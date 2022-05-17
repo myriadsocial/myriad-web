@@ -4,6 +4,8 @@ import React, {useState} from 'react';
 
 import dynamic from 'next/dynamic';
 
+import {SvgIcon} from '@material-ui/core';
+
 import {TabsComponent} from '../atoms/Tabs';
 import {useStyles} from './RightMenuBar.styles';
 
@@ -15,22 +17,22 @@ export const RightMenuBar: React.FC = () => {
   const iconTabs = [
     {
       id: 'trendingExperienceTabPanel',
-      icon: <TrendingUpIcon />,
+      icon: <SvgIcon component={TrendingUpIcon} />,
       component: <TrendingExperienceTab />,
     },
     {
       id: 'experienceTabMenu',
-      icon: <VariableIcon />,
+      icon: <SvgIcon component={VariableIcon} />,
       component: <ExperienceTab />,
     },
     {
       id: 'trendingTabPanel',
-      icon: <HashtagIcon />,
+      icon: <SvgIcon component={HashtagIcon} />,
       component: <TrendingTab />,
     },
     {
       id: 'chatTabPanel',
-      icon: <ChatAlt2Icon />,
+      icon: <SvgIcon component={ChatAlt2Icon} />,
       component: null,
       tooltip: 'Chat feature, coming soon',
       disabled: true,
