@@ -10,6 +10,7 @@ import {TabsComponent} from '../atoms/Tabs/Tabs';
 import {useStyles} from './FriendMenu.style';
 
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -26,12 +27,12 @@ export const FriendMenuComponent: React.FC = () => {
   const tabs = [
     {
       id: '0',
-      title: 'Friend List',
+      title: i18n.t('Friends.Container.Tab_Panel_1'),
       component: <FriendListContainer user={user} disableFilter disableSort />,
     },
     {
       id: '1',
-      title: 'Friend Request',
+      title: i18n.t('Friends.Container.Tab_Panel_2'),
       component: <FriendRequestListContainer user={user} />,
     },
   ];
@@ -48,7 +49,7 @@ export const FriendMenuComponent: React.FC = () => {
     <div className={style.padding}>
       <Paper className={style.root}>
         <Typography className={style.title} color="textPrimary">
-          Friends
+          {i18n.t('Friends.Container.Title')}
         </Typography>
         <div className={style.tabs}>
           <TabsComponent

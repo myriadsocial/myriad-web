@@ -6,7 +6,7 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 
 import {FriendMenuComponent} from 'src/components/FriendsMenu/FriendMenu';
-import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
+import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {UserMetric} from 'src/interfaces/user';
 import {setHeaders} from 'src/lib/api/base';
@@ -45,8 +45,8 @@ const Friends: React.FC = () => {
         <title>{i18n.t('Friends.Title', {appname: publicRuntimeConfig.appName})}</title>
       </Head>
       <TopNavbarComponent
-        description={`${metric?.totalFriends ?? 0} Friends`}
-        sectionTitle={SectionTitle.FRIENDS}
+        description={i18n.t('TopNavbar.Subtitle.Friends', {total: metric?.totalFriends ?? 0})}
+        sectionTitle={i18n.t('TopNavbar.Title.Friends')}
         type={'menu'}
       />
 

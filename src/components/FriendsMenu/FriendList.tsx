@@ -33,6 +33,7 @@ import {ReferenceType} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
 import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
 import * as UserAPI from 'src/lib/api/user';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
 import {blockFromFriend, removeFromFriend} from 'src/reducers/friend/actions';
@@ -204,7 +205,10 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
 
   if (friends.length === 0 && !isFiltered) {
     return (
-      <Empty title="Friend list is empty" subtitle="Find or invite your friends to Myriad 😉" />
+      <Empty
+        title={i18n.t('Friends.Empty.Friend_List.Title')}
+        subtitle={i18n.t('Friends.Empty.Friend_List.Subtitle')}
+      />
     );
   }
 
@@ -215,14 +219,18 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
           <ShowIf condition={!disableFilter}>
             <div className={style.filter}>
               <DropdownMenu<FriendType>
-                title="Filter by"
+                title={i18n.t('Friends.Filter.Title')}
                 options={friendFilterOptions}
                 onChange={onFilter}
               />
             </div>
           </ShowIf>
           <ShowIf condition={!disableSort}>
-            <DropdownMenu<SortType> title={'Sort by'} options={sortOptions} onChange={onSort} />
+            <DropdownMenu<SortType>
+              title={i18n.t('Friends.Sort.Title')}
+              options={sortOptions}
+              onChange={onSort}
+            />
           </ShowIf>
         </Grid>
       </ShowIf>
@@ -231,7 +239,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
         <div className={style.search}>
           <SearchComponent
             onSubmit={onSearch}
-            placeholder={'Search friend'}
+            placeholder={i18n.t('Friends.Search.Placeholder')}
             iconPosition={'end'}
             outlined={true}
           />
@@ -266,7 +274,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
                   </Link>
                   <ShowIf condition={!!friend.totalMutual}>
                     <Typography className={style.friend} component="p" color="textSecondary">
-                      {friend.totalMutual} mutual friends
+                      {i18n.t('Friends.List.Mutual', {total: friend.totalMutual})}
                     </Typography>
                   </ShowIf>
                 </ListItemText>
@@ -300,13 +308,13 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleCloseFriendSetting}>
-        <MenuItem onClick={handleVisitProfile}>Visit profile</MenuItem>
+        <MenuItem onClick={handleVisitProfile}>{i18n.t('Friends.Menu.Visit')}</MenuItem>
         <MenuItem
           disabled={
             balanceDetails.length === 0 || currentFriend?.id === currentUser?.id || !tipping.enabled
           }
           onClick={handleSendTip}>
-          Send direct tip
+          {i18n.t('Friends.Menu.Send_Tip')}
         </MenuItem>
         <ShowIf
           condition={
@@ -314,11 +322,11 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
             (!currentFriend || currentFriend.username !== 'myriad_official')
           }>
           <MenuItem className={style.danger} onClick={handleUnfriend}>
-            Unfriend
+            {i18n.t('Friends.Menu.Unfriend')}
           </MenuItem>
 
           <MenuItem className={style.danger} onClick={handleBlock}>
-            Block this person
+            {i18n.t('Friends.Menu.Block')}
           </MenuItem>
         </ShowIf>
       </Menu>
