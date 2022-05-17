@@ -113,7 +113,47 @@
     }
   },
   "Friends": {
-    "Title": "{{appname}} - Teman"
+    "Title": "{{appname}} - Teman",
+    "Container": {
+      "Title": "Teman",
+      "Tab_Panel_1": "Daftar Teman",
+      "Tab_Panel_2": "Permintaan Pertemanan"
+    },
+    "List": {
+      "Mutual": "{{total}} teman bersama"
+    },
+    "Search": {
+      "Placeholder": "Mencari Teman"
+    },
+    "Menu": {
+      "Visit": "Visit profile",
+      "Send_Tip": "Send direct tip",
+      "Unfriend": "Unfriend",
+      "Block": "Block this person"
+    },
+    "Empty": {
+      "Friend_List": {
+        "Title": "Daftar teman kosong",
+        "Subtitle": "Temukan atau undang teman Anda ke Myriad 😉"
+      },
+      "Friend_Request": {
+        "Title": "Permintaan pertemanan kosong"
+      }
+    },
+    "Button": {
+      "Accept": "Terima",
+      "Decline": "Tolak"
+    },
+    "Sort": {
+      "Title": "Sortir dengan",
+      "Latest": "Terbaru",
+      "Oldest": "Terlama"
+    },
+    "Filter": {
+      "Title": "Filter menurut",
+      "Mutual": "Teman Bersama",
+      "All": "Semua Teman"
+    }
   },
   "Maintenance": {
     "Title": "{{appname}} - Perbaikan"
@@ -161,5 +201,22 @@
   },
   "Wallet": {
     "Title": "{{appname}} - Dompet"
+  },
+  "TopNavbar": {
+    "Title": {
+      "Friends": "Teman",
+      "SocialMedia": "Media Sosial",
+      "Wallet": "Dompet",
+      "Experience": "Pengalaman",
+      "Profile": "Profil",
+      "Settings": "Pengaturan",
+      "Notification": "Notifikasi",
+      "NFT": "NFT",
+      "SocialToken": "Sosial Token",
+      "Trends": "Trending"
+    },
+    "Subtitle": {
+      "Friends": "{{total}} Teman"
+    }
   }
 }

@@ -117,7 +117,47 @@
     }
   },
   "Friends": {
-    "Title": "{{appname}} - Friends"
+    "Title": "{{appname}} - Friends",
+    "Container": {
+      "Title": "Friends",
+      "Tab_Panel_1": "Friend List",
+      "Tab_Panel_2": "Friend Request"
+    },
+    "List": {
+      "Mutual": "{{total}} mutual friends"
+    },
+    "Search": {
+      "Placeholder": "Search Friend"
+    },
+    "Menu": {
+      "Visit": "Visit profile",
+      "Send_Tip": "Send direct tip",
+      "Unfriend": "Unfriend",
+      "Block": "Block this person"
+    },
+    "Empty": {
+      "Friend_List": {
+        "Title": "Friend list is empty",
+        "Subtitle": "Find or invite your friends to Myriad 😉"
+      },
+      "Friend_Request": {
+        "Title": "Friend request is empty"
+      }
+    },
+    "Button": {
+      "Accept": "Accept",
+      "Decline": "Decline"
+    },
+    "Sort": {
+      "Title": "Sort by",
+      "Latest": "Latest",
+      "Oldest": "Oldest"
+    },
+    "Filter": {
+      "Title": "Filter by",
+      "Mutual": "Mutual Friends",
+      "All": "All Friends"
+    }
   },
   "Maintenance": {
     "Title": "{{appname}} - Maintenance"
@@ -165,5 +205,22 @@
   },
   "Wallet": {
     "Title": "{{appname}} - Wallet"
+  },
+  "TopNavbar": {
+    "Title": {
+      "Friends": "Friends",
+      "SocialMedia": "Social Media",
+      "Wallet": "Wallet",
+      "Experience": "Experience",
+      "Profile": "Profile",
+      "Settings": "Settings",
+      "Notification": "Notification",
+      "NFT": "NFT",
+      "SocialToken": "Social Token",
+      "Trends": "Trends"
+    },
+    "Subtitle": {
+      "Friends": "{{total}} Friends"
+    }
   }
 }

@@ -22,6 +22,7 @@ import {useFriendRequestList} from './hooks/use-friend-request.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import {Friend} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
+import i18n from 'src/locale';
 
 type FriendRequestProps = {
   user?: User;
@@ -37,7 +38,7 @@ export const FriendRequestComponent: React.FC<FriendRequestProps> = props => {
   const list = useFriendRequestList(requests, user);
 
   if (requests.length === 0) {
-    return <Empty title="Friend request is empty" />;
+    return <Empty title={i18n.t('Friends.Empty.Friend_Request.Title')} />;
   }
 
   return (
@@ -56,7 +57,7 @@ export const FriendRequestComponent: React.FC<FriendRequestProps> = props => {
               </Link>
               <ShowIf condition={!!request.totalMutual}>
                 <Typography className={style.friend} component="p" color="textSecondary">
-                  {request.totalMutual} mutual friends
+                  {i18n.t('Friends.List.Mutual', {total: request.totalMutual})}
                 </Typography>
               </ShowIf>
             </ListItemText>
@@ -73,7 +74,9 @@ export const FriendRequestComponent: React.FC<FriendRequestProps> = props => {
                     viewBox="0 0 24 24"
                   />
                 }>
-                <Typography className={style.buttonText}>Accept</Typography>
+                <Typography className={style.buttonText}>
+                  {i18n.t('Friends.Button.Accept')}
+                </Typography>
               </Button>
               <Button
                 onClick={() => onDeclineRequest(request.friend)}
@@ -87,7 +90,9 @@ export const FriendRequestComponent: React.FC<FriendRequestProps> = props => {
                     viewBox="0 0 24 24"
                   />
                 }>
-                <Typography className={style.buttonText}>Decline</Typography>
+                <Typography className={style.buttonText}>
+                  {i18n.t('Friends.Button.Decline')}
+                </Typography>
               </Button>
             </ListItemSecondaryAction>
           </ListItem>
