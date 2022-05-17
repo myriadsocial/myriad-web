@@ -16,8 +16,8 @@ import {
   Button,
 } from '@material-ui/core';
 
-import ModalAddToPostContext, {HandleConfirm} from './ModalAddToPost.context';
-import {ModalAddToPostProps} from './ModalAddToPost.interface';
+import ModalAddToPostContext, {HandleConfirmAddPostExperience} from './ModalAddToPost.context';
+import {ModalAddPostExperienceProps} from './ModalAddToPost.interface';
 import {useStyles} from './ModalAddToPost.styles';
 
 import {Loading} from 'src/components/atoms/Loading';
@@ -26,7 +26,9 @@ import {useExperienceHook} from 'src/hooks/use-experience-hook';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
-export const ModalAddToPostProvider: React.ComponentType<ModalAddToPostProps> = ({children}) => {
+export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceProps> = ({
+  children,
+}) => {
   const styles = useStyles();
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const {userExperiences, loadExperiencePostList, addPostsToExperience, loading} =
@@ -42,7 +44,7 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddToPostProps> = 
   const toolTipText =
     'Some posts will not be visible to other users due to visibility restrictions by their owners.';
 
-  const addPostToExperience = useCallback<HandleConfirm>(
+  const addPostToExperience = useCallback<HandleConfirmAddPostExperience>(
     props => {
       setOpen(true);
       loadExperiencePostList(props.post.id, postsExperiences => {

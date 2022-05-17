@@ -1,5 +1,5 @@
 import {Post} from 'src/interfaces/post';
 
-export type ModalAddToPostProps = {
+export type ModalAddPostExperienceProps = {
   post: Post;
 };

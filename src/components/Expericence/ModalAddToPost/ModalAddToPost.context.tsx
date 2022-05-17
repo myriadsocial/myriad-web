@@ -1,7 +1,7 @@
 import {createContext} from 'react';
 
-import {ModalAddToPostProps} from './ModalAddToPost.interface';
+import {ModalAddPostExperienceProps} from './ModalAddToPost.interface';
 
-export type HandleConfirm = (props: ModalAddToPostProps) => void;
+export type HandleConfirmAddPostExperience = (props: ModalAddPostExperienceProps) => void;
 
-export default createContext<HandleConfirm | null>(null);
+export default createContext<HandleConfirmAddPostExperience | null>(null);
