@@ -9,9 +9,11 @@ import {
   UserExperience,
   ExperienceType,
 } from 'src/interfaces/experience';
+import {Post} from 'src/interfaces/post';
 
 type ExperienceList = BaseList<Experience>;
 type UserExperienceList = BaseList<UserExperience>;
+type PostsExperienceList = BaseList<Post>;
 
 export const getExperiences = async (
   params: PaginationParams,
@@ -224,6 +226,24 @@ export const getExperienceDetail = async (experienceId: string): Promise<Experie
     },
   });
 
+  return data;
+};
+
+export const getExperiencePost = async (
+  experienceId: string,
+  page = 1,
+): Promise<PostsExperienceList> => {
+  const {data} = await MyriadAPI.request<PostsExperienceList>({
+    url: `/experiences/${experienceId}/posts`,
+    method: 'GET',
+    params: {
+      pageNumber: page,
+      pageLimit: PAGINATION_LIMIT,
+      filter: {
+        include: [{relation: 'user'}],
+      },
+    },
+  });
   return data;
 };
 

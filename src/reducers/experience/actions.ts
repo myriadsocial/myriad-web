@@ -7,6 +7,7 @@ import * as constants from './constants';
 import {Action} from 'redux';
 import {Experience, ExperienceProps, Tag} from 'src/interfaces/experience';
 import {People} from 'src/interfaces/people';
+import {Post} from 'src/interfaces/post';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import * as PeopleAPI from 'src/lib/api/people';
 import * as TagAPI from 'src/lib/api/tag';
@@ -20,9 +21,9 @@ export interface LoadExperience extends PaginationAction {
   experiences: Experience[];
 }
 
-export interface LoadExperiencePostList extends PaginationAction {
-  type: constants.FETCH_POST_EXPERIENCE;
-  experiences: Experience[];
+export interface LoadExperiencePost extends PaginationAction {
+  type: constants.FETCH_EXPERIENCE_POST;
+  posts: Post[];
 }
 
 export interface FetchTrendingExperience extends PaginationAction {
@@ -64,7 +65,7 @@ export interface ClearExperiences extends Action {
 
 export type Actions =
   | LoadExperience
-  | LoadExperiencePostList
+  | LoadExperiencePost
   | FetchTrendingExperience
   | LoadDetailExperience
   | SearchExperience
@@ -129,18 +130,12 @@ export const loadExperiencesPostList: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      const {data: experiences, meta} = await ExperienceAPI.getExperiences(
+      const {data: experiences} = await ExperienceAPI.getExperiences(
         {page: 1},
         false,
         user.id,
         postId,
       );
-
-      dispatch({
-        type: constants.FETCH_POST_EXPERIENCE,
-        experiences,
-        meta,
-      });
 
       callback(experiences);
     } catch (error) {
@@ -235,6 +230,28 @@ export const fetchDetailExperience: ThunkActionCreator<Actions, RootState> =
       );
     } finally {
       dispatch(setLoading(false));
+    }
+  };
+
+export const fetchPostsExperience: ThunkActionCreator<Actions, RootState> =
+  (experienceId: string, page = 1) =>
+  async dispatch => {
+    dispatch(setExperienceLoading(true));
+    try {
+      const {data, meta} = await ExperienceAPI.getExperiencePost(experienceId, page);
+      dispatch({
+        type: constants.FETCH_EXPERIENCE_POST,
+        posts: data,
+        meta,
+      });
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setExperienceLoading(false));
     }
   };
 
