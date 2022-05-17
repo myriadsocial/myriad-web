@@ -23,7 +23,6 @@ import {useStyles} from './ModalAddToPost.styles';
 import {Loading} from 'src/components/atoms/Loading';
 import {Modal} from 'src/components/atoms/Modal';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -32,7 +31,6 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddToPostProps> = 
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const {userExperiences, loadExperiencePostList, addPostsToExperience, loading} =
     useExperienceHook();
-  const {openToasterSnack} = useToasterSnackHook();
   const [postId, setPostId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [isSelectAll, setIsSelectAll] = useState(false);
@@ -94,10 +92,6 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddToPostProps> = 
     if (postId) {
       addPostsToExperience(postId, selectedExperience, () => {
         setOpen(false);
-        openToasterSnack({
-          message: 'Post added to experience!',
-          variant: 'success',
-        });
       });
     }
   };
