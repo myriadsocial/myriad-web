@@ -1,8 +1,8 @@
 import {useContext} from 'react';
 
-import ModalAddToPostContext, {HandleConfirm} from './ModalAddToPost.context';
+import ModalAddToPostContext, {HandleConfirmAddPostExperience} from './ModalAddToPost.context';
 
-const useModalAddToPost = (): HandleConfirm => {
+const useModalAddToPost = (): HandleConfirmAddPostExperience => {
   const addPostToExperience = useContext(ModalAddToPostContext);
 
   if (!addPostToExperience) {
