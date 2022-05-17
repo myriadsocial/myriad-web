@@ -49,9 +49,9 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
       setOpen(true);
       loadExperiencePostList(props.post.id, postsExperiences => {
         setPostId(props.post.id);
-        const tmpSelectedExperience = [...selectedExperience];
+        const tmpSelectedExperience: string[] = [];
         postsExperiences.map(item => {
-          if (item.posts) {
+          if (item.posts && item.posts.length > 0) {
             tmpSelectedExperience.push(item.id);
           }
         });
