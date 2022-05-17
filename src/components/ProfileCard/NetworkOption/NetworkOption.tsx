@@ -121,7 +121,9 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
         }
 
         case 'near': {
-          const callback = publicRuntimeConfig.appAuthURL + router.asPath + '&action=switch';
+          const url = publicRuntimeConfig.appAuthURL + router.route;
+          const query = router.query?.q ? `?q=${router.query.q}&action=switch` : '?action=switch';
+          const callback = `${url}${query}`;
 
           const data = await connectToNear(callback);
 
