@@ -159,7 +159,47 @@
     "Title": "{{appname}} - Perbaikan"
   },
   "Notification": {
-    "Title": "{{appname}} - Notifikasi"
+    "Title": "{{appname}} - Notifikasi",
+    "Header": {
+      "Title": "Notifikasi",
+      "Read": "Tandai semua telah dibaca",
+      "Account_Linked": "Akun tertaut",
+      "Account_Unlinked": "Akun tidak tertaut",
+      "User_Reported": "Laporan pengguna",
+      "Comment_Removed": "Komentar dihapus",
+      "Post_Removed": "Post dihapus",
+      "Reward": "Hadiah tip",
+      "Claimed": "Tip diklaim",
+      "Tips_received": "Tips diterima"
+    },
+    "Description": {
+      "Friend_Accept": "Menerima permintaan pertemanan Anda",
+      "Friend_Request": "Ingin menjadi temanmu",
+      "Post_Comment": "Mengomentari Postingan Anda",
+      "Comment_Comment": "Mengomentari balasan Anda",
+      "Post_Mention": "Menyebut Anda dalam sebuah postingan",
+      "Comment_Mention": "Menyebutmu di komentar",
+      "User_Tip": "Anda menerima tip dari {{name}} ({{amount}})",
+      "Post_Tip": "Your post received tip from {{name}} ({{amount}})",
+      "Comment_Tip": "Postingan Anda menerima tip dari {{name}} ({{amount}})",
+      "Report": {
+        "Approved": "Laporan telah disetujui",
+        "Removed": "Postingan telah dihapus"
+      },
+      "Comment_Removed": {
+        "Other": "Komentar {{name}} telah dihapus berdasarkan laporan Anda",
+        "User": "Komentar Anda telah dihapus karena melanggar pedoman komunitas kami"
+      },
+      "User_Banned": {
+        "Other": "Akun {{name}} telah diblokir oleh admin berdasarkan laporan Anda",
+        "User": "Anda telah dilarang karena melanggar aturan komunitas kami"
+      },
+      "Connect_Socmed": "Akun {{platform}} Anda @{{username}} berhasil terhubung ke Myriad",
+      "Disconnect_Socmed": "Akun {{platform}} Anda @{{username}} berhasil diputuskan dari Myriad oleh @{{user}}"
+    },
+    "Footer": {
+      "View": "Lihat semua notifikasi"
+    }
   },
   "PrivacyPolicy": {
     "Title": "{{appname}} - Kebijakan Privasi"
@@ -216,7 +256,9 @@
       "Trends": "Trending"
     },
     "Subtitle": {
-      "Friends": "{{total}} Teman"
+      "Friends": "{{total}} Teman",
+      "Notification": "{{total}} notifikasi baru"
+
     }
   }
 }

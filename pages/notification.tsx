@@ -6,7 +6,7 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 
 import {NotificationsContainer} from 'src/components/Notifications';
-import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
+import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {setHeaders} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
@@ -40,8 +40,8 @@ const Notification: React.FC = () => {
         <title>{i18n.t('Notification.Title', {appname: publicRuntimeConfig.appName})}</title>
       </Head>
       <TopNavbarComponent
-        description={`${total} new notifications`}
-        sectionTitle={SectionTitle.NOTIFICATION}
+        description={i18n.t('TopNavbar.Subtitle.Notification', {total: total})}
+        sectionTitle={i18n.t('TopNavbar.Title.Notification')}
       />
       <NotificationsContainer gutter={2} infinite />
     </DefaultLayout>

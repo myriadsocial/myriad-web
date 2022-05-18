@@ -19,6 +19,7 @@ import {parseScientificNotatedNumber} from 'src/helpers/number';
 import {Notification, NotificationType} from 'src/interfaces/notification';
 import {PostOrigin} from 'src/interfaces/timeline';
 import {PAGINATION_LIMIT} from 'src/lib/api/constants/pagination';
+import i18n from 'src/locale';
 
 const {publicRuntimeConfig} = getConfig();
 
@@ -85,7 +86,7 @@ export const useNotificationList = (
             userId: notification.fromUserId.id,
             user: notification.fromUserId.name,
             avatar: notification.fromUserId.profilePictureURL,
-            description: 'Accepted your friend request',
+            description: i18n.t('Notification.Description.Friend_Accept'),
             badge: (
               <div className={style.circle}>
                 <SvgIcon
@@ -107,7 +108,7 @@ export const useNotificationList = (
             userId: notification.fromUserId.id,
             user: notification.fromUserId.name,
             avatar: notification.fromUserId.profilePictureURL,
-            description: 'Wants to be your friend',
+            description: i18n.t('Notification.Description.Friend_Request'),
             badge: (
               <div className={style.circle}>
                 <SvgIcon
@@ -129,7 +130,7 @@ export const useNotificationList = (
             userId: notification.fromUserId.id,
             user: notification.fromUserId.name,
             avatar: notification.fromUserId.profilePictureURL,
-            description: 'Commented on your Post',
+            description: i18n.t('Notification.Description.Post_Comment'),
             badge: (
               <div className={style.circle}>
                 <SvgIcon
@@ -153,7 +154,7 @@ export const useNotificationList = (
             userId: notification.fromUserId.id,
             user: notification.fromUserId.name,
             avatar: notification.fromUserId.profilePictureURL,
-            description: 'Commented on your reply',
+            description: i18n.t('Notification.Description.Comment_Comment'),
             badge: (
               <div className={style.circle}>
                 <SvgIcon
@@ -177,7 +178,7 @@ export const useNotificationList = (
             userId: notification.fromUserId.id,
             user: notification.fromUserId.name,
             avatar: notification.fromUserId.profilePictureURL,
-            description: 'Mentioned you in a post',
+            description: i18n.t('Notification.Description.Post_Mention'),
             badge: (
               <div className={style.circle}>
                 <SvgIcon
@@ -199,7 +200,7 @@ export const useNotificationList = (
             userId: notification.fromUserId.id,
             user: notification.fromUserId.name,
             avatar: notification.fromUserId.profilePictureURL,
-            description: 'Mentioned you in a comment',
+            description: i18n.t('Notification.Description.Comment_Mention'),
             badge: (
               <div className={style.circle}>
                 <SvgIcon
@@ -265,11 +266,12 @@ export const useNotificationList = (
             type: NotificationType.USER_TIPS,
             read: notification.read,
             userId: notification.fromUserId.id,
-            user: 'Tips received',
+            user: i18n.t('Notification.Header.Tips_received'),
             avatar: notification.fromUserId.profilePictureURL,
-            description: `You received tip from ${
-              notification.fromUserId.name
-            } (${parseTipAmountContainingENumber(notification.message)})}`,
+            description: i18n.t('Notification.Description.User_Tip', {
+              name: notification.fromUserId.name,
+              amount: parseTipAmountContainingENumber(notification.message),
+            }),
             badge: (
               <div className={style.circleSuccess}>
                 <SvgIcon
@@ -289,11 +291,12 @@ export const useNotificationList = (
             type: NotificationType.POST_TIPS,
             read: notification.read,
             userId: notification.fromUserId.id,
-            user: 'Tips received',
+            user: i18n.t('Notification.Header.Tips_received'),
             avatar: notification.fromUserId.profilePictureURL,
-            description: `Your post received tip from ${
-              notification.fromUserId.name
-            } (${parseTipAmountContainingENumber(notification.message)})`,
+            description: i18n.t('Notification.Description.Post_Tip', {
+              name: notification.fromUserId.name,
+              amount: parseTipAmountContainingENumber(notification.message),
+            }),
             badge: (
               <div className={style.circleSuccess}>
                 <SvgIcon
@@ -317,11 +320,12 @@ export const useNotificationList = (
             type: NotificationType.COMMENT_TIPS,
             read: notification.read,
             userId: notification.fromUserId.id,
-            user: 'Tips received',
+            user: i18n.t('Notification.Header.Tips_received'),
             avatar: notification.fromUserId.profilePictureURL,
-            description: `Your reply received tip from ${
-              notification.fromUserId.name
-            } (${parseTipAmountContainingENumber(notification.message)})`,
+            description: i18n.t('Notification.Description.Comment_Tip', {
+              name: notification.fromUserId.name,
+              amount: parseTipAmountContainingENumber(notification.message),
+            }),
             badge: (
               <div className={style.circleSuccess}>
                 <SvgIcon
@@ -345,7 +349,7 @@ export const useNotificationList = (
             type: NotificationType.USER_CLAIM_TIPS,
             read: notification.read,
             userId: notification.fromUserId.id,
-            user: 'Tips claimed',
+            user: i18n.t('Notification.Header.Claimed'),
             avatar: notification.fromUserId.profilePictureURL,
             description: `${notification.message}`,
             badge: (
@@ -367,7 +371,7 @@ export const useNotificationList = (
             type: NotificationType.USER_INITIAL_TIPS,
             read: notification.read,
             userId: notification.fromUserId.id,
-            user: 'Tips claimed',
+            user: i18n.t('Notification.Header.Claimed'),
             avatar: notification.fromUserId.profilePictureURL,
             description: `${notification.message}`,
             badge: (
@@ -389,7 +393,7 @@ export const useNotificationList = (
             type: NotificationType.USER_REWARD,
             read: notification.read,
             userId: notification.fromUserId.id,
-            user: 'Tips reward',
+            user: i18n.t('Notification.Header.Reward'),
             avatar: notification.fromUserId.profilePictureURL,
             description: `${notification.message}`,
             badge: (
@@ -410,11 +414,11 @@ export const useNotificationList = (
             id: notification.id,
             type: NotificationType.POST_REMOVED,
             read: notification.read,
-            user: 'Post removed',
+            user: i18n.t('Notification.Header.Post_Removed'),
             avatar: notification.fromUserId.profilePictureURL,
             description: notification.message.includes('approved')
-              ? 'Report has been approved'
-              : 'Post has been removed',
+              ? i18n.t('Notification.Description.Report.Approved')
+              : i18n.t('Notification.Description.Report.Removed'),
             badge: (
               <div className={style.circleError}>
                 <SvgIcon
@@ -435,13 +439,14 @@ export const useNotificationList = (
             id: notification.id,
             type: NotificationType.COMMENT_REMOVED,
             read: notification.read,
-            user: 'Comment removed',
+            user: i18n.t('Notification.Header.Comment_Removed'),
             avatar: notification.fromUserId.profilePictureURL,
             description: notification.message.includes('approved')
-              ? (notification.additionalReferenceId &&
-                  notification.additionalReferenceId?.comment?.user?.name) +
-                `'s comment has been removed based on your report`
-              : 'Your comment has been removed due to breaking our community guideline',
+              ? notification.additionalReferenceId &&
+                i18n.t('Notification.Description.Comment_Removed.Other', {
+                  name: notification.additionalReferenceId?.comment?.user?.name,
+                })
+              : i18n.t('Notification.Description.Comment_Removed.User'),
             badge: (
               <div className={style.circleError}>
                 <SvgIcon
@@ -463,13 +468,14 @@ export const useNotificationList = (
             type: NotificationType.USER_BANNED,
             read: notification.read,
             userId: notification.fromUserId.id,
-            user: 'User reported',
+            user: i18n.t('Notification.Header.User_Reported'),
             avatar: notification.fromUserId.profilePictureURL,
             description: notification.message.includes('approved')
-              ? (notification.additionalReferenceId &&
-                  notification.additionalReferenceId?.user?.name) +
-                ' account has been banned by admin based on your report'
-              : 'You have been banned due to breaking our community rule',
+              ? notification.additionalReferenceId &&
+                i18n.t('Notification.Description.User_Banned.Other', {
+                  name: notification.additionalReferenceId?.user?.name,
+                })
+              : i18n.t('Notification.Description.User_Banned.User'),
             badge: (
               <div className={style.circleError}>
                 <SvgIcon
@@ -489,15 +495,14 @@ export const useNotificationList = (
             type: NotificationType.CONNECTED_SOCIAL_MEDIA,
             read: notification.read,
             userId: notification.fromUserId.id,
-            user: 'Account linked',
+            user: i18n.t('Notification.Header.Account_Linked'),
             avatar: notification.toUserId.profilePictureURL ?? notification.toUserId.name,
-            description:
-              'Your ' +
-              getPlatform(notification.message) +
-              ' account @' +
-              (notification.additionalReferenceId &&
-                notification.additionalReferenceId?.people?.username) +
-              ' successfully connected to Myriad',
+            description: i18n.t('Notification.Description.Connect_Socmed', {
+              platform: getPlatform(notification.message),
+              username:
+                notification.additionalReferenceId &&
+                notification.additionalReferenceId?.people?.username,
+            }),
             badge: (
               <div className={style.circleError}>
                 <SvgIcon
@@ -518,16 +523,15 @@ export const useNotificationList = (
             type: NotificationType.DISCONNECTED_SOCIAL_MEDIA,
             read: notification.read,
             userId: notification.fromUserId.id,
-            user: 'Account unlinked',
+            user: i18n.t('Notification.Header.Account_Unlinked'),
             avatar: notification.toUserId.profilePictureURL ?? notification.toUserId.name,
-            description:
-              'Your ' +
-              getPlatform(notification.message) +
-              ' account @' +
-              (notification.additionalReferenceId &&
-                notification.additionalReferenceId?.people?.username) +
-              ' successfully disconnected from Myriad by @' +
-              notification.fromUserId.username,
+            description: i18n.t('Notification.Description.Disconnect_Socmed', {
+              platform: getPlatform(notification.message),
+              username:
+                notification.additionalReferenceId &&
+                notification.additionalReferenceId?.people?.username,
+              user: notification.fromUserId.username,
+            }),
             badge: (
               <div className={style.circleError}>
                 <SvgIcon

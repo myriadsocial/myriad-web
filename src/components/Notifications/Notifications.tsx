@@ -24,6 +24,7 @@ import {Loading} from 'src/components/atoms/Loading';
 import {timeAgo} from 'src/helpers/date';
 import {acronym} from 'src/helpers/string';
 import {Notification, NotificationType} from 'src/interfaces/notification';
+import i18n from 'src/locale';
 
 type NotificationsProps = {
   notifications: Notification[];
@@ -91,14 +92,14 @@ export const Notifications: React.FC<NotificationsProps> = props => {
     <Paper className={style.root}>
       <Grid container justifyContent="space-between" alignItems="center" className={style.header}>
         <Typography className={style.title} color="textPrimary">
-          Notifications
+          {i18n.t('Notification.Header.Title')}
         </Typography>
         <Button
           style={{width: 'auto'}}
           color="primary"
           disabled={unread === 0}
           onClick={onMarkAllAsRead}>
-          Mark all as read
+          {i18n.t('Notification.Header.Read')}
         </Button>
       </Grid>
       <List className={style.list} component="div">
@@ -172,7 +173,9 @@ export const Notifications: React.FC<NotificationsProps> = props => {
         <div className={style.footer}>
           <Link href="/notification">
             <a className={style.link}>
-              <Typography style={{fontWeight: 'bold'}}>View all notifications</Typography>
+              <Typography style={{fontWeight: 'bold'}}>
+                {i18n.t('Notification.Footer.View')}
+              </Typography>
             </a>
           </Link>
         </div>
