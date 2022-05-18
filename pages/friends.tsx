@@ -7,6 +7,7 @@ import Head from 'next/head';
 
 import {FriendMenuComponent} from 'src/components/FriendsMenu/FriendMenu';
 import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
+import {TippingSuccess} from 'src/components/common/Tipping/render/Tipping.success';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {UserMetric} from 'src/interfaces/user';
 import {setHeaders} from 'src/lib/api/base';
@@ -51,6 +52,7 @@ const Friends: React.FC = () => {
       />
 
       <FriendMenuComponent />
+      <TippingSuccess />
     </DefaultLayout>
   );
 };
