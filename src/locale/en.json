@@ -163,7 +163,47 @@
     "Title": "{{appname}} - Maintenance"
   },
   "Notification": {
-    "Title": "{{appname}} - Notification"
+    "Title": "{{appname}} - Notification",
+    "Header": {
+      "Title": "Notification",
+      "Read": "Mark all as read",
+      "Account_Linked": "Account linked",
+      "Account_Unlinked": "Account unlinked",
+      "User_Reported": "User reported",
+      "Comment_Removed": "Comment removed",
+      "Post_Removed": "Post removed",
+      "Reward": "Tips reward",
+      "Claimed": "Tips claimed",
+      "Tips_received": "Tips received"
+    },
+    "Description": {
+      "Friend_Accept": "Accepted your friend request",
+      "Friend_Request": "Wants to be your friend",
+      "Post_Comment": "Commented on your Post",
+      "Comment_Comment": "Commented on your reply",
+      "Post_Mention": "Mentioned you in a post",
+      "Comment_Mention": "Mentioned you in a comment",
+      "User_Tip": "You received tip from {{name}} ({{amount}})",
+      "Post_Tip": "Your post received tip from {{name}} ({{amount}})",
+      "Comment_Tip": "Your reply received tip from {{name}} ({{amount}})",
+      "Report": {
+        "Approved": "Report has been approved",
+        "Removed": "Post has been removed"
+      },
+      "Comment_Removed": {
+        "Other": "{{name}}'s comment has been removed based on your report",
+        "User": "Your comment has been removed due to breaking our community guideline"
+      },
+      "User_Banned": {
+        "Other": "{{name}} account has been banned by admin based on your report",
+        "User": "You have been banned due to breaking our community rule"
+      },
+      "Connect_Socmed": "Your {{platform}} account @{{username}} successfully connected to Myriad",
+      "Disconnect_Socmed": "Your {{platform}} account @{{username}} successfully disconnected from Myriad by @{{user}}"
+    },
+    "Footer": {
+      "View": "View all notifications"
+    }
   },
   "PrivacyPolicy": {
     "Title": "{{appname}} - Privacy Policy"
@@ -220,7 +260,8 @@
       "Trends": "Trends"
     },
     "Subtitle": {
-      "Friends": "{{total}} Friends"
+      "Friends": "{{total}} Friends",
+      "Notification": "{{total}} new notifications"
     }
   }
 }
