@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 
+import getConfig from 'next/config';
 import {useRouter} from 'next/router';
 
 import {Box, Button, Grid, Typography} from '@material-ui/core';
@@ -33,6 +34,7 @@ export type TippingStorageProps = {
 };
 
 export const TIPPING_STORAGE_KEY = '@Tipping_Storage_Key';
+const {publicRuntimeConfig} = getConfig();
 
 export const TippingSuccess = () => {
   const router = useRouter();
@@ -42,11 +44,25 @@ export const TippingSuccess = () => {
   const [openPrompt, setOpenPrompt] = useState(false);
 
   useEffect(() => {
-    if (router.query) {
-      const transactionHashes = router.query.transactionHashes as string | null;
+    const url = new URL(router.pathname, publicRuntimeConfig.appAuthURL);
+    const transactionHashes = router.query.transactionHashes as string | null;
+
+    if (transactionHashes) {
+      const search = router.query.q;
+
+      if (search && !Array.isArray(search)) {
+        url.searchParams.set('q', search);
+      }
+
+      if (search && Array.isArray(search)) {
+        search.forEach(keyword => {
+          url.searchParams.append('q', keyword);
+        });
+      }
+
       if (transactionHashes) {
         setTrxHash(transactionHashes);
-        router.replace(router.pathname, undefined, {shallow: true});
+        router.replace(url, undefined, {shallow: true});
         setOpenPrompt(true);
         processTips(transactionHashes);
       }
@@ -58,7 +74,8 @@ export const TippingSuccess = () => {
           variant: 'warning',
           message: 'Transaction rejected by user',
         });
-        router.replace(router.pathname, undefined, {shallow: true});
+
+        router.replace(url, undefined, {shallow: true});
       }
     }
   }, [router.query]);
