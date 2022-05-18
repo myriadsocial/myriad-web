@@ -63,7 +63,7 @@ export const TimelineFilterContainer: React.FC<TimelineFilterContainerProps> = p
         path: 'home',
         query: {
           type,
-          id: experiences[0].id,
+          id: experiences[0].experience.id,
         },
       });
     } else {
