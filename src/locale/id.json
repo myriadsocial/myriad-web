@@ -1,5 +1,14 @@
 {
   "Experience": {
+    "Alert": {
+      "Confirmation_Unsub": {
+        "Title": "Berhenti berangganan?",
+        "Desc_1": "Apakah Anda ingin berhenti berlangganan?",
+        "Desc_2": "Anda tidak akan melihat lebih banyak pos dari pengalaman ini",
+        "Btn": "Berhenti berangganan"
+      },
+      "Max_Exp": "Anda hanya dapat menambahkan maksimal 10 pengalaman"
+    },
     "Clone": {
       "Title": "Klon Eperience"
     },
@@ -7,7 +16,28 @@
       "Title": "Ubah Experience"
     },
     "Preview": {
-      "Title": "Pratinjau Experience"
+      "Title": "Pratinjau Experience",
+      "Text_1": "pelanggan",
+      "Text_2": "cloners",
+      "Button": {
+        "Edit": "Edit experience",
+        "Subscribe": "Berlangganan",
+        "Unsubscribe": "Berhenti berlangganan",
+        "Clone": "Clone"
+      },
+      "Subheader": {
+        "Author": "Pengarang",
+        "Tags": {
+          "Title": "Tag",
+          "Sub_Included": "Included tag",
+          "Sub_Excluded": "Excluded tag"
+        },
+        "People": "People",
+        "Post": "Post"
+      },
+      "Post": {
+        "Empty": "Pos yang ditambahkan akan muncul di sini. Anda dapat menambahkan postingan ke pengalaman dengan memilih 'tambahkan postingan ke pengalaman' pada opsi lainnya."
+      }
     },
     "Create": {
       "Title": "Buat Experience"

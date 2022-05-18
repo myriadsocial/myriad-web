@@ -22,6 +22,7 @@ import {useExperienceHook} from 'src/hooks/use-experience-hook';
 import {Experience, WrappedExperience} from 'src/interfaces/experience';
 import {People} from 'src/interfaces/people';
 import {SocialsEnum} from 'src/interfaces/social';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -127,9 +128,11 @@ export const ExperiencePreview: React.FC<Props> = props => {
 
   const openUnsubscribeConfirmation = () => {
     confirm({
-      title: 'Unsubscribe?',
-      description: "Do you want to unsubscribe?\n You won't see more post from this experience",
-      confirmationText: 'Unsubscribe',
+      title: i18n.t('Experience.Alert.Confirmation_Unsub.Title'),
+      description: `${i18n.t('Experience.Alert.Confirmation_Unsub.Desc_1')}\n ${i18n.t(
+        'Experience.Alert.Confirmation_Unsub.Desc_2',
+      )}`,
+      confirmationText: i18n.t('Experience.Alert.Confirmation_Unsub.Btn'),
       onConfirm: () => {
         const subscribedExperience = userExperiences.find(
           ar => ar.experience.id === experience.id && ar.subscribed === true,
@@ -177,13 +180,17 @@ export const ExperiencePreview: React.FC<Props> = props => {
               <Typography className={style.counterNumberMetric}>
                 {experience.subscribedCount}
               </Typography>
-              <Typography className={style.counterTextMetric}>&nbsp;subscribers</Typography>
+              <Typography className={style.counterTextMetric}>
+                &nbsp;{i18n.t('Experience.Preview.Text_1')}
+              </Typography>
             </Typography>
             <Typography component={'span'} className={style.wrapperCounter}>
               <Typography className={style.counterNumberMetric}>
                 {experience.clonedCount}
               </Typography>
-              <Typography className={style.counterTextMetric}>&nbsp;cloners</Typography>
+              <Typography className={style.counterTextMetric}>
+                &nbsp;{i18n.t('Experience.Preview.Text_2')}
+              </Typography>
             </Typography>
           </div>
           {(experience?.createdBy !== user?.id || anonymous) && (
@@ -194,7 +201,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
                 color="secondary"
                 className={style.clone}
                 onClick={handleCloneExperience}>
-                Clone
+                {i18n.t('Experience.Preview.Button.Clone')}
               </Button>
               <Button
                 disabled={isDisable()}
@@ -202,7 +209,9 @@ export const ExperiencePreview: React.FC<Props> = props => {
                 color="primary"
                 className={style.subscribe}
                 onClick={isSubscribed() ? openUnsubscribeConfirmation : handleSubscribeExperience}>
-                {isSubscribed() ? 'Unsubscribe' : 'Subscribe'}
+                {isSubscribed()
+                  ? i18n.t('Experience.Preview.Button.Unsubscribe')
+                  : i18n.t('Experience.Preview.Button.Subscribe')}
               </Button>
             </div>
           )}
@@ -214,14 +223,16 @@ export const ExperiencePreview: React.FC<Props> = props => {
               variant="contained"
               color="primary"
               onClick={handleEditExperience}>
-              Edit experience
+              {i18n.t('Experience.Preview.Button.Edit')}
             </Button>
           )}
         </div>
       </div>
       <Typography className={style.description}>{experience.description}</Typography>
       <div className={style.mb30}>
-        <Typography className={style.subtitle}>{'Author'}</Typography>
+        <Typography className={style.subtitle}>
+          {i18n.t('Experience.Preview.Subheader.Author')}
+        </Typography>
         <div className={style.flex}>
           <Avatar
             alt={experience.user.name}
@@ -234,14 +245,22 @@ export const ExperiencePreview: React.FC<Props> = props => {
         </div>
       </div>
       <div className={style.mb30}>
-        <Typography className={style.subtitle}>{'Tags'}</Typography>
-        <Typography className={style.tagSection}>{'Included tag'}</Typography>
+        <Typography className={style.subtitle}>
+          {i18n.t('Experience.Preview.Subheader.Tags.Title')}
+        </Typography>
+        <Typography className={style.tagSection}>
+          {i18n.t('Experience.Preview.Subheader.Tags.Sub_Included')}
+        </Typography>
         <Typography>{parsingTags(TagsProps.ALLOWED)}</Typography>
-        <Typography className={style.tagSection}>{'Excluded tag'}</Typography>
+        <Typography className={style.tagSection}>
+          {i18n.t('Experience.Preview.Subheader.Tags.Sub_Excluded')}
+        </Typography>
         <Typography>{parsingTags(TagsProps.PROHIBITED)}</Typography>
       </div>
       <div className={style.subtitleContainer}>
-        <Typography className={style.subtitle}>{'People'}</Typography>
+        <Typography className={style.subtitle}>
+          {i18n.t('Experience.Preview.Subheader.People')}
+        </Typography>
         <IconButton onClick={handleExpandPeople} color="primary" aria-label="expand">
           <SvgIcon
             component={isExpandPeople ? ChevronUpIcon : ChevronDownIcon}
@@ -267,7 +286,9 @@ export const ExperiencePreview: React.FC<Props> = props => {
           ))}
 
       <div className={style.subtitleContainer}>
-        <Typography className={style.subtitle}>{'Post'}</Typography>
+        <Typography className={style.subtitle}>
+          {i18n.t('Experience.Preview.Subheader.Post')}
+        </Typography>
         <IconButton onClick={handleExpandPosts} color="primary" aria-label="expand">
           <SvgIcon
             component={isExpandPost ? ChevronUpIcon : ChevronDownIcon}
@@ -285,10 +306,11 @@ export const ExperiencePreview: React.FC<Props> = props => {
           loader={<Loading />}>
           {experiencePosts.length === 0 ? (
             <div className={style.postTextContainer}>
-              <Typography className={style.textPost}>Post</Typography>
+              <Typography className={style.textPost}>
+                {i18n.t('Experience.Preview.Subheader.Post')}
+              </Typography>
               <Typography className={style.textPostDetail}>
-                Added posts will appear here. You can add a post to experience by select "add post
-                to experience" on more option.
+                {i18n.t('Experience.Preview.Post.Empty')}
               </Typography>
             </div>
           ) : (

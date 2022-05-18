@@ -1,5 +1,14 @@
 {
   "Experience": {
+    "Alert": {
+      "Confirmation_Unsub": {
+        "Title": "Unsubscribe?",
+        "Desc_1": "Do you want to unsubscribe?",
+        "Desc_2": "You won't see more post from this experience",
+        "Btn": "Unsubscribe"
+      },
+      "Max_Exp": "You can only add up to 10 experiences max"
+    },
     "Clone": {
       "Title": "Clone Eperience"
     },
@@ -7,7 +16,28 @@
       "Title": "Edit Experience"
     },
     "Preview": {
-      "Title": "Preview Experience"
+      "Title": "Preview Experience",
+      "Text_1": "subscribers",
+      "Text_2": "cloners",
+      "Button": {
+        "Edit": "Edit experience",
+        "Subscribe": "Subscribe",
+        "Unsubscribe": "Unsubscribe",
+        "Clone": "Clone"
+      },
+      "Subheader": {
+        "Author": "Author",
+        "Tags": {
+          "Title": "Tags",
+          "Sub_Included": "Included tag",
+          "Sub_Excluded": "Excluded tag"
+        },
+        "People": "People",
+        "Post": "Post"
+      },
+      "Post": {
+        "Empty": "Added posts will appear here. You can add a post to experience by select 'add post to experience' on more option."
+      }
     },
     "Create": {
       "Title": "Create Experience"

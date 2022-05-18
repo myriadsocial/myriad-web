@@ -5,9 +5,10 @@ import {useRouter} from 'next/router';
 import {ExperiencePreview} from './ExperiencePreview';
 import {useStyles} from './experience.style';
 
-import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
+import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
+import i18n from 'src/locale';
 
 export const ExperiencePreviewContainer: React.FC = () => {
   const {
@@ -29,7 +30,7 @@ export const ExperiencePreviewContainer: React.FC = () => {
   const handleSubscribeExperience = (experienceId: string) => {
     if (userExperiences.length === 10) {
       openToasterSnack({
-        message: 'You can only add up to 10 experiences max',
+        message: i18n.t('Experience.Alert.Max_Exp'),
         variant: 'warning',
       });
     } else {
@@ -44,7 +45,7 @@ export const ExperiencePreviewContainer: React.FC = () => {
   const handleCloneExperience = (experienceId: string) => {
     if (userExperiences.length === 10) {
       openToasterSnack({
-        message: 'You can only add up to 10 experiences max',
+        message: i18n.t('Experience.Alert.Max_Exp'),
         variant: 'warning',
       });
     } else {
@@ -62,7 +63,7 @@ export const ExperiencePreviewContainer: React.FC = () => {
     <>
       <TopNavbarComponent
         description={experience.name || 'Experience'}
-        sectionTitle={SectionTitle.EXPERIENCE}
+        sectionTitle={i18n.t('TopNavbar.Title.Experience')}
         reverse
       />
       <div className={style.box}>
