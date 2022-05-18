@@ -57,7 +57,7 @@ export const getUserDetail = async (id: string, userId?: string): Promise<User &
     params.userId = userId;
   }
 
-  const {data} = await MyriadAPI.request<User & BlockedProps>({
+  const {data} = await MyriadAPI().request<User & BlockedProps>({
     url: `users/${id}`,
     method: 'GET',
     params,
@@ -67,7 +67,7 @@ export const getUserDetail = async (id: string, userId?: string): Promise<User &
 };
 
 export const getUserByAddress = async (address: string[]): Promise<UserList> => {
-  const {data} = await MyriadAPI.request<UserList>({
+  const {data} = await MyriadAPI().request<UserList>({
     url: '/users',
     method: 'GET',
     params: {
@@ -86,7 +86,7 @@ export const getUserByAddress = async (address: string[]): Promise<UserList> => 
 };
 
 export const createUser = async (values: Partial<User>): Promise<User> => {
-  const {data} = await MyriadAPI.request<User>({
+  const {data} = await MyriadAPI().request<User>({
     url: '/users',
     method: 'POST',
     data: values,
@@ -96,7 +96,7 @@ export const createUser = async (values: Partial<User>): Promise<User> => {
 };
 
 export const updateUser = async (userId: string, values: Partial<User>): Promise<User> => {
-  const {data} = await MyriadAPI.request<User>({
+  const {data} = await MyriadAPI().request<User>({
     url: `/users/${userId}`,
     method: 'PATCH',
     data: values,
@@ -124,7 +124,7 @@ export const searchUsers = async (page = 1, query?: string): Promise<UserList> =
     };
   }
 
-  const {data} = await MyriadAPI.request<UserList>({
+  const {data} = await MyriadAPI().request<UserList>({
     url: '/users',
     method: 'GET',
     params,
@@ -134,7 +134,7 @@ export const searchUsers = async (page = 1, query?: string): Promise<UserList> =
 };
 
 export const getUserTransactionDetail = async (id: string): Promise<UserTransactionDetail> => {
-  const {data} = await MyriadAPI.request<UserTransactionDetail>({
+  const {data} = await MyriadAPI().request<UserTransactionDetail>({
     url: `/users/${id}/transaction-summary`,
     method: 'GET',
   });
@@ -143,7 +143,7 @@ export const getUserTransactionDetail = async (id: string): Promise<UserTransact
 };
 
 export const searchUsername = async (query: string): Promise<UserList> => {
-  const {data} = await MyriadAPI.request<UserList>({
+  const {data} = await MyriadAPI().request<UserList>({
     url: '/users',
     method: 'GET',
     params: {
@@ -159,7 +159,7 @@ export const searchUsername = async (query: string): Promise<UserList> => {
 };
 
 export const checkUsername = async (userId: string): Promise<ActivityList> => {
-  const {data} = await MyriadAPI.request<ActivityList>({
+  const {data} = await MyriadAPI().request<ActivityList>({
     url: '/activity-logs',
     method: 'GET',
     params: {
@@ -175,7 +175,7 @@ export const checkUsername = async (userId: string): Promise<ActivityList> => {
 };
 
 export const getUsername = async (username: string): Promise<boolean> => {
-  const {data} = await MyriadAPI.request({
+  const {data} = await MyriadAPI().request({
     url: `/username/${username}`,
     method: 'GET',
   });
@@ -184,7 +184,7 @@ export const getUsername = async (username: string): Promise<boolean> => {
 };
 
 export const getWalletAddress = async (userId: string): Promise<WalletDetail> => {
-  const {data} = await MyriadAPI.request<WalletDetail>({
+  const {data} = await MyriadAPI().request<WalletDetail>({
     url: `/users/${userId}/walletaddress`,
     method: 'GET',
   });

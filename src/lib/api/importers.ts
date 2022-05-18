@@ -12,7 +12,7 @@ export const getImporters = async (
   userId: string,
   page = 1,
 ): Promise<ImporterList> => {
-  const {data} = await MyriadAPI.request<ImporterList>({
+  const {data} = await MyriadAPI().request<ImporterList>({
     url: `/posts/${originPostId}/importers/${platform}`,
     method: 'GET',
     params: {

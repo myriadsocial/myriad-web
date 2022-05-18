@@ -4,16 +4,15 @@ import getConfig from 'next/config';
 
 import axios, {AxiosInstance} from 'axios';
 
-type AuthorizationParams = {
-  type: string;
-  credential: string;
+type MyriadAPIParams = {
+  cookie?: string;
 };
 
 let API: AxiosInstance;
 
 const {publicRuntimeConfig} = getConfig();
 
-export const initialize = (params?: AuthorizationParams): AxiosInstance => {
+export const initialize = (params?: MyriadAPIParams): AxiosInstance => {
   if (!API) {
     API = axios.create({
       baseURL: publicRuntimeConfig.appAuthURL + '/api',
@@ -37,22 +36,18 @@ export const initialize = (params?: AuthorizationParams): AxiosInstance => {
     );
   }
 
-  return API;
-};
-
-export const setHeaders = (headers: {cookie?: string}): void => {
-  if (!headers?.cookie) return;
-
-  if (API) {
+  if (params?.cookie) {
     API.interceptors.request.use(config => {
       config.headers = {
         ...config.headers,
-        cookie: headers.cookie,
+        cookie: params.cookie,
       };
 
       return config;
     });
   }
+
+  return API;
 };
 
-export default initialize();
+export default initialize;

@@ -19,7 +19,7 @@ import {generateAnonymousUser} from 'src/helpers/auth';
 import {FriendStatus} from 'src/interfaces/friend';
 import {Post, PostVisibility} from 'src/interfaces/post';
 import {Privacy} from 'src/interfaces/setting';
-import {setHeaders} from 'src/lib/api/base';
+import {initialize} from 'src/lib/api/base';
 import * as FriendAPI from 'src/lib/api/friends';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as PostAPI from 'src/lib/api/post';
@@ -113,7 +113,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const session = await getSession(context);
 
-  setHeaders({cookie: req.headers.cookie as string});
+  initialize({cookie: req.headers.cookie as string});
 
   const anonymous = session?.user.anonymous || !session ? true : false;
   const userAddress = session?.user.address as string;

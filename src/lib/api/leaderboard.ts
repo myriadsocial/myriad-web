@@ -20,7 +20,7 @@ export const fetchLeaderboard = async (page = 1): Promise<UserList> => {
     pageNumber: page,
   };
 
-  const {data} = await MyriadAPI.request<UserList>({
+  const {data} = await MyriadAPI().request<UserList>({
     url: '/users',
     method: 'GET',
     params,

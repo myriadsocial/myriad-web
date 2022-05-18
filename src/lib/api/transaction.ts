@@ -8,7 +8,7 @@ import {Transaction, TransactionProps, TransactionInfo} from 'src/interfaces/tra
 type TransactionList = BaseList<Transaction>;
 
 export const storeTransaction = async (values: TransactionProps): Promise<Transaction> => {
-  const {data} = await MyriadAPI.request<Transaction>({
+  const {data} = await MyriadAPI().request<Transaction>({
     url: '/transactions',
     method: 'POST',
     data: values,
@@ -53,7 +53,7 @@ export const getTransactions = async (
     status = 'sent';
   }
 
-  const {data} = await MyriadAPI.request<TransactionList>({
+  const {data} = await MyriadAPI().request<TransactionList>({
     url: '/transactions',
     method: 'GET',
     params: {
@@ -74,14 +74,14 @@ export const getTransactions = async (
 };
 
 export const removeTransaction = async (transactionId: string): Promise<void> => {
-  await MyriadAPI.request({
+  await MyriadAPI().request({
     url: `/transactions/${transactionId}`,
     method: 'DELETE',
   });
 };
 
 export const updateTransaction = async (transactionInfo: TransactionInfo): Promise<void> => {
-  await MyriadAPI.request({
+  await MyriadAPI().request({
     url: `/transactions`,
     method: 'PATCH',
     data: transactionInfo,

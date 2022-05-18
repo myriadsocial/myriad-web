@@ -31,7 +31,7 @@ export const image = async (
   const formData = new FormData();
   formData.append('file', file);
 
-  const {data} = await MyriadAPI.request<ResponseFileUpload>({
+  const {data} = await MyriadAPI().request<ResponseFileUpload>({
     url: `/buckets/${userId}/${kind}`,
     method: 'POST',
     headers: {
@@ -54,7 +54,7 @@ export const video = async (
   const formData = new FormData();
   formData.append('file', file);
 
-  const {data} = await MyriadAPI.request<ResponseFileUpload>({
+  const {data} = await MyriadAPI().request<ResponseFileUpload>({
     url: `/buckets/${userId}/${kind}`,
     method: 'POST',
     headers: {

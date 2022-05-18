@@ -6,7 +6,7 @@ import Head from 'next/head';
 
 import {ExperienceEditContainer} from 'src/components/ExperiencePreview/ExperienceEdit.container';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
-import {setHeaders} from 'src/lib/api/base';
+import {initialize} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
@@ -72,7 +72,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const session = await getSession(context);
 
-  setHeaders({cookie: req.headers.cookie as string});
+  initialize({cookie: req.headers.cookie as string});
 
   if (!session) {
     return {

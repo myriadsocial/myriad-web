@@ -10,7 +10,7 @@ import {useRouter} from 'next/router';
 import {ExperiencePreviewContainer} from 'src/components/ExperiencePreview/ExperiencePreview.container';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {generateAnonymousUser} from 'src/helpers/auth';
-import {setHeaders} from 'src/lib/api/base';
+import {initialize} from 'src/lib/api/base';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
@@ -79,7 +79,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const session = await getSession(context);
 
-  setHeaders({cookie: req.headers.cookie as string});
+  initialize({cookie: req.headers.cookie as string});
 
   const anonymous = Boolean(session?.user.anonymous);
   const userAddress = session?.user.address as string;

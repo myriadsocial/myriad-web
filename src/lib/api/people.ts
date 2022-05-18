@@ -7,7 +7,7 @@ import {SocialsEnum} from 'src/interfaces/social';
 type PeopleList = BaseList<People>;
 
 export const getPeople = async (page = 1): Promise<PeopleList> => {
-  const {data} = await MyriadAPI.request<PeopleList>({
+  const {data} = await MyriadAPI().request<PeopleList>({
     url: `/people`,
     method: 'GET',
     params: {
@@ -22,7 +22,7 @@ export const getPeopleByPlatform = async (
   platform: SocialsEnum,
   accountId: string,
 ): Promise<People | null> => {
-  const {data: people} = await MyriadAPI.request<People[]>({
+  const {data: people} = await MyriadAPI().request<People[]>({
     url: `/people`,
     method: 'GET',
     params: {
@@ -44,7 +44,7 @@ export const getPeopleByPlatform = async (
 };
 
 export const createPeople = async (values: Partial<People>): Promise<People> => {
-  const {data} = await MyriadAPI.request<People>({
+  const {data} = await MyriadAPI().request<People>({
     url: '/people',
     method: 'POST',
     data: values,
@@ -54,7 +54,7 @@ export const createPeople = async (values: Partial<People>): Promise<People> => 
 };
 
 export const searchPeople = async (query: string): Promise<People[]> => {
-  const {data} = await MyriadAPI.request<People[]>({
+  const {data} = await MyriadAPI().request<People[]>({
     url: `/people/search?q=${query}`,
     method: 'GET',
   });

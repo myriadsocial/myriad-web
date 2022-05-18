@@ -12,7 +12,7 @@ type FriendList = BaseList<Friend>;
 type FriendRequestList = BaseList<Friend>;
 
 export const getSentRequests = async (userId: string): Promise<FriendList> => {
-  const {data} = await MyriadAPI.request<FriendList>({
+  const {data} = await MyriadAPI().request<FriendList>({
     url: `/friends`,
     method: 'GET',
     params: {
@@ -28,7 +28,7 @@ export const getSentRequests = async (userId: string): Promise<FriendList> => {
 };
 
 export const getFriendRequests = async (userId: string, page = 1): Promise<FriendRequestList> => {
-  const {data} = await MyriadAPI.request<FriendRequestList>({
+  const {data} = await MyriadAPI().request<FriendRequestList>({
     url: `/friends`,
     method: 'GET',
     params: {
@@ -53,7 +53,7 @@ export const getFriends = async (
 ): Promise<FriendList> => {
   const {page = 1, limit = PAGINATION_LIMIT, orderField = 'createdAt', sort = 'DESC'} = pagination;
 
-  const {data} = await MyriadAPI.request<FriendList>({
+  const {data} = await MyriadAPI().request<FriendList>({
     url: `/friends`,
     method: 'GET',
     params: {
@@ -114,7 +114,7 @@ export const getBlockList = async (userId: string, page = 1): Promise<FriendList
     params.pageLimit = PAGINATION_LIMIT;
   }
 
-  const {data} = await MyriadAPI.request<FriendList>({
+  const {data} = await MyriadAPI().request<FriendList>({
     url: `/friends`,
     method: 'GET',
     params,
@@ -130,7 +130,7 @@ export const searchFriend = async (
   const {query, userId} = filter;
   const {page = 1, limit = PAGINATION_LIMIT, orderField = 'createdAt', sort = 'DESC'} = pagination;
 
-  const {data} = await MyriadAPI.request<FriendList>({
+  const {data} = await MyriadAPI().request<FriendList>({
     url: `/users`,
     method: 'GET',
     params: {
@@ -174,7 +174,7 @@ export const checkFriendStatus = async (
   userId: string,
   friendIds: string[],
 ): Promise<FriendList> => {
-  const {data} = await MyriadAPI.request<FriendList>({
+  const {data} = await MyriadAPI().request<FriendList>({
     url: `/friends`,
     method: 'GET',
     params: {
@@ -227,7 +227,7 @@ export const checkFriendStatus = async (
 };
 
 export const sendRequest = async (userId: string, requesteeId: string): Promise<void> => {
-  await MyriadAPI.request<Friend[]>({
+  await MyriadAPI().request<Friend[]>({
     url: `/friends`,
     method: 'POST',
     data: {
@@ -239,7 +239,7 @@ export const sendRequest = async (userId: string, requesteeId: string): Promise<
 };
 
 export const toggleRequest = async (requestId: string, status: FriendStatus): Promise<void> => {
-  await MyriadAPI.request({
+  await MyriadAPI().request({
     url: `/friends/${requestId}`,
     method: 'PATCH',
     data: {
@@ -249,14 +249,14 @@ export const toggleRequest = async (requestId: string, status: FriendStatus): Pr
 };
 
 export const deleteRequest = async (requestId: string): Promise<void> => {
-  await MyriadAPI.request({
+  await MyriadAPI().request({
     url: `/friends/${requestId}`,
     method: 'DELETE',
   });
 };
 
 export const blockUser = async (requesteeId: string, userId: string): Promise<void> => {
-  await MyriadAPI.request({
+  await MyriadAPI().request({
     url: '/friends',
     method: 'POST',
     data: {

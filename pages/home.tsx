@@ -14,7 +14,7 @@ import Banner from 'src/components/atoms/BannerStatus/BannerStatus';
 import {SearchBoxContainer} from 'src/components/atoms/Search/SearchBoxContainer';
 import {TippingSuccess} from 'src/components/common/Tipping/render/Tipping.success';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
-import {setHeaders} from 'src/lib/api/base';
+import {initialize} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
@@ -110,8 +110,8 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   const session = await getSession(context);
-
-  setHeaders({cookie: req.headers.cookie as string});
+  console.log('SET HEADERS');
+  initialize({cookie: req.headers.cookie});
 
   if (!session) {
     return {
