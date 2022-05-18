@@ -8,7 +8,7 @@ type TagList = BaseList<Tag>;
 type TrendingList = BaseList<Tag>;
 
 export const loadTag = async (page = 1): Promise<TagList> => {
-  const {data} = await MyriadAPI.request<TagList>({
+  const {data} = await MyriadAPI().request<TagList>({
     url: '/tags',
     method: 'GET',
     params: {
@@ -22,7 +22,7 @@ export const loadTag = async (page = 1): Promise<TagList> => {
 };
 
 export const searchTag = async (query: string, page = 1): Promise<TagList> => {
-  const {data} = await MyriadAPI.request<TagList>({
+  const {data} = await MyriadAPI().request<TagList>({
     url: '/tags',
     method: 'GET',
     params: {
@@ -43,7 +43,7 @@ export const searchTag = async (query: string, page = 1): Promise<TagList> => {
 };
 
 export const trendingTopic = async (limit?: number): Promise<TrendingList> => {
-  const {data} = await MyriadAPI.request<TrendingList>({
+  const {data} = await MyriadAPI().request<TrendingList>({
     url: '/tags',
     method: 'GET',
     params: {

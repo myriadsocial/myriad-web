@@ -7,7 +7,7 @@ type CurrencyList = BaseList<Currency>;
 type UserCurrencyList = BaseList<UserCurrency>;
 
 export const getTokens = async (): Promise<CurrencyList> => {
-  const {data} = await MyriadAPI.request<CurrencyList>({
+  const {data} = await MyriadAPI().request<CurrencyList>({
     url: '/currencies',
     method: 'GET',
   });
@@ -16,7 +16,7 @@ export const getTokens = async (): Promise<CurrencyList> => {
 };
 
 export const searchToken = async (query: string): Promise<CurrencyList> => {
-  const {data} = await MyriadAPI.request<CurrencyList>({
+  const {data} = await MyriadAPI().request<CurrencyList>({
     url: `/currencies`,
     method: 'GET',
     params: {
@@ -34,7 +34,7 @@ export const searchToken = async (query: string): Promise<CurrencyList> => {
 };
 
 export const addNewToken = async (values: CurrencyProps): Promise<Currency[]> => {
-  const {data} = await MyriadAPI.request<Currency[]>({
+  const {data} = await MyriadAPI().request<Currency[]>({
     url: `/currencies`,
     method: 'POST',
     data: values,
@@ -44,7 +44,7 @@ export const addNewToken = async (values: CurrencyProps): Promise<Currency[]> =>
 };
 
 export const addUserToken = async (values: UserCurrencyProps): Promise<Currency> => {
-  const {data} = await MyriadAPI.request<Currency>({
+  const {data} = await MyriadAPI().request<Currency>({
     url: `/user-currencies`,
     method: 'POST',
     data: values,
@@ -55,7 +55,7 @@ export const addUserToken = async (values: UserCurrencyProps): Promise<Currency>
 
 export const changeDefaultCurrency = async (values: UserCurrencyProps): Promise<boolean | null> => {
   const {userId, currencyId} = values;
-  const {status: statusCode} = await MyriadAPI({
+  const {status: statusCode} = await MyriadAPI()({
     url: `/users/${userId}/select-currency/${currencyId}`,
     method: 'PATCH',
   });
@@ -68,7 +68,7 @@ export const changeDefaultCurrency = async (values: UserCurrencyProps): Promise<
 };
 
 export const getUserCurrencies = async (userId: string): Promise<UserCurrencyList> => {
-  const {data} = await MyriadAPI.request<UserCurrencyList>({
+  const {data} = await MyriadAPI().request<UserCurrencyList>({
     url: '/user-currencies',
     method: 'GET',
     params: {
@@ -86,7 +86,7 @@ export const getUserCurrencies = async (userId: string): Promise<UserCurrencyLis
 };
 
 export const updateCurrencySet = async (userId: string, currenciesId: string[]): Promise<void> => {
-  await MyriadAPI.request({
+  await MyriadAPI().request({
     url: `/user-currencies`,
     method: 'PATCH',
     data: {

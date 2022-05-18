@@ -38,7 +38,7 @@ export interface Server {
 }
 
 export const getUserNonce = async (id: string): Promise<UserNonceProps> => {
-  const {data} = await MyriadAPI.request({
+  const {data} = await MyriadAPI().request({
     url: `wallets/${id}/nonce`,
     method: 'GET',
   });
@@ -81,7 +81,7 @@ export const getUserByWalletAddress = async (address: string): Promise<User & Bl
     },
   };
 
-  const {data} = await MyriadAPI.request<User & BlockedProps>({
+  const {data} = await MyriadAPI().request<User & BlockedProps>({
     url: `wallets/${address}/user`,
     method: 'GET',
     params,
@@ -91,7 +91,7 @@ export const getUserByWalletAddress = async (address: string): Promise<User & Bl
 };
 
 export const getCurrentUserWallet = async (): Promise<UserWallet> => {
-  const {data} = await MyriadAPI.request({
+  const {data} = await MyriadAPI().request({
     url: `/wallet`,
     method: 'GET',
   });
@@ -100,7 +100,7 @@ export const getCurrentUserWallet = async (): Promise<UserWallet> => {
 };
 
 export const getUserWallets = async (userId: string): Promise<WalletList> => {
-  const {data} = await MyriadAPI.request({
+  const {data} = await MyriadAPI().request({
     url: `/users/${userId}/wallets`,
     method: 'GET',
     params: {
@@ -114,7 +114,7 @@ export const getUserWallets = async (userId: string): Promise<WalletList> => {
 };
 
 export const getUserNonceByUserId = async (id: string): Promise<UserNonceProps> => {
-  const {data} = await MyriadAPI.request({
+  const {data} = await MyriadAPI().request({
     url: `users/${id}/nonce`,
     method: 'GET',
   });
@@ -127,7 +127,7 @@ export const connectNetwork = async (
   id: string,
 ): Promise<Wallet | null> => {
   try {
-    const {data} = await MyriadAPI.request<Wallet>({
+    const {data} = await MyriadAPI().request<Wallet>({
       url: `users/${id}/wallets`,
       method: 'POST',
       data: payload,
@@ -149,7 +149,7 @@ export const connectNetwork = async (
 
 export const switchNetwork = async (payload: ConnectNetwork, id: string): Promise<void> => {
   try {
-    await MyriadAPI.request({
+    await MyriadAPI().request({
       url: `users/${id}/networks`,
       method: 'PATCH',
       data: payload,
@@ -168,7 +168,7 @@ export const switchNetwork = async (payload: ConnectNetwork, id: string): Promis
 };
 
 export const getNetworks = async (): Promise<Networks> => {
-  const {data} = await MyriadAPI.request({
+  const {data} = await MyriadAPI().request({
     url: `/networks`,
     method: 'GET',
     params: {
@@ -189,7 +189,7 @@ export const getNetworks = async (): Promise<Networks> => {
 };
 
 export const getServerId = async (): Promise<string> => {
-  const {data} = await MyriadAPI.request<Server>({
+  const {data} = await MyriadAPI().request<Server>({
     url: `/server`,
     method: 'GET',
   });

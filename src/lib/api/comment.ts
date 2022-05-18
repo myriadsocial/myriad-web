@@ -43,7 +43,7 @@ export const loadComments = async (
     };
   }
 
-  const {data} = await MyriadAPI.request<CommentList>({
+  const {data} = await MyriadAPI().request<CommentList>({
     url: `/comments`,
     method: 'GET',
     params: {
@@ -73,7 +73,7 @@ export const loadComments = async (
 };
 
 export const reply = async (comment: CommentProps): Promise<Comment> => {
-  const {data} = await MyriadAPI.request<Comment>({
+  const {data} = await MyriadAPI().request<Comment>({
     url: `/comments`,
     method: 'POST',
     data: comment,
@@ -83,7 +83,7 @@ export const reply = async (comment: CommentProps): Promise<Comment> => {
 };
 
 export const remove = async (commentId: string): Promise<Comment> => {
-  const {data} = await MyriadAPI.request<Comment>({
+  const {data} = await MyriadAPI().request<Comment>({
     url: `/comments/${commentId}`,
     method: 'DELETE',
   });
@@ -101,7 +101,7 @@ export const loadUserComments = async (
     userId,
   };
 
-  const {data} = await MyriadAPI.request<CommentList>({
+  const {data} = await MyriadAPI().request<CommentList>({
     url: `/comments`,
     method: 'GET',
     params: {
@@ -131,7 +131,7 @@ export const loadUserComments = async (
 };
 
 export const getWalletAddress = async (commentId: string): Promise<WalletDetail> => {
-  const {data} = await MyriadAPI.request<WalletDetail>({
+  const {data} = await MyriadAPI().request<WalletDetail>({
     url: `/comments/${commentId}/walletaddress`,
     method: 'GET',
   });

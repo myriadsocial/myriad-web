@@ -6,7 +6,7 @@ export const updateAccountSettings = async (
   userId: string,
   settings: Partial<PrivacySettings>,
 ): Promise<PrivacySettings> => {
-  const {data} = await MyriadAPI.request<PrivacySettings>({
+  const {data} = await MyriadAPI().request<PrivacySettings>({
     url: `/users/${userId}/account-setting`,
     method: 'PATCH',
     data: settings,
@@ -15,7 +15,7 @@ export const updateAccountSettings = async (
 };
 
 export const getAccountSettings = async (userId: string): Promise<PrivacySettings> => {
-  const {data} = await MyriadAPI.request<PrivacySettings>({
+  const {data} = await MyriadAPI().request<PrivacySettings>({
     url: `/users/${userId}/account-setting`,
     method: 'GET',
   });
@@ -27,7 +27,7 @@ export const updateNotificationSettings = async (
   userId: string,
   settings: NotificationSettingItems,
 ): Promise<NotificationSettingItems> => {
-  const {data} = await MyriadAPI.request<NotificationSettingItems>({
+  const {data} = await MyriadAPI().request<NotificationSettingItems>({
     url: `/users/${userId}/notification-setting`,
     method: 'PATCH',
     data: settings,
@@ -38,7 +38,7 @@ export const updateNotificationSettings = async (
 export const getNotificationSettings = async (
   userId: string,
 ): Promise<NotificationSettingItems> => {
-  const {data} = await MyriadAPI.request<NotificationSettingItems>({
+  const {data} = await MyriadAPI().request<NotificationSettingItems>({
     url: `/users/${userId}/notification-setting`,
     method: 'GET',
   });

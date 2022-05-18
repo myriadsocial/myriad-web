@@ -10,6 +10,7 @@ import AlertComponent from 'src/components/atoms/Alert/Alert.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {LoginLayout} from 'src/components/template/Login';
 import {useAlertHook} from 'src/hooks/use-alert.hook';
+import {initialize} from 'src/lib/api/base';
 import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
@@ -121,6 +122,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     };
   }
 
+  initialize();
   await dispatch(fetchNetwork());
 
   return {

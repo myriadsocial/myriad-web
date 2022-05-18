@@ -12,7 +12,7 @@ import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {Experience} from 'src/interfaces/experience';
 import {People} from 'src/interfaces/people';
-import {setHeaders} from 'src/lib/api/base';
+import {initialize} from 'src/lib/api/base';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
@@ -91,7 +91,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const session = await getSession(context);
 
-  setHeaders({cookie: req.headers.cookie as string});
+  initialize({cookie: req.headers.cookie as string});
 
   if (!session) {
     return {

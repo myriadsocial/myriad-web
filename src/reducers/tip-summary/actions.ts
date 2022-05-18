@@ -154,7 +154,7 @@ export const fetchTransactionSummary: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      const {data} = await MyriadAPI.request<TransactionDetail[]>({
+      const {data} = await MyriadAPI().request<TransactionDetail[]>({
         url: `/posts/${post.id}/transaction-summary`,
         method: 'GET',
       });
@@ -232,7 +232,7 @@ export const fetchTransactionSummaryForComment: ThunkActionCreator<Actions, Root
         throw new Error('Comment not found');
       }
 
-      const {data} = await MyriadAPI.request<TransactionDetail[]>({
+      const {data} = await MyriadAPI().request<TransactionDetail[]>({
         url: `/comments/${comment.id}/transaction-summary`,
         method: 'GET',
       });

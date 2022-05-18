@@ -15,7 +15,7 @@ import {TippingSuccess} from 'src/components/common/Tipping/render/Tipping.succe
 import ShowIf from 'src/components/common/show-if.component';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {generateAnonymousUser} from 'src/helpers/auth';
-import {setHeaders} from 'src/lib/api/base';
+import {initialize} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
@@ -97,7 +97,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const session = await getSession(context);
 
-  setHeaders({cookie: req.headers.cookie as string});
+  initialize({cookie: req.headers.cookie as string});
 
   const anonymous = session?.user.anonymous || !session ? true : false;
   const userId = session?.user.address as string;

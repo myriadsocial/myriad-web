@@ -138,7 +138,7 @@ export const getPost = async (
       break;
   }
 
-  const {data} = await MyriadAPI.request<PostList>({
+  const {data} = await MyriadAPI().request<PostList>({
     url: '/posts',
     method: 'GET',
     params,
@@ -201,7 +201,7 @@ export const findPosts = async (
     });
   }
 
-  const {data} = await MyriadAPI.request<PostList>({
+  const {data} = await MyriadAPI().request<PostList>({
     url: path,
     method: 'GET',
     params: {
@@ -228,7 +228,7 @@ export const findPosts = async (
 };
 
 export const createPost = async (values: PostProps): Promise<Post> => {
-  const {data} = await MyriadAPI.request<Post>({
+  const {data} = await MyriadAPI().request<Post>({
     url: '/posts',
     method: 'POST',
     data: {
@@ -245,7 +245,7 @@ export const importPost = async (values: ImportPostProps): Promise<Post> => {
     ...values,
   };
 
-  const {data} = await MyriadAPI.request<Post>({
+  const {data} = await MyriadAPI().request<Post>({
     url: `/posts/import`,
     method: 'POST',
     data: attributes,
@@ -289,7 +289,7 @@ export const getPostDetail = async (id: string, currentUserId?: string): Promise
     });
   }
 
-  const {data} = await MyriadAPI.request<Post>({
+  const {data} = await MyriadAPI().request<Post>({
     url: `/posts/${id}`,
     method: 'GET',
     params: {
@@ -308,7 +308,7 @@ export const getPostDetail = async (id: string, currentUserId?: string): Promise
 };
 
 export const editPost = async (id: string, payload: Partial<PostProps>): Promise<void> => {
-  await MyriadAPI.request<Post>({
+  await MyriadAPI().request<Post>({
     url: `/posts/${id}`,
     method: 'PATCH',
     data: payload,
@@ -316,14 +316,14 @@ export const editPost = async (id: string, payload: Partial<PostProps>): Promise
 };
 
 export const removePost = async (postId: string): Promise<void> => {
-  await MyriadAPI.request({
+  await MyriadAPI().request({
     url: `/posts/${postId}`,
     method: 'DELETE',
   });
 };
 
 export const getWalletAddress = async (postId: string): Promise<WalletDetail> => {
-  const {data} = await MyriadAPI.request<WalletDetail>({
+  const {data} = await MyriadAPI().request<WalletDetail>({
     url: `/posts/${postId}/walletaddress`,
     method: 'GET',
   });
@@ -335,7 +335,7 @@ export const getImporters = async (
   originPostId: string,
   platform: PostOrigin,
 ): Promise<ImporterList> => {
-  const {data} = await MyriadAPI.request({
+  const {data} = await MyriadAPI().request({
     url: `/posts/${originPostId}/importers/${platform}`,
     method: 'GET',
   });

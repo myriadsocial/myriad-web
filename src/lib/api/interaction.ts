@@ -22,7 +22,7 @@ export const vote = async (
     section,
   };
 
-  const {data} = await MyriadAPI.request<Vote>({
+  const {data} = await MyriadAPI().request<Vote>({
     url: `/votes`,
     method: 'POST',
     data: attributes,
@@ -48,7 +48,7 @@ export const downvote = async (
     section,
   };
 
-  const {data} = await MyriadAPI.request<Vote>({
+  const {data} = await MyriadAPI().request<Vote>({
     url: `/votes`,
     method: 'POST',
     data: attributes,
@@ -58,7 +58,7 @@ export const downvote = async (
 };
 
 export const removeVote = async (id: string): Promise<void> => {
-  await MyriadAPI.request({
+  await MyriadAPI().request({
     url: `/votes/${id}`,
     method: 'DELETE',
   });
@@ -68,7 +68,7 @@ export const report = async (
   userId: string,
   report: Pick<ReportProps, 'referenceId' | 'type' | 'referenceType' | 'description'>,
 ): Promise<void> => {
-  await MyriadAPI.request({
+  await MyriadAPI().request({
     url: `users/${userId}/reports`,
     method: 'POST',
     data: report,
