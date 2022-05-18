@@ -20,11 +20,13 @@ const mentionables: MentionNodeData[] = [
   {
     value: '0',
     name: 'Myriad User',
+    username: 'myriaduser',
     avatar: 'https://res.cloudinary.com/dsget80gs/w_150,h_150,c_thumb/e6bvyvm8xtewfzafmgto.jpg',
   },
   {
     value: '1',
     name: 'Other User',
+    username: 'otheruser',
     avatar: 'https://res.cloudinary.com/dsget80gs/w_150,h_150,c_thumb/e6bvyvm8xtewfzafmgto.jpg',
   },
 ];

@@ -106,7 +106,7 @@ export const CommentEditor: React.FC<PostEditorProps> = props => {
     insertSpaceAfterMention: true,
     trigger: '@',
     mentionableFilter: (s: string) => (mentionable: MentionNodeData) =>
-      mentionable.name.toLowerCase().includes(s.toLowerCase()),
+      mentionable.username.toLowerCase().includes(s.toLowerCase()),
     mentionableSearchPattern: '\\S*',
   };
 

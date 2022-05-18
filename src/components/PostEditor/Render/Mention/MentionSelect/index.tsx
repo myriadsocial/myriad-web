@@ -44,15 +44,17 @@ export const MentionSelect = (props: MentionSelectProps) => {
   return (
     <PortalBody element={portalElement}>
       <div ref={ref} className={styles.root} {...props}>
-        {options.map((option, i) => (
-          <div
-            role="presentation"
-            key={`${i}-${option.value}`}
-            className={valueIndex === i ? styles.item : styles.selected}
-            onMouseDown={getPreventDefaultHandler(onClickMention, editor, option)}>
-            {renderLabel(option)}
-          </div>
-        ))}
+        <div className={styles.wrapper}>
+          {options.map((option, i) => (
+            <div
+              role="presentation"
+              key={`${i}-${option.value}`}
+              className={valueIndex === i ? styles.selected : styles.item}
+              onMouseDown={getPreventDefaultHandler(onClickMention, editor, option)}>
+              {renderLabel(option)}
+            </div>
+          ))}
+        </div>
       </div>
     </PortalBody>
   );
