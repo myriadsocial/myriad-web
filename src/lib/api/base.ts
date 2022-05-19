@@ -13,7 +13,8 @@ let API: AxiosInstance;
 const {publicRuntimeConfig} = getConfig();
 
 export const initialize = (params?: MyriadAPIParams): AxiosInstance => {
-  if (!API) {
+  // always create new axios instance when cookie changed
+  if (params?.cookie || !API) {
     API = axios.create({
       baseURL: publicRuntimeConfig.appAuthURL + '/api',
     });

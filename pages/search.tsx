@@ -72,7 +72,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const session = await getSession(context);
 
-  initialize({cookie: req.headers.cookie as string});
+  initialize({cookie: req.headers.cookie});
 
   if (!session) {
     return {
