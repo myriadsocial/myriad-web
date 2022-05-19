@@ -1,33 +1,34 @@
 import {MenuOptions} from '../atoms/DropdownMenu';
 
 import {TransactionOrderType} from 'src/interfaces/transaction';
+import i18n from 'src/locale';
 
 export const transactionSortOptions: MenuOptions<TransactionOrderType>[] = [
   {
     id: TransactionOrderType.LATEST,
-    title: 'Latest',
+    title: i18n.t('Wallet.History.Sort_Opt.Latest'),
   },
   {
     id: TransactionOrderType.HIGHEST,
-    title: 'Highest',
+    title: i18n.t('Wallet.History.Sort_Opt.Highest'),
   },
   {
     id: TransactionOrderType.LOWEST,
-    title: 'Lowest',
+    title: i18n.t('Wallet.History.Sort_Opt.Lowest'),
   },
 ];
 
 export const transactionStatusOptions: MenuOptions<string>[] = [
   {
     id: 'all',
-    title: 'All',
+    title: i18n.t('Wallet.History.Tsx_Opt.All'),
   },
   {
     id: 'received',
-    title: 'Received',
+    title: i18n.t('Wallet.History.Tsx_Opt.Received'),
   },
   {
     id: 'sent',
-    title: 'Sent',
+    title: i18n.t('Wallet.History.Tsx_Opt.Sent'),
   },
 ];

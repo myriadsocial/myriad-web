@@ -5,6 +5,7 @@ import {MyWallet} from '.';
 import {useStyles} from './myWallet.style';
 
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -18,7 +19,7 @@ const MyWalletContainer: React.FC = () => {
 
   return (
     <div className={style.root}>
-      <MyWallet headerTitle={'Wallet'} />
+      <MyWallet headerTitle={i18n.t('Wallet.Header')} />
     </div>
   );
 };

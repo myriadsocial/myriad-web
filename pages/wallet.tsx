@@ -6,7 +6,7 @@ import getConfig from 'next/config';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 
-import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
+import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {initialize} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
@@ -48,8 +48,8 @@ const Home: React.FC = () => {
         <title>{i18n.t('Wallet.Title', {appname: publicRuntimeConfig.appName})}</title>
       </Head>
       <TopNavbarComponent
-        sectionTitle={SectionTitle.WALLET}
-        description={`View your balance or manage your wallet`}
+        sectionTitle={i18n.t('TopNavbar.Title.Wallet')}
+        description={i18n.t('TopNavbar.Subtitle.Wallet')}
         type={'menu'}
       />
       <MyWalletContainerWithoutSSR />

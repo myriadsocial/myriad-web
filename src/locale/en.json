@@ -47,7 +47,8 @@
     "Close": "Close",
     "OK": "OK",
     "Back": "Back",
-    "Next": "Next"
+    "Next": "Next",
+    "Cancel": "Cancel"
   },
   "Mobile": {
     "title": "We are trully sorry",
@@ -309,7 +310,83 @@
     "Title": "{{appname}} - Topics"
   },
   "Wallet": {
-    "Title": "{{appname}} - Wallet"
+    "Title": "{{appname}} - Wallet",
+    "Header": "Wallet",
+    "Tab": {
+      "Balance": "Balance",
+      "History": "History",
+      "Tip": "Tip",
+      "Manage": "Manage"
+    },
+    "Balance": {
+      "Search_Plc": "Search coin",
+      "Hide_0": "Hide 0 balance",
+      "Search_Empty": {
+        "Title": "No results",
+        "Subtitle": "Please make sure your keywords match with current network you were in."
+      },
+      "Sort": "Sort",
+      "Sort_Opt": {
+        "Highest": "Highest",
+        "Lowest": "Lowest"
+      },
+      "Empty": {
+        "Title": "You don't have any crypto assets",
+        "Subtitle": "You can add crypto assets by depositing money in your wallet."
+      },
+      "Manage": "Manage assets"
+    },
+    "Primary_Coin": {
+      "Alert": {
+        "Msg": "You have saved your changes."
+      },
+      "Text_1": "Primary coin",
+      "Text_2": "Click and drag to change wallet order",
+      "Btn_Apply": "Apply Changes"
+    },
+    "History": {
+      "Empty": {
+        "Title": "You don't have any transaction",
+        "Subtitle": "Start to send tips in a post!"
+      },
+      "Received": "Received",
+      "Sent": "Sent",
+      "Sort": "Sort",
+      "Sort_Opt": {
+        "Latest": "Latest",
+        "Highest": "Highest",
+        "Lowest": "Lowest"
+      },
+      "Coin": "Coin",
+      "Coin_Opt": {
+        "All": "All"
+      },
+      "Transaction": "Transaction",
+      "Tsx_Opt": {
+        "All": "All",
+        "Received": "Received",
+        "Sent": "Sent"
+      }
+    },
+    "Tip": {
+      "Alert": {
+        "Insufficient": "Insufficient balance",
+        "Success": "Tips will be add to your wallet shortly."
+      },
+      "Empty": {
+        "Title": "You have no tip",
+        "Subtitle": "Start to make a post to get tips from other users."
+      },
+      "Claim_All": "Claim all",
+      "Claim": "Claim",
+      "Switch": "Switch network to claim"
+    },
+    "Manage": {
+      "Alert": {
+        "Copy_Msg": "Wallet address copied to clipboard!"
+      },
+      "Btn_Connect": "Connect"
+    }
   },
   "TopNavbar": {
     "Title": {
@@ -327,7 +404,8 @@
     "Subtitle": {
       "Friends": "{{total}} Friends",
       "Notification": "{{total}} new notifications",
-      "SocialMedia": "{{total}} account connected"
+      "SocialMedia": "{{total}} account connected",
+      "Wallet": "View your balance or manage your wallet"
     }
   }
 }

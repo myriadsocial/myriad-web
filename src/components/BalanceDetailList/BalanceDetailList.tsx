@@ -31,6 +31,7 @@ import ShowIf from 'src/components/common/show-if.component';
 import {formatUsd} from 'src/helpers/balance';
 import {useExchangeRate} from 'src/hooks/use-exchange-rate.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
+import i18n from 'src/locale';
 
 type BalanceDetailListProps = {
   balanceDetails: BalanceDetail[];
@@ -138,7 +139,7 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
       <div className={classes.search}>
         <SearchComponent
           onSubmit={handleSearch}
-          placeholder={'Search coin'}
+          placeholder={i18n.t('Wallet.Balance.Search_Plc')}
           iconPosition={'end'}
           outlined={true}
         />
@@ -148,7 +149,7 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
       </div>
       <div className={classes.headerActionWrapper}>
         <DropdownMenu<BalanceSortType>
-          title={'Sort'}
+          title={i18n.t('Wallet.Balance.Sort')}
           options={balanceSortOptions}
           onChange={handleSortChanged}
           disabled={isSearch}
@@ -166,7 +167,7 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
                 classes={{root: classes.fill}}
               />
             }
-            label="Hide 0 balance"
+            label={i18n.t('Wallet.Balance.Hide_0')}
           />
         </FormGroup>
       </div>
@@ -175,15 +176,15 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
       </ShowIf>
       <ShowIf condition={!defaultBalanceDetails.length && !isLoading && isSearch}>
         <Empty
-          title="No results found"
-          subtitle="Please make sure your keywords match with current network you were in."
+          title={i18n.t('Wallet.Balance.Search_Empty.Title')}
+          subtitle={i18n.t('Wallet.Balance.Search_Empty.Subtitle')}
         />
       </ShowIf>
 
       <ShowIf condition={!defaultBalanceDetails.length && !isLoading && !isSearch}>
         <Empty
-          title="You don't have any crypto assets"
-          subtitle="You can add crypto assets by depositing money in your wallet."
+          title={i18n.t('Wallet.Balance.Empty.Title')}
+          subtitle={i18n.t('Wallet.Balance.Empty.Subtitle')}
         />
       </ShowIf>
 
@@ -238,7 +239,7 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleCloseManageAssets}>
-        <MenuItem onClick={handleOpenManageAsset}>Manage assets</MenuItem>
+        <MenuItem onClick={handleOpenManageAsset}>{i18n.t('Wallet.Balance.Manage')}</MenuItem>
       </Menu>
     </>
   );

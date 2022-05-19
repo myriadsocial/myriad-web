@@ -47,7 +47,8 @@
     "Close": "Tutup",
     "OK": "OK",
     "Back": "Kembali",
-    "Next": "Selanjutnya"
+    "Next": "Selanjutnya",
+    "Cancel": "Batalkan"
   },
   "Mobile": {
     "title": "Kami benar-benar minta maaf",
@@ -305,7 +306,83 @@
     "Title": "{{appname}} - Topik"
   },
   "Wallet": {
-    "Title": "{{appname}} - Dompet"
+    "Title": "{{appname}} - Dompet",
+    "Header": "Dompet",
+    "Tab": {
+      "Balance": "Saldo",
+      "History": "Riwayat",
+      "Tip": "Tip",
+      "Manage": "Kelola"
+    },
+    "Balance": {
+      "Search_Plc": "Cari koin",
+      "Hide_0": "Sembunyikan 0 saldo",
+      "Search_Empty": {
+        "Title": "Tidak ada hasil",
+        "Subtitle": "Pastikan kata kunci Anda cocok dengan network yang ada."
+      },
+      "Sort": "Urutkan",
+      "Sort_Opt": {
+        "Highest": "Tertinggi",
+        "Lowest": "Terendah"
+      },
+      "Empty": {
+        "Title": "Anda tidak memiliki aset kripto",
+        "Subtitle": "Anda dapat menambahkan aset kripto dengan menyetorkan uang ke dompet Anda."
+      },
+      "Manage": "Kelola aset"
+    },
+    "Primary_Coin": {
+      "Alert": {
+        "Msg": "Anda telah menyimpan perubahan Anda."
+      },
+      "Text_1": "Koin primer",
+      "Text_2": "Klik dan seret untuk mengubah urutan dompet",
+      "Btn_Apply": "Terapkan perubahan"
+    },
+    "History": {
+      "Empty": {
+        "Title": "Anda tidak memiliki transaksi apapun",
+        "Subtitle": "Mulai mengirim tip dalam sebuah postingan!"
+      },
+      "Received": "Diterima",
+      "Sent": "terkirim",
+      "Sort": "Urutkan",
+      "Sort_Opt": {
+        "Latest": "Terlama",
+        "Highest": "Tertinggi",
+        "Lowest": "Terendah"
+      },
+      "Coin": "Koin",
+      "Coin_Opt": {
+        "All": "Semua"
+      },
+      "Transaction": "Transaksi",
+      "Tsx_Opt": {
+        "All": "Semua",
+        "Received": "Diterima",
+        "Sent": "Terkirim"
+      }
+    },
+    "Tip": {
+      "Alert": {
+        "Insufficient": "Saldo tidak cukup",
+        "Success": "Tip akan segera ditambahkan ke dompet Anda."
+      },
+      "Empty": {
+        "Title": "Anda tidak punya tip",
+        "Subtitle": "Mulailah membuat postingan untuk mendapatkan tip dari pengguna lain."
+      },
+      "Claim_All": "Klaim Semua",
+      "Claim": "Klaim",
+      "Switch": "Ganti network untuk mengklaim"
+    },
+    "Manage": {
+      "Alert": {
+        "Copy_Msg": "Alamat dompet disalin!"
+      },
+      "Btn_Connect": "Hubungkan"
+    }
   },
   "TopNavbar": {
     "Title": {
@@ -323,7 +400,8 @@
     "Subtitle": {
       "Friends": "{{total}} Teman",
       "Notification": "{{total}} notifikasi baru",
-      "SocialMedia": "{{total}} akun terhubung"
+      "SocialMedia": "{{total}} akun terhubung",
+      "Wallet": "Lihat atau kelola saldo Anda"
     }
   }
 }

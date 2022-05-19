@@ -15,6 +15,7 @@ import {useCurrency} from 'src/hooks/use-currency.hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {CurrencyId} from 'src/interfaces/currency';
+import i18n from 'src/locale';
 
 type PrimaryCoinMenuProps = {
   balanceDetails: BalanceDetail[];
@@ -86,7 +87,7 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
 
     updateCurrencySet(user.id, coinsId, () => {
       openToasterSnack({
-        message: 'You have saved your changes.',
+        message: i18n.t('Wallet.Primary_Coin.Alert.Msg'),
         variant: 'success',
       });
     });
@@ -101,11 +102,11 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
         <div className={classes.innerRoot}>
           <div className={classes.primaryCoinWrapper}>
             <Typography variant="body1" style={{fontWeight: 'bold'}}>
-              Primary coin
+              {i18n.t('Wallet.Primary_Coin.Text_1')}
             </Typography>
             <div style={{marginLeft: 'auto'}}>
               <Typography variant="body1" color="textSecondary">
-                Click and drag to change wallet order
+                {i18n.t('Wallet.Primary_Coin.Text_2')}
               </Typography>
             </div>
           </div>
@@ -167,10 +168,10 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
             onClick={togglePrimaryCoinMenu}
             variant={ButtonVariant.OUTLINED}
             color={ButtonColor.SECONDARY}>
-            Cancel
+            {i18n.t('General.Cancel')}
           </Button>
           <Button onClick={handleSetDefaultCurrency} variant={ButtonVariant.CONTAINED}>
-            Apply Changes
+            {i18n.t('Wallet.Primary_Coin.Btn_Apply')}
           </Button>
         </div>
       </div>
