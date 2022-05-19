@@ -243,6 +243,7 @@
   },
   "Setting": {
     "Title": "{{appname}} - Pengaturan",
+    "Header": "Pengaturan",
     "List_Menu": {
       "Account_Title": "Pengaturan Akun",
       "Account_Subtitle": "Privasi akun, privasi sosial media",

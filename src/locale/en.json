@@ -247,6 +247,7 @@
   },
   "Setting": {
     "Title": "{{appname}} - Settings",
+    "Header": "Setting",
     "List_Menu": {
       "Account_Title": "Privacy Settings",
       "Account_Subtitle": "Account privacy, social media privacy",
