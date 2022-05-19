@@ -280,6 +280,9 @@
       },
       "Language_Title": "Pengaturan Bahasa",
       "Language_Subtitle": "Ubah bahasa yang digunakan pada layanan antar muka",
+      "Language_Setting": {
+        "Confirm": "Simpan perubahan"
+      },
       "Help_Title": "Bantuan",
       "Help_Subtitle": "Syarat dan ketentuan, kebijakan privasi, hubungi kami",
       "About_Title": "Tentang Myriad",

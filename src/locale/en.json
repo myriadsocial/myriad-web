@@ -283,6 +283,9 @@
       },
       "Language_Title": "Language Settings",
       "Language_Subtitle": "Change the language used in the user interface",
+      "Language_Setting": {
+        "Confirm": "Save changes"
+      },
       "Help_Title": "Help",
       "Help_Subtitle": "Terms and conditions, privacy policy, contact us",
       "About_Title": "About Myriad",
