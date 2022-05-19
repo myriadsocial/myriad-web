@@ -23,6 +23,7 @@ import ShowIf from '../common/show-if.component';
 import {useStyles} from './AddSocialMedia.styles';
 
 import {SocialsEnum} from 'src/interfaces/social';
+import i18n from 'src/locale';
 
 type AddSocialMediaProps = Pick<ModalProps, 'onClose' | 'open'> & {
   social: SocialsEnum;
@@ -95,10 +96,14 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
   };
 
   return (
-    <Modal title="Add social media" onClose={handleClose} open={open} className={styles.root}>
+    <Modal
+      title={i18n.t('SocialMedia.Modal.Title')}
+      onClose={handleClose}
+      open={open}
+      className={styles.root}>
       <div className={styles.title}>
         <Typography component="div" variant="body1">
-          Connect your {capitalize(social)} account
+          {i18n.t('SocialMedia.Modal.Header', {platform: capitalize(social)})}
         </Typography>
       </div>
       <div className={styles.steps}>
@@ -106,7 +111,8 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
           <ListItem>
             <ListItemText disableTypography>
               <Typography component="h1" variant="body1" gutterBottom className={styles.caption}>
-                <b>Step 1:</b> Fill in your {capitalize(social)} account URL
+                <b>{i18n.t('SocialMedia.Modal.Step_1')}</b>{' '}
+                {i18n.t('SocialMedia.Modal.Text_1', {platform: capitalize(social)})}
               </Typography>
 
               <TextField
@@ -133,10 +139,10 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
           <ListItem>
             <ListItemText disableTypography>
               <Typography component="h1" variant="body1" gutterBottom>
-                <b>Step 2:</b>{' '}
+                <b>{i18n.t('SocialMedia.Modal.Step_2')}</b>{' '}
                 {social == SocialsEnum.REDDIT
-                  ? 'Copy the text below and post it on your Reddit profile. Do not post the text on a Subreddit.'
-                  : 'Copy text below and post it on your timeline. Make sure your account is not protected.'}
+                  ? i18n.t('SocialMedia.Modal.Text_2.Reddit')
+                  : i18n.t('SocialMedia.Modal.Text_2.Other')}
               </Typography>
 
               <TextField
@@ -187,7 +193,7 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
                       fullWidth
                       startIcon={socials[SocialsEnum.TWITTER]}
                       className={styles.twitter}>
-                      Tweet Now
+                      {i18n.t('SocialMedia.Modal.Btn_Twitter')}
                     </Button>
                   </TwitterShareButton>
                 </ShowIf>
@@ -205,7 +211,7 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
                       fullWidth
                       startIcon={socials[SocialsEnum.REDDIT]}
                       className={styles.reddit}>
-                      Share
+                      {i18n.t('SocialMedia.Modal.Btn_Reddit')}
                     </Button>
                   </RedditShareButton>
                 </ShowIf>
@@ -216,8 +222,8 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
           <ListItem>
             <ListItemText disableTypography>
               <Typography component="h1" variant="body1" gutterBottom>
-                <b>Step 3:</b> Verify your {capitalize(social)} account, repeat step 2 if it’s not
-                verified
+                <b>{i18n.t('SocialMedia.Modal.Step_3')}</b>{' '}
+                {i18n.t('SocialMedia.Modal.Text_3', {platform: capitalize(social)})}
               </Typography>
             </ListItemText>
           </ListItem>
@@ -228,9 +234,9 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
                 control={<Checkbox name="term" color="primary" className={styles.icon} />}
                 label={
                   <Typography>
-                    I agree to the Myriad{' '}
+                    {i18n.t('SocialMedia.Modal.Aggre_1')}{' '}
                     <a href="/term-of-use" className={styles.term}>
-                      Terms of Service
+                      {i18n.t('SocialMedia.Modal.Aggre_2')}
                     </a>
                   </Typography>
                 }
@@ -246,7 +252,7 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
         fullWidth
         variant="contained"
         color="primary">
-        Verify My {capitalize(social)} Account
+        {i18n.t('SocialMedia.Modal.OK', {platform: capitalize(social)})}
       </Button>
 
       <ShowIf condition={verifying}>

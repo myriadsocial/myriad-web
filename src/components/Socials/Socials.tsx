@@ -24,6 +24,7 @@ import {ListItemSocialComponent} from 'src/components/atoms/ListItem/ListItemSoc
 import {capitalize} from 'src/helpers/string';
 import {SocialMedia, SocialsEnum} from 'src/interfaces/social';
 import {User} from 'src/interfaces/user';
+import i18n from 'src/locale';
 
 type SocialsProps = {
   user?: User;
@@ -114,11 +115,13 @@ export const Socials: React.FC<SocialsProps> = props => {
 
   const confirmDisconnectSocial = (social: SocialMedia): void => {
     confirm({
-      title: 'Disconnect social account',
-      description: `Are you sure to remove ${social.people?.name}?`,
+      title: i18n.t('SocialMedia.Alert.Disconnect.Title'),
+      description: i18n.t('SocialMedia.Alert.Disconnect.Title', {
+        username: social.people?.name,
+      }),
       icon: 'danger',
-      confirmationText: 'Yes, proceed to delete',
-      cancellationText: 'No, let me rethink',
+      confirmationText: i18n.t('SocialMedia.Alert.Disconnect.Btn_Yes'),
+      cancellationText: i18n.t('SocialMedia.Alert.Disconnect.Btn_No'),
       onConfirm: () => {
         onDisconnectSocial(social);
       },
@@ -134,10 +137,10 @@ export const Socials: React.FC<SocialsProps> = props => {
       <Box className={styles.root}>
         <div className={styles.header}>
           <Typography variant="h4" style={{fontWeight: 'bold'}}>
-            Connected Accounts
+            {i18n.t('SocialMedia.Header')}
           </Typography>
           <Typography variant="caption" color="textSecondary">
-            Connect social accounts to receive rewards!
+            {i18n.t('SocialMedia.Subheader')}
           </Typography>
         </div>
 
@@ -167,7 +170,7 @@ export const Socials: React.FC<SocialsProps> = props => {
                 account={account}
                 selectedPeople={selectedPeople}
                 title={account.people?.name || ''}
-                subtitle={account.primary ? '(Primary account)' : undefined}
+                subtitle={account.primary ? i18n.t('SocialMedia.Primary_Account') : undefined}
                 avatar={account.people?.profilePictureURL}
                 handleChange={handleSetPrimary(account)}
                 action={
@@ -184,7 +187,7 @@ export const Socials: React.FC<SocialsProps> = props => {
             <ListItem role={undefined} disableGutters>
               <ListItemText disableTypography className={styles.action}>
                 <Button color="primary" disableRipple variant="text" onClick={toggleAddSocialMedia}>
-                  + Add {capitalize(selectedSocial)} account
+                  {i18n.t('SocialMedia.Add', {platform: capitalize(selectedSocial)})}
                 </Button>
               </ListItemText>
             </ListItem>
@@ -192,8 +195,8 @@ export const Socials: React.FC<SocialsProps> = props => {
         </div>
 
         <PromtMobile
-          title={'Connect your Social Media!'}
-          subtitle={'Get rewards by connecting your Twitter or Reddit account.'}
+          title={i18n.t('Mobile.Alert_Connect.Title')}
+          subtitle={i18n.t('Mobile.Alert_Connect.Subtitle')}
           open={openPromptDrawer}
           onCancel={handleCancel}
         />

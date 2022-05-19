@@ -55,7 +55,11 @@
     "subtitle_2": "To access Myriad, you need to view in dekstop mode and install",
     "subtitle_3": "Sign in on mobile is not available yet. To access Myriad, you need to use desktop browser and install Polakdot.js",
     "button_label": "Visit Myriad Social",
-    "button_label_sign_in": "Sign in as anonymous"
+    "button_label_sign_in": "Sign in as anonymous",
+    "Alert_Connect": {
+      "Title": "Connect your Social Media!",
+      "Subtitle": "Get rewards by connecting your Twitter or Reddit account."
+    }
   },
   "Login": {
     "Description": "A social platform that’s entirely under your control. Remain anonymous, look for your own topics, choose your interface and control what you see.",
@@ -262,7 +266,38 @@
     }
   },
   "SocialMedia": {
-    "Title": "{{appname}} - Social Media"
+    "Title": "{{appname}} - Social Media",
+    "Alert": {
+      "Verify": "Your {{social}} account successfully connected!",
+      "Disconnect": {
+        "Title": "Disconnect social account",
+        "Description": "Are you sure to remove {{username}}?",
+        "Btn_No": "No, let me rethink",
+        "Btn_Yes": "Yes, proceed to delete"
+      }
+    },
+    "Header": "Connected Accounts",
+    "Subheader": "Connect social accounts to receive rewards!",
+    "Add": "+ Add {{platform}} account",
+    "Primary_Account": "(Primary account)",
+    "Modal": {
+      "Title": "Add social media",
+      "Header": "Connect your {{platform}} account",
+      "Step_1": "Step 1:",
+      "Step_2": "Step 2:",
+      "Step_3": "Step 3:",
+      "Text_1": "Fill in your {{platform}} account URL",
+      "Text_2": {
+        "Reddit": "Copy the text below and post it on your Reddit profile. Do not post the text on a Subreddit.",
+        "Other": "Copy text below and post it on your timeline. Make sure your account is not protected."
+      },
+      "Text_3": "Verify your {{platform}} account, repeat step 2 if it’s not verified",
+      "Btn_Twitter": "Tweet Now",
+      "Btn_Reddit": "Share",
+      "Aggre_1": "I agree to the Myriad",
+      "Aggre_2": "Terms of Service",
+      "OK": "Verify My {{platform}} Account"
+    }
   },
   "SocialToken": {
     "Title": "{{appname}} - Social Token"
@@ -291,7 +326,8 @@
     },
     "Subtitle": {
       "Friends": "{{total}} Friends",
-      "Notification": "{{total}} new notifications"
+      "Notification": "{{total}} new notifications",
+      "SocialMedia": "{{total}} account connected"
     }
   }
 }

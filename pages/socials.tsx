@@ -6,7 +6,7 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 
 import {SocialsContainer} from 'src/components/Socials/Socials.container';
-import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
+import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {initialize} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
@@ -39,8 +39,10 @@ const Socials: React.FC = () => {
         <title>{i18n.t('SocialMedia.Title', {appname: publicRuntimeConfig.appName})}</title>
       </Head>
       <TopNavbarComponent
-        description={`${socials.length} account connected`}
-        sectionTitle={SectionTitle.SOCIAL_MEDIA}
+        description={i18n.t('TopNavbar.Subtitle.SocialMedia', {
+          total: socials.length,
+        })}
+        sectionTitle={i18n.t('TopNavbar.Title.SocialMedia')}
         type={'menu'}
       />
 

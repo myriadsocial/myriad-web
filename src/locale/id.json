@@ -55,7 +55,11 @@
     "subtitle_2": "Untuk mengakses Myriad, Anda perlu melihat dalam mode desktop dan menginstal",
     "subtitle_3": "Masuk melalui ponsel belum tersedia. Untuk mengakses Myriad, Anda perlu menggunakan browser desktop dan menginstal Polkadot.js",
     "button_label": "Kunjungi Myriad Social",
-    "button_label_sign_in": "Masuk sebagai anonim"
+    "button_label_sign_in": "Masuk sebagai anonim",
+    "Alert_Connect": {
+      "Title": "Hubungkan Media Sosial Anda!",
+      "Subtitle": "Dapatkan hadiah dengan menghubungkan akun Twitter atau Reddit Anda."
+    }
   },
   "Login": {
     "Description": "Platform sosial yang sepenuhnya berada di bawah kendali Anda. Tetap anonim, cari topik Anda sendiri, pilih antarmuka Anda dan kendalikan apa yang Anda lihat.",
@@ -258,7 +262,38 @@
     }
   },
   "SocialMedia": {
-    "Title": "{{appname}} - Media Sosial"
+    "Title": "{{appname}} - Media Sosial",
+    "Alert": {
+      "Verify": "Akun {{social}} Anda berhasil terhubung!",
+      "Disconnect": {
+        "Title": "Putuskan hubungan akun sosial",
+        "Description": "Apakah Anda yakin akan menghapus {{username}}?",
+        "Btn_No": "Tidak, biarkan aku memikirkan kembali",
+        "Btn_Yes": "Ya, lanjutkan untuk menghapus"
+      }
+    },
+    "Header": "Akun Terhubung",
+    "Subheader": "Hubungkan akun sosial untuk menerima hadiah!",
+    "Add": "+ Tambahkan akun {{platform}}",
+    "Primary_Account": "(Akun primer)",
+    "Modal": {
+      "Title": "Tambahkan media sosial",
+      "Header": "Hubungkan akun {{platform}} Anda",
+      "Step_1": "Langkah 1:",
+      "Step_2": "Langkah 2:",
+      "Step_3": "Langkah 3:",
+      "Text_1": "Isi URL akun {{platform}} Anda",
+      "Text_2": {
+        "Reddit": "Salin teks di bawah ini dan posting di profil Reddit Anda. Jangan memposting teks di Subreddit.",
+        "Other": "Salin teks di bawah ini dan posting di timeline Anda. Pastikan akun Anda tidak dilindungi."
+      },
+      "Text_3": "Verifikasi akun {{platform}} Anda, ulangi langkah 2 jika belum diverifikasi",
+      "Btn_Twitter": "Tweet Sekarang",
+      "Btn_Reddit": "Bagikan",
+      "Aggre_1": "Saya setuju dengan",
+      "Aggre_2": "Persyaratan Layanan Myriad",
+      "OK": "Verifikasi Akun {{platform}} Saya"
+    }
   },
   "SocialToken": {
     "Title": "{{appname}} - Token Sosial"
@@ -287,8 +322,8 @@
     },
     "Subtitle": {
       "Friends": "{{total}} Teman",
-      "Notification": "{{total}} notifikasi baru"
-
+      "Notification": "{{total}} notifikasi baru",
+      "SocialMedia": "{{total}} akun terhubung"
     }
   }
 }

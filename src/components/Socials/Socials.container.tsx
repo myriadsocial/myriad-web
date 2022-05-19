@@ -8,6 +8,7 @@ import {Socials as SocialsComponent} from '.';
 import {useShareSocial} from 'src/hooks/use-share-social';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {SocialMedia, SocialsEnum} from 'src/interfaces/social';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {deleteSocial, setAsPrimary} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
@@ -31,7 +32,7 @@ export const SocialsContainer: React.FC = () => {
       resetVerification();
 
       openToasterSnack({
-        message: ` Your ${social} account successfully connected!`,
+        message: i18n.t('SocialMedia.Alert.Verify', {social: social}),
         variant: 'success',
       });
     });
