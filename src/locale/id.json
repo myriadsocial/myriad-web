@@ -426,24 +426,74 @@
   "Search": {
     "Title": "{{appname}} - Hasil Pencarian"
   },
+  "Section": {
+    "Friends": "Teman",
+    "Social_Media": "Media Sosial",
+    "Wallet": "Dompet",
+    "Experience": "Pengalaman",
+    "Profile": "Profil",
+    "Settings": "Pengaturan",
+    "Notification": "Notifikasi",
+    "Timeline": "Linimasa",
+    "NFT": "NFT",
+    "Social_Token": "Token sosial",
+    "Trends": "Tren"
+  },
   "Setting": {
     "Title": "{{appname}} - Pengaturan",
+    "Default_Title": "Tentukan pengaturan privasi dan notifikasi",
+    "Header": "Pengaturan",
     "List_Menu": {
-      "Account_Title": "Akun",
+      "Account_Title": "Pengaturan Akun",
       "Account_Subtitle": "Privasi akun, privasi sosial media",
+      "Account_Setting": {
+        "Account_Privacy": {
+          "Title": "Privasi akun",
+          "Subtitle": 
+          "Pengaturan visibilitas akun Anda terhadap pengguna selain teman"
+        },
+        "Social_Media_Privacy": {
+          "Title": "Privasi media sosial",
+          "Subtitle": "Pengaturan visibilitas media sosial Anda terhadap pengguna selain teman"
+        },
+        "Options": {
+          "Private": "Privat",
+          "Public": "Publik"
+        },
+        "Confirm": "Simpan perubahan"
+      },
       "Notification_Title": "Notifikasi",
       "Notification_Subtitle": "Pengaturan notifikasi",
+      "Notification_Setting": {
+        "Comments": "Komentar",
+        "Mention": "Sebutan",
+        "Friend_Requests": "Ajakan Berteman",
+        "Tips": "Tip",
+        "Confirm": "Simpan perubahan"
+      },
       "Blocked_Title": "Pengguna Diblokir",
       "Blocked_Subtitle": "Pengaturan daftar pengguna yang diblokir",
-      "Language_Title": "Bahasa",
+      "Blocked_Setting": {
+        "Description": "Ketika Anda memblokir pengguna lain, pengguna tersebut tidak akan dapat melihat profil dan konten Anda, menambahkan Anda sebagai teman, menyebutkan Anda atau mengirimkan Anda pesan dan Anda tidak akan melihat konten dan notifikasi dari mereka",
+        "Empty_Block": "Anda belum memblokir siapapun"
+      },
+      "Language_Title": "Pengaturan Bahasa",
       "Language_Subtitle": "Ubah bahasa yang digunakan pada layanan antar muka",
+      "Language_Setting": {
+        "Confirm": "Simpan perubahan"
+      },
       "Help_Title": "Bantuan",
       "Help_Subtitle": "Syarat dan ketentuan, kebijakan privasi, hubungi kami",
+      "Help_Setting": {
+        "Terms_and_conditions": "Syarat dan ketentuan",
+        "Privacy_and_policy": "Kebijakan privasi",
+        "Contact_us": "Hubungi kami"
+      },
       "About_Title": "Tentang Myriad",
       "About_Subtitle": "Ketahui lebih banyak tentang Myriad",
       "Feedback_Title": "Berikan Tanggapan",
       "Feedback_Subtitle": "Silahkan berikan pengalaman kamu melalui email",
-      "Version_Title": "Myriad versi"
+      "Version_Title": "Versi Myriad"
     }
   },
   "SocialMedia": {

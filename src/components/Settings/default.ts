@@ -1,15 +1,16 @@
 import {MenuOptions} from '../atoms/DropdownMenu';
 
 import {LanguageSettingType, PrivacyType} from 'src/interfaces/setting';
+import i18n from 'src/locale';
 
 export const accountPrivacyOptions: MenuOptions<PrivacyType>[] = [
   {
     id: 'private',
-    title: 'Private',
+    title: i18n.t('Setting.List_Menu.Account_Setting.Options.Private'),
   },
   {
     id: 'public',
-    title: 'Public',
+    title: i18n.t('Setting.List_Menu.Account_Setting.Options.Public'),
   },
 ];
 

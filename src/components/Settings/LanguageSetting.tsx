@@ -68,7 +68,7 @@ export const LanguageSetting: React.FC<LanguageSettingsProps> = props => {
           disableElevation
           fullWidth
           onClick={saveLanguageSetting}>
-          Save Changes
+          {i18n.t('Setting.List_Menu.Language_Setting.Confirm')}
         </Button>
       </div>
     </Paper>

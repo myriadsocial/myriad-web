@@ -17,6 +17,7 @@ import {useAccountSetting} from './hooks/use-account-setting.hook';
 import {SettingsOption} from './hooks/use-setting-list.hook';
 
 import {PrivacySettings, PrivacySettingType, PrivacyType} from 'src/interfaces/setting';
+import i18n from 'src/locale';
 
 type AccountSettingsProps = {
   value: PrivacySettings;
@@ -77,7 +78,7 @@ export const AccountSettings: React.FC<AccountSettingsProps> = props => {
           disableElevation
           fullWidth
           onClick={savePrivacySetting}>
-          Save Changes
+          {i18n.t('Setting.List_Menu.Account_Setting.Confirm')}
         </Button>
       </div>
     </Paper>

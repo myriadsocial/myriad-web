@@ -17,6 +17,7 @@ import useConfirm from 'src/components/common/Confirm/use-confirm.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import {Friend} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
+import i18n from 'src/locale';
 
 type Props = {
   blockList: Friend[];
@@ -45,15 +46,13 @@ export const BlockListComponent: React.FC<Props> = ({blockList, user, onUnblock}
     <>
       <div className={style.root}>
         <Typography className={style.text}>
-          When you blocked someone, that person won&apos;t be able to view your profile and post,
-          add you as a friend, tag you or message you and you won&apos;t see post or notification
-          from them.
+          {i18n.t('Setting.List_Menu.Blocked_Setting.Description')}
         </Typography>
       </div>
 
       <List style={{marginTop: 12}}>
         <ShowIf condition={list.length === 0}>
-          <Empty title="You haven't blocked anyone yet." />
+          <Empty title={i18n.t('Setting.List_Menu.Blocked_Setting.Empty_Block')} />
         </ShowIf>
 
         {list.map(user => (
