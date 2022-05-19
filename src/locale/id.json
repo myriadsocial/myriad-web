@@ -265,6 +265,13 @@
       },
       "Notification_Title": "Notifikasi",
       "Notification_Subtitle": "Pengaturan notifikasi",
+      "Notification_Setting": {
+        "Comments": "Komentar",
+        "Mention": "Sebutan",
+        "Friend_Requests": "Ajakan Berteman",
+        "Tips": "Tip",
+        "Confirm": "Simpan perubahan"
+      },
       "Blocked_Title": "Pengguna Diblokir",
       "Blocked_Subtitle": "Pengaturan daftar pengguna yang diblokir",
       "Language_Title": "Pengaturan Bahasa",

@@ -18,6 +18,7 @@ import {
 } from './hooks/use-notification-setting.hook';
 
 import {NotificationSettingItems} from 'src/interfaces/setting';
+import i18n from 'src/locale';
 
 type NotificationSettingsProps = {
   value: NotificationSettingItems;
@@ -74,7 +75,7 @@ export const NotificationSettings: React.FC<NotificationSettingsProps> = props =
           disableElevation
           fullWidth
           onClick={saveSetting}>
-          Save Changes
+          {i18n.t('Setting.List_Menu.Notification_Setting.Confirm')}
         </Button>
       </div>
     </Paper>
