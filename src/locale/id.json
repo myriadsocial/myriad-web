@@ -285,6 +285,11 @@
       },
       "Help_Title": "Bantuan",
       "Help_Subtitle": "Syarat dan ketentuan, kebijakan privasi, hubungi kami",
+      "Help_Setting": {
+        "Terms_and_conditions": "Syarat dan ketentuan",
+        "Privacy_and_policy": "Kebijakan privasi",
+        "Contact_us": "Hubungi kami"
+      },
       "About_Title": "Tentang Myriad",
       "About_Subtitle": "Ketahui lebih banyak tentang Myriad",
       "Feedback_Title": "Berikan Tanggapan",

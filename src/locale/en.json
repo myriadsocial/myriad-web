@@ -288,6 +288,11 @@
       },
       "Help_Title": "Help",
       "Help_Subtitle": "Terms and conditions, privacy policy, contact us",
+      "Help_Setting": {
+        "Terms_and_conditions": "Terms and conditions",
+        "Privacy_and_policy": "Privacy and Policy",
+        "Contact_us": "Contact us"
+      },
       "About_Title": "About Myriad",
       "About_Subtitle": "Read more about Myriad",
       "Feedback_Title": "Submit Feedback",
