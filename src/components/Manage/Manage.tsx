@@ -18,6 +18,7 @@ import {useWalletList} from './use-wallet-list.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {UserWallet} from 'src/interfaces/user';
+import i18n from 'src/locale';
 
 export type ManageProps = {
   currentWallet?: UserWallet;
@@ -32,7 +33,7 @@ export const Manage: React.FC<ManageProps> = ({wallets, onConnect}) => {
 
   const handleLinkCopied = () => {
     openToasterSnack({
-      message: 'Wallet address copied to clipboard!',
+      message: i18n.t('Wallet.Manage.Alert.Copy_Msg'),
       variant: 'success',
     });
   };
@@ -81,7 +82,7 @@ export const Manage: React.FC<ManageProps> = ({wallets, onConnect}) => {
                   size="small"
                   color="secondary"
                   onClick={() => handleConnectWallet(option.id)}>
-                  Connect
+                  {i18n.t('Wallet.Manage.Btn_Connect')}
                 </Button>
               </div>
             </ShowIf>

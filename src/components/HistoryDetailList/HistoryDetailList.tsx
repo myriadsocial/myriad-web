@@ -27,6 +27,7 @@ import {Currency} from 'src/interfaces/currency';
 import {NetworkTypeEnum} from 'src/interfaces/network';
 import {Transaction, TransactionOrderType} from 'src/interfaces/transaction';
 import {UserWallet} from 'src/interfaces/user';
+import i18n from 'src/locale';
 import {TransactionFilterProps} from 'src/reducers/transaction/actions';
 
 type HistoryDetailListProps = {
@@ -70,7 +71,7 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
   );
 
   const currencyOptions: MenuOptions<string>[] = [
-    {id: 'all', title: 'All'},
+    {id: 'all', title: i18n.t('Wallet.History.Coin_Opt.All')},
     ...currencies.map(item => ({
       id: item.id,
       title: item.symbol,
@@ -147,19 +148,19 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
     <>
       <div className={classes.headerActionWrapper}>
         <DropdownMenu<TransactionOrderType>
-          title={'Sort'}
+          title={i18n.t('Wallet.History.Sort')}
           selected={selectedSort}
           options={transactionSortOptions}
           onChange={handleSortTransaction}
         />
         <DropdownMenu
-          title={'Coin'}
+          title={i18n.t('Wallet.History.Coin')}
           selected={selectedCurrency}
           options={currencyOptions}
           onChange={handleCurrencyChange}
         />
         <DropdownMenu
-          title={'Transaction'}
+          title={i18n.t('Wallet.History.Transaction')}
           selected={selectedStatus}
           options={transactionStatusOptions}
           onChange={handleFilterTransactionStatus}
@@ -167,7 +168,10 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
       </div>
 
       <ShowIf condition={transactions.length === 0 && !isLoading}>
-        <Empty title="You don't have any transaction" subtitle="Start to send tips in a post!" />
+        <Empty
+          title={i18n.t('Wallet.History.Empty.Title')}
+          subtitle={i18n.t('Wallet.History.Empty.Subtitle')}
+        />
       </ShowIf>
 
       <TableContainer component={List}>
@@ -232,12 +236,16 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                         <TableCell align="center">
                           {tx.toWallet?.userId === userId && (
                             <div className={classes.received}>
-                              <Typography variant="caption">Received</Typography>
+                              <Typography variant="caption">
+                                {i18n.t('Wallet.History.Received')}
+                              </Typography>
                             </div>
                           )}
                           {tx.fromWallet?.userId === userId && (
                             <div className={classes.sent}>
-                              <Typography variant="caption">Sent</Typography>
+                              <Typography variant="caption">
+                                {i18n.t('Wallet.History.Sent')}
+                              </Typography>
                             </div>
                           )}
                         </TableCell>

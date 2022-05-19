@@ -10,6 +10,7 @@ import ShowIf from 'src/components/common/show-if.component';
 import {useClaimTip} from 'src/hooks/use-claim-tip.hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Network} from 'src/interfaces/wallet';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
 import {UserState} from 'src/reducers/user/reducer';
@@ -29,13 +30,13 @@ export const TipContainer: React.FC = () => {
       //TODO: get estimate fee gas from polkadot
       if (balanceGasClaim[0].originBalance < 1) {
         openToasterSnack({
-          message: 'Insufficient balance',
+          message: i18n.t('Wallet.Tip.Alert.Insufficient'),
           variant: 'warning',
         });
       } else {
         claimTipMyria(networkId, ftIdentifier, () => {
           openToasterSnack({
-            message: 'Tips will be add to your wallet shortly.',
+            message: i18n.t('Wallet.Tip.Alert.Success'),
             variant: 'success',
           });
         });
@@ -46,7 +47,7 @@ export const TipContainer: React.FC = () => {
   const handleClaimTipAll = (networkId: string) => {
     claimAll(networkId, () => {
       openToasterSnack({
-        message: 'Tips will be add to your wallet shortly.',
+        message: i18n.t('Wallet.Tip.Alert.Success'),
         variant: 'success',
       });
     });
@@ -73,8 +74,8 @@ export const TipContainer: React.FC = () => {
           <ShowIf condition={!loading && !tipWithBalances(network).length && isShow(network)}>
             <div style={{marginTop: 20}}>
               <Empty
-                title="You have no tip"
-                subtitle="Start to make a post to get tips from other users."
+                title={i18n.t('Wallet.Tip.Empty.Title')}
+                subtitle={i18n.t('Wallet.Tip.Empty.Subtitle')}
               />
             </div>
           </ShowIf>

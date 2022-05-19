@@ -21,6 +21,7 @@ import {
 import ShowIf from 'src/components/common/show-if.component';
 import {UserWallet} from 'src/interfaces/user';
 import {TipResult} from 'src/lib/services/polkadot-js';
+import i18n from 'src/locale';
 
 type TipProps = {
   tips: TipResult[];
@@ -89,7 +90,7 @@ export const Tip: React.FC<TipProps> = props => {
         </ListItemText>
         <div className={style.secondaryAction}>
           <ShowIf condition={!!currentWallet && currentWallet.networkId !== network}>
-            <Typography>Switch network to claim</Typography>
+            <Typography>{i18n.t('Wallet.Tip.Switch')}</Typography>
           </ShowIf>
           <ShowIf condition={!!currentWallet && currentWallet.networkId == network}>
             <Button
@@ -98,7 +99,7 @@ export const Tip: React.FC<TipProps> = props => {
               color="primary"
               variant="text"
               onClick={handleClaimAll}>
-              Claim all
+              {i18n.t('Wallet.Tip.Claim_All')}
             </Button>
           </ShowIf>
         </div>
@@ -123,7 +124,7 @@ export const Tip: React.FC<TipProps> = props => {
                   className={style.buttonClaim}
                   color="primary"
                   variant="contained">
-                  Claim
+                  {i18n.t('Wallet.Tip.Claim')}
                 </Button>
               </div>
               <div className={style.text}>

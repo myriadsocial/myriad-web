@@ -7,6 +7,7 @@ import {TabsComponent} from '../atoms/Tabs';
 import {useStyles} from './myWallet.style';
 
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
+import i18n from 'src/locale';
 
 const BalanceDetailListContainer = dynamic(
   () => import('../BalanceDetailList/BalanceDetailListContainer'),
@@ -34,22 +35,22 @@ export const MyWallet: React.FC<MyWalletProps> = () => {
   const [tabTexts] = useState([
     {
       id: 'balance',
-      title: 'Balance',
+      title: i18n.t('Wallet.Tab.Balance'),
       component: <BalanceDetailListContainer />,
     },
     {
       id: 'history',
-      title: 'History',
+      title: i18n.t('Wallet.Tab.History'),
       component: <HistoryDetailListContainer />,
     },
     {
       id: 'tip',
-      title: 'Tip',
+      title: i18n.t('Wallet.Tab.Tip'),
       component: <TipContainer />,
     },
     {
       id: 'manage',
-      title: 'Manage',
+      title: i18n.t('Wallet.Tab.Manage'),
       component: <ManageContainer />,
     },
   ]);
