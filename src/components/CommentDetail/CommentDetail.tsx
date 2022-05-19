@@ -350,6 +350,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
             mentionables={mentionables.map(item => ({
               value: item.id,
               name: item.name,
+              username: item.username ?? item.name.replace(' ', ''),
               avatar: item.profilePictureURL,
             }))}
             onSearchMention={onSearchPeople}

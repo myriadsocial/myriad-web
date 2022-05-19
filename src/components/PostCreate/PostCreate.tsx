@@ -149,6 +149,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
           mentionable={people.map(item => ({
             value: item.id,
             name: item.name,
+            username: item.username ?? item.name.replace(' ', ''),
             avatar: item.profilePictureURL,
           }))}
           uploadProgress={uploadProgress}
