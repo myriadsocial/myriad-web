@@ -11,6 +11,7 @@ import {useStyles} from './Settings.styles';
 import {SettingsOption, useSettingList, SettingsType} from './hooks/use-setting-list.hook';
 
 import {UserSettings} from 'src/interfaces/setting';
+import i18n from 'src/locale';
 
 type SettingsProps = {
   selectedType?: SettingsType;
@@ -38,7 +39,7 @@ export const Settings: React.FC<SettingsProps> = props => {
       {!selected && (
         <>
           <Typography className={styles.title} color="textPrimary">
-            Settings
+            {i18n.t('Setting.Header')}
           </Typography>
           <List>
             {settings
@@ -98,7 +99,7 @@ export const Settings: React.FC<SettingsProps> = props => {
       {selected && (
         <ShowIf condition={selected.id !== 'version' && selected.id !== 'about'}>
           <Typography className={styles.subtitle} color="textPrimary">
-            {selected?.title} Settings
+            {selected?.title}
           </Typography>
           <div>{selected.component}</div>
         </ShowIf>

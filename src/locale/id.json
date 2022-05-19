@@ -244,13 +244,29 @@
   "Setting": {
     "Title": "{{appname}} - Pengaturan",
     "List_Menu": {
-      "Account_Title": "Akun",
+      "Account_Title": "Pengaturan Akun",
       "Account_Subtitle": "Privasi akun, privasi sosial media",
+      "Account_Setting": {
+        "Account_Privacy": {
+          "Title": "Privasi akun",
+          "Subtitle": 
+          "Pengaturan visibilitas akun Anda terhadap pengguna selain teman"
+        },
+        "Social_Media_Privacy": {
+          "Title": "Privasi media sosial",
+          "Subtitle": "Pengaturan visibilitas media sosial Anda terhadap pengguna selain teman"
+        },
+        "Options": {
+          "Private": "Privat",
+          "Public": "Publik"
+        },
+        "Confirm": "Simpan perubahan"
+      },
       "Notification_Title": "Notifikasi",
       "Notification_Subtitle": "Pengaturan notifikasi",
       "Blocked_Title": "Pengguna Diblokir",
       "Blocked_Subtitle": "Pengaturan daftar pengguna yang diblokir",
-      "Language_Title": "Bahasa",
+      "Language_Title": "Pengaturan Bahasa",
       "Language_Subtitle": "Ubah bahasa yang digunakan pada layanan antar muka",
       "Help_Title": "Bantuan",
       "Help_Subtitle": "Syarat dan ketentuan, kebijakan privasi, hubungi kami",
@@ -258,7 +274,7 @@
       "About_Subtitle": "Ketahui lebih banyak tentang Myriad",
       "Feedback_Title": "Berikan Tanggapan",
       "Feedback_Subtitle": "Silahkan berikan pengalaman kamu melalui email",
-      "Version_Title": "Myriad versi"
+      "Version_Title": "Versi Myriad"
     }
   },
   "SocialMedia": {

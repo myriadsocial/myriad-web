@@ -248,13 +248,28 @@
   "Setting": {
     "Title": "{{appname}} - Settings",
     "List_Menu": {
-      "Account_Title": "Privacy",
+      "Account_Title": "Privacy Settings",
       "Account_Subtitle": "Account privacy, social media privacy",
-      "Notification_Title": "Notification",
+      "Account_Setting": {
+        "Account_Privacy": {
+        "Title": "Account privacy",
+        "Subtitle": "Change whether people other than friends can see your posts"
+        },
+        "Social_Media_Privacy": {
+      "Title": "Social media privacy",
+      "Subtitle": "Change whether people other than friends can see your social media"
+        },
+        "Options": {
+          "Private": "Private",
+          "Public": "Public"
+        },
+        "Confirm": "Save changes"
+      },
+      "Notification_Title": "Notification Settings",
       "Notification_Subtitle": "Manage your notification",
-      "Blocked_Title": "Blocked User",
+      "Blocked_Title": "Blocked User Settings",
       "Blocked_Subtitle": "Manage your blocked list",
-      "Language_Title": "Language",
+      "Language_Title": "Language Settings",
       "Language_Subtitle": "Change the language used in the user interface",
       "Help_Title": "Help",
       "Help_Subtitle": "Terms and conditions, privacy policy, contact us",
