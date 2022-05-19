@@ -2,12 +2,14 @@ import React from 'react';
 
 import {Empty} from '../atoms/Empty';
 
+import i18n from 'src/locale';
+
 export const PrivateProfile: React.FC = () => {
   return (
     <div style={{marginTop: '27px'}}>
       <Empty
-        title="Nothing to see here!"
-        subtitle="This account is private. Send them a friend request to see their full profile."
+        title={i18n.t('Profile.Private.Title')}
+        subtitle={i18n.t('Profile.Private.Subtitle')}
       />
     </div>
   );

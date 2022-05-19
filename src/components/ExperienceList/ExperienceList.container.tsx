@@ -12,6 +12,7 @@ import {ExperienceOwner, useExperienceHook} from 'src/hooks/use-experience-hook'
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {WrappedExperience} from 'src/interfaces/experience';
 import {TimelineType} from 'src/interfaces/timeline';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -67,7 +68,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
 
     if (limitExceeded) {
       openToasterSnack({
-        message: 'You can only add up to 10 experiences max',
+        message: i18n.t('Experience.List.Alert'),
         variant: 'warning',
       });
     } else {
@@ -80,7 +81,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
 
     if (limitExceeded) {
       openToasterSnack({
-        message: 'You can only add up to 10 experiences max',
+        message: i18n.t('Experience.List.Alert'),
         variant: 'warning',
       });
     } else {

@@ -10,6 +10,7 @@ import {UserSocialContainer} from 'src/components/UserSocials';
 import {TabItems} from 'src/components/atoms/Tabs';
 import {Post} from 'src/interfaces/post';
 import {TimelineFilter} from 'src/interfaces/timeline';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {ExperienceState} from 'src/reducers/experience/reducer';
 import {FriendState} from 'src/reducers/friend/reducer';
@@ -35,22 +36,22 @@ export const useUserTabs = (excludes: UserMenuTabs[]): TabItems<UserMenuTabs>[] 
     const items: TabItems<UserMenuTabs>[] = [
       {
         id: 'post',
-        title: `Post`,
+        title: i18n.t('Profile.Tab.Post'),
         component: <ProfilePostsTab filterType="origin" sortType="created" filters={filters} />,
       },
       {
         id: 'comments',
-        title: `Comments`,
+        title: i18n.t('Profile.Tab.Comments'),
         component: <CommentHistoryListContainer profile={profileUser} />,
       },
       {
         id: 'experience',
-        title: `Experience`,
+        title: i18n.t('Profile.Tab.Experience'),
         component: <ProfileExperienceTab user={profileUser} type="personal" />,
       },
       {
         id: 'friend',
-        title: `Friends`,
+        title: i18n.t('Profile.Tab.Friends'),
         component: (
           <FriendListContainer
             type="contained"
@@ -62,7 +63,7 @@ export const useUserTabs = (excludes: UserMenuTabs[]): TabItems<UserMenuTabs>[] 
       },
       {
         id: 'social',
-        title: `Social Media`,
+        title: i18n.t('Profile.Tab.Social_Media'),
         component: <UserSocialContainer user={profileUser} />,
         background: 'white',
       },
@@ -71,7 +72,7 @@ export const useUserTabs = (excludes: UserMenuTabs[]): TabItems<UserMenuTabs>[] 
     if (user) {
       items.push({
         id: 'setting',
-        title: `Wallet Address`,
+        title: i18n.t('Profile.Tab.Wallet_Address'),
         component: <UserSettingsContainer user={profileUser} />,
         background: 'white',
       });

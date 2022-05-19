@@ -15,6 +15,7 @@ import {useStyles} from './profile-edit.style';
 import {debounce} from 'lodash';
 import {acronym} from 'src/helpers/string';
 import {User} from 'src/interfaces/user';
+import i18n from 'src/locale';
 
 export type Props = {
   user: User;
@@ -144,10 +145,10 @@ export const ProfileEditComponent: React.FC<Props> = props => {
   const handleCancel = () => {
     if (isEdited) {
       confirm({
-        title: 'Are you sure?',
-        description: 'You already made some changes,\nsure you want to leave it?',
-        confirmationText: 'Yes, Leave it',
-        cancellationText: 'No, let me rethink',
+        title: i18n.t('Profile.Edit.Prompt_Cancel.Title'),
+        description: i18n.t('Profile.Edit.Prompt_Cancel.Desc'),
+        confirmationText: i18n.t('Profile.Edit.Prompt_Cancel.Btn_Yes'),
+        cancellationText: i18n.t('Profile.Edit.Prompt_Cancel.Btn_Cancel'),
         onConfirm: () => {
           onCancel();
         },
@@ -159,11 +160,11 @@ export const ProfileEditComponent: React.FC<Props> = props => {
 
   return (
     <div className={style.root}>
-      <Typography className={style.title}>Edit Profile</Typography>
+      <Typography className={style.title}>{i18n.t('Profile.Edit.Title')}</Typography>
 
       <FormControl classes={{root: style.mb}} fullWidth variant="outlined" focused>
         <InputLabel htmlFor="profile-picture" shrink={true} className={style.label}>
-          Profile Picture
+          {i18n.t('Profile.Edit.Subtitle_1')}
         </InputLabel>
         <div className={style.pictureBox}>
           <div className={style.box}>
@@ -193,7 +194,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
 
       <FormControl classes={{root: style.mb}} fullWidth variant="outlined" focused>
         <InputLabel htmlFor="background-images" shrink={true} className={style.label}>
-          Background Image
+          {i18n.t('Profile.Edit.Subtitle_2')}
         </InputLabel>
         <div className={style.bgBox}>
           <CardMedia
@@ -217,7 +218,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
       </FormControl>
 
       <FormControl classes={{root: style.mb}} fullWidth variant="outlined">
-        <InputLabel htmlFor="username">Username</InputLabel>
+        <InputLabel htmlFor="username">{i18n.t('Profile.Edit.Subtitle_3')}</InputLabel>
         <OutlinedInput
           error={handleError()}
           disabled
@@ -231,7 +232,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
       </FormControl>
 
       <FormControl classes={{root: style.mb}} fullWidth variant="outlined">
-        <InputLabel htmlFor="display-name">Display Name</InputLabel>
+        <InputLabel htmlFor="display-name">{i18n.t('Profile.Edit.Subtitle_4')}</InputLabel>
         <OutlinedInput
           id="display-name"
           placeholder="Display Name"
@@ -245,12 +246,12 @@ export const ProfileEditComponent: React.FC<Props> = props => {
 
       {isError && (
         <Typography className={`${style.available} ${style.red} ${style.validation}`}>
-          Required min 2 characters
+          {i18n.t('Profile.Edit.Required')}
         </Typography>
       )}
 
       <FormControl classes={{root: style.mb}} fullWidth variant="outlined">
-        <InputLabel htmlFor="bio">Bio</InputLabel>
+        <InputLabel htmlFor="bio">{i18n.t('Profile.Edit.Subtitle_5')}</InputLabel>
         <OutlinedInput
           id="bio"
           placeholder="Bio"
@@ -263,7 +264,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
       </FormControl>
 
       <FormControl classes={{root: style.mb}} fullWidth variant="outlined">
-        <InputLabel htmlFor="website">Website</InputLabel>
+        <InputLabel htmlFor="website">{i18n.t('Profile.Edit.Subtitle_6')}</InputLabel>
         <OutlinedInput
           id="website"
           placeholder="mysite.url"
@@ -282,7 +283,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
             disableElevation
             onClick={handleCancel}
             classes={{root: style.width}}>
-            Cancel
+            {i18n.t('General.Cancel')}
           </Button>
         </FormControl>
         <FormControl variant="outlined">
@@ -293,7 +294,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
             onClick={saveConfirmation}
             disabled={isError || handleError() || updatingProfile || !isUpdateProfile}
             classes={{root: style.width}}>
-            Save changes
+            {i18n.t('Profile.Edit.Btn_Save')}
           </Button>
           {updatingProfile && (
             <CircularProgress size={24} color="primary" className={style.buttonProgress} />

@@ -15,6 +15,35 @@
     "Edit": {
       "Title": "Ubah Experience"
     },
+    "List": {
+      "Alert": "Anda hanya dapat menambahkan maksimal 10 pengalaman",
+      "Copy": "Tautan pengalaman berhasil disalin",
+      "Prompt_Delete": {
+        "Title": "Hapus Pengalaman?",
+        "Desc": "Apakah Anda yakin ingin menghapus pengalaman ini? You can't undo this in the future.",
+        "Btn_Yes": "Ya, lanjutkan untuk menghapus"
+      },
+      "Prompt_Unsub": {
+        "Title": "Berhenti berlangganan?",
+        "Desc_1": "Apakah Anda ingin berhenti berlangganan?",
+        "Desc_2": "Anda tidak bisa melihat lebih banyak pos dari pengalaman ini",
+        "Btn_Yes": "Berhenti berlangganan"
+      },
+      "You": "anda",
+      "Menu": {
+        "View": "Lihat rincian",
+        "Edit": "Edit pengalaman",
+        "Clone": "Clone",
+        "Subscribe": "Berlangganan",
+        "Unsubscribe": "Berhenti berlangganan",
+        "Delete": "Hapus",
+        "Share": "Bagikan"
+      },
+      "Modal": {
+        "Title": "Bagikan",
+        "Subtitle": "Beri tahu orang lain tentang Pengalaman ini di Myriad.Social"
+      }
+    },
     "Preview": {
       "Title": "Pratinjau Experience",
       "Text_1": "pelanggan",
@@ -126,6 +155,142 @@
       }
     }
   },
+  "Profile": {
+    "Private": {
+      "Title": "Tidak ada yang bisa dilihat di sini!",
+      "Subtitle": "Akun ini bersifat pribadi. Kirim permintaan pertemanan untuk melihat profil lengkap mereka."
+    },
+    "Empty": {
+      "Title_Own": "Tidak ada yang bisa dilihat di sini!",
+      "Subtitle_Own": "Anda belum memposting apa pun.",
+      "Title": "Tidak ada yang bisa dilihat di sini!",
+      "Subtitle": "Pengguna ini belum memposting apa pun."
+    },
+    "Block": {
+      "User": {
+        "Title": "Anda telah memblokir pengguna ini",
+        "Subtitle": "Anda tidak dapat melihat postingan mereka atau mengirimi mereka permintaan pertemanan. Buka pengaturan untuk mengelola daftar blokir Anda."
+      },
+      "Other": {
+        "Title": "Maaf, Anda telah diblokir oleh pengguna ini",
+        "Subtitle": "Anda tidak dapat melihat postingan mereka atau mengirimi mereka permintaan pertemanan."
+      }
+    },
+    "Header": {
+      "Tooltip": {
+        "Official": "Akun Resmi"
+      },
+      "Alert": {
+        "Success_Block": "Pengguna berhasil diblokir",
+        "Success_Req": "Permintaan pertemanan dikonfirmasi",
+        "Unfriend": "{{name}} telah dihapus dari daftar teman Anda",
+        "Copy": "Tautan profil disalin!"
+      },
+      "Prompt": {
+        "Block": {
+          "Title": "Blokir Pengguna?",
+          "Desc": "Anda tidak akan melihat postingan mereka di timeline Anda lagi dan Anda mungkin tidak dapat melihat profil lengkap mereka. Apa kamu yakin?",
+          "Btn": "Blokir Sekarang"
+        },
+        "Unfriend": {
+          "Title": "Hapus pertemanan dengan {{name}}?",
+          "Desc": "Anda tidak akan melihat postingan mereka di timeline Anda lagi dan Anda mungkin tidak dapat melihat profil lengkap mereka. Apa kamu yakin?",
+          "Btn": "Hapus pertemanan Sekarang"
+        }
+      },
+      "Menu": {
+        "Copy": "Salin profil tautan",
+        "Report": "Laporkan akun",
+        "Block": "Blok orang ini",
+        "Unfriend": "Hapus pertemanan",
+        "Acc": "Terima",
+        "Reject": "Tolak"
+      },
+      "Btn_Edit": "Edit Profil",
+      "Btn_Add": "Tambahkan Teman",
+      "Status": {
+        "Friends": "Teman",
+        "Respond": "Respon",
+        "Requested": "Diminta"
+      },
+      "Metric": {
+        "Post": "Post",
+        "Kudos": "Kudos",
+        "Friends": "Teman",
+        "Experience": "Pengalaman"
+      }
+    },
+    "Edit": {
+      "Title": "Edit Profil",
+      "Subtitle_1": "Foto profil",
+      "Subtitle_2": "Gambar latar",
+      "Subtitle_3": "Username",
+      "Subtitle_4": "Nama tampilan",
+      "Subtitle_5": "Bio",
+      "Subtitle_6": "Situs web",
+      "Required": "Diperlukan minimal 2 karakter",
+      "Btn_Save": "Simpan perubahan",
+      "Alert": "ada yang salah!",
+      "Prompt": {
+        "Title": "Profil disimpan!",
+        "Desc": "Anda telah menyimpan perubahan Anda.",
+        "Btn": "Lihat Profil"
+      },
+      "Prompt_Cancel": {
+        "Title": "Apa kamu yakin?",
+        "Desc": "Anda sudah membuat beberapa perubahan,\nyakin ingin keluar?",
+        "Btn_Yes": "Ya, Tinggalkan",
+        "Btn_Cancel": "Tidak, biarkan aku memikirkan kembali"
+      }
+    },
+    "Tab": {
+      "Post": "Post",
+      "Comments": "Komentar",
+      "Experience": "Pengalaman",
+      "Friends": "Teman",
+      "Social_Media": "Media Sosial",
+      "Wallet_Address": "Alamat Dompet"
+    },
+    "Comments": {
+      "Empty": {
+        "Title": "Tidak ada yang bisa dilihat di sini!",
+        "Subtitle": "Pengguna ini belum membuat komentar apa pun.",
+        "Subtitle_Own": "Anda belum membuat komentar apa pun."
+      },
+      "Sort": "Urut berdasarkan",
+      "See": "Lihat Post",
+      "Comment": "Anda mengomentari “{{text}}...” yang diposting oleh {{name}}.",
+      "Reply": "Anda membalas komentar di “{{text}}...” yang Diposting oleh {{name}}."
+    },
+    "Experience": {
+      "Empty": {
+        "Title": "Tidak ada yang bisa dilihat di sini!",
+        "Subtitle": "Pengguna ini belum membuat Pengalaman apa pun."
+      },
+      "Sort": {
+        "Title": "Filter menurut",
+        "All": "Semua Pengalaman",
+        "Personal": "Pengalaman Personal",
+        "Subscribed": "Pengalaman Berlangganan"
+      }
+    },
+    "Friend": {
+      "Empty": {
+        "Title": "Tidak ada yang bisa dilihat di sini!",
+        "Subtitle": "Akun ini bersifat pribadi. Kirimi mereka permintaan pertemanan untuk melihat profil lengkap mereka."
+      }
+    },
+    "Social_Media": {
+      "Empty": {
+        "Title": "Tidak ada yang bisa dilihat di sini!",
+        "Private": "Akun ini bersifat pribadi. Kirimi mereka permintaan pertemanan untuk melihat profil lengkap mereka.",
+        "Not_Connect": "Pengguna ini belum terhubung ke media sosial mana pun."
+      }
+    },
+    "Setting": {
+      "Copy": "Alamat dompet disalin!"
+    }
+  },
   "Home": {
     "Title": "{{appname}} - Beranda",
     "Prompt_Banned": {
@@ -156,6 +321,25 @@
     },
     "List": {
       "Mutual": "{{total}} teman bersama"
+    },
+    "Alert": {
+      "Removed": "{{name}} telah dihapus dari daftar teman Anda",
+      "Block": "User successfully blocked"
+    },
+    "Prompt_Wallet": {
+      "Title": "Akun dompet tidak ditemukan",
+      "Desc": "Alamat dompet komentar ini tidak tersedia",
+      "Btn": "Tutup"
+    },
+    "Prompt_Unfriend": {
+      "Title": "Putuskan pertemanan {{name}}?",
+      "Desc": "Anda tidak akan ditampilkan lagi postingan mereka di timeline Anda dan Anda mungkin tidak dapat melihat profil lengkap mereka. Apa kamu yakin?",
+      "Btn": "Putuskan Pertemanan"
+    },
+    "Prompt_Block": {
+      "Title": "Block {{name}}?",
+      "Desc": "Anda tidak akan ditampilkan lagi postingan mereka di timeline Anda dan Anda mungkin tidak dapat melihat profil lengkap mereka. Apa kamu yakin?",
+      "Btn": "Blokir Sekarang"
     },
     "Search": {
       "Placeholder": "Mencari Teman"
@@ -401,7 +585,8 @@
       "Friends": "{{total}} Teman",
       "Notification": "{{total}} notifikasi baru",
       "SocialMedia": "{{total}} akun terhubung",
-      "Wallet": "Lihat atau kelola saldo Anda"
+      "Wallet": "Lihat atau kelola saldo Anda",
+      "Profile": "Detail Profil"
     }
   }
 }

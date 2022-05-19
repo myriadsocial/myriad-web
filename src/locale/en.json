@@ -15,6 +15,35 @@
     "Edit": {
       "Title": "Edit Experience"
     },
+    "List": {
+      "Alert": "You can only add up to 10 experiences max",
+      "Copy": "Experience link copied to clipboard!",
+      "Prompt_Delete": {
+        "Title": "Delete Experience?",
+        "Desc": "Are you sure you want to delete this experience? You can't undo this in the future.",
+        "Btn_Yes": "Yes, proceed to delete"
+      },
+      "Prompt_Unsub": {
+        "Title": "Unsubscribe?",
+        "Desc_1": "Do you want to unsubscribe?",
+        "Desc_2": "You won't see more post from this experience",
+        "Btn_Yes": "Unsubscribe"
+      },
+      "You": "you",
+      "Menu": {
+        "View": "View Details",
+        "Edit": "Edit experience",
+        "Clone": "Clone",
+        "Subscribe": "Subscribe",
+        "Unsubscribe": "Unsubscribe",
+        "Delete": "Delete",
+        "Share": "Share"
+      },
+      "Modal": {
+        "Title": "Share",
+        "Subtitle": "Let others know about this Experience on Myriad.Social"
+      }
+    },
     "Preview": {
       "Title": "Preview Experience",
       "Text_1": "subscribers",
@@ -130,6 +159,142 @@
       }
     }
   },
+  "Profile": {
+    "Private": {
+      "Title": "Nothing to see here!",
+      "Subtitle": "This account is private. Send them a friend request to see their full profile."
+    },
+    "Empty": {
+      "Title_Own": "Nothing to see here!",
+      "Subtitle_Own": "You haven't posted anything yet.",
+      "Title": "Nothing to see here!",
+      "Subtitle": "This user hasn't posted anything yet."
+    },
+    "Block": {
+      "User": {
+        "Title": "You have blocked this user",
+        "Subtitle": "You can’t see their posts or send them a friend request. Go to setting to manage your block list."
+      },
+      "Other": {
+        "Title": "Sorry, you have been blocked by this user",
+        "Subtitle": "You can’t see their posts or send them a friend request."
+      }
+    },
+    "Header": {
+      "Tooltip": {
+        "Official": "Official Account"
+      },
+      "Alert": {
+        "Success_Block": "User successfully blocked",
+        "Success_Req": "Friend request confirmed",
+        "Unfriend": "{{name}} has been removed from your friend lists",
+        "Copy": "Profile link copied!"
+      },
+      "Prompt": {
+        "Block": {
+          "Title": "Block User?",
+          "Desc": "You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?",
+          "Btn": "Block Now"
+        },
+        "Unfriend": {
+          "Title": "Unfriend {{name}}?",
+          "Desc": "You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?",
+          "Btn": "Unfriend Now"
+        }
+      },
+      "Menu": {
+        "Copy": "Copy link profile",
+        "Report": "Report account",
+        "Block": "Block this person",
+        "Unfriend": "Unfriend",
+        "Acc": "Accept",
+        "Reject": "Reject"
+      },
+      "Btn_Edit": "Edit Profile",
+      "Btn_Add": "Add Friend",
+      "Status": {
+        "Friends": "Friends",
+        "Respond": "Respond",
+        "Requested": "Requested"
+      },
+      "Metric": {
+        "Post": "Post",
+        "Kudos": "Kudos",
+        "Friends": "Friends",
+        "Experience": "Experience"
+      }
+    },
+    "Edit": {
+      "Title": "Edit Profile",
+      "Subtitle_1": "Profile Picture",
+      "Subtitle_2": "Background Image",
+      "Subtitle_3": "Username",
+      "Subtitle_4": "Display name",
+      "Subtitle_5": "Bio",
+      "Subtitle_6": "Website",
+      "Required": "Required min 2 characters",
+      "Btn_Save": "Save changes",
+      "Alert": "something went wrong!",
+      "Prompt": {
+        "Title": "Profile saved!",
+        "Desc": "You have saved your changes.",
+        "Btn": "See Profile"
+      },
+      "Prompt_Cancel": {
+        "Title": "Are you sure?",
+        "Desc": "You already made some changes,\nsure you want to leave it?",
+        "Btn_Yes": "Yes, Leave it",
+        "Btn_Cancel": "No, let me rethink"
+      }
+    },
+    "Tab": {
+      "Post": "Post",
+      "Comments": "Comments",
+      "Experience": "Experience",
+      "Friends": "Friends",
+      "Social_Media": "Social Media",
+      "Wallet_Address": "Wallet Address"
+    },
+    "Comments": {
+      "Empty": {
+        "Title": "Nothing to see here!",
+        "Subtitle": "This user hasn't created any comment yet.",
+        "Subtitle_Own": "You haven't created any comment yet."
+      },
+      "Sort": "Sort by",
+      "See": "See Post",
+      "Comment": "You commented on “{{text}}...” Posted by {{name}}.",
+      "Reply": "You reply a comment on “{{text}}...” Posted by {{name}}."
+    },
+    "Experience": {
+      "Empty": {
+        "Title": "Nothing to see here!",
+        "Subtitle": "This user hasn't created any Experience yet."
+      },
+      "Sort": {
+        "Title": "Filter by",
+        "All": "All Experience",
+        "Personal": "Personal Experience",
+        "Subscribed": "Subscribed Experience"
+      }
+    },
+    "Friend": {
+      "Empty": {
+        "Title": "Nothing to see here!",
+        "Subtitle": "This account is private. Send them a friend request to see their full profile."
+      }
+    },
+    "Social_Media": {
+      "Empty": {
+        "Title": "Nothing to see here!",
+        "Private": "This account is private. Send them a friend request to see their full profile.",
+        "Not_Connect": "This user hasn't connected to any social media yet."
+      }
+    },
+    "Setting": {
+      "Copy": "Wallet address copied!"
+    }
+  },
   "Home": {
     "Title": "{{appname}} - Home",
     "Prompt_Banned": {
@@ -160,6 +325,25 @@
     },
     "List": {
       "Mutual": "{{total}} mutual friends"
+    },
+    "Alert": {
+      "Removed": "{{name}} has been removed from your friend lists",
+      "Block": "User successfully blocked"
+    },
+    "Prompt_Wallet": {
+      "Title": "Wallet account not found",
+      "Desc": "This comment wallet address is unavailable",
+      "Btn": "Close"
+    },
+    "Prompt_Unfriend": {
+      "Title": "Unfriend {{name}}?",
+      "Desc": "You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?",
+      "Btn": "Unfriend Now"
+    },
+    "Prompt_Block": {
+      "Title": "Block {{name}}?",
+      "Desc": "You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?",
+      "Btn": "Block Now"
     },
     "Search": {
       "Placeholder": "Search Friend"
@@ -405,7 +589,8 @@
       "Friends": "{{total}} Friends",
       "Notification": "{{total}} new notifications",
       "SocialMedia": "{{total}} account connected",
-      "Wallet": "View your balance or manage your wallet"
+      "Wallet": "View your balance or manage your wallet",
+      "Profile": "Profile Detail"
     }
   }
 }

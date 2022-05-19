@@ -6,9 +6,9 @@ import i18n from 'src/locale';
 export type BalanceSortType = 'aToZ' | 'highest' | 'lowest' | 'all';
 // TODO: move this to experience tab
 export const experienceFilterOptions: MenuOptions<ExperienceType>[] = [
-  {id: 'all', title: 'All Experience'},
-  {id: 'personal', title: 'Personal Experience'},
-  {id: 'other', title: 'Subscribed Experience'},
+  {id: 'all', title: i18n.t('Profile.Experience.Sort.All')},
+  {id: 'personal', title: i18n.t('Profile.Experience.Sort.Personal')},
+  {id: 'other', title: i18n.t('Profile.Experience.Sort.Subscribed')},
 ];
 
 // TODO: move this to balance detail list

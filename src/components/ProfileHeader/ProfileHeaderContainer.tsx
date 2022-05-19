@@ -11,6 +11,7 @@ import {useReport} from 'src/hooks/use-report.hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Friend, FriendStatus} from 'src/interfaces/friend';
 import {ReportProps} from 'src/interfaces/report';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {blockFromFriend} from 'src/reducers/friend/actions';
 import {fetchProfileDetail, fetchProfileExperience} from 'src/reducers/profile/actions';
@@ -76,7 +77,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
     await reloadFriendStatus();
 
     openToasterSnack({
-      message: 'User successfully blocked',
+      message: i18n.t('Profile.Header.Alert.Success_Block'),
       variant: 'success',
     });
   };
@@ -90,7 +91,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
       toggleRequest(friendStatus, FriendStatus.APPROVED);
 
       openToasterSnack({
-        message: 'Friend request confirmed',
+        message: i18n.t('Profile.Header.Alert.Success_Req'),
         variant: 'success',
       });
     }
@@ -101,7 +102,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
       removeFriendRequest(friendStatus);
 
       openToasterSnack({
-        message: `${profile?.name} has been removed from your friend lists`,
+        message: i18n.t('Profile.Header.Alert.Unfriend', {name: profile?.name}),
         variant: 'success',
       });
     }

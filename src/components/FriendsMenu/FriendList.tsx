@@ -109,10 +109,10 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
       });
     } catch {
       confirm({
-        title: 'Wallet account not found',
-        description: 'This comment wallet address is unavailable',
+        title: i18n.t('Friends.Prompt_Wallet.Title'),
+        description: i18n.t('Friends.Prompt_Wallet.Desc'),
         icon: 'warning',
-        confirmationText: 'close',
+        confirmationText: i18n.t('Friends.Prompt_Wallet.Close'),
         hideCancel: true,
       });
     }
@@ -135,11 +135,12 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
       router.push('/404');
     } else {
       confirm({
-        title: `Unfriend ${currentFriend ? currentFriend.name : 'User'}?`,
-        description:
-          "You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?",
+        title: i18n.t('Friends.Prompt_Unfriend.Title', {
+          name: currentFriend ? currentFriend.name : 'User',
+        }),
+        description: i18n.t('Friends.Prompt_Unfriend.Desc'),
         icon: 'danger',
-        confirmationText: 'Unfriend Now',
+        confirmationText: i18n.t('Friends.Prompt_Unfriend.Btn'),
         onConfirm: () => {
           handleRemoveFriend();
         },
@@ -152,11 +153,12 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
       router.push('/404');
     } else {
       confirm({
-        title: `Block ${currentFriend ? currentFriend.name : 'User'}?`,
-        description:
-          "You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?",
+        title: i18n.t('Friends.Prompt_Block.Title', {
+          name: currentFriend ? currentFriend.name : 'User',
+        }),
+        description: i18n.t('Friends.Prompt_Block.Title'),
         icon: 'danger',
-        confirmationText: 'Block Now',
+        confirmationText: i18n.t('Friends.Prompt_Block.Btn'),
         onConfirm: () => {
           handleBlockUser();
         },
@@ -178,7 +180,9 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
       removeFromFriendList(currentFriend.id);
 
       openToasterSnack({
-        message: `${currentFriend?.name} has been removed from your friend lists`,
+        message: i18n.t('Friends.Alert.Removed', {
+          name: currentFriend?.name,
+        }),
         variant: 'success',
       });
 
@@ -195,7 +199,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
       removeFromFriendList(currentFriend.id);
 
       openToasterSnack({
-        message: 'User successfully blocked',
+        message: i18n.t('Friends.Alert.Block'),
         variant: 'success',
       });
 

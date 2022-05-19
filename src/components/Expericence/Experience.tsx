@@ -27,6 +27,7 @@ import ShowIf from 'src/components/common/show-if.component';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {WrappedExperience} from 'src/interfaces/experience';
 import {User} from 'src/interfaces/user';
+import i18n from 'src/locale';
 
 type ExperienceProps = {
   user?: User;
@@ -108,12 +109,11 @@ export const Experience: React.FC<ExperienceProps> = props => {
     handleCloseSettings();
 
     confirm({
-      title: 'Delete Experience?',
-      description:
-        "Are you sure you want to delete this experience? You can't undo this in the future.",
+      title: i18n.t('Experience.List.Prompt_Delete.Title'),
+      description: i18n.t('Experience.List.Prompt_Delete.Desc'),
       icon: 'danger',
-      confirmationText: 'Yes, proceed to delete',
-      cancellationText: 'Cancel',
+      confirmationText: i18n.t('Experience.List.Prompt_Delete.Btn_Yes'),
+      cancellationText: i18n.t('General.Cancel'),
       onConfirm: () => {
         if (onDelete && userExperienceId) {
           onDelete(userExperienceId);
@@ -126,10 +126,12 @@ export const Experience: React.FC<ExperienceProps> = props => {
     handleCloseSettings();
 
     confirm({
-      title: 'Unsubscribe?',
-      description: "Do you want to unsubscribe?\n You won't see more post from this experience",
+      title: i18n.t('Experience.List.Prompt_Unsub.Title'),
+      description: `${i18n.t('Experience.List.Prompt_Unsub.Desc_1')}\n ${i18n.t(
+        'Experience.List.Prompt_Unsub.Desc_2',
+      )}`,
       icon: 'warning',
-      confirmationText: 'Unsubscribe',
+      confirmationText: i18n.t('Experience.List.Prompt_Unsub.Btn_Yes'),
       onConfirm: () => {
         if (onUnsubscribe && userExperienceId) {
           onUnsubscribe(userExperienceId);
@@ -150,7 +152,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
 
   const handleExperienceLinkCopied = () => {
     openToasterSnack({
-      message: 'Experience link copied to clipboard!',
+      message: i18n.t('Experience.List.Copy'),
       variant: 'success',
     });
   };
@@ -180,7 +182,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
                 {userExperience.experience.user.name}
               </Typography>
               <Typography variant="caption" color="textSecondary">
-                {isOwnExperience ? ' (you)' : ''}
+                {isOwnExperience ? ` ${i18n.t('Experience.List.You')}` : ''}
               </Typography>
             </CardContent>
 
@@ -205,7 +207,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
           href={`/experience/[experienceId]/preview`}
           as={`/experience/${experienceId}/preview`}
           passHref>
-          <MenuItem onClick={handleCloseSettings}>View details</MenuItem>
+          <MenuItem onClick={handleCloseSettings}>{i18n.t('Experience.List.Menu.View')}</MenuItem>
         </Link>
 
         <ShowIf condition={isOwnExperience}>
@@ -213,38 +215,38 @@ export const Experience: React.FC<ExperienceProps> = props => {
             href={`/experience/[experienceId]/edit`}
             as={`/experience/${experienceId}/edit`}
             passHref>
-            <MenuItem onClick={handleCloseSettings}>Edit experience</MenuItem>
+            <MenuItem onClick={handleCloseSettings}>{i18n.t('Experience.List.Menu.Edit')}</MenuItem>
           </Link>
         </ShowIf>
 
         <ShowIf condition={!isOwnExperience && !isHidden()}>
           <MenuItem onClick={handleCloneExperience} disabled={anonymous}>
-            Clone
+            {i18n.t('Experience.List.Menu.Clone')}
           </MenuItem>
         </ShowIf>
 
         <ShowIf condition={!userExperience.subscribed && !isOwnExperience && !isHidden()}>
           <MenuItem onClick={handleSubscribeExperience} disabled={anonymous}>
-            Subscribe
+            {i18n.t('Experience.List.Menu.Subscribe')}
           </MenuItem>
         </ShowIf>
 
         <ShowIf condition={Boolean(userExperience.subscribed) && !isOwnExperience}>
           <MenuItem onClick={confirmUnsubscribe} className={styles.delete}>
-            Unsubscribe
+            {i18n.t('Experience.List.Menu.Unsubscribe')}
           </MenuItem>
         </ShowIf>
         <ShowIf condition={isOwnExperience}>
           <MenuItem onClick={confirmDeleteExperience} className={styles.delete}>
-            Delete
+            {i18n.t('Experience.List.Menu.Delete')}
           </MenuItem>
         </ShowIf>
-        <MenuItem onClick={openShareExperience}>Share</MenuItem>
+        <MenuItem onClick={openShareExperience}>{i18n.t('Experience.List.Menu.Share')}</MenuItem>
       </Menu>
 
       <Modal
-        title="Share"
-        subtitle="Let others know about this Experience on Myriad.Social"
+        title={i18n.t('Experience.List.Modal.Title')}
+        subtitle={i18n.t('Experience.List.Modal.Subtitle')}
         maxWidth="sm"
         className={styles.modal}
         open={Boolean(shareAnchorElement)}

@@ -11,6 +11,7 @@ import {useProfileFriend} from 'src/hooks/use-profile-friend.hook';
 import {Friend} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
 import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {ConfigState} from 'src/reducers/config/reducer';
 import {ProfileState} from 'src/reducers/profile/reducer';
@@ -98,8 +99,8 @@ export const FriendListContainer: React.FC<FriendListContainerProps> = props => 
     return (
       <div style={{marginTop: 30}}>
         <Empty
-          title="Nothing to see here!"
-          subtitle="This account is private. Send them a friend request to see their full profile."
+          title={i18n.t('Profile.Friend.Empty.Title')}
+          subtitle={i18n.t('Profile.Friend.Empty.Subtitle')}
         />
       </div>
     );

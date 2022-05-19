@@ -15,6 +15,7 @@ import {UserExperience, ExperienceType} from 'src/interfaces/experience';
 import {FriendStatus} from 'src/interfaces/friend';
 import {UserSettings} from 'src/interfaces/setting';
 import {User} from 'src/interfaces/user';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {fetchProfileExperience} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
@@ -89,8 +90,8 @@ export const ProfileExperienceTab: React.FC<ProfileExperienceTabProps> = props =
     return (
       <div style={{marginTop: 30}}>
         <Empty
-          title="Nothing to see here!"
-          subtitle="This user hasn't created any Experience yet."
+          title={i18n.t('Profile.Experience.Empty.Title')}
+          subtitle={i18n.t('Profile.Experience.Empty.Subtitle')}
         />
       </div>
     );
@@ -100,7 +101,7 @@ export const ProfileExperienceTab: React.FC<ProfileExperienceTabProps> = props =
     <div className={style.mobile}>
       <Grid container alignItems="center" className={style.root}>
         <DropdownMenu<ExperienceType>
-          title="Filter by"
+          title={i18n.t('Profile.Experience.Sort.Title')}
           options={experienceFilterOptions}
           onChange={handleFilterSelected}
         />

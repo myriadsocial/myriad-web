@@ -9,7 +9,7 @@ import Head from 'next/head';
 import {useRouter} from 'next/router';
 
 import {ProfileTimeline} from 'src/components/Profile/Profile';
-import {SectionTitle, TopNavbarComponent} from 'src/components/atoms/TopNavbar';
+import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {ResourceDeleted} from 'src/components/common/ResourceDeleted';
 import {TippingSuccess} from 'src/components/common/Tipping/render/Tipping.success';
 import ShowIf from 'src/components/common/show-if.component';
@@ -18,6 +18,7 @@ import {generateAnonymousUser} from 'src/helpers/auth';
 import {initialize} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
+import i18n from 'src/locale';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchAccountPrivacySetting} from 'src/reducers/config/actions';
@@ -71,7 +72,10 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = props => {
       <ProfileTimeline loading={false} isBanned={isBanned} />
 
       <ShowIf condition={isBanned}>
-        <TopNavbarComponent description={'Profile Detail'} sectionTitle={SectionTitle.PROFILE} />
+        <TopNavbarComponent
+          description={i18n.t('TopNavbar.Profile.Subtitle')}
+          sectionTitle={i18n.t('TopNavbar.Profile.Title')}
+        />
         <ResourceDeleted />
       </ShowIf>
       <TippingSuccess />

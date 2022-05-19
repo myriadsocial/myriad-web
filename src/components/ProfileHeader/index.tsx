@@ -31,6 +31,7 @@ import {Friend} from 'src/interfaces/friend';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {ReportProps} from 'src/interfaces/report';
 import {User} from 'src/interfaces/user';
+import i18n from 'src/locale';
 
 export type Props = {
   person: User;
@@ -101,7 +102,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
   const handleLinkCopied = () => {
     handleCloseMenu();
     openToasterSnack({
-      message: 'Profile link copied!',
+      message: i18n.t('Profile.Header.Alert.Copy'),
       variant: 'success',
     });
   };
@@ -118,11 +119,10 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     handleCloseMenu();
 
     confirm({
-      title: 'Block User?',
-      description:
-        "You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?",
+      title: i18n.t('Profile.Header.Prompt.Block.Title'),
+      description: i18n.t('Profile.Header.Prompt.Block.Desc'),
       icon: 'danger',
-      confirmationText: 'Block Now',
+      confirmationText: i18n.t('Profile.Header.Prompt.Block.Btn'),
       onConfirm: () => {
         onBlock();
       },
@@ -141,11 +141,10 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     handleCloseMenu();
 
     confirm({
-      title: `Unfriend ${person.name}?`,
-      description:
-        "You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?",
+      title: i18n.t('Profile.Header.Prompt.Unfriend.Title', {name: person.name}),
+      description: i18n.t('Profile.Header.Prompt.Unfriend.Desc'),
       icon: 'danger',
-      confirmationText: 'Unfriend Now',
+      confirmationText: i18n.t('Profile.Header.Prompt.Unfriend.Btn'),
       onConfirm: () => {
         onRemoveFriend();
       },
@@ -176,7 +175,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 {person.name}
                 <ShowIf condition={Boolean(person.verified)}>
                   <Tooltip
-                    title={<Typography>Official Account</Typography>}
+                    title={<Typography>{i18n.t('Profile.Header.Tooltip.Official')}</Typography>}
                     aria-label="official-account">
                     <IconButton
                       aria-label="official-badge"
@@ -213,11 +212,11 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
               open={Boolean(anchorEl)}
               onClose={handleCloseMenu}>
               <CopyToClipboard text={linkUrl} onCopy={handleLinkCopied}>
-                <MenuItem>Copy link profile</MenuItem>
+                <MenuItem>{i18n.t('Profile.Header.Menu.Copy')}</MenuItem>
               </CopyToClipboard>
               <ShowIf condition={person.username !== 'myriad_official'}>
                 <MenuItem onClick={handleOpenReportModal} className={style.delete}>
-                  Report account
+                  {i18n.t('Profile.Header.Menu.Report')}
                 </MenuItem>
               </ShowIf>
               <ShowIf condition={!isBlocked}>
@@ -225,7 +224,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                   disabled={isBlocked}
                   onClick={confirmBlockPerson}
                   className={style.delete}>
-                  Block this person
+                  {i18n.t('Profile.Header.Menu.Block')}
                 </MenuItem>
               </ShowIf>
             </Menu>
@@ -249,7 +248,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 variant="contained"
                 color="primary"
                 size="small">
-                Edit Profile
+                {i18n.t('Profile.Header.Btn_Edit')}
               </Button>
             </ShowIf>
 
@@ -269,7 +268,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                   variant="contained"
                   color="primary"
                   size="small">
-                  Add Friend
+                  {i18n.t('Profile.Header.Btn_Add')}
                 </Button>
               </ShowIf>
 
@@ -305,18 +304,24 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                   open={Boolean(anchorElFriend)}
                   onClose={handleCloseMenu}>
                   <ShowIf condition={isFriend}>
-                    <MenuItem onClick={() => confirmRemoveFriend()}>Unfriend</MenuItem>
+                    <MenuItem onClick={() => confirmRemoveFriend()}>
+                      {i18n.t('Profile.Header.Menu.Unfriend')}
+                    </MenuItem>
                   </ShowIf>
                   <ShowIf condition={isFriend}>
                     <MenuItem onClick={confirmBlockPerson} className={style.delete}>
-                      Block this person
+                      {i18n.t('Profile.Header.Menu.Block')}
                     </MenuItem>
                   </ShowIf>
                   <ShowIf condition={isRequested}>
-                    <MenuItem onClick={() => onAcceptFriend()}>Accept</MenuItem>
+                    <MenuItem onClick={() => onAcceptFriend()}>
+                      {i18n.t('Profile.Header.Menu.Acc')}
+                    </MenuItem>
                   </ShowIf>
                   <ShowIf condition={isRequested}>
-                    <MenuItem onClick={() => onDeclineRequest()}>Reject</MenuItem>
+                    <MenuItem onClick={() => onDeclineRequest()}>
+                      {i18n.t('Profile.Header.Menu.Reject')}
+                    </MenuItem>
                   </ShowIf>
                 </Menu>
               </ShowIf>
