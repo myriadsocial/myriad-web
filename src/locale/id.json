@@ -274,6 +274,10 @@
       },
       "Blocked_Title": "Pengguna Diblokir",
       "Blocked_Subtitle": "Pengaturan daftar pengguna yang diblokir",
+      "Blocked_Setting": {
+        "Description": "Ketika Anda memblokir pengguna lain, pengguna tersebut tidak akan dapat melihat profil dan konten Anda, menambahkan Anda sebagai teman, menyebutkan Anda atau mengirimkan Anda pesan dan Anda tidak akan melihat konten dan notifikasi dari mereka",
+        "Empty_Block": "Anda belum memblokir siapapun"
+      },
       "Language_Title": "Pengaturan Bahasa",
       "Language_Subtitle": "Ubah bahasa yang digunakan pada layanan antar muka",
       "Help_Title": "Bantuan",

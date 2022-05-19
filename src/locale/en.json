@@ -277,6 +277,10 @@
       },
       "Blocked_Title": "Blocked User Settings",
       "Blocked_Subtitle": "Manage your blocked list",
+      "Blocked_Setting": {
+        "Description": "When you blocked someone, that person won't be able to view your profile and post, add you as a friend, tag you or message you and you won't see post or notification from them.",
+        "Empty_Block": "You haven't blocked anyone yet"
+      },
       "Language_Title": "Language Settings",
       "Language_Subtitle": "Change the language used in the user interface",
       "Help_Title": "Help",
