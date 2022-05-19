@@ -13,6 +13,9 @@ import Typography from '@material-ui/core/Typography';
 import {TopNavbarProps} from './TopNavbar.interfaces';
 import {useStyles} from './TopNavbar.styles';
 
+import {SectionTitle} from 'src/components/atoms/TopNavbar';
+import i18n from 'src/locale';
+
 const MenuDrawerComponent = dynamic(() => import('src/components/Mobile/MenuDrawer/MenuDrawer'), {
   ssr: false,
 });
@@ -60,7 +63,9 @@ export const TopNavbarComponent: React.FC<TopNavbarProps> = props => {
 
       <Grid container direction={reverse ? 'column-reverse' : 'column'}>
         <Typography className={classes.sectionTitle} color="primary">
-          {sectionTitle}
+          {sectionTitle == (SectionTitle.SETTINGS as string)
+            ? i18n.t('Section.Settings')
+            : sectionTitle}
         </Typography>
         <Typography className={classes.description}>{description}</Typography>
       </Grid>

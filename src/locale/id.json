@@ -241,8 +241,22 @@
   "Search": {
     "Title": "{{appname}} - Hasil Pencarian"
   },
+  "Section": {
+    "Friends": "Teman",
+    "Social_Media": "Media Sosial",
+    "Wallet": "Dompet",
+    "Experience": "Pengalaman",
+    "Profile": "Profil",
+    "Settings": "Pengaturan",
+    "Notification": "Notifikasi",
+    "Timeline": "Linimasa",
+    "NFT": "NFT",
+    "Social_Token": "Token sosial",
+    "Trends": "Tren"
+  },
   "Setting": {
     "Title": "{{appname}} - Pengaturan",
+    "Default_Title": "Tentukan pengaturan privasi dan notifikasi",
     "Header": "Pengaturan",
     "List_Menu": {
       "Account_Title": "Pengaturan Akun",

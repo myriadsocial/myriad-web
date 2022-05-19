@@ -46,7 +46,7 @@ const Settings: React.FC = () => {
         <title>{i18n.t('Setting.Title', {appname: publicRuntimeConfig.appName})}</title>
       </Head>
       <TopNavbarComponent
-        description={selected ? `${selected.title}` : 'Set Privacy and Notification settings'}
+        description={selected ? `${selected.title}` : i18n.t('Setting.Default_Title')}
         sectionTitle={SectionTitle.SETTINGS}
         type={selected ? 'back' : 'menu'}
       />

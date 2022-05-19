@@ -245,8 +245,22 @@
   "Search": {
     "Title": "{{appname}} - Search Result"
   },
+  "Section": {
+    "Friends": "Friends",
+    "Social_Media": "Social Media",
+    "Wallet": "Wallet",
+    "Experience": "Experience",
+    "Profile": "Profile",
+    "Settings": "Settings",
+    "Notification": "Notification",
+    "Timeline": "Timeline",
+    "NFT": "NFT",
+    "Social_Token": "Social Token",
+    "Trends": "Trends"
+  },
   "Setting": {
     "Title": "{{appname}} - Settings",
+    "Default_Title": "Set Privacy and Notification settings",
     "Header": "Setting",
     "List_Menu": {
       "Account_Title": "Privacy Settings",
