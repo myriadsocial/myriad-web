@@ -9,6 +9,7 @@ import {ProfileEditComponent} from './ProfileEdit';
 import {useProfileHook} from 'src/hooks/use-profile.hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {User} from 'src/interfaces/user';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -77,7 +78,7 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
       updateProfile(newUser, openSuccesPrompt);
     } catch (err) {
       openToasterSnack({
-        message: 'something went wrong!',
+        message: i18n.t('Profile.Edit.Alert'),
         variant: 'error',
       });
     }
@@ -95,10 +96,10 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
 
   const openSuccesPrompt = useCallback(() => {
     confirm({
-      title: 'Profile saved!',
-      description: 'You have saved your changes.',
+      title: i18n.t('Profile.Edit.Prompt.Title'),
+      description: i18n.t('Profile.Edit.Prompt.Desc'),
       icon: 'success',
-      confirmationText: 'See Profile',
+      confirmationText: i18n.t('Profile.Edit.Prompt.Btn'),
       hideCancel: true,
       onConfirm: () => {
         redirectToProfile();

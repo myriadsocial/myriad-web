@@ -6,6 +6,7 @@ import {CommentHistoryList} from './CommentHistoryList';
 import {useCommentHistory} from './hooks/use-comment-history.hook';
 
 import {User} from 'src/interfaces/user';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -28,7 +29,10 @@ export const CommentHistoryListContainer: React.FC<CommentHistoryListContainerPr
   if (comments.length === 0 && !isProfileOwner) {
     return (
       <div style={{marginTop: 30}}>
-        <Empty title="Nothing to see here!" subtitle="This user hasn't created any comment yet." />
+        <Empty
+          title={i18n.t('Profile.Comments.Empty.Title')}
+          subtitle={i18n.t('Profile.Comments.Empty.Subtitle')}
+        />
       </div>
     );
   }
@@ -36,7 +40,10 @@ export const CommentHistoryListContainer: React.FC<CommentHistoryListContainerPr
   if (comments.length === 0 && isProfileOwner) {
     return (
       <div style={{marginTop: 30}}>
-        <Empty title="Nothing to see here!" subtitle="You haven't created any comment yet." />
+        <Empty
+          title={i18n.t('Profile.Comments.Empty.Title')}
+          subtitle={i18n.t('Profile.Comments.Empty.Subtitle_Own')}
+        />
       </div>
     );
   }

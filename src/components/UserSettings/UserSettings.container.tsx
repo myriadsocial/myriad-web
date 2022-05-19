@@ -6,6 +6,7 @@ import {UserSettings} from './UserSettings';
 
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {User} from 'src/interfaces/user';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {ProfileState} from 'src/reducers/profile/reducer';
 
@@ -21,7 +22,7 @@ export const UserSettingsContainer: React.FC<UserSettingsContainerProps> = props
 
   const handlePublicKeyCopied = () => {
     openToasterSnack({
-      message: 'Wallet address copied!',
+      message: i18n.t('Profile.Setting.Copy'),
       variant: 'success',
     });
   };

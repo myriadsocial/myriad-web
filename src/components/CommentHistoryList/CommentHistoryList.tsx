@@ -12,6 +12,7 @@ import {Loading} from 'src/components/atoms/Loading';
 import {Comment} from 'src/interfaces/comment';
 import {User} from 'src/interfaces/user';
 import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
+import i18n from 'src/locale';
 
 type CommentHistoryListProps = {
   user?: User;
@@ -31,7 +32,7 @@ export const CommentHistoryList: React.FC<CommentHistoryListProps> = props => {
     <div className={styles.root}>
       <Grid container justifyContent="flex-end">
         <DropdownMenu<SortType>
-          title={'Sort by'}
+          title={i18n.t('Profile.Comments.Sort')}
           options={sortOptions}
           selected={sort}
           onChange={onSort}

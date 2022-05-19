@@ -7,6 +7,7 @@ import {useStyles} from './Metric.style';
 import ShowIf from 'src/components/common/show-if.component';
 import {formatCount} from 'src/helpers/number';
 import {UserMetric} from 'src/interfaces/user';
+import i18n from 'src/locale';
 
 export type MetricProps = {
   data?: UserMetric;
@@ -23,7 +24,7 @@ export const Metric: React.FC<MetricProps> = props => {
     <Grid container spacing={2} wrap="nowrap" classes={{root: style.root}}>
       <Grid item xs={3} className={style.post}>
         <Typography variant="body1" className={`${style.username}`} component="p">
-          Post
+          {i18n.t('Profile.Header.Metric.Post')}
         </Typography>
         <Typography variant="h5" className={style.total} component="p">
           {formatCount(data?.totalPosts ?? 0)}
@@ -31,7 +32,7 @@ export const Metric: React.FC<MetricProps> = props => {
       </Grid>
       <Grid item xs={3}>
         <Typography variant="body1" className={`${style.username}`} component="p">
-          Kudos
+          {i18n.t('Profile.Header.Metric.Kudos')}
         </Typography>
         <Typography variant="h5" className={style.total} component="p">
           {formatCount(data?.totalKudos ?? 0)}
@@ -40,7 +41,7 @@ export const Metric: React.FC<MetricProps> = props => {
       <ShowIf condition={!official}>
         <Grid item xs={3}>
           <Typography variant="body1" className={`${style.username}`} component="p">
-            Friends
+            {i18n.t('Profile.Header.Metric.Friends')}
           </Typography>
           <Typography variant="h5" className={style.total} component="p">
             {formatCount(data?.totalFriends ?? 0)}
@@ -49,7 +50,7 @@ export const Metric: React.FC<MetricProps> = props => {
       </ShowIf>
       <Grid item xs={3}>
         <Typography variant="body1" className={`${style.username}`} component="p">
-          Experience
+          {i18n.t('Profile.Header.Metric.Experience')}
         </Typography>
         <Typography variant="h5" className={style.total} component="p">
           {anonymous ? 3 : formatCount(data?.totalExperiences ?? 0)}

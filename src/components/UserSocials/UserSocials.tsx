@@ -8,6 +8,7 @@ import {useStyles} from './UserSocials.styles';
 
 import {Empty} from 'src/components/atoms/Empty';
 import {socials as socialsIcon} from 'src/components/atoms/Icons';
+import i18n from 'src/locale';
 
 type UserSocialsProps = {
   socials: SocialMedia[];
@@ -58,8 +59,8 @@ export const UserSocials: React.FC<UserSocialsProps> = props => {
     return (
       <div className={`${styles.mt30}`}>
         <Empty
-          title="Nothing to see here!"
-          subtitle="This account is private. Send them a friend request to see their full profile."
+          title={i18n.t('Profile.Social_Media.Empty.Title')}
+          subtitle={i18n.t('Profile.Social_Media.Empty.Private')}
         />
       </div>
     );
@@ -69,8 +70,8 @@ export const UserSocials: React.FC<UserSocialsProps> = props => {
     return (
       <div className={`${styles.mt30}`}>
         <Empty
-          title="Nothing to see here!"
-          subtitle="This user hasn't connected to any social media yet."
+          title={i18n.t('Profile.Social_Media.Empty.Title')}
+          subtitle={i18n.t('Profile.Social_Media.Empty.Not_Connect')}
         />
       </div>
     );

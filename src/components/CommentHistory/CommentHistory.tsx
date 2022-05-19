@@ -14,6 +14,7 @@ import {useStyles} from './CommentHistory.style';
 import {Comment} from 'src/interfaces/comment';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
+import i18n from 'src/locale';
 
 type CommentHistoryProps = {
   user?: User;
@@ -48,10 +49,11 @@ export const CommentHistory: React.FC<CommentHistoryProps> = props => {
     <div className={styles.root}>
       <ShowIf condition={comment.type === ReferenceType.POST}>
         <Typography variant="body1" color="textSecondary" gutterBottom>
-          You commented on “{text}...” Posted by {postUser?.name ?? 'Anonymous'}.&nbsp;
+          {i18n.t('Profile.Comments.Comment', {text: text, name: postUser?.name ?? 'Anonymous'})}
+          &nbsp;
           <Link href={'/post/[postId]'} as={`/post/${comment.postId}`} passHref>
             <Typography variant="body1" className={styles.link} component="a">
-              See Post
+              {i18n.t('Profile.Comments.See')}
             </Typography>
           </Link>
         </Typography>
@@ -59,10 +61,11 @@ export const CommentHistory: React.FC<CommentHistoryProps> = props => {
 
       <ShowIf condition={comment.type === ReferenceType.COMMENT}>
         <Typography variant="body1" color="textSecondary" gutterBottom>
-          You reply a comment on “{text}...” Posted by {postUser?.name ?? 'Anonymous'}.&nbsp;
+          {i18n.t('Profile.Comments.Reply', {text: text, name: postUser?.name ?? 'Anonymous'})}
+          &nbsp;
           <Link href={'/post/[postId]'} as={`/post/${comment.postId}`} passHref>
             <Typography variant="body1" className={styles.link} component="a">
-              See Post
+              {i18n.t('Profile.Comments.See')}
             </Typography>
           </Link>
         </Typography>

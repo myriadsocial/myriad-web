@@ -12,9 +12,10 @@ import {useStyles} from './Profile.style';
 
 import {ProfileHeaderContainer} from 'src/components/ProfileHeader/ProfileHeaderContainer';
 import {UserMenuContainer} from 'src/components/UserMenu';
-import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
+import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import ShowIf from 'src/components/common/show-if.component';
 import {FriendStatus} from 'src/interfaces/friend';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {fetchProfileFriend} from 'src/reducers/profile/actions';
 import {checkFriendedStatus} from 'src/reducers/profile/actions';
@@ -82,7 +83,7 @@ export const ProfileTimeline: React.FC<Props> = ({loading, isBanned = false}) =>
         <div className={style.mb}>
           <TopNavbarComponent
             description={profile.name}
-            sectionTitle={SectionTitle.PROFILE}
+            sectionTitle={i18n.t('TopNavbar.Title.Profile')}
             reverse
           />
         </div>
@@ -105,18 +106,17 @@ export const ProfileTimeline: React.FC<Props> = ({loading, isBanned = false}) =>
               className={style.blocked}>
               <Typography variant="h4" className={style.blockedTitle}>
                 {user?.id === profile.blocker
-                  ? 'You have blocked this user'
-                  : 'Sorry, you have been blocked by this user'}
+                  ? i18n.t('Profile.Block.User.Title')
+                  : i18n.t('Profile.Block.Other.Title')}
               </Typography>
               <ShowIf condition={user?.id === profile.blocker}>
                 <Typography variant="body1" component="div">
-                  You can’t see their posts or send them a friend request. Go to setting to manage
-                  your block list.
+                  {i18n.t('Profile.Block.User.Subtitle')}
                 </Typography>
               </ShowIf>
               <ShowIf condition={user?.id !== profile.blocker}>
                 <Typography variant="body1" component="div">
-                  You can’t see their posts or send them a friend request.
+                  {i18n.t('Profile.Block.Other.Subtitle')}
                 </Typography>
               </ShowIf>
             </Grid>
