@@ -368,6 +368,17 @@
       "Delete_Post": "Hapus Postingan"
     }
   },
+  "Post_Create": {
+    "Title": "Buat Postingan",
+    "Subtitle": "Buat Postinganmu",
+    "Tab_Label": "Buat",
+    "Confirm": "Buat Postingan"
+  },
+  "Post_Import": {
+    "Title": "Impor Postingan",
+    "Subtitle": "Impor postingan dari media sosial lain",
+    "Tab_Label": "Impor"
+  },
   "Friends": {
     "Title": "{{appname}} - Teman",
     "Container": {

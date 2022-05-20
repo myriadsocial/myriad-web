@@ -369,6 +369,17 @@
       "Delete_Post": "Delete Post"
     }
   },
+  "Post_Create": {
+    "Title": "Create Post",
+    "Subtitle": "Create your own post",
+    "Tab_Label": "Create",
+    "Confirm": "Create Post"
+  },
+  "Post_Import": {
+    "Title": "Import Post",
+    "Subtitle": "Import post from another social media",
+    "Tab_Label": "Import"
+  },
   "Friends": {
     "Title": "{{appname}} - Friends",
     "Container": {
