@@ -18,6 +18,7 @@ import {menuOptions} from './default';
 import ShowIf from 'src/components/common/show-if.component';
 import {Post, PostVisibility} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
+import i18n from 'src/locale';
 
 type PostCreateProps = {
   url?: string;
@@ -57,12 +58,12 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
 
   const header: Record<PostCreateType, {title: string; subtitle: string}> = {
     create: {
-      title: 'Create Post',
-      subtitle: 'Create your own post',
+      title: i18n.t('Post_Create.Title'),
+      subtitle: i18n.t('Post_Create.Subtitle'),
     },
     import: {
-      title: 'Import Post',
-      subtitle: 'Import post from another social media',
+      title: i18n.t('Post_Import.Title'),
+      subtitle: i18n.t('Post_Import.Subtitle'),
     },
   };
 
@@ -139,8 +140,8 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
         indicatorColor="secondary"
         onChange={handleTabChange}
         className={styles.tabs}>
-        <Tab label="Create" value="create" />
-        <Tab label="Import" value="import" />
+        <Tab label={i18n.t('Post_Create.Tab_Label')} value="create" />
+        <Tab label={i18n.t('Post_Import.Tab_Label')} value="import" />
       </Tabs>
 
       <TabPanel value={activeTab} index="create">
@@ -166,7 +167,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
       <div className={styles.action}>
         <div className={styles.option}>
           <DropdownMenu<PostVisibility>
-            title="Visibility"
+            title={i18n.t('Post_Create.Visibility.Label')}
             options={menuOptions}
             onChange={handleVisibilityChange}
           />
@@ -186,7 +187,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
           color="primary"
           size="small"
           onClick={handleSubmit}>
-          Create Post
+          {i18n.t('Post_Create.Confirm')}
         </Button>
       </div>
     </Modal>

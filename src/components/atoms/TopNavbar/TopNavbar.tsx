@@ -46,6 +46,58 @@ export const TopNavbarComponent: React.FC<TopNavbarProps> = props => {
     }
   };
 
+  const convertToLocale = (sectionTitle: SectionTitle) => {
+    switch (sectionTitle) {
+      case SectionTitle.FRIENDS: {
+        return i18n.t('TopNavbar.Title.Friends');
+      }
+
+      case SectionTitle.SOCIAL_MEDIA: {
+        return i18n.t('TopNavbar.Title.Social_Media');
+      }
+
+      case SectionTitle.WALLET: {
+        return i18n.t('TopNavbar.Title.Wallet');
+      }
+
+      case SectionTitle.EXPERIENCE: {
+        return i18n.t('TopNavbar.Title.Experience');
+      }
+
+      case SectionTitle.PROFILE: {
+        return i18n.t('TopNavbar.Title.Profile');
+      }
+
+      case SectionTitle.SETTINGS: {
+        return i18n.t('TopNavbar.Title.Settings');
+      }
+
+      case SectionTitle.NOTIFICATION: {
+        return i18n.t('TopNavbar.Title.Notification');
+      }
+
+      case SectionTitle.NFT: {
+        return i18n.t('TopNavbar.Title.NFT');
+      }
+
+      case SectionTitle.TIMELINE: {
+        return i18n.t('TopNavbar.Title.Timeline');
+      }
+
+      case SectionTitle.SOCIAL_TOKEN: {
+        return i18n.t('TopNavbar.Title.Social_Token');
+      }
+
+      case SectionTitle.TRENDS: {
+        return i18n.t('TopNavbar.Title.Trends');
+      }
+
+      default: {
+        return '';
+      }
+    }
+  };
+
   return (
     <Paper className={classes.root}>
       <IconButton
@@ -63,9 +115,7 @@ export const TopNavbarComponent: React.FC<TopNavbarProps> = props => {
 
       <Grid container direction={reverse ? 'column-reverse' : 'column'}>
         <Typography className={classes.sectionTitle} color="primary">
-          {sectionTitle == (SectionTitle.SETTINGS as string)
-            ? i18n.t('Section.Settings')
-            : sectionTitle}
+          {convertToLocale(sectionTitle as SectionTitle)}
         </Typography>
         <Typography className={classes.description}>{description}</Typography>
       </Grid>

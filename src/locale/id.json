@@ -348,6 +348,56 @@
     "Embed_Link_PLaceholder": "Salin dan tempel kode ini ke situs web atau blog Anda",
     "Copy_URL_Message": "Tautan disalin!"
   },
+  "Post_Detail": {
+    "Navbar_Title": "Detail Postingan",
+    "Post_Action": {
+      "Comments": "Komentar",
+      "Share": "Bagikan",
+      "Send_tip": "Kirim tip"
+    },
+    "Post_Options": {
+      "Tip_History": "Riwayat Tip",
+      "View_Post": "Lihat Postingan",
+      "View_Source_Post": "Lihat Postingan Sumber",
+      "Visit_Myriad_Profile": "Kunjungi Profil Myriad",
+      "Visit_Post_Platform": "Kunjungi Akun {{postPlatform}}",
+      "Visit_Profile": "Kunjungi Profil",
+      "Post_Visibility": "Visibilitas Profil",
+      "Add_Post_To_Experience": "Tambahkan postingan ke dalam pengalaman",
+      "Report": "Laporkan",
+      "Delete_Post": "Hapus Postingan"
+    }
+  },
+  "Post_Create": {
+    "Text_Placeholder": "Ketik...",
+    "Title": "Buat Postingan",
+    "Subtitle": "Buat Postinganmu",
+    "Tab_Label": "Buat",
+    "Confirm": "Buat Postingan",
+    "Visibility": {
+      "Label": "Visibilitas",
+      "Public": "Publik",
+      "Friend_Only": "Hanya teman",
+      "Only_Me": "Hanya saya"
+    },
+    "NSFW": {
+      "Label": "NSFW",
+      "Nudity": "Gambar Telanjang",
+      "Violent": "Kekerasan",
+      "Profanity": "Perkataan kasar",
+      "Violence_and_Gore": "Kekerasan dan Sadisme",
+      "Race_and_Religion": "Ras dan Agama",
+      "Pornography": "Pornografi",
+      "Other": "Lainnya",
+      "Confirm": "Konfirmasi"
+    }
+  },
+  "Post_Import": {
+    "Text_Placeholder": "Tautan ke postingan",
+    "Title": "Impor Postingan",
+    "Subtitle": "Impor postingan dari media sosial lain",
+    "Tab_Label": "Impor"
+  },
   "Friends": {
     "Title": "{{appname}} - Teman",
     "Container": {
@@ -660,14 +710,15 @@
   "TopNavbar": {
     "Title": {
       "Friends": "Teman",
-      "SocialMedia": "Media Sosial",
+      "Social_Media": "Media Sosial",
       "Wallet": "Dompet",
       "Experience": "Pengalaman",
       "Profile": "Profil",
       "Settings": "Pengaturan",
       "Notification": "Notifikasi",
+      "Timeline": "Linimasa",
       "NFT": "NFT",
-      "SocialToken": "Sosial Token",
+      "Social_Token": "Sosial Token",
       "Trends": "Trending"
     },
     "Subtitle": {

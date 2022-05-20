@@ -97,7 +97,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
           <SvgIcon classes={{root: style.fill}} component={ChatAltIcon} viewBox="0 0 24 24" />
         </IconButton>
         <Typography component="span" color="primary" variant="body1" className={style.wording}>
-          {formatNumber(discussions + debates)}&nbsp;Comments
+          {formatNumber(discussions + debates)}&nbsp;{i18n.t('Post_Detail.Post_Action.Comments')}
         </Typography>
       </div>
 

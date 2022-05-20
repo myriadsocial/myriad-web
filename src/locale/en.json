@@ -349,6 +349,56 @@
     "Embed_Link_PLaceholder": "Copy and paste this code into your website or blog",
     "Copy_URL_Message": "Link copied!"
   },
+  "Post_Detail": {
+    "Navbar_Title": "Post Detail",
+    "Post_Action": {
+      "Comments": "Comments",
+      "Share": "Share",
+      "Send_tip": "Send tip"
+    },
+    "Post_Options": {
+      "Tip_History": "Tip History",
+      "View_Post": "View Post",
+      "View_Source_Post": "View Source Post",
+      "Visit_Myriad_Profile": "Visit Myriad Profile",
+      "Visit_Post_Platform": "Visit {{postPlatform}} Account",
+      "Visit_Profile": "Visit Profile",
+      "Post_Visibility": "Post Visibility",
+      "Add_Post_To_Experience": "Add post to experience",
+      "Report": "Report",
+      "Delete_Post": "Delete Post"
+    }
+  },
+  "Post_Create": {
+    "Text_Placeholder": "Type...",
+    "Title": "Create Post",
+    "Subtitle": "Create your own post",
+    "Tab_Label": "Create",
+    "Confirm": "Create Post",
+    "Visibility": {
+      "Label": "Visibility",
+      "Public": "Public",
+      "Friend_Only": "Friend Only",
+      "Only_Me": "Only Me"
+    },
+    "NSFW": {
+      "Label": "NSFW",
+      "Nudity": "Nudity",
+      "Violent": "Violent",
+      "Profanity": "Profanity",
+      "Violence_and_Gore": "Violence and Gore",
+      "Race_and_Religion": "Race and Religion",
+      "Pornography": "Pornography",
+      "Other": "Other",
+      "Confirm": "Confirm"
+    }
+  },
+  "Post_Import": {
+    "Text_Placeholder": "Link to post",
+    "Title": "Import Post",
+    "Subtitle": "Import post from another social media",
+    "Tab_Label": "Import"
+  },
   "Friends": {
     "Title": "{{appname}} - Friends",
     "Container": {
@@ -660,14 +710,15 @@
   "TopNavbar": {
     "Title": {
       "Friends": "Friends",
-      "SocialMedia": "Social Media",
+      "Social_Media": "Social Media",
       "Wallet": "Wallet",
       "Experience": "Experience",
       "Profile": "Profile",
       "Settings": "Settings",
       "Notification": "Notification",
+      "Timeline": "Timeline",
       "NFT": "NFT",
-      "SocialToken": "Social Token",
+      "Social_Token": "Social Token",
       "Trends": "Trends"
     },
     "Subtitle": {

@@ -25,6 +25,7 @@ import {WalletDetail} from 'src/interfaces/wallet';
 import * as CommentAPI from 'src/lib/api/comment';
 import * as PostAPI from 'src/lib/api/post';
 import * as UserAPI from 'src/lib/api/user';
+import i18n from 'src/locale';
 
 type SendTipButtonProps = ButtonProps & {
   label?: string;
@@ -44,7 +45,7 @@ interface PeopleWithWalletDetail extends People {
 
 export const SendTipButton: React.FC<SendTipButtonProps> = props => {
   const {
-    label = 'Send tip',
+    label = i18n.t('Post_Detail.Post_Action.Send_tip'),
     reference,
     referenceType,
     showIcon = false,

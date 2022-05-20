@@ -64,6 +64,7 @@ import {createHashtagPlugin, ELEMENT_HASHTAG} from './plugins/hashtag';
 import {Transforms, Selection, Editor} from 'slate';
 import {ReactEditor} from 'slate-react';
 import {EditableProps} from 'slate-react/dist/components/editable';
+import i18n from 'src/locale';
 import theme from 'src/themes/light-theme';
 
 export type PostEditorProps = {
@@ -92,7 +93,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
   const {
     value,
     debug = false,
-    placeholder = 'Type…',
+    placeholder = i18n.t('Post_Create.Text_Placeholder'),
     mentionable,
     uploadProgress,
     onSearchMention,

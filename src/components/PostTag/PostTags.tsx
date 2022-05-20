@@ -5,6 +5,8 @@ import {Button, List, ListItem, ListItemText} from '@material-ui/core';
 import {TagOptions} from '.';
 import {useStyles} from './PostTags.styles';
 
+import i18n from 'src/locale';
+
 type PostTagsProps = {
   selected: string[];
   options: TagOptions[];
@@ -47,7 +49,7 @@ export const PostTags: React.FC<PostTagsProps> = props => {
         ))}
       </List>
       <Button fullWidth variant="contained" color="primary" onClick={handleConfirm}>
-        Confirm
+        {i18n.t('Post_Create.NSFW.Confirm')}
       </Button>
     </div>
   );
