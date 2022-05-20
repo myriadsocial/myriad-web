@@ -323,7 +323,7 @@ export const useAuthHook = () => {
         dispatch(fetchCurrentUserWallets()),
       ]);
 
-      await dispatch(fetchBalances());
+      await dispatch(fetchBalances(true));
 
       callback && callback();
     } catch (error) {
