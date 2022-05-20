@@ -156,7 +156,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
         title: i18n.t('Friends.Prompt_Block.Title', {
           name: currentFriend ? currentFriend.name : 'User',
         }),
-        description: i18n.t('Friends.Prompt_Block.Title'),
+        description: i18n.t('Friends.Prompt_Block.Desc'),
         icon: 'danger',
         confirmationText: i18n.t('Friends.Prompt_Block.Btn'),
         onConfirm: () => {

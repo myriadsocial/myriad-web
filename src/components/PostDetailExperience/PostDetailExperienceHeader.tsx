@@ -15,6 +15,7 @@ import {PostSubHeader} from '../atoms/PostHeader/subHeader/post-sub-header.compo
 
 import {Post} from 'src/interfaces/post';
 import {SocialsEnum} from 'src/interfaces/social';
+import i18n from 'src/locale';
 
 export type PostHeaderExperienceProps = {
   post: Post;
@@ -141,7 +142,9 @@ export const HeaderComponentExperience: React.FC<PostHeaderExperienceProps> = pr
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClosePostSetting}>
-        <MenuItem onClick={handleRemoveFromExperience}>Remove from experience</MenuItem>
+        <MenuItem onClick={handleRemoveFromExperience}>
+          {i18n.t('Experience.Editor.Menu_Post.Remove')}
+        </MenuItem>
       </Menu>
     </>
   );
