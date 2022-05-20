@@ -546,6 +546,7 @@
         "Reddit": "Salin teks di bawah ini dan posting di profil Reddit Anda. Jangan memposting teks di Subreddit.",
         "Other": "Salin teks di bawah ini dan posting di timeline Anda. Pastikan akun Anda tidak dilindungi."
       },
+      "Msg": "I'm part of the @myriad_social {{address}}\n\n{{url}}",
       "Text_3": "Verifikasi akun {{platform}} Anda, ulangi langkah 2 jika belum diverifikasi",
       "Btn_Twitter": "Tweet Sekarang",
       "Btn_Reddit": "Bagikan",
@@ -676,5 +677,17 @@
       "Not_Preview": "Kami tidak dapat melihat pratinjau video Anda, pratinjau video dapat dilakukan setelah Anda mengonfirmasinya.",
       "Not_Support": "Encoding video tidak didukung."
     }
+  },
+  "Date": {
+    "Secs": "detik",
+    "Minute": "menit",
+    "Hours": "jam",
+    "Days": "hari",
+    "Weeks": "minggu",
+    "Months": "bulan",
+    "Years": "tahun",
+    "Just_Now": "baru saja",
+    "Yesterday": "kemarin",
+    "Result": "{{date}} yang lalu"
   }
 }
