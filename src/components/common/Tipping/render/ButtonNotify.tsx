@@ -15,6 +15,7 @@ import {People} from 'src/interfaces/people';
 import {Post} from 'src/interfaces/post';
 import {SocialsEnum} from 'src/interfaces/social';
 import {User} from 'src/interfaces/user';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -46,7 +47,7 @@ export const ButtonNotify: React.FC<ButtonNotifyProps> = ({
 
   const getLink = () => {
     const username = getUsername(SocialsEnum.REDDIT);
-    const path = `submit?title=${'You’ve been tipped on Myriad!'}&text=${textShare}`;
+    const path = `submit?title=${i18n.t('Tipping.Prompt_Success.Notify_Title')}&text=${textShare}`;
 
     if (username) {
       return `https://www.reddit.com/user/${username}/${path}`;
@@ -55,9 +56,13 @@ export const ButtonNotify: React.FC<ButtonNotifyProps> = ({
   };
 
   const textShare =
-    `Hey @${receiver.username}, I just sent you ${finalAmount} ${currency?.symbol} on @myriad_social!` +
-    `\nMyriad.Social is a web3 layer on top of web2 social media, decentralized and federated.` +
-    `\nYou can claim it by joining app.myriad.social and connecting your ${reference.platform} account.`;
+    `${i18n.t('Tipping.Prompt_Success.Notify_Text_1', {
+      receiverUsername: receiver.username,
+      finalAmount: finalAmount,
+      currencySymbol: currency?.symbol,
+    })}` +
+    `\n${i18n.t('Tipping.Prompt_Success.Notify_Text_2')}` +
+    `\n${i18n.t('Tipping.Prompt_Success.Notify_Text_3', {platform: reference.platform})}`;
 
   const TwitterButton = () => {
     return (
@@ -68,7 +73,7 @@ export const ButtonNotify: React.FC<ButtonNotifyProps> = ({
           fullWidth
           startIcon={socials[SocialsEnum.TWITTER]}
           className={styles.twitter}>
-          Notify on {reference.platform}
+          {i18n.t('Tipping.Prompt_Success.Notify_Btn')} {reference.platform}
         </Button>
       </TwitterShareButton>
     );
@@ -83,7 +88,7 @@ export const ButtonNotify: React.FC<ButtonNotifyProps> = ({
           fullWidth
           startIcon={socials[SocialsEnum.REDDIT]}
           className={styles.reddit}>
-          Notify on {reference.platform}
+          {i18n.t('Tipping.Prompt_Success.Notify_Btn')} {reference.platform}
         </Button>
       </Link>
     );

@@ -430,7 +430,12 @@
       "Subtitle_1": "Tip ke ",
       "Subtitle_2": " berhasil dikirim",
       "Btn_Trx_Detail": "Detail Transaksi",
-      "Btn_Return": "Kembali"
+      "Btn_Return": "Kembali",
+      "Notify_Title": "Kamu mendapatkan Tip di Myriad!",
+      "Notify_Text_1": "Hai @{{receiverUsername}}, Saya baru saja mengirimu {{finalAmount}} {{currencySymbol}} di @myriad_social!",
+      "Notify_Text_2": "Myriad.Social adalah sebuah web3 layer di atas web2 sosial media, terdesentralisasi dan federasi.",
+      "Notify_Text_3": "Kamu dapat mengklaimnya dengan bergabung app.myriad.social dan menghubungkan akun {{platform}} kamu.",
+      "Notify_Btn": "Beri tahu di"
     },
     "Toaster": {
       "Cancelled": "Penandatanganan transaksi dibatalkan",

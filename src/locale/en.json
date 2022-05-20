@@ -431,7 +431,12 @@
       "Subtitle_1": "Tip to ",
       "Subtitle_2": " sent successfully",
       "Btn_Trx_Detail": "Transaction details",
-      "Btn_Return": "Return"
+      "Btn_Return": "Return",
+      "Notify_Title": "You’ve been tipped on Myriad!",
+      "Notify_Text_1": "Hey @{{receiverUsername}}, I just sent you {{finalAmount}} {{currencySymbol}} on @myriad_social!",
+      "Notify_Text_2": "Myriad.Social is a web3 layer on top of web2 social media, decentralized and federated.",
+      "Notify_Text_3": "You can claim it by joining app.myriad.social and connecting your {{platform}} account.",
+      "Notify_Btn": "Notify on"
     },
     "Toaster": {
       "Cancelled": "Transaction signing cancelled",
