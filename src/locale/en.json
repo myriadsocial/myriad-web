@@ -549,6 +549,7 @@
         "Reddit": "Copy the text below and post it on your Reddit profile. Do not post the text on a Subreddit.",
         "Other": "Copy text below and post it on your timeline. Make sure your account is not protected."
       },
+      "Msg": "I'm part of the @myriad_social {{address}}\n\n{{url}}",
       "Text_3": "Verify your {{platform}} account, repeat step 2 if it’s not verified",
       "Btn_Twitter": "Tweet Now",
       "Btn_Reddit": "Share",
@@ -679,5 +680,17 @@
       "Not_Preview": "We cannot preview your video, preview video can be done after you confirm it.",
       "Not_Support": "Video encoding not supported."
     }
+  },
+  "Date": {
+    "Secs": "secs",
+    "Minute": "min",
+    "Hours": "hours",
+    "Days": "days",
+    "Weeks": "weeks",
+    "Months": "months",
+    "Years": "years",
+    "Just_Now": "just now",
+    "Yesterday": "yesterday",
+    "Result": "{{date}} ago"
   }
 }

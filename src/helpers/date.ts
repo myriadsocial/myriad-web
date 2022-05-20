@@ -1,23 +1,25 @@
 import {formatDistanceStrict, format} from 'date-fns';
+import {id, enUS} from 'date-fns/locale';
 import locale from 'date-fns/locale/en-US';
+import i18n from 'src/locale';
 
 const formatDistanceLocale: Record<any, string> = {
-  lessThanXSeconds: '{{count}} secs',
-  xSeconds: '{{count}} secs',
-  halfAMinute: '30 secs',
-  lessThanXMinutes: '{{count}} min',
-  xMinutes: '{{count}} min',
-  aboutXHours: '{{count}} hours',
-  xHours: '{{count}} hours',
-  xDays: '{{count}} days',
-  aboutXWeeks: '{{count}} weeks',
-  xWeeks: '{{count}} weeks',
-  aboutXMonths: '{{count}} months',
-  xMonths: '{{count}} months',
-  aboutXYears: '{{count}} years',
-  xYears: '{{count}} years',
-  overXYears: '{{count}} years',
-  almostXYears: '{{count}} years',
+  lessThanXSeconds: `{{count}} ${i18n.t('Date.Secs')}`,
+  xSeconds: `{{count}} ${i18n.t('Date.Secs')}`,
+  halfAMinute: `30 ${i18n.t('Date.Secs')}`,
+  lessThanXMinutes: `{{count}} ${i18n.t('Date.Minute')}`,
+  xMinutes: `{{count}} ${i18n.t('Date.Minute')}`,
+  aboutXHours: `{{count}} ${i18n.t('Date.Hours')}`,
+  xHours: `{{count}} ${i18n.t('Date.Hours')}`,
+  xDays: `{{count}} ${i18n.t('Date.Days')}`,
+  aboutXWeeks: `{{count}} ${i18n.t('Date.Weeks')}`,
+  xWeeks: `{{count}} ${i18n.t('Date.Weeks')}`,
+  aboutXMonths: `{{count}} ${i18n.t('Date.Months')}`,
+  xMonths: `{{count}} ${i18n.t('Date.Months')}`,
+  aboutXYears: `{{count}} ${i18n.t('Date.Years')}`,
+  xYears: `{{count}} ${i18n.t('Date.Years')}`,
+  overXYears: `{{count}} ${i18n.t('Date.Years')}`,
+  almostXYears: `{{count}} ${i18n.t('Date.Years')}`,
 };
 
 const customFormatDistance = (token: any, count: any, options: any) => {
@@ -29,9 +31,9 @@ const customFormatDistance = (token: any, count: any, options: any) => {
     if (options.comparison > 0) {
       return 'in ' + result;
     } else {
-      if (count < 45 && token === 'xSeconds') return (result = 'just now');
-      if (count === 1 && token === 'xDays') return (result = 'yesterday');
-      return result + ' ago';
+      if (count < 45 && token === 'xSeconds') return (result = i18n.t('Date.Just_Now'));
+      if (count === 1 && token === 'xDays') return (result = i18n.t('Date.Yesterday'));
+      return i18n.t('Date.Result', {date: result});
     }
   }
 
@@ -48,7 +50,14 @@ export const timeAgo = (value: string | Date): string => {
   });
 };
 
-export const formatDate = (date: Date): string => {
-  const newFormat = format(new Date(date), 'd MMMM y');
+export const formatDate = (date: Date, lang: string): string => {
+  const language: Record<string, Locale> = {
+    id: id,
+    en: enUS,
+  };
+
+  const newFormat = format(new Date(date), 'd MMMM y', {
+    locale: language[lang],
+  });
   return newFormat;
 };
