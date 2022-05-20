@@ -369,6 +369,7 @@
     }
   },
   "Post_Create": {
+    "Text_Placeholder": "Ketik...",
     "Title": "Buat Postingan",
     "Subtitle": "Buat Postinganmu",
     "Tab_Label": "Buat",
@@ -378,9 +379,21 @@
       "Public": "Publik",
       "Friend_Only": "Hanya teman",
       "Only_Me": "Hanya saya"
+    },
+    "NSFW": {
+      "Label": "NSFW",
+      "Nudity": "Gambar Telanjang",
+      "Violent": "Kekerasan",
+      "Profanity": "Perkataan kasar",
+      "Violence_and_Gore": "Kekerasan dan Sadisme",
+      "Race_and_Religion": "Ras dan Agama",
+      "Pornography": "Pornografi",
+      "Other": "Lainnya",
+      "Confirm": "Konfirmasi"
     }
   },
   "Post_Import": {
+    "Text_Placeholder": "Tautan ke postingan",
     "Title": "Impor Postingan",
     "Subtitle": "Impor postingan dari media sosial lain",
     "Tab_Label": "Impor"

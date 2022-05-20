@@ -9,6 +9,7 @@ import {useStyles} from './PostImport.styles';
 
 import ShowIf from 'src/components/common/show-if.component';
 import {SocialsEnum} from 'src/interfaces/social';
+import i18n from 'src/locale';
 
 type PostImportProps = {
   value?: string;
@@ -89,7 +90,7 @@ export const PostImport: React.FC<PostImportProps> = props => {
   return (
     <div className={styles.root}>
       <FormControl fullWidth className={styles.input} error={showError}>
-        <InputLabel htmlFor="link-to-post">Link to post</InputLabel>
+        <InputLabel htmlFor="link-to-post">{i18n.t('Post_Import.Text_Placeholder')}</InputLabel>
         <Input id="link-to-post" value={url} onChange={handleUrlChange} />
         <ShowIf condition={showError}>
           <FormHelperText id="component-error-text">

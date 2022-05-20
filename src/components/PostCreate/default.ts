@@ -7,27 +7,27 @@ import i18n from 'src/locale';
 export const tagOptions: TagOptions[] = [
   {
     id: 'violent',
-    title: 'Violent',
+    title: i18n.t('Post_Create.NSFW.Violent'),
   },
   {
     id: 'profanity',
-    title: 'Profanity',
+    title: i18n.t('Post_Create.NSFW.Profanity'),
   },
   {
     id: 'violence_gore',
-    title: 'Violence and Gore',
+    title: i18n.t('Post_Create.NSFW.Violence_and_Gore'),
   },
   {
     id: 'rage_religion',
-    title: 'Race and Religion',
+    title: i18n.t('Post_Create.NSFW.Race_and_Religion'),
   },
   {
     id: 'pornography',
-    title: 'Pornography',
+    title: i18n.t('Post_Create.NSFW.Pornography'),
   },
   {
     id: 'other',
-    title: 'Other',
+    title: i18n.t('Post_Create.NSFW.Other'),
   },
 ];
 
