@@ -1,3 +1,5 @@
+import {User} from '@sentry/types';
+
 import {Actions as BaseAction, setLoading, setError} from '../base/actions';
 import {RootState} from '../index';
 import * as constants from './constants';
@@ -75,40 +77,35 @@ export type RetrieveBalanceProps = {
 };
 
 export const fetchBalances: ThunkActionCreator<Actions, RootState> =
-  () => async (dispatch, getState) => {
+  (force: false) => async (dispatch, getState) => {
     const {
       userState: {user, anonymous, currentWallet},
-      balanceState: {loading},
+      balanceState: {initialized},
     } = getState();
 
-    if (anonymous || !user || loading) return;
+    if (anonymous || !user || (initialized && !force)) return;
+
     if (currentWallet?.network?.blockchainPlatform === 'substrate') {
-      dispatch(fetchBalancesPolkadot());
+      dispatch(fetchBalancesPolkadot(user));
     }
 
     if (currentWallet?.network?.blockchainPlatform === 'near') {
-      dispatch(fetchBalancesNear());
+      dispatch(fetchBalancesNear(user));
     }
   };
 
 export const fetchBalancesPolkadot: ThunkActionCreator<Actions, RootState> =
-  () => async (dispatch, getState) => {
+  (user: User) => async (dispatch, getState) => {
     const {
-      userState: {currencies, user, anonymous},
-      balanceState: {loading},
+      userState: {currencies},
     } = getState();
 
-    let address = '';
-
-    if (anonymous || !user || loading) return;
-
     // Only parse address to fetch balance when wallets are successfully fetched
-    if ('wallets' in user && user?.wallets?.length) {
-      address = user.wallets[0].id;
-    } else {
+    if (!('wallets' in user) || user.wallets?.length === 0) {
       return;
     }
 
+    const address = user.wallets[0].id;
     const tokenBalances: BalanceDetail[] = [];
 
     dispatch(setLoading(true));
@@ -154,6 +151,7 @@ export const fetchBalancesPolkadot: ThunkActionCreator<Actions, RootState> =
         balanceDetails: tokenBalances,
       });
     } catch (error) {
+      console.error('[action][fetch-balances][polkadot]', error);
       dispatch(
         setError({
           title: 'something is wrong',
@@ -166,13 +164,10 @@ export const fetchBalancesPolkadot: ThunkActionCreator<Actions, RootState> =
   };
 
 export const fetchBalancesNear: ThunkActionCreator<Actions, RootState> =
-  () => async (dispatch, getState) => {
+  (user: User) => async (dispatch, getState) => {
     const {
-      userState: {currencies, user, anonymous},
-      balanceState: {loading},
+      userState: {currencies},
     } = getState();
-
-    if (anonymous || !user || loading) return;
 
     const tokenBalances: BalanceDetail[] = [];
 
@@ -215,6 +210,7 @@ export const fetchBalancesNear: ThunkActionCreator<Actions, RootState> =
         balanceDetails: tokenBalances,
       });
     } catch (error) {
+      console.error('[action][fetch-balances][near]', error);
       dispatch(
         setError({
           title: 'something is wrong',

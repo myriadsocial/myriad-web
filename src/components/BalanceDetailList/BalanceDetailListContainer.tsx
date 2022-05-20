@@ -54,7 +54,7 @@ export const BalanceDetailListContainer: React.FC = () => {
   };
 
   const handleRefresh = () => {
-    dispatch(fetchBalances());
+    dispatch(fetchBalances(true));
   };
 
   const toggleAddCoinModal = () => {

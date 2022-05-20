@@ -25,7 +25,12 @@ export const initialize = (params?: MyriadAPIParams): AxiosInstance => {
       },
       error => {
         if (error.response) {
-          console.error('[myriad-api][error]', error.response?.data);
+          console.error(
+            JSON.stringify({
+              name: '[myriad-api][error]',
+              detail: error.response?.data,
+            }),
+          );
         } else {
           console.error('[error]', error);
         }

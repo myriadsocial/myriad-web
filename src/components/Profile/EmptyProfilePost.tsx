@@ -20,7 +20,7 @@ export const EmptyProfilePost: React.FC<EmptyPostProps> = ({owner}) => {
       </ShowIf>
 
       <ShowIf condition={!owner}>
-        <Empty title={i18n.t('Profile.Empty.Title')} subtitle={i18n.t('Profile.Empty.Subtitle')} />;
+        <Empty title={i18n.t('Profile.Empty.Title')} subtitle={i18n.t('Profile.Empty.Subtitle')} />
       </ShowIf>
     </div>
   );
