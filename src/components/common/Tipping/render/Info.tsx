@@ -6,6 +6,7 @@ import BaseTooltip from '@material-ui/core/Tooltip';
 import {withStyles} from '@material-ui/core/styles';
 
 import {InfoIcon} from 'src/components/atoms/Icons';
+import i18n from 'src/locale';
 
 const Tooltip = withStyles({
   tooltipPlacementRight: {
@@ -24,15 +25,14 @@ export const TippingInfo: React.FC = () => (
     leaveDelay={1500}
     title={
       <Typography>
-        If the receiver&apos;s balance is below the existential deposit after the tipping was done,
-        the account will be reaped.&nbsp;
+        {i18n.t('Tipping.Modal_Main.Tooltip')}
         <Link
           color="secondary"
           variant="inherit"
           target="_blank"
           href="https://support.polkadot.network/support/solutions/articles/65000168651-what-is-the-existential-deposit-"
           rel="noopener noreferrer">
-          Read more
+          {i18n.t('Tipping.Modal_Main.Tooltip_Read_More')}
         </Link>
       </Typography>
     }>

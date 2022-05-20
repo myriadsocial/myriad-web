@@ -18,6 +18,7 @@ import {Post} from 'src/interfaces/post';
 import {SimpleSendTipProps, TransactionProps} from 'src/interfaces/transaction';
 import {User} from 'src/interfaces/user';
 import {storeTransaction} from 'src/lib/api/transaction';
+import i18n from 'src/locale';
 
 export type TippingSuccessProps = {
   receiver: User;
@@ -72,7 +73,7 @@ export const TippingSuccess = () => {
       if (errorCode && errorMessage) {
         openToasterSnack({
           variant: 'warning',
-          message: 'Transaction rejected by user',
+          message: i18n.t('Tipping.Toaster.Rejected'),
         });
 
         router.replace(url, undefined, {shallow: true});
@@ -114,14 +115,14 @@ export const TippingSuccess = () => {
           icon="success"
           open={openPrompt}
           onCancel={onClosePrompt}
-          title="Tip sent!"
+          title={i18n.t('Tipping.Prompt_Success.Title')}
           subtitle={
             <Typography component="div">
-              Tip to&nbsp;
+              {i18n.t('Tipping.Prompt_Success.Subtitle_1')}
               <Box fontWeight={400} display="inline">
                 {options?.receiver.name ?? 'Unknown Myrian'}
               </Box>
-              &nbsp;sent successfully
+              {i18n.t('Tipping.Prompt_Success.Subtitle_2')}
             </Typography>
           }>
           <Grid container justifyContent="space-around">
@@ -136,7 +137,7 @@ export const TippingSuccess = () => {
               size="small"
               variant="outlined"
               color="secondary">
-              Transaction details
+              {i18n.t('Tipping.Prompt_Success.Btn_Trx_Detail')}
             </Button>
             {options &&
             'platform' in options.reference &&
@@ -150,7 +151,7 @@ export const TippingSuccess = () => {
               />
             ) : (
               <Button size="small" variant="contained" color="primary" onClick={onClosePrompt}>
-                Return
+                {i18n.t('Tipping.Prompt_Success.Btn_Return')}
               </Button>
             )}
           </Grid>

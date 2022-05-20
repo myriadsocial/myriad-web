@@ -10,6 +10,7 @@ import {useStyles} from './InputAmount.style';
 import {formatBalance} from 'src/helpers/balance';
 import {toBigNumber} from 'src/helpers/string';
 import {CurrencyId} from 'src/interfaces/currency';
+import i18n from 'src/locale';
 
 type InputAmountProps = Omit<InputProps, 'onChange'> & {
   defaultValue?: string | BN;
@@ -107,7 +108,7 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
       <TextField
         id="input-amount"
         classes={{root: styles.input}}
-        label="Tip amount"
+        label={i18n.t('Tipping.Modal_Main.Tip_Amount')}
         type="number"
         variant="outlined"
         InputLabelProps={{shrink: dirty}}

@@ -17,6 +17,7 @@ import ShowIf from 'src/components/common/show-if.component';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {People} from 'src/interfaces/people';
 import {User} from 'src/interfaces/user';
+import i18n from 'src/locale';
 
 type SummaryProps = {
   amount: BN;
@@ -38,7 +39,7 @@ export const Summary: React.FC<SummaryProps> = props => {
       <div className={styles.summary}>
         <Avatar src={receiver.profilePictureURL} name={receiver.name} size={AvatarSize.TINY} />
         <Typography variant="subtitle2" color="textPrimary" className={styles.description}>
-          {`${receiver.name ?? 'Unnamed Myrian'} will receive `}
+          {`${receiver.name ?? 'Unnamed Myrian'} ${i18n.t('Tipping.Modal_Main.Will_Receive')} `}
           <FormatCurrency
             variant="subtitle2"
             color="primary"
@@ -50,7 +51,7 @@ export const Summary: React.FC<SummaryProps> = props => {
       </div>
       <div className={styles.detail}>
         <Typography className={styles.bold} gutterBottom>
-          Tip Summary
+          {i18n.t('Tipping.Modal_Main.Tip_Summary')}
         </Typography>
         <TableContainer>
           <Table size="small" aria-label="tip summary table">
@@ -58,7 +59,7 @@ export const Summary: React.FC<SummaryProps> = props => {
               <TableRow>
                 <TableCell component="th" scope="row" classes={{root: styles.table}}>
                   <Typography variant="subtitle2" color="textSecondary">
-                    Tip
+                    {i18n.t('Tipping.Modal_Main.Tip_Label')}
                   </Typography>
                 </TableCell>
                 <TableCell align="right" classes={{root: styles.table}}>
@@ -73,7 +74,7 @@ export const Summary: React.FC<SummaryProps> = props => {
               <TableRow>
                 <TableCell component="th" scope="row" classes={{root: styles.table}}>
                   <Typography variant="subtitle2" color="textSecondary">
-                    Estimated gas fee
+                    {i18n.t('Tipping.Modal_Main.Estimated_Gas_Fee')}
                   </Typography>
                 </TableCell>
                 <TableCell align="right" classes={{root: styles.table}}>
@@ -87,7 +88,7 @@ export const Summary: React.FC<SummaryProps> = props => {
                   </ShowIf>
                   <ShowIf condition={loadingFee}>
                     <Typography variant="subtitle2" color="textSecondary">
-                      Loading
+                      {i18n.t('General.Loading')}
                     </Typography>
                   </ShowIf>
                 </TableCell>
@@ -95,7 +96,7 @@ export const Summary: React.FC<SummaryProps> = props => {
               <TableRow>
                 <TableCell component="th" scope="row" classes={{root: styles.table}}>
                   <Typography component="span" variant="subtitle2" color="textPrimary">
-                    Total
+                    {i18n.t('Tipping.Modal_Main.Total')}
                   </Typography>
                 </TableCell>
                 <TableCell align="right" classes={{root: styles.table}}>
@@ -110,7 +111,7 @@ export const Summary: React.FC<SummaryProps> = props => {
                   </ShowIf>
                   <ShowIf condition={loadingFee}>
                     <Typography component="span" variant="subtitle2" color="textSecondary">
-                      Loading
+                      {i18n.t('General.Loading')}
                     </Typography>
                   </ShowIf>
                 </TableCell>

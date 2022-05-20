@@ -104,7 +104,8 @@
     "OK": "OKE",
     "Back": "Kembali",
     "Next": "Selanjutnya",
-    "Cancel": "Batalkan"
+    "Cancel": "Batalkan",
+    "Loading": "Memuat"
   },
   "Mobile": {
     "title": "Kami benar-benar minta maaf",
@@ -400,6 +401,46 @@
     "Title": "Impor Postingan",
     "Subtitle": "Impor postingan dari media sosial lain",
     "Tab_Label": "Impor"
+  },
+  "Tipping": {
+    "Modal_Main": {
+      "Title": "Kirim Tip",
+      "Subtitle": "Postingan ini bermanfaat? Kirim tip",
+      "Tooltip": "Jika saldo penerima di bawah setoran eksistensial setelah pemberian tip, akun akan dicabut. ",
+      "Tooltip_Read_More": "Baca selengkapnya",
+      "Balance": "Saldo",
+      "Currency_Options": "Ubah mata uang",
+      "Search_Coin": "Cari Koin",
+      "Coin": "Koin",
+      "Tip_Amount": "Jumlah Tip",
+      "Will_Receive": "akan menerima",
+      "Tip_Summary": "Ringkasan Tip",
+      "Tip_Label": "Tip",
+      "Estimated_Gas_Fee": "Perkiraan Biaya Gas",
+      "Total": "Total",
+      "About": "Memberi Tip",
+      "Btn_Send_Tip": "Kirim tips saya"
+    },
+    "Prompt_Mobile": {
+      "Title": "Kirim Tip",
+      "Subtitle": "Hargai postingan orang lain dengan mengirimkan tip dengan cryptocurrency yang stabil"
+    },
+    "Prompt_Success": {
+      "Title": "Tip terkirim!",
+      "Subtitle_1": "Tip ke ",
+      "Subtitle_2": " berhasil dikirim",
+      "Btn_Trx_Detail": "Detail Transaksi",
+      "Btn_Return": "Kembali"
+    },
+    "Toaster": {
+      "Cancelled": "Penandatanganan transaksi dibatalkan",
+      "Rejected": "Transaksi ditolak oleh pengguna"
+    }
+  },
+  "TOS": {
+    "Text_1": "Saya setuju dengan ",
+    "Text_2": "Persyaratan Layanan",
+    "Text_3": " Myriad tentang {{about}}"
   },
   "Friends": {
     "Title": "{{appname}} - Teman",

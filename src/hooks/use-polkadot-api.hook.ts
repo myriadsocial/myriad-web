@@ -14,6 +14,7 @@ import {BalanceDetail} from 'src/interfaces/balance';
 import {WalletDetail, WalletReferenceType} from 'src/interfaces/wallet';
 import {storeTransaction} from 'src/lib/api/transaction';
 import {estimateFee, signAndSendExtrinsic} from 'src/lib/services/polkadot-js';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {fetchBalances} from 'src/reducers/balance/actions';
 import {BalanceState} from 'src/reducers/balance/reducer';
@@ -128,7 +129,7 @@ export const usePolkadotApi = () => {
       if (error.message === 'Cancelled') {
         openToasterSnack({
           variant: 'warning',
-          message: 'Transaction signing cancelled',
+          message: i18n.t('Tipping.Toaster.Cancelled'),
         });
       } else {
         openToasterSnack({
