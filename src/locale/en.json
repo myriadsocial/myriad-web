@@ -355,6 +355,18 @@
       "Comments": "Comments",
       "Share": "Share",
       "Send_tip": "Send tip"
+    },
+    "Post_Options": {
+      "Tip_History": "Tip History",
+      "View_Post": "View Post",
+      "View_Source_Post": "View Source Post",
+      "Visit_Myriad_Profile": "Visit Myriad Profile",
+      "Visit_Post_Platform": "Visit {{postPlatform}} Account",
+      "Visit_Profile": "Visit Profile",
+      "Post_Visibility": "Post Visibility",
+      "Add_Post_To_Experience": "Add post to experience",
+      "Report": "Report",
+      "Delete_Post": "Delete Post"
     }
   },
   "Friends": {

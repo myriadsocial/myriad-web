@@ -17,6 +17,7 @@ import {PostSubHeader} from './subHeader/post-sub-header.component';
 import useModalAddToPost from 'src/components/Expericence/ModalAddToPost/useModalAddToPost.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import {SocialsEnum} from 'src/interfaces/social';
+import i18n from 'src/locale';
 
 export const HeaderComponent: React.FC<PostHeaderProps> = props => {
   const {
@@ -200,39 +201,55 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClosePostSetting}>
-        <MenuItem onClick={handleOpenTipHistory}>Tip History</MenuItem>
+        <MenuItem onClick={handleOpenTipHistory}>
+          {i18n.t('Post_Detail.Post_Options.Tip_History')}
+        </MenuItem>
 
         <ShowIf condition={!owner}>
-          <MenuItem onClick={openPost}>View Post</MenuItem>
+          <MenuItem onClick={openPost}>{i18n.t('Post_Detail.Post_Options.View_Post')}</MenuItem>
         </ShowIf>
 
         <ShowIf condition={!owner && post.platform !== 'myriad'}>
-          <MenuItem onClick={openSourcePost}>View Source Post</MenuItem>
-          <MenuItem onClick={openUserProfile}>Visit Myriad Profile</MenuItem>
-          <MenuItem onClick={openSourceAccount}>Visit {capitalize(post.platform)} Account</MenuItem>
+          <MenuItem onClick={openSourcePost}>
+            {i18n.t('Post_Detail.Post_Options.View_Source_Post')}
+          </MenuItem>
+          <MenuItem onClick={openUserProfile}>
+            {i18n.t('Post_Detail.Post_Options.Visit_Myriad_Profile')}
+          </MenuItem>
+          <MenuItem onClick={openSourceAccount}>
+            {i18n.t('Post_Detail.Post_Options.Visit_Post_Platform', {
+              postPlatform: capitalize(post.platform),
+            })}
+          </MenuItem>
         </ShowIf>
 
         <ShowIf condition={!owner && post.platform === 'myriad'}>
-          <MenuItem onClick={openUserProfile}>Visit Profile</MenuItem>
+          <MenuItem onClick={openUserProfile}>
+            {i18n.t('Post_Detail.Post_Options.Visit_Profile')}
+          </MenuItem>
         </ShowIf>
 
         <ShowIf condition={owner && !post.deletedAt}>
-          <MenuItem onClick={handlePostVisibility}>Post Visibility</MenuItem>
+          <MenuItem onClick={handlePostVisibility}>
+            {i18n.t('Post_Detail.Post_Options.Post_Visibility')}
+          </MenuItem>
         </ShowIf>
 
         <ShowIf condition={!!user}>
-          <MenuItem onClick={handleOpenAddPostToExperience}>Add post to experience</MenuItem>
+          <MenuItem onClick={handleOpenAddPostToExperience}>
+            {i18n.t('Post_Detail.Post_Options.Add_Post_To_Experience')}
+          </MenuItem>
         </ShowIf>
 
         <ShowIf condition={!owner && !!user}>
           <MenuItem onClick={handleReport} className={style.danger}>
-            Report
+            {i18n.t('Post_Detail.Post_Options.Report')}
           </MenuItem>
         </ShowIf>
 
         <ShowIf condition={owner && !post.deletedAt}>
           <MenuItem onClick={handleDelete} className={style.danger} color="danger">
-            Delete Post
+            {i18n.t('Post_Detail.Post_Options.Delete_Post')}
           </MenuItem>
         </ShowIf>
       </Menu>

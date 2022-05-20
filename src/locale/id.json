@@ -354,6 +354,18 @@
       "Comments": "Komentar",
       "Share": "Bagikan",
       "Send_tip": "Kirim tip"
+    },
+    "Post_Options": {
+      "Tip_History": "Riwayat Tip",
+      "View_Post": "Lihat Postingan",
+      "View_Source_Post": "Lihat Postingan Sumber",
+      "Visit_Myriad_Profile": "Kunjungi Profil Myriad",
+      "Visit_Post_Platform": "Kunjungi Akun {{postPlatform}}",
+      "Visit_Profile": "Kunjungi Profil",
+      "Post_Visibility": "Visibilitas Profil",
+      "Add_Post_To_Experience": "Tambahkan postingan ke dalam pengalaman",
+      "Report": "Laporkan",
+      "Delete_Post": "Hapus Postingan"
     }
   },
   "Friends": {
