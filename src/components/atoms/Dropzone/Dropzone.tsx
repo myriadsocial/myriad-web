@@ -21,6 +21,7 @@ import {detect} from 'detect-browser';
 import muxjs from 'mux.js';
 import ShowIf from 'src/components/common/show-if.component';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
+import i18n from 'src/locale';
 
 type DropzoneProps = {
   value?: string;
@@ -54,7 +55,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
     loading = false,
     multiple = false,
     border = true,
-    placeholder = 'File must be .jpeg or .png',
+    placeholder = i18n.t('Dropzone.Placeholder'),
     usage = '',
     isEdit = false,
     editorType = '',
@@ -251,17 +252,17 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
   const formatButtonLable = () => {
     if (usage == 'post') {
       if (type == 'video' && files.length > 0) return `Replace ${capitalize(type)}`;
-      return `Add ${capitalize(type)}`;
+      return i18n.t('Dropzone.Btn_Upload_Video', {type: capitalize(type)});
     }
     if (!multiple && preview.length === 1) {
-      return `Reupload ${capitalize(type)}`;
+      return i18n.t('Dropzone.Btn_Reupload', {type: capitalize(type)});
     }
-    return `Upload ${capitalize(type)}`;
+    return i18n.t('Dropzone.Btn_Upload', {type: capitalize(type)});
   };
 
   const getErrorMessage = (error: FileError): string => {
     if (error.code === ErrorCode.FileTooLarge) {
-      return `File is larger than ${maxSize}Mb`;
+      return i18n.t('Dropzone.Error_File_Large', {maxSize});
     }
 
     return error.message;
@@ -341,16 +342,14 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
 
             <ShowIf condition={type === 'video'}>
               <ShowIf condition={!videoCodecSupported}>
-                <Typography>
-                  We cannot preview your video, preview video can be done after you confirm it.
-                </Typography>
+                <Typography>{i18n.t('Dropzone.Video.Not_Preview')}</Typography>
               </ShowIf>
               <ShowIf condition={videoCodecSupported}>
                 {files.map((item, i) => (
                   <video key={item.name} controls style={{width: '100%'}}>
                     <track kind="captions" />
                     <source src={item.preview} type="video/mp4" />
-                    <div>Video encoding not supported.</div>
+                    <div>{i18n.t('Dropzone.Video.Not_Support')}</div>
                   </video>
                 ))}
               </ShowIf>

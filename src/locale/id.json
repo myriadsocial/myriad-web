@@ -2,7 +2,7 @@
   "Experience": {
     "Alert": {
       "Confirmation_Unsub": {
-        "Title": "Berhenti berangganan?",
+        "Title": "Berhenti berlangganan?",
         "Desc_1": "Apakah Anda ingin berhenti berlangganan?",
         "Desc_2": "Anda tidak akan melihat lebih banyak pos dari pengalaman ini",
         "Btn": "Berhenti berangganan"
@@ -10,10 +10,12 @@
       "Max_Exp": "Anda hanya dapat menambahkan maksimal 10 pengalaman"
     },
     "Clone": {
-      "Title": "Klon Eperience"
+      "Title": "Klon Pengalaman",
+      "Type": "Klon"
     },
     "Edit": {
-      "Title": "Ubah Experience"
+      "Title": "Ubah Pengalaman",
+      "Type": "Ubah"
     },
     "List": {
       "Alert": "Anda hanya dapat menambahkan maksimal 10 pengalaman",
@@ -32,7 +34,7 @@
       "You": "anda",
       "Menu": {
         "View": "Lihat rincian",
-        "Edit": "Edit pengalaman",
+        "Edit": "Ubah pengalaman",
         "Clone": "Clone",
         "Subscribe": "Berlangganan",
         "Unsubscribe": "Berhenti berlangganan",
@@ -45,11 +47,11 @@
       }
     },
     "Preview": {
-      "Title": "Pratinjau Experience",
+      "Title": "Pratinjau Pengalaman",
       "Text_1": "pelanggan",
-      "Text_2": "cloners",
+      "Text_2": "kloners",
       "Button": {
-        "Edit": "Edit experience",
+        "Edit": "Ubah pengalaman",
         "Subscribe": "Berlangganan",
         "Unsubscribe": "Berhenti berlangganan",
         "Clone": "Clone"
@@ -58,23 +60,45 @@
         "Author": "Pengarang",
         "Tags": {
           "Title": "Tag",
-          "Sub_Included": "Included tag",
-          "Sub_Excluded": "Excluded tag"
+          "Sub_Included": "Tag yang diikuti",
+          "Sub_Excluded": "Tag yang dikecualikan"
         },
-        "People": "People",
-        "Post": "Post"
+        "People": "Orang",
+        "Post": "Pos"
       },
       "Post": {
         "Empty": "Pos yang ditambahkan akan muncul di sini. Anda dapat menambahkan postingan ke pengalaman dengan memilih 'tambahkan postingan ke pengalaman' pada opsi lainnya."
       }
     },
     "Create": {
-      "Title": "Buat Experience"
+      "Title": "Buat Pengalaman",
+      "Header": "Buat"
+    },
+    "Editor": {
+      "Text_1": "Pengalaman",
+      "Subtitle_1": "Nama pengalaman",
+      "Subtitle_2": "Deskripsi",
+      "Subtitle_3": "Foto",
+      "Label_1": "Tag yang diikuti",
+      "Label_2": "Tag yang dikecualikan",
+      "Label_3": "Orang",
+      "Placeholder_1": "topik yang ingin Anda ikuti",
+      "Placeholder_2": "topik yang ingin Anda kecualikan",
+      "Placeholder_3": "Cari orang di sini",
+      "Post": {
+        "Title": "Pos",
+        "Desc": "Pos yang ditambahkan akan muncul di sini. Anda dapat menambahkan postingan ke pengalaman dengan memilih 'tambahkan postingan ke pengalaman' pada opsi lainnya."
+      },
+      "Btn": {
+        "Save": "Simpan Perubahan",
+        "Clone": "Klon Pengalaman",
+        "Create": "Buat Pengalaman"
+      }
     }
   },
   "General": {
     "Close": "Tutup",
-    "OK": "OK",
+    "OK": "OKE",
     "Back": "Kembali",
     "Next": "Selanjutnya",
     "Cancel": "Batalkan"
@@ -206,7 +230,7 @@
         "Acc": "Terima",
         "Reject": "Tolak"
       },
-      "Btn_Edit": "Edit Profil",
+      "Btn_Edit": "Ubah Profil",
       "Btn_Add": "Tambahkan Teman",
       "Status": {
         "Friends": "Teman",
@@ -214,14 +238,14 @@
         "Requested": "Diminta"
       },
       "Metric": {
-        "Post": "Post",
+        "Post": "Pos",
         "Kudos": "Kudos",
         "Friends": "Teman",
         "Experience": "Pengalaman"
       }
     },
     "Edit": {
-      "Title": "Edit Profil",
+      "Title": "Ubah Profil",
       "Subtitle_1": "Foto profil",
       "Subtitle_2": "Gambar latar",
       "Subtitle_3": "Username",
@@ -244,7 +268,7 @@
       }
     },
     "Tab": {
-      "Post": "Post",
+      "Post": "Pos",
       "Comments": "Komentar",
       "Experience": "Pengalaman",
       "Friends": "Teman",
@@ -258,7 +282,7 @@
         "Subtitle_Own": "Anda belum membuat komentar apa pun."
       },
       "Sort": "Urut berdasarkan",
-      "See": "Lihat Post",
+      "See": "Lihat Pos",
       "Comment": "Anda mengomentari “{{text}}...” yang diposting oleh {{name}}.",
       "Reply": "Anda membalas komentar di “{{text}}...” yang Diposting oleh {{name}}."
     },
@@ -337,7 +361,7 @@
       "Btn": "Putuskan Pertemanan"
     },
     "Prompt_Block": {
-      "Title": "Block {{name}}?",
+      "Title": "Blok {{name}}?",
       "Desc": "Anda tidak akan ditampilkan lagi postingan mereka di timeline Anda dan Anda mungkin tidak dapat melihat profil lengkap mereka. Apa kamu yakin?",
       "Btn": "Blokir Sekarang"
     },
@@ -345,10 +369,10 @@
       "Placeholder": "Mencari Teman"
     },
     "Menu": {
-      "Visit": "Visit profile",
-      "Send_Tip": "Send direct tip",
-      "Unfriend": "Unfriend",
-      "Block": "Block this person"
+      "Visit": "Kunjungi profil",
+      "Send_Tip": "Kirim tip langsung",
+      "Unfriend": "Putuskan pertemanan",
+      "Block": "Blok orang ini"
     },
     "Empty": {
       "Friend_List": {
@@ -386,7 +410,7 @@
       "Account_Unlinked": "Akun tidak tertaut",
       "User_Reported": "Laporan pengguna",
       "Comment_Removed": "Komentar dihapus",
-      "Post_Removed": "Post dihapus",
+      "Post_Removed": "Pos dihapus",
       "Reward": "Hadiah tip",
       "Claimed": "Tip diklaim",
       "Tips_received": "Tips diterima"
@@ -399,7 +423,7 @@
       "Post_Mention": "Menyebut Anda dalam sebuah postingan",
       "Comment_Mention": "Menyebutmu di komentar",
       "User_Tip": "Anda menerima tip dari {{name}} ({{amount}})",
-      "Post_Tip": "Your post received tip from {{name}} ({{amount}})",
+      "Post_Tip": "Postingan Anda menerima tip dari {{name}} ({{amount}})",
       "Comment_Tip": "Postingan Anda menerima tip dari {{name}} ({{amount}})",
       "Report": {
         "Approved": "Laporan telah disetujui",
@@ -580,10 +604,10 @@
         "Subtitle": "Mulai mengirim tip dalam sebuah postingan!"
       },
       "Received": "Diterima",
-      "Sent": "terkirim",
+      "Sent": "Terkirim",
       "Sort": "Urutkan",
       "Sort_Opt": {
-        "Latest": "Terlama",
+        "Latest": "Terbaru",
         "Highest": "Tertinggi",
         "Lowest": "Terendah"
       },
@@ -636,7 +660,21 @@
       "Notification": "{{total}} notifikasi baru",
       "SocialMedia": "{{total}} akun terhubung",
       "Wallet": "Lihat atau kelola saldo Anda",
-      "Profile": "Detail Profil"
+      "Profile": "Detail Profil",
+      "Experience_Create": "Buat Pengalaman",
+      "Experience_Clone": "Klon Pengalaman",
+      "Experience_Edit": "Ubah Pengalaman"
+    }
+  },
+  "Dropzone": {
+    "Placeholder": "File harus .jpeg atau .png",
+    "Btn_Upload": "Unggah {{type}}",
+    "Btn_Reupload": "Unggah ulang {{type}}",
+    "Btn_Upload_Video": "Tambahkan {{type}}",
+    "Error_File_Large": "File lebih besar dari {{maxSize}}Mb",
+    "Video": {
+      "Not_Preview": "Kami tidak dapat melihat pratinjau video Anda, pratinjau video dapat dilakukan setelah Anda mengonfirmasinya.",
+      "Not_Support": "Encoding video tidak didukung."
     }
   }
 }

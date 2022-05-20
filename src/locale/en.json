@@ -10,10 +10,12 @@
       "Max_Exp": "You can only add up to 10 experiences max"
     },
     "Clone": {
-      "Title": "Clone Eperience"
+      "Title": "Clone Experience",
+      "Type": "Clone"
     },
     "Edit": {
-      "Title": "Edit Experience"
+      "Title": "Edit Experience",
+      "Type": "Edit"
     },
     "List": {
       "Alert": "You can only add up to 10 experiences max",
@@ -69,7 +71,29 @@
       }
     },
     "Create": {
-      "Title": "Create Experience"
+      "Title": "Create Experience",
+      "Header": "Create new"
+    },
+    "Editor": {
+      "Text_1": "Experience",
+      "Subtitle_1": "Experience Name",
+      "Subtitle_2": "Description",
+      "Subtitle_3": "Picture",
+      "Label_1": "Included tags",
+      "Label_2": "Excluded tags",
+      "Label_3": "People",
+      "Placeholder_1": "topic you want to follow",
+      "Placeholder_2": "topic you want to exclude",
+      "Placeholder_3": "Search people here",
+      "Post": {
+        "Title": "Post",
+        "Desc": "Added posts will appear here. You can add a post to experience by select 'add post to experience' on more option."
+      },
+      "Btn": {
+        "Save": "Save Changes",
+        "Clone": "Clone Experience",
+        "Create": "Create Experience"
+      }
     }
   },
   "General": {
@@ -639,7 +663,21 @@
       "Notification": "{{total}} new notifications",
       "SocialMedia": "{{total}} account connected",
       "Wallet": "View your balance or manage your wallet",
-      "Profile": "Profile Detail"
+      "Profile": "Profile Detail",
+      "Experience_Create": "Create Experience",
+      "Experience_Clone": "Clone Experience",
+      "Experience_Edit": "Edit Experience"
+    }
+  },
+  "Dropzone": {
+    "Placeholder": "File must be .jpeg or .png",
+    "Btn_Upload": "Upload {{type}}",
+    "Btn_Reupload": "Reupload {{type}}",
+    "Btn_Upload_Video": "Add {{type}}",
+    "Error_File_Large": "File is larger than {{maxSize}}Mb",
+    "Video": {
+      "Not_Preview": "We cannot preview your video, preview video can be done after you confirm it.",
+      "Not_Support": "Video encoding not supported."
     }
   }
 }
