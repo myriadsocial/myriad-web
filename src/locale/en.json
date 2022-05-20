@@ -660,14 +660,15 @@
   "TopNavbar": {
     "Title": {
       "Friends": "Friends",
-      "SocialMedia": "Social Media",
+      "Social_Media": "Social Media",
       "Wallet": "Wallet",
       "Experience": "Experience",
       "Profile": "Profile",
       "Settings": "Settings",
       "Notification": "Notification",
+      "Timeline": "Timeline",
       "NFT": "NFT",
-      "SocialToken": "Social Token",
+      "Social_Token": "Social Token",
       "Trends": "Trends"
     },
     "Subtitle": {

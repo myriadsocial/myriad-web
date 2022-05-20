@@ -24,6 +24,7 @@ import * as FriendAPI from 'src/lib/api/friends';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as PostAPI from 'src/lib/api/post';
 import * as SettingAPI from 'src/lib/api/setting';
+import i18n from 'src/locale';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
@@ -80,7 +81,10 @@ const PostPage: React.FC<PostPageProps> = props => {
         <meta name="twitter:card" content="summary" />
       </Head>
 
-      <TopNavbarComponent description={'Post Detail'} sectionTitle={SectionTitle.TIMELINE} />
+      <TopNavbarComponent
+        description={i18n.t('Post_Detail.Navbar_Title')}
+        sectionTitle={SectionTitle.TIMELINE}
+      />
 
       <ShowIf condition={removed}>
         <ResourceDeleted />
