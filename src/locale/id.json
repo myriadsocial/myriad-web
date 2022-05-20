@@ -113,7 +113,8 @@
       "Text_Try_2": "dahulu",
       "Footer_Text_1": "Untuk menggunakan Myriad, kamu harus menggunakan",
       "Footer_Text_2": ", pada aplikasi peramban kamu",
-      "Footer_Text_3": "Masuk melalui ponsel tidak tersedia",
+      "Footer_Text_3": "atau kamu juga bisa menggunakan ",
+      "Footer_Text_4": " akun.",
       "Btn_Signin": "Sign in",
       "Btn_Demo": "demo"
     },
@@ -133,7 +134,8 @@
       "Prompt_Account": {
         "Title": "Akun Tidak Ditemukan",
         "Subtitle": "Tidak ada akun di wallet yang anda pilih."
-      }
+      },
+      "Tooltip_Wallet": "Segera hadir"
     },
     "Profile": {
       "Helper_Text_Name": "Kamu bisa menggunakan {{min_length}} karakter atau lebih.",

@@ -134,7 +134,8 @@
       "Prompt_Account": {
         "Title": "Account Not Found",
         "Subtitle": "There is no account in the wallet you selected."
-      }
+      },
+      "Tooltip_Wallet": "Coming soon"
     },
     "Profile": {
       "Title": "Create new account",
