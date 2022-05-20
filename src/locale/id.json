@@ -429,6 +429,7 @@
     "Title": "{{appname}} - Hasil Pencarian"
   },
   "Section": {
+    "Home": "Beranda",
     "Friends": "Teman",
     "Social_Media": "Media Sosial",
     "Wallet": "Dompet",
@@ -439,7 +440,8 @@
     "Timeline": "Linimasa",
     "NFT": "NFT",
     "Social_Token": "Token sosial",
-    "Trends": "Tren"
+    "Trends": "Tren",
+    "Topic": "Topik"
   },
   "Setting": {
     "Title": "{{appname}} - Pengaturan",

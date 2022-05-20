@@ -432,6 +432,7 @@
     "Title": "{{appname}} - Search Result"
   },
   "Section": {
+    "Home": "Beranda",
     "Friends": "Friends",
     "Social_Media": "Social Media",
     "Wallet": "Wallet",
@@ -442,7 +443,8 @@
     "Timeline": "Timeline",
     "NFT": "NFT",
     "Social_Token": "Social Token",
-    "Trends": "Trends"
+    "Trends": "Trends",
+    "Topic": "Topic"
   },
   "Setting": {
     "Title": "{{appname}} - Settings",

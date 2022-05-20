@@ -12,6 +12,8 @@ import {
 
 import React, {useMemo} from 'react';
 
+import i18n from 'src/locale';
+
 export type MenuId =
   | 'home'
   | 'friends'
@@ -36,63 +38,63 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
     () => [
       {
         id: 'home',
-        title: 'Home',
+        title: i18n.t('Section.Home'),
         active: selected === 'home',
         icon: HomeIcon,
         url: '/home',
       },
       {
         id: 'experience',
-        title: 'Experience',
+        title: i18n.t('Section.Experience'),
         active: selected === 'experience',
         icon: VariableIcon,
         url: '/experience',
       },
       {
         id: 'wallet',
-        title: 'Wallet',
+        title: i18n.t('Section.Wallet'),
         active: selected === 'wallet',
         icon: CreditCardIcon,
         url: '/wallet',
       },
       {
         id: 'friends',
-        title: 'Friends',
+        title: i18n.t('Section.Friends'),
         active: selected === 'friends',
         icon: UsersIcon,
         url: '/friends',
       },
       {
         id: 'token',
-        title: 'Social Token',
+        title: i18n.t('Section.Social_Token'),
         active: selected === 'token',
         icon: CurrencyDollarIcon,
         url: '/socialtoken',
       },
       {
         id: 'nft',
-        title: 'NFT',
+        title: i18n.t('Section.NFT'),
         active: selected === 'nft',
         icon: PhotographIcon,
         url: '/nft',
       },
       {
         id: 'topic',
-        title: 'Topic',
+        title: i18n.t('Section.Topic'),
         active: selected === 'topic',
         icon: HashtagIcon,
         url: '/topic',
       },
       {
         id: 'socials',
-        title: 'Social Media',
+        title: i18n.t('Section.Social_Media'),
         active: selected === 'socials',
         icon: ViewGridIcon,
         url: '/socials',
       },
       {
         id: 'settings',
-        title: 'Settings',
+        title: i18n.t('Section.Settings'),
         active: selected === 'settings',
         icon: CogIcon,
         url: '/settings',
