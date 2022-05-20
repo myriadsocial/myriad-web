@@ -47,7 +47,6 @@ export const TopNavbarComponent: React.FC<TopNavbarProps> = props => {
   };
 
   const convertToLocale = (sectionTitle: SectionTitle) => {
-    console.log({sectionTitle});
     switch (sectionTitle) {
       case SectionTitle.FRIENDS: {
         return i18n.t('TopNavbar.Title.Friends');

@@ -348,6 +348,14 @@
     "Embed_Link_PLaceholder": "Salin dan tempel kode ini ke situs web atau blog Anda",
     "Copy_URL_Message": "Tautan disalin!"
   },
+  "Post_Detail": {
+    "Navbar_Title": "Detail Postingan",
+    "Post_Action": {
+      "Comments": "Komentar",
+      "Share": "Bagikan",
+      "Send_tip": "Kirim tip"
+    }
+  },
   "Friends": {
     "Title": "{{appname}} - Teman",
     "Container": {

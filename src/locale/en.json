@@ -349,6 +349,14 @@
     "Embed_Link_PLaceholder": "Copy and paste this code into your website or blog",
     "Copy_URL_Message": "Link copied!"
   },
+  "Post_Detail": {
+    "Navbar_Title": "Post Detail",
+    "Post_Action": {
+      "Comments": "Comments",
+      "Share": "Share",
+      "Send_tip": "Send tip"
+    }
+  },
   "Friends": {
     "Title": "{{appname}} - Friends",
     "Container": {
