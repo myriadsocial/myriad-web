@@ -138,6 +138,8 @@
       "Tooltip_Wallet": "Segera hadir"
     },
     "Profile": {
+      "Title": "Buat akun baru",
+      "Subtitle": "Kamu hanya bisa membuat username satu kali saja.",
       "Helper_Text_Name": "Kamu bisa menggunakan {{min_length}} karakter atau lebih.",
       "Helper_Text_Username": "Kamu bisa menggunakan {{min_length}} karakter atau lebih.",
       "Helper_Validate_Name_Min": "Nama tampilan harus disediakan dan mengandung setidaknya {{min_length}} karakter",
@@ -313,6 +315,14 @@
         "Subtitle_Duplicate": "Maaf, kamu tidak bisa mengimpot postingan ini, \n karena postingan ini telah diimpor sebelumnya"
       }
     }
+  },
+  "Post_Share": {
+    "Action": "Bagikan",
+    "Title": "Salin tautan posting",
+    "Post_URL": "URL Posting",
+    "Embed_Link": "Tautkan Semat",
+    "Embed_Link_PLaceholder": "Salin dan tempel kode ini ke situs web atau blog Anda",
+    "Copy_URL_Message": "Tautan disalin!"
   },
   "Friends": {
     "Title": "{{appname}} - Teman",

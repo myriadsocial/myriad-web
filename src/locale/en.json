@@ -317,6 +317,14 @@
       }
     }
   },
+  "Post_Share": {
+    "Action": "Share",
+    "Title": "Copy post link",
+    "Post_URL": "Post URL",
+    "Embed_Link": "Embed Link",
+    "Embed_Link_PLaceholder": "Copy and paste this code into your website or blog",
+    "Copy_URL_Message": "Link copied!"
+  },
   "Friends": {
     "Title": "{{appname}} - Friends",
     "Container": {

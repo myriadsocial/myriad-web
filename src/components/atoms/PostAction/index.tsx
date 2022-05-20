@@ -15,6 +15,7 @@ import {useStyles} from './postAction.style';
 import millify from 'millify';
 import ShowIf from 'src/components/common/show-if.component';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
+import i18n from 'src/locale';
 
 type PostActionProps = {
   metrics: PostMetric;
@@ -58,7 +59,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
   const handleLinkCopied = () => {
     setLinkAnchorEl(null);
     openToasterSnack({
-      message: 'Link copied!',
+      message: i18n.t('Post_Share.Copy_URL_Message'),
       variant: 'success',
     });
     onShared();
@@ -110,7 +111,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
               viewBox="0 0 24 24"
             />
             <Typography component="span" color="primary" variant="body1" className={style.wording}>
-              Share
+              {i18n.t('Post_Share.Action')}
             </Typography>
           </IconButton>
         </div>
@@ -120,16 +121,16 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
 
       <Modal
         align="left"
-        title="Copy post link"
+        title={i18n.t('Post_Share.Title')}
         className={style.modal}
         open={Boolean(linkAnchorEl)}
         onClose={handleCloseCopyLink}>
         <div className={style.copy}>
           <Typography component="p" className={style.subtitle} color="primary" variant="h4">
-            Post URL
+            {i18n.t('Post_Share.Post_URL')}
           </Typography>
           <TextField
-            label="Post URL"
+            label={i18n.t('Post_Share.Post_URL')}
             id="copy-post-url"
             value={postUrl}
             variant="outlined"
@@ -151,10 +152,10 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
           />
           <div className={style.divider} />
           <Typography component="p" className={style.subtitle} color="primary" variant="h4">
-            Embed Link
+            {i18n.t('Post_Share.Embed_Link')}
           </Typography>
           <TextField
-            label="Copy and paste this code into your website or blog"
+            label={i18n.t('Post_Share.Embed_Link_PLaceholder')}
             id="copy-post-embed"
             value={`<iframe width="700" height="525" src="${embedUrl}></iframe>`}
             variant="outlined"
