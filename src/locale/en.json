@@ -93,6 +93,9 @@
         "Save": "Save Changes",
         "Clone": "Clone Experience",
         "Create": "Create Experience"
+      },
+      "Menu_Post": {
+        "Remove": "Remove from experience"
       }
     }
   },

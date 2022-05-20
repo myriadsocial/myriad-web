@@ -93,6 +93,9 @@
         "Save": "Simpan Perubahan",
         "Clone": "Klon Pengalaman",
         "Create": "Buat Pengalaman"
+      },
+      "Menu_Post": {
+        "Remove": "Hapus dari pengalaman"
       }
     }
   },
@@ -610,7 +613,7 @@
         "Reddit": "Salin teks di bawah ini dan posting di profil Reddit Anda. Jangan memposting teks di Subreddit.",
         "Other": "Salin teks di bawah ini dan posting di timeline Anda. Pastikan akun Anda tidak dilindungi."
       },
-      "Msg": "I'm part of the @myriad_social {{address}}\n\n{{url}}",
+      "Msg": "Saya bagian dari @myriad_social {{address}}\n\n{{url}}",
       "Text_3": "Verifikasi akun {{platform}} Anda, ulangi langkah 2 jika belum diverifikasi",
       "Btn_Twitter": "Tweet Sekarang",
       "Btn_Reddit": "Bagikan",
