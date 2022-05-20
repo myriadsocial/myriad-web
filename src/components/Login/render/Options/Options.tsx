@@ -226,7 +226,11 @@ export const Options: React.FC<OptionProps> = props => {
             </Grid>
           ))}
           <Grid item xs={3}>
-            <Tooltip title={<Typography component="span">Coming soon</Typography>} arrow>
+            <Tooltip
+              title={
+                <Typography component="span">{i18n.t('Login.Options.Tooltip_Wallet')}</Typography>
+              }
+              arrow>
               <ListItem disableGutters disabled>
                 <div className={styles.card}>
                   <EthereumNetworkIcon className={styles.icon} />
@@ -236,7 +240,11 @@ export const Options: React.FC<OptionProps> = props => {
             </Tooltip>
           </Grid>
           <Grid item xs={3}>
-            <Tooltip title={<Typography component="span">Coming soon</Typography>} arrow>
+            <Tooltip
+              title={
+                <Typography component="span">{i18n.t('Login.Options.Tooltip_Wallet')}</Typography>
+              }
+              arrow>
               <ListItem disableGutters disabled>
                 <div className={styles.card}>
                   <PolygonNetworkDisabledIcon className={styles.icon} />
@@ -298,7 +306,11 @@ export const Options: React.FC<OptionProps> = props => {
           </ShowIf>
           <ShowIf condition={network === null || network === NetworkTypeEnum.NEAR}>
             <Grid item xs={3}>
-              <Tooltip title={<Typography component="span">Coming soon</Typography>} arrow>
+              <Tooltip
+                title={
+                  <Typography component="span">{i18n.t('Login.Options.Tooltip_Wallet')}</Typography>
+                }
+                arrow>
                 <ListItem
                   disableGutters
                   disabled

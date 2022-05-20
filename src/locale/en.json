@@ -158,7 +158,8 @@
       "Prompt_Account": {
         "Title": "Account Not Found",
         "Subtitle": "There is no account in the wallet you selected."
-      }
+      },
+      "Tooltip_Wallet": "Coming soon"
     },
     "Profile": {
       "Title": "Create new account",
@@ -340,6 +341,14 @@
       }
     }
   },
+  "Post_Share": {
+    "Action": "Share",
+    "Title": "Copy post link",
+    "Post_URL": "Post URL",
+    "Embed_Link": "Embed Link",
+    "Embed_Link_PLaceholder": "Copy and paste this code into your website or blog",
+    "Copy_URL_Message": "Link copied!"
+  },
   "Friends": {
     "Title": "{{appname}} - Friends",
     "Container": {
@@ -455,6 +464,7 @@
     "Title": "{{appname}} - Search Result"
   },
   "Section": {
+    "Home": "Beranda",
     "Friends": "Friends",
     "Social_Media": "Social Media",
     "Wallet": "Wallet",
@@ -465,7 +475,8 @@
     "Timeline": "Timeline",
     "NFT": "NFT",
     "Social_Token": "Social Token",
-    "Trends": "Trends"
+    "Trends": "Trends",
+    "Topic": "Topic"
   },
   "Setting": {
     "Title": "{{appname}} - Settings",

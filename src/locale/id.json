@@ -137,7 +137,8 @@
       "Text_Try_2": "dahulu",
       "Footer_Text_1": "Untuk menggunakan Myriad, kamu harus menggunakan",
       "Footer_Text_2": ", pada aplikasi peramban kamu",
-      "Footer_Text_3": "Masuk melalui ponsel tidak tersedia",
+      "Footer_Text_3": "atau kamu juga bisa menggunakan ",
+      "Footer_Text_4": " akun.",
       "Btn_Signin": "Sign in",
       "Btn_Demo": "demo"
     },
@@ -157,9 +158,12 @@
       "Prompt_Account": {
         "Title": "Akun Tidak Ditemukan",
         "Subtitle": "Tidak ada akun di wallet yang anda pilih."
-      }
+      },
+      "Tooltip_Wallet": "Segera hadir"
     },
     "Profile": {
+      "Title": "Buat akun baru",
+      "Subtitle": "Kamu hanya bisa membuat username satu kali saja.",
       "Helper_Text_Name": "Kamu bisa menggunakan {{min_length}} karakter atau lebih.",
       "Helper_Text_Username": "Kamu bisa menggunakan {{min_length}} karakter atau lebih.",
       "Helper_Validate_Name_Min": "Nama tampilan harus disediakan dan mengandung setidaknya {{min_length}} karakter",
@@ -336,6 +340,14 @@
       }
     }
   },
+  "Post_Share": {
+    "Action": "Bagikan",
+    "Title": "Salin tautan posting",
+    "Post_URL": "URL Posting",
+    "Embed_Link": "Tautkan Semat",
+    "Embed_Link_PLaceholder": "Salin dan tempel kode ini ke situs web atau blog Anda",
+    "Copy_URL_Message": "Tautan disalin!"
+  },
   "Friends": {
     "Title": "{{appname}} - Teman",
     "Container": {
@@ -451,6 +463,7 @@
     "Title": "{{appname}} - Hasil Pencarian"
   },
   "Section": {
+    "Home": "Beranda",
     "Friends": "Teman",
     "Social_Media": "Media Sosial",
     "Wallet": "Dompet",
@@ -461,7 +474,8 @@
     "Timeline": "Linimasa",
     "NFT": "NFT",
     "Social_Token": "Token sosial",
-    "Trends": "Tren"
+    "Trends": "Tren",
+    "Topic": "Topik"
   },
   "Setting": {
     "Title": "{{appname}} - Pengaturan",
