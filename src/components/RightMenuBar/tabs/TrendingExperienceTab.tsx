@@ -43,7 +43,13 @@ export const TrendingExperienceTab: React.FC = () => {
           </IconButton>
         </Tooltip>
       </div>
-      <ExperienceListContainer selectable filterTimeline owner={ExperienceOwner.TRENDING} />
+      <ExperienceListContainer
+        selectable
+        enableClone
+        enableSubscribe
+        filterTimeline
+        owner={ExperienceOwner.TRENDING}
+      />
 
       <ShowIf condition={loading && trendingExperiences.length === 0}>
         <Grid container justifyContent="center">
