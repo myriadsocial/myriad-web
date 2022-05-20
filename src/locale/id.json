@@ -437,6 +437,20 @@
       "Rejected": "Transaksi ditolak oleh pengguna"
     }
   },
+  "Tipping_History": {
+    "Modal": {
+      "Title": "Riwayat Tip",
+      "Sort": "Urut berdasarkan",
+      "Sort_Highest": "Tip Terbesar",
+      "Sort_Latest": "Tip Terakhir",
+      "Coin": "Koin",
+      "All_Coin": "Semua Koin",
+      "Search_Coin": "Cari Koin",
+      "Empty": "Tip kosong",
+      "User_Banned": "Pengguna dilarang",
+      "Send_Tip": "Saya juga ingin memberikan tip"
+    }
+  },
   "TOS": {
     "Text_1": "Saya setuju dengan ",
     "Text_2": "Persyaratan Layanan",

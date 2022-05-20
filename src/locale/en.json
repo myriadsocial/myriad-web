@@ -438,6 +438,20 @@
       "Rejected": "Transaction rejected by user"
     }
   },
+  "Tipping_History": {
+    "Modal": {
+      "Title": "Tip History",
+      "Sort": "Sort by",
+      "Sort_Highest": "Highest Tip",
+      "Sort_Latest": "Latest Tip",
+      "Coin": "Coin",
+      "All_Coin": "All Coin",
+      "Search_Coin": "Search Coin",
+      "Empty": "Tip empty",
+      "User_Banned": "User Banned",
+      "Send_Tip": "I want to send tip too"
+    }
+  },
   "TOS": {
     "Text_1": "I agree to the Myriad ",
     "Text_2": "Terms of Service",

@@ -37,6 +37,7 @@ import {Comment} from 'src/interfaces/comment';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
+import i18n from 'src/locale';
 
 type TipHistoryProps = Pick<ModalProps, 'open' | 'onClose'> & {
   reference: Post | Comment | User;
@@ -69,7 +70,7 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
   const styles = useStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [search, setSearch] = useState('');
-  const [selected, setSelected] = useState<string>('All Coin');
+  const [selected, setSelected] = useState<string>(i18n.t('Tipping_History.Modal.All_Coin'));
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -122,17 +123,17 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
   };
 
   return (
-    <Modal title="Tip History" open={open} onClose={onClose}>
+    <Modal title={i18n.t('Tipping_History.Modal.Title')} open={open} onClose={onClose}>
       <div className={styles.root}>
         <div className={styles.options}>
           <DropdownMenu<TransactionSort>
-            title="Sort by"
+            title={i18n.t('Tipping_History.Modal.Sort')}
             options={sortOptions}
             onChange={handleSortChange}
           />
 
           <div>
-            <Typography component="span">Coin:&nbsp;</Typography>
+            <Typography component="span">{i18n.t('Tipping_History.Modal.Coin')}:&nbsp;</Typography>
 
             <Typography component="span" color="textPrimary" className={styles.selected}>
               {selected}
@@ -163,7 +164,7 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
                   onKeyUp={submitSearch}
                   value={search}
                   onChange={handleChange}
-                  placeholder={`Search Coin`}
+                  placeholder={i18n.t('Tipping_History.Modal.Search_Coin')}
                   inputProps={{
                     'aria-label': 'search',
                   }}
@@ -190,7 +191,7 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
 
       <div className={styles.list}>
         <ShowIf condition={tips.length === 0}>
-          <Empty title="Tip empty" subtitle="" />
+          <Empty title={i18n.t('Tipping_History.Modal.Empty')} subtitle="" />
         </ShowIf>
         <ShowIf condition={!!tips.length}>
           <List className={styles.list} id="scrollable-tip-history">
@@ -206,7 +207,7 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
                   avatar={tip.fromWallet?.user.profilePictureURL || tip.fromWallet?.user.name}
                   title={
                     tip?.fromWallet?.user?.deletedAt
-                      ? 'User Banned'
+                      ? i18n.t('Tipping_History.Modal.User_Banned')
                       : limitChar(tip.fromWallet?.user.name, 16)
                   }
                   isBanned={!!tip?.fromWallet?.user?.deletedAt}
@@ -235,7 +236,7 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
       <div className={styles.action}>
         <ShowIf condition={!tippingDisabled}>
           <SendTipButton
-            label="I want to send tip too"
+            label={i18n.t('Tipping_History.Modal.Send_Tip')}
             reference={reference}
             referenceType={referenceType}
             variant="contained"
