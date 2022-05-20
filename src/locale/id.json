@@ -372,7 +372,13 @@
     "Title": "Buat Postingan",
     "Subtitle": "Buat Postinganmu",
     "Tab_Label": "Buat",
-    "Confirm": "Buat Postingan"
+    "Confirm": "Buat Postingan",
+    "Visibility": {
+      "Label": "Visibilitas",
+      "Public": "Publik",
+      "Friend_Only": "Hanya teman",
+      "Only_Me": "Hanya saya"
+    }
   },
   "Post_Import": {
     "Title": "Impor Postingan",

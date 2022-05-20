@@ -167,7 +167,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
       <div className={styles.action}>
         <div className={styles.option}>
           <DropdownMenu<PostVisibility>
-            title="Visibility"
+            title={i18n.t('Post_Create.Visibility.Label')}
             options={menuOptions}
             onChange={handleVisibilityChange}
           />

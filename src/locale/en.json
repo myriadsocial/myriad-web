@@ -373,7 +373,13 @@
     "Title": "Create Post",
     "Subtitle": "Create your own post",
     "Tab_Label": "Create",
-    "Confirm": "Create Post"
+    "Confirm": "Create Post",
+    "Visibility": {
+      "Label": "Visibility",
+      "Public": "Public",
+      "Friend_Only": "Friend Only",
+      "Only_Me": "Only Me"
+    }
   },
   "Post_Import": {
     "Title": "Import Post",
