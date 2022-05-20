@@ -35,6 +35,7 @@ import {useStyles} from './Experience.styles';
 import {debounce, isEmpty} from 'lodash';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
 import {Post} from 'src/interfaces/post';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -287,9 +288,9 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   };
 
   const renderLabelButton = () => {
-    if (type === 'edit') return 'Save changes';
-    else if (type === 'clone') return 'Clone Experience';
-    else return 'Create Experience';
+    if (type === 'edit') return i18n.t('Experience.Editor.Btn.Save');
+    else if (type === 'clone') return i18n.t('Experience.Editor.Btn.Clone');
+    else return i18n.t('Experience.Editor.Btn.Create');
   };
 
   const handleNextPagePosts = () => {
@@ -320,10 +321,12 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
 
   return (
     <div className={styles.root}>
-      <Typography className={styles.title}>{type ? type : 'Create new'} Experience</Typography>
+      <Typography className={styles.title}>
+        {type ? type : i18n.t('Experience.Create.Header')} {i18n.t('Experience.Editor.Text_1')}
+      </Typography>
 
       <FormControl fullWidth variant="outlined">
-        <InputLabel htmlFor="experience-name">Experience Name</InputLabel>
+        <InputLabel htmlFor="experience-name">{i18n.t('Experience.Editor.Subtitle_1')}</InputLabel>
         <OutlinedInput
           id="experience-name"
           placeholder="Experience Name"
@@ -335,7 +338,9 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       </FormControl>
 
       <FormControl fullWidth variant="outlined">
-        <InputLabel htmlFor="experience-description">Description</InputLabel>
+        <InputLabel htmlFor="experience-description">
+          {i18n.t('Experience.Editor.Subtitle_2')}
+        </InputLabel>
         <OutlinedInput
           id="experience-description"
           placeholder="Description"
@@ -349,7 +354,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
 
       <FormControl fullWidth variant="outlined" style={{position: 'relative', zIndex: 100}}>
         <InputLabel htmlFor="experience-picture" shrink={true} className={styles.label}>
-          Picture
+          {i18n.t('Experience.Editor.Subtitle_3')}
         </InputLabel>
         <Dropzone
           onImageSelected={handleImageUpload}
@@ -382,10 +387,12 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         renderInput={params => (
           <TextField
             {...params}
-            label="Included tags"
+            label={i18n.t('Experience.Editor.Label_1')}
             variant="outlined"
             placeholder={
-              newExperience.allowedTags.length === 0 ? 'topic you want to follow' : undefined
+              newExperience.allowedTags.length === 0
+                ? i18n.t('Experience.Editor.Placeholder_1')
+                : undefined
             }
             onChange={handleSearchTags}
             InputProps={{
@@ -415,10 +422,12 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         renderInput={params => (
           <TextField
             {...params}
-            label="Excluded tags"
+            label={i18n.t('Experience.Editor.Label_2')}
             variant="outlined"
             placeholder={
-              newExperience.prohibitedTags?.length === 0 ? 'topic you want to exclude' : undefined
+              newExperience.prohibitedTags?.length === 0
+                ? i18n.t('Experience.Editor.Placeholder_2')
+                : undefined
             }
             onChange={handleSearchTags}
             InputProps={{
@@ -446,8 +455,8 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         renderInput={params => (
           <TextField
             {...params}
-            label="People"
-            placeholder="Search people here"
+            label={i18n.t('Experience.Editor.Label_3')}
+            placeholder={i18n.t('Experience.Editor.Placeholder_3')}
             variant="outlined"
             onChange={handleSearchPeople}
             InputProps={{
@@ -509,15 +518,18 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         loader={<Loading />}>
         {experiencePosts.length === 0 ? (
           <div className={styles.postTextContainer}>
-            <Typography className={styles.textPost}>Post</Typography>
+            <Typography className={styles.textPost}>
+              {i18n.t('Experience.Editor.Post.Title')}
+            </Typography>
             <Typography className={styles.textPostDetail}>
-              Added posts will appear here. You can add a post to experience by select "add post to
-              experience" on more option.
+              {i18n.t('Experience.Editor.Post.Desc')}
             </Typography>
           </div>
         ) : (
           <>
-            <Typography className={styles.textPost}>Post</Typography>
+            <Typography className={styles.textPost}>
+              {i18n.t('Experience.Editor.Post.Title')}
+            </Typography>
             {experiencePosts.map(post => (
               <PostDetailExperience
                 user={user}

@@ -5,10 +5,11 @@ import {useRouter} from 'next/router';
 import {ExperienceEditor} from '../ExperienceEditor/ExperienceEditor';
 
 import {debounce} from 'lodash';
-import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
+import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
 import {useUpload} from 'src/hooks/use-upload.hook';
 import {ExperienceProps} from 'src/interfaces/experience';
+import i18n from 'src/locale';
 
 export const ExperienceEditContainer: React.FC = () => {
   // TODO: separate hook for tag, people and experience
@@ -55,14 +56,14 @@ export const ExperienceEditContainer: React.FC = () => {
   return (
     <>
       <TopNavbarComponent
-        description={'Edit Experience'}
-        sectionTitle={SectionTitle.EXPERIENCE}
+        description={i18n.t('TopNavbar.Subtitle.Experience_Edit')}
+        sectionTitle={i18n.t('TopNavbar.Title.Experience')}
         reverse
       />
 
       {experience && (
         <ExperienceEditor
-          type={'edit'}
+          type={i18n.t('Experience.Edit.Type')}
           experience={experience}
           tags={tags}
           people={people}
