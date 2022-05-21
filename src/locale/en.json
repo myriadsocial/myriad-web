@@ -181,7 +181,7 @@
       "Btn_Register": "Register",
       "Prompt": {
         "Title": "Create a new account",
-        "Subtitle": 
+        "Subtitle":
         "You will create a new account. Please make sure you don't have a Myriad account before. You can connect other wallet in the manage tab.",
         "Btn_No": "Cancel",
         "Btn_Yes": "Confirm"
@@ -232,6 +232,7 @@
         }
       },
       "Menu": {
+        "TipHistory": "Tip History",
         "Copy": "Copy link profile",
         "Report": "Report account",
         "Block": "Block this person",

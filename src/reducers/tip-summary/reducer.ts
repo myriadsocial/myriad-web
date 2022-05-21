@@ -8,9 +8,10 @@ import * as Redux from 'redux';
 import {Comment} from 'src/interfaces/comment';
 import {Post} from 'src/interfaces/post';
 import {Transaction, TransactionDetail, TransactionSort} from 'src/interfaces/transaction';
+import {User} from 'src/interfaces/user';
 
 export interface TipSummaryState extends BasePaginationState {
-  reference: Post | Comment | null;
+  reference: Post | Comment | User | null;
   tippingDisabled: boolean;
   show: boolean;
   hasMore: boolean;

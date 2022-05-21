@@ -46,6 +46,7 @@ export type Props = {
   linkUrl: string;
   onSubmitReport: (payload: ReportProps) => void;
   onBlock: () => void;
+  onOpenTipHistory: (person: User) => void;
 };
 
 const background = 'https://res.cloudinary.com/dsget80gs/background/profile-default-bg.png';
@@ -64,6 +65,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     linkUrl,
     onSubmitReport,
     onBlock,
+    onOpenTipHistory,
   } = props;
   const style = useStyles();
   const confirm = useConfirm();
@@ -151,6 +153,10 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     });
   };
 
+  const showProfileTipHistory = () => {
+    onOpenTipHistory(person);
+  };
+
   return (
     <div>
       <div className={style.root}>
@@ -211,6 +217,9 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
               transformOrigin={{vertical: 'top', horizontal: 'right'}}
               open={Boolean(anchorEl)}
               onClose={handleCloseMenu}>
+              <MenuItem onClick={showProfileTipHistory}>
+                {i18n.t('Profile.Header.Menu.TipHistory')}
+              </MenuItem>
               <CopyToClipboard text={linkUrl} onCopy={handleLinkCopied}>
                 <MenuItem>{i18n.t('Profile.Header.Menu.Copy')}</MenuItem>
               </CopyToClipboard>

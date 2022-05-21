@@ -6,6 +6,7 @@ import {Action} from 'redux';
 import {Comment} from 'src/interfaces/comment';
 import {Post} from 'src/interfaces/post';
 import {Transaction, TransactionDetail, TransactionSort} from 'src/interfaces/transaction';
+import {User} from 'src/interfaces/user';
 import MyriadAPI from 'src/lib/api/base';
 import * as TransactionAPI from 'src/lib/api/transaction';
 import {ThunkActionCreator} from 'src/types/thunk';
@@ -16,7 +17,7 @@ import {ThunkActionCreator} from 'src/types/thunk';
 
 export interface SetTippedReference extends Action {
   type: constants.SET_TIPPED_REFERENCE;
-  payload: Post | Comment;
+  payload: Post | Comment | User;
 }
 
 export interface SetDisableTipping extends Action {
@@ -78,7 +79,7 @@ export type Actions =
  *
  * Actions
  */
-export const setTippedReference = (reference: Post | Comment): SetTippedReference => ({
+export const setTippedReference = (reference: Post | Comment | User): SetTippedReference => ({
   type: constants.SET_TIPPED_REFERENCE,
   payload: reference,
 });
