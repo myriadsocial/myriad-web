@@ -27,6 +27,7 @@ import {BalanceDetail} from 'src/interfaces/balance';
 import {CurrencyId} from 'src/interfaces/currency';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
+import i18n from 'src/locale';
 
 const INITIAL_AMOUNT = new BN(-1);
 
@@ -188,7 +189,9 @@ export const Tipping: React.FC<SendTipProps> = props => {
       <div className={classes.subHeaderSection}>
         <Grid container spacing={1} alignItems="center">
           <Grid item>
-            <Typography className={classes.subHeader}>Balance</Typography>
+            <Typography className={classes.subHeader}>
+              {i18n.t('Tipping.Modal_Main.Balance')}
+            </Typography>
           </Grid>
           <Grid item>
             <TippingInfo />
@@ -210,7 +213,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
         <form className={classes.formRoot} autoComplete="off">
           <InputAmount
             defaultValue={amount}
-            placeholder="Tip Amount"
+            placeholder={i18n.t('Tipping.Modal_Main.Tip_Amount')}
             decimal={currency.decimal}
             fee={transactionFee}
             maxValue={currency.freeBalance}
@@ -228,7 +231,10 @@ export const Tipping: React.FC<SendTipProps> = props => {
           />
 
           <div className={classes.formControls}>
-            <TermOfService about="Tipping" onChange={handleChangeAgreement} />
+            <TermOfService
+              about={i18n.t('Tipping.Modal_Main.About')}
+              onChange={handleChangeAgreement}
+            />
 
             <Button
               isDisabled={
@@ -236,7 +242,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
               }
               variant={ButtonVariant.CONTAINED}
               onClick={signTransaction}>
-              Send my tips
+              {i18n.t('Tipping.Modal_Main.Btn_Send_Tip')}
             </Button>
           </div>
         </form>

@@ -104,7 +104,8 @@
     "OK": "OKE",
     "Back": "Kembali",
     "Next": "Selanjutnya",
-    "Cancel": "Batalkan"
+    "Cancel": "Batalkan",
+    "Loading": "Memuat"
   },
   "Mobile": {
     "title": "Kami benar-benar minta maaf",
@@ -142,7 +143,7 @@
       "Footer_Text_2": ", pada aplikasi peramban kamu",
       "Footer_Text_3": "atau kamu juga bisa menggunakan ",
       "Footer_Text_4": " akun.",
-      "Btn_Signin": "Sign in",
+      "Btn_Signin": "Masuk",
       "Btn_Demo": "demo"
     },
     "Options": {
@@ -400,6 +401,65 @@
     "Title": "Impor Postingan",
     "Subtitle": "Impor postingan dari media sosial lain",
     "Tab_Label": "Impor"
+  },
+  "Tipping": {
+    "Modal_Main": {
+      "Title": "Kirim Tip",
+      "Subtitle": "Postingan ini bermanfaat? Kirim tip",
+      "Tooltip": "Jika saldo penerima di bawah setoran eksistensial setelah pemberian tip, akun akan dicabut. ",
+      "Tooltip_Read_More": "Baca selengkapnya",
+      "Balance": "Saldo",
+      "Currency_Options": "Ubah mata uang",
+      "Search_Coin": "Cari Koin",
+      "Coin": "Koin",
+      "Tip_Amount": "Jumlah Tip",
+      "Will_Receive": "akan menerima",
+      "Tip_Summary": "Ringkasan Tip",
+      "Tip_Label": "Tip",
+      "Estimated_Gas_Fee": "Perkiraan Biaya Gas",
+      "Total": "Total",
+      "About": "Memberi Tip",
+      "Btn_Send_Tip": "Kirim tips saya"
+    },
+    "Prompt_Mobile": {
+      "Title": "Kirim Tip",
+      "Subtitle": "Hargai postingan orang lain dengan mengirimkan tip dengan cryptocurrency yang stabil"
+    },
+    "Prompt_Success": {
+      "Title": "Tip terkirim!",
+      "Subtitle_1": "Tip ke ",
+      "Subtitle_2": " berhasil dikirim",
+      "Btn_Trx_Detail": "Detail Transaksi",
+      "Btn_Return": "Kembali",
+      "Notify_Title": "Kamu mendapatkan Tip di Myriad!",
+      "Notify_Text_1": "Hai @{{receiverUsername}}, Saya baru saja mengirimu {{finalAmount}} {{currencySymbol}} di @myriad_social!",
+      "Notify_Text_2": "Myriad.Social adalah sebuah web3 layer di atas web2 sosial media, terdesentralisasi dan federasi.",
+      "Notify_Text_3": "Kamu dapat mengklaimnya dengan bergabung app.myriad.social dan menghubungkan akun {{platform}} kamu.",
+      "Notify_Btn": "Beri tahu di"
+    },
+    "Toaster": {
+      "Cancelled": "Penandatanganan transaksi dibatalkan",
+      "Rejected": "Transaksi ditolak oleh pengguna"
+    }
+  },
+  "Tipping_History": {
+    "Modal": {
+      "Title": "Riwayat Tip",
+      "Sort": "Urut berdasarkan",
+      "Sort_Highest": "Tip Terbesar",
+      "Sort_Latest": "Tip Terakhir",
+      "Coin": "Koin",
+      "All_Coin": "Semua Koin",
+      "Search_Coin": "Cari Koin",
+      "Empty": "Tip kosong",
+      "User_Banned": "Pengguna dilarang",
+      "Send_Tip": "Saya juga ingin memberikan tip"
+    }
+  },
+  "TOS": {
+    "Text_1": "Saya setuju dengan ",
+    "Text_2": "Persyaratan Layanan",
+    "Text_3": " Myriad tentang {{about}}"
   },
   "Friends": {
     "Title": "{{appname}} - Teman",

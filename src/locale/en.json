@@ -104,7 +104,8 @@
     "OK": "OK",
     "Back": "Back",
     "Next": "Next",
-    "Cancel": "Cancel"
+    "Cancel": "Cancel",
+    "Loading": "Loading"
   },
   "Mobile": {
     "title": "We are trully sorry",
@@ -401,6 +402,65 @@
     "Title": "Import Post",
     "Subtitle": "Import post from another social media",
     "Tab_Label": "Import"
+  },
+  "Tipping": {
+    "Modal_Main": {
+      "Title": "Send Tip",
+      "Subtitle": "Finding this post is insightful? Send a tip!",
+      "Balance": "Balance",
+      "Tooltip": "If the receiver's balance is below the existential deposit after the tipping was done, the account will be reaped. ",
+      "Tooltip_Read_More": "Read more",
+      "Currency_Options": "Change currency",
+      "Search_Coin": "Search Coin",
+      "Coin": "Coin",
+      "Tip_Amount": "Tip Amount",
+      "Will_Receive": "will receive",
+      "Tip_Summary": "Tip Summary",
+      "Tip_Label": "Tip",
+      "Estimated_Gas_Fee": "Estimated Gas Fee",
+      "Total": "Total",
+      "About": "Tipping",
+      "Btn_Send_Tip": "Send my tips"
+    },
+    "Prompt_Mobile": {
+      "Title": "Send Tip",
+      "Subtitle": "Appreciate others posts by sending tips with stable cryptocurrency"
+    },
+    "Prompt_Success": {
+      "Title": "Tip sent!",
+      "Subtitle_1": "Tip to ",
+      "Subtitle_2": " sent successfully",
+      "Btn_Trx_Detail": "Transaction details",
+      "Btn_Return": "Return",
+      "Notify_Title": "You’ve been tipped on Myriad!",
+      "Notify_Text_1": "Hey @{{receiverUsername}}, I just sent you {{finalAmount}} {{currencySymbol}} on @myriad_social!",
+      "Notify_Text_2": "Myriad.Social is a web3 layer on top of web2 social media, decentralized and federated.",
+      "Notify_Text_3": "You can claim it by joining app.myriad.social and connecting your {{platform}} account.",
+      "Notify_Btn": "Notify on"
+    },
+    "Toaster": {
+      "Cancelled": "Transaction signing cancelled",
+      "Rejected": "Transaction rejected by user"
+    }
+  },
+  "Tipping_History": {
+    "Modal": {
+      "Title": "Tip History",
+      "Sort": "Sort by",
+      "Sort_Highest": "Highest Tip",
+      "Sort_Latest": "Latest Tip",
+      "Coin": "Coin",
+      "All_Coin": "All Coin",
+      "Search_Coin": "Search Coin",
+      "Empty": "Tip empty",
+      "User_Banned": "User Banned",
+      "Send_Tip": "I want to send tip too"
+    }
+  },
+  "TOS": {
+    "Text_1": "I agree to the Myriad ",
+    "Text_2": "Terms of Service",
+    "Text_3": " about {{about}}"
   },
   "Friends": {
     "Title": "{{appname}} - Friends",

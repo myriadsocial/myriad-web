@@ -14,6 +14,7 @@ import {PromptComponent as MobilePromptComponent} from 'src/components/Mobile/Pr
 import {Modal} from 'src/components/atoms/Modal';
 import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
 import {BalanceDetail} from 'src/interfaces/balance';
+import i18n from 'src/locale';
 
 const Tipping = dynamic(() => import('./Tipping'), {
   ssr: false,
@@ -92,8 +93,8 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
           open={tipFormOpened}
           style={{}}
           onClose={handleCloseTipForm}
-          title="Send Tip"
-          subtitle="Finding this post is insightful? Send a tip!">
+          title={i18n.t('Tipping.Modal_Main.Title')}
+          subtitle={i18n.t('Tipping.Modal_Main.Subtitle')}>
           <Tipping
             defaultCurrency={defaultCurrency}
             currentNetwork={currentNetwork}
@@ -106,8 +107,8 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
       )}
 
       <MobilePromptComponent
-        title={'Send Tips'}
-        subtitle={'Appreciate others posts by sending tips with stable cryptocurrency'}
+        title={i18n.t('Tipping.Prompt_Mobile.Title')}
+        subtitle={i18n.t('Tipping.Prompt_Mobile.Subtitle')}
         open={tipInfoOpened}
         onCancel={handleCloseTipInfo}
       />
@@ -116,14 +117,14 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
         icon="success"
         open={Boolean(currencyTipped)}
         onCancel={resetTippingStatus}
-        title="Tip sent!"
+        title={i18n.t('Tipping.Prompt_Success.Title')}
         subtitle={
           <Typography component="div">
-            Tip to&nbsp;
+            {i18n.t('Tipping.Prompt_Success.Subtitle_1')}
             <Box fontWeight={400} display="inline">
               {options?.receiver.name ?? 'Unknown Myrian'}
             </Box>
-            &nbsp;sent successfully
+            {i18n.t('Tipping.Prompt_Success.Subtitle_2')}
           </Typography>
         }>
         <Grid container justifyContent="space-around">
@@ -134,7 +135,7 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
             size="small"
             variant="outlined"
             color="secondary">
-            Transaction details
+            {i18n.t('Tipping.Prompt_Success.Btn_Trx_Detail')}
           </Button>
           {currencyTipped &&
             (options &&
@@ -148,7 +149,7 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
               />
             ) : (
               <Button size="small" variant="contained" color="primary" onClick={resetTippingStatus}>
-                Return
+                {i18n.t('Tipping.Prompt_Success.Btn_Return')}
               </Button>
             ))}
         </Grid>

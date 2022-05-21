@@ -16,6 +16,7 @@ import {useStyles} from './currencyOption.style';
 
 import {debounce} from 'lodash';
 import {CurrencyId} from 'src/interfaces/currency';
+import i18n from 'src/locale';
 
 type Props = {
   balanceDetails: BalanceDetail[];
@@ -64,7 +65,7 @@ export const CurrencyOptionComponent: React.FC<Props> = props => {
     <div>
       <IconButton style={{padding: 0}} onClick={handleClick} color="primary" aria-label="expand">
         <Typography component="span" color="textPrimary">
-          Change currency
+          {i18n.t('Tipping.Modal_Main.Currency_Options')}
         </Typography>
         <SvgIcon classes={{root: style.fill}} component={ChevronDownIcon} viewBox="0 0 20 20" />
       </IconButton>
@@ -85,7 +86,7 @@ export const CurrencyOptionComponent: React.FC<Props> = props => {
             onKeyUp={submitSearch}
             value={search}
             onChange={handleChange}
-            placeholder={`Search Coin`}
+            placeholder={i18n.t('Tipping.Modal_Main.Search_Coin')}
             inputProps={{
               'aria-label': 'search',
             }}
@@ -95,8 +96,8 @@ export const CurrencyOptionComponent: React.FC<Props> = props => {
           />
         </div>
         <div className={style.header}>
-          <Typography component="span">Coin</Typography>
-          <Typography component="span">Balance</Typography>
+          <Typography component="span">{i18n.t('Tipping.Modal_Main.Coin')}</Typography>
+          <Typography component="span">{i18n.t('Tipping.Modal_Main.Balance')}</Typography>
         </div>
         {balanceDetails &&
           balanceDetails.map(item => (
