@@ -18,6 +18,7 @@ import {
   KusamaNetworkIcon,
 } from 'src/components/atoms/Icons';
 import {Modal} from 'src/components/atoms/Modal';
+import {formatCount} from 'src/helpers/number';
 import {NetworkTypeEnum, WalletTypeEnum} from 'src/lib/api/ext-auth';
 
 export const ProfileContent: React.FC<ProfileCardProps> = props => {
@@ -113,7 +114,10 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
         </div>
         <div className={classes.notification}>
           <IconButton aria-label="avatar" disabled={!!alias} onClick={onShowNotificationList}>
-            <Badge variant="dot" invisible={notificationCount === 0}>
+            <Badge
+              invisible={notificationCount === 0}
+              badgeContent={formatCount(notificationCount)}
+              color="error">
               <NotificationIcon />
             </Badge>
           </IconButton>

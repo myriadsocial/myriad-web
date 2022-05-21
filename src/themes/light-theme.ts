@@ -421,6 +421,13 @@ const theme = createTheme({
         padding: '20px 20px 10px',
       },
     },
+
+    MuiBadge: {
+      badge: {
+        fontSize: textXs,
+        padding: '0 4px',
+      },
+    },
   },
 
   props: {
