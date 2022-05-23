@@ -9,13 +9,14 @@ import {useStyles} from './Confirm.style';
 
 import clsx from 'clsx';
 import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
+import i18n from 'src/locale';
 
 const DEFAULT_OPTIONS: ConfirmOptions = {
-  title: 'Are you sure?',
+  title: i18n.t('Confirm.Title'),
   description: '',
   icon: 'warning',
-  confirmationText: 'Ok',
-  cancellationText: 'Cancel',
+  confirmationText: i18n.t('General.OK'),
+  cancellationText: i18n.t('General.Cancel'),
   hideCancel: false,
 };
 

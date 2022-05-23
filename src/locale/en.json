@@ -107,6 +107,9 @@
     "Cancel": "Cancel",
     "Loading": "Loading"
   },
+  "Confirm": {
+    "Title": "Are you sure?"
+  },
   "Mobile": {
     "title": "We are trully sorry",
     "subtitle": "Sign in on mobile is not available yet",
@@ -402,6 +405,32 @@
     "Title": "Import Post",
     "Subtitle": "Import post from another social media",
     "Tab_Label": "Import"
+  },
+  "Post_Sorting": {
+    "Title_Filter": "Filter by",
+    "Title_Sort": "Sort by",
+    "Sort": {
+      "Latest": "Latest",
+      "Oldest": "Oldest"
+    },
+    "Origin_Filter": {
+      "All": "all",
+      "Myriad": "{{name}} Post",
+      "Imported": "Imported Posts"
+    },
+    "Type_Filter": {
+      "All": "All",
+      "Friend": "Friend",
+      "Trending": "Trending",
+      "Experience": "Experience"
+    },
+    "Order": {
+      "Latest": "Latest",
+      "Popular": "Popularity",
+      "Liked": "Most liked",
+      "Comment": "Most commented",
+      "Tip": "Most tipped"
+    }
   },
   "Tipping": {
     "Modal_Main": {

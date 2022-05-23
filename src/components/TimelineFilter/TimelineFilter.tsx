@@ -11,6 +11,7 @@ import {useFilterOption} from './hooks/use-filter-option.hook';
 import {TimelineType, TimelineOrderType, PostOriginType} from 'src/interfaces/timeline';
 import {User} from 'src/interfaces/user';
 import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
+import i18n from 'src/locale';
 
 export type TimelineFilterProps = {
   user?: User;
@@ -65,7 +66,7 @@ export const TimelineFilter: React.FC<TimelineFilterProps> = props => {
       <ShowIf condition={filterType === 'origin'}>
         <div className={styles.mobile}>
           <DropdownMenu<PostOriginType>
-            title="Filter by"
+            title={i18n.t('Post_Sorting.Title_Filter')}
             selected={originType}
             options={originFilterOptions}
             onChange={handleFilterOrigin}
@@ -75,7 +76,7 @@ export const TimelineFilter: React.FC<TimelineFilterProps> = props => {
 
       <ShowIf condition={selectionType === 'order'}>
         <DropdownMenu<TimelineOrderType>
-          title="Sort by"
+          title={i18n.t('Post_Sorting.Title_Sort')}
           selected={order}
           options={orderOptions}
           onChange={orderTimeline}
@@ -83,7 +84,11 @@ export const TimelineFilter: React.FC<TimelineFilterProps> = props => {
       </ShowIf>
 
       <ShowIf condition={selectionType === 'sort'}>
-        <DropdownMenu<SortType> title="Sort by" options={sortOptions} onChange={sortTimeline} />
+        <DropdownMenu<SortType>
+          title={i18n.t('Post_Sorting.Title_Sort')}
+          options={sortOptions}
+          onChange={sortTimeline}
+        />
       </ShowIf>
     </Grid>
   );
