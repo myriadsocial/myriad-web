@@ -11,7 +11,7 @@ import {useRouter} from 'next/router';
 import axios from 'axios';
 import {PostDetailContainer} from 'src/components/PostDetail';
 import {deserialize, formatToString} from 'src/components/PostEditor';
-import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
+import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {TippingSuccess} from 'src/components/common/Tipping/render/Tipping.success';
 import ShowIf from 'src/components/common/show-if.component';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
@@ -83,7 +83,7 @@ const PostPage: React.FC<PostPageProps> = props => {
 
       <TopNavbarComponent
         description={i18n.t('Post_Detail.Navbar_Title')}
-        sectionTitle={SectionTitle.TIMELINE}
+        sectionTitle={i18n.t('Section.Timeline')}
       />
 
       <ShowIf condition={removed}>
