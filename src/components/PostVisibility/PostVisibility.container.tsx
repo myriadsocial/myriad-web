@@ -8,6 +8,7 @@ import {PostVisibility} from './PostVisibility';
 
 import {PostVisibility as Visibility} from 'src/interfaces/post';
 import {Post} from 'src/interfaces/post';
+import i18n from 'src/locale';
 import {editPost} from 'src/reducers/timeline/actions';
 
 type PostVisibilityContainerProps = {
@@ -25,31 +26,41 @@ export const PostVisibilityContainer: React.FC<PostVisibilityContainerProps> = p
 
   const confirmChangeToPrivate = () => {
     confirm({
-      title: 'Are you sure?',
-      description:
-        'By setting the visibility setting to "Only Me",\nthis post will not be able to receive any tips from other users',
-      confirmationText: "Yes, Let's go",
-      cancellationText: 'No, let me rethink',
+      title: i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Private_Title'),
+      description: i18n.t(
+        'Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Private_Description',
+      ),
+      confirmationText: i18n.t(
+        'Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Private_Text',
+      ),
+      cancellationText: i18n.t(
+        'Post_Detail.Post_Options.Post_Visibility_Setting.Cancel_Private_Text',
+      ),
       onConfirm: () => {
         handleSaveChanges();
       },
     });
   };
 
-  const openSuccessPrompt = () => {
+  const openSuccessPrompt = (updatedVisibility: string) => {
     confirm({
-      title: 'Post visibility changed!',
+      title: i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Title'),
       description: (
         <Typography>
-          Post visibility successfully changed to&nbsp;
-          {visibility === Visibility.FRIEND
-            ? 'friends only'
-            : visibility === Visibility.PRIVATE
-            ? 'Only Me'
-            : visibility}
+          {updatedVisibility === Visibility.FRIEND
+            ? i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Description', {
+                visibility: 'Friend Only',
+              })
+            : updatedVisibility === Visibility.PRIVATE
+            ? i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Description', {
+                visibility: 'Only Me',
+              })
+            : i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Description', {
+                visibility: updatedVisibility,
+              })}
         </Typography>
       ),
-      confirmationText: 'Back to timeline',
+      confirmationText: i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Text'),
       hideCancel: true,
       onConfirm: () => {
         //code
@@ -57,8 +68,8 @@ export const PostVisibilityContainer: React.FC<PostVisibilityContainerProps> = p
     });
   };
 
-  const handlePostVisibility = async (type: string) => {
-    await setVisibility(type);
+  const handlePostVisibility = (type: string) => {
+    setVisibility(type);
 
     if (type === Visibility.PRIVATE) {
       confirmChangeToPrivate();
@@ -73,7 +84,7 @@ export const PostVisibilityContainer: React.FC<PostVisibilityContainerProps> = p
     reference &&
       dispatch(
         editPost(reference.id, newVisibility, () => {
-          openSuccessPrompt();
+          openSuccessPrompt(newVisibility.visibility);
         }),
       );
   };

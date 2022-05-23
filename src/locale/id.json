@@ -378,7 +378,14 @@
         "Only_Me": "Hanya saya",
         "Tipping_Warning": "Dengan membatasi paparan pengguna terhadap postingan ini, jumlah pengguna yang dapat memberikan tip juga akan berkurang.",
         "Cancel": "Batal",
-        "Confirm": "Konfirmasi" 
+        "Confirm": "Konfirmasi", 
+        "Confirm_Title": "Visibilitas postingan berhasil diubah!",
+        "Confirm_Description": "Visibilitas postingan berhasil diubah menjadi {{visibility}}",
+        "Confirm_Text": "Kembali ke linimasa",
+        "Confirm_Private_Title": "Apa Anda yakin?",
+        "Confirm_Private_Description": "Dengan mengubah visibilitas menjadi 'Hanya saya', postingan ini tidak akan mendapatkan tip dari pengguna lain",
+        "Confirm_Private_Text": "Ya, lanjutkan",
+        "Cancel_Private_Text": "Tidak, nanti dahulu"
       },
       "Add_Post_To_Experience": "Tambahkan postingan ke dalam pengalaman",
       "Report": "Laporkan",
