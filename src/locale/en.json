@@ -372,6 +372,27 @@
       "Visit_Post_Platform": "Visit {{postPlatform}} Account",
       "Visit_Profile": "Visit Profile",
       "Post_Visibility": "Post Visibility",
+      "Post_Visibility_Setting": {
+        "Header": "Post Visibility",
+        "Title": "Define who can see this post.",
+        "Visibility_Friend": "Only you and your friends can see this post.",
+        "Visibility_Private": "Only you can see this post.",
+        "Visibility_Everyone": "This post is visible to everyone.",
+        "Public": "Public",
+        "Friend_Only": "Friend Only",
+        "Only_Me": "Only Me",
+        "Tipping_Warning": "By limiting audience exposure to this post, the number of users who can tip you will also get smaller.",
+        "Cancel": "Cancel",
+        "Confirm": "Confirm",
+        "Confirm_Title": "Post visibility changed!",
+        "Confirm_Description": "Post visibility successfully changed to {{visibility}}",
+        "Confirm_Text": "Back to timeline",
+        "Confirm_Private_Title": "Are you sure?",
+        "Confirm_Private_Description": "By setting the visibility setting to 'Only Me', this post will not be able to receive any tips from other users",
+        "Confirm_Private_Text": "Yes, let's go",
+        "Cancel_Private_Text": "No, let me rethink"
+
+      },
       "Add_Post_To_Experience": "Add post to experience",
       "Report": "Report",
       "Delete_Post": "Delete Post"

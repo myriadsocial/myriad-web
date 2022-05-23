@@ -18,6 +18,7 @@ import {useStyles} from './postVisibility.styles';
 import {usePostVisibilityList} from './use-post-visibility-list.hook';
 
 import {Post, PostVisibility as Visibility} from 'src/interfaces/post';
+import i18n from 'src/locale';
 
 type ReportProps = {
   open: boolean;
@@ -54,14 +55,20 @@ export const PostVisibility: React.FC<ReportProps> = props => {
   };
 
   return (
-    <Modal title="Post Visibility" open={open} onClose={onClose} className={styles.root}>
-      <Typography variant="h5">Define who can see this post.</Typography>
+    <Modal
+      title={i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Header')}
+      open={open}
+      onClose={onClose}
+      className={styles.root}>
+      <Typography variant="h5">
+        {i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Title')}
+      </Typography>
       <Typography variant="subtitle1" color="textSecondary" className={styles.fontSize}>
         {reference.visibility === Visibility.FRIEND
-          ? 'Only you and your friends can see this post.'
+          ? i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Visibility_Friend')
           : reference.visibility === Visibility.PRIVATE
-          ? 'Only you can see this post.'
-          : 'This post is visible to everyone'}
+          ? i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Visibility_Private')
+          : i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Visibility_Everyone')}
       </Typography>
 
       <List dense={false} className={styles.list}>
@@ -84,14 +91,13 @@ export const PostVisibility: React.FC<ReportProps> = props => {
 
       <div className={styles.info}>
         <Typography variant="subtitle1" color="textSecondary" className={styles.fontSize}>
-          By limiting audience exposure to this post, the number of users who can tip you will also
-          get smaller.
+          {i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Tipping_Warning')}
         </Typography>
       </div>
 
       <div className={styles.action}>
         <Button variant="outlined" color="secondary" onClick={onClose}>
-          Cancel
+          {i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Cancel')}
         </Button>
 
         <Button
@@ -99,7 +105,7 @@ export const PostVisibility: React.FC<ReportProps> = props => {
           color="primary"
           onClick={handlePostVisibility}
           disabled={reference.visibility === type}>
-          Confirm
+          {i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm')}
         </Button>
       </div>
     </Modal>
