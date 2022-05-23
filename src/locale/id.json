@@ -402,6 +402,32 @@
     "Subtitle": "Impor postingan dari media sosial lain",
     "Tab_Label": "Impor"
   },
+  "Post_Sorting": {
+    "Title_Filter": "Saring menurut",
+    "Title_Sort": "Sortir menurut",
+    "Sort": {
+      "Latest": "Terbaru",
+      "Oldest": "Terlama"
+    },
+    "Origin_Filter": {
+      "All": "Semua",
+      "Myriad": "{{name}} Pos",
+      "Imported": "Postingan yang Diimpor"
+    },
+    "Type_Filter": {
+      "All": "Semua",
+      "Friend": "Teman",
+      "Trending": "Trending",
+      "Experience": "Pengalaman"
+    },
+    "Order": {
+      "Latest": "Terbaru",
+      "Popular": "Populer",
+      "Liked": "Paling disukai",
+      "Comment": "Paling banyak dikomentari",
+      "Tip": "Paling banyak tip"
+    }
+  },
   "Tipping": {
     "Modal_Main": {
       "Title": "Kirim Tip",
