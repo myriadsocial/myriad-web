@@ -107,6 +107,9 @@
     "Cancel": "Batalkan",
     "Loading": "Memuat"
   },
+  "Confirm": {
+    "Title": "Apa kamu yakin?"
+  },
   "Mobile": {
     "title": "Kami benar-benar minta maaf",
     "subtitle": "Masuk dengan melalui ponsel belum tersedia",

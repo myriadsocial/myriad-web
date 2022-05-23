@@ -107,6 +107,9 @@
     "Cancel": "Cancel",
     "Loading": "Loading"
   },
+  "Confirm": {
+    "Title": "Are you sure?"
+  },
   "Mobile": {
     "title": "We are trully sorry",
     "subtitle": "Sign in on mobile is not available yet",
