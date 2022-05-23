@@ -2,8 +2,8 @@ import React, {useCallback, useEffect, useState} from 'react';
 
 import dynamic from 'next/dynamic';
 
-import millify from 'millify';
 import {TabItems, TabHookProps} from 'src/components/atoms/Tabs';
+import {formatCount} from 'src/helpers/number';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {SectionType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
@@ -43,18 +43,10 @@ export const useCommentTabs = (
     });
   }, [ref]);
 
-  const formatNumber = (num: number) => {
-    const vote = millify(num, {
-      precision: 1,
-      lowercase: true,
-    });
-    return vote;
-  };
-
   const tabs: TabItems<SectionType>[] = [
     {
       id: SectionType.DISCUSSION,
-      title: `Discussion (${formatNumber(post.metric.discussions || 0)})`,
+      title: `Discussion (${formatCount(post.metric.discussions || 0)})`,
       icon: '🤔 ',
       component: selected ? (
         <CommentListContainer
@@ -67,7 +59,7 @@ export const useCommentTabs = (
     },
     {
       id: SectionType.DEBATE,
-      title: `Debate (${formatNumber(post.metric.debates || 0)})`,
+      title: `Debate (${formatCount(post.metric.debates || 0)})`,
       icon: '😡 ',
       component: selected ? (
         <CommentListContainer

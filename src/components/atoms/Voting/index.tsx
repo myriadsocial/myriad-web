@@ -12,8 +12,8 @@ import {VoteProps} from './voting.interface';
 import {useStyles} from './voting.style';
 
 import {debounce} from 'lodash';
-import millify from 'millify';
 import {PromptComponent} from 'src/components/Mobile/PromptDrawer/Prompt';
+import {formatCount} from 'src/helpers/number';
 import {RootState} from 'src/reducers';
 
 export const VotingComponent: React.FC<VoteProps> = props => {
@@ -48,14 +48,6 @@ export const VotingComponent: React.FC<VoteProps> = props => {
     }
   }, 300);
 
-  const formatNumber = (num: number) => {
-    const vote = millify(num, {
-      precision: 1,
-      lowercase: true,
-    });
-    return vote;
-  };
-
   const handleCancel = () => {
     setOpenPromptDrawer(false);
   };
@@ -74,7 +66,7 @@ export const VotingComponent: React.FC<VoteProps> = props => {
           />
         </IconButton>
         <Typography variant="body1" component="span" className={style.mr1}>
-          {formatNumber(vote)}
+          {formatCount(vote)}
         </Typography>
         <IconButton disabled={disabled} onClick={handleDownVote} className={style.action}>
           <SvgIcon

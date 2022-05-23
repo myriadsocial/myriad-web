@@ -234,6 +234,7 @@
         }
       },
       "Menu": {
+        "TipHistory": "Riwayat Tip",
         "Copy": "Salin profil tautan",
         "Report": "Laporkan akun",
         "Block": "Blok orang ini",
@@ -632,7 +633,7 @@
       "Account_Setting": {
         "Account_Privacy": {
           "Title": "Privasi akun",
-          "Subtitle": 
+          "Subtitle":
           "Pengaturan visibilitas akun Anda terhadap pengguna selain teman"
         },
         "Social_Media_Privacy": {

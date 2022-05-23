@@ -200,6 +200,10 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
     });
   };
 
+  const handleExpandText = () => {
+    setMaxLength(undefined);
+  };
+
   return (
     <>
       <div className={style.flex} ref={ref} id={`comment-${comment.id}-deep-${deep}`}>
@@ -269,11 +273,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                 }
               />
               <CardContent className={style.content}>
-                <CommentRender
-                  comment={comment}
-                  max={maxLength}
-                  onShowAll={() => setMaxLength(undefined)}
-                />
+                <CommentRender comment={comment} max={maxLength} onShowAll={handleExpandText} />
               </CardContent>
               <CardActions disableSpacing>
                 <VotingComponent

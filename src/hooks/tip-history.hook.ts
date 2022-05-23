@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Comment} from 'src/interfaces/comment';
 import {Post} from 'src/interfaces/post';
 import {TransactionSort} from 'src/interfaces/transaction';
+import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 import {
   fetchTransactionHistory,
@@ -28,11 +29,24 @@ export const useTipHistory = () => {
   } = useSelector<RootState, TipSummaryState>(state => state.tipSummaryState);
   const isTipHistoryOpen = Boolean(reference);
 
-  const openTipHistory = (reference: Comment | Post) => {
-    // type guarding, post always has platform field
-    const type = 'platform' in reference ? 'post' : 'comment';
+  const getReferenceType = (reference: Comment | Post | User): string => {
+    if ('username' in reference) return 'user';
 
-    if ((user && user.id === reference.user.id) || !user) dispatch(setDisableTipping(true));
+    if ('section' in reference) return 'comment';
+
+    return 'post';
+  };
+
+  const openTipHistory = (reference: Comment | Post | User) => {
+    const type = getReferenceType(reference);
+
+    if ('username' in reference) {
+      if ((user && user.id === reference.id) || !user) dispatch(setDisableTipping(true));
+    }
+
+    if ('section' in reference || 'platform' in reference) {
+      if ((user && user.id === reference.user.id) || !user) dispatch(setDisableTipping(true));
+    }
 
     dispatch(setTippedReference(reference));
     dispatch(fetchTransactionHistory(reference, type));
@@ -46,7 +60,7 @@ export const useTipHistory = () => {
     dispatch(setTransactionSort(sort));
 
     if (reference) {
-      const type = 'platform' in reference ? 'post' : 'comment';
+      const type = getReferenceType(reference);
 
       dispatch(fetchTransactionHistory(reference, type));
     }
@@ -56,7 +70,7 @@ export const useTipHistory = () => {
     dispatch(setTransactionCurrency(currency));
 
     if (reference) {
-      const type = 'platform' in reference ? 'post' : 'comment';
+      const type = getReferenceType(reference);
 
       dispatch(fetchTransactionHistory(reference, type));
     }
@@ -64,7 +78,7 @@ export const useTipHistory = () => {
 
   const handleLoadNextPage = () => {
     if (reference) {
-      const type = 'platform' in reference ? 'post' : 'comment';
+      const type = getReferenceType(reference);
 
       dispatch(fetchTransactionHistory(reference, type, currentPage + 1));
     }

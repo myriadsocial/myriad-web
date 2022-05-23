@@ -12,8 +12,8 @@ import {Modal} from '../Modal';
 import {VotingComponent} from '../Voting';
 import {useStyles} from './postAction.style';
 
-import millify from 'millify';
 import ShowIf from 'src/components/common/show-if.component';
+import {formatCount} from 'src/helpers/number';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import i18n from 'src/locale';
 
@@ -69,14 +69,6 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
     setLinkAnchorEl(null);
   };
 
-  const formatNumber = (num: number) => {
-    const vote = millify(num, {
-      precision: 1,
-      lowercase: true,
-    });
-    return vote;
-  };
-
   return (
     <div className={style.root}>
       <VotingComponent
@@ -97,7 +89,7 @@ export const PostActionComponent: React.FC<PostActionProps> = props => {
           <SvgIcon classes={{root: style.fill}} component={ChatAltIcon} viewBox="0 0 24 24" />
         </IconButton>
         <Typography component="span" color="primary" variant="body1" className={style.wording}>
-          {formatNumber(discussions + debates)}&nbsp;{i18n.t('Post_Detail.Post_Action.Comments')}
+          {formatCount(discussions + debates)}&nbsp;{i18n.t('Post_Detail.Post_Action.Comments')}
         </Typography>
       </div>
 
