@@ -20,6 +20,7 @@ import {ReferenceType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
 import {TimelineFilter, TimelineType} from 'src/interfaces/timeline';
 import {User} from 'src/interfaces/user';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {removeImporter} from 'src/reducers/importers/actions';
 import {upvote, setDownvoting, deletePost, removeVote} from 'src/reducers/timeline/actions';
@@ -99,11 +100,11 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
 
   const handleDeletePost = (post: Post) => {
     confirm({
-      title: 'Remove Post',
-      description: 'Are you sure to remove this post?',
+      title: i18n.t('Post_Delete.Title'),
+      description: i18n.t('Post_Delete.Description'),
       icon: 'danger',
-      confirmationText: 'Yes, proceed to delete',
-      cancellationText: 'No, let me rethink',
+      confirmationText: i18n.t('Post_Delete.Confirmation_Text'),
+      cancellationText: i18n.t('Post_Delete.Cancellation_Text'),
       onConfirm: () => {
         dispatch(deletePost(post.id));
       },
@@ -113,7 +114,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   const handleSharePost = (post: Post, type: 'link' | 'post') => {
     if (type === 'post') {
       openToasterSnack({
-        message: 'This post successfully share to your timeline',
+        message: i18n.t('Post_Share.Confirmation_Message'),
         variant: 'success',
       });
     }

@@ -355,7 +355,8 @@
     "Post_URL": "Post URL",
     "Embed_Link": "Embed Link",
     "Embed_Link_PLaceholder": "Copy and paste this code into your website or blog",
-    "Copy_URL_Message": "Link copied!"
+    "Copy_URL_Message": "Link copied!",
+    "Confirmation_Message": "This post is successfully shared to your timeline"
   },
   "Post_Detail": {
     "Navbar_Title": "Post Detail",
@@ -421,6 +422,12 @@
       "Other": "Other",
       "Confirm": "Confirm"
     }
+  },
+  "Post_Delete": {
+      "Title": "Remove Post",
+      "Description": "Are you sure to remove this post?",
+      "Confirmation_Text": "Yes, proceed to delete",
+      "Cancellation_Text": "No, let me rethink"
   },
   "Post_Import": {
     "Text_Placeholder": "Link to post",

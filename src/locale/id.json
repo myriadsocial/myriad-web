@@ -354,7 +354,8 @@
     "Post_URL": "URL Posting",
     "Embed_Link": "Tautkan Semat",
     "Embed_Link_PLaceholder": "Salin dan tempel kode ini ke situs web atau blog Anda",
-    "Copy_URL_Message": "Tautan disalin!"
+    "Copy_URL_Message": "Tautan disalin!",
+    "Confirmation_Message": "Postingan ini berhasil dibagikan di linimasamu"
   },
   "Post_Detail": {
     "Navbar_Title": "Detail Postingan",
@@ -419,6 +420,12 @@
       "Other": "Lainnya",
       "Confirm": "Konfirmasi"
     }
+  },
+  "Post_Delete": {
+      "Title": "Hapus Postingan",
+      "Description": "Apakah kamu yakin ingin menghapus postingan ini?",
+      "Confirmation_Text": "Ya, lanjutkan",
+      "Cancellation_Text": "Tidak, nanti dahulu"
   },
   "Post_Import": {
     "Text_Placeholder": "Tautan ke postingan",
