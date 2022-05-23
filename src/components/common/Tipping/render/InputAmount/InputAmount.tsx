@@ -85,19 +85,19 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
     const maxTip = balance.sub(fee);
 
     if (length && amount.length > length) {
-      return [value, false, `${length} char maximum`];
+      return [value, false, i18n.t('Tipping.Modal_Main.Error_Amount_Max', {length: length})];
     }
 
     if (value.lte(BN_ZERO)) {
-      return [value, false, 'Digit only'];
+      return [value, false, i18n.t('Tipping.Modal_Main.Error_Digit')];
     }
 
     if (maxTip && maxTip.lten(0)) {
-      return [value, false, 'Insufficient balance'];
+      return [value, false, i18n.t('Tipping.Modal_Main.Error_Insufficient_Balance')];
     }
 
     if (maxTip && maxTip.gtn(0) && value.gt(maxTip)) {
-      return [value, false, 'Insufficient balance'];
+      return [value, false, i18n.t('Tipping.Modal_Main.Error_Insufficient_Balance')];
     }
 
     return [value, true];
