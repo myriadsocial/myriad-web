@@ -324,6 +324,10 @@
         "Not_Connect": "This user hasn't connected to any social media yet."
       }
     },
+    "NFT": {
+    "Text_1": "NFT is underway!",
+    "Text_2": "We will let you know very soon"
+  },
     "Setting": {
       "Copy": "Wallet address copied!"
     }
@@ -853,7 +857,8 @@
       "Profile": "Profile Detail",
       "Experience_Create": "Create Experience",
       "Experience_Clone": "Clone Experience",
-      "Experience_Edit": "Edit Experience"
+      "Experience_Edit": "Edit Experience",
+      "NFT": "Underway"
     }
   },
   "Dropzone": {

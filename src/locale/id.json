@@ -650,6 +650,10 @@
     "Trends": "Tren",
     "Topic": "Topik"
   },
+  "NFT": {
+    "Text_1": "NFT sedang berlangsung!",
+    "Text_2": "Kami akan segera memberi tahu Anda"
+  },
   "Setting": {
     "Title": "{{appname}} - Pengaturan",
     "Default_Title": "Tentukan pengaturan privasi dan notifikasi",
@@ -852,7 +856,8 @@
       "Profile": "Detail Profil",
       "Experience_Create": "Buat Pengalaman",
       "Experience_Clone": "Klon Pengalaman",
-      "Experience_Edit": "Ubah Pengalaman"
+      "Experience_Edit": "Ubah Pengalaman",
+      "NFT": "Sedang berjalan"
     }
   },
   "Dropzone": {
