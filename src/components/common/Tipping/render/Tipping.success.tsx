@@ -40,51 +40,53 @@ const {publicRuntimeConfig} = getConfig();
 export const TippingSuccess = () => {
   const router = useRouter();
   const {openToasterSnack} = useToasterSnackHook();
-  const [trxHash, setTrxHash] = useState<string>();
   const [options, setOptions] = useState<TippingStorageProps>();
   const [openPrompt, setOpenPrompt] = useState(false);
+  const transactionHashes = router.query.transactionHashes as string | null;
+  const errorCode = router.query.errorCode as string | null;
+  const errorMessage = router.query.errorMessage as string | null;
+  const search = router.query.q;
 
   useEffect(() => {
     const url = new URL(router.pathname, publicRuntimeConfig.appAuthURL);
-    const transactionHashes = router.query.transactionHashes as string | null;
+
+    if (search && !Array.isArray(search)) {
+      url.searchParams.set('q', search);
+    }
+
+    if (search && Array.isArray(search)) {
+      search.forEach(keyword => {
+        url.searchParams.append('q', keyword);
+      });
+    }
 
     if (transactionHashes) {
-      const search = router.query.q;
+      setOpenPrompt(true);
+      processTips(transactionHashes);
 
-      if (search && !Array.isArray(search)) {
-        url.searchParams.set('q', search);
-      }
-
-      if (search && Array.isArray(search)) {
-        search.forEach(keyword => {
-          url.searchParams.append('q', keyword);
-        });
-      }
-
-      if (transactionHashes) {
-        setTrxHash(transactionHashes);
-        router.replace(url, undefined, {shallow: true});
-        setOpenPrompt(true);
-        processTips(transactionHashes);
-      }
-
-      const errorCode = router.query.errorCode as string | null;
-      const errorMessage = router.query.errorMessage as string | null;
-      if (errorCode && errorMessage) {
-        openToasterSnack({
-          variant: 'warning',
-          message: i18n.t('Tipping.Toaster.Rejected'),
-        });
-
-        router.replace(url, undefined, {shallow: true});
-      }
+      router.replace(url, undefined, {shallow: true});
     }
-  }, [router.query]);
+
+    if (errorCode && errorMessage) {
+      openToasterSnack({
+        variant: 'warning',
+        message: i18n.t('Tipping.Toaster.Rejected'),
+      });
+
+      removeStoredTipDetail();
+      router.replace(url, undefined, {shallow: true});
+    }
+  }, [transactionHashes, errorCode, errorMessage]);
+
+  const removeStoredTipDetail = async () => {
+    await localforage.removeItem(TIPPING_STORAGE_KEY);
+  };
 
   const processTips = async (transactionHashes: string) => {
     const attributesOptions = (await localforage.getItem(
       TIPPING_STORAGE_KEY,
     )) as TippingStorageProps | null;
+
     if (attributesOptions) {
       setOptions(attributesOptions);
       let simpleSendTip: SimpleSendTipProps | null;
@@ -97,10 +99,12 @@ export const TippingSuccess = () => {
             amount: attributesOptions.amount,
             currencyId: simpleSendTip.currency.id,
             hash: transactionHashes,
+            referenceId: attributesOptions.reference.id,
+            type: attributesOptions.referenceType,
           });
         }
       }
-      await localforage.removeItem(TIPPING_STORAGE_KEY);
+      await removeStoredTipDetail();
     }
   };
 
@@ -129,7 +133,8 @@ export const TippingSuccess = () => {
             <Button
               href={`${
                 'currency' in options.attributes
-                  ? options?.attributes.currency.network.explorerURL + `/transactions/${trxHash}`
+                  ? options?.attributes.currency.network.explorerURL +
+                    `/transactions/${transactionHashes}`
                   : null
               }`}
               target="_blank"
