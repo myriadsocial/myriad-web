@@ -399,6 +399,12 @@
       "Confirm": "Konfirmasi"
     }
   },
+  "Post_Delete": {
+      "Title": "Hapus Postingan",
+      "Description": "Apakah kamu yakin ingin menghapus postingan ini?",
+      "Confirmation_Text": "Ya, lanjutkan",
+      "Cancellation_Text": "Tidak, nanti dahulu"
+  },
   "Post_Import": {
     "Text_Placeholder": "Tautan ke postingan",
     "Title": "Impor Postingan",

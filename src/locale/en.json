@@ -400,6 +400,12 @@
       "Confirm": "Confirm"
     }
   },
+  "Post_Delete": {
+      "Title": "Remove Post",
+      "Description": "Are you sure to remove this post?",
+      "Confirmation_Text": "Yes, proceed to delete",
+      "Cancellation_Text": "No, let me rethink"
+  },
   "Post_Import": {
     "Text_Placeholder": "Link to post",
     "Title": "Import Post",
