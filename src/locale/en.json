@@ -368,6 +368,19 @@
       "Visit_Post_Platform": "Visit {{postPlatform}} Account",
       "Visit_Profile": "Visit Profile",
       "Post_Visibility": "Post Visibility",
+      "Post_Visibility_Setting": {
+        "Header": "Post Visibility",
+        "Title": "Define who can see this post.",
+        "Visibility_Friend": "Only you and your friends can see this post.",
+        "Visibility_Private": "Only you can see this post.",
+        "Visibility_Everyone": "This post is visible to everyone.",
+        "Public": "Public",
+        "Friend_Only": "Friend Only",
+        "Only_Me": "Only Me",
+        "Tipping_Warning": "By limiting audience exposure to this post, the number of users who can tip you will also get smaller.",
+        "Cancel": "Cancel",
+        "Confirm": "Confirm" 
+      },
       "Add_Post_To_Experience": "Add post to experience",
       "Report": "Report",
       "Delete_Post": "Delete Post"

@@ -367,6 +367,19 @@
       "Visit_Post_Platform": "Kunjungi Akun {{postPlatform}}",
       "Visit_Profile": "Kunjungi Profil",
       "Post_Visibility": "Visibilitas Profil",
+      "Post_Visibility_Setting": {
+        "Header": "Visibilitas Postingan",
+        "Title": "Tentukan siapa yang dapat melihat postingan ini.",
+        "Visibility_Friend": "Hanya kamu dan teman-temanmu yang dapat melihat postingan ini.",
+        "Visibility_Private": "Hanya kamu yang dapat melihat postingan ini.",
+        "Visibility_Everyone": "Postingan ini bisa dilihat semua orang.",
+        "Public": "Publik",
+        "Friend_Only": "Teman saja",
+        "Only_Me": "Hanya saya",
+        "Tipping_Warning": "Dengan membatasi paparan pengguna terhadap postingan ini, jumlah pengguna yang dapat memberikan tip juga akan berkurang.",
+        "Cancel": "Batal",
+        "Confirm": "Konfirmasi" 
+      },
       "Add_Post_To_Experience": "Tambahkan postingan ke dalam pengalaman",
       "Report": "Laporkan",
       "Delete_Post": "Hapus Postingan"
