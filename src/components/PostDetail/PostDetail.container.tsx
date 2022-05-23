@@ -14,6 +14,7 @@ import {useTipHistory} from 'src/hooks/tip-history.hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {removeImporter} from 'src/reducers/importers/actions';
 import {UserState} from 'src/reducers/user/reducer';
@@ -84,11 +85,11 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
 
   const confirmRemovePost = () => {
     confirm({
-      title: 'Remove Post',
-      description: 'Are you sure to remove this post',
+      title: i18n.t('Post_Delete.Title'),
+      description: i18n.t('Post_Delete.Description'),
       icon: 'danger',
-      confirmationText: 'Yes, proceed to delete',
-      cancellationText: 'No, let me rethink',
+      confirmationText: i18n.t('Post_Delete.Confirmation_Text'),
+      cancellationText: i18n.t('Post_Delete.Cancellation_Text'),
       onConfirm: () => {
         confirmDeletePost();
       },

@@ -114,7 +114,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   const handleSharePost = (post: Post, type: 'link' | 'post') => {
     if (type === 'post') {
       openToasterSnack({
-        message: 'This post successfully share to your timeline',
+        message: i18n.t('Post_Share.Confirmation_Message'),
         variant: 'success',
       });
     }
