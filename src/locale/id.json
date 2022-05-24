@@ -895,5 +895,9 @@
     "Just_Now": "baru saja",
     "Yesterday": "kemarin",
     "Result": "{{date}} yang lalu"
+  },
+  "Loading": {
+    "Load_More": "Muat lebih banyak",
+    "Loading_More": "Memuat lebih banyak"
   }
 }

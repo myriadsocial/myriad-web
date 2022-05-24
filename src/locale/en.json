@@ -896,5 +896,9 @@
     "Just_Now": "just now",
     "Yesterday": "yesterday",
     "Result": "{{date}} ago"
+  },
+  "Loading": {
+    "Load_More": "Load more",
+    "Loading_More": "Loading more"
   }
 }
