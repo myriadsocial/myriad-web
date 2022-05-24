@@ -413,6 +413,8 @@
     }
   },
   "Post_Create": {
+    "Success_Toaster": "Postingan berhasil dibuat!",
+    "Failed_Toaster": "Gagal membuat postingan, coba lagi nanti",
     "Text_Placeholder": "Ketik...",
     "Title": "Buat Postingan",
     "Subtitle": "Buat Postinganmu",
@@ -470,6 +472,7 @@
       "Cancellation_Text": "Tidak, nanti dahulu"
   },
   "Post_Import": {
+    "Success_Toaster": "Postingan berhasil diimpor!",
     "Text_Placeholder": "Tautan ke postingan",
     "Title": "Impor Postingan",
     "Subtitle": "Impor postingan dari media sosial lain",
