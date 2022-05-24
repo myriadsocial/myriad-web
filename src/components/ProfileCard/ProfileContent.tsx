@@ -20,6 +20,7 @@ import {
 import {Modal} from 'src/components/atoms/Modal';
 import {formatCount} from 'src/helpers/number';
 import {NetworkTypeEnum, WalletTypeEnum} from 'src/lib/api/ext-auth';
+import i18n from 'src/locale';
 
 export const ProfileContent: React.FC<ProfileCardProps> = props => {
   const {
@@ -123,7 +124,7 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
           </IconButton>
         </div>
       </Grid>
-      <Modal title="Account" onClose={handleOpenProfile} open={open}>
+      <Modal title={i18n.t('Profile_Card.Account')} onClose={handleOpenProfile} open={open}>
         <div className={classes.modal}>
           <div className={classes.purple}>
             <div className={classes.flex}>
@@ -144,7 +145,7 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
               </div>
             </div>
             <div className={classes.column}>
-              <Typography component="span">Network</Typography>
+              <Typography component="span">{i18n.t('Profile_Card.Network')}</Typography>
               <Typography component="span" className={classes.flex}>
                 {getSelectedIcon()}{' '}
                 {formatNetwork(
@@ -154,7 +155,7 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
               </Typography>
             </div>
             <div className={classes.column}>
-              <Typography component="span">Wallet</Typography>
+              <Typography component="span">{i18n.t('Profile_Card.Wallet')}</Typography>
               <Typography component="span" className={classes.flex}>
                 {getSelectedIcon(true)}
                 {formatWallet(currentWallet?.network?.blockchainPlatform, currentWallet)}
@@ -168,7 +169,7 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
               size="small"
               className={classes.button}
               onClick={onViewProfile}>
-              Profile
+              {i18n.t('Profile_Card.Profile')}
             </Button>
             <div className={classes.line} />
             <Button
@@ -177,7 +178,7 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
               size="small"
               className={classes.button}
               onClick={handleSignOut}>
-              Log out
+              {i18n.t('Profile_Card.Logout')}
             </Button>
           </div>
         </div>

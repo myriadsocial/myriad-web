@@ -190,6 +190,13 @@
       }
     }
   },
+  "Profile_Card": {
+    "Account": "Akun",
+    "Profile": "Profil",
+    "Logout": "Keluar",
+    "Network": "Jaringan",
+    "Wallet": "Dompet"
+  },
   "Profile": {
     "Private": {
       "Title": "Tidak ada yang bisa dilihat di sini!",

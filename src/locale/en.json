@@ -191,6 +191,13 @@
       }
     }
   },
+  "Profile_Card": {
+    "Account": "Account",
+    "Profile": "Profile",
+    "Logout": "Log out",
+    "Network": "Network",
+    "Wallet": "Wallet"
+  },
   "Profile": {
     "Private": {
       "Title": "Nothing to see here!",
