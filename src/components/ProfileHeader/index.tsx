@@ -154,6 +154,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
   };
 
   const showProfileTipHistory = () => {
+    handleCloseMenu();
     onOpenTipHistory(person);
   };
 
