@@ -94,7 +94,7 @@ export const PostImport: React.FC<PostImportProps> = props => {
         <Input id="link-to-post" value={url} onChange={handleUrlChange} />
         <ShowIf condition={showError}>
           <FormHelperText id="component-error-text">
-            Currently we can only import post from reddit and twitter
+            {i18n.t('Post_Import.Form_Helper_Text')}
           </FormHelperText>
         </ShowIf>
       </FormControl>
@@ -102,7 +102,7 @@ export const PostImport: React.FC<PostImportProps> = props => {
       {previewUrl && (
         <div>
           <Typography variant="h5" gutterBottom className={styles.title}>
-            Post Preview
+            {i18n.t('Post_Import.Post_Preview')}
           </Typography>
 
           <div className={styles.preview}>
