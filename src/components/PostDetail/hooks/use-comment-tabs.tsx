@@ -7,6 +7,7 @@ import {formatCount} from 'src/helpers/number';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {SectionType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
+import i18n from 'src/locale';
 
 const CommentListContainer = dynamic(
   () => import('src/components/CommentList/CommentList.container'),
@@ -46,11 +47,13 @@ export const useCommentTabs = (
   const tabs: TabItems<SectionType>[] = [
     {
       id: SectionType.DISCUSSION,
-      title: `Discussion (${formatCount(post.metric.discussions || 0)})`,
+      title: `${i18n.t('Post_Detail.Discussion.Title')} (${formatCount(
+        post.metric.discussions || 0,
+      )})`,
       icon: '🤔 ',
       component: selected ? (
         <CommentListContainer
-          placeholder={'Write a Discussion...'}
+          placeholder={i18n.t('Post_Detail.Discussion.Text_Placeholder')}
           referenceId={post.id}
           section={SectionType.DISCUSSION}
           scrollToPost={scrollToPost}
@@ -59,11 +62,11 @@ export const useCommentTabs = (
     },
     {
       id: SectionType.DEBATE,
-      title: `Debate (${formatCount(post.metric.debates || 0)})`,
+      title: `${i18n.t('Post_Detail.Debate.Title')} (${formatCount(post.metric.debates || 0)})`,
       icon: '😡 ',
       component: selected ? (
         <CommentListContainer
-          placeholder={'Your downvote will be submitted after you post a comment'}
+          placeholder={i18n.t('Post_Detail.Debate.Text_Placeholder')}
           referenceId={post.id}
           section={SectionType.DEBATE}
           scrollToPost={scrollToPost}

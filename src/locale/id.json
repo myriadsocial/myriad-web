@@ -402,6 +402,14 @@
       "Add_Post_To_Experience": "Tambahkan postingan ke dalam pengalaman",
       "Report": "Laporkan",
       "Delete_Post": "Hapus Postingan"
+    },
+    "Discussion": {
+      "Title": "Diskusi",
+      "Text_Placeholder": "Tulis sebuah diskusi..."
+    },
+    "Debate": {
+      "Title": "Debat",
+      "Text_Placeholder": "Voting tidak suka terhadap postingan ini akan muncul setelah kamu memberikan komentar"
     }
   },
   "Post_Create": {
