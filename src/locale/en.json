@@ -328,6 +328,10 @@
     "Text_1": "NFT is underway!",
     "Text_2": "We will let you know very soon"
   },
+  "Social_Token": {
+    "Text_1": "Social token is underway!",
+    "Text_2": "We will let you know very soon"
+  },
     "Setting": {
       "Copy": "Wallet address copied!"
     }
@@ -858,7 +862,8 @@
       "Experience_Create": "Create Experience",
       "Experience_Clone": "Clone Experience",
       "Experience_Edit": "Edit Experience",
-      "NFT": "Underway"
+      "NFT": "Underway",
+      "Social_Token": "Underway"
     }
   },
   "Dropzone": {

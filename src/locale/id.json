@@ -654,6 +654,10 @@
     "Text_1": "NFT sedang berlangsung!",
     "Text_2": "Kami akan segera memberi tahu Anda"
   },
+  "Social_Token": {
+    "Text_1": "Token sosial sedang berlangsung!",
+    "Text_2": "Kami akan segera memberi tahu Anda"
+  },
   "Setting": {
     "Title": "{{appname}} - Pengaturan",
     "Default_Title": "Tentukan pengaturan privasi dan notifikasi",
@@ -857,7 +861,8 @@
       "Experience_Create": "Buat Pengalaman",
       "Experience_Clone": "Klon Pengalaman",
       "Experience_Edit": "Ubah Pengalaman",
-      "NFT": "Sedang berjalan"
+      "NFT": "Sedang berjalan",
+      "Social_Token": "Sedang berjalan"
     }
   },
   "Dropzone": {

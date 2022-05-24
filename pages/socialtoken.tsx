@@ -5,7 +5,7 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 
 import SocialTokenContainer from 'src/components/SocialToken/SocialToken.container';
-import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
+import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
@@ -33,8 +33,8 @@ const SocialToken: React.FC = () => {
         <title>{i18n.t('SocialToken.Title', {appname: publicRuntimeConfig.appName})}</title>
       </Head>
       <TopNavbarComponent
-        description={'Underway'}
-        sectionTitle={SectionTitle.SOCIAL_TOKEN}
+        description={i18n.t('TopNavbar.Subtitle.Social_Token')}
+        sectionTitle={i18n.t('Section.Social_Token')}
         type={'menu'}
       />
 
