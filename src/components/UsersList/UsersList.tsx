@@ -10,6 +10,7 @@ import {AvatarSize} from '../atoms/Avatar';
 import {UsersListItem} from './UsersListItem';
 
 import {LoadingDots} from 'src/components/atoms/Loading/LoadingDots';
+import i18n from 'src/locale';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -80,7 +81,7 @@ export const UsersList: React.FC<UsersListProps> = ({
                   <CircularProgress size={16} style={{marginRight: 8}} thickness={4} />
                   <div className={classes.footer}>
                     <Link component="button" className={classes.link}>
-                      Loading more
+                      {i18n.t('Loading.Loading_More')}
                     </Link>
                   </div>
                   <LoadingDots />
@@ -89,7 +90,7 @@ export const UsersList: React.FC<UsersListProps> = ({
                 <div style={{paddingBottom: 20}}>
                   <div className={classes.footer}>
                     <Link component="button" className={classes.link} onClick={loadNextPage}>
-                      Load more
+                      {i18n.t('Loading.Load_More')}
                     </Link>
                   </div>
                 </div>

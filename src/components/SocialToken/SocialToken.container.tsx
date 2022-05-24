@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import {useStyles} from '../NFT/nft.style';
 
 import SocialTokenIllustration from 'src/images/illustration/Social_Token_Isometric_1.svg';
+import i18n from 'src/locale';
 
 const SocialTokenContainer: React.FC = () => {
   const style = useStyles();
@@ -16,12 +17,12 @@ const SocialTokenContainer: React.FC = () => {
           <SocialTokenIllustration />
         </div>
         <Typography className={style.text}>
-          Social token is underway!{' '}
+          {i18n.t('Social_Token.Text_1')}{' '}
           <span aria-label="hands-up" role="img">
             🙌
           </span>
         </Typography>
-        <Typography className={style.text2}>We will let you know very soon</Typography>
+        <Typography className={style.text2}>{i18n.t('Social_Token.Text_2')}</Typography>
       </div>
     </div>
   );

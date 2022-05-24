@@ -6,13 +6,15 @@ import {Button, FormControl, Input, InputLabel} from '@material-ui/core';
 
 import {useStyles} from './EmbedURL.styles';
 
+import i18n from 'src/locale';
+
 type EmbedURLProps = {
   prefix?: string;
   onConfirm: (result: string | null) => void;
 };
 
 export const EmbedURL: React.FC<EmbedURLProps> = props => {
-  const {prefix, onConfirm} = props;
+  const {prefix = '', onConfirm} = props;
   const styles = useStyles();
 
   const [url, setUrl] = useState<string | null>(null);
@@ -36,7 +38,9 @@ export const EmbedURL: React.FC<EmbedURLProps> = props => {
   return (
     <div className={styles.root}>
       <FormControl fullWidth className={styles.input}>
-        <InputLabel htmlFor="link-to-file">{prefix} Link URL</InputLabel>
+        <InputLabel htmlFor="link-to-file">
+          {i18n.t('Post_Create.Upload.Embed.Placeholder', {prefix: prefix})}
+        </InputLabel>
         <Input id="link-to-file" onChange={handleUrlChanged} error={error} />
       </FormControl>
       <Button
@@ -46,7 +50,7 @@ export const EmbedURL: React.FC<EmbedURLProps> = props => {
         fullWidth
         onClick={handleConfirm}
         disabled={error || url === null}>
-        Confirm
+        {i18n.t('Post_Create.Upload.Embed.Btn_Confirm')}
       </Button>
     </div>
   );
