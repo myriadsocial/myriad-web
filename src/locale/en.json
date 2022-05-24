@@ -482,7 +482,9 @@
     "Importer_List_Title": "Who else imported this post?",
     "Importer_List_Subtitle": "users imported this post",
     "Form_Helper_Text": "Currently we can only import post from reddit and twitter",
-    "Post_Preview": "Post Preview"
+    "Post_Preview": "Post Preview",
+    "Importer_List_Title": "Who else imported this post?",
+    "Importer_List_Subtitle": "users imported this post"
   },
   "Post_Sorting": {
     "Title_Filter": "Filter by",

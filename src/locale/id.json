@@ -480,7 +480,9 @@
     "Importer_List_Title": "Siapa saja yang mengimpor postingan ini?",
     "Importer_List_Subtitle": "pengguna mengimpor postingan ini",
     "Form_Helper_Text": "Sementara postingan yang dapat diimpor hanya dari reddit dan twitter",
-    "Post_Preview": "Pratinjau Postingan"
+    "Post_Preview": "Pratinjau Postingan",
+    "Importer_List_Title": "Siapa saja yang mengimpor postingan ini?",
+    "Importer_List_Subtitle": "pengguna mengimpor postingan ini"
   },
   "Post_Sorting": {
     "Title_Filter": "Saring menurut",
