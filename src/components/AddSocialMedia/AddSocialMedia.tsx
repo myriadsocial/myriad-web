@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {FacebookShareButton, RedditShareButton, TwitterShareButton} from 'react-share';
 
 import getConfig from 'next/config';
+import Link from 'next/link';
 
 import {
   Button,
@@ -238,9 +239,9 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
                 label={
                   <Typography>
                     {i18n.t('SocialMedia.Modal.Aggre_1')}{' '}
-                    <a href="/term-of-use" className={styles.term}>
-                      {i18n.t('SocialMedia.Modal.Aggre_2')}
-                    </a>
+                    <Link href="/term-of-use" passHref>
+                      <span className={styles.term}>{i18n.t('SocialMedia.Modal.Aggre_2')}</span>
+                    </Link>
                   </Typography>
                 }
               />
