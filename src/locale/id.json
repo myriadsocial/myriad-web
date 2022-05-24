@@ -22,7 +22,7 @@
       "Copy": "Tautan pengalaman berhasil disalin",
       "Prompt_Delete": {
         "Title": "Hapus Pengalaman?",
-        "Desc": "Apakah Anda yakin ingin menghapus pengalaman ini? You can't undo this in the future.",
+        "Desc": "Apakah Anda yakin ingin menghapus pengalaman ini? Anda tidak dapat membatalkan ini di masa mendatang.",
         "Btn_Yes": "Ya, lanjutkan untuk menghapus"
       },
       "Prompt_Unsub": {
