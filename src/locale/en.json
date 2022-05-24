@@ -400,6 +400,8 @@
     }
   },
   "Post_Create": {
+    "Success_Toaster": "Post successfully created!",
+    "Failed_Toaster": "Failed to create post, try again later",
     "Text_Placeholder": "Type...",
     "Title": "Create Post",
     "Subtitle": "Create your own post",
@@ -430,6 +432,7 @@
       "Cancellation_Text": "No, let me rethink"
   },
   "Post_Import": {
+    "Success_Toaster": "Post successfully imported!",
     "Text_Placeholder": "Link to post",
     "Title": "Import Post",
     "Subtitle": "Import post from another social media",
