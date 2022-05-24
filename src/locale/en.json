@@ -433,7 +433,9 @@
     "Text_Placeholder": "Link to post",
     "Title": "Import Post",
     "Subtitle": "Import post from another social media",
-    "Tab_Label": "Import"
+    "Tab_Label": "Import",
+    "Importer_List_Title": "Who else imported this post?",
+    "Importer_List_Subtitle": "users imported this post"
   },
   "Post_Sorting": {
     "Title_Filter": "Filter by",
