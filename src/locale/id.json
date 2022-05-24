@@ -151,7 +151,7 @@
     },
     "Options": {
       "Network": "Pilih Jaringan",
-      "Wallet": "Pilih Wallet",
+      "Wallet": "Pilih Dompet",
       "Text_Terms_1": "Saya sudah membaca, dan menyetujui",
       "Text_Terms_2": "Persyaratan Pelayanan",
       "Text_Terms_3": "dan",
@@ -164,7 +164,7 @@
       },
       "Prompt_Account": {
         "Title": "Akun Tidak Ditemukan",
-        "Subtitle": "Tidak ada akun di wallet yang anda pilih."
+        "Subtitle": "Tidak ada akun di dompet yang anda pilih."
       },
       "Tooltip_Wallet": "Segera hadir"
     },
@@ -180,7 +180,7 @@
       "Helper_Validate_Username_Taken": "Nama pengguna sudah terpakai",
       "Placeholder_Display_Name": "Masukkan nama tampilan",
       "Placeholder_Username": "Masukkan nama pengguna",
-      "Btn_Change_Wallet": "Ubah Wallet",
+      "Btn_Change_Wallet": "Ubah Dompet",
       "Btn_Register": "Daftar",
       "Prompt": {
         "Title": "Apa kamu yakin?",
@@ -769,6 +769,7 @@
   "Wallet": {
     "Title": "{{appname}} - Dompet",
     "Header": "Dompet",
+    "Anonymous": "Please Login to access this feature",
     "Tab": {
       "Balance": "Saldo",
       "History": "Riwayat",

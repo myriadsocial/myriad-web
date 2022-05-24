@@ -770,6 +770,7 @@
   "Wallet": {
     "Title": "{{appname}} - Wallet",
     "Header": "Wallet",
+    "Anonymous": "Please Login to access this feature",
     "Tab": {
       "Balance": "Balance",
       "History": "History",
