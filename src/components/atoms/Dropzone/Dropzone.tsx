@@ -251,13 +251,15 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
 
   const formatButtonLable = () => {
     if (usage == 'post') {
-      if (type == 'video' && files.length > 0) return `Replace ${capitalize(type)}`;
-      return i18n.t('Dropzone.Btn_Upload_Video', {type: capitalize(type)});
+      if (type == 'video') {
+        if (files.length > 0) return i18n.t('Dropzone.Btn_Replace_Video', {type: capitalize(type)});
+        return i18n.t('Dropzone.Btn_Upload_Video', {type: capitalize(type)});
+      } else return i18n.t('Dropzone.Btn_Add_Image');
     }
     if (!multiple && preview.length === 1) {
-      return i18n.t('Dropzone.Btn_Reupload', {type: capitalize(type)});
+      return i18n.t('Dropzone.Btn_Reupload');
     }
-    return i18n.t('Dropzone.Btn_Upload', {type: capitalize(type)});
+    return i18n.t('Dropzone.Btn_Upload');
   };
 
   const getErrorMessage = (error: FileError): string => {

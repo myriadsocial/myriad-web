@@ -191,6 +191,13 @@
       }
     }
   },
+  "Profile_Card": {
+    "Account": "Account",
+    "Profile": "Profile",
+    "Logout": "Log out",
+    "Network": "Network",
+    "Wallet": "Wallet"
+  },
   "Profile": {
     "Private": {
       "Title": "Nothing to see here!",
@@ -324,6 +331,14 @@
         "Not_Connect": "This user hasn't connected to any social media yet."
       }
     },
+    "NFT": {
+    "Text_1": "NFT is underway!",
+    "Text_2": "We will let you know very soon"
+  },
+  "Social_Token": {
+    "Text_1": "Social token is underway!",
+    "Text_2": "We will let you know very soon"
+  },
     "Setting": {
       "Copy": "Wallet address copied!"
     }
@@ -421,6 +436,33 @@
       "Pornography": "Pornography",
       "Other": "Other",
       "Confirm": "Confirm"
+    },
+    "Toolbar_Media": {
+      "Menu": {
+        "Upload": "Upload Image",
+        "Link": "Image Link"
+      }
+    },
+    "Upload": {
+      "Btn_Confirm": "Confirm",
+      "Video": {
+        "Title": "Upload Video",
+        "Placeholder": "Upload .mp4 video file with size less than 100Mb"
+      },
+      "Image": {
+        "Title": "Upload Picture"
+      },
+      "Embed": {
+        "Hyperlink": {
+          "Title": "Insert Hyperlink",
+          "Subtitle": "Highlight text as an embedded link"
+        },
+        "Image": {
+          "Title": "Embed Image"
+        },
+        "Placeholder": "{{prefix}} Link URL",
+        "Btn_Confirm": "Confirm"
+      }
     }
   },
   "Post_Delete": {
@@ -755,6 +797,7 @@
   "Wallet": {
     "Title": "{{appname}} - Wallet",
     "Header": "Wallet",
+    "Anonymous": "Please Login to access this feature",
     "Tab": {
       "Balance": "Balance",
       "History": "History",
@@ -853,14 +896,18 @@
       "Profile": "Profile Detail",
       "Experience_Create": "Create Experience",
       "Experience_Clone": "Clone Experience",
-      "Experience_Edit": "Edit Experience"
+      "Experience_Edit": "Edit Experience",
+      "NFT": "Underway",
+      "Social_Token": "Underway"
     }
   },
   "Dropzone": {
     "Placeholder": "File must be .jpeg or .png",
-    "Btn_Upload": "Upload {{type}}",
-    "Btn_Reupload": "Reupload {{type}}",
+    "Btn_Upload": "Upload Image",
+    "Btn_Reupload": "Reupload Image",
+    "Btn_Add_Image": "Add Image",
     "Btn_Upload_Video": "Add {{type}}",
+    "Btn_Replace_Video": "Replace {{type}}",
     "Error_File_Large": "File is larger than {{maxSize}}Mb",
     "Video": {
       "Not_Preview": "We cannot preview your video, preview video can be done after you confirm it.",
@@ -878,5 +925,9 @@
     "Just_Now": "just now",
     "Yesterday": "yesterday",
     "Result": "{{date}} ago"
+  },
+  "Loading": {
+    "Load_More": "Load more",
+    "Loading_More": "Loading more"
   }
 }

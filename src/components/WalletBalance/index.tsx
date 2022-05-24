@@ -10,6 +10,8 @@ import {BalanceDetail} from '../../interfaces/balance';
 import {BoxComponent} from '../atoms/Box';
 import {ListItemComponent} from '../atoms/ListItem';
 
+import i18n from 'src/locale';
+
 type WalletProps = {
   balances: Array<BalanceDetail>;
 };
@@ -36,7 +38,10 @@ export const WalletBalances: React.FC<WalletProps> = ({balances}) => {
   };
 
   return (
-    <BoxComponent title="Wallet" onClick={changeToWalletPage} className={styles.root}>
+    <BoxComponent
+      title={i18n.t('Wallet.Header')}
+      onClick={changeToWalletPage}
+      className={styles.root}>
       {/**handle loading when fetching balance**/}
       {balances.length === 0 && (
         <div className={styles.loading}>
