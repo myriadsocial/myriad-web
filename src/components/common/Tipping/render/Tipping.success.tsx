@@ -9,6 +9,7 @@ import {ButtonNotify} from './ButtonNotify';
 
 import localforage from 'localforage';
 import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
+import {toBigNumber} from 'src/helpers/string';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Comment} from 'src/interfaces/comment';
 import {Currency} from 'src/interfaces/currency';
@@ -151,7 +152,7 @@ export const TippingSuccess = () => {
               <ButtonNotify
                 reference={options.reference}
                 currency={options.attributes.currency}
-                amount={options.attributes.amount}
+                amount={toBigNumber(options.amount.toString(), options.attributes.currency.decimal)}
                 receiver={options.receiver}
               />
             ) : (
