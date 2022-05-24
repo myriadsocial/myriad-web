@@ -17,10 +17,6 @@ export const useStyles = makeStyles((theme: Theme) =>
 
       '& .slate-p': {
         wordBreak: 'break-word',
-
-        [theme.breakpoints.down('lg')]: {
-          fontSize: 12,
-        },
       },
     },
     action: {
