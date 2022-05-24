@@ -1,5 +1,7 @@
 import {User} from '@sentry/types';
 
+import getConfig from 'next/config';
+
 import {Actions as BaseAction, setLoading, setError} from '../base/actions';
 import {RootState} from '../index';
 import * as constants from './constants';
@@ -8,6 +10,7 @@ import {Action} from 'redux';
 import {formatNumber} from 'src/helpers/balance';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {Currency, CurrencyId} from 'src/interfaces/currency';
+import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 import * as TokenAPI from 'src/lib/api/token';
 import {nearInitialize, getNearBalance} from 'src/lib/services/near-api-js';
 import {checkAccountBalance} from 'src/lib/services/polkadot-js';
@@ -168,8 +171,15 @@ export const fetchBalancesNear: ThunkActionCreator<Actions, RootState> =
     const {
       userState: {currencies},
     } = getState();
-
+    const {publicRuntimeConfig} = getConfig();
     const tokenBalances: BalanceDetail[] = [];
+    const {near, wallet} = await nearInitialize();
+
+    if (!wallet.isSignedIn()) {
+      await wallet.requestSignIn({
+        successUrl: `${publicRuntimeConfig.appAuthURL}/?auth=${WalletTypeEnum.NEAR}`,
+      });
+    }
 
     dispatch(setLoading(true));
 
@@ -178,7 +188,7 @@ export const fetchBalancesNear: ThunkActionCreator<Actions, RootState> =
         const originBalance = 0;
         let freeBalance = 0;
         const previousNonce = 0;
-        const {near, wallet} = await nearInitialize();
+
         const {balance} = await getNearBalance(
           near,
           wallet.getAccountId(),

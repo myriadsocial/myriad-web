@@ -3,6 +3,7 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
+import {Skeleton} from './Network.skeleton';
 import {NetworkOption} from './NetworkOption/NetworkOption';
 import {ProfileCardProps} from './ProfileCard.interfaces';
 import {useStyles} from './ProfileCard.style';
@@ -68,11 +69,16 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
             </Button>
           </ShowIf>
           <ShowIf condition={!anonymous}>
-            <NetworkOption currentWallet={currentWallet} wallets={wallets} networks={networks} />
+            <ShowIf condition={Boolean(currentWallet)}>
+              <NetworkOption currentWallet={currentWallet} wallets={wallets} networks={networks} />
 
-            <Typography component="div" className={classes.address}>
-              {formatAddress(userWalletAddress)}
-            </Typography>
+              <Typography component="div" className={classes.address}>
+                {formatAddress(userWalletAddress)}
+              </Typography>
+            </ShowIf>
+            <ShowIf condition={!currentWallet}>
+              <Skeleton />
+            </ShowIf>
           </ShowIf>
         </div>
       </div>

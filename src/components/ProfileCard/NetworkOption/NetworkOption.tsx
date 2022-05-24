@@ -56,9 +56,7 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
   const {publicRuntimeConfig} = getConfig();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [current, setCurrent] = React.useState<string>(
-    currentWallet?.networkId ? currentWallet?.networkId : networks[0].id,
-  );
+  const [current, setCurrent] = React.useState<string | undefined>(currentWallet?.networkId);
   const [showAccountList, setShowAccountList] = React.useState(false);
   const [extensionInstalled, setExtensionInstalled] = React.useState(false);
   const [accounts, setAccounts] = React.useState<InjectedAccountWithMeta[]>([]);
