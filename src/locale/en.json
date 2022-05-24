@@ -397,6 +397,14 @@
       "Add_Post_To_Experience": "Add post to experience",
       "Report": "Report",
       "Delete_Post": "Delete Post"
+    },
+    "Discussion": {
+      "Title": "Discussion",
+      "Text_Placeholder": "Write a discussion..."
+    },
+    "Debate": {
+      "Title": "Debate",
+      "Text_Placeholder": "Your downvote will be submitted after you post a comment"
     }
   },
   "Post_Create": {
