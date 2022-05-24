@@ -1,19 +1,25 @@
 import * as React from 'react';
 
-import {Typography} from '@material-ui/core';
+import {Button, Typography} from '@material-ui/core';
+
+import {useStyles} from './ShowMore.styles';
 
 export const ELEMENT_SHOW_MORE = 'show_more';
 
 type ShowMoreProps = {
-  onClick: () => void;
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
-export const ShowMore = (props: ShowMoreProps) => {
+export const ShowMore: React.FC<ShowMoreProps> = props => {
   const {onClick} = props;
+  const styles = useStyles();
 
   return (
-    <Typography onClick={onClick} component="span" color="textPrimary">
-      ...&nbsp; <span style={{color: '#7342CC', cursor: 'pointer'}}>See More</span>
+    <Typography component="span" color="textPrimary">
+      ...&nbsp;
+      <Button onClick={onClick} className={styles.button} disableTouchRipple>
+        See More
+      </Button>
     </Typography>
   );
 };
