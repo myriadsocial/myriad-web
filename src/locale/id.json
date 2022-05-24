@@ -431,7 +431,9 @@
     "Text_Placeholder": "Tautan ke postingan",
     "Title": "Impor Postingan",
     "Subtitle": "Impor postingan dari media sosial lain",
-    "Tab_Label": "Impor"
+    "Tab_Label": "Impor",
+    "Form_Helper_Text": "Sementara postingan yang dapat diimpor hanya dari reddit dan twitter",
+    "Post_Preview": "Pratinjau Postingan"
   },
   "Post_Sorting": {
     "Title_Filter": "Saring menurut",

@@ -433,7 +433,9 @@
     "Text_Placeholder": "Link to post",
     "Title": "Import Post",
     "Subtitle": "Import post from another social media",
-    "Tab_Label": "Import"
+    "Tab_Label": "Import",
+    "Form_Helper_Text": "Currently we can only import post from reddit and twitter",
+    "Post_Preview": "Post Preview"
   },
   "Post_Sorting": {
     "Title_Filter": "Filter by",
