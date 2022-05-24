@@ -460,7 +460,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
         </Typography>
       </div>
       <Modal
-        title="Upload Picture"
+        title={i18n.t('Post_Create.Upload.Image.Title')}
         align="left"
         titleSize="small"
         maxWidth="xl"
@@ -478,7 +478,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
       </Modal>
 
       <Modal
-        title="Upload Video"
+        title={i18n.t('Post_Create.Upload.Video.Title')}
         align="left"
         titleSize="small"
         maxWidth="xl"
@@ -491,14 +491,14 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
           onFileSelected={handleVideoSelected}
           accept={['video/*']}
           maxSize={100}
-          placeholder="Upload .mp4 video file with size less than 100Mb"
+          placeholder={i18n.t('Post_Create.Upload.Video.Placeholder')}
           usage="post"
         />
       </Modal>
 
       <Modal
-        title="Insert Hyperlink"
-        subtitle="Highlight text as an embedded link"
+        title={i18n.t('Post_Create.Upload.Embed.Hyperlink.Title')}
+        subtitle={i18n.t('Post_Create.Upload.Embed.Hyperlink.Subtitle')}
         titleSize="small"
         maxWidth="xl"
         open={showModalLink}
@@ -507,7 +507,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
       </Modal>
 
       <Modal
-        title="Embed Image"
+        title={i18n.t('Post_Create.Upload.Embed.Image.Title')}
         align="left"
         titleSize="small"
         maxWidth="xl"

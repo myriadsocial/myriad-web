@@ -6,6 +6,8 @@ import {IconButton, Menu, MenuItem, Typography} from '@material-ui/core';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import {Image, VideoLibrary} from '@material-ui/icons';
 
+import i18n from 'src/locale';
+
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     media: {
@@ -66,10 +68,16 @@ export const ToolbarMedia: React.FC<ToolbarMediaProps> = props => {
         open={Boolean(anchorEl)}
         onClose={handleClose}>
         <MenuItem>
-          <ToolbarImage icon={<Typography>Upload Image</Typography>} onMouseDown={openImage} />
+          <ToolbarImage
+            icon={<Typography>{i18n.t('Post_Create.Toolbar_Media.Menu.Upload')}</Typography>}
+            onMouseDown={openImage}
+          />
         </MenuItem>
         <MenuItem>
-          <ToolbarImage icon={<Typography>Image Link</Typography>} onMouseDown={openImageLink} />
+          <ToolbarImage
+            icon={<Typography>{i18n.t('Post_Create.Toolbar_Media.Menu.Link')}</Typography>}
+            onMouseDown={openImageLink}
+          />
         </MenuItem>
       </Menu>
 

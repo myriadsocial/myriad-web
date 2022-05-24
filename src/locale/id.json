@@ -426,6 +426,33 @@
       "Pornography": "Pornografi",
       "Other": "Lainnya",
       "Confirm": "Konfirmasi"
+    },
+    "Toolbar_Media": {
+      "Menu": {
+        "Upload": "Unggah Gambar",
+        "Link": "Tautan Gambar"
+      }
+    },
+    "Upload": {
+      "Btn_Confirm": "Konfirmasi",
+      "Video": {
+        "Title": "Unggah video",
+        "Placeholder": "Unggah file video .mp4 dengan ukuran kurang dari 100Mb"
+      },
+      "Image": {
+        "Title": "Unggah Gambar"
+      },
+      "Embed": {
+        "Hyperlink": {
+          "Title": "Sisipkan Hyperlink",
+          "Subtitle": "Sorot teks sebagai tautan tersemat"
+        },
+        "Image": {
+          "Title": "Sematkan Gambar"
+        },
+        "Placeholder": "{{prefix}} URL Tautan",
+        "Btn_Confirm": "Konfirmasi"
+      }
     }
   },
   "Post_Delete": {
@@ -849,7 +876,7 @@
   "TopNavbar": {
     "Title": {
       "Friends": "Teman",
-      "Social_Media": "Media Sosial",
+      "SocialMedia": "Media Sosial",
       "Wallet": "Dompet",
       "Experience": "Pengalaman",
       "Profile": "Profil",
@@ -875,9 +902,11 @@
   },
   "Dropzone": {
     "Placeholder": "File harus .jpeg atau .png",
-    "Btn_Upload": "Unggah {{type}}",
-    "Btn_Reupload": "Unggah ulang {{type}}",
+    "Btn_Upload": "Unggah Gambar",
+    "Btn_Reupload": "Unggah ulang Gambar",
+    "Btn_Add_Image": "Tambahkan Gambar",
     "Btn_Upload_Video": "Tambahkan {{type}}",
+    "Btn_Replace_Video": "Ganti {{type}}",
     "Error_File_Large": "File lebih besar dari {{maxSize}}Mb",
     "Video": {
       "Not_Preview": "Kami tidak dapat melihat pratinjau video Anda, pratinjau video dapat dilakukan setelah Anda mengonfirmasinya.",
