@@ -15,6 +15,7 @@ import {TabsComponent} from '../atoms/Tabs';
 import {NavbarComponent} from 'src/components/Mobile/Navbar/Navbar';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
 import {useSearchHook} from 'src/hooks/use-search.hooks';
+import i18n from 'src/locale';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -74,17 +75,17 @@ export const SearchResultContainer: React.FC = () => {
     return [
       {
         id: 'posts-tab',
-        title: 'Post',
+        title: i18n.t('Search_Result.Post_Tab'),
         component: <PostsListContainer query={searchKeyword} />,
       },
       {
         id: 'users-tab',
-        title: 'Users',
+        title: i18n.t('Search_Result.Users_Tab'),
         component: <UsersListContainer query={searchKeyword} />,
       },
       {
         id: 'experience-tab',
-        title: 'Experience',
+        title: i18n.t('Search_Result.Experience_Tab'),
         component: <SearchExperienceListContainer query={searchKeyword} />,
       },
     ];
@@ -117,7 +118,7 @@ export const SearchResultContainer: React.FC = () => {
       <SearchBoxContainer onSubmitSearch={onSubmitSearch} hidden={true} />
       <div className={style.box}>
         <Typography className={style.text}>
-          Search results for &quot;
+          {i18n.t('Search_Result.Helper_Text')} &quot;
           <Typography variant="inherit" color="primary">
             {searchKeyword}
           </Typography>

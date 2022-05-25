@@ -348,6 +348,9 @@
       }
     }
   },
+  "Post_Lists": {
+    "Sort_By": "Urutkan yang"
+  },
   "Post_Share": {
     "Action": "Bagikan",
     "Title": "Salin tautan posting",
@@ -634,6 +637,12 @@
   },
   "Search": {
     "Title": "{{appname}} - Hasil Pencarian"
+  },
+  "Search_Result": {
+    "Helper_Text": "Hasil pencarian untuk ",
+    "Post_Tab": "Postingan",
+    "Users_Tab": "Pengguna",
+    "Experience_Tab": "Pengalaman"
   },
   "Section": {
     "Home": "Beranda",

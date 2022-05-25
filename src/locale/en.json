@@ -349,6 +349,9 @@
       }
     }
   },
+  "Post_Lists": {
+    "Sort_By": "Sort by"
+  },
   "Post_Share": {
     "Action": "Share",
     "Title": "Copy post link",
@@ -636,6 +639,12 @@
   },
   "Search": {
     "Title": "{{appname}} - Search Result"
+  },
+  "Search_Result": {
+    "Helper_Text": "Search results for ",
+    "Post_Tab": "Post",
+    "Users_Tab": "Users",
+    "Experience_Tab": "Experience"
   },
   "Section": {
     "Home": "Home",

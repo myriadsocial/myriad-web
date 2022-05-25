@@ -15,6 +15,7 @@ import {Comment} from 'src/interfaces/comment';
 import {Post} from 'src/interfaces/post';
 import {TimelineOrderType} from 'src/interfaces/timeline';
 import {User} from 'src/interfaces/user';
+import i18n from 'src/locale';
 
 type PostsListProps = {
   user?: User;
@@ -59,7 +60,7 @@ export const PostsList: React.FC<PostsListProps> = props => {
     <Paper className={style.root}>
       <div className={style.sort}>
         <DropdownMenu<TimelineOrderType>
-          title="Sort by"
+          title={i18n.t('Post_Lists.Sort_By')}
           selected={order}
           options={orderOptions}
           onChange={onSort}
