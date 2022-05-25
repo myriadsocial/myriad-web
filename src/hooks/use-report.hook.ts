@@ -45,13 +45,13 @@ export const useReport = () => {
   const sendReportWithAttributes = async (value: ReportProps) => {
     try {
       if (!user) {
-        throw new Error('Please login to continue your report');
+        throw new Error(i18n.t('Profile.Modal_Report.Error_Login'));
       }
 
       await InteractionAPI.report(user.id, value);
 
       openToasterSnack({
-        message: 'User has been reported',
+        message: i18n.t('Profile.Modal_Report.Toaster_Success'),
         variant: 'success',
       });
     } catch (error) {

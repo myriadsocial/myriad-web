@@ -338,6 +338,16 @@
     },
     "Setting": {
       "Copy": "Alamat dompet disalin!"
+    },
+    "Modal_Report": {
+      "Title": "Laporkan Pengguna",
+      "Subtitle_1": "Mengapa kamu melaporkan ",
+      "Subtitle_2":"Bantu kami untuk mengetahui permasalahannya",
+      "Description_Placeholder":"Deskripsi",
+      "Description_Validation":"Harus diantara 4 sampai 200 karakter",
+      "Btn_Submit": "Kirim",
+      "Error_Login":"Silahkan masuk untuk melanjutkan pembuatan laporan",
+      "Toaster_Success": "Pengguna telah dilaporkan"
     }
   },
   "Home": {
