@@ -331,14 +331,6 @@
         "Not_Connect": "This user hasn't connected to any social media yet."
       }
     },
-    "NFT": {
-    "Text_1": "NFT is underway!",
-    "Text_2": "We will let you know very soon"
-  },
-  "Social_Token": {
-    "Text_1": "Social token is underway!",
-    "Text_2": "We will let you know very soon"
-  },
     "Setting": {
       "Copy": "Wallet address copied!"
     }
@@ -706,6 +698,14 @@
     "Social_Token": "Social Token",
     "Trends": "Trends",
     "Topic": "Topic"
+  },
+  "NFT": {
+    "Text_1": "NFT is underway!",
+    "Text_2": "We will let you know very soon"
+  },
+  "Social_Token": {
+    "Text_1": "Social token is underway!",
+    "Text_2": "We will let you know very soon"
   },
   "Setting": {
     "Title": "{{appname}} - Settings",
