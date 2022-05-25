@@ -369,6 +369,12 @@
     "Confirmation_Message": "This post is successfully shared to your timeline"
   },
   "Post_Detail": {
+    "Imported_Post": "Imported",
+    "by": "by",
+    "and": "and",
+    "other": "other",
+    "others": "others",
+    "via": "via",
     "Navbar_Title": "Post Detail",
     "Post_Action": {
       "Comments": "Comments",

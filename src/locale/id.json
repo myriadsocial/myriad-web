@@ -368,6 +368,12 @@
     "Confirmation_Message": "Postingan ini berhasil dibagikan di linimasamu"
   },
   "Post_Detail": {
+    "Imported_Post": "Diimpor",
+    "by": "oleh",
+    "and": "dan",
+    "other": "lainnya",
+    "others": "lainnya",
+    "via": "melalui",
     "Navbar_Title": "Detail Postingan",
     "Post_Action": {
       "Comments": "Komentar",
