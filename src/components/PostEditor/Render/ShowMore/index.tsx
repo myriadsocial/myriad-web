@@ -4,6 +4,8 @@ import {Button, Typography} from '@material-ui/core';
 
 import {useStyles} from './ShowMore.styles';
 
+import i18n from 'src/locale';
+
 export const ELEMENT_SHOW_MORE = 'show_more';
 
 type ShowMoreProps = {
@@ -18,7 +20,7 @@ export const ShowMore: React.FC<ShowMoreProps> = props => {
     <Typography component="span" color="textPrimary">
       ...&nbsp;
       <Button onClick={onClick} className={styles.button} disableTouchRipple>
-        See More
+        {i18n.t('General.See_More')}
       </Button>
     </Typography>
   );

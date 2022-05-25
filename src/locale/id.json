@@ -105,7 +105,8 @@
     "Back": "Kembali",
     "Next": "Selanjutnya",
     "Cancel": "Batalkan",
-    "Loading": "Memuat"
+    "Loading": "Memuat",
+    "See_More": "Selengkapnya"
   },
   "Confirm": {
     "Title": "Apa kamu yakin?"
@@ -515,6 +516,22 @@
       "Liked": "Paling disukai",
       "Comment": "Paling banyak dikomentari",
       "Tip": "Paling banyak tip"
+    }
+  },
+  "Post_Comment": {
+    "User_Banned": "[pengguna diblokir]",
+    "Reply": "Balas",
+    "Reply_Placeholder": "Tulis balasan ...",
+    "Report": "Laporkan",
+    "Delete": "Hapus",
+    "Tip_History": "Riwayat Tip",
+    "Show_Comment": "tampilkan komentar",
+    "Blocked_User": "Pengguna Diblokir",
+    "Confirm_Delete": {
+      "Title": "Hapus Komentar",
+      "Description": "Apa kamu yakin ingin menghapus komentar ini?",
+      "Confirm_Text": "Ya, lanjutkan untuk menghapus",
+      "Cancel_Text": "Tidak, biarkan saya pikir lagi"
     }
   },
   "Tipping": {

@@ -28,6 +28,7 @@ import {Comment} from 'src/interfaces/comment';
 import {CommentProps} from 'src/interfaces/comment';
 import {ReferenceType, Vote} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {
   upvote,
@@ -185,11 +186,11 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
 
   const showConfirmDeleteDialog = (reply: Comment) => {
     confirm({
-      title: 'Delete Comment',
-      description: 'Are you sure to remove this comment?',
+      title: i18n.t('Post_Comment.Confirm_Delete.Title'),
+      description: i18n.t('Post_Comment.Confirm_Delete.Description'),
       icon: 'danger',
-      confirmationText: 'Yes, proceed to delete',
-      cancellationText: 'No, let me rethink',
+      confirmationText: i18n.t('Post_Comment.Confirm_Delete.Confirm_Text'),
+      cancellationText: i18n.t('Post_Comment.Confirm_Delete.Cancel_Text'),
       onConfirm: () => {
         if (reply.id === comment.id) {
           onDelete(comment);
@@ -230,7 +231,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                         shallow
                         passHref>
                         <Typography variant="body1" className={style.link} component="a">
-                          Blocked user
+                          {i18n.t('Post_Comment.Blocked_User')}
                         </Typography>
                       </Link>
 
@@ -245,7 +246,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                       className={style.cursor}
                       color="primary"
                       onClick={handleOpenComment}>
-                      show comment
+                      {i18n.t('Post_Comment.Show_Comment')}
                     </Typography>
                   </div>
                 }
@@ -261,7 +262,9 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                       shallow
                       passHref>
                       <Typography variant="body1" className={style.link} component="a">
-                        {comment?.user?.deletedAt ? '[user banned]' : comment.user.name}
+                        {comment?.user?.deletedAt
+                          ? i18n.t('Post_Comment.User_Banned')
+                          : comment.user.name}
                       </Typography>
                     </Link>
 
@@ -293,7 +296,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                   onClick={handleOpenReply}
                   size="small"
                   variant="text">
-                  Reply
+                  {i18n.t('Post_Comment.Reply')}
                 </Button>
 
                 <ShowIf condition={!isOwnComment}>
@@ -312,7 +315,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                   size="small"
                   variant="text"
                   onClick={handleOpenTipHistory}>
-                  Tip history
+                  {i18n.t('Post_Comment.Tip_History')}
                 </Button>
                 <ShowIf condition={!isOwnComment}>
                   <Button
@@ -322,7 +325,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                     size="small"
                     variant="text"
                     onClick={handleReport}>
-                    Report
+                    {i18n.t('Post_Comment.Report')}
                   </Button>
                 </ShowIf>
                 <ShowIf condition={isOwnComment}>
@@ -331,7 +334,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                     size="small"
                     variant="text"
                     onClick={() => onDelete(comment)}>
-                    Delete
+                    {i18n.t('Post_Comment.Delete')}
                   </Button>
                 </ShowIf>
               </CardActions>

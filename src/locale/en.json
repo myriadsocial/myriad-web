@@ -105,7 +105,8 @@
     "Back": "Back",
     "Next": "Next",
     "Cancel": "Cancel",
-    "Loading": "Loading"
+    "Loading": "Loading",
+    "See_More": "See More"
   },
   "Confirm": {
     "Title": "Are you sure?"
@@ -517,6 +518,22 @@
       "Liked": "Most liked",
       "Comment": "Most commented",
       "Tip": "Most tipped"
+    }
+  },
+  "Post_Comment": {
+    "User_Banned": "[user banned]",
+    "Reply": "Reply",
+    "Reply_Placeholder": "Write a Reply ...",
+    "Report": "Report",
+    "Delete": "Delete",
+    "Tip_History": "Tip History",
+    "Show_Comment": "show comment",
+    "Blocked_User": "Blocked user",
+    "Confirm_Delete": {
+      "Title": "Delete Comment",
+      "Description": "Are you sure to remove this comment?",
+      "Confirm_Text": "Yes, proceed to delete",
+      "Cancel_Text": "No, let me rethink"
     }
   },
   "Tipping": {

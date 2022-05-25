@@ -11,6 +11,8 @@ import {acronym} from '../../helpers/string';
 import {Props} from './richText.interface';
 import {useStyles} from './richtext.style';
 
+import i18n from 'src/locale';
+
 export const RichTextComponent: React.FC<Props> = props => {
   const {userProfilePict, onOpenCreatePost, alias, name} = props;
   const style = useStyles();
@@ -36,7 +38,7 @@ export const RichTextComponent: React.FC<Props> = props => {
           <TextareaAutosize
             minRows={1}
             value={post}
-            placeholder={`What's on your mind?`}
+            placeholder={i18n.t('Home.RichText.Placeholder')}
             className={style.postTextArea}
             onChange={updatePostText}
             spellCheck={false}
