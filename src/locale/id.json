@@ -44,6 +44,11 @@
       "Modal": {
         "Title": "Bagikan",
         "Subtitle": "Beri tahu orang lain tentang Pengalaman ini di Myriad.Social"
+      },
+      "Empty": {
+        "Text_1": "Uh-oh!",
+        "Text_2": "Anda belum membuat pengalaman apa pun. Pengalaman memungkinkan Anda untuk menyesuaikan berbagai tag dan orang untuk ditampilkan di timeline Anda.",
+        "Btn_Create": "Buat Pengalaman"
       }
     },
     "Preview": {
@@ -517,6 +522,11 @@
       "Tip": "Paling banyak tip"
     }
   },
+  "Post_Empty": {
+    "Title": "Tidak ada postingan untuk ditampilkan",
+    "Subtitle_Exp": "Setelah Anda membuat pengalaman, itu akan muncul di sini.",
+    "Subtitle_Friend": "Setelah Anda menambahkan beberapa teman baru, postingan mereka akan muncul di sini."
+  },
   "Tipping": {
     "Modal_Main": {
       "Title": "Kirim Tip",
@@ -732,8 +742,7 @@
       "Account_Setting": {
         "Account_Privacy": {
           "Title": "Privasi akun",
-          "Subtitle":
-          "Pengaturan visibilitas akun Anda terhadap pengguna selain teman"
+          "Subtitle": "Pengaturan visibilitas akun Anda terhadap pengguna selain teman"
         },
         "Social_Media_Privacy": {
           "Title": "Privasi media sosial",
@@ -958,5 +967,16 @@
   "Loading": {
     "Load_More": "Muat lebih banyak",
     "Loading_More": "Memuat lebih banyak"
+  },
+  "Cookies": {
+    "Text_1": "Situs web ini menggunakan cookie untuk meningkatkan pengalaman online Anda.",
+    "Text_2": "Syarat dan ketentuan"
+  },
+  "Banner": {
+    "Text": "{{appName}} {{version}} tidak sepenuhnya diaudit, silakan gunakan dengan risiko Anda sendiri."
+  },
+  "Tooltip": {
+    "Chat": "Fitur obrolan, segera hadir",
+    "Trending_Exp": "Tampilkan 10 pengalaman teratas berdasarkan total pelanggan dan kloning dalam 24 jam."
   }
 }

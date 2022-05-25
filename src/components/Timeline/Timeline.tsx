@@ -15,6 +15,7 @@ import {Comment} from 'src/interfaces/comment';
 import {Post} from 'src/interfaces/post';
 import {TimelineType} from 'src/interfaces/timeline';
 import {User} from 'src/interfaces/user';
+import i18n from 'src/locale';
 
 type TimelineProps = {
   user?: User;
@@ -81,21 +82,21 @@ export const Timeline: React.FC<TimelineProps> = props => {
         loader={<Loading />}>
         {timelineType === TimelineType.EXPERIENCE && posts.length === 0 ? (
           <TimelineEmptyComponent
-            title={'No post to show'}
-            subtitle={'Once you create an experience, it will show up here.'}
+            title={i18n.t('Post_Empty.Title')}
+            subtitle={i18n.t('Post_Empty.Subtitle_Exp')}
             action={
               <Button
                 variant={ButtonVariant.CONTAINED}
                 size={ButtonSize.SMALL}
                 onClick={handleCreateExperience}>
-                Create experience
+                {i18n.t('Experience.Create.Title')}
               </Button>
             }
           />
         ) : timelineType === TimelineType.FRIEND && posts.length === 0 ? (
           <TimelineEmptyComponent
-            title={'No post to show'}
-            subtitle={'Once you add some new friends, their posts will show up here.'}
+            title={i18n.t('Post_Empty.Title')}
+            subtitle={i18n.t('Post_Empty.Subtitle_Friend')}
           />
         ) : (
           posts.map(post => (

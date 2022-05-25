@@ -9,6 +9,8 @@ import {SvgIcon} from '@material-ui/core';
 import {TabsComponent} from '../atoms/Tabs';
 import {useStyles} from './RightMenuBar.styles';
 
+import i18n from 'src/locale';
+
 const ExperienceTab = dynamic(() => import('./tabs/ExperienceTab'));
 const TrendingTab = dynamic(() => import('./tabs/TrendingTab'));
 const TrendingExperienceTab = dynamic(() => import('./tabs/TrendingExperienceTab'));
@@ -34,7 +36,7 @@ export const RightMenuBar: React.FC = () => {
       id: 'chatTabPanel',
       icon: <SvgIcon component={ChatAlt2Icon} />,
       component: null,
-      tooltip: 'Chat feature, coming soon',
+      tooltip: i18n.t('Tooltip.Chat'),
       disabled: true,
     },
   ];
