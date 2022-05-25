@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {formatDistance, subDays} from 'date-fns';
+import {timeAgo} from 'src/helpers/date';
 
 type TimeAgoProps = {
   date: Date;
@@ -9,9 +9,5 @@ type TimeAgoProps = {
 export const TimeAgo: React.FC<TimeAgoProps> = props => {
   const {date} = props;
 
-  const formatted = formatDistance(subDays(new Date(date), 0), new Date(), {
-    addSuffix: true,
-  });
-
-  return <span>{formatted}</span>;
+  return <span>{timeAgo(date)}</span>;
 };
