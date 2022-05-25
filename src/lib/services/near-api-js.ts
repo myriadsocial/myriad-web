@@ -1,8 +1,7 @@
 import getConfig from 'next/config';
 
-import {u8aToHex, numberToHex} from '@polkadot/util';
+import {BN, u8aToHex, numberToHex} from '@polkadot/util';
 
-import BN from 'bn.js';
 import {assign} from 'lodash';
 import * as nearAPI from 'near-api-js';
 import {ConnectConfig} from 'near-api-js';

@@ -66,7 +66,7 @@ export const fetchAccountPrivacySetting: ThunkActionCreator<Action, RootState> =
         },
       });
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -83,7 +83,7 @@ export const updatePrivacySetting: ThunkActionCreator<Action, RootState> =
       });
       callback && callback();
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -100,7 +100,7 @@ export const updateNotificationSetting: ThunkActionCreator<Action, RootState> =
       });
       callback && callback();
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -122,7 +122,7 @@ export const fetchNotificationSetting: ThunkActionCreator<Action, RootState> =
         },
       });
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -139,7 +139,7 @@ export const fetchAvailableToken: ThunkActionCreator<Actions, RootState> = () =>
       payload: currencies,
     });
   } catch (error) {
-    dispatch(setError(error.message));
+    dispatch(setError(error));
   } finally {
     dispatch(setLoading(false));
   }
@@ -152,7 +152,7 @@ export const fetchLanguageSetting: ThunkActionCreator<Actions, RootState> =
     try {
       // TODO fetch data language from backend
     } catch (error) {
-      dispatch(setError(error.message));
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }

@@ -3,6 +3,8 @@ import {Session, AdapterInstance} from 'next-auth/adapters';
 import jwt from 'next-auth/jwt';
 import getConfig from 'next/config';
 
+import axios from 'axios';
+import {isErrorWithMessage} from 'src/helpers/error';
 import {SocialsEnum} from 'src/interfaces/social';
 import * as PeopleAPI from 'src/lib/api/people';
 import * as WalletAPI from 'src/lib/api/wallet';
@@ -14,7 +16,7 @@ const {serverRuntimeConfig} = getConfig();
 function Adapter() {
   async function getAdapter(appOptions: AppOptions): Promise<AdapterInstance<any, any, any, any>> {
     // Display debug output if debug option enabled
-    function _debug(...args: Object[]) {
+    function _debug(...args: Array<any>) {
       if (appOptions.debug) {
         console.log('[next-auth][adapter][debug]', ...args);
       }
@@ -33,9 +35,13 @@ function Adapter() {
 
         return userToSession(user, address);
       } catch (error) {
-        _debug('getUser error', error.response.data);
+        if (axios.isAxiosError(error)) {
+          _debug('getUser error', error.response?.data);
+        } else if (isErrorWithMessage(error)) {
+          _debug('getUser error', error.message);
+        }
 
-        return Promise.reject(error.message);
+        return Promise.reject(error);
       }
     }
 
@@ -88,7 +94,9 @@ function Adapter() {
 
         return session;
       } catch (error) {
-        _debug('decoded session error', error);
+        if (isErrorWithMessage(error)) {
+          _debug('decoded session error', error);
+        }
 
         return null;
       }

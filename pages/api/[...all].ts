@@ -3,6 +3,7 @@ import {getSession} from 'next-auth/client';
 import httpProxyMiddleware from 'next-http-proxy-middleware';
 import getConfig from 'next/config';
 
+import {isErrorWithMessage} from 'src/helpers/error';
 import {decryptMessage} from 'src/lib/crypto';
 
 const {serverRuntimeConfig} = getConfig();
@@ -57,7 +58,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       headers,
     });
   } catch (error) {
-    console.error('[api-proxy][error]', {error});
-    res.status(500).send({error: error.message});
+    let message = 'Unknown error';
+
+    if (isErrorWithMessage(error)) {
+      message = error.message;
+    }
+
+    console.error('[api-proxy][error]', {error: message});
+    res.status(500).send({error: message});
   }
 };

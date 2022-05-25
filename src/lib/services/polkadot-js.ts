@@ -11,6 +11,7 @@ import {numberToHex} from '@polkadot/util';
 import {BN, BN_TEN} from '@polkadot/util';
 
 import {NoAccountException} from './errors/NoAccountException';
+import {SignRawException} from './errors/SignRawException';
 
 import {BalanceDetail} from 'src/interfaces/balance';
 import {Currency, CurrencyId} from 'src/interfaces/currency';
@@ -97,7 +98,7 @@ export const estimateFee = async (
   from: string,
   walletDetail: WalletDetail,
   selectedCurrency: BalanceDetail,
-): Promise<EstimateFeeResponseProps> => {
+): Promise<EstimateFeeResponseProps | null> => {
   try {
     const {enableExtension} = await import('src/helpers/extension');
 
@@ -171,7 +172,7 @@ export const estimateFee = async (
   } catch (error) {
     console.log({error});
     Sentry.captureException(error);
-    return error;
+    return null;
   }
 };
 
@@ -194,7 +195,7 @@ export const signWithExtension = async (
 
       return signature;
     } else {
-      throw 'signRaw error!';
+      throw SignRawException;
     }
   } catch (error) {
     console.log({error});

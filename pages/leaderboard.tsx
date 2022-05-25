@@ -4,7 +4,6 @@ import {getSession} from 'next-auth/client';
 
 import {LeaderBoardComponent} from 'src/components/Leaderboard/LeaderBoard';
 import {generateAnonymousUser} from 'src/helpers/auth';
-import {healthcheck} from 'src/lib/api/healthcheck';
 import {setAnonymous} from 'src/reducers/user/actions';
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
@@ -33,17 +32,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
         },
       };
     }
-  }
-
-  const available = await healthcheck();
-
-  if (!available) {
-    return {
-      redirect: {
-        destination: '/maintenance',
-        permanent: false,
-      },
-    };
   }
 
   const session = await getSession(context);

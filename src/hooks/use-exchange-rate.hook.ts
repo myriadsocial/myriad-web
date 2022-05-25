@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
+import {isErrorWithMessage, ErrorWithMessage} from 'src/helpers/error';
 import {RootState} from 'src/reducers';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
 import {ExchangeRateState} from 'src/reducers/exchange-rate/reducer';
@@ -11,13 +12,17 @@ export const useExchangeRate = () => {
     state => state.exchangeRateState,
   );
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<ErrorWithMessage | null>(null);
 
   const load = async () => {
     try {
       dispatch(fetchExchangeRates());
     } catch (error) {
-      setError(error);
+      if (isErrorWithMessage(error)) {
+        setError(error);
+      } else {
+        setError(new Error('Unknown error'));
+      }
     } finally {
       setLoading(false);
     }

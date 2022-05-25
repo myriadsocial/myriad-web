@@ -154,6 +154,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     };
 
   const handleTagsInputChange = (
+    // eslint-disable-next-line @typescript-eslint/ban-types
     event: React.ChangeEvent<{}>,
     newValue: string,
     type: TagsProps,
@@ -185,6 +186,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     type: TagsProps,
   ) => {
     const data = [...new Set(value.map(tag => tag.replace('#', '')))];
+
     const prohibitedTagsChanged =
       type === TagsProps.PROHIBITED &&
       (data.filter(tag => !experience?.prohibitedTags || !experience.prohibitedTags.includes(tag))
@@ -370,7 +372,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         </ShowIf>
       </FormControl>
 
-      <Autocomplete
+      <Autocomplete<string, true, true, true>
         id="experience-tags-include"
         freeSolo
         multiple

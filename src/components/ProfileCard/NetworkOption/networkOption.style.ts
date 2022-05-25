@@ -7,7 +7,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: '125px',
       background: '#F6F7FC',
       fontSize: '14px',
-      fontWeight: theme.typography.fontWeightRegular,
+      fontWeight: 400,
       marginRight: theme.spacing(1),
     },
     menu: {

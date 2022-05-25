@@ -37,11 +37,7 @@ export const useReport = () => {
         variant: 'success',
       });
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     }
   };
 
@@ -58,11 +54,7 @@ export const useReport = () => {
         variant: 'success',
       });
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     }
   };
 

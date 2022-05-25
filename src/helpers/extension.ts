@@ -25,7 +25,7 @@ export const enableExtension = async () => {
   return allAccounts;
 };
 
-export const unsubscribeFromAccounts = async () => {
+export const unsubscribeFromAccounts = async (): Promise<void> => {
   const {web3AccountsSubscribe} = await import('@polkadot/extension-dapp');
 
   const allAccounts = await enableExtension();

@@ -26,25 +26,25 @@ export const useStyles = makeStyles<Theme, TopNavbarProps>(theme =>
       },
       [theme.breakpoints.down('xs')]: {
         display: props => (props.type === 'menu' ? 'none' : ''),
-        fontWeight: theme.typography.fontWeightMedium,
+        fontWeight: 500,
         color: '#404040',
       },
     },
     sectionTitle: {
-      fontWeight: theme.typography.fontWeightBold,
+      fontWeight: 700,
       fontSize: 20,
       textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       [theme.breakpoints.down('xs')]: {
         fontSize: 16,
-        fontWeight: theme.typography.fontWeightMedium,
+        fontWeight: 500,
       },
     },
     description: {
       [theme.breakpoints.down('xs')]: {
         fontSize: 12,
-        fontWeight: theme.typography.fontWeightRegular,
+        fontWeight: 400,
       },
     },
     drawer: {

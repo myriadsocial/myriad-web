@@ -1,8 +1,7 @@
 import {SyntheticEvent} from 'react';
 
-import {BN_TEN} from '@polkadot/util';
+import {BN, BN_TEN} from '@polkadot/util';
 
-import BN from 'bn.js';
 import parse from 'html-react-parser';
 
 export const acronym = (value: string): string => {

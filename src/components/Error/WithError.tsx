@@ -9,14 +9,12 @@ export type WithErrorProps = {
   enable?: boolean;
 };
 
-export function withError<T extends WithErrorProps = WithErrorProps>(
-  WrappedComponent: React.ComponentType<T>,
-) {
+export function withError<T>(WrappedComponent: React.ComponentType<T & WithErrorProps>) {
   // Try to create a nice displayName for React Dev Tools.
   const displayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
   // Creating the inner component. The calculated Props type here is the where the magic happens.
-  const ComponentWithError = (props: Omit<T, keyof WithErrorProps>) => {
+  const ComponentWithError: React.FC<T> = props => {
     const {openToasterSnack} = useToasterSnackHook();
 
     const {error} = useSelector<RootState, BaseState>(state => state.baseState);

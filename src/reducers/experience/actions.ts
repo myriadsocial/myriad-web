@@ -107,11 +107,7 @@ export const loadExperiences: ThunkActionCreator<Actions, RootState> =
         meta,
       });
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setExperienceLoading(false));
     }
@@ -203,11 +199,7 @@ export const searchExperiences: ThunkActionCreator<Actions, RootState> =
         meta,
       });
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setExperienceLoading(false));
     }
@@ -223,11 +215,7 @@ export const fetchDetailExperience: ThunkActionCreator<Actions, RootState> =
         experience,
       });
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -281,11 +269,7 @@ export const cloneExperience: ThunkActionCreator<Actions, RootState> =
         }),
       );
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -309,11 +293,7 @@ export const searchPeople: ThunkActionCreator<Actions, RootState> =
         });
       }
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -338,11 +318,7 @@ export const searchTags: ThunkActionCreator<Actions, RootState> =
         });
       }
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -371,11 +347,7 @@ export const createExperience: ThunkActionCreator<Actions, RootState> =
         }),
       );
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -404,11 +376,7 @@ export const subscribeExperience: ThunkActionCreator<Actions, RootState> =
         }),
       );
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -439,11 +407,7 @@ export const updateExperience: ThunkActionCreator<Actions, RootState> =
         }),
       );
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -465,11 +429,7 @@ export const deleteExperience: ThunkActionCreator<Actions, RootState> =
 
       callback && callback();
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -498,11 +458,7 @@ export const unsubscribeExperience: ThunkActionCreator<Actions, RootState> =
         }),
       );
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }

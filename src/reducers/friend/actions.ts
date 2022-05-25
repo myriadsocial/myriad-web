@@ -85,11 +85,7 @@ export const fetchFriend: ThunkActionCreator<Actions, RootState> =
         meta,
       });
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -118,11 +114,7 @@ export const searchFriend: ThunkActionCreator<Actions, RootState> =
         filter: query,
       });
     } catch (error) {
-      dispatch(
-        setError({
-          message: error.message,
-        }),
-      );
+      dispatch(setError(error));
     } finally {
       dispatch(setLoading(false));
     }
@@ -148,7 +140,7 @@ export const removeFromFriend: ThunkActionCreator<Actions, RootState> =
       if (user && axios.isAxiosError(error) && error.response?.status === 401) {
         dispatch(fetchFriend(user));
       } else {
-        dispatch(setError(error.message));
+        dispatch(setError(error));
       }
     } finally {
       dispatch(setLoading(false));
@@ -175,7 +167,7 @@ export const blockFromFriend: ThunkActionCreator<Actions, RootState> =
       if (user && axios.isAxiosError(error) && error.response?.status === 401) {
         dispatch(fetchFriend(user));
       } else {
-        dispatch(setError(error.message));
+        dispatch(setError(error));
       }
     } finally {
       dispatch(setLoading(false));

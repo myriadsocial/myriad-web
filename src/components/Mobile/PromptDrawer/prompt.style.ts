@@ -24,11 +24,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       color: '#FFC857',
     },
     title: {
-      fontWeight: theme.typography.fontWeightMedium,
+      fontWeight: 500,
       fontSize: '18px',
     },
     text: {
-      fontWeight: theme.typography.fontWeightRegular,
+      fontWeight: 400,
       marginBottom: theme.spacing(4),
       whiteSpace: 'pre-line',
       fontSize: '14px',

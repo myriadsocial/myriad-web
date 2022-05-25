@@ -20,7 +20,7 @@ type TabsComponentProps<T> = TabsProps & {
   onChangeTab: (currentTab: T) => void;
 };
 
-export const TabsComponent = <T extends unknown>(props: TabsComponentProps<T>): JSX.Element => {
+export const TabsComponent = <T,>(props: TabsComponentProps<T>): JSX.Element => {
   const {
     tabs,
     selected,
