@@ -950,5 +950,9 @@
   "Loading": {
     "Load_More": "Muat lebih banyak",
     "Loading_More": "Memuat lebih banyak"
+  },
+  "Cookies": {
+    "Text_1": "Situs web ini menggunakan cookie untuk meningkatkan pengalaman online Anda.",
+    "Text_2": "Syarat dan ketentuan"
   }
 }

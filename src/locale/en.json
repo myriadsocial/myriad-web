@@ -950,5 +950,9 @@
   "Loading": {
     "Load_More": "Load more",
     "Loading_More": "Loading more"
+  },
+  "Cookies": {
+    "Text_1": "This website uses cookies to enhance your online experience.",
+    "Text_2": "Terms and Conditions"
   }
 }
