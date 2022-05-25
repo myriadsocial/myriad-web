@@ -5,6 +5,8 @@ import {Button, Drawer, Typography} from '@material-ui/core';
 
 import {useStyles} from './CookieConsent.style';
 
+import i18n from 'src/locale';
+
 type CookieConsentProps = {};
 
 export const COOKIE_CONSENT_NAME = 'cookie-consent';
@@ -39,13 +41,13 @@ export const CookieConsent: React.FC<CookieConsentProps> = props => {
         PaperProps={{className: styles.paper, square: false}}
         ModalProps={{hideBackdrop: true}}>
         <Typography variant="body1" className={styles.term}>
-          This website uses cookies to enhance your online experience.&nbsp;
+          {i18n.t('Cookies.Text_1')}&nbsp;
           <Typography href="/term-of-use" component="a" color="primary" className={styles.link}>
-            Terms and Conditions
+            {i18n.t('Cookies.Text_2')}
           </Typography>
         </Typography>
         <Button variant="contained" size="medium" color="primary" onClick={handleAccept}>
-          OK
+          {i18n.t('General.OK')}
         </Button>
       </Drawer>
     </>

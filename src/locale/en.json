@@ -44,6 +44,11 @@
       "Modal": {
         "Title": "Share",
         "Subtitle": "Let others know about this Experience on Myriad.Social"
+      },
+      "Empty": {
+        "Text_1": "Uh-oh!",
+        "Text_2": "You haven't created any experience yet. Experience allows you to customize various tags and people to be shown in your timeline.",
+        "Btn_Create": "Create Experience"
       }
     },
     "Preview": {
@@ -185,8 +190,7 @@
       "Btn_Register": "Register",
       "Prompt": {
         "Title": "Create a new account",
-        "Subtitle":
-        "You will create a new account. Please make sure you don't have a Myriad account before. You can connect other wallet in the manage tab.",
+        "Subtitle": "You will create a new account. Please make sure you don't have a Myriad account before. You can connect other wallet in the manage tab.",
         "Btn_No": "Cancel",
         "Btn_Yes": "Confirm"
       }
@@ -409,7 +413,6 @@
         "Confirm_Private_Description": "By setting the visibility setting to 'Only Me', this post will not be able to receive any tips from other users",
         "Confirm_Private_Text": "Yes, let's go",
         "Cancel_Private_Text": "No, let me rethink"
-
       },
       "Add_Post_To_Experience": "Add post to experience",
       "Report": "Report",
@@ -535,6 +538,11 @@
       "Confirm_Text": "Yes, proceed to delete",
       "Cancel_Text": "No, let me rethink"
     }
+  },
+  "Post_Empty": {
+    "Title": "No post to show",
+    "Subtitle_Exp": "Once you create an experience, it will show up here.",
+    "Subtitle_Friend": "Once you add some new friends, their posts will show up here."
   },
   "Tipping": {
     "Modal_Main": {
@@ -976,5 +984,16 @@
   "Loading": {
     "Load_More": "Load more",
     "Loading_More": "Loading more"
+  },
+  "Cookies": {
+    "Text_1": "This website uses cookies to enhance your online experience.",
+    "Text_2": "Terms and Conditions"
+  },
+  "Banner": {
+    "Text": "{{appName}} {{version}} is not fully audited, please use at your own risk."
+  },
+  "Tooltip": {
+    "Chat": "Chat feature, coming soon",
+    "Trending_Exp": "Show the top 10 experiences based on total subscribers and clone in 24 hours."
   }
 }

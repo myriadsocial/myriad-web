@@ -5,6 +5,8 @@ import Link from 'next/link';
 import {Button, Typography} from '@material-ui/core';
 import {createStyles, makeStyles} from '@material-ui/core/styles';
 
+import i18n from 'src/locale';
+
 const useStyles = makeStyles(() =>
   createStyles({
     empty: {
@@ -36,17 +38,16 @@ export const EmptyExperience: React.FC = () => {
   return (
     <div className={style.empty}>
       <Typography className={style.title} component="p">
-        Uh-oh!
+        {i18n.t('Experience.List.Empty.Text_1')}
       </Typography>
       <div style={{paddingLeft: 8, paddingRight: 8}}>
         <Typography className={style.subtitle} align="center" color="textSecondary" component="p">
-          You haven't created any experience yet. Experience allows you to customize various tags
-          and people to be shown in your timeline.
+          {i18n.t('Experience.List.Empty.Text_2')}
         </Typography>
       </div>
       <Link href={'/experience/create'}>
         <Button color="primary" variant="contained" size="small">
-          Create Experience
+          {i18n.t('Experience.List.Empty.Btn_Create')}
         </Button>
       </Link>
     </div>
