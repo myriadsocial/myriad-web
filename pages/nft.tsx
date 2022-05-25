@@ -7,6 +7,7 @@ import Head from 'next/head';
 import NFTContainer from 'src/components/NFT/NFT.container';
 import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
+import i18n from 'src/locale';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
 import {
@@ -28,7 +29,11 @@ const NFTComponent: React.FC = () => {
       <Head>
         <title>{publicRuntimeConfig.appName} - NFT</title>
       </Head>
-      <TopNavbarComponent description={'Underway'} sectionTitle={SectionTitle.NFT} type={'menu'} />
+      <TopNavbarComponent
+        description={i18n.t('TopNavbar.Subtitle.NFT')}
+        sectionTitle={SectionTitle.NFT}
+        type={'menu'}
+      />
       <NFTContainer />
     </DefaultLayout>
   );

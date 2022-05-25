@@ -9,6 +9,7 @@ import {BoxComponent} from '../atoms/Box';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
 import {UserState} from 'src/reducers/user/reducer';
@@ -51,8 +52,8 @@ export const WalletBalancesContainer: React.FC = () => {
 
   if (anonymous)
     return (
-      <BoxComponent title="Wallet">
-        <Typography>Please Login to access this feature</Typography>
+      <BoxComponent title={i18n.t('Wallet.Header')}>
+        <Typography>{i18n.t('Wallet.Anonymous')}</Typography>
       </BoxComponent>
     );
 

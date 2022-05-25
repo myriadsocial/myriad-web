@@ -17,6 +17,7 @@ import * as InteractionAPI from 'src/lib/api/interaction';
 import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
 import * as PostAPI from 'src/lib/api/post';
+import i18n from 'src/locale';
 import {ThunkActionCreator} from 'src/types/thunk';
 
 /**
@@ -319,14 +320,14 @@ export const createPost: ThunkActionCreator<Actions, RootState> =
 
       dispatch(
         showToasterSnack({
-          message: 'Post successfully created!',
+          message: i18n.t('Post_Create.Success_Toaster'),
           variant: 'success',
         }),
       );
     } catch (error) {
       dispatch(
         setError({
-          message: 'Failed to create post, try again later',
+          message: i18n.t('Post_Create.Failed_Toaster'),
         }),
       );
     } finally {
@@ -368,7 +369,7 @@ export const importPost: ThunkActionCreator<Actions, RootState> =
 
       dispatch(
         showToasterSnack({
-          message: 'Post successfully imported!',
+          message: i18n.t('Post_Import.Success_Toaster'),
           variant: 'success',
         }),
       );

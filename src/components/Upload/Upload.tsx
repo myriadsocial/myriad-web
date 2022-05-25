@@ -5,6 +5,8 @@ import {Button, LinearProgress} from '@material-ui/core';
 import {Dropzone} from '../atoms/Dropzone';
 import {useStyles} from './Upload.styles';
 
+import i18n from 'src/locale';
+
 type UploadProps = {
   type: 'video' | 'image';
   accept: string[];
@@ -71,7 +73,7 @@ export const Upload: React.FC<UploadProps> = props => {
           fullWidth
           onClick={handleConfirm}
           disabled={files.length === 0 || loading}>
-          Confirm
+          {i18n.t('Post_Create.Upload.Btn_Confirm')}
         </Button>
       </div>
     </div>

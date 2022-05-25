@@ -22,7 +22,7 @@
       "Copy": "Tautan pengalaman berhasil disalin",
       "Prompt_Delete": {
         "Title": "Hapus Pengalaman?",
-        "Desc": "Apakah Anda yakin ingin menghapus pengalaman ini? You can't undo this in the future.",
+        "Desc": "Apakah Anda yakin ingin menghapus pengalaman ini? Anda tidak dapat membatalkan ini di masa mendatang.",
         "Btn_Yes": "Ya, lanjutkan untuk menghapus"
       },
       "Prompt_Unsub": {
@@ -151,7 +151,7 @@
     },
     "Options": {
       "Network": "Pilih Jaringan",
-      "Wallet": "Pilih Wallet",
+      "Wallet": "Pilih Dompet",
       "Text_Terms_1": "Saya sudah membaca, dan menyetujui",
       "Text_Terms_2": "Persyaratan Pelayanan",
       "Text_Terms_3": "dan",
@@ -164,7 +164,7 @@
       },
       "Prompt_Account": {
         "Title": "Akun Tidak Ditemukan",
-        "Subtitle": "Tidak ada akun di wallet yang anda pilih."
+        "Subtitle": "Tidak ada akun di dompet yang anda pilih."
       },
       "Tooltip_Wallet": "Segera hadir"
     },
@@ -180,7 +180,7 @@
       "Helper_Validate_Username_Taken": "Nama pengguna sudah terpakai",
       "Placeholder_Display_Name": "Masukkan nama tampilan",
       "Placeholder_Username": "Masukkan nama pengguna",
-      "Btn_Change_Wallet": "Ubah Wallet",
+      "Btn_Change_Wallet": "Ubah Dompet",
       "Btn_Register": "Daftar",
       "Prompt": {
         "Title": "Apa kamu yakin?",
@@ -189,6 +189,13 @@
         "Btn_Yes": "Ya, Lanjutkan"
       }
     }
+  },
+  "Profile_Card": {
+    "Account": "Akun",
+    "Profile": "Profil",
+    "Logout": "Keluar",
+    "Network": "Jaringan",
+    "Wallet": "Dompet"
   },
   "Profile": {
     "Private": {
@@ -395,9 +402,19 @@
       "Add_Post_To_Experience": "Tambahkan postingan ke dalam pengalaman",
       "Report": "Laporkan",
       "Delete_Post": "Hapus Postingan"
+    },
+    "Discussion": {
+      "Title": "Diskusi",
+      "Text_Placeholder": "Tulis sebuah diskusi..."
+    },
+    "Debate": {
+      "Title": "Debat",
+      "Text_Placeholder": "Voting tidak suka terhadap postingan ini akan muncul setelah kamu memberikan komentar"
     }
   },
   "Post_Create": {
+    "Success_Toaster": "Postingan berhasil dibuat!",
+    "Failed_Toaster": "Gagal membuat postingan, coba lagi nanti",
     "Text_Placeholder": "Ketik...",
     "Title": "Buat Postingan",
     "Subtitle": "Buat Postinganmu",
@@ -419,6 +436,33 @@
       "Pornography": "Pornografi",
       "Other": "Lainnya",
       "Confirm": "Konfirmasi"
+    },
+    "Toolbar_Media": {
+      "Menu": {
+        "Upload": "Unggah Gambar",
+        "Link": "Tautan Gambar"
+      }
+    },
+    "Upload": {
+      "Btn_Confirm": "Konfirmasi",
+      "Video": {
+        "Title": "Unggah video",
+        "Placeholder": "Unggah file video .mp4 dengan ukuran kurang dari 100Mb"
+      },
+      "Image": {
+        "Title": "Unggah Gambar"
+      },
+      "Embed": {
+        "Hyperlink": {
+          "Title": "Sisipkan Hyperlink",
+          "Subtitle": "Sorot teks sebagai tautan tersemat"
+        },
+        "Image": {
+          "Title": "Sematkan Gambar"
+        },
+        "Placeholder": "{{prefix}} URL Tautan",
+        "Btn_Confirm": "Konfirmasi"
+      }
     }
   },
   "Post_Delete": {
@@ -428,10 +472,13 @@
       "Cancellation_Text": "Tidak, nanti dahulu"
   },
   "Post_Import": {
+    "Success_Toaster": "Postingan berhasil diimpor!",
     "Text_Placeholder": "Tautan ke postingan",
     "Title": "Impor Postingan",
     "Subtitle": "Impor postingan dari media sosial lain",
-    "Tab_Label": "Impor"
+    "Tab_Label": "Impor",
+    "Form_Helper_Text": "Sementara postingan yang dapat diimpor hanya dari reddit dan twitter",
+    "Post_Preview": "Pratinjau Postingan"
   },
   "Post_Sorting": {
     "Title_Filter": "Saring menurut",
@@ -650,6 +697,14 @@
     "Trends": "Tren",
     "Topic": "Topik"
   },
+  "NFT": {
+    "Text_1": "NFT sedang berlangsung!",
+    "Text_2": "Kami akan segera memberi tahu Anda"
+  },
+  "Social_Token": {
+    "Text_1": "Token sosial sedang berlangsung!",
+    "Text_2": "Kami akan segera memberi tahu Anda"
+  },
   "Setting": {
     "Title": "{{appname}} - Pengaturan",
     "Default_Title": "Tentukan pengaturan privasi dan notifikasi",
@@ -754,6 +809,7 @@
   "Wallet": {
     "Title": "{{appname}} - Dompet",
     "Header": "Dompet",
+    "Anonymous": "Please Login to access this feature",
     "Tab": {
       "Balance": "Saldo",
       "History": "Riwayat",
@@ -833,7 +889,7 @@
   "TopNavbar": {
     "Title": {
       "Friends": "Teman",
-      "Social_Media": "Media Sosial",
+      "SocialMedia": "Media Sosial",
       "Wallet": "Dompet",
       "Experience": "Pengalaman",
       "Profile": "Profil",
@@ -852,14 +908,18 @@
       "Profile": "Detail Profil",
       "Experience_Create": "Buat Pengalaman",
       "Experience_Clone": "Klon Pengalaman",
-      "Experience_Edit": "Ubah Pengalaman"
+      "Experience_Edit": "Ubah Pengalaman",
+      "NFT": "Sedang berjalan",
+      "Social_Token": "Sedang berjalan"
     }
   },
   "Dropzone": {
     "Placeholder": "File harus .jpeg atau .png",
-    "Btn_Upload": "Unggah {{type}}",
-    "Btn_Reupload": "Unggah ulang {{type}}",
+    "Btn_Upload": "Unggah Gambar",
+    "Btn_Reupload": "Unggah ulang Gambar",
+    "Btn_Add_Image": "Tambahkan Gambar",
     "Btn_Upload_Video": "Tambahkan {{type}}",
+    "Btn_Replace_Video": "Ganti {{type}}",
     "Error_File_Large": "File lebih besar dari {{maxSize}}Mb",
     "Video": {
       "Not_Preview": "Kami tidak dapat melihat pratinjau video Anda, pratinjau video dapat dilakukan setelah Anda mengonfirmasinya.",
@@ -877,5 +937,9 @@
     "Just_Now": "baru saja",
     "Yesterday": "kemarin",
     "Result": "{{date}} yang lalu"
+  },
+  "Loading": {
+    "Load_More": "Muat lebih banyak",
+    "Loading_More": "Memuat lebih banyak"
   }
 }

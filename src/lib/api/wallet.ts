@@ -51,12 +51,6 @@ export const getUserByWalletAddress = async (address: string): Promise<User & Bl
     filter: {
       include: [
         {
-          relation: 'currencies',
-          scope: {
-            order: 'priority ASC',
-          },
-        },
-        {
           relation: 'people',
         },
         {
