@@ -13,6 +13,7 @@ import {Modal} from '../atoms/Modal';
 import {useStyles} from './PostImporter.styles';
 
 import {Post} from 'src/interfaces/post';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {fetchImporter} from 'src/reducers/importers/actions';
 import {ImporterState} from 'src/reducers/importers/reducer';
@@ -59,7 +60,7 @@ export const PostImporter: React.FC<Props> = props => {
 
   return (
     <Modal
-      title="Who else imported this post?"
+      title={i18n.t('Post_Import.Importer_List_Title')}
       align="left"
       open={open}
       onClose={onClose}
@@ -71,7 +72,7 @@ export const PostImporter: React.FC<Props> = props => {
           : post.importers.length === 0
           ? post.totalImporter
           : post.totalImporter - 1
-      } users imported this post`}
+      } ${i18n.t('Post_Import.Importer_List_Subtitle')}`}
       className={styles.root}
       gutter="custom">
       {loading ? (
