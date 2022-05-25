@@ -7,6 +7,8 @@ import {SocialMedia, SocialsEnum} from '../../interfaces/social';
 import {BoxComponent} from '../atoms/Box';
 import {SocialDetail, useSocialMediaList} from './use-social-media-list.hook';
 
+import i18n from 'src/locale';
+
 type SocialMediaListProps = {
   connected: Array<SocialMedia>;
   addSocial: (social: SocialsEnum) => void;
@@ -61,7 +63,7 @@ export const SocialMediaList: React.FC<SocialMediaListProps> = ({
   };
 
   return (
-    <BoxComponent title="Social Media" onClick={openSocialPage}>
+    <BoxComponent title={i18n.t('Section.Social_Media')} onClick={openSocialPage}>
       <div className={styles.list}>
         {socials.map(social => (
           <IconButton

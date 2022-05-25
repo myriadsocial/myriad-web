@@ -15,6 +15,7 @@ import {useStyles} from './Tab.style';
 import {ExperienceListContainer} from 'src/components/ExperienceList';
 import ShowIf from 'src/components/common/show-if.component';
 import {ExperienceOwner, useExperienceHook} from 'src/hooks/use-experience-hook';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {ExperienceState} from 'src/reducers/experience/reducer';
 
@@ -24,8 +25,7 @@ export const TrendingExperienceTab: React.FC = () => {
   const {trendingExperiences} = useSelector<RootState, ExperienceState>(
     state => state.experienceState,
   );
-  const toolTipText =
-    'Show the top 10 experiences based on total subscribers and clone in 24 hours.';
+  const toolTipText = i18n.t('Tooltip.Trending_Exp');
 
   React.useEffect(() => {
     loadTrendingExperience();

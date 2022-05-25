@@ -957,5 +957,9 @@
   },
   "Banner": {
     "Text": "{{appName}} {{version}} is not fully audited, please use at your own risk."
+  },
+  "Tooltip": {
+    "Chat": "Chat feature, coming soon",
+    "Trending_Exp": "Show the top 10 experiences based on total subscribers and clone in 24 hours."
   }
 }
