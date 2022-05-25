@@ -44,6 +44,11 @@
       "Modal": {
         "Title": "Bagikan",
         "Subtitle": "Beri tahu orang lain tentang Pengalaman ini di Myriad.Social"
+      },
+      "Empty": {
+        "Text_1": "Uh-oh!",
+        "Text_2": "Anda belum membuat pengalaman apa pun. Pengalaman memungkinkan Anda untuk menyesuaikan berbagai tag dan orang untuk ditampilkan di timeline Anda.",
+        "Btn_Create": "Buat Pengalaman"
       }
     },
     "Preview": {

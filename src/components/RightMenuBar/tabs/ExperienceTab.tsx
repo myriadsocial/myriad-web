@@ -11,6 +11,7 @@ import {ExperienceListContainer, EmptyExperience} from 'src/components/Experienc
 import ShowIf from 'src/components/common/show-if.component';
 import {ExperienceOwner} from 'src/hooks/use-experience-hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -25,7 +26,7 @@ export const ExperienceTab: React.FC = () => {
   const handleCreateExperience = () => {
     if (experiences.length === 10) {
       openToasterSnack({
-        message: 'You can only add up to 10 experiences max',
+        message: i18n.t('Experience.Alert.Max_Exp'),
         variant: 'warning',
       });
     } else {
@@ -46,7 +47,7 @@ export const ExperienceTab: React.FC = () => {
           component="div"
           className={styles.action}
           onClick={handleCreateExperience}>
-          + Create experience
+          + {i18n.t('Experience.Create.Title')}
         </Typography>
       </ShowIf>
 

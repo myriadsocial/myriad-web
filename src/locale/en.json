@@ -44,6 +44,11 @@
       "Modal": {
         "Title": "Share",
         "Subtitle": "Let others know about this Experience on Myriad.Social"
+      },
+      "Empty": {
+        "Text_1": "Uh-oh!",
+        "Text_2": "You haven't created any experience yet. Experience allows you to customize various tags and people to be shown in your timeline.",
+        "Btn_Create": "Create Experience"
       }
     },
     "Preview": {
