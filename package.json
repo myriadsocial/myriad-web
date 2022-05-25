@@ -10,6 +10,13 @@
     "type": "git",
     "url": "https://github.com/myriadsocial/myriad-web.git"
   },
+  "resolutions": {
+    "@polkadot/util": "^8.7.1",
+    "@polkadot/util-crypto": "^8.7.1",
+    "@polkadot/wasm-crypto": "^5.1.1",
+    "@polkadot/wasm-crypto-wasm": "^5.1.1",
+    "bn.js": "^4.11"
+  },
   "scripts": {
     "analyze": "cross-env ANALYZE=true next build",
     "prepare": "husky install",
@@ -61,11 +68,11 @@
     "@types/bn.js": "^4.11.6",
     "@udecode/plate": "^3.1.0",
     "axios": "^0.26.1",
-    "bn.js": "^4.12.0",
     "date-fns": "^2.28.0",
     "detect-browser": "^5.3.0",
     "express": "^4.17.3",
     "firebase": "^8.6.2",
+    "global": "^4.4.0",
     "html-react-parser": "^1.4.9",
     "http-proxy-middleware": "^2.0.4",
     "i18next": "^21.6.7",
@@ -111,9 +118,11 @@
     "styled-components": "^5.3.1",
     "ua-parser-js": "^1.0.2",
     "unique-names-generator": "^4.7.1",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "yarn-deduplicate": "^5.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.0.0",
     "@commitlint/cli": "^12.1.4",
     "@polkadot/types": "^6.5.2",
     "@storybook/addon-actions": "^6.3.7",
@@ -127,7 +136,6 @@
     "@types/node": "^14.14.37",
     "@types/react": "^17.0.3",
     "@typescript-eslint/eslint-plugin": "^5.16.0",
-    "@babel/core": "^7.0.0",
     "commitlint-config-jira": "^1.6.3",
     "commitlint-plugin-jira-rules": "^1.6.3",
     "cross-env": "^7.0.3",
