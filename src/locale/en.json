@@ -338,6 +338,16 @@
     },
     "Setting": {
       "Copy": "Wallet address copied!"
+    },
+    "Modal_Report": {
+      "Title": "Report User",
+      "Subtitle_1": "Why are you reporting ",
+      "Subtitle_2": "Help us understand the problem",
+      "Description_Placeholder":"Description",
+      "Description_Validation":"Must be between 4 to 200 characters",
+      "Btn_Submit": "Submit",
+      "Error_Login": "Please login to continue your report",
+      "Toaster_Success": "User has been reported"
     }
   },
   "Home": {
@@ -537,6 +547,25 @@
       "Description": "Are you sure to remove this comment?",
       "Confirm_Text": "Yes, proceed to delete",
       "Cancel_Text": "No, let me rethink"
+    },
+    "Modal_Report": {
+      "Title": "Report Post",
+      "Subtitle_1": "Why are you reporting this post?",
+      "Subtitle_2": "Help us understand the problem",
+      "Reason_Trademark": "Unauthorized trademark",
+      "Reason_Copyright": "Unauthorized use of copyrighted materials",
+      "Reason_Child_Sexual": "Child sexual exploitation",
+      "Reason_Porn": "Pornography (No NSFW Tag)",
+      "Reason_Private": "Private information posted on Myriad",
+      "Reason_Abuse": "Abusive behavior and violent threats",
+      "Reason_Spam": "Spam and system abuse",
+      "Description_Placeholder": "Description",
+      "Description_Validation": "Must be between 4 to 200 characters",
+      "Footer": "Not sure if something breaking the rules?",
+      "Review_Content_Policy": "Review Myriad’s content policy",
+      "Btn_Confirm": "Confirm",
+      "Error_Login": "Please login to continue your report",
+      "Toaster_Success": "Post report has been submitted"
     }
   },
   "Post_Empty": {

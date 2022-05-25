@@ -338,6 +338,16 @@
     },
     "Setting": {
       "Copy": "Alamat dompet disalin!"
+    },
+    "Modal_Report": {
+      "Title": "Laporkan Pengguna",
+      "Subtitle_1": "Mengapa kamu melaporkan ",
+      "Subtitle_2":"Bantu kami untuk mengetahui permasalahannya",
+      "Description_Placeholder":"Deskripsi",
+      "Description_Validation":"Harus diantara 4 sampai 200 karakter",
+      "Btn_Submit": "Kirim",
+      "Error_Login":"Silahkan masuk untuk melanjutkan pembuatan laporan",
+      "Toaster_Success": "Pengguna telah dilaporkan"
     }
   },
   "Home": {
@@ -537,6 +547,25 @@
       "Description": "Apa kamu yakin ingin menghapus komentar ini?",
       "Confirm_Text": "Ya, lanjutkan untuk menghapus",
       "Cancel_Text": "Tidak, biarkan saya pikir lagi"
+    },
+    "Modal_Report": {
+      "Title": "Laporkan Postingan",
+      "Subtitle_1": "Mengapa kamu melaporkan postingan ini?",
+      "Subtitle_2": "Bantu kami untuk mengetahui permasalahannya",
+      "Reason_Trademark": "Merek dagang yang tidak sah",
+      "Reason_Copyright": "Penggunaan materi berhak cipta secara tidak sah",
+      "Reason_Child_Sexual": "Eksploitasi seksual anak",
+      "Reason_Porn": "Pornografi (Tanpa Tag NSFW)",
+      "Reason_Private": "Informasi pribadi diposting di Myriad",
+      "Reason_Abuse": "Perilaku kasar dan ancaman kekerasan",
+      "Reason_Spam": "Spam dan penyalahgunaan sistem",
+      "Description_Placeholder": "Deskripsi",
+      "Description_Validation": "Harus diantara 4 sampai 200 karakter",
+      "Footer": "Tidak yakin apakah ada yang melanggar aturan?",
+      "Review_Content_Policy": "Tinjau kebijakan konten Myriad",
+      "Btn_Confirm": "Konfirmasi",
+      "Error_Login": "Silahkan masuk untuk melanjutkan pembuatan laporan",
+      "Toaster_Success": "Laporan postingan telah terkirim"
     }
   },
   "Post_Empty": {

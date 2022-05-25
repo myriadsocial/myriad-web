@@ -12,6 +12,7 @@ import ShowIf from 'src/components/common/show-if.component';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {ReportProps} from 'src/interfaces/report';
 import {User} from 'src/interfaces/user';
+import i18n from 'src/locale';
 
 export type Props = {
   user: User;
@@ -54,10 +55,10 @@ export const ReportComponent: React.FC<Props> = props => {
   };
 
   return (
-    <Modal title="Report User" onClose={onClose} open={open}>
+    <Modal title={i18n.t('Profile.Modal_Report.Title')} onClose={onClose} open={open}>
       <div className={style.root}>
         <Typography variant="h5" gutterBottom={true} style={{fontWeight: 600}}>
-          Why are you reporting&nbsp;
+          {i18n.t('Profile.Modal_Report.Subtitle_1')}
           <Typography variant="h5" component="span" color="primary" style={{fontWeight: 600}}>
             {user.name}
           </Typography>
@@ -65,14 +66,14 @@ export const ReportComponent: React.FC<Props> = props => {
         </Typography>
 
         <Typography variant="caption" color="textSecondary" gutterBottom={true} component="div">
-          Help us understand the problem
+        {i18n.t('Profile.Modal_Report.Subtitle_2')}
         </Typography>
 
         <div className={style.box}>
           <TextField
             error={isErrorValidation}
             id="description"
-            label="Description"
+            label={i18n.t('Profile.Modal_Report.Description_Placeholder')}
             variant="outlined"
             fullWidth
             multiline
@@ -88,16 +89,16 @@ export const ReportComponent: React.FC<Props> = props => {
           />
           <ShowIf condition={isErrorValidation}>
             <Typography gutterBottom variant="caption" component="h2" color="error">
-              Must be between 4 to 200 characters
+            {i18n.t('Profile.Modal_Report.Description_Validation')}
             </Typography>
           </ShowIf>
         </div>
         <Grid container justifyContent="space-between">
           <Button onClick={onClose} size="small" variant="outlined" color="secondary">
-            Cancel
+          {i18n.t('General.Cancel')}
           </Button>
           <Button onClick={handleSubmit} size="small" variant="contained" color="primary">
-            Submit
+          {i18n.t('Profile.Modal_Report.Btn_Submit')}
           </Button>
         </Grid>
       </div>
