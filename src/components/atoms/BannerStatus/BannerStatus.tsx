@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import useStyles from './banner.style';
 
 import ShowIf from 'src/components/common/show-if.component';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -26,7 +27,7 @@ const BannerStatusComponent: React.FC<Props> = props => {
   const appName = publicRuntimeConfig.appName;
   const appEnvironment = publicRuntimeConfig.appEnvironment;
   const {
-    text = `${appName} ${publicRuntimeConfig.appVersion} is not fully audited, please use at your own risk.`,
+    text = i18n.t('Banner.Text', {appName: appName, version: publicRuntimeConfig.appVersion}),
   } = props;
 
   React.useEffect(() => {

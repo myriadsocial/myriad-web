@@ -954,5 +954,8 @@
   "Cookies": {
     "Text_1": "This website uses cookies to enhance your online experience.",
     "Text_2": "Terms and Conditions"
+  },
+  "Banner": {
+    "Text": "{{appName}} {{version}} is not fully audited, please use at your own risk."
   }
 }
