@@ -174,10 +174,77 @@ export const useNearApi = () => {
     await account.signAndSendTransaction({receiverId, actions});
   };
 
+  const sendAmountV2 = async (
+    receiver: string,
+    amount: BN,
+    referenceId?: string,
+  ): Promise<void> => {
+    const {wallet} = await nearInitialize();
+
+    if (referenceId) {
+      const ONE_YOCTO = '1';
+      const MAX_GAS = '300000000000000';
+      const ATTACHED_AMOUNT = '1250000000000000000000';
+      const ATTACHED_GAS = '10000000000000';
+      const contract = await contractInitialize(referenceId);
+      const check_storage = await (contract as any).storage_balance_of({account_id: receiver});
+      const actions: nearAPI.transactions.Action[] = [];
+
+      if (!check_storage) {
+        actions.push(
+          nearAPI.transactions.functionCall(
+            'storage_deposit',
+            Buffer.from(JSON.stringify({account_id: receiver, registration_only: true})),
+            new BN(ATTACHED_GAS),
+            new BN(ATTACHED_AMOUNT),
+          ),
+        );
+      }
+
+      actions.push(
+        nearAPI.transactions.functionCall(
+          'ft_transfer',
+          Buffer.from(JSON.stringify({receiver_id: receiver, amount: amount.toString()})),
+          new BN(MAX_GAS).sub(new BN(ATTACHED_GAS)),
+          new BN(ONE_YOCTO),
+        ),
+      );
+
+      const accountId = wallet.getAccountId();
+      const provider = new nearAPI.providers.JsonRpcProvider(
+        `https://rpc.${wallet._networkId}.near.org`,
+      );
+      const {
+        public_key,
+        access_key: {nonce},
+      } = await wallet.account().accessKeyForTransaction(referenceId, actions);
+      const accessKey = await provider.query(
+        `access_key/${accountId}/${public_key.toString()}`,
+        '',
+      );
+      const recentBlockHash = nearAPI.utils.serialize.base_decode(accessKey.block_hash);
+      const signer = new nearAPI.InMemorySigner(wallet._keyStore);
+      const publicKey = await signer.getPublicKey(accountId, wallet._networkId);
+      const transaction = nearAPI.transactions.createTransaction(
+        accountId,
+        publicKey,
+        referenceId,
+        nonce + 1,
+        actions,
+        recentBlockHash,
+      );
+      await wallet.requestSignTransactions({transactions: [transaction]});
+    } else {
+      const account = wallet.account();
+      await account.sendMoney(receiver, amount);
+    }
+  };
+
   return {
     connectToNear,
     getEstimatedFee,
     sendAmount,
     balanceDetails,
+    sendAmountV2,
   };
 };
