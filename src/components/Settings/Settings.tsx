@@ -2,8 +2,6 @@ import {ChevronRightIcon} from '@heroicons/react/outline';
 
 import React from 'react';
 
-import getConfig from 'next/config';
-
 import {List, ListItem, ListItemText, Paper, SvgIcon, Typography} from '@material-ui/core';
 
 import ShowIf from '../common/show-if.component';
@@ -23,8 +21,6 @@ type SettingsProps = {
 export const Settings: React.FC<SettingsProps> = props => {
   const {selectedType, value, onChange} = props;
 
-  const {publicRuntimeConfig} = getConfig();
-  const appEnvironment = publicRuntimeConfig.appEnvironment;
   const styles = useStyles();
   const settings = useSettingList();
 
@@ -42,56 +38,45 @@ export const Settings: React.FC<SettingsProps> = props => {
             {i18n.t('Setting.Header')}
           </Typography>
           <List>
-            {settings
-              .filter(
-                setting =>
-                  setting.id !==
-                  (appEnvironment === 'development' || appEnvironment === 'local'
-                    ? ''
-                    : 'language'),
-              )
-              .map(item => {
-                return (
-                  <ListItem
-                    key={item.id}
-                    button
-                    onClick={selectSettings(item)}
-                    disabled={item.id == 'version'}
-                    className={styles.option}
-                    alignItems="center">
-                    <ListItemText>
-                      <Typography variant="h5" color="textPrimary" className={styles.primary}>
-                        {item.title}
-                      </Typography>
-                      <Typography
-                        variant="body1"
-                        color="textSecondary"
-                        className={styles.secondary}>
-                        {item.subtitle}
-                      </Typography>
-                    </ListItemText>
-                    {item.id === 'version' && (
-                      <div
-                        style={{
-                          display: 'flex',
-                          paddingRight: 31,
-                          fontWeight: 300,
-                          fontStyle: 'italic',
-                          fontSize: 14,
-                          color: '#988E8E',
-                        }}>
-                        <Typography>{value.version}</Typography>
-                      </div>
-                    )}
+            {settings.map(item => {
+              return (
+                <ListItem
+                  key={item.id}
+                  button
+                  onClick={selectSettings(item)}
+                  disabled={item.id == 'version'}
+                  className={styles.option}
+                  alignItems="center">
+                  <ListItemText>
+                    <Typography variant="h5" color="textPrimary" className={styles.primary}>
+                      {item.title}
+                    </Typography>
+                    <Typography variant="body1" color="textSecondary" className={styles.secondary}>
+                      {item.subtitle}
+                    </Typography>
+                  </ListItemText>
+                  {item.id === 'version' && (
+                    <div
+                      style={{
+                        display: 'flex',
+                        paddingRight: 31,
+                        fontWeight: 300,
+                        fontStyle: 'italic',
+                        fontSize: 14,
+                        color: '#988E8E',
+                      }}>
+                      <Typography>{value.version}</Typography>
+                    </div>
+                  )}
 
-                    {item.id !== 'version' && (
-                      <div className="hidden-button">
-                        <SvgIcon component={ChevronRightIcon} />
-                      </div>
-                    )}
-                  </ListItem>
-                );
-              })}
+                  {item.id !== 'version' && (
+                    <div className="hidden-button">
+                      <SvgIcon component={ChevronRightIcon} />
+                    </div>
+                  )}
+                </ListItem>
+              );
+            })}
           </List>
         </>
       )}
