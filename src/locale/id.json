@@ -102,6 +102,18 @@
       "Menu_Post": {
         "Remove": "Hapus dari pengalaman"
       }
+    },
+    "Modal_Add_Post": {
+      "Title": "Pilih pengalaman",
+      "Subtitle_1": "Tambahkan pos ke pengalaman di bawah ini. Kamu",
+      "Subtitle_2": "dapat membatalkan pilihan untuk menghapus dari pengalaman",
+      "Tooltip": "Pengalaman",
+      "Tooltip_Text": "Beberapa postingan tidak akan terlihat oleh pengguna lain karena batasan visibilitas oleh pemiliknya.",
+      "Select_All": "Pilih semua",
+      "Card_Own": "(anda)",
+      "Empty_Title": "Uh-oh",
+      "Empty_Subtitle": "Anda belum membuat pengalaman apa pun.",
+      "Btn_Confirm": "Konfirmasi"
     }
   },
   "General": {

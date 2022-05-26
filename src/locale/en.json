@@ -102,6 +102,18 @@
       "Menu_Post": {
         "Remove": "Remove from experience"
       }
+    },
+    "Modal_Add_Post": {
+      "Title": "Select experience",
+      "Subtitle_1": "Add post to experience below. You",
+      "Subtitle_2": "can unselect it to remove from experience",
+      "Tooltip": "Experience",
+      "Tooltip_Text": "Some posts will not be visible to other users due to visibility restrictions by their owners.",
+      "Select_All": "Select all",
+      "Card_Own": "(you)",
+      "Empty_Title": "Uh-oh",
+      "Empty_Subtitle": "You haven't created any experience yet.",
+      "Btn_Confirm": "Confirm"
     }
   },
   "General": {
