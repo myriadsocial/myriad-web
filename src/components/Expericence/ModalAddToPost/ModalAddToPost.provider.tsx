@@ -20,6 +20,7 @@ import ModalAddToPostContext, {HandleConfirmAddPostExperience} from './ModalAddT
 import {ModalAddPostExperienceProps} from './ModalAddToPost.interface';
 import {useStyles} from './ModalAddToPost.styles';
 
+import ShowIf from 'components/common/show-if.component';
 import {Loading} from 'src/components/atoms/Loading';
 import {Modal} from 'src/components/atoms/Modal';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
@@ -194,6 +195,19 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
                 );
               })
           )}
+          <ShowIf
+            condition={
+              userExperiences.filter(ar => ar.experience.user.id === user?.id).length === 0
+            }>
+            <div className={styles.containerEmpty}>
+              <Typography component="p" className={styles.emptyTitle}>
+                {i18n.t('Experience.Modal_Add_Post.Empty_Title')}
+              </Typography>
+              <Typography component="p" className={styles.emptySubtitle}>
+                {i18n.t('Experience.Modal_Add_Post.Empty_Subtitle')}
+              </Typography>
+            </div>
+          </ShowIf>
         </div>
         <Button
           size="small"
@@ -201,7 +215,9 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
           color="primary"
           fullWidth
           onClick={handleConfirm}
-          disabled={loading}>
+          disabled={
+            loading || userExperiences.filter(ar => ar.experience.user.id === user?.id).length === 0
+          }>
           {i18n.t('Experience.Modal_Add_Post.Btn_Confirm')}
         </Button>
       </Modal>
