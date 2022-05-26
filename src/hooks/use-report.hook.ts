@@ -7,10 +7,10 @@ import {ReferenceType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
 import {ReportProps} from 'src/interfaces/report';
 import * as InteractionAPI from 'src/lib/api/interaction';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {setError} from 'src/reducers/base/actions';
 import {UserState} from 'src/reducers/user/reducer';
-import i18n from 'src/locale';
 
 export const useReport = () => {
   const {user} = useSelector<RootState, UserState>(state => state.userState);

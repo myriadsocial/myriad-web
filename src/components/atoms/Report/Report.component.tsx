@@ -66,7 +66,7 @@ export const ReportComponent: React.FC<Props> = props => {
         </Typography>
 
         <Typography variant="caption" color="textSecondary" gutterBottom={true} component="div">
-        {i18n.t('Profile.Modal_Report.Subtitle_2')}
+          {i18n.t('Profile.Modal_Report.Subtitle_2')}
         </Typography>
 
         <div className={style.box}>
@@ -89,16 +89,16 @@ export const ReportComponent: React.FC<Props> = props => {
           />
           <ShowIf condition={isErrorValidation}>
             <Typography gutterBottom variant="caption" component="h2" color="error">
-            {i18n.t('Profile.Modal_Report.Description_Validation')}
+              {i18n.t('Profile.Modal_Report.Description_Validation')}
             </Typography>
           </ShowIf>
         </div>
         <Grid container justifyContent="space-between">
           <Button onClick={onClose} size="small" variant="outlined" color="secondary">
-          {i18n.t('General.Cancel')}
+            {i18n.t('General.Cancel')}
           </Button>
           <Button onClick={handleSubmit} size="small" variant="contained" color="primary">
-          {i18n.t('Profile.Modal_Report.Btn_Submit')}
+            {i18n.t('Profile.Modal_Report.Btn_Submit')}
           </Button>
         </Grid>
       </div>

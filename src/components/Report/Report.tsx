@@ -23,10 +23,10 @@ import {Modal} from '../atoms/Modal';
 import ShowIf from '../common/show-if.component';
 import {useStyles} from './Report.styles';
 import {usePostReportList} from './use-post-report-list.hook';
-import i18n from 'src/locale';
 
 import {Comment} from 'src/interfaces/comment';
 import {Post} from 'src/interfaces/post';
+import i18n from 'src/locale';
 
 type ReportProps = {
   open: boolean;
@@ -76,7 +76,11 @@ export const Report: React.FC<ReportProps> = props => {
   };
 
   return (
-    <Modal title={i18n.t('Post_Comment.Modal_Report.Title')} open={open} onClose={onClose} className={styles.root}>
+    <Modal
+      title={i18n.t('Post_Comment.Modal_Report.Title')}
+      open={open}
+      onClose={onClose}
+      className={styles.root}>
       <Typography variant="h5">{i18n.t('Post_Comment.Modal_Report.Subtitle_1')}</Typography>
       <Typography variant="subtitle1">{i18n.t('Post_Comment.Modal_Report.Subtitle_2')}</Typography>
 
@@ -131,11 +135,11 @@ export const Report: React.FC<ReportProps> = props => {
         </CardMedia>
         <CardContent>
           <Typography gutterBottom variant="caption" component="h2">
-          {i18n.t('Post_Comment.Modal_Report.Footer')}
+            {i18n.t('Post_Comment.Modal_Report.Footer')}
           </Typography>
           <Link href="/term-of-use" target="_blank">
             <Typography variant="caption" color="primary" component="a">
-            {i18n.t('Post_Comment.Modal_Report.Review_Content_Policy')}
+              {i18n.t('Post_Comment.Modal_Report.Review_Content_Policy')}
             </Typography>
           </Link>
         </CardContent>
@@ -143,7 +147,7 @@ export const Report: React.FC<ReportProps> = props => {
 
       <div className={styles.action}>
         <Button variant="outlined" color="secondary" onClick={onClose}>
-        {i18n.t('General.Cancel')}
+          {i18n.t('General.Cancel')}
         </Button>
 
         <Button
