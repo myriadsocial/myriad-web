@@ -67,7 +67,7 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
   }, []);
 
   const handleSelectAllExperience = () => {
-    const tmpUserExperience = [...userExperiences];
+    const tmpUserExperience = [...userExperiences].filter(ar => ar.experience.user.id === user?.id);
     let tmpSelectedExperience: string[] = [];
     if (!isSelectAll) {
       tmpUserExperience.map(item => {
