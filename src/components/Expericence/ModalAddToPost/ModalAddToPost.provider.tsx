@@ -20,9 +20,11 @@ import ModalAddToPostContext, {HandleConfirmAddPostExperience} from './ModalAddT
 import {ModalAddPostExperienceProps} from './ModalAddToPost.interface';
 import {useStyles} from './ModalAddToPost.styles';
 
+import ShowIf from 'components/common/show-if.component';
 import {Loading} from 'src/components/atoms/Loading';
 import {Modal} from 'src/components/atoms/Modal';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -41,8 +43,7 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
   const DEFAULT_IMAGE =
     'https://pbs.twimg.com/profile_images/1407599051579617281/-jHXi6y5_400x400.jpg';
 
-  const toolTipText =
-    'Some posts will not be visible to other users due to visibility restrictions by their owners.';
+  const toolTipText = i18n.t('Experience.Modal_Add_Post.Tooltip_Text');
 
   const addPostToExperience = useCallback<HandleConfirmAddPostExperience>(
     props => {
@@ -66,7 +67,7 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
   }, []);
 
   const handleSelectAllExperience = () => {
-    const tmpUserExperience = [...userExperiences];
+    const tmpUserExperience = [...userExperiences].filter(ar => ar.experience.user.id === user?.id);
     let tmpSelectedExperience: string[] = [];
     if (!isSelectAll) {
       tmpUserExperience.map(item => {
@@ -104,11 +105,11 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
         {children}
       </ModalAddToPostContext.Provider>
       <Modal
-        title="Select experience"
+        title={i18n.t('Experience.Modal_Add_Post.Title')}
         subtitle={
           <Typography>
-            <Typography>Add post to experience below. You</Typography>
-            <Typography>can unselect it to remove from experience</Typography>
+            <Typography>{i18n.t('Experience.Modal_Add_Post.Subtitle_1')}</Typography>
+            <Typography>{i18n.t('Experience.Modal_Add_Post.Subtitle_2')}</Typography>
           </Typography>
         }
         open={open}
@@ -116,7 +117,7 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
         <div className={styles.root}>
           <div className={styles.options}>
             <div className={styles.flex}>
-              <Typography>Experience</Typography>
+              <Typography>{i18n.t('Experience.Modal_Add_Post.Tooltip')}</Typography>
               <Tooltip title={toolTipText} arrow>
                 <IconButton aria-label="info" className={styles.info} style={{color: '#404040'}}>
                   <SvgIcon component={InformationCircleIcon} viewBox="0 0 24 24" />
@@ -132,7 +133,7 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
                 classes={{root: styles.fill}}
               />
               <Typography component="span" color="textPrimary" className={styles.selected}>
-                Select all
+                {i18n.t('Experience.Modal_Add_Post.Select_All')}
               </Typography>
             </div>
           </div>
@@ -185,7 +186,7 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
                             {item.experience.user.name}
                           </Typography>
                           <Typography variant="caption" color="textSecondary">
-                            {item ? ' (you)' : ''}
+                            {item ? ` ${i18n.t('Experience.Modal_Add_Post.Card_Own')}` : ''}
                           </Typography>
                         </CardContent>
                       </Grid>
@@ -194,6 +195,19 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
                 );
               })
           )}
+          <ShowIf
+            condition={
+              userExperiences.filter(ar => ar.experience.user.id === user?.id).length === 0
+            }>
+            <div className={styles.containerEmpty}>
+              <Typography component="p" className={styles.emptyTitle}>
+                {i18n.t('Experience.Modal_Add_Post.Empty_Title')}
+              </Typography>
+              <Typography component="p" className={styles.emptySubtitle}>
+                {i18n.t('Experience.Modal_Add_Post.Empty_Subtitle')}
+              </Typography>
+            </div>
+          </ShowIf>
         </div>
         <Button
           size="small"
@@ -201,8 +215,10 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
           color="primary"
           fullWidth
           onClick={handleConfirm}
-          disabled={loading}>
-          Confirm
+          disabled={
+            loading || userExperiences.filter(ar => ar.experience.user.id === user?.id).length === 0
+          }>
+          {i18n.t('Experience.Modal_Add_Post.Btn_Confirm')}
         </Button>
       </Modal>
     </>
