@@ -710,7 +710,15 @@
     }
   },
   "Maintenance": {
-    "Title": "{{appname}} - Perbaikan"
+    "Title_Head": "{{appname}} - Perbaikan",
+    "Title": "Yah, tidak ada seorang pun disini",
+    "Subtitle": "Kami sedang dalam perbaikan, silakan kembali lagi nanti",
+    "Btn_Web": "Myriad web"
+  },
+  "404": {
+    "Title": "Ups! Kamu bergerak sangat cepat dan kamu tersesat",
+    "Subtitle": "Halaman yang kamu cari tidak ditemukan ",
+    "Btn_Back": "Kembali ke beranda"
   },
   "Notification": {
     "Title": "{{appname}} - Notifikasi",

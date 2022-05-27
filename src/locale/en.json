@@ -710,7 +710,15 @@
     }
   },
   "Maintenance": {
-    "Title": "{{appname}} - Maintenance"
+    "Title_Head": "{{appname}} - Maintenance",
+    "Title": "Yep there's no one here",
+    "Subtitle": "We're currently under maintenance, please come back later",
+    "Btn_Web": "Myriad web"
+  },
+  "404": {
+    "Title": "Whoops! You've moved so fast and you got lost",
+    "Subtitle": "The page you are looking for is not found ",
+    "Btn_Back": "Back to home"
   },
   "Notification": {
     "Title": "{{appname}} - Notification",

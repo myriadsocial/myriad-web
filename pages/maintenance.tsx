@@ -68,7 +68,7 @@ const Maintenance: React.FC = () => {
   return (
     <div className={style.root}>
       <Head>
-        <title>{i18n.t('Maintenance.Title', {appname: publicRuntimeConfig.appName})}</title>
+        <title>{i18n.t('Maintenance.Title_Head', {appname: publicRuntimeConfig.appName})}</title>
       </Head>
       <div>
         <div className={style.bar} />
@@ -78,12 +78,11 @@ const Maintenance: React.FC = () => {
         <div className={style.illustration}>
           <Illustration />
         </div>
-        <Typography className={style.title}>Yep there&rsquo;s no one here</Typography>
-        <Typography className={style.subtitle}>
-          We&rsquo;re currently under maintenance, please come back later
-        </Typography>
+
+        <Typography className={style.title}>{i18n.t('Maintenance.Title')}</Typography>
+        <Typography className={style.subtitle}>{i18n.t('Maintenance.Subtitle')}</Typography>
         <Button onClick={handleAction} className={style.button} variant="contained" color="primary">
-          Myriad web
+          {i18n.t('Maintenance.Btn_Web')}
         </Button>
       </div>
     </div>
