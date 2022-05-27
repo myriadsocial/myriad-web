@@ -11,6 +11,7 @@ import {deserialize} from '../CommentEditor/formatter';
 import {formatToString} from 'src/components/PostEditor';
 import {ELEMENT_SHOW_MORE, ShowMore} from 'src/components/PostEditor/Render/ShowMore';
 import {Comment} from 'src/interfaces/comment';
+import i18n from 'src/locale';
 import theme from 'src/themes/light-theme';
 
 type CommentRenderProps = {
@@ -41,9 +42,23 @@ export const CommentRender: React.FC<CommentRenderProps> = props => {
     return render;
   };
 
+  const translationComment = (comment: string) => {
+    switch (comment) {
+      case '[This comment is from a private account]':
+        return i18n.t('Post_Comment.Private_Account');
+
+      case '[comment removed]':
+        return i18n.t('Post_Comment.Banned_Account');
+
+      default:
+        return comment;
+    }
+  };
+
   const renderElement = useCallback(
     (node, i) => {
       if (node.text) {
+        node.text = translationComment(node.text);
         if (Object.keys(node).length === 1) {
           const splitNewLine = node.text.split('\n');
 

@@ -8,6 +8,7 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import {MyriadFullIcon} from 'components/atoms/Icons';
 import Illustration from 'src/images/illustration/404_Page_Not_Found__Isometric_2_1.svg';
+import i18n from 'src/locale';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -68,18 +69,16 @@ const NotFound: React.FC = () => {
         <div className={style.illustration}>
           <Illustration />
         </div>
-        <Typography className={style.title}>
-          Whoops! You&rsquo;ve moved so fast and you got lost
-        </Typography>
+        <Typography className={style.title}>{i18n.t('404.Title')}</Typography>
         <Typography className={style.subtitle}>
-          The page you are looking for is not found&nbsp;
+          {i18n.t('404.Subtitle')}
           <span aria-label="sad" role="img">
             😢
           </span>
         </Typography>
         <Link href={'/home'} passHref>
           <Button className={style.button} variant="contained" color="primary">
-            Back to home
+            {i18n.t('404.Btn_Back')}
           </Button>
         </Link>
       </div>

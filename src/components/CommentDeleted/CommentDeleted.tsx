@@ -18,6 +18,7 @@ import {CommentDeletedProps} from './CommentDeleted.interface';
 import {useStyles} from './CommentDeleted.styles';
 
 import ShowIf from 'src/components/common/show-if.component';
+import i18n from 'src/locale';
 
 export const CommentDeleted = forwardRef<HTMLDivElement, CommentDeletedProps>((props, ref) => {
   const {comment, deep, user, onOpenTipHistory} = props;
@@ -59,7 +60,7 @@ export const CommentDeleted = forwardRef<HTMLDivElement, CommentDeletedProps>((p
           <CardContent className={style.content}>
             <SvgIcon component={InformationCircleIcon} viewBox="0 0 24 24" />
             <Typography variant="body1" component="div">
-              Comment deleted by user.
+              {i18n.t('Post_Comment.Deleted_Comment')}
             </Typography>
           </CardContent>
 
@@ -80,7 +81,7 @@ export const CommentDeleted = forwardRef<HTMLDivElement, CommentDeletedProps>((p
               classes={{root: style.button}}
               size="small"
               variant="text">
-              Reply
+              {i18n.t('Post_Comment.Reply')}
             </Button>
             <ShowIf condition={!isOwnComment}>
               <Button
@@ -89,7 +90,7 @@ export const CommentDeleted = forwardRef<HTMLDivElement, CommentDeletedProps>((p
                 classes={{root: style.button}}
                 size="small"
                 variant="text">
-                Send tip
+                {i18n.t('Post_Comment.Send_Tip')}
               </Button>
             </ShowIf>
             <Button
@@ -97,7 +98,7 @@ export const CommentDeleted = forwardRef<HTMLDivElement, CommentDeletedProps>((p
               size="small"
               variant="text"
               onClick={handleOpenTipHistory}>
-              Tip history
+              {i18n.t('Post_Comment.Tip_History')}
             </Button>
             <ShowIf condition={!isOwnComment}>
               <Button
@@ -106,7 +107,7 @@ export const CommentDeleted = forwardRef<HTMLDivElement, CommentDeletedProps>((p
                 classes={{root: style.button}}
                 size="small"
                 variant="text">
-                Report
+                {i18n.t('Post_Comment.Report')}
               </Button>
             </ShowIf>
           </CardActions>

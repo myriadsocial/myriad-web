@@ -554,12 +554,16 @@
     "Tip_History": "Tip History",
     "Show_Comment": "show comment",
     "Blocked_User": "Blocked user",
+    "Deleted_Comment": "Comment deleted by user.",
+    "Send_Tip": "Send tip",
     "Confirm_Delete": {
       "Title": "Delete Comment",
       "Description": "Are you sure to remove this comment?",
       "Confirm_Text": "Yes, proceed to delete",
       "Cancel_Text": "No, let me rethink"
     },
+    "Private_Account": "[This comment is from a private account]",
+    "Banned_Account": "[comment removed]",
     "Modal_Report": {
       "Title": "Report Post",
       "Subtitle_1": "Why are you reporting this post?",
@@ -710,7 +714,15 @@
     }
   },
   "Maintenance": {
-    "Title": "{{appname}} - Maintenance"
+    "Title_Head": "{{appname}} - Maintenance",
+    "Title": "Yep there's no one here",
+    "Subtitle": "We're currently under maintenance, please come back later",
+    "Btn_Web": "Myriad web"
+  },
+  "404": {
+    "Title": "Whoops! You've moved so fast and you got lost",
+    "Subtitle": "The page you are looking for is not found ",
+    "Btn_Back": "Back to home"
   },
   "Notification": {
     "Title": "{{appname}} - Notification",

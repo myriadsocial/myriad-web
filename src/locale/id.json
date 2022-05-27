@@ -554,6 +554,10 @@
     "Tip_History": "Riwayat Tip",
     "Show_Comment": "tampilkan komentar",
     "Blocked_User": "Pengguna Diblokir",
+    "Deleted_Comment": "Komentar telah dihapus oleh pengguna.",
+    "Send_Tip": "Kirim tip",
+    "Private_Account": "[Komentar ini dari pengguna privat]",
+    "Banned_Account": "[komentar dihapus]",
     "Confirm_Delete": {
       "Title": "Hapus Komentar",
       "Description": "Apa kamu yakin ingin menghapus komentar ini?",
@@ -710,7 +714,15 @@
     }
   },
   "Maintenance": {
-    "Title": "{{appname}} - Perbaikan"
+    "Title_Head": "{{appname}} - Perbaikan",
+    "Title": "Yah, tidak ada seorang pun disini",
+    "Subtitle": "Kami sedang dalam perbaikan, silakan kembali lagi nanti",
+    "Btn_Web": "Myriad web"
+  },
+  "404": {
+    "Title": "Ups! Kamu bergerak sangat cepat dan kamu tersesat",
+    "Subtitle": "Halaman yang kamu cari tidak ditemukan ",
+    "Btn_Back": "Kembali ke beranda"
   },
   "Notification": {
     "Title": "{{appname}} - Notifikasi",
