@@ -17,6 +17,7 @@ import {Comment, CommentProps} from 'src/interfaces/comment';
 import {SectionType, ReferenceType, Vote} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {loadUsers, searchUsers} from 'src/reducers/search/actions';
 import {downvote, removeVote, upvote} from 'src/reducers/timeline/actions';
@@ -118,11 +119,11 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
 
   const showConfirmDeleteDialog = (comment: Comment): void => {
     confirm({
-      title: 'Delete Comment',
-      description: 'Are you sure to remove this comment?',
+      title: i18n.t('Post_Comment.Confirm_Delete.Title'),
+      description: i18n.t('Post_Comment.Confirm_Delete.Description'),
       icon: 'danger',
-      confirmationText: 'Yes, proceed to delete',
-      cancellationText: 'No, let me rethink',
+      confirmationText: i18n.t('Post_Comment.Confirm_Delete.Confirm_Text'),
+      cancellationText: i18n.t('Post_Comment.Confirm_Delete.Cancel_Text'),
       onConfirm: () => {
         remove(comment);
       },

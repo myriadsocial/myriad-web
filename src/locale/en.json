@@ -562,6 +562,8 @@
       "Confirm_Text": "Yes, proceed to delete",
       "Cancel_Text": "No, let me rethink"
     },
+    "Private_Account": "[This comment is from a private account]",
+    "Banned_Account": "[comment removed]",
     "Modal_Report": {
       "Title": "Report Post",
       "Subtitle_1": "Why are you reporting this post?",
