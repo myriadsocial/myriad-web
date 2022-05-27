@@ -11,7 +11,7 @@ const CardTitle: React.FC<CardTitleProps> = ({text, url, target = '_blank'}) => 
   const style = useStyles();
 
   return (
-    <Link href={url}>
+    <Link href={url} passHref>
       <Typography variant="h4" color="textPrimary" component="a" href={url} className={style.link}>
         {text}
       </Typography>

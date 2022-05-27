@@ -209,7 +209,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           )}
 
           {post.asset?.videos && post.asset.videos.length > 0 && (
-            <Video url={post.asset.videos[0]} width={560} />
+            <Video url={post.asset.videos[0]} height={308} width={560} />
           )}
         </ShowIf>
 
