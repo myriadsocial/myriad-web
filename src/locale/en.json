@@ -554,6 +554,8 @@
     "Tip_History": "Tip History",
     "Show_Comment": "show comment",
     "Blocked_User": "Blocked user",
+    "Deleted_Comment": "Comment deleted by user.",
+    "Send_Tip": "Send tip",
     "Confirm_Delete": {
       "Title": "Delete Comment",
       "Description": "Are you sure to remove this comment?",

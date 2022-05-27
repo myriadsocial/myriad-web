@@ -554,6 +554,8 @@
     "Tip_History": "Riwayat Tip",
     "Show_Comment": "tampilkan komentar",
     "Blocked_User": "Pengguna Diblokir",
+    "Deleted_Comment": "Komentar telah dihapus oleh pengguna.",
+    "Send_Tip": "Kirim tip",
     "Confirm_Delete": {
       "Title": "Hapus Komentar",
       "Description": "Apa kamu yakin ingin menghapus komentar ini?",
