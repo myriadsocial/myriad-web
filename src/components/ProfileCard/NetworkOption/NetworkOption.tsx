@@ -119,11 +119,17 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
         }
 
         case 'near': {
-          const url = publicRuntimeConfig.appAuthURL + router.route;
-          const query = router.query?.q ? `?q=${router.query.q}&action=switch` : '?action=switch';
-          const callback = `${url}${query}`;
+          const callbackUrl = new URL(router.asPath, publicRuntimeConfig.appAuthURL);
+          const redirectUrl = new URL(router.asPath, publicRuntimeConfig.appAuthURL);
 
-          const data = await connectToNear(callback);
+          callbackUrl.searchParams.set('action', 'switch');
+
+          if (router.query?.q && !Array.isArray(router.query?.q)) {
+            callbackUrl.searchParams.set('q', router.query.q);
+            redirectUrl.searchParams.set('q', router.query.q);
+          }
+
+          const data = await connectToNear(callbackUrl.toString());
 
           if (data) {
             const payload: NearPayload = {
@@ -135,10 +141,7 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
 
             await handleSwitch('near', networkType, payload);
 
-            const updatedRouter = (router.query.q as string)
-              ? `${router.route}?q=${router.query.q}`
-              : router.route;
-            router.replace(updatedRouter, undefined, {shallow: true});
+            router.replace(redirectUrl, undefined, {shallow: true});
           } else {
             console.log('redirection to near auth page');
           }
