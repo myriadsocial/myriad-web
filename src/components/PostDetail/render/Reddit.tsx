@@ -19,7 +19,7 @@ export const RenderReddit: React.FC<RenderRedditProps> = props => {
   const {title, text, maxLength, onShowMore, onHashtagClicked} = props;
 
   return (
-    <>
+    <div style={{paddingTop: 10}}>
       {title && (
         <LinkifyComponent
           text={title}
@@ -36,7 +36,7 @@ export const RenderReddit: React.FC<RenderRedditProps> = props => {
       <ShowIf condition={!!maxLength && text.length > maxLength}>
         <ShowMore onClick={() => onShowMore && onShowMore()} />
       </ShowIf>
-    </>
+    </div>
   );
 };
 
