@@ -5,11 +5,12 @@ import {TwitterShareButton} from 'react-share';
 import {Link} from '@material-ui/core';
 import {Button} from '@material-ui/core';
 
-import {BN, formatBalance} from '@polkadot/util';
+import {BN} from '@polkadot/util';
 
 import {useStyles} from './ButtonNotify.styles';
 
 import {socials} from 'src/components/atoms/Icons/Socials';
+import {formatBalance} from 'src/helpers/balance';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {People} from 'src/interfaces/people';
 import {Post} from 'src/interfaces/post';
@@ -35,9 +36,7 @@ export const ButtonNotify: React.FC<ButtonNotifyProps> = ({
   const {socials: account} = useSelector<RootState, UserState>(state => state.userState);
   const styles = useStyles();
 
-  const finalAmount = parseFloat(
-    formatBalance(amount, {decimals: currency.decimal, forceUnit: '-', withSi: false}),
-  );
+  const finalAmount = formatBalance(amount, currency.decimal);
 
   const getUsername = (platform: string) => {
     const username = account.find(social => social.platform === platform);
