@@ -197,7 +197,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
               </Typography>
             </div>
           </Grid>
-          <ShowIf condition={!self && !!user}>
+          <ShowIf condition={!!user}>
             <IconButton
               onClick={handleClickUserOption}
               classes={{root: style.action}}
@@ -224,18 +224,20 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
               <CopyToClipboard text={linkUrl} onCopy={handleLinkCopied}>
                 <MenuItem>{i18n.t('Profile.Header.Menu.Copy')}</MenuItem>
               </CopyToClipboard>
-              <ShowIf condition={person.username !== 'myriad_official'}>
-                <MenuItem onClick={handleOpenReportModal} className={style.delete}>
-                  {i18n.t('Profile.Header.Menu.Report')}
-                </MenuItem>
-              </ShowIf>
-              <ShowIf condition={!isBlocked}>
-                <MenuItem
-                  disabled={isBlocked}
-                  onClick={confirmBlockPerson}
-                  className={style.delete}>
-                  {i18n.t('Profile.Header.Menu.Block')}
-                </MenuItem>
+              <ShowIf condition={!self}>
+                <ShowIf condition={person.username !== 'myriad_official'}>
+                  <MenuItem onClick={handleOpenReportModal} className={style.delete}>
+                    {i18n.t('Profile.Header.Menu.Report')}
+                  </MenuItem>
+                </ShowIf>
+                <ShowIf condition={!isBlocked}>
+                  <MenuItem
+                    disabled={isBlocked}
+                    onClick={confirmBlockPerson}
+                    className={style.delete}>
+                    {i18n.t('Profile.Header.Menu.Block')}
+                  </MenuItem>
+                </ShowIf>
               </ShowIf>
             </Menu>
           </ShowIf>
