@@ -85,7 +85,7 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         title: i18n.t('Section.Trending_Experience'),
         active: selected === 'experience-trend',
         icon: TrendingUpIcon,
-        url: '/experience',
+        url: '/experience/trending',
       },
       {
         id: 'experience',

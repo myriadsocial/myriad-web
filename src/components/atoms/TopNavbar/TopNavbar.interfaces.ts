@@ -2,6 +2,7 @@ export enum SectionTitle {
   FRIENDS = 'Friends',
   SOCIAL_MEDIA = 'Social Media',
   WALLET = 'Wallet',
+  TRENDING_EXPERIENCE = 'Top 10 Experiences',
   EXPERIENCE = 'Experience',
   PROFILE = 'Profile',
   SETTINGS = 'Settings',
