@@ -7,6 +7,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {useSession} from 'next-auth/client';
 import {useRouter} from 'next/router';
 
+import {Button} from '@material-ui/core';
 import Drawer from '@material-ui/core/Drawer';
 import Grid from '@material-ui/core/Grid';
 import ListItem from '@material-ui/core/ListItem';
@@ -15,22 +16,29 @@ import ListItemText from '@material-ui/core/ListItemText';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
+import {Skeleton} from 'components/ProfileCard/Network.skeleton';
+import {NetworkOption} from 'components/ProfileCard/NetworkOption/NetworkOption';
+import ShowIf from 'components/common/show-if.component';
 import {useMenuList, MenuId, MenuDetail} from 'src/components/Menu/use-menu-list';
 import {Metric} from 'src/components/Metric';
 import {useStyles} from 'src/components/Mobile/MenuDrawer/menuDrawer.style';
 import {PromptComponent} from 'src/components/Mobile/PromptDrawer/Prompt';
 import {ProfileContent} from 'src/components/ProfileCard';
 import {ListItemComponent} from 'src/components/atoms/ListItem';
+import {convertToPolkadotAddress} from 'src/helpers/extension';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {RootState} from 'src/reducers';
+import {NotificationState} from 'src/reducers/notification/reducer';
 import {clearUser} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const MenuDrawerComponent: React.FC = () => {
-  const {user, alias, anonymous, networks} = useSelector<RootState, UserState>(
-    state => state.userState,
-  );
+  const {user, alias, anonymous, networks, currentWallet, wallets} = useSelector<
+    RootState,
+    UserState
+  >(state => state.userState);
+  const {total} = useSelector<RootState, NotificationState>(state => state.notificationState);
   const [selected, setSelected] = React.useState<MenuId>('home');
   const [openDrawer, setOpenDrawer] = React.useState(false);
   const [openPromptDrawer, setOpenPromptDrawer] = React.useState(false);
@@ -111,6 +119,25 @@ export const MenuDrawerComponent: React.FC = () => {
     }
   };
 
+  const formatAddress = (address: null | string) => {
+    if (address && address.length > 14) {
+      let validAddress = '';
+
+      if (currentWallet?.network?.blockchainPlatform === 'substrate') {
+        validAddress = convertToPolkadotAddress(address, currentWallet);
+      } else {
+        validAddress = address;
+      }
+
+      return (
+        validAddress.substring(0, 4) +
+        '...' +
+        validAddress.substring(validAddress.length - 4, validAddress.length)
+      );
+    }
+    return address;
+  };
+
   return (
     <>
       <SvgIcon
@@ -135,12 +162,36 @@ export const MenuDrawerComponent: React.FC = () => {
                 user={user}
                 alias={alias}
                 networks={networks}
-                notificationCount={0}
+                notificationCount={total}
                 onShowNotificationList={console.log}
                 onViewProfile={console.log}
                 isMobile={true}
                 userWalletAddress={userWalletAddress}
               />
+              {/* network */}
+              <div className={style.wallet}>
+                <ShowIf condition={anonymous}>
+                  <Button variant="contained" color="primary" onClick={handleSignOut}>
+                    Sign in to connect wallet
+                  </Button>
+                </ShowIf>
+                <ShowIf condition={!anonymous}>
+                  <ShowIf condition={Boolean(currentWallet)}>
+                    <NetworkOption
+                      currentWallet={currentWallet}
+                      wallets={wallets}
+                      networks={networks}
+                    />
+
+                    <Typography component="div" className={style.address}>
+                      {formatAddress(userWalletAddress)}
+                    </Typography>
+                  </ShowIf>
+                  <ShowIf condition={!currentWallet}>
+                    <Skeleton />
+                  </ShowIf>
+                </ShowIf>
+              </div>
               {/* metric */}
               <Metric official={false} data={user?.metric} anonymous={anonymous} />
             </div>
