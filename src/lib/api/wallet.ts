@@ -122,7 +122,7 @@ export const connectNetwork = async (
 ): Promise<Wallet | null> => {
   try {
     const {data} = await MyriadAPI().request<Wallet>({
-      url: `users/${id}/wallets`,
+      url: `users/${id}/wallets?blockchain=${true}`, // TODO: set to false when using blockchain
       method: 'POST',
       data: payload,
     });

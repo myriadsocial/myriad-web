@@ -346,7 +346,13 @@ export const addNewWallet: ThunkActionCreator<Actions, RootState> =
   };
 
 export const verifySocialMediaConnected: ThunkActionCreator<Actions, RootState> =
-  (platform: SocialsEnum, socialName: string, address: string, callback?: () => void) =>
+  (
+    platform: SocialsEnum,
+    socialName: string,
+    address: string,
+    blockchain: boolean,
+    callback?: () => void,
+  ) =>
   async (dispatch, getState) => {
     const {
       userState: {user},
@@ -357,7 +363,7 @@ export const verifySocialMediaConnected: ThunkActionCreator<Actions, RootState> 
     dispatch(setVerifyingSocial());
 
     try {
-      await SocialAPI.verifySocialAccount(socialName, platform, address);
+      await SocialAPI.verifySocialAccount(socialName, platform, address, blockchain);
 
       dispatch(fetchConnectedSocials());
 

@@ -45,6 +45,7 @@ export const useShareSocial = () => {
     platform: SocialsEnum,
     profileUrl: string,
     address: string,
+    blockchain: boolean,
     callback?: () => void,
   ): Promise<void> => {
     setPlatform(platform);
@@ -56,7 +57,7 @@ export const useShareSocial = () => {
       username = profileUrl.substring(profileUrl.lastIndexOf('/') + 1);
     }
 
-    dispatch(verifySocialMediaConnected(platform, username, address, callback));
+    dispatch(verifySocialMediaConnected(platform, username, address, blockchain, callback));
   };
 
   return {
