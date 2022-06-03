@@ -1,9 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import dynamic from 'next/dynamic';
 
 import {CarouselLoginView} from 'src/components/Mobile/OnBoardingView/CarouselLoginView';
-import ShowIf from 'src/components/common/show-if.component';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 
@@ -18,6 +17,12 @@ type OnBoardingContainerProps = {
 export const OnBoardingContainer: React.FC<OnBoardingContainerProps> = props => {
   const {redirectAuth} = props;
 
+  useEffect(() => {
+    if (redirectAuth === WalletTypeEnum.NEAR) {
+      setIsMobileSignIn(true);
+    }
+  }, [redirectAuth]);
+
   const {anonymous} = useAuthHook();
 
   const [isMobileSignIn, setIsMobileSignIn] = useState(false);
@@ -28,13 +33,11 @@ export const OnBoardingContainer: React.FC<OnBoardingContainerProps> = props => 
 
   return (
     <>
-      <ShowIf condition={!isMobileSignIn}>
-        <CarouselLoginView onMobileSignIn={handleMobileSignIn} anonymousLogin={anonymous} />
-      </ShowIf>
-
-      <ShowIf condition={isMobileSignIn}>
+      {isMobileSignIn ? (
         <Login redirectAuth={redirectAuth} isMobileSignIn={true} />
-      </ShowIf>
+      ) : (
+        <CarouselLoginView onMobileSignIn={handleMobileSignIn} anonymousLogin={anonymous} />
+      )}
     </>
   );
 };
