@@ -116,5 +116,15 @@ export const useStyles = makeStyles((theme: Theme) =>
     logo: {
       height: 48,
     },
+    rowCard: {
+      display: 'flex',
+      alignItems: 'center',
+      padding: 10,
+      cursor: 'pointer',
+    },
+    rowCardIcon: {
+      width: 80,
+      fontSize: 32,
+    },
   }),
 );
