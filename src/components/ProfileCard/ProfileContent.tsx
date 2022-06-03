@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Link from 'next/link';
+
 import {Badge, Grid} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -71,6 +73,8 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
   const [open, setOpen] = React.useState(false);
 
   const handleOpenProfile = () => {
+    if (isMobile) return;
+
     !anonymous && setOpen(!open);
   };
 
@@ -105,9 +109,12 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
             />
           </div>
           <div className={classes.identity}>
-            <Typography variant="h5" className={classes.name}>
-              {user?.name || alias || ''}
-            </Typography>
+            <Link href={`/profile/${user.id}`} passHref>
+              <Typography component="a" variant="h5" className={classes.name}>
+                {user?.name || alias || ''}
+              </Typography>
+            </Link>
+
             <Typography variant="caption" color="textSecondary" className={classes.username}>
               @{user?.username || 'anonymous'}
             </Typography>

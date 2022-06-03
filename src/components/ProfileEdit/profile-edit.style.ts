@@ -58,6 +58,16 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     width: {
       width: '250px',
+      [theme.breakpoints.down('xs')]: {
+        width: '100%',
+      },
+    },
+    hideOnMobile: {
+      width: '250px',
+
+      [theme.breakpoints.down('xs')]: {
+        display: 'none',
+      },
     },
     marker: {
       fontSize: '12px',
@@ -101,6 +111,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginLeft: -12,
     },
     flex: {
+      width: '100%',
       display: 'flex',
       justifyContent: 'space-between',
     },

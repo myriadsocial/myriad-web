@@ -1,9 +1,8 @@
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-import {TabPosition, TabMark, TabSize} from '.';
+import {TabMark, TabSize} from '.';
 
 type StylesProps = {
-  position: TabPosition;
   mark: TabMark;
   size: TabSize;
   background?: string;
@@ -17,10 +16,6 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
     tabs: {
       minHeight: props => (props.size === 'small' ? 36 : 48),
       background: props => props.background ?? 'transparent',
-
-      '& .MuiTabs-flexContainer': {
-        justifyContent: props => props.position,
-      },
 
       '& .MuiTabs-scroller': {
         height: props => (props.size === 'small' ? 36 : 48),

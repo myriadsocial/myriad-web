@@ -200,7 +200,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
           <ShowIf condition={!!user}>
             <IconButton
               onClick={handleClickUserOption}
-              classes={{root: style.action}}
+              classes={{root: style.userMenu}}
               aria-label="profile-setting">
               <SvgIcon
                 classes={{root: style.solid}}
@@ -249,107 +249,115 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
 
         <Website url={person.websiteURL} joinDate={person.createdAt} />
 
-        <Grid container alignItems="flex-end" justifyContent="space-between" className={style.mt15}>
-          <Metric data={person.metric} official={person.username === 'myriad_official'} profile />
+        <Grid
+          container
+          alignItems="flex-start"
+          justifyContent="space-between"
+          className={style.detail}>
+          <div className={style.detailItem}>
+            <Metric data={person.metric} official={person.username === 'myriad_official'} profile />
+          </div>
 
-          <div>
-            <ShowIf condition={self && !!user}>
-              <Button
-                onClick={handleOpenEdit}
-                classes={{root: style.button}}
-                variant="contained"
-                color="primary"
-                size="small">
-                {i18n.t('Profile.Header.Btn_Edit')}
-              </Button>
-            </ShowIf>
-
-            <ShowIf condition={!self && !!user}>
-              <ShowIf condition={canAddFriend && person.username !== 'myriad_official'}>
+          <div className={style.detailItem}>
+            <Grid container justifyContent="space-between" alignItems="center" direction="row">
+              <ShowIf condition={self && !!user}>
                 <Button
-                  onClick={handleSendRequest}
-                  startIcon={
-                    <SvgIcon
-                      classes={{root: style.fill}}
-                      component={UserAddIcon}
-                      viewBox="0 0 22 22"
-                    />
-                  }
-                  classes={{root: style.button}}
-                  className={style.mr12}
+                  onClick={handleOpenEdit}
+                  classes={{root: style.editBtn}}
+                  fullWidth
                   variant="contained"
                   color="primary"
                   size="small">
-                  {i18n.t('Profile.Header.Btn_Add')}
+                  {i18n.t('Profile.Header.Btn_Edit')}
                 </Button>
               </ShowIf>
+              <ShowIf condition={!self && !!user}>
+                <ShowIf condition={canAddFriend && person.username !== 'myriad_official'}>
+                  <Button
+                    onClick={handleSendRequest}
+                    startIcon={
+                      <SvgIcon
+                        classes={{root: style.fill}}
+                        component={UserAddIcon}
+                        viewBox="0 0 22 22"
+                      />
+                    }
+                    classes={{root: style.button}}
+                    variant="contained"
+                    color="primary"
+                    size="small">
+                    {i18n.t('Profile.Header.Btn_Add')}
+                  </Button>
+                </ShowIf>
 
-              <ShowIf
-                condition={
-                  !isBlocked && !canAddFriend && person.username !== 'myriad_official' && !!user
-                }>
-                <Button
-                  onClick={handleClickFriendOption}
-                  startIcon={
-                    <SvgIcon
-                      classes={{root: style.fill}}
-                      component={isFriend ? UserIcon : UserAddIcon}
-                      viewBox="0 0 22 22"
-                    />
-                  }
-                  endIcon={isFriend || isRequested ? <SvgIcon component={ChevronDownIcon} /> : null}
-                  classes={{root: style.button}}
-                  className={style.mr12}
-                  variant="contained"
-                  color={isFriend ? 'primary' : 'default'}
-                  size="small">
-                  <ShowIf condition={isFriend}>Friends</ShowIf>
-                  <ShowIf condition={isRequested}>Respond</ShowIf>
-                  <ShowIf condition={isRequesting}>Requested</ShowIf>
-                </Button>
-                <Menu
-                  classes={{paper: style.menu}}
-                  anchorEl={anchorElFriend}
-                  getContentAnchorEl={null}
-                  anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
-                  transformOrigin={{vertical: 'top', horizontal: 'right'}}
-                  open={Boolean(anchorElFriend)}
-                  onClose={handleCloseMenu}>
-                  <ShowIf condition={isFriend}>
-                    <MenuItem onClick={() => confirmRemoveFriend()}>
-                      {i18n.t('Profile.Header.Menu.Unfriend')}
-                    </MenuItem>
-                  </ShowIf>
-                  <ShowIf condition={isFriend}>
-                    <MenuItem onClick={confirmBlockPerson} className={style.delete}>
-                      {i18n.t('Profile.Header.Menu.Block')}
-                    </MenuItem>
-                  </ShowIf>
-                  <ShowIf condition={isRequested}>
-                    <MenuItem onClick={() => onAcceptFriend()}>
-                      {i18n.t('Profile.Header.Menu.Acc')}
-                    </MenuItem>
-                  </ShowIf>
-                  <ShowIf condition={isRequested}>
-                    <MenuItem onClick={() => onDeclineRequest()}>
-                      {i18n.t('Profile.Header.Menu.Reject')}
-                    </MenuItem>
-                  </ShowIf>
-                </Menu>
-              </ShowIf>
+                <ShowIf
+                  condition={
+                    !isBlocked && !canAddFriend && person.username !== 'myriad_official' && !!user
+                  }>
+                  <Button
+                    onClick={handleClickFriendOption}
+                    startIcon={
+                      <SvgIcon
+                        classes={{root: style.fill}}
+                        component={isFriend ? UserIcon : UserAddIcon}
+                        viewBox="0 0 22 22"
+                      />
+                    }
+                    endIcon={
+                      isFriend || isRequested ? <SvgIcon component={ChevronDownIcon} /> : null
+                    }
+                    classes={{root: style.button}}
+                    variant="contained"
+                    color={isFriend ? 'primary' : 'default'}
+                    size="small">
+                    <ShowIf condition={isFriend}>Friends</ShowIf>
+                    <ShowIf condition={isRequested}>Respond</ShowIf>
+                    <ShowIf condition={isRequesting}>Requested</ShowIf>
+                  </Button>
+                  <Menu
+                    classes={{paper: style.menu}}
+                    anchorEl={anchorElFriend}
+                    getContentAnchorEl={null}
+                    anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
+                    transformOrigin={{vertical: 'top', horizontal: 'right'}}
+                    open={Boolean(anchorElFriend)}
+                    onClose={handleCloseMenu}>
+                    <ShowIf condition={isFriend}>
+                      <MenuItem onClick={() => confirmRemoveFriend()}>
+                        {i18n.t('Profile.Header.Menu.Unfriend')}
+                      </MenuItem>
+                    </ShowIf>
+                    <ShowIf condition={isFriend}>
+                      <MenuItem onClick={confirmBlockPerson} className={style.delete}>
+                        {i18n.t('Profile.Header.Menu.Block')}
+                      </MenuItem>
+                    </ShowIf>
+                    <ShowIf condition={isRequested}>
+                      <MenuItem onClick={() => onAcceptFriend()}>
+                        {i18n.t('Profile.Header.Menu.Acc')}
+                      </MenuItem>
+                    </ShowIf>
+                    <ShowIf condition={isRequested}>
+                      <MenuItem onClick={() => onDeclineRequest()}>
+                        {i18n.t('Profile.Header.Menu.Reject')}
+                      </MenuItem>
+                    </ShowIf>
+                  </Menu>
+                </ShowIf>
 
-              <ShowIf condition={!isBlocked}>
-                <SendTipButton
-                  reference={person}
-                  referenceType={ReferenceType.USER}
-                  classes={{root: style.button}}
-                  showIcon
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                />
+                <ShowIf condition={!isBlocked}>
+                  <SendTipButton
+                    reference={person}
+                    referenceType={ReferenceType.USER}
+                    classes={{root: style.button}}
+                    showIcon
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                  />
+                </ShowIf>
               </ShowIf>
-            </ShowIf>
+            </Grid>
           </div>
         </Grid>
       </div>

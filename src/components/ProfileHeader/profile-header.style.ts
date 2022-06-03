@@ -81,25 +81,48 @@ export const useStyles = makeStyles((theme: Theme) =>
         marginTop: '0px',
       },
     },
+    detail: {
+      flexDirection: 'row',
+      marginTop: 15,
+      gap: 8,
+
+      [theme.breakpoints.down('xs')]: {
+        flexDirection: 'column',
+      },
+    },
+    detailItem: {
+      width: 250,
+      [theme.breakpoints.down('xs')]: {
+        width: '100%',
+      },
+    },
     solid: {
       fill: 'currentColor',
     },
-    action: {
+    userMenu: {
       background: 'rgba(115, 66, 204, 0.2)',
       padding: '8px',
-    },
-    mt22: {
-      marginTop: '22px',
     },
     mt15: {
       marginTop: '15px',
     },
-    mr12: {
-      marginRight: '12px',
+    editBtn: {
+      width: 'auto',
+      minWidth: 120,
+      marginLeft: 'auto',
+      [theme.breakpoints.down('xs')]: {
+        width: '100%',
+      },
     },
     button: {
       width: 'auto',
-      minWidth: '120px',
+      minWidth: 120,
+      [theme.breakpoints.up('xs')]: {
+        maxWidth: 150,
+      },
+      [theme.breakpoints.down('xs')]: {
+        width: 160,
+      },
     },
     fill: {
       fill: 'none',

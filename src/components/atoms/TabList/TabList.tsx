@@ -6,12 +6,11 @@ import Tabs, {TabsProps} from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from './TabList.styles';
-import {TabListItem, TabPosition, TabMark, TabSize} from './TabList.types';
+import {TabListItem, TabMark, TabSize} from './TabList.types';
 
 type TabListProps<T> = TabsProps & {
   tabs: TabListItem<T>[];
   selected: T;
-  position?: TabPosition;
   mark?: TabMark;
   size?: TabSize;
   background?: string;
@@ -22,15 +21,15 @@ export const TabList = <T,>(props: TabListProps<T>): JSX.Element => {
   const {
     tabs,
     selected,
-    position = 'space-evenly',
     mark = 'underline',
     textColor = 'primary',
     size = 'medium',
     background,
     onChangeTab,
+    ...tabsProps
   } = props;
 
-  const styles = useStyles({position, mark, size, background});
+  const styles = useStyles({mark, size, background});
 
   const [selectedTab, setSelectedTab] = useState<T>(selected);
 
@@ -46,6 +45,7 @@ export const TabList = <T,>(props: TabListProps<T>): JSX.Element => {
 
   return (
     <Tabs
+      {...tabsProps}
       value={selectedTab}
       textColor={textColor}
       TabIndicatorProps={{
@@ -54,7 +54,7 @@ export const TabList = <T,>(props: TabListProps<T>): JSX.Element => {
       }}
       classes={{root: styles.tabs}}
       onChange={handleTabChange}>
-      {tabs.map(tab => {
+      {tabs.map((tab, i) => {
         if (tab.tooltip) {
           return (
             <Tooltip

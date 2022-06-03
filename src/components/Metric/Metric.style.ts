@@ -4,31 +4,23 @@ import {MetricProps} from './Metric';
 
 export const useStyles = makeStyles<Theme, MetricProps>(theme =>
   createStyles({
-    root: {
-      width: 240,
-    },
+    root: {},
     username: {
-      fontWeight: 700,
+      fontWeight: 400,
       lineHeight: '17.57px',
       [theme.breakpoints.down('xs')]: {
-        fontWeight: 400,
-        // color: '#616161',
         color: props => (props.profile ? '#FFFFFF' : '#616161'),
         fontSize: 12,
       },
     },
     total: {
       fontWeight: 700,
+      fontSize: 16,
       lineHeight: '20.08px',
 
       [theme.breakpoints.down('xs')]: {
         fontWeight: 500,
         fontSize: 16,
-      },
-    },
-    post: {
-      [theme.breakpoints.down('xs')]: {
-        display: 'none',
       },
     },
   }),
