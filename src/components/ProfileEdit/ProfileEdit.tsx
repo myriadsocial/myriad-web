@@ -276,30 +276,29 @@ export const ProfileEditComponent: React.FC<Props> = props => {
       </FormControl>
 
       <div className={`${style.flex} ${style.button}`}>
-        <FormControl variant="outlined">
-          <Button
-            variant="outlined"
-            color="secondary"
-            disableElevation
-            onClick={handleCancel}
-            classes={{root: style.width}}>
-            {i18n.t('General.Cancel')}
-          </Button>
-        </FormControl>
-        <FormControl variant="outlined">
-          <Button
-            variant="contained"
-            color="primary"
-            disableElevation
-            onClick={saveConfirmation}
-            disabled={isError || handleError() || updatingProfile || !isUpdateProfile}
-            classes={{root: style.width}}>
-            {i18n.t('Profile.Edit.Btn_Save')}
-          </Button>
+        <Button
+          variant="outlined"
+          color="secondary"
+          disableElevation
+          onClick={handleCancel}
+          classes={{root: style.width}}
+          className={style.hideOnMobile}>
+          {i18n.t('General.Cancel')}
+        </Button>
+
+        <Button
+          variant="contained"
+          color="primary"
+          disableElevation
+          onClick={saveConfirmation}
+          disabled={isError || handleError() || updatingProfile || !isUpdateProfile}
+          className={style.width}>
+          {i18n.t('Profile.Edit.Btn_Save')}
+
           {updatingProfile && (
             <CircularProgress size={24} color="primary" className={style.buttonProgress} />
           )}
-        </FormControl>
+        </Button>
       </div>
     </div>
   );

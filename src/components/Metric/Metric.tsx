@@ -21,9 +21,9 @@ export const Metric: React.FC<MetricProps> = props => {
   const style = useStyles({...props, profile});
 
   return (
-    <Grid container spacing={2} wrap="nowrap" classes={{root: style.root}}>
-      <Grid item xs={3} className={style.post}>
-        <Typography variant="body1" className={`${style.username}`} component="p">
+    <Grid container wrap="nowrap" justifyContent="space-between" classes={{root: style.root}}>
+      <Grid item xs={3}>
+        <Typography variant="body1" className={style.username} component="p">
           {i18n.t('Profile.Header.Metric.Post')}
         </Typography>
         <Typography variant="h5" className={style.total} component="p">
@@ -31,7 +31,7 @@ export const Metric: React.FC<MetricProps> = props => {
         </Typography>
       </Grid>
       <Grid item xs={3}>
-        <Typography variant="body1" className={`${style.username}`} component="p">
+        <Typography variant="body1" className={style.username} component="p">
           {i18n.t('Profile.Header.Metric.Kudos')}
         </Typography>
         <Typography variant="h5" className={style.total} component="p">
@@ -40,7 +40,7 @@ export const Metric: React.FC<MetricProps> = props => {
       </Grid>
       <ShowIf condition={!official}>
         <Grid item xs={3}>
-          <Typography variant="body1" className={`${style.username}`} component="p">
+          <Typography variant="body1" className={style.username} component="p">
             {i18n.t('Profile.Header.Metric.Friends')}
           </Typography>
           <Typography variant="h5" className={style.total} component="p">

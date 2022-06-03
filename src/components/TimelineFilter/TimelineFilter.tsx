@@ -58,7 +58,6 @@ export const TimelineFilter: React.FC<TimelineFilterProps> = props => {
           selected={type}
           mark="underline"
           size="small"
-          position={'left'}
           onChangeTab={handleFilter}
         />
       </ShowIf>

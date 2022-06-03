@@ -11,8 +11,6 @@ type StylesProps = {
 export const useStyles = makeStyles<Theme, StylesProps>(theme =>
   createStyles({
     root: {},
-    tabs: {
-      borderBottom: '1px solid #E5E5E5',
-    },
+    tabs: {},
   }),
 );
