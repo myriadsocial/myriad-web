@@ -9,6 +9,7 @@ import {useRouter} from 'next/router';
 import AlertComponent from 'src/components/atoms/Alert/Alert.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {LoginLayout} from 'src/components/template/Login';
+import {MobileLayout} from 'src/components/template/Login';
 import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {initialize} from 'src/lib/api/base';
 import {WalletTypeEnum} from 'src/lib/api/ext-auth';
@@ -71,7 +72,9 @@ export default function Index(props: IndexPageProps) {
       </ShowIf>
 
       <ShowIf condition={mobile}>
-        <OnBoardingContainer />
+        <MobileLayout>
+          <OnBoardingContainer redirectAuth={redirectAuth} />
+        </MobileLayout>
       </ShowIf>
     </>
   );
