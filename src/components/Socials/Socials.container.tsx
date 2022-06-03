@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {useSession} from 'next-auth/client';
+
+import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import {Socials as SocialsComponent} from '.';
 
@@ -17,25 +19,58 @@ export const SocialsContainer: React.FC = () => {
   const [session] = useSession();
   const dispatch = useDispatch();
 
-  const {isVerifying, resetVerification, verifyPublicKeyShared} = useShareSocial();
+  const {
+    isVerifying,
+    resetVerification,
+    verifyPublicKeyShared,
+    isSignerLoading,
+    verifySocialMedia,
+  } = useShareSocial();
+
   const {openToasterSnack} = useToasterSnackHook();
 
   const {user, socials, anonymous} = useSelector<RootState, UserState>(state => state.userState);
+
+  const [useBlockchain] = useState<boolean>(true);
+
   const address = session?.user.address as string;
 
   const handleDisconnectSocial = (people: SocialMedia) => {
     dispatch(deleteSocial(people.id));
   };
 
-  const handleVerifySocial = (social: SocialsEnum, profileUrl: string) => {
-    verifyPublicKeyShared(social, profileUrl, address, () => {
-      resetVerification();
+  const handleVerifySocial = async (
+    social: SocialsEnum,
+    profileUrl: string,
+    account?: InjectedAccountWithMeta,
+    callback?: () => void,
+  ) => {
+    if (useBlockchain && account) {
+      verifySocialMedia(social, profileUrl, account, ({isVerified}) => {
+        callback && callback();
 
-      openToasterSnack({
-        message: i18n.t('SocialMedia.Alert.Verify', {social: social}),
-        variant: 'success',
+        isVerified &&
+          openToasterSnack({
+            message: i18n.t('SocialMedia.Alert.Verify', {social: social}),
+            variant: 'success',
+          });
+
+        !isVerified &&
+          openToasterSnack({
+            message: i18n.t('SocialMedia.Alert.Error'),
+            variant: 'error',
+          });
       });
-    });
+    } else {
+      verifyPublicKeyShared(social, profileUrl, address, true, () => {
+        resetVerification();
+
+        openToasterSnack({
+          message: i18n.t('SocialMedia.Alert.Verify', {social: social}),
+          variant: 'success',
+        });
+      });
+    }
   };
 
   const handleSetUserSocialAsPrimary = (people: SocialMedia) => {
@@ -43,15 +78,18 @@ export const SocialsContainer: React.FC = () => {
   };
 
   return (
-    <SocialsComponent
-      user={user}
-      socials={socials}
-      address={address}
-      anonymous={anonymous}
-      verifying={isVerifying}
-      onVerifySocialMedia={handleVerifySocial}
-      onDisconnectSocial={handleDisconnectSocial}
-      onSetAsPrimary={handleSetUserSocialAsPrimary}
-    />
+    <>
+      <SocialsComponent
+        user={user}
+        socials={socials}
+        address={address}
+        anonymous={anonymous}
+        verifying={useBlockchain ? isSignerLoading : isVerifying}
+        onVerifySocialMedia={handleVerifySocial}
+        onDisconnectSocial={handleDisconnectSocial}
+        onSetAsPrimary={handleSetUserSocialAsPrimary}
+        useBlockchain={useBlockchain}
+      />
+    </>
   );
 };
