@@ -20,10 +20,11 @@ import {WalletTypeEnum, NetworkTypeEnum} from 'src/lib/api/ext-auth';
 
 type LoginProps = {
   redirectAuth: WalletTypeEnum | null;
+  isMobileSignIn?: boolean;
 };
 
 export const Login: React.FC<LoginProps> = props => {
-  const {redirectAuth} = props;
+  const {redirectAuth, isMobileSignIn} = props;
 
   const styles = useStyles();
 
@@ -40,7 +41,7 @@ export const Login: React.FC<LoginProps> = props => {
   const [loading, setLoading] = useState(false);
   const [walletLoading, setWalletLoading] = useState(Boolean(redirectAuth));
   const [initialEntries, setInitialEntries] = useState<string[]>(
-    redirectAuth ? ['/wallet'] : ['/'],
+    redirectAuth || isMobileSignIn ? ['/wallet'] : ['/'],
   );
 
   useEffect(() => {
@@ -64,6 +65,7 @@ export const Login: React.FC<LoginProps> = props => {
       },
       undefined,
       data.publicAddress,
+      WalletTypeEnum.NEAR,
     );
   }, []);
 
@@ -82,7 +84,7 @@ export const Login: React.FC<LoginProps> = props => {
     setNearWallet(nearId);
     setWalletType(WalletTypeEnum.NEAR);
 
-    checkAccountRegistered(callback, undefined, nearId);
+    checkAccountRegistered(callback, undefined, nearId, WalletTypeEnum.NEAR);
   };
 
   const handleSelectedAccount = (account: InjectedAccountWithMeta) => {
@@ -96,7 +98,12 @@ export const Login: React.FC<LoginProps> = props => {
   };
 
   const checkAccountRegistered = useCallback(
-    async (callback: () => void, account?: InjectedAccountWithMeta, nearId?: string) => {
+    async (
+      callback: () => void,
+      account?: InjectedAccountWithMeta,
+      nearId?: string,
+      walletType?: WalletTypeEnum,
+    ) => {
       switch (walletType) {
         case WalletTypeEnum.POLKADOT:
           {
@@ -185,7 +192,13 @@ export const Login: React.FC<LoginProps> = props => {
           <Route
             index={false}
             path="/wallet"
-            element={<Options onConnect={handleOnconnect} onConnectNear={handleOnConnectNear} />}
+            element={
+              <Options
+                onConnect={handleOnconnect}
+                onConnectNear={handleOnConnectNear}
+                isMobileSignIn={isMobileSignIn}
+              />
+            }
           />
 
           <Route

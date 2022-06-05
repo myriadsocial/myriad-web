@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useMemo} from 'react';
 import {useSelector} from 'react-redux';
 import {useNavigate} from 'react-router';
 
@@ -18,6 +18,7 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import {useStyles} from './Options.style';
 
+import {MyriadFullIcon} from 'src/components/atoms/Icons';
 import {
   EthereumNetworkIcon,
   PolkadotNetworkIcon,
@@ -44,13 +45,14 @@ type OptionProps = {
   network?: string;
   onConnect?: (accounts: InjectedAccountWithMeta[], network: NetworkTypeEnum) => void;
   onConnectNear?: (nearId: string, callback: () => void, network: NetworkTypeEnum) => void;
+  isMobileSignIn?: boolean;
 };
 
 export const Options: React.FC<OptionProps> = props => {
   const {networks} = useSelector<RootState, UserState>(state => state.userState);
   const styles = useStyles();
 
-  const {onConnect, onConnectNear} = props;
+  const {onConnect, onConnectNear, isMobileSignIn} = props;
 
   const navigate = useNavigate();
   const {enablePolkadotExtension, getPolkadotAccounts} = usePolkadotExtension();
@@ -65,12 +67,27 @@ export const Options: React.FC<OptionProps> = props => {
   const [extensionEnabled, setExtensionEnabled] = useState(false);
   const [connectAttempted, setConnectAttempted] = useState(false);
 
-  const icons = React.useMemo(
+  const networksOnMobile = networks.filter(
+    network => network.id === NetworkTypeEnum.POLKADOT || network.id === NetworkTypeEnum.NEAR,
+  );
+
+  const getMobileIconStyles = isMobileSignIn ? styles.rowCardIcon : styles.icon;
+
+  const icons = useMemo(
     () => ({
-      polkadot: <PolkadotNetworkIcon className={styles.icon} />,
-      kusama: <KusamaNetworkIcon className={styles.icon} />,
-      near: <NearNetworkIcon className={styles.icon} />,
-      myriad: <MyriadCircleIcon className={styles.icon} />,
+      polkadot: <PolkadotNetworkIcon className={getMobileIconStyles} />,
+      kusama: <KusamaNetworkIcon className={getMobileIconStyles} />,
+      near: <NearNetworkIcon className={getMobileIconStyles} />,
+      myriad: <MyriadCircleIcon className={getMobileIconStyles} />,
+    }),
+    [],
+  );
+
+  const walletIcons = useMemo(
+    () => ({
+      polkadot: <PolkadotNetworkIcon className={getMobileIconStyles} />,
+      sender: <SenderWalletDisabledIcon className={getMobileIconStyles} />,
+      near: <NearNetworkIcon className={getMobileIconStyles} />,
     }),
     [],
   );
@@ -204,242 +221,459 @@ export const Options: React.FC<OptionProps> = props => {
   };
 
   return (
-    <div className={styles.root}>
-      <div className={styles.wrapper}>
-        <div className={styles.title}>
-          <Typography variant="h5">{i18n.t('Login.Options.Network')}</Typography>
-        </div>
-        <Grid
-          container
-          justifyContent="flex-start"
-          alignContent="center"
-          classes={{root: styles.list}}>
-          {networks.map(option => (
-            <Grid item xs={3} key={option.id}>
-              <ListItem
-                disableGutters
-                selected={network === option.id}
-                onClick={setSelectedNetwork(option.id as NetworkTypeEnum)}>
-                <div className={styles.card}>
-                  {icons[option.id as keyof typeof icons]}
-                  <Typography>{formatTitle(option.id)}</Typography>
-                </div>
-              </ListItem>
+    <>
+      <ShowIf condition={!isMobileSignIn}>
+        <div className={styles.root}>
+          <div className={styles.wrapper}>
+            <div className={styles.title}>
+              <Typography variant="h5">{i18n.t('Login.Options.Network')}</Typography>
+            </div>
+            <Grid
+              container
+              justifyContent="flex-start"
+              alignContent="center"
+              classes={{root: styles.list}}>
+              {networks.map(option => (
+                <Grid item xs={3} key={option.id}>
+                  <ListItem
+                    disableGutters
+                    selected={network === option.id}
+                    onClick={setSelectedNetwork(option.id as NetworkTypeEnum)}>
+                    <div className={styles.card}>
+                      {icons[option.id as keyof typeof icons]}
+                      <Typography>{formatTitle(option.id)}</Typography>
+                    </div>
+                  </ListItem>
+                </Grid>
+              ))}
+              <Grid item xs={3}>
+                <Tooltip
+                  title={
+                    <Typography component="span">
+                      {i18n.t('Login.Options.Tooltip_Wallet')}
+                    </Typography>
+                  }
+                  arrow>
+                  <ListItem disableGutters disabled>
+                    <div className={styles.card}>
+                      <EthereumNetworkIcon className={styles.icon} />
+                      <Typography>Ethereum</Typography>
+                    </div>
+                  </ListItem>
+                </Tooltip>
+              </Grid>
+              <Grid item xs={3}>
+                <Tooltip
+                  title={
+                    <Typography component="span">
+                      {i18n.t('Login.Options.Tooltip_Wallet')}
+                    </Typography>
+                  }
+                  arrow>
+                  <ListItem disableGutters disabled>
+                    <div className={styles.card}>
+                      <PolygonNetworkDisabledIcon className={styles.icon} />
+                      <Typography>Polygon</Typography>
+                    </div>
+                  </ListItem>
+                </Tooltip>
+              </Grid>
             </Grid>
-          ))}
-          <Grid item xs={3}>
-            <Tooltip
-              title={
-                <Typography component="span">{i18n.t('Login.Options.Tooltip_Wallet')}</Typography>
-              }
-              arrow>
-              <ListItem disableGutters disabled>
-                <div className={styles.card}>
-                  <EthereumNetworkIcon className={styles.icon} />
-                  <Typography>Ethereum</Typography>
-                </div>
-              </ListItem>
-            </Tooltip>
-          </Grid>
-          <Grid item xs={3}>
-            <Tooltip
-              title={
-                <Typography component="span">{i18n.t('Login.Options.Tooltip_Wallet')}</Typography>
-              }
-              arrow>
-              <ListItem disableGutters disabled>
-                <div className={styles.card}>
-                  <PolygonNetworkDisabledIcon className={styles.icon} />
-                  <Typography>Polygon</Typography>
-                </div>
-              </ListItem>
-            </Tooltip>
-          </Grid>
-        </Grid>
-      </div>
+          </div>
 
-      {/* WALLET LIST */}
-      <div className={styles.wrapper}>
-        <div className={styles.title}>
-          <Typography variant="h5">{i18n.t('Login.Options.Wallet')}</Typography>
-        </div>
-        <Grid
-          container
-          justifyContent="flex-start"
-          alignContent="center"
-          classes={{root: styles.list}}>
-          <ShowIf
-            condition={
-              network === null ||
-              network === NetworkTypeEnum.POLKADOT ||
-              network === NetworkTypeEnum.KUSAMA ||
-              network === NetworkTypeEnum.MYRIAD
-            }>
-            <Grid item xs={3}>
-              <ListItem
-                component={'button'}
-                disableGutters
-                disabled={network === null}
-                selected={wallet === WalletTypeEnum.POLKADOT}
-                onClick={setSelectedWallet(WalletTypeEnum.POLKADOT)}
-                className={network !== NetworkTypeEnum.POLKADOT ? styles.walletCardDisabled : ''}>
-                <div className={styles.walletCard}>
-                  <PolkadotNetworkIcon className={styles.icon} />
-                  <Typography>Polkadot.js</Typography>
-                </div>
-              </ListItem>
-            </Grid>
-          </ShowIf>
-          <ShowIf condition={network === null || network === NetworkTypeEnum.NEAR}>
-            <Grid item xs={3}>
-              <ListItem
-                component={'button'}
-                disableGutters
-                disabled={network === null || network !== NetworkTypeEnum.NEAR}
-                selected={wallet === WalletTypeEnum.NEAR}
-                onClick={setSelectedWallet(WalletTypeEnum.NEAR)}
-                className={network !== NetworkTypeEnum.NEAR ? styles.walletCardDisabled : ''}>
-                <div className={styles.card}>
-                  <NearNetworkIcon className={styles.icon} />
-                  <Typography>NEAR</Typography>
-                </div>
-              </ListItem>
-            </Grid>
-          </ShowIf>
-          <ShowIf condition={network === null || network === NetworkTypeEnum.NEAR}>
-            <Grid item xs={3}>
-              <Tooltip
-                title={
-                  <Typography component="span">{i18n.t('Login.Options.Tooltip_Wallet')}</Typography>
-                }
-                arrow>
+          {/* WALLET LIST */}
+          <div className={styles.wrapper}>
+            <div className={styles.title}>
+              <Typography variant="h5">{i18n.t('Login.Options.Wallet')}</Typography>
+            </div>
+            <Grid
+              container
+              justifyContent="flex-start"
+              alignContent="center"
+              classes={{root: styles.list}}>
+              <ShowIf
+                condition={
+                  network === null ||
+                  network === NetworkTypeEnum.POLKADOT ||
+                  network === NetworkTypeEnum.KUSAMA ||
+                  network === NetworkTypeEnum.MYRIAD
+                }>
+                <Grid item xs={3}>
+                  <ListItem
+                    component={'button'}
+                    disableGutters
+                    disabled={network === null}
+                    selected={wallet === WalletTypeEnum.POLKADOT}
+                    onClick={setSelectedWallet(WalletTypeEnum.POLKADOT)}
+                    className={
+                      network !== NetworkTypeEnum.POLKADOT ? styles.walletCardDisabled : ''
+                    }>
+                    <div className={styles.walletCard}>
+                      <PolkadotNetworkIcon className={styles.icon} />
+                      <Typography>Polkadot.js</Typography>
+                    </div>
+                  </ListItem>
+                </Grid>
+              </ShowIf>
+              <ShowIf condition={network === null || network === NetworkTypeEnum.NEAR}>
+                <Grid item xs={3}>
+                  <ListItem
+                    component={'button'}
+                    disableGutters
+                    disabled={network === null || network !== NetworkTypeEnum.NEAR}
+                    selected={wallet === WalletTypeEnum.NEAR}
+                    onClick={setSelectedWallet(WalletTypeEnum.NEAR)}
+                    className={network !== NetworkTypeEnum.NEAR ? styles.walletCardDisabled : ''}>
+                    <div className={styles.card}>
+                      <NearNetworkIcon className={styles.icon} />
+                      <Typography>NEAR</Typography>
+                    </div>
+                  </ListItem>
+                </Grid>
+              </ShowIf>
+              <ShowIf condition={network === null || network === NetworkTypeEnum.NEAR}>
+                <Grid item xs={3}>
+                  <Tooltip
+                    title={
+                      <Typography component="span">
+                        {i18n.t('Login.Options.Tooltip_Wallet')}
+                      </Typography>
+                    }
+                    arrow>
+                    <ListItem
+                      disableGutters
+                      disabled
+                      onClick={setSelectedWallet(WalletTypeEnum.SENDER)}>
+                      <div className={styles.walletCard}>
+                        <SenderWalletDisabledIcon className={styles.icon} />
+                        <Typography style={{fontSize: 13}}>Sender Wallet</Typography>
+                      </div>
+                    </ListItem>
+                  </Tooltip>
+                </Grid>
+              </ShowIf>
+              <Grid item xs={3}>
                 <ListItem
+                  style={{display: 'none'}}
                   disableGutters
                   disabled
-                  onClick={setSelectedWallet(WalletTypeEnum.SENDER)}>
-                  <div className={styles.walletCard}>
-                    <SenderWalletDisabledIcon className={styles.icon} />
-                    <Typography style={{fontSize: 13}}>Sender Wallet</Typography>
+                  onClick={setSelectedWallet(WalletTypeEnum.COINBASE)}>
+                  <div className={styles.card}>
+                    <CoinbaseWalletisabledIcon className={styles.icon} />
+                    <Typography>Coinbase</Typography>
                   </div>
                 </ListItem>
-              </Tooltip>
+              </Grid>
+              <Grid item xs={3}>
+                <ListItem
+                  style={{display: 'none'}}
+                  disableGutters
+                  disabled
+                  onClick={setSelectedWallet(WalletTypeEnum.METAMASK)}>
+                  <div className={styles.card}>
+                    <MetamaskWalletDisabledIcon className={styles.icon} />
+                    <Typography>Metamask</Typography>
+                  </div>
+                </ListItem>
+              </Grid>
+              <Grid item xs={3}>
+                <ListItem
+                  style={{display: 'none'}}
+                  disableGutters
+                  disabled
+                  onClick={setSelectedWallet(WalletTypeEnum.TRUST)}>
+                  <div className={styles.card}>
+                    <TrustWalletDisabledIcon className={styles.icon} />
+                    <Typography>Trust Wallet</Typography>
+                  </div>
+                </ListItem>
+              </Grid>
             </Grid>
-          </ShowIf>
-          <Grid item xs={3}>
-            <ListItem
-              style={{display: 'none'}}
-              disableGutters
-              disabled
-              onClick={setSelectedWallet(WalletTypeEnum.COINBASE)}>
-              <div className={styles.card}>
-                <CoinbaseWalletisabledIcon className={styles.icon} />
-                <Typography>Coinbase</Typography>
-              </div>
-            </ListItem>
-          </Grid>
-          <Grid item xs={3}>
-            <ListItem
-              style={{display: 'none'}}
-              disableGutters
-              disabled
-              onClick={setSelectedWallet(WalletTypeEnum.METAMASK)}>
-              <div className={styles.card}>
-                <MetamaskWalletDisabledIcon className={styles.icon} />
-                <Typography>Metamask</Typography>
-              </div>
-            </ListItem>
-          </Grid>
-          <Grid item xs={3}>
-            <ListItem
-              style={{display: 'none'}}
-              disableGutters
-              disabled
-              onClick={setSelectedWallet(WalletTypeEnum.TRUST)}>
-              <div className={styles.card}>
-                <TrustWalletDisabledIcon className={styles.icon} />
-                <Typography>Trust Wallet</Typography>
-              </div>
-            </ListItem>
-          </Grid>
-        </Grid>
-      </div>
+          </div>
 
-      <Grid container direction="column" className={styles.condition}>
-        <FormControlLabel
-          className={styles.termControl}
-          onChange={toggleTermApproved}
-          control={<Checkbox name="term" color="primary" className={styles.checkbox} />}
-          label={
-            <Typography style={{color: '#0A0A0A'}}>
-              {i18n.t('Login.Options.Text_Terms_1')}&nbsp;
-              <Link href="/term-of-use" passHref>
-                <Typography component={'a'} className={styles.term}>
-                  {i18n.t('Login.Options.Text_Terms_2')}
+          <Grid container direction="column" className={styles.condition}>
+            <FormControlLabel
+              className={styles.termControl}
+              onChange={toggleTermApproved}
+              control={<Checkbox name="term" color="primary" className={styles.checkbox} />}
+              label={
+                <Typography style={{color: '#0A0A0A'}}>
+                  {i18n.t('Login.Options.Text_Terms_1')}&nbsp;
+                  <Link href="/term-of-use" passHref>
+                    <Typography component={'a'} className={styles.term}>
+                      {i18n.t('Login.Options.Text_Terms_2')}
+                    </Typography>
+                  </Link>
+                  &nbsp;{i18n.t('Login.Options.Text_Terms_3')}&nbsp;
+                  <Link href="/privacy-policy" passHref>
+                    <Typography component={'a'} className={styles.term}>
+                      {i18n.t('Login.Options.Text_Terms_4')}
+                    </Typography>
+                  </Link>
                 </Typography>
-              </Link>
-              &nbsp;{i18n.t('Login.Options.Text_Terms_3')}&nbsp;
-              <Link href="/privacy-policy" passHref>
-                <Typography component={'a'} className={styles.term}>
-                  {i18n.t('Login.Options.Text_Terms_4')}
-                </Typography>
-              </Link>
+              }
+            />
+          </Grid>
+
+          <div>
+            <Button
+              variant="contained"
+              fullWidth
+              color="primary"
+              disabled={!termApproved || !extensionChecked || wallet === null}
+              onClick={handleConnect}>
+              {i18n.t('Login.Options.Connect')}
+            </Button>
+          </div>
+
+          <Prompt
+            title={i18n.t('Login.Options.Prompt_Extension.Title')}
+            icon="warning"
+            open={connectAttempted && extensionChecked && !extensionEnabled}
+            onCancel={closeExtensionDisableModal}
+            subtitle={
+              <Typography>
+                {i18n.t('Login.Options.Prompt_Extension.Subtitle_1')}&nbsp;
+                <PolkadotLink />
+                &nbsp;{i18n.t('Login.Options.Prompt_Extension.Subtitle_2')}
+              </Typography>
+            }>
+            <Button
+              size="small"
+              variant="contained"
+              color="primary"
+              onClick={closeExtensionDisableModal}>
+              {i18n.t('General.Close')}
+            </Button>
+          </Prompt>
+
+          <Prompt
+            title={i18n.t('Login.Options.Prompt_Account.Title')}
+            icon="warning"
+            open={
+              connectAttempted &&
+              extensionChecked &&
+              extensionEnabled &&
+              accounts.length === 0 &&
+              network === NetworkTypeEnum.POLKADOT
+            }
+            onCancel={closeExtensionDisableModal}
+            subtitle={<Typography>{i18n.t('Login.Options.Prompt_Account.Subtitle')}</Typography>}>
+            <Button
+              size="small"
+              variant="contained"
+              color="primary"
+              onClick={closeExtensionDisableModal}>
+              {i18n.t('General.Close')}
+            </Button>
+          </Prompt>
+        </div>
+      </ShowIf>
+      <ShowIf condition={isMobileSignIn}>
+        <div className={styles.mobileRoot}>
+          <div className={styles.logoWrapper}>
+            <div className={styles.logo}>
+              <MyriadFullIcon />
+            </div>
+
+            <Typography variant="h5" component="h1" className={styles.title}>
+              {i18n.t('Login.Layout.Title_left')}{' '}
+              <span className={styles.titlePrimary}>{i18n.t('Login.Layout.Title_right')}</span>
             </Typography>
-          }
-        />
-      </Grid>
+          </div>
+          <div className={styles.mobileCard}>
+            <div style={{marginBottom: 24}}>
+              <div className={styles.title}>
+                <Typography variant="h5">{i18n.t('Login.Options.Network')}</Typography>
+              </div>
+              <Grid
+                container
+                justifyContent="flex-start"
+                direction="column"
+                classes={{root: styles.list}}>
+                {networksOnMobile.map(option => (
+                  <Grid item xs={12} key={option.id}>
+                    {option.id === NetworkTypeEnum.POLKADOT ? (
+                      <>
+                        <ListItem disableGutters disabled>
+                          <div className={styles.rowCard}>
+                            {icons['polkadot']}
+                            <Typography>{formatTitle(option.id)}</Typography>
+                          </div>
+                        </ListItem>
+                        <Typography color="primary">
+                          * Polkadot available for desktop only
+                        </Typography>
+                      </>
+                    ) : (
+                      <ListItem
+                        disableGutters
+                        selected={network === option.id}
+                        onClick={setSelectedNetwork(option.id as NetworkTypeEnum)}>
+                        <div className={styles.rowCard}>
+                          {icons[option.id as keyof typeof icons]}
+                          <Typography>{formatTitle(option.id)}</Typography>
+                        </div>
+                      </ListItem>
+                    )}
+                  </Grid>
+                ))}
+              </Grid>
+            </div>
 
-      <div>
-        <Button
-          variant="contained"
-          fullWidth
-          color="primary"
-          disabled={!termApproved || !extensionChecked || wallet === null}
-          onClick={handleConnect}>
-          {i18n.t('Login.Options.Connect')}
-        </Button>
-      </div>
+            {/* WALLET LIST */}
+            <div>
+              <div className={styles.title}>
+                <Typography variant="h5">{i18n.t('Login.Options.Wallet')}</Typography>
+              </div>
+              <Grid
+                container
+                justifyContent="flex-start"
+                direction="column"
+                classes={{root: styles.list}}>
+                <ShowIf condition={network === null || network === NetworkTypeEnum.NEAR}>
+                  <Grid item xs={12}>
+                    <ListItem
+                      component={'button'}
+                      disableGutters
+                      disabled={network === null || network !== NetworkTypeEnum.NEAR}
+                      selected={wallet === WalletTypeEnum.NEAR}
+                      onClick={setSelectedWallet(WalletTypeEnum.NEAR)}
+                      className={network !== NetworkTypeEnum.NEAR ? styles.walletCardDisabled : ''}>
+                      <div className={styles.rowCard}>
+                        {walletIcons['near']}
+                        <Typography>NEAR</Typography>
+                      </div>
+                    </ListItem>
+                  </Grid>
+                </ShowIf>
+                <ShowIf condition={network === null || network === NetworkTypeEnum.NEAR}>
+                  <Grid item xs={12}>
+                    <Tooltip
+                      title={
+                        <Typography component="span">
+                          {i18n.t('Login.Options.Tooltip_Wallet')}
+                        </Typography>
+                      }
+                      arrow>
+                      <ListItem
+                        disableGutters
+                        disabled
+                        onClick={setSelectedWallet(WalletTypeEnum.SENDER)}>
+                        <div className={styles.rowCard}>
+                          {walletIcons['sender']}
+                          <Typography style={{fontSize: 13}}>Sender Wallet</Typography>
+                        </div>
+                      </ListItem>
+                    </Tooltip>
+                  </Grid>
+                </ShowIf>
+                <ShowIf
+                  condition={
+                    network === null ||
+                    network === NetworkTypeEnum.POLKADOT ||
+                    network === NetworkTypeEnum.KUSAMA ||
+                    network === NetworkTypeEnum.MYRIAD
+                  }>
+                  <Grid item xs={12}>
+                    <ListItem
+                      component={'button'}
+                      disableGutters
+                      disabled={network === null}
+                      selected={wallet === WalletTypeEnum.POLKADOT}
+                      onClick={setSelectedWallet(WalletTypeEnum.POLKADOT)}
+                      className={
+                        network !== NetworkTypeEnum.POLKADOT ? styles.walletCardDisabled : ''
+                      }>
+                      <div className={styles.rowCard}>
+                        {walletIcons['polkadot']}
+                        <Typography>Polkadot.js</Typography>
+                      </div>
+                    </ListItem>
+                  </Grid>
+                </ShowIf>
+              </Grid>
+            </div>
 
-      <Prompt
-        title={i18n.t('Login.Options.Prompt_Extension.Title')}
-        icon="warning"
-        open={connectAttempted && extensionChecked && !extensionEnabled}
-        onCancel={closeExtensionDisableModal}
-        subtitle={
-          <Typography>
-            {i18n.t('Login.Options.Prompt_Extension.Subtitle_1')}&nbsp;
-            <PolkadotLink />
-            &nbsp;{i18n.t('Login.Options.Prompt_Extension.Subtitle_2')}
-          </Typography>
-        }>
-        <Button
-          size="small"
-          variant="contained"
-          color="primary"
-          onClick={closeExtensionDisableModal}>
-          {i18n.t('General.Close')}
-        </Button>
-      </Prompt>
+            <Grid container direction="column" className={styles.condition}>
+              <FormControlLabel
+                className={styles.termControl}
+                onChange={toggleTermApproved}
+                control={<Checkbox name="term" color="primary" className={styles.checkbox} />}
+                label={
+                  <Typography style={{color: '#0A0A0A'}}>
+                    {i18n.t('Login.Options.Text_Terms_1')}&nbsp;
+                    <Link href="/term-of-use" passHref>
+                      <Typography component={'a'} className={styles.term}>
+                        {i18n.t('Login.Options.Text_Terms_2')}
+                      </Typography>
+                    </Link>
+                    &nbsp;{i18n.t('Login.Options.Text_Terms_3')}&nbsp;
+                    <Link href="/privacy-policy" passHref>
+                      <Typography component={'a'} className={styles.term}>
+                        {i18n.t('Login.Options.Text_Terms_4')}
+                      </Typography>
+                    </Link>
+                  </Typography>
+                }
+              />
+            </Grid>
 
-      <Prompt
-        title={i18n.t('Login.Options.Prompt_Account.Title')}
-        icon="warning"
-        open={
-          connectAttempted &&
-          extensionChecked &&
-          extensionEnabled &&
-          accounts.length === 0 &&
-          network === NetworkTypeEnum.POLKADOT
-        }
-        onCancel={closeExtensionDisableModal}
-        subtitle={<Typography>{i18n.t('Login.Options.Prompt_Account.Subtitle')}</Typography>}>
-        <Button
-          size="small"
-          variant="contained"
-          color="primary"
-          onClick={closeExtensionDisableModal}>
-          {i18n.t('General.Close')}
-        </Button>
-      </Prompt>
-    </div>
+            <div>
+              <Button
+                variant="contained"
+                fullWidth
+                color="primary"
+                disabled={!termApproved || !extensionChecked || wallet === null}
+                onClick={handleConnect}>
+                {i18n.t('Login.Options.Connect')}
+              </Button>
+            </div>
+          </div>
+
+          <Prompt
+            title={i18n.t('Login.Options.Prompt_Extension.Title')}
+            icon="warning"
+            open={connectAttempted && extensionChecked && !extensionEnabled}
+            onCancel={closeExtensionDisableModal}
+            subtitle={
+              <Typography>
+                {i18n.t('Login.Options.Prompt_Extension.Subtitle_1')}&nbsp;
+                <PolkadotLink />
+                &nbsp;{i18n.t('Login.Options.Prompt_Extension.Subtitle_2')}
+              </Typography>
+            }>
+            <Button
+              size="small"
+              variant="contained"
+              color="primary"
+              onClick={closeExtensionDisableModal}>
+              {i18n.t('General.Close')}
+            </Button>
+          </Prompt>
+
+          <Prompt
+            title={i18n.t('Login.Options.Prompt_Account.Title')}
+            icon="warning"
+            open={
+              connectAttempted &&
+              extensionChecked &&
+              extensionEnabled &&
+              accounts.length === 0 &&
+              network === NetworkTypeEnum.POLKADOT
+            }
+            onCancel={closeExtensionDisableModal}
+            subtitle={<Typography>{i18n.t('Login.Options.Prompt_Account.Subtitle')}</Typography>}>
+            <Button
+              size="small"
+              variant="contained"
+              color="primary"
+              onClick={closeExtensionDisableModal}>
+              {i18n.t('General.Close')}
+            </Button>
+          </Prompt>
+        </div>
+      </ShowIf>
+    </>
   );
 };

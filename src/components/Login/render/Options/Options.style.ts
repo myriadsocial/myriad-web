@@ -20,6 +20,9 @@ export const useStyles = makeStyles((theme: Theme) =>
         color: '#0A0A0A',
       },
     },
+    titlePrimary: {
+      color: theme.palette.primary.main,
+    },
     list: {
       display: 'flex',
       boxSizing: 'border-box',
@@ -77,6 +80,51 @@ export const useStyles = makeStyles((theme: Theme) =>
       '& .MuiSvgIcon-root': {
         fill: 'currentColor',
       },
+    },
+    mobileRoot: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    mobileCard: {
+      minWidth: '80vw',
+      padding: 20,
+      gap: 24,
+
+      /* Neutral/10 */
+      background: '#FFFFFF',
+
+      /* Drop Shadow Card */
+      boxShadow: `0px 6px 10px rgba(0, 0, 0, 0.05)`,
+      borderRadius: 10,
+
+      /* Inside auto layout */
+      flex: 'none',
+      order: 1,
+      flexGrow: 0,
+    },
+    logoWrapper: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: '10vh',
+      marginBottom: 20,
+      rowGap: 8,
+    },
+    logo: {
+      height: 48,
+    },
+    rowCard: {
+      display: 'flex',
+      alignItems: 'center',
+      padding: 10,
+      cursor: 'pointer',
+    },
+    rowCardIcon: {
+      width: 80,
+      fontSize: 32,
     },
   }),
 );
