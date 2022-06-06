@@ -28,9 +28,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
-      [theme.breakpoints.down('xs')]: {
-        display: 'none',
-      },
     },
     refreshIcon: {
       paddingRight: 0,

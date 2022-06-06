@@ -6,6 +6,7 @@ import {
   PhotographIcon,
   HashtagIcon,
   VariableIcon,
+  TrendingUpIcon,
   ViewGridIcon,
   CreditCardIcon,
 } from '@heroicons/react/outline';
@@ -20,6 +21,7 @@ export type MenuId =
   | 'token'
   | 'nft'
   | 'settings'
+  | 'experience-trend'
   | 'experience'
   | 'wallet'
   | 'topic'
@@ -44,20 +46,6 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         url: '/home',
       },
       {
-        id: 'experience',
-        title: i18n.t('Section.Experience'),
-        active: selected === 'experience',
-        icon: VariableIcon,
-        url: '/experience',
-      },
-      {
-        id: 'wallet',
-        title: i18n.t('Section.Wallet'),
-        active: selected === 'wallet',
-        icon: CreditCardIcon,
-        url: '/wallet',
-      },
-      {
         id: 'friends',
         title: i18n.t('Section.Friends'),
         active: selected === 'friends',
@@ -79,18 +67,39 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         url: '/nft',
       },
       {
-        id: 'topic',
-        title: i18n.t('Section.Topic'),
-        active: selected === 'topic',
-        icon: HashtagIcon,
-        url: '/topic',
-      },
-      {
         id: 'socials',
         title: i18n.t('Section.Social_Media'),
         active: selected === 'socials',
         icon: ViewGridIcon,
         url: '/socials',
+      },
+      {
+        id: 'wallet',
+        title: i18n.t('Section.Wallet'),
+        active: selected === 'wallet',
+        icon: CreditCardIcon,
+        url: '/wallet',
+      },
+      {
+        id: 'experience-trend',
+        title: i18n.t('Section.Trending_Experience'),
+        active: selected === 'experience-trend',
+        icon: TrendingUpIcon,
+        url: '/experience/trending',
+      },
+      {
+        id: 'experience',
+        title: i18n.t('Section.Experience'),
+        active: selected === 'experience',
+        icon: VariableIcon,
+        url: '/experience',
+      },
+      {
+        id: 'topic',
+        title: i18n.t('Section.Topic'),
+        active: selected === 'topic',
+        icon: HashtagIcon,
+        url: '/topic',
       },
       {
         id: 'settings',

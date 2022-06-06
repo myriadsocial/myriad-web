@@ -15,7 +15,12 @@ import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
-export const ExperienceTab: React.FC = () => {
+type ExperienceTabProps = {
+  experienceType?: 'user' | 'trending';
+};
+
+export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
+  const {experienceType = 'user'} = props;
   const router = useRouter();
   const styles = useStyles();
 
@@ -51,9 +56,13 @@ export const ExperienceTab: React.FC = () => {
         </Typography>
       </ShowIf>
 
-      <ExperienceListContainer selectable owner={ExperienceOwner.CURRENT_USER} filterTimeline />
+      <ExperienceListContainer
+        selectable
+        owner={experienceType === 'user' ? ExperienceOwner.CURRENT_USER : ExperienceOwner.TRENDING}
+        filterTimeline
+      />
 
-      <ShowIf condition={experiences.length === 0}>
+      <ShowIf condition={experiences.length === 0 && experienceType === 'user'}>
         <EmptyExperience />
       </ShowIf>
     </div>
