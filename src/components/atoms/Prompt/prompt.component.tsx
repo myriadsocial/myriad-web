@@ -34,6 +34,7 @@ export const PromptComponent: React.FC<Prompt> = props => {
   return (
     <Dialog
       className={style.root}
+      scroll={'paper'}
       onClose={onCancel}
       aria-labelledby="simple-dialog-title"
       open={open}>

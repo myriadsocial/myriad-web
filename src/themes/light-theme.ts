@@ -2,6 +2,7 @@ import '@fontsource/mulish';
 
 import {createTheme, alpha} from '@material-ui/core/styles';
 import {BreakpointValues} from '@material-ui/core/styles/createBreakpoints';
+import createBreakpoints from '@material-ui/core/styles/createBreakpoints';
 
 declare module '@material-ui/core/styles' {
   interface Theme {
@@ -131,6 +132,8 @@ const breakpointsValue: BreakpointValues = {
   lg: 1366,
   xl: 1920,
 };
+
+const newBreakpoints = createBreakpoints({});
 
 const theme = createTheme({
   breakpoints: {
@@ -426,6 +429,14 @@ const theme = createTheme({
       badge: {
         fontSize: textXs,
         padding: '0 4px',
+      },
+    },
+
+    MuiDialog: {
+      container: {
+        [newBreakpoints.down('xs')]: {
+          alignItems: 'flex-end',
+        },
       },
     },
   },
