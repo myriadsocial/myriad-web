@@ -109,7 +109,7 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
             />
           </div>
           <div className={classes.identity}>
-            <Link href={`/profile/${user.id}`} passHref>
+            <Link href={user ? `/profile/${user.id}` : ''} passHref>
               <Typography component="a" variant="h5" className={classes.name}>
                 {user?.name || alias || ''}
               </Typography>
