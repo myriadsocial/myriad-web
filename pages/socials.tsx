@@ -42,7 +42,7 @@ const Socials: React.FC = () => {
         description={i18n.t('TopNavbar.Subtitle.SocialMedia', {
           total: socials.length,
         })}
-        sectionTitle={i18n.t('TopNavbar.Title.SocialMedia')}
+        sectionTitle={i18n.t('TopNavbar.Title.Social_Media')}
         type={'menu'}
       />
 
