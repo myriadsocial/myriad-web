@@ -31,11 +31,18 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontSize: '24px',
       fontWeight: 700,
       lineHeight: 1,
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '18px',
+        fontWeight: 600,
+      },
     },
     text2: {
       marginBottom: '85px',
       fontSize: '20px',
       lineHeight: 1,
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '14px',
+      },
     },
     illustration: {
       marginBottom: '80px',
