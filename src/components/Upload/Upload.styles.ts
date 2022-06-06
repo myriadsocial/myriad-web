@@ -6,6 +6,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(1, 1, 3),
       background: '#FFF',
       width: 720,
+      [theme.breakpoints.down('xs')]: {
+        width: 288,
+      },
     },
     confirm: {
       marginTop: 16,

@@ -15,6 +15,9 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
         borderRadius: '10px',
       },
     },
+    nav: {
+      marginBottom: 20,
+    },
     title: {
       textAlign: props => props.align,
       padding: 30,
@@ -46,6 +49,15 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
           : props.gutter === 'none'
           ? 0
           : '0 0 30px 0',
+
+      [theme.breakpoints.down('xs')]: {
+        padding: props =>
+          props.gutter === 'default'
+            ? '0 20px 20px 20px'
+            : props.gutter === 'none'
+            ? 0
+            : '0 0 20px 0',
+      },
     },
   }),
 );

@@ -18,28 +18,32 @@ const MenuDrawerComponent = dynamic(() => import('src/components/Mobile/MenuDraw
 });
 
 export const TopNavbarComponent: React.FC<TopNavbarProps> = props => {
-  const {sectionTitle, description, reverse = false, type = 'back'} = props;
+  const {sectionTitle, description, reverse = false, type = 'back', onClick} = props;
 
   const router = useRouter();
   const classes = useStyles({...props, type});
 
   const handleClick = (): void => {
-    const section = router.query.section as string | undefined;
-    const settings = [
-      'account',
-      'notification',
-      'block',
-      'language',
-      'about',
-      'feedback',
-      'help',
-      'version',
-    ];
-
-    if (router.pathname === '/settings' && section && settings.includes(section)) {
-      router.push('/settings', undefined, {shallow: true});
+    if (onClick) {
+      onClick();
     } else {
-      router.push('/home', undefined, {shallow: true});
+      const section = router.query.section as string | undefined;
+      const settings = [
+        'account',
+        'notification',
+        'block',
+        'language',
+        'about',
+        'feedback',
+        'help',
+        'version',
+      ];
+
+      if (router.pathname === '/settings' && section && settings.includes(section)) {
+        router.push('/settings', undefined, {shallow: true});
+      } else {
+        router.push('/home', undefined, {shallow: true});
+      }
     }
   };
 

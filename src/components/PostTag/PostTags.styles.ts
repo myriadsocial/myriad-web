@@ -6,6 +6,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'column',
       width: 386,
+      [theme.breakpoints.down('xs')]: {
+        width: '100%',
+      },
     },
     list: {
       display: 'flex',

@@ -19,12 +19,13 @@ type DropdownMenuProps<T> = {
   options: MenuOptions<T>[];
   selected?: T;
   disabled?: boolean;
+  useIconOnMobile?: boolean;
   onChange: (selected: T) => void;
 };
 
 export const DropdownMenu = <T,>(props: DropdownMenuProps<T>): JSX.Element => {
-  const {title, options, selected, onChange, disabled = false} = props;
-  const styles = useStyles();
+  const {title, options, selected, onChange, disabled = false, useIconOnMobile = true} = props;
+  const styles = useStyles({useIconOnMobile});
 
   const [current, setCurrent] = useState<T>();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

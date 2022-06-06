@@ -4,6 +4,10 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: 840,
+
+      [theme.breakpoints.down('xs')]: {
+        width: '100%',
+      },
     },
     input: {
       marginBottom: 30,
@@ -17,6 +21,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       borderRadius: 5,
       background: '#FFF',
       padding: 30,
+
+      [theme.breakpoints.down('xs')]: {
+        padding: 10,
+      },
     },
   }),
 );

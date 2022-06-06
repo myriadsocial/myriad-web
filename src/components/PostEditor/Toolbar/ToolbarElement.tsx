@@ -14,7 +14,7 @@ import React from 'react';
 
 import {FormatQuote, Looks3, Looks4, Looks5, Looks6, LooksOne, LooksTwo} from '@material-ui/icons';
 
-export const ToolbarElementList = () => {
+export const ToolbarElementList: React.FC = () => {
   const editor = useStoreEditorRef(useEventEditorId('focus'));
 
   return (

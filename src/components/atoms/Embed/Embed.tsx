@@ -27,22 +27,22 @@ export const Embed: React.FC<EmbedProps> = props => {
   return (
     <div className={styles.root} onClick={handleClick}>
       <ShowIf condition={social === SocialsEnum.TWITTER}>
-        <div style={{margin: '0 auto', width: 560}}>
+        <div className={styles.embed}>
           <Tweet tweetId={postId} options={{height: 560}} />
         </div>
       </ShowIf>
 
       <ShowIf condition={social === SocialsEnum.REDDIT}>
-        <iframe
-          id="reddit-embed"
-          title="Reddit preview"
-          src={generateRedditEmbedUrl(url)}
-          sandbox="allow-scripts allow-same-origin allow-popups"
-          style={{border: 'none'}}
-          width="780"
-          height="560"
-          scrolling="yes"
-        />
+        <div className={styles.embed}>
+          <iframe
+            id="reddit-embed"
+            title="Reddit preview"
+            src={generateRedditEmbedUrl(url)}
+            sandbox="allow-scripts allow-same-origin allow-popups"
+            scrolling="yes"
+            className={styles.reddit}
+          />
+        </div>
       </ShowIf>
 
       <div id="fb-root" />

@@ -3,7 +3,8 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import dynamic from 'next/dynamic';
 
-import {Button} from '@material-ui/core';
+import {Button, useMediaQuery} from '@material-ui/core';
+import {useTheme} from '@material-ui/core/styles';
 
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
 
@@ -28,7 +29,9 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   const {open, onClose} = props;
 
   const dispatch = useDispatch();
+  const theme = useTheme();
   const {progress, uploadImage, uploadVideo} = useUpload();
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
   const people = useSelector<RootState, User[]>(state => state.searchState.searchedUsers);
   const {user} = useSelector<RootState, UserState>(state => state.userState);
@@ -113,6 +116,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
         onSubmit={submitPost}
         onSearchPeople={handleSearchPeople}
         onUploadFile={handleFileUpload}
+        isMobile={isMobile}
       />
       <PromptComponent
         title={i18n.t('Home.RichText.Prompt_Import.Title')}
