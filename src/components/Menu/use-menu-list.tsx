@@ -24,7 +24,7 @@ export type MenuId =
   | 'experience-trend'
   | 'experience'
   | 'wallet'
-  | 'topic'
+  | 'trends'
   | 'socials';
 
 export type MenuDetail = {
@@ -95,9 +95,9 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         url: '/experience',
       },
       {
-        id: 'topic',
-        title: i18n.t('Section.Topic'),
-        active: selected === 'topic',
+        id: 'trends',
+        title: i18n.t('Section.Trends'),
+        active: selected === 'trends',
         icon: HashtagIcon,
         url: '/topic',
       },

@@ -785,6 +785,7 @@
     "Social_Media": "Social Media",
     "Wallet": "Wallet",
     "Trending_Experience": "Trending Experience",
+    "Trending_Experience_Desc": "Top 10 Experiences",
     "Experience": "Experience",
     "Profile": "Profile",
     "Settings": "Settings",
@@ -793,6 +794,7 @@
     "NFT": "NFT",
     "Social_Token": "Social Token",
     "Trends": "Trends",
+    "Trends_Desc": "Top 10 trending hashtags",
     "Topic": "Topic"
   },
   "NFT": {

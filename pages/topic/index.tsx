@@ -5,8 +5,9 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 
 import {TrendingTab} from 'src/components/RightMenuBar/tabs/TrendingTab';
-import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
+import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
+import i18n from 'src/locale';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
 import {
@@ -26,11 +27,13 @@ const TopicPageComponent: React.FC = () => {
   return (
     <DefaultLayout isOnProfilePage={false}>
       <Head>
-        <title>{publicRuntimeConfig.appName} - Trends</title>
+        <title>
+          {publicRuntimeConfig.appName} - {i18n.t('Section.Trends')}
+        </title>
       </Head>
       <TopNavbarComponent
-        description={`Top 10 trending hashtags`}
-        sectionTitle={SectionTitle.TRENDS}
+        description={i18n.t('Section.Trends_Desc')}
+        sectionTitle={i18n.t('Section.Trends')}
         type={'menu'}
       />
       <TrendingTab />

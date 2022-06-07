@@ -42,9 +42,15 @@ export type NetworkOptionProps = {
   currentWallet?: UserWallet;
   wallets?: UserWallet[];
   networks: Network[];
+  isMobile?: boolean;
 };
 
-export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wallets, networks}) => {
+export const NetworkOption: React.FC<NetworkOptionProps> = ({
+  currentWallet,
+  wallets,
+  networks,
+  isMobile = false,
+}) => {
   const router = useRouter();
   const styles = useStyles();
 
@@ -280,6 +286,7 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({currentWallet, wall
           <MenuItem
             key={option.id}
             onClick={() => handleSelected(option.blockchainPlatform, option.id as NetworkTypeEnum)}
+            disabled={!isMobile ? false : option.id === 'near' ? false : true}
             className={option.id === current ? styles.menu : ''}>
             <ListItemIcon>{icons[option.id as keyof typeof icons]}</ListItemIcon>
             <ListItemText>{formatTitle(option.id)}</ListItemText>

@@ -85,7 +85,7 @@ export const MenuDrawerComponent: React.FC = () => {
         setSelected('nft');
         break;
       case '/topic':
-        setSelected('topic');
+        setSelected('trends');
         break;
       case '/socials':
         setSelected('socials');
@@ -181,6 +181,7 @@ export const MenuDrawerComponent: React.FC = () => {
                       currentWallet={currentWallet}
                       wallets={wallets}
                       networks={networks}
+                      isMobile={true}
                     />
 
                     <Typography component="div" className={style.address}>

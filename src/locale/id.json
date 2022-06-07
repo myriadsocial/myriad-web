@@ -785,6 +785,7 @@
     "Social_Media": "Media Sosial",
     "Wallet": "Dompet",
     "Trending_Experience": "Pengalaman Tren",
+    "Trending_Experience_Desc": "10 Pengalaman Terbaik",
     "Experience": "Pengalaman",
     "Profile": "Profil",
     "Settings": "Pengaturan",
@@ -793,6 +794,7 @@
     "NFT": "NFT",
     "Social_Token": "Token sosial",
     "Trends": "Tren",
+    "Trends_Desc": "10 tagar trending teratas",
     "Topic": "Topik"
   },
   "NFT": {
