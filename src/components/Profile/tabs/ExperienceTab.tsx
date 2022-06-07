@@ -7,7 +7,7 @@ import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 import {PrivateProfile} from '../PrivateProfile';
 
 import {EmptyExperience, ExperienceListContainer} from 'src/components/ExperienceList';
-import {experienceFilterOptions} from 'src/components/Timeline/default';
+import {MenuOptions} from 'src/components/atoms/DropdownMenu';
 import {DropdownMenu} from 'src/components/atoms/DropdownMenu';
 import {Empty} from 'src/components/atoms/Empty';
 import {ExperienceOwner} from 'src/hooks/use-experience-hook';
@@ -58,6 +58,12 @@ export const ProfileExperienceTab: React.FC<ProfileExperienceTabProps> = props =
   const isFriend = friendStatus?.status === FriendStatus.APPROVED;
   const isProfileOwner = profile?.id == user?.id;
   const isPrivateProfile = privacy.accountPrivacy == 'private';
+
+  const experienceFilterOptions: MenuOptions<ExperienceType>[] = [
+    {id: 'all', title: i18n.t('Profile.Experience.Sort.All')},
+    {id: 'personal', title: i18n.t('Profile.Experience.Sort.Personal')},
+    {id: 'other', title: i18n.t('Profile.Experience.Sort.Subscribed')},
+  ];
 
   useEffect(() => {
     dispatch(fetchProfileExperience());

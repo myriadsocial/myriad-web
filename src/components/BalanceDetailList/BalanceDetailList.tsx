@@ -20,9 +20,9 @@ import Typography from '@material-ui/core/Typography';
 
 import {useStyles, ShimerComponent} from '.';
 import {PrimaryCoinMenuContainer} from '../PrimaryCoinMenu/PrimaryCoinMenuContainer';
-import {balanceSortOptions, BalanceSortType} from '../Timeline/default';
+import {BalanceSortType} from '../Timeline/default';
 import {Avatar, AvatarSize} from '../atoms/Avatar';
-import {DropdownMenu} from '../atoms/DropdownMenu';
+import {DropdownMenu, MenuOptions} from '../atoms/DropdownMenu';
 import SearchComponent from '../atoms/Search/SearchBox';
 
 import _ from 'lodash';
@@ -50,6 +50,17 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const {loading, exchangeRates} = useExchangeRate();
+
+  const balanceSortOptions: MenuOptions<BalanceSortType>[] = [
+    {
+      id: 'highest',
+      title: i18n.t('Wallet.Balance.Sort_Opt.Highest'),
+    },
+    {
+      id: 'lowest',
+      title: i18n.t('Wallet.Balance.Sort_Opt.Lowest'),
+    },
+  ];
 
   // Make sure balance is showing, does not return empty JSX
   useEffect(() => {

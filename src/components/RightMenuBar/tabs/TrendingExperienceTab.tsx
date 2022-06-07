@@ -35,7 +35,7 @@ export const TrendingExperienceTab: React.FC = () => {
     <div className={styles.box}>
       <div className={styles.flex}>
         <Typography variant={'h4'} style={{color: '#404040'}}>
-          Trending Experience
+          {i18n.t('Section.Trending_Experience')}
         </Typography>
         <Tooltip title={toolTipText} arrow>
           <IconButton aria-label="info" className={styles.info} style={{color: '#404040'}}>

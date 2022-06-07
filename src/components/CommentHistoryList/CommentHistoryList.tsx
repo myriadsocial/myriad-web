@@ -4,7 +4,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import {Grid} from '@material-ui/core';
 
 import {CommentHistory} from '../CommentHistory/CommentHistory';
-import {sortOptions} from '../FriendsMenu/default';
+import {MenuOptions} from '../atoms/DropdownMenu';
 import {DropdownMenu} from '../atoms/DropdownMenu';
 import {useStyles} from './CommentHistoryList.style';
 
@@ -27,6 +27,10 @@ export const CommentHistoryList: React.FC<CommentHistoryListProps> = props => {
   const {comments, user, hasMore, sort, loadMore, onSort} = props;
 
   const styles = useStyles();
+  const sortOptions: MenuOptions<SortType>[] = [
+    {id: 'DESC', title: i18n.t('Friends.Sort.Latest')},
+    {id: 'ASC', title: i18n.t('Friends.Sort.Oldest')},
+  ];
 
   return (
     <div className={styles.root}>

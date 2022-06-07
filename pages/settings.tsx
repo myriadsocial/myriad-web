@@ -6,7 +6,7 @@ import Head from 'next/head';
 import {useRouter} from 'next/router';
 
 import {SettingsContainer, SettingsType, useSettingList} from 'src/components/Settings';
-import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
+import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {initialize} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
@@ -47,7 +47,7 @@ const Settings: React.FC = () => {
       </Head>
       <TopNavbarComponent
         description={selected ? `${selected.title}` : i18n.t('Setting.Default_Title')}
-        sectionTitle={SectionTitle.SETTINGS}
+        sectionTitle={i18n.t('Section.Settings')}
         type={selected ? 'back' : 'menu'}
       />
       <SettingsContainer />

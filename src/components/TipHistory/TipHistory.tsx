@@ -19,13 +19,14 @@ import {formatUsd} from '../../helpers/balance';
 import {Currency} from '../../interfaces/currency';
 import {Transaction, TransactionSort} from '../../interfaces/transaction';
 import {AvatarSize} from '../atoms/Avatar';
+import {MenuOptions} from '../atoms/DropdownMenu';
 import {DropdownMenu} from '../atoms/DropdownMenu';
 import {ListItemComponent} from '../atoms/ListItem';
 import {Modal, ModalProps} from '../atoms/Modal';
 import {SendTipButton} from '../common/SendTipButton/SendTipButton';
 import {useStyles} from './TipHistory.styles';
-import {sortOptions} from './default';
 
+// import {sortOptions} from './default';
 import {debounce} from 'lodash';
 import {Empty} from 'src/components/atoms/Empty';
 import {Loading} from 'src/components/atoms/Loading';
@@ -71,6 +72,17 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<string>(i18n.t('Tipping_History.Modal.All_Coin'));
+
+  const sortOptions: MenuOptions<TransactionSort>[] = [
+    {
+      id: 'highest',
+      title: i18n.t('Tipping_History.Modal.Sort_Highest'),
+    },
+    {
+      id: 'latest',
+      title: i18n.t('Tipping_History.Modal.Sort_Latest'),
+    },
+  ];
 
   const handleClose = () => {
     setAnchorEl(null);
