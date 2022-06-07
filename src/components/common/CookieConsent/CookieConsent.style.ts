@@ -4,6 +4,17 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {},
     paper: {
+      [theme.breakpoints.down('xs')]: {
+        width: '50vw',
+        height: 'auto',
+        bottom: '-5vh',
+        padding: '5%',
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: '12px',
+        position: 'fixed',
+        right: '-5%',
+      },
       width: 560,
       height: 120,
       padding: 40,

@@ -33,7 +33,7 @@ const useStyles = makeStyles<Theme, CarouselLoginViewProps>(theme =>
       marginBottom: theme.spacing(8),
     },
     carousel: {
-      marginTop: '20vh',
+      marginTop: '10vh',
       marginBottom: theme.spacing(3),
       width: 'max-content',
     },
