@@ -17,10 +17,11 @@ import Typography from '@material-ui/core/Typography';
 
 import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {DropdownMenu} from '../atoms/DropdownMenu';
+import {MenuOptions} from '../atoms/DropdownMenu';
 import SearchComponent from '../atoms/Search/SearchBox';
 import useConfirm from '../common/Confirm/use-confirm.hook';
 import useTipping from '../common/Tipping/use-tipping.hook';
-import {friendFilterOptions, FriendType, sortOptions} from './default';
+import {FriendType} from './default';
 import {useStyles} from './friend.style';
 import {UserWithMutual, useFriendList} from './hooks/use-friend-list.hook';
 
@@ -83,6 +84,22 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [currentFriend, setCurrentFriend] = useState<null | UserWithMutual>(null);
+
+  const friendFilterOptions: MenuOptions<FriendType>[] = [
+    {
+      id: 'all',
+      title: i18n.t('Friends.Filter.All'),
+    },
+    {
+      id: 'mutual',
+      title: i18n.t('Friends.Filter.Mutual'),
+    },
+  ];
+
+  const sortOptions: MenuOptions<SortType>[] = [
+    {id: 'DESC', title: i18n.t('Friends.Sort.Latest')},
+    {id: 'ASC', title: i18n.t('Friends.Sort.Oldest')},
+  ];
 
   const handleOpenFriendSetting =
     (currentFriend: UserWithMutual) => (event: React.MouseEvent<HTMLButtonElement>) => {
