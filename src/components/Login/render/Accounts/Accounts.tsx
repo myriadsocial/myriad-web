@@ -8,11 +8,17 @@ import Identicon from '@polkadot/react-identicon';
 
 import {useStyles} from './Accounts.style';
 
+import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 import i18n from 'src/locale';
 
 type AccountListProps = {
   onSelect: (account: InjectedAccountWithMeta) => void;
-  onNext: (callback: () => void) => void;
+  onNext: (
+    callback: () => void,
+    account?: InjectedAccountWithMeta,
+    nearId?: string,
+    walletType?: WalletTypeEnum,
+  ) => void;
   accounts: InjectedAccountWithMeta[];
   signature: boolean;
 };
@@ -46,9 +52,14 @@ export const Accounts: React.FC<AccountListProps> = props => {
   const handleNext = () => {
     setSubmitted(true);
 
-    onNext(() => {
-      navigate('/profile');
-    });
+    onNext(
+      () => {
+        navigate('/profile');
+      },
+      undefined,
+      undefined,
+      WalletTypeEnum.POLKADOT,
+    );
   };
 
   return (
