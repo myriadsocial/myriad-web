@@ -223,6 +223,7 @@ export const Login: React.FC<LoginProps> = props => {
                 publicAddress={nearWallet}
                 account={selectedAccount}
                 checkUsernameAvailability={checkUsernameAvailable}
+                isMobileSignIn={isMobileSignIn}
               />
             }
           />

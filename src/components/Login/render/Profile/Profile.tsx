@@ -9,7 +9,9 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import {useStyles} from './Profile.style';
 
+import {MyriadFullIcon} from 'src/components/atoms/Icons';
 import useConfirm from 'src/components/common/Confirm/use-confirm.hook';
+import ShowIf from 'src/components/common/show-if.component';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {WalletTypeEnum, NetworkTypeEnum} from 'src/lib/api/ext-auth';
 import {toHexPublicKey} from 'src/lib/crypto';
@@ -22,6 +24,7 @@ type ProfileProps = {
   networkType: NetworkTypeEnum | null;
   account?: InjectedAccountWithMeta | null;
   publicAddress?: string;
+  isMobileSignIn?: boolean;
 };
 
 const USERNAME_MAX_LENGTH = 16;
@@ -36,7 +39,14 @@ const USERNAME_HELPER_TEXT = i18n.t('Login.Profile.Helper_Text_Username', {
 });
 
 export const Profile: React.FC<ProfileProps> = props => {
-  const {walletType, checkUsernameAvailability, account, publicAddress, networkType} = props;
+  const {
+    walletType,
+    checkUsernameAvailability,
+    account,
+    publicAddress,
+    networkType,
+    isMobileSignIn,
+  } = props;
 
   const styles = useStyles();
   const confirm = useConfirm();
@@ -256,61 +266,143 @@ export const Profile: React.FC<ProfileProps> = props => {
   }, [handleSubmit]);
 
   return (
-    <div className={styles.root}>
-      <div style={{marginBottom: 33}}>
-        <Typography variant="h5" style={{fontWeight: 600}}>
-          {i18n.t('Login.Profile.Title')}
-        </Typography>
-        <Typography variant="caption" color="textSecondary">
-          {i18n.t('Login.Profile.Subtitle')}
-        </Typography>
-      </div>
-      <div className={styles.box}>
-        <TextField
-          id="name"
-          label={i18n.t('Login.Profile.Placeholder_Display_Name')}
-          helperText={profile.name.helper}
-          error={profile.name.error}
-          fullWidth
-          variant="outlined"
-          onChange={handleChangeName}
-          inputProps={{maxLength: DISPLAY_NAME_MAX_LENGTH}}
-        />
-        <Typography className={`${styles.count}`} component="span">
-          ({profile.name.value.length}/{DISPLAY_NAME_MAX_LENGTH})
-        </Typography>
-      </div>
+    <>
+      <ShowIf condition={!isMobileSignIn}>
+        <div className={styles.root}>
+          <div style={{marginBottom: 33}}>
+            <Typography variant="h5" style={{fontWeight: 600}}>
+              {i18n.t('Login.Profile.Title')}
+            </Typography>
+            <Typography variant="caption" color="textSecondary">
+              {i18n.t('Login.Profile.Subtitle')}
+            </Typography>
+          </div>
+          <div className={styles.box}>
+            <TextField
+              id="name"
+              label={i18n.t('Login.Profile.Placeholder_Display_Name')}
+              helperText={profile.name.helper}
+              error={profile.name.error}
+              fullWidth
+              variant="outlined"
+              onChange={handleChangeName}
+              inputProps={{maxLength: DISPLAY_NAME_MAX_LENGTH}}
+            />
+            <Typography className={`${styles.count}`} component="span">
+              ({profile.name.value.length}/{DISPLAY_NAME_MAX_LENGTH})
+            </Typography>
+          </div>
 
-      <div className={styles.box}>
-        <TextField
-          id="username"
-          label={i18n.t('Login.Profile.Placeholder_Username')}
-          helperText={profile.username.helper}
-          error={profile.username.error}
-          fullWidth
-          variant="outlined"
-          onChange={handleChangeUsername}
-          inputProps={{maxLength: USERNAME_MAX_LENGTH, style: {textTransform: 'lowercase'}}}
-        />
-        <Typography className={`${styles.count}`} component="span">
-          ({profile.username.value.length}/{USERNAME_MAX_LENGTH})
-        </Typography>
-      </div>
+          <div className={styles.box}>
+            <TextField
+              id="username"
+              label={i18n.t('Login.Profile.Placeholder_Username')}
+              helperText={profile.username.helper}
+              error={profile.username.error}
+              fullWidth
+              variant="outlined"
+              onChange={handleChangeUsername}
+              inputProps={{maxLength: USERNAME_MAX_LENGTH, style: {textTransform: 'lowercase'}}}
+            />
+            <Typography className={`${styles.count}`} component="span">
+              ({profile.username.value.length}/{USERNAME_MAX_LENGTH})
+            </Typography>
+          </div>
 
-      <Grid container className={styles.action} justifyContent="space-between">
-        <Button onClick={handleChangeWallet} variant="outlined" color="secondary" size="small">
-          {i18n.t('Login.Profile.Btn_Change_Wallet')}
-        </Button>
+          <Grid container className={styles.action} justifyContent="space-between">
+            <Button onClick={handleChangeWallet} variant="outlined" color="secondary" size="small">
+              {i18n.t('Login.Profile.Btn_Change_Wallet')}
+            </Button>
 
-        <Button
-          disabled={profile.username.value.length === 0}
-          onClick={handleConfirmation}
-          variant="contained"
-          color="primary"
-          size="small">
-          {i18n.t('Login.Profile.Btn_Register')}
-        </Button>
-      </Grid>
-    </div>
+            <Button
+              disabled={profile.username.value.length === 0}
+              onClick={handleConfirmation}
+              variant="contained"
+              color="primary"
+              size="small">
+              {i18n.t('Login.Profile.Btn_Register')}
+            </Button>
+          </Grid>
+        </div>
+      </ShowIf>
+      <ShowIf condition={isMobileSignIn}>
+        <div className={styles.mobileRoot}>
+          <div className={styles.logoWrapper}>
+            <div className={styles.logo}>
+              <MyriadFullIcon />
+            </div>
+
+            <Typography variant="h5" component="h1" className={styles.title}>
+              {i18n.t('Login.Layout.Title_left')}{' '}
+              <span className={styles.titlePrimary}>{i18n.t('Login.Layout.Title_right')}</span>
+            </Typography>
+          </div>
+          <div className={styles.mobileCard}>
+            <div style={{marginBottom: 24}}>
+              <div className={styles.title}>
+                <Typography variant="h5" style={{fontWeight: 600}}>
+                  {i18n.t('Login.Profile.Title')}
+                </Typography>
+                <Typography variant="caption" color="textSecondary">
+                  {i18n.t('Login.Profile.Subtitle')}
+                </Typography>
+              </div>
+            </div>
+
+            {/* CREATE USER FORM */}
+            <div className={styles.box}>
+              <TextField
+                id="name"
+                label={i18n.t('Login.Profile.Placeholder_Display_Name')}
+                helperText={profile.name.helper}
+                FormHelperTextProps={{style: {marginLeft: 0}}}
+                error={profile.name.error}
+                fullWidth
+                variant="outlined"
+                onChange={handleChangeName}
+                inputProps={{maxLength: DISPLAY_NAME_MAX_LENGTH}}
+              />
+              <Typography className={`${styles.count}`} component="span">
+                ({profile.name.value.length}/{DISPLAY_NAME_MAX_LENGTH})
+              </Typography>
+            </div>
+            <div className={styles.box}>
+              <TextField
+                id="username"
+                label={i18n.t('Login.Profile.Placeholder_Username')}
+                helperText={profile.username.helper}
+                FormHelperTextProps={{style: {marginLeft: 0}}}
+                error={profile.username.error}
+                fullWidth
+                variant="outlined"
+                onChange={handleChangeUsername}
+                inputProps={{maxLength: USERNAME_MAX_LENGTH, style: {textTransform: 'lowercase'}}}
+              />
+              <Typography className={`${styles.count}`} component="span">
+                ({profile.username.value.length}/{USERNAME_MAX_LENGTH})
+              </Typography>
+            </div>
+            <div className={styles.actionWrapper}>
+              <Button
+                onClick={handleChangeWallet}
+                variant="outlined"
+                color="secondary"
+                size="small">
+                {i18n.t('Login.Profile.Btn_Change_Wallet')}
+              </Button>
+
+              <Button
+                disabled={profile.username.value.length === 0}
+                onClick={handleConfirmation}
+                variant="contained"
+                color="primary"
+                size="small">
+                {i18n.t('Login.Profile.Btn_Register')}
+              </Button>
+            </div>
+          </div>
+        </div>
+      </ShowIf>
+    </>
   );
 };
