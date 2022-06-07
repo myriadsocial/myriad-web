@@ -2,11 +2,11 @@ import {ImageListProps, ImageListItemProps, GalleryType} from './Gallery.types';
 
 import {generateImageSizes} from 'src/helpers/image';
 
-const horizontalGallery = (source: string[]): ImageListProps => {
+const horizontalGallery = (source: string[], mobile: boolean): ImageListProps => {
   let listCols = 1;
   let itemCols = 1;
   let ROWS = 1;
-  let cellHeight = 320;
+  let cellHeight = mobile ? 260 : 320;
 
   const images: ImageListItemProps[] = [];
 
@@ -18,7 +18,7 @@ const horizontalGallery = (source: string[]): ImageListProps => {
 
     if (source.length >= 3) {
       listCols = 6;
-      cellHeight = 160;
+      cellHeight = mobile ? 130 : 160;
       ROWS = index === 0 ? 2 : 1;
       itemCols = index === 0 ? listCols : listCols / Math.min(source.length - 1, 3);
     }
@@ -41,10 +41,10 @@ const horizontalGallery = (source: string[]): ImageListProps => {
   };
 };
 
-const verticalGallery = (source: string[]): ImageListProps => {
+const verticalGallery = (source: string[], mobile: boolean): ImageListProps => {
   let listCols = 1;
   let ROWS = 1;
-  let cellHeight = 320;
+  let cellHeight = mobile ? 260 : 320;
 
   const images: ImageListItemProps[] = [];
 
@@ -54,7 +54,7 @@ const verticalGallery = (source: string[]): ImageListProps => {
     }
 
     if (source.length >= 2) {
-      cellHeight = 162;
+      cellHeight = mobile ? 130 : 162;
       ROWS = index === 0 ? 2 : 1;
     }
 
@@ -76,11 +76,15 @@ const verticalGallery = (source: string[]): ImageListProps => {
   };
 };
 
-export const buildList = (source: string[], variant: GalleryType): ImageListProps => {
+export const buildList = (
+  source: string[],
+  variant: GalleryType,
+  mobile = false,
+): ImageListProps => {
   switch (variant) {
     case 'horizontal':
-      return horizontalGallery(source);
+      return horizontalGallery(source, mobile);
     default:
-      return verticalGallery(source);
+      return verticalGallery(source, mobile);
   }
 };

@@ -3,7 +3,7 @@ import {XIcon, ChevronRightIcon, ChevronLeftIcon} from '@heroicons/react/solid';
 import React, {useEffect, useState} from 'react';
 import Carousel from 'react-material-ui-carousel';
 
-import {Dialog, IconButton, SvgIcon, Paper, Grid} from '@material-ui/core';
+import {Dialog, IconButton, SvgIcon, Paper, Grid, useTheme, useMediaQuery} from '@material-ui/core';
 import ImageList from '@material-ui/core/ImageList';
 import ImageListItem from '@material-ui/core/ImageListItem';
 import ImageListItemBar from '@material-ui/core/ImageListItemBar';
@@ -24,6 +24,8 @@ export const Gallery: React.FC<GalleryProps> = props => {
   const {images, variant = 'horizontal'} = props;
 
   const style = useStyles();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
   const [viewerIsOpen, setViewerIsOpen] = useState(false);
   const [index, setIndex] = useState(0);
@@ -35,11 +37,11 @@ export const Gallery: React.FC<GalleryProps> = props => {
   });
 
   useEffect(() => {
-    const gallery = buildList(images, variant);
-
+    const gallery = buildList(images, variant, isMobile);
+    console.log('gallery', gallery);
     setList(gallery);
     setItems(gallery.images);
-  }, []);
+  }, [isMobile]);
 
   const imageLoaded = (index: number) => () => {
     setItems(prevItems =>

@@ -38,6 +38,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.down('lg')]: {
         fontSize: theme.typography.h5.fontSize,
       },
+      [theme.breakpoints.down('xs')]: {
+        height: 130,
+      },
     },
     imageGrid: {
       width: '100%',
