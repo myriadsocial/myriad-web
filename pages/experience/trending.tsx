@@ -5,7 +5,7 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 
 import {ExperienceTab} from 'src/components/RightMenuBar/tabs/ExperienceTab';
-import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
+import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
 import i18n from 'src/locale';
@@ -38,8 +38,8 @@ const ExperiencePageComponent: React.FC = () => {
       </Head>
 
       <TopNavbarComponent
-        description={SectionTitle.TRENDING_EXPERIENCE}
         sectionTitle={i18n.t('Section.Trending_Experience')}
+        description={i18n.t('Section.Trending_Experience_Desc')}
         type={'menu'}
       />
 
