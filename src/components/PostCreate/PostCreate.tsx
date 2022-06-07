@@ -25,6 +25,7 @@ type PostCreateProps = {
   open: boolean;
   people: User[];
   uploadProgress: number;
+  isMobile?: boolean;
   onClose: () => void;
   onSubmit: (
     post: Partial<Post> | string,
@@ -42,7 +43,8 @@ const initialPost = {
 };
 
 export const PostCreate: React.FC<PostCreateProps> = props => {
-  const {open, people, uploadProgress, onClose, onSubmit, onSearchPeople, onUploadFile} = props;
+  const {open, people, uploadProgress, isMobile, onClose, onSubmit, onSearchPeople, onUploadFile} =
+    props;
   const styles = useStyles();
 
   const [activeTab, setActiveTab] = useState<PostCreateType>('create');
@@ -133,6 +135,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
       subtitle={header[activeTab].subtitle}
       onClose={handleClose}
       open={open}
+      fullScreen={isMobile}
       maxWidth="md"
       className={styles.root}>
       <Tabs
@@ -157,6 +160,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
           onChange={handlePostTextChange}
           onSearchMention={onSearchPeople}
           onFileUploaded={onUploadFile}
+          isMobile={isMobile}
         />
       </TabPanel>
 
@@ -169,10 +173,15 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
           <DropdownMenu<PostVisibility>
             title={i18n.t('Post_Create.Visibility.Label')}
             options={menuOptions}
+            useIconOnMobile={false}
             onChange={handleVisibilityChange}
           />
 
-          <NSFWTags tags={post.NSFWTag?.split(',') || []} onConfirm={handleConfirmNSFWTags} />
+          <NSFWTags
+            maxWidth={isMobile ? 'xs' : 'md'}
+            tags={post.NSFWTag?.split(',') || []}
+            onConfirm={handleConfirmNSFWTags}
+          />
 
           <ShowIf condition={false}>
             <Button color="primary" size="small" className={styles.markdown}>
@@ -186,6 +195,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
           variant="contained"
           color="primary"
           size="small"
+          fullWidth={isMobile}
           onClick={handleSubmit}>
           {i18n.t('Post_Create.Confirm')}
         </Button>

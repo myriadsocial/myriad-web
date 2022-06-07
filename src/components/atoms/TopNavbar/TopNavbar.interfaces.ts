@@ -1,3 +1,5 @@
+import React from 'react';
+
 export enum SectionTitle {
   FRIENDS = 'Friends',
   SOCIAL_MEDIA = 'Social Media',
@@ -15,7 +17,8 @@ export enum SectionTitle {
 
 export type TopNavbarProps = {
   sectionTitle: SectionTitle | string;
-  description: string;
+  description: string | React.ReactNode;
   type?: 'menu' | 'back';
   reverse?: boolean;
+  onClick?: () => void;
 };

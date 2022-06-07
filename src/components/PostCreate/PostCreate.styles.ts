@@ -38,6 +38,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'space-between',
       alignItems: 'center',
       position: 'relative',
+      [theme.breakpoints.down('xs')]: {
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        padding: 0,
+      },
     },
     option: {
       display: 'flex',

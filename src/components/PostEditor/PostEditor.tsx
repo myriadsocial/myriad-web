@@ -73,6 +73,7 @@ export type PostEditorProps = {
   placeholder?: string;
   mentionable: MentionNodeData[];
   uploadProgress: number;
+  isMobile?: boolean;
   onSearchMention: (query: string) => void;
   onChange?: (value: TNode[]) => void;
   onFileUploaded?: (file: File, type: 'image' | 'video') => Promise<string | null>;
@@ -96,6 +97,7 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
     placeholder = i18n.t('Post_Create.Text_Placeholder'),
     mentionable,
     uploadProgress,
+    isMobile = false,
     onSearchMention,
     onChange,
     onFileUploaded,
@@ -445,9 +447,9 @@ export const PostEditor: React.FC<PostEditorProps> = props => {
           components={components}
           options={options}>
           <HeadingToolbar className={styles.header}>
-            <ToolbarElementList />
+            {!isMobile && <ToolbarElementList />}
             <ToolbarButtonsMarks />
-            <ToolbarButtonsAlign />
+            {!isMobile && <ToolbarButtonsAlign />}
             <ToolbarButtonsList />
             <ToolbarLink icon={<Link />} onMouseDown={openLinkEditor} />
             <ToolbarMedia openImageUpload={getImageUrl} openVideoUpload={getVideoUrl} />

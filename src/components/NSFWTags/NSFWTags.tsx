@@ -11,11 +11,12 @@ import {tagOptions} from './default';
 
 type NSFWTagsProps = {
   tags: string[];
+  maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false;
   onConfirm: (tags: string[]) => void;
 };
 
 export const NSFWTags: React.FC<NSFWTagsProps> = props => {
-  const {tags, onConfirm} = props;
+  const {tags, onConfirm, ...restProps} = props;
 
   const [isOpen, setOpen] = useState(false);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -45,7 +46,14 @@ export const NSFWTags: React.FC<NSFWTagsProps> = props => {
         <SvgIcon component={ChevronDownIcon} fontSize="small" color="primary" />
       </IconButton>
 
-      <Modal title="NSFW tags" align="left" titleSize="small" open={isOpen} onClose={closeTag}>
+      <Modal
+        {...restProps}
+        title="NSFW tags"
+        align="left"
+        titleSize="small"
+        open={isOpen}
+        maxWidth="sm"
+        onClose={closeTag}>
         <PostTags selected={tags} options={tagOptions} onConfirm={handleConfirmTags} />
       </Modal>
     </>
