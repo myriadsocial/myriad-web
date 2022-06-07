@@ -14,8 +14,9 @@ import {
   Typography,
   TextField,
   capitalize,
-  CircularProgress,
   InputAdornment,
+  Backdrop,
+  CircularProgress,
 } from '@material-ui/core';
 
 import {socials} from '../atoms/Icons';
@@ -30,7 +31,9 @@ type AddSocialMediaProps = Pick<ModalProps, 'onClose' | 'open'> & {
   social: SocialsEnum;
   address?: string;
   verifying?: boolean;
-  verify: (social: SocialsEnum, profileUrl: string) => void;
+  verify: (social: SocialsEnum, profileUrl: string, callback?: () => void) => void;
+  useBlockchain?: boolean;
+  fromDrawer?: boolean;
 };
 
 const prefix: Record<SocialsEnum, string> = {
@@ -46,7 +49,16 @@ const prefix: Record<SocialsEnum, string> = {
 };
 
 export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
-  const {social, address, open, verifying = false, onClose, verify} = props;
+  const {
+    social,
+    address,
+    open,
+    verifying = false,
+    onClose,
+    verify,
+    useBlockchain = true,
+    fromDrawer = false,
+  } = props;
 
   const styles = useStyles();
 
@@ -89,9 +101,14 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
   };
 
   const handleShared = () => {
-    verify(social, profileUrl);
+    if (useBlockchain) {
+      verify(social, profileUrl, handleClose);
+    } else {
+      verify(social, profileUrl);
 
-    handleClose();
+      if (fromDrawer) clear();
+      else handleClose();
+    }
   };
 
   const handleClose = () => {
@@ -259,8 +276,14 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
         {i18n.t('SocialMedia.Modal.OK', {platform: capitalize(social)})}
       </Button>
 
-      <ShowIf condition={verifying}>
+      <ShowIf condition={!useBlockchain && verifying}>
         <CircularProgress size={40} className={styles.loading} />
+      </ShowIf>
+
+      <ShowIf condition={useBlockchain}>
+        <Backdrop className={styles.backdrop} open={verifying}>
+          <CircularProgress color="primary" />
+        </Backdrop>
       </ShowIf>
     </Modal>
   );

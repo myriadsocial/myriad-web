@@ -39,10 +39,11 @@ export const verifySocialAccount = async (
   username: string,
   platform: string,
   address: string,
+  blockchain: boolean,
 ): Promise<void> => {
   await MyriadAPI().request({
     method: 'POST',
-    url: '/user-social-medias/verify',
+    url: '/user-social-medias/verify?blockchain=' + blockchain,
     data: {
       username,
       platform,

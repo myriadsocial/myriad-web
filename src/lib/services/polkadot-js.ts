@@ -460,3 +460,46 @@ export const claimMyria = async (
     console.log(error);
   }
 };
+
+export const verify = async (
+  account: InjectedAccountWithMeta,
+  rpcURL: string,
+  serverId: string,
+  accessToken: string,
+  socialMediaCredential: object,
+  ftIdentifier: string,
+  callback?: (param: SignTransactionCallbackProps) => void,
+): Promise<ApiPromise | null> => {
+  const {web3FromSource} = await import('@polkadot/extension-dapp');
+
+  let api: ApiPromise | null;
+  try {
+    api = await connectToBlockchain(rpcURL);
+
+    callback && callback({apiConnected: true});
+
+    const injector = await web3FromSource(account.meta.source);
+
+    callback &&
+      callback({
+        apiConnected: true,
+        signerOpened: true,
+      });
+
+    const extrinsic = api.tx.tipping.verifySocialMedia(
+      serverId,
+      accessToken,
+      socialMediaCredential,
+      ftIdentifier,
+    );
+
+    await extrinsic.signAndSend(account.address, {
+      signer: injector.signer,
+      nonce: -1,
+    });
+  } catch (err) {
+    return null;
+  }
+
+  return api;
+};

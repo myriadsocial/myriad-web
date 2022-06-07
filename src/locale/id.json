@@ -863,6 +863,7 @@
     "Title": "{{appname}} - Media Sosial",
     "Alert": {
       "Verify": "Akun {{social}} Anda berhasil terhubung!",
+      "Error": "Gagal terhubung",
       "Disconnect": {
         "Title": "Putuskan hubungan akun sosial",
         "Description": "Apakah Anda yakin akan menghapus {{username}}?",
@@ -986,7 +987,7 @@
   "TopNavbar": {
     "Title": {
       "Friends": "Teman",
-      "SocialMedia": "Media Sosial",
+      "Social_Media": "Media Sosial",
       "Wallet": "Dompet",
       "Experience": "Pengalaman",
       "Profile": "Profil",

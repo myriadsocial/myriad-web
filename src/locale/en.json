@@ -863,6 +863,7 @@
     "Title": "{{appname}} - Social Media",
     "Alert": {
       "Verify": "Your {{social}} account successfully connected!",
+      "Error": "Failed to verify",
       "Disconnect": {
         "Title": "Disconnect social account",
         "Description": "Are you sure to remove {{username}}?",

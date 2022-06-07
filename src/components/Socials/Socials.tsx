@@ -14,7 +14,10 @@ import {
   NoSsr,
 } from '@material-ui/core';
 
+import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
+
 import {AddSocialMedia} from '../AddSocialMedia';
+import {PolkadotAccountList} from '../PolkadotAccountList';
 import {useSocialMediaList} from '../SocialMediaList/use-social-media-list.hook';
 import useConfirm from '../common/Confirm/use-confirm.hook';
 import {useStyles} from './Socials.styles';
@@ -22,6 +25,8 @@ import {useStyles} from './Socials.styles';
 import {PromptComponent as PromtMobile} from 'src/components/Mobile/PromptDrawer/Prompt';
 import {ListItemSocialComponent} from 'src/components/atoms/ListItem/ListItemSocial';
 import {capitalize} from 'src/helpers/string';
+import {useAuthHook} from 'src/hooks/auth.hook';
+import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {SocialMedia, SocialsEnum} from 'src/interfaces/social';
 import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
@@ -32,7 +37,13 @@ type SocialsProps = {
   address: string;
   anonymous?: boolean;
   verifying?: boolean;
-  onVerifySocialMedia: (social: SocialsEnum, profileUrl: string) => void;
+  useBlockchain?: boolean;
+  onVerifySocialMedia: (
+    social: SocialsEnum,
+    profileUrl: string,
+    account?: InjectedAccountWithMeta,
+    callback?: () => void,
+  ) => void;
   onDisconnectSocial: (people: SocialMedia) => void;
   onSetAsPrimary: (people: SocialMedia) => void;
 };
@@ -43,6 +54,7 @@ export const Socials: React.FC<SocialsProps> = props => {
     user,
     address,
     verifying = false,
+    useBlockchain = true,
     onDisconnectSocial,
     onVerifySocialMedia,
     onSetAsPrimary,
@@ -53,11 +65,20 @@ export const Socials: React.FC<SocialsProps> = props => {
   const confirm = useConfirm();
   const socialList = useSocialMediaList(socials);
 
+  const {enablePolkadotExtension} = usePolkadotExtension();
+  const {getRegisteredAccounts} = useAuthHook();
   const [selectedSocial, setSelectedSocial] = useState<SocialsEnum>(SocialsEnum.TWITTER);
   const [people, setPeople] = useState<SocialMedia[]>([]);
   const [selectedPeople, setSelectedPeople] = useState<string | null>(null);
   const [addSocial, setAddSocial] = useState(false);
   const [openPromptDrawer, setOpenPromptDrawer] = useState(false);
+  const [showAccountList, setShowAccountList] = React.useState(false);
+  const [extensionInstalled, setExtensionInstalled] = React.useState(false);
+  const [accounts, setAccounts] = React.useState<InjectedAccountWithMeta[]>([]);
+  const [social, setSocial] = React.useState<SocialsEnum | null>(null);
+  const [profileUrl, setProfileUrl] = React.useState<string | null>(null);
+  const [addSocialCallback, setCallback] = React.useState<() => void | null>(null);
+
   const enabledSocial = [SocialsEnum.TWITTER, SocialsEnum.REDDIT];
 
   useEffect(() => {
@@ -108,9 +129,12 @@ export const Socials: React.FC<SocialsProps> = props => {
     }
   };
 
-  const verifySocialMedia = (social: SocialsEnum, profileUrl: string) => {
-    onVerifySocialMedia(social, profileUrl);
-    toggleAddSocialMedia();
+  const closeAddSocialMedia = () => {
+    if (useBlockchain) {
+      setAddSocial(false);
+    } else {
+      toggleAddSocialMedia();
+    }
   };
 
   const confirmDisconnectSocial = (social: SocialMedia): void => {
@@ -130,6 +154,48 @@ export const Socials: React.FC<SocialsProps> = props => {
 
   const handleCancel = () => {
     setOpenPromptDrawer(false);
+  };
+
+  const closeAccountList = () => {
+    setShowAccountList(false);
+  };
+
+  const handleConnect = async (account?: InjectedAccountWithMeta) => {
+    closeAccountList();
+
+    if (account) {
+      onVerifySocialMedia(social, profileUrl, account, addSocialCallback);
+      setCallback(null);
+      setSocial(null);
+      setProfileUrl(null);
+    }
+  };
+
+  const checkExtensionInstalled = async (social: SocialsEnum, profileUrl: string) => {
+    const installed = await enablePolkadotExtension();
+
+    setShowAccountList(true);
+    setExtensionInstalled(installed);
+    setSocial(social);
+    setProfileUrl(profileUrl);
+
+    getAvailableAccounts();
+  };
+
+  const getAvailableAccounts = async () => {
+    const accounts = await getRegisteredAccounts();
+
+    setAccounts(accounts);
+  };
+
+  const verifySocialMedia = (social: SocialsEnum, profileUrl: string, callback?: () => void) => {
+    if (useBlockchain) {
+      checkExtensionInstalled(social, profileUrl);
+      setCallback(() => callback);
+    } else {
+      onVerifySocialMedia(social, profileUrl);
+      toggleAddSocialMedia();
+    }
   };
 
   return (
@@ -206,9 +272,18 @@ export const Socials: React.FC<SocialsProps> = props => {
             open={addSocial}
             social={selectedSocial}
             address={address}
-            onClose={toggleAddSocialMedia}
+            onClose={closeAddSocialMedia}
             verifying={verifying}
             verify={verifySocialMedia}
+            useBlockchain={useBlockchain}
+          />
+          <PolkadotAccountList
+            align="left"
+            title="Select account"
+            isOpen={showAccountList && extensionInstalled}
+            accounts={accounts}
+            onSelect={handleConnect}
+            onClose={closeAccountList}
           />
         </NoSsr>
       </Box>
