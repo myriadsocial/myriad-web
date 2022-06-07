@@ -5,6 +5,10 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       width: 460,
       marginTop: 8,
+
+      [theme.breakpoints.down('md')]: {
+        width: '100%',
+      },
     },
     flex: {display: 'flex', justifyContent: 'space-between'},
     name: {

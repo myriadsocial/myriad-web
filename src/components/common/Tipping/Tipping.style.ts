@@ -17,6 +17,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       background: '#FFFFFF',
       boxShadow: `0px 2px 10px rgba(0, 0, 0, 0.05)`,
       borderRadius: 10,
+
+      [theme.breakpoints.down('xs')]: {
+        width: '100%',
+      },
     },
     header: {
       fontWeight: 700,

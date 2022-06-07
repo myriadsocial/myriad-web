@@ -5,6 +5,10 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       width: 400,
       maxHeight: 600,
+
+      [theme.breakpoints.down('md')]: {
+        maxWidth: 286,
+      },
     },
     options: {
       display: 'flex',

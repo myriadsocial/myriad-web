@@ -38,7 +38,7 @@ export const Gallery: React.FC<GalleryProps> = props => {
 
   useEffect(() => {
     const gallery = buildList(images, variant, isMobile);
-    console.log('gallery', gallery);
+
     setList(gallery);
     setItems(gallery.images);
   }, [isMobile]);

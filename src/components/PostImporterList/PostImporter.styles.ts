@@ -4,6 +4,10 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: 460,
+
+      [theme.breakpoints.down('md')]: {
+        width: '100%',
+      },
     },
     name: {
       fontSize: '16px',

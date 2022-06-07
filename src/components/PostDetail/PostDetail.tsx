@@ -249,6 +249,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
       <ShowIf condition={shoWcomment}>
         <TabsComponent<SectionType>
           tabs={tabs}
+          centered
           selected={selectedCommentTab as SectionType}
           onChangeTab={handleChangeTab}
         />

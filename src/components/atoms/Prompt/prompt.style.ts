@@ -3,10 +3,13 @@ import {createStyles, Theme, makeStyles} from '@material-ui/core/styles';
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     prompt: {
-      width: '480px',
-      minHeight: '260px',
+      width: 480,
+      minHeight: 260,
       textAlign: 'center',
       padding: 30,
+      [theme.breakpoints.down('md')]: {
+        width: '100%',
+      },
     },
     text: {
       fontWeight: 400,
@@ -27,7 +30,11 @@ export const useStyles = makeStyles((theme: Theme) =>
         borderRadius: '20px',
       },
       [theme.breakpoints.down('md')]: {
-        //display: 'none',
+        alignItems: 'flex-end',
+      },
+    },
+    container: {
+      [theme.breakpoints.down('xs')]: {
         alignItems: 'flex-end',
       },
     },

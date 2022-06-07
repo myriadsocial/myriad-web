@@ -63,7 +63,7 @@ export const ConfirmProvider: React.ComponentType<ConfirmProviderProps> = ({chil
         subtitle={options?.description}
         icon={options?.icon ?? 'warning'}
         onCancel={handleClose}>
-        <Grid container justifyContent="space-around">
+        <Grid container justifyContent="space-around" className={styles.action}>
           <ShowIf condition={!options?.hideCancel}>
             <Button size="small" variant="outlined" color="secondary" onClick={handleCancel}>
               {options?.cancellationText}
