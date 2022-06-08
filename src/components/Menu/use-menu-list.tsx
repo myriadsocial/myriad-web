@@ -33,6 +33,7 @@ export type MenuDetail = {
   active: boolean;
   icon: React.ReactNode;
   url: string;
+  isDesktop: boolean;
 };
 
 export const useMenuList = (selected: MenuId): MenuDetail[] => {
@@ -44,6 +45,7 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         active: selected === 'home',
         icon: HomeIcon,
         url: '/home',
+        isDesktop: true,
       },
       {
         id: 'friends',
@@ -51,6 +53,7 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         active: selected === 'friends',
         icon: UsersIcon,
         url: '/friends',
+        isDesktop: true,
       },
       {
         id: 'token',
@@ -58,6 +61,7 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         active: selected === 'token',
         icon: CurrencyDollarIcon,
         url: '/socialtoken',
+        isDesktop: true,
       },
       {
         id: 'nft',
@@ -65,6 +69,7 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         active: selected === 'nft',
         icon: PhotographIcon,
         url: '/nft',
+        isDesktop: true,
       },
       {
         id: 'socials',
@@ -72,6 +77,7 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         active: selected === 'socials',
         icon: ViewGridIcon,
         url: '/socials',
+        isDesktop: true,
       },
       {
         id: 'wallet',
@@ -79,6 +85,7 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         active: selected === 'wallet',
         icon: CreditCardIcon,
         url: '/wallet',
+        isDesktop: true,
       },
       {
         id: 'experience-trend',
@@ -86,6 +93,7 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         active: selected === 'experience-trend',
         icon: TrendingUpIcon,
         url: '/experience/trending',
+        isDesktop: false,
       },
       {
         id: 'experience',
@@ -93,6 +101,7 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         active: selected === 'experience',
         icon: VariableIcon,
         url: '/experience',
+        isDesktop: false,
       },
       {
         id: 'trends',
@@ -100,6 +109,7 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         active: selected === 'trends',
         icon: HashtagIcon,
         url: '/topic',
+        isDesktop: false,
       },
       {
         id: 'settings',
@@ -107,6 +117,7 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         active: selected === 'settings',
         icon: CogIcon,
         url: '/settings',
+        isDesktop: true,
       },
     ],
     [selected],
