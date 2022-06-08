@@ -7,14 +7,12 @@ import {NetworkTypeEnum} from 'src/interfaces/network';
 import {SocialsEnum} from 'src/interfaces/social';
 import {UserSocialMedia} from 'src/interfaces/user';
 import * as NetworkAPI from 'src/lib/api/network';
+import * as UserSocialAPI from 'src/lib/api/social';
 import * as WalletAPI from 'src/lib/api/wallet';
 import {verify} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
-import {
-  verifySocialMediaConnected,
-  resetVerifyingSocial,
-  fetchConnectedSocials,
-} from 'src/reducers/user/actions';
+import {verifySocialMediaConnected, resetVerifyingSocial} from 'src/reducers/user/actions';
+import * as constants from 'src/reducers/user/constants';
 import {UserState} from 'src/reducers/user/reducer';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -109,34 +107,30 @@ export const useShareSocial = () => {
 
       if (!api) throw new Error('Cancel transaction');
 
-      verified = await new Promise(resolve => {
+      await new Promise(resolve => {
         api.query.system.events(events => {
           events.forEach(({event}) => {
-            for (let i = 0; i < event.data.length; i++) {
-              const data = event.data[i];
-
-              if (data.toString() === 'Success') {
-                const userSocialMedia = event.data[i + 1].toHuman() as unknown as UserSocialMedia;
-                if (userSocialMedia.userId === user.id) {
-                  resolve(true);
-                }
-              }
-
-              if (data.toString() === 'Failed') {
-                resolve(false);
-              }
-            }
+            event.data.forEach(record => {
+              if (record.toString() === 'Success') resolve(true);
+              if (record.toString() === 'Failed') resolve(false);
+            });
           });
         });
       });
 
       await api.disconnect();
 
-      if (!verified) {
-        throw new Error('Failed to verify');
-      }
+      const currentTotal = socials.length;
+      const updatedSocialMedia = await UserSocialAPI.getUserSocials(user.id, true);
+      const updatedTotal = updatedSocialMedia.data.length;
 
-      dispatch(fetchConnectedSocials());
+      if (currentTotal === updatedTotal) verified = false;
+      if (currentTotal < updatedTotal) verified = true;
+
+      dispatch({
+        type: constants.FETCH_USER_SOCIALS,
+        payload: updatedSocialMedia.data,
+      });
     } catch (err) {
       console.log(err);
     } finally {
