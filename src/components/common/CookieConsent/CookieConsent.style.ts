@@ -5,7 +5,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {},
     paper: {
       [theme.breakpoints.down('xs')]: {
-        width: '50vw',
+        width: '65vw',
         height: 'auto',
         bottom: '-5vh',
         padding: '5%',
