@@ -13,6 +13,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
+      textAlign: 'center',
     },
   }),
 );
