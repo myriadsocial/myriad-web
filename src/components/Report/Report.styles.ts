@@ -4,6 +4,9 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: 460,
+      [theme.breakpoints.down('md')]: {
+        width: '100%',
+      },
     },
     list: {
       display: 'flex',
@@ -20,6 +23,10 @@ export const useStyles = makeStyles((theme: Theme) =>
         height: 36,
         width: 'auto',
         padding: theme.spacing(1, 0),
+
+        [theme.breakpoints.down('md')]: {
+          paddingRight: 40,
+        },
 
         '&.Mui-selected': {
           fontWeight: 'bold',

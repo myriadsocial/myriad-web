@@ -73,8 +73,8 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = props => {
 
       <ShowIf condition={isBanned}>
         <TopNavbarComponent
-          description={i18n.t('TopNavbar.Profile.Subtitle')}
-          sectionTitle={i18n.t('TopNavbar.Profile.Title')}
+          description={i18n.t('TopNavbar.Subtitle.Profile')}
+          sectionTitle={i18n.t('TopNavbar.Title.Profile')}
         />
         <ResourceDeleted />
       </ShowIf>
