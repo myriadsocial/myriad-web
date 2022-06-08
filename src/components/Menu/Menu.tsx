@@ -36,17 +36,19 @@ export const Menu: React.FC<MenuProps> = props => {
           <MyriadFullBlackIcon />
         </div>
 
-        {menu.map(item => (
-          <ListItemComponent
-            id={item.id}
-            key={item.id}
-            title={item.title}
-            icon={item.icon}
-            active={item.active}
-            onClick={openMenu(item)}
-            url={item.url}
-          />
-        ))}
+        {menu
+          .filter(ar => ar.isDesktop === true)
+          .map(item => (
+            <ListItemComponent
+              id={item.id}
+              key={item.id}
+              title={item.title}
+              icon={item.icon}
+              active={item.active}
+              onClick={openMenu(item)}
+              url={item.url}
+            />
+          ))}
       </BoxComponent>
     </div>
   );

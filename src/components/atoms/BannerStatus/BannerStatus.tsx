@@ -51,24 +51,23 @@ const BannerStatusComponent: React.FC<Props> = props => {
     <>
       <ShowIf condition={open && appEnvironment !== 'mainnet'}>
         <div className={style.root}>
+          <SvgIcon
+            classes={{root: style.fill}}
+            color="secondary"
+            component={ExclamationIcon}
+            viewBox="0 0 20 20"
+          />
           <Typography variant="body1" className={style.text}>
-            <SvgIcon
-              classes={{root: style.fill}}
-              color="secondary"
-              component={ExclamationIcon}
-              viewBox="0 0 20 20"
-            />
             {text}
           </Typography>
-          <Typography variant="body1" className={`${style.text} ${style.icon}`}>
-            <SvgIcon
-              onClick={setHiddenBanner}
-              classes={{root: style.fill}}
-              color="inherit"
-              component={XIcon}
-              viewBox="0 0 20 20"
-            />
-          </Typography>
+          <SvgIcon
+            onClick={setHiddenBanner}
+            classes={{root: style.fill}}
+            className={style.icon}
+            style={{color: '#ffffff'}}
+            component={XIcon}
+            viewBox="0 0 20 20"
+          />
         </div>
       </ShowIf>
     </>
