@@ -33,9 +33,8 @@ const useStyles = makeStyles<Theme, CarouselLoginViewProps>(theme =>
       marginBottom: theme.spacing(8),
     },
     carousel: {
-      marginTop: '10vh',
       marginBottom: theme.spacing(3),
-      width: 'max-content',
+      wordBreak: 'break-word',
     },
     title: {
       lineHeight: '33.6px',
@@ -110,9 +109,7 @@ export const CarouselLoginView: React.FC<CarouselLoginViewProps> = props => {
               {i18n.t('Login.Layout.Carousel_Title_1_right')}
             </Typography>
             <Typography variant="h4" className={style.subtitle} component="p" color="textPrimary">
-              {i18n.t('Login.Layout.Carousel_Subtitle_1a')}
-            </Typography>
-            <Typography variant="h4" className={style.subtitle} component="p" color="textPrimary">
+              {i18n.t('Login.Layout.Carousel_Subtitle_1a')}{' '}
               {i18n.t('Login.Layout.Carousel_Subtitle_1b')}
             </Typography>
           </div>
