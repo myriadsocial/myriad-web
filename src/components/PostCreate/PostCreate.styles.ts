@@ -9,6 +9,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginRight: -30,
       borderBottom: '1px solid #E5E5E5',
 
+      [theme.breakpoints.down('xs')]: {
+        marginLeft: -20,
+        marginRight: -20,
+      },
+
       '& .MuiTabs-flexContainer': {
         justifyContent: 'space-evenly',
       },
