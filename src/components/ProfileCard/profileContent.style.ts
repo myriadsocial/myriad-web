@@ -35,9 +35,9 @@ export const useStyles = makeStyles<Theme, ProfileCardProps>(theme =>
       },
     },
     name: {
-      textDecoration: 'none',
       color: theme.palette.text.primary,
       display: 'block',
+      cursor: 'pointer',
 
       [theme.breakpoints.down('xs')]: {
         fontWeight: 500,

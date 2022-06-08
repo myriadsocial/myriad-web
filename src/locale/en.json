@@ -101,6 +101,12 @@
       },
       "Menu_Post": {
         "Remove": "Remove from experience"
+      },
+      "Helper": {
+        "Name": "Must Between 1-50 character",
+        "Image": "Required",
+        "Tag": "Add at least one tag",
+        "People": "Add at least one people"
       }
     },
     "Modal_Add_Post": {
@@ -355,8 +361,8 @@
       "Title": "Report User",
       "Subtitle_1": "Why are you reporting ",
       "Subtitle_2": "Help us understand the problem",
-      "Description_Placeholder":"Description",
-      "Description_Validation":"Must be between 4 to 200 characters",
+      "Description_Placeholder": "Description",
+      "Description_Validation": "Must be between 4 to 200 characters",
       "Btn_Submit": "Submit",
       "Error_Login": "Please login to continue your report",
       "Toaster_Success": "User has been reported"
@@ -503,10 +509,10 @@
     }
   },
   "Post_Delete": {
-      "Title": "Remove Post",
-      "Description": "Are you sure to remove this post?",
-      "Confirmation_Text": "Yes, proceed to delete",
-      "Cancellation_Text": "No, let me rethink"
+    "Title": "Remove Post",
+    "Description": "Are you sure to remove this post?",
+    "Confirmation_Text": "Yes, proceed to delete",
+    "Cancellation_Text": "No, let me rethink"
   },
   "Post_Import": {
     "Success_Toaster": "Post successfully imported!",

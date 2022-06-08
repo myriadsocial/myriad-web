@@ -35,6 +35,7 @@ type DropzoneProps = {
   usage?: string;
   isEdit?: boolean;
   editorType?: string;
+  error?: boolean;
   onImageSelected: (files: File[]) => void;
 };
 
@@ -59,8 +60,9 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
     usage = '',
     isEdit = false,
     editorType = '',
+    error,
   } = props;
-  const styles = useStyles({border, multiple});
+  const styles = useStyles({border, multiple, error});
 
   const {openToasterSnack} = useToasterSnackHook();
 
