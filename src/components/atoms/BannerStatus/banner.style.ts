@@ -18,6 +18,10 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'absolute',
       right: '250px',
       cursor: 'pointer',
+      [theme.breakpoints.down('xs')]: {
+        position: 'absolute',
+        right: '0px',
+      },
     },
     fill: {
       marginRight: '12px',
