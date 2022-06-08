@@ -1,6 +1,6 @@
 import {SearchIcon, XCircleIcon, PlusCircleIcon} from '@heroicons/react/solid';
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import {useSelector} from 'react-redux';
 
@@ -88,11 +88,12 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   } = useExperienceHook();
   const router = useRouter();
 
+  const ref = useRef(null);
   const {anonymous, user} = useSelector<RootState, UserState>(state => state.userState);
   const [experienceId, setExperienceId] = useState<string | undefined>();
   const [newExperience, setNewExperience] = useState<ExperienceProps>(experience);
   const [image, setImage] = useState<string | undefined>(experience.experienceImageURL);
-  const [isDetailChanged, setDetailChanged] = useState<boolean>(false);
+  const [, setDetailChanged] = useState<boolean>(false);
   const [isLoading, setIsloading] = useState<boolean>(false);
   const [errors, setErrors] = useState({
     name: false,
@@ -299,6 +300,11 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
 
     if (valid) {
       onSave(newExperience);
+    } else {
+      ref.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
     }
   };
 
@@ -329,7 +335,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   };
 
   return (
-    <div className={styles.root}>
+    <div className={styles.root} ref={ref}>
       <Typography className={styles.title}>
         {type ? type : i18n.t('Experience.Create.Header')} {i18n.t('Experience.Editor.Text_1')}
       </Typography>
@@ -577,7 +583,6 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       </InfiniteScroll>
       <FormControl fullWidth variant="outlined">
         <Button
-          disabled={!isDetailChanged}
           variant="contained"
           color="primary"
           disableElevation
