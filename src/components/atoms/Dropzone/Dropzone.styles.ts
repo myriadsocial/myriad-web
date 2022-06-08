@@ -3,12 +3,15 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 type StylesProps = {
   border: boolean;
   multiple?: boolean;
+  error?: boolean;
 };
 
 export const useStyles = makeStyles<Theme, StylesProps>(theme =>
   createStyles({
     root: {
-      border: props => (props.border ? '1px dashed #E5E5E5' : 'none'),
+      borderColor: props => (props.error ? '#f44336' : '#E5E5E5'),
+      borderStyle: 'dashed',
+      borderWidth: props => (props.border ? '1px' : 'none'),
       padding: 8,
       background: '#FFF',
       borderRadius: 5,

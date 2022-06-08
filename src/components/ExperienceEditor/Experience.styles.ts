@@ -13,6 +13,14 @@ export const useStyles = makeStyles((theme: Theme) =>
         width: 14,
         height: 14,
       },
+
+      ' .MuiFormHelperText-root': {
+        marginLeft: 0,
+
+        [theme.breakpoints.down('xs')]: {
+          fontSize: 12,
+        },
+      },
     },
     root: {
       padding: 30,
@@ -102,6 +110,12 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     option: {
       width: '100%',
+    },
+    counter: {
+      position: 'absolute',
+      right: 0,
+      bottom: 0,
+      color: '#898888',
     },
   }),
 );

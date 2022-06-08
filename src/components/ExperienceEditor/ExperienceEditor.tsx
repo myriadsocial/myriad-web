@@ -1,6 +1,6 @@
 import {SearchIcon, XCircleIcon, PlusCircleIcon} from '@heroicons/react/solid';
 
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import {useSelector} from 'react-redux';
 
@@ -9,6 +9,7 @@ import {useRouter} from 'next/router';
 import {
   Button,
   FormControl,
+  FormHelperText,
   IconButton,
   InputLabel,
   OutlinedInput,
@@ -40,7 +41,7 @@ import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
 type ExperienceEditorProps = {
-  type?: 'clone' | 'edit';
+  type?: 'Clone' | 'Edit' | 'Create';
   isEdit?: boolean;
   experience?: ExperienceProps;
   tags: Tag[];
@@ -65,7 +66,7 @@ const DEFAULT_EXPERIENCE: ExperienceProps = {
 
 export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   const {
-    type,
+    type = 'Create',
     isEdit,
     experience = DEFAULT_EXPERIENCE,
     people,
@@ -87,14 +88,21 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   } = useExperienceHook();
   const router = useRouter();
 
+  const ref = useRef(null);
   const {anonymous, user} = useSelector<RootState, UserState>(state => state.userState);
   const [experienceId, setExperienceId] = useState<string | undefined>();
   const [newExperience, setNewExperience] = useState<ExperienceProps>(experience);
   const [image, setImage] = useState<string | undefined>(experience.experienceImageURL);
-  const [isDetailChanged, setDetailChanged] = useState<boolean>(false);
+  const [, setDetailChanged] = useState<boolean>(false);
   const [isLoading, setIsloading] = useState<boolean>(false);
+  const [errors, setErrors] = useState({
+    name: false,
+    picture: false,
+    tags: false,
+    people: false,
+  });
 
-  React.useEffect(() => {
+  useEffect(() => {
     const experienceId = router.query.experienceId as string | null;
     if (experienceId) {
       setExperienceId(experienceId);
@@ -271,28 +279,33 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     setDetailChanged(true);
   };
 
-  const isValidExperience = (): boolean => {
-    if (newExperience.name.length === 0) return false;
+  const validateExperience = (): boolean => {
+    const validName = newExperience.name.length > 0;
+    const validPicture = Boolean(newExperience.experienceImageURL);
+    const validTags = newExperience.allowedTags.length > 0;
+    const validPeople = newExperience.people.filter(people => !isEmpty(people.id)).length > 0;
 
-    if (!newExperience.experienceImageURL) return false;
+    setErrors({
+      name: !validName,
+      picture: !validPicture,
+      tags: !validTags,
+      people: !validPeople,
+    });
 
-    if (newExperience.allowedTags.length === 0) return false;
-
-    if (newExperience.people.filter(people => !isEmpty(people.id)).length === 0) return false;
-
-    return true;
+    return validName && validPicture && validTags && validPeople;
   };
 
   const saveExperience = () => {
-    if (!isValidExperience()) return;
+    const valid = validateExperience();
 
-    onSave(newExperience);
-  };
-
-  const renderLabelButton = () => {
-    if (type === 'edit') return i18n.t('Experience.Editor.Btn.Save');
-    else if (type === 'clone') return i18n.t('Experience.Editor.Btn.Clone');
-    else return i18n.t('Experience.Editor.Btn.Create');
+    if (valid) {
+      onSave(newExperience);
+    } else {
+      ref.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
   };
 
   const handleNextPagePosts = () => {
@@ -322,12 +335,12 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   };
 
   return (
-    <div className={styles.root}>
+    <div className={styles.root} ref={ref}>
       <Typography className={styles.title}>
         {type ? type : i18n.t('Experience.Create.Header')} {i18n.t('Experience.Editor.Text_1')}
       </Typography>
 
-      <FormControl fullWidth variant="outlined">
+      <FormControl fullWidth variant="outlined" error={errors.name}>
         <InputLabel htmlFor="experience-name">{i18n.t('Experience.Editor.Subtitle_1')}</InputLabel>
         <OutlinedInput
           id="experience-name"
@@ -337,9 +350,15 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
           labelWidth={110}
           inputProps={{maxLength: 50}}
         />
+        <FormHelperText id="experience-name-error">
+          {i18n.t('Experience.Editor.Helper.Name')}
+        </FormHelperText>
+        <Typography variant="subtitle1" className={styles.counter}>
+          {newExperience?.name.length ?? 0}/50
+        </Typography>
       </FormControl>
 
-      <FormControl fullWidth variant="outlined">
+      <FormControl fullWidth variant="outlined" style={{position: 'relative'}}>
         <InputLabel htmlFor="experience-description">
           {i18n.t('Experience.Editor.Subtitle_2')}
         </InputLabel>
@@ -352,13 +371,22 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
           inputProps={{maxLength: 280}}
           multiline
         />
+        <FormHelperText id="experience-name-error">&nbsp;</FormHelperText>
+        <Typography variant="subtitle1" className={styles.counter}>
+          {newExperience?.description ?? 0}/280
+        </Typography>
       </FormControl>
 
-      <FormControl fullWidth variant="outlined" style={{position: 'relative', zIndex: 100}}>
+      <FormControl
+        fullWidth
+        variant="outlined"
+        style={{position: 'relative', zIndex: 100}}
+        error={errors.picture}>
         <InputLabel htmlFor="experience-picture" shrink={true} className={styles.label}>
           {i18n.t('Experience.Editor.Subtitle_3')}
         </InputLabel>
         <Dropzone
+          error={errors.picture}
           onImageSelected={handleImageUpload}
           value={image}
           maxSize={3}
@@ -370,6 +398,9 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
             <CircularProgress size={32} color="primary" />
           </div>
         </ShowIf>
+        <FormHelperText error={errors.picture} id="experience-picture-error">
+          {i18n.t('Experience.Editor.Helper.Image')}
+        </FormHelperText>
       </FormControl>
 
       <Autocomplete<string, true, true, true>
@@ -389,6 +420,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         renderInput={params => (
           <TextField
             {...params}
+            error={errors.tags}
             label={i18n.t('Experience.Editor.Label_1')}
             variant="outlined"
             placeholder={
@@ -397,6 +429,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
                 : undefined
             }
             onChange={handleSearchTags}
+            helperText={i18n.t('Experience.Editor.Helper.Tag')}
             InputProps={{
               ...params.InputProps,
               endAdornment: <React.Fragment>{params.InputProps.endAdornment}</React.Fragment>,
@@ -457,6 +490,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         renderInput={params => (
           <TextField
             {...params}
+            error={errors.people}
             label={i18n.t('Experience.Editor.Label_3')}
             placeholder={i18n.t('Experience.Editor.Placeholder_3')}
             variant="outlined"
@@ -465,6 +499,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
               ...params.InputProps,
               endAdornment: <React.Fragment>{params.InputProps.endAdornment}</React.Fragment>,
             }}
+            helperText={i18n.t('Experience.Editor.Helper.People')}
           />
         )}
         renderOption={(option, state: AutocompleteRenderOptionState) => {
@@ -548,13 +583,12 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       </InfiniteScroll>
       <FormControl fullWidth variant="outlined">
         <Button
-          disabled={!isDetailChanged || !isValidExperience()}
           variant="contained"
           color="primary"
           disableElevation
           fullWidth
           onClick={saveExperience}>
-          {renderLabelButton()}
+          {i18n.t(`Experience.Editor.Btn.${type}`)}
         </Button>
       </FormControl>
     </div>

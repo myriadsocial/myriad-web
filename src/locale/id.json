@@ -101,6 +101,12 @@
       },
       "Menu_Post": {
         "Remove": "Hapus dari pengalaman"
+      },
+      "Helper": {
+        "Name": "Harus Diantar 1-50 Karakter",
+        "Image": "Harus Di Isi",
+        "Tag": "Tambah minimal satu tag",
+        "People": "Tambah minimal satu Orang"
       }
     },
     "Modal_Add_Post": {

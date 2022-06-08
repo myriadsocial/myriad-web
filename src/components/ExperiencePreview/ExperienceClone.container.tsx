@@ -55,7 +55,7 @@ export const ExperienceCloneContainer: React.FC = () => {
 
       {experience && (
         <ExperienceEditor
-          type={i18n.t('Experience.Clone.Type')}
+          type="Clone"
           experience={experience}
           tags={tags}
           people={people}

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Link from 'next/link';
+import {useRouter} from 'next/router';
 
 import {Badge, Grid} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
@@ -38,6 +38,8 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
   } = props;
   const classes = useStyles({...props});
 
+  const router = useRouter();
+
   const icons = React.useMemo(
     () => ({
       'polkadot{.js}': <PolkadotNetworkIcon />,
@@ -73,9 +75,11 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
   const [open, setOpen] = React.useState(false);
 
   const handleOpenProfile = () => {
-    if (isMobile) return;
-
-    !anonymous && setOpen(!open);
+    if (isMobile) {
+      router.push(`/profile/${user.id}`);
+    } else {
+      !anonymous && setOpen(!open);
+    }
   };
 
   const getSelectedIcon = (isWallet?: boolean) => {
@@ -109,11 +113,13 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
             />
           </div>
           <div className={classes.identity}>
-            <Link href={user ? `/profile/${user.id}` : ''} passHref>
-              <Typography component="a" variant="h5" className={classes.name}>
-                {user?.name || alias || ''}
-              </Typography>
-            </Link>
+            <Typography
+              onClick={handleOpenProfile}
+              component="a"
+              variant="h5"
+              className={classes.name}>
+              {user?.name || alias || ''}
+            </Typography>
 
             <Typography variant="caption" color="textSecondary" className={classes.username}>
               @{user?.username || 'anonymous'}
@@ -143,7 +149,7 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
                 />
               </div>
               <div className={classes.identity}>
-                <Typography variant="h5" className={classes.name}>
+                <Typography variant="h5" className={classes.username}>
                   {user?.name || alias || ''}
                 </Typography>
                 <Typography variant="caption" className={classes.username}>

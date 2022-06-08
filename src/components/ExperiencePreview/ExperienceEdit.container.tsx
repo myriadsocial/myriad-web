@@ -63,7 +63,7 @@ export const ExperienceEditContainer: React.FC = () => {
 
       {experience && (
         <ExperienceEditor
-          type={i18n.t('Experience.Edit.Type')}
+          type="Edit"
           experience={experience}
           tags={tags}
           people={people}
