@@ -4,14 +4,15 @@ import {Typography} from '@material-ui/core';
 
 import {useStyles} from './Empty.styles';
 
-type EmptyProps = {
+export type EmptyProps = {
   title: string;
   subtitle?: string;
+  margin?: boolean;
 };
 
 export const Empty: React.FC<EmptyProps> = props => {
   const {title, subtitle, children} = props;
-  const styles = useStyles();
+  const styles = useStyles({...props});
 
   return (
     <div className={styles.root}>
@@ -24,4 +25,8 @@ export const Empty: React.FC<EmptyProps> = props => {
       {children}
     </div>
   );
+};
+
+Empty.defaultProps = {
+  margin: true,
 };

@@ -203,7 +203,7 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
 
       <div className={styles.list}>
         <ShowIf condition={tips.length === 0}>
-          <Empty title={i18n.t('Tipping_History.Modal.Empty')} subtitle="" />
+          <Empty title={i18n.t('Tipping_History.Modal.Empty')} subtitle="" margin={false} />
         </ShowIf>
         <ShowIf condition={!!tips.length}>
           <List className={styles.list} id="scrollable-tip-history">
