@@ -1,6 +1,8 @@
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-export const useStyles = makeStyles((theme: Theme) =>
+import {EmptyProps} from './Empty';
+
+export const useStyles = makeStyles<Theme, EmptyProps>(theme =>
   createStyles({
     root: {
       background: '#FFF',
@@ -13,9 +15,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       height: '335px',
     },
     title: {
-      marginTop: 54,
+      marginTop: props => (props.margin ? 54 : 0),
       fontWeight: 700,
-      marginBottom: 12,
+      marginBottom: props => (props.margin ? 12 : 0),
     },
   }),
 );

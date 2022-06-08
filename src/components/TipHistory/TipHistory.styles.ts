@@ -9,6 +9,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.down('md')]: {
         maxWidth: 286,
       },
+      [theme.breakpoints.down('xs')]: {
+        maxWidth: '100%',
+      },
     },
     options: {
       display: 'flex',
@@ -18,6 +21,9 @@ export const useStyles = makeStyles((theme: Theme) =>
 
       '& . MuiMenu-paper': {
         width: 170,
+      },
+      [theme.breakpoints.down('xs')]: {
+        marginBottom: 0,
       },
     },
     selected: {
