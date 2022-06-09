@@ -110,13 +110,8 @@ export const fetchTransactionHistory: ThunkActionCreator<Actions, RootState> =
 
     try {
       const {
-        userState: {user},
         tipSummaryState: {sort, currency},
       } = getState();
-
-      if (!user) {
-        throw new Error('User not found');
-      }
 
       const filter = {
         type,

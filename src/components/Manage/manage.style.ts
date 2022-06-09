@@ -26,6 +26,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.down('xs')]: {
         maxWidth: '120px',
       },
+    backdrop: {
+      zIndex: theme.zIndex.drawer + 1,
+      color: '#fff',
     },
   }),
 );

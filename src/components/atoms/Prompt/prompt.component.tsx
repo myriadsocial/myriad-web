@@ -4,7 +4,7 @@ import {ExclamationIcon} from '@heroicons/react/solid';
 
 import React, {useMemo} from 'react';
 
-import {SvgIcon} from '@material-ui/core';
+import {SvgIcon, useMediaQuery, useTheme} from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
@@ -16,6 +16,8 @@ export const PromptComponent: React.FC<Prompt> = props => {
   const {open, title, subtitle, children, icon, onCancel} = props;
 
   const style = useStyles();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
   const promptIcon = useMemo(() => {
     switch (icon) {
@@ -34,8 +36,8 @@ export const PromptComponent: React.FC<Prompt> = props => {
   return (
     <Dialog
       className={style.root}
-      classes={{container: style.container}}
-      scroll={'paper'}
+      classes={{container: style.container, paper: style.paper}}
+      PaperProps={{square: isMobile}}
       onClose={onCancel}
       aria-labelledby="simple-dialog-title"
       open={open}>

@@ -33,6 +33,8 @@ const StyledBadge = withStyles((theme: Theme) =>
 export const UserSocials: React.FC<UserSocialsProps> = props => {
   const {socials, isPrivate, isFriend, isOwner} = props;
 
+  const styles = useStyles();
+
   const getPlatformProfileUrl = (selectedSocials: SocialMedia) => {
     let url = '';
 
@@ -54,10 +56,9 @@ export const UserSocials: React.FC<UserSocialsProps> = props => {
     window.open(url, '_blank');
   };
 
-  const styles = useStyles();
   if (isPrivate && !isFriend && !isOwner) {
     return (
-      <div className={`${styles.mt30}`}>
+      <div className={styles.empty}>
         <Empty
           title={i18n.t('Profile.Social_Media.Empty.Title')}
           subtitle={i18n.t('Profile.Social_Media.Empty.Private')}
@@ -68,10 +69,14 @@ export const UserSocials: React.FC<UserSocialsProps> = props => {
 
   if (socials.length === 0) {
     return (
-      <div className={`${styles.mt30}`}>
+      <div className={styles.empty}>
         <Empty
           title={i18n.t('Profile.Social_Media.Empty.Title')}
-          subtitle={i18n.t('Profile.Social_Media.Empty.Not_Connect')}
+          subtitle={
+            isOwner
+              ? i18n.t('Profile.Social_Media.Empty.Owner_Not_Connect')
+              : i18n.t('Profile.Social_Media.Empty.Not_Connect')
+          }
         />
       </div>
     );

@@ -21,15 +21,11 @@ import {toHexPublicKey} from 'src/lib/crypto';
 import {firebaseCloudMessaging} from 'src/lib/firebase';
 import {clearNearAccount} from 'src/lib/services/near-api-js';
 import {createNearSignature} from 'src/lib/services/near-api-js';
-import {signWithExtension} from 'src/lib/services/polkadot-js';
+import {connect, signWithExtension} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
 import {fetchBalances, getUserCurrencies} from 'src/reducers/balance/actions';
-import {
-  fetchUserWallets,
-  fetchCurrentUserWallets,
-  fetchUser,
-  addNewWallet,
-} from 'src/reducers/user/actions';
+import {fetchUserWallets, fetchCurrentUserWallets, fetchUser} from 'src/reducers/user/actions';
+import * as constants from 'src/reducers/user/constants';
 import {UserState} from 'src/reducers/user/reducer';
 import {uniqueNamesGenerator, adjectives, colors} from 'unique-names-generator';
 
@@ -50,35 +46,11 @@ export const useAuthHook = () => {
   const {getPolkadotAccounts} = usePolkadotExtension();
   const {publicRuntimeConfig} = getConfig();
   const [loading, setLoading] = useState(false);
+  const [isSignerLoading, setSignerLoading] = useState(false);
 
-  const createSignaturePolkadotExt = async (
-    account: InjectedAccountWithMeta,
-    nonce: number,
-  ): Promise<string | null> => {
+  const fetchUserNonce = async (address: string): Promise<UserNonceProps> => {
     try {
-      const signature = await signWithExtension(account, nonce);
-
-      return signature;
-    } catch (error) {
-      console.log({error});
-      return null;
-    }
-  };
-
-  const fetchNearUserNonce = async (nearId: string): Promise<UserNonceProps> => {
-    try {
-      const data = await WalletAPI.getUserNonce(nearId);
-
-      return data;
-    } catch (error) {
-      console.log('[useAuthHook][getUserNonce][error]', {error});
-      return {nonce: 0};
-    }
-  };
-
-  const fetchUserNonce = async (account: InjectedAccountWithMeta): Promise<UserNonceProps> => {
-    try {
-      const data = await WalletAPI.getUserNonce(toHexPublicKey(account));
+      const data = await WalletAPI.getUserNonce(address);
 
       return data;
     } catch (error) {
@@ -119,7 +91,7 @@ export const useAuthHook = () => {
     nearAddress?: string,
   ) => {
     if (account) {
-      const signature = await createSignaturePolkadotExt(account, nonce);
+      const signature = await signWithExtension(account, nonce);
 
       if (!signature) return false;
 
@@ -139,14 +111,14 @@ export const useAuthHook = () => {
     }
 
     if (nearAddress && nearAddress.length > 0) {
-      const data = await createNearSignature(nearAddress, nonce);
+      const nearAccount = nearAddress.split('/')[1];
+      const data = await createNearSignature(nearAccount, nonce);
 
       if (data && !data.signature) return false;
 
       if (data) {
-        const parsedNearAddress = nearAddress.split('/')[1];
         signIn('credentials', {
-          address: parsedNearAddress,
+          address: nearAccount,
           publicAddress: data.publicAddress,
           signature: data.signature,
           walletType: WalletTypeEnum.NEAR,
@@ -199,69 +171,157 @@ export const useAuthHook = () => {
     });
   };
 
-  const connectNetwork = async (account?: InjectedAccountWithMeta, nearAccount?: NearPayload) => {
-    if (!user) return;
+  const connectNetwork = async (
+    blockchainPlatform: string,
+    account?: InjectedAccountWithMeta | NearPayload,
+    useBlockchain = true,
+  ): Promise<boolean> => {
+    if (!user) return false;
+    if (!account) return false;
+
+    const {nonce} = await WalletAPI.getUserNonceByUserId(user?.id);
+
+    if (!nonce) return false;
 
     try {
-      const {nonce} = await WalletAPI.getUserNonceByUserId(user?.id);
       let payload = null;
-      let currentAddress = null;
 
-      if (account) {
-        const address = toHexPublicKey(account);
-        const signature = await createSignaturePolkadotExt(account, nonce);
-        currentAddress = address;
-        payload = {
-          publicAddress: address,
-          nonce,
-          signature,
-          networkType: NetworkTypeEnum.POLKADOT,
-          walletType: WalletTypeEnum.POLKADOT,
-          data: {
-            id: address,
-          },
-        };
+      switch (blockchainPlatform) {
+        case 'substrate':
+          const polkadotAccount = account as InjectedAccountWithMeta;
+          const polkadotSignature = await signWithExtension(polkadotAccount, nonce);
 
-        await WalletAPI.connectNetwork(payload, user.id);
-      } else if (nearAccount) {
-        const result = await createNearSignature(`/${nearAccount.nearAddress}`, nonce);
-        currentAddress = nearAccount.nearAddress;
-        payload = {
-          publicAddress: nearAccount.pubKey,
-          nonce,
-          signature: nearAccount.signature,
-          networkType: NetworkTypeEnum.NEAR,
-          walletType: WalletTypeEnum.NEAR,
-          data: {
-            id: nearAccount.nearAddress,
-          },
-        };
+          if (!polkadotSignature) return false;
+          if (useBlockchain)
+            return connectAccount(account as InjectedAccountWithMeta, polkadotSignature);
 
-        if (result) payload.signature = result.signature;
+          const polkadotAddress = toHexPublicKey(polkadotAccount);
 
-        await WalletAPI.connectNetwork(payload, user.id);
+          payload = {
+            publicAddress: polkadotAddress,
+            nonce,
+            signature: polkadotSignature,
+            networkType: NetworkTypeEnum.POLKADOT,
+            walletType: WalletTypeEnum.POLKADOT,
+            data: {
+              id: polkadotAddress,
+            },
+          };
+
+          break;
+
+        case 'near':
+          const nearAccount = account as NearPayload;
+          const result = await createNearSignature(nearAccount.nearAddress, nonce);
+
+          if (!result) return false;
+
+          const nearSignature = result.signature;
+          const {pubKey, nearAddress} = nearAccount;
+
+          payload = {
+            publicAddress: pubKey,
+            nonce,
+            signature: nearSignature,
+            networkType: NetworkTypeEnum.NEAR,
+            walletType: WalletTypeEnum.NEAR,
+            data: {
+              id: nearAddress,
+            },
+          };
+
+          break;
       }
 
-      if (payload && currentAddress) {
-        const network = await NetworkAPI.getNetwork(payload.networkType);
-        dispatch(
-          addNewWallet({
-            id: currentAddress,
-            type: payload.walletType,
-            networkId: payload.networkType,
-            primary: false,
-            userId: user.id,
-            network: network,
-          }),
-        );
-      }
-    } catch (error) {
-      if (error instanceof AccountRegisteredError) {
-        throw error;
+      if (!payload) return false;
+
+      await WalletAPI.connectNetwork(payload, user.id);
+
+      dispatch(fetchUserWallets());
+
+      return true;
+    } catch (err) {
+      if (err instanceof AccountRegisteredError) {
+        throw err;
       } else {
-        Sentry.captureException(error);
+        Sentry.captureException(err);
       }
     }
+
+    return false;
+  };
+
+  const connectAccount = async (
+    account: InjectedAccountWithMeta,
+    signature: string,
+  ): Promise<boolean> => {
+    if (!user) return false;
+
+    try {
+      const response = await fetch('/api/access-token');
+      const {accessToken} = await response.json();
+
+      if (!accessToken) throw new Error('Access Token Not Found');
+
+      const {nonce} = await WalletAPI.getUserNonceByUserId(user?.id);
+
+      if (!nonce) throw new Error('Nonce Not Found');
+
+      const {rpcURL} = await NetworkAPI.getNetwork(NetworkTypeEnum.MYRIAD);
+      const serverId = await WalletAPI.getServerId();
+
+      const userCredential = {nonce, signature: signature.replace('0x', ''), userId: user.id};
+      const ftIdentifier = 'native';
+
+      const api = await connect(
+        account as InjectedAccountWithMeta,
+        rpcURL,
+        serverId,
+        accessToken,
+        userCredential,
+        ftIdentifier,
+        ({signerOpened}) => {
+          if (signerOpened) {
+            setSignerLoading(true);
+          }
+        },
+      );
+
+      if (!api) throw new Error('Cancel transaction');
+
+      await new Promise(resolve => {
+        api.query.system.events(events => {
+          events.forEach(({event}) => {
+            event.data.forEach(record => {
+              if (record.toString() === 'Success') resolve(true);
+              if (record.toString() === 'Failed') resolve(false);
+            });
+          });
+        });
+      });
+
+      await api.disconnect();
+
+      const currentTotal = user.wallets.length;
+      const {data: wallets, meta} = await WalletAPI.getUserWallets(user.id);
+      const updatedTotal = wallets.length;
+
+      if (updatedTotal > currentTotal) {
+        dispatch({
+          type: constants.FETCH_USER_WALLETS,
+          payload: wallets,
+          meta,
+        });
+
+        return true;
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setSignerLoading(false);
+    }
+
+    return false;
   };
 
   const switchNetwork = async (
@@ -283,7 +343,9 @@ export const useAuthHook = () => {
       switch (blockchainPlatform) {
         case 'substrate': {
           const polkadotAccount = account as InjectedAccountWithMeta;
-          const signature = await createSignaturePolkadotExt(polkadotAccount, nonce);
+          const signature = await signWithExtension(polkadotAccount, nonce);
+
+          if (!signature) return;
 
           currentAddress = toHexPublicKey(polkadotAccount);
           payload = {
@@ -356,10 +418,11 @@ export const useAuthHook = () => {
     getUserByAccounts,
     getRegisteredAccounts,
     fetchUserNonce,
-    fetchNearUserNonce,
     signInWithExternalAuth,
     signUpWithExternalAuth,
     connectNetwork,
+    connectAccount,
     switchNetwork,
+    isSignerLoading,
   };
 };

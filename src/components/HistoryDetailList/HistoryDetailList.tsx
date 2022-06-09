@@ -245,15 +245,28 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                             }
                             name={
                               tx.toWallet?.userId === userId
-                                ? tx.fromWallet?.user.name ?? DEFAULT_NAME
+                                ? tx.fromWallet?.user.deletedAt
+                                  ? undefined
+                                  : tx.fromWallet?.user.name ?? DEFAULT_NAME
+                                : tx.toWallet?.user.deletedAt
+                                ? undefined
                                 : tx.toWallet?.user.name ?? DEFAULT_NAME
+                            }
+                            banned={
+                              tx.toWallet?.userId === userId
+                                ? !!tx.fromWallet?.user.deletedAt
+                                : !!tx.toWallet?.user.deletedAt
                             }
                           />
 
                           <div className={classes.textSenderWrapper}>
                             <Typography variant="body1" className={classes.textSender}>
                               {tx.toWallet?.userId === userId
-                                ? tx.fromWallet?.user.name ?? DEFAULT_NAME
+                                ? tx.fromWallet?.user.deletedAt
+                                  ? i18n.t('Tipping_History.Modal.User_Banned')
+                                  : tx.fromWallet?.user.name ?? DEFAULT_NAME
+                                : tx.toWallet?.user.deletedAt
+                                ? i18n.t('Tipping_History.Modal.User_Banned')
                                 : tx.toWallet?.user.name ?? DEFAULT_NAME}
                             </Typography>
                             <Typography

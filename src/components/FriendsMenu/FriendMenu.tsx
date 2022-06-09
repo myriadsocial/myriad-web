@@ -53,6 +53,7 @@ export const FriendMenuComponent: React.FC = () => {
         </Typography>
         <div className={style.tabs}>
           <TabsComponent
+            position="space-evenly"
             tabs={tabs}
             selected={activeTab}
             size={'small'}

@@ -95,9 +95,9 @@
         "Desc": "Added posts will appear here. You can add a post to experience by select 'add post to experience' on more option."
       },
       "Btn": {
-        "Save": "Save Changes",
         "Clone": "Clone Experience",
-        "Create": "Create Experience"
+        "Create": "Create Experience",
+        "Edit": "Save Changes"
       },
       "Menu_Post": {
         "Remove": "Remove from experience"
@@ -352,7 +352,8 @@
       "Empty": {
         "Title": "Nothing to see here!",
         "Private": "This account is private. Send them a friend request to see their full profile.",
-        "Not_Connect": "This user hasn't connected to any social media yet."
+        "Not_Connect": "This user hasn't connected to any social media yet.",
+        "Owner_Not_Connect": "You haven't connected to any social media yet."
       }
     },
     "Setting": {
@@ -993,7 +994,9 @@
     },
     "Manage": {
       "Alert": {
-        "Copy_Msg": "Wallet address copied to clipboard!"
+        "Copy_Msg": "Wallet address copied to clipboard!",
+        "Connect": "Your wallet account successfully connected!",
+        "Error": "The wallet account connected with another account!"
       },
       "Btn_Connect": "Connect"
     }

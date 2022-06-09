@@ -95,9 +95,9 @@
         "Desc": "Pos yang ditambahkan akan muncul di sini. Anda dapat menambahkan postingan ke pengalaman dengan memilih 'tambahkan postingan ke pengalaman' pada opsi lainnya."
       },
       "Btn": {
-        "Save": "Simpan Perubahan",
         "Clone": "Klon Pengalaman",
-        "Create": "Buat Pengalaman"
+        "Create": "Buat Pengalaman",
+        "Edit": "Simpan Pengalaman"
       },
       "Menu_Post": {
         "Remove": "Hapus dari pengalaman"
@@ -352,7 +352,8 @@
       "Empty": {
         "Title": "Tidak ada yang bisa dilihat di sini!",
         "Private": "Akun ini bersifat pribadi. Kirimi mereka permintaan pertemanan untuk melihat profil lengkap mereka.",
-        "Not_Connect": "Pengguna ini belum terhubung ke media sosial mana pun."
+        "Not_Connect": "Pengguna ini belum terhubung ke media sosial mana pun.",
+        "Owner_Not_Connect": "Anda belum menghubugkan media sosial mana pun."
       }
     },
     "Setting": {
@@ -993,7 +994,9 @@
     },
     "Manage": {
       "Alert": {
-        "Copy_Msg": "Alamat dompet disalin!"
+        "Copy_Msg": "Alamat dompet disalin!",
+        "Connect": "Akun dompet Anda berhasil terhubung!",
+        "Error": "Akun dompet terhubung dengan akun lain!"
       },
       "Btn_Connect": "Hubungkan"
     }
