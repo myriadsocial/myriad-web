@@ -1,31 +1,33 @@
 import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import getConfig from 'next/config';
 import {useRouter} from 'next/router';
+
+import {Backdrop, CircularProgress} from '@material-ui/core';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import {PolkadotAccountList} from '../PolkadotAccountList';
 import {BoxComponent} from '../atoms/Box';
 import {Manage} from './Manage';
+import {useStyles} from './manage.style';
 
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
-import {AccountRegisteredError} from 'src/lib/api/errors/account-registered.error';
 import {clearNearAccount} from 'src/lib/services/near-api-js';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
-import {fetchUserWallets} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const ManageCointainer: React.FC = () => {
+  const styles = useStyles();
   const {enablePolkadotExtension} = usePolkadotExtension();
-  const {getRegisteredAccounts, connectNetwork} = useAuthHook();
+  const {getRegisteredAccounts, connectNetwork, isSignerLoading} = useAuthHook();
   const {connectToNear} = useNearApi();
   const router = useRouter();
-  const dispatch = useDispatch();
   const {publicRuntimeConfig} = getConfig();
   const {openToasterSnack} = useToasterSnackHook();
 
@@ -63,32 +65,37 @@ export const ManageCointainer: React.FC = () => {
   const handleConnect = async (account?: InjectedAccountWithMeta) => {
     closeAccountList();
 
+    let verified = false;
+
     try {
-      if (account) {
-        await connectNetwork(account);
-
-        dispatch(fetchUserWallets());
-      } else {
-        await connectNearAccount();
-      }
-    } catch (error) {
-      if (error instanceof AccountRegisteredError) {
-        openToasterSnack({
-          message: 'Failed! ' + error.message,
-          variant: 'error',
-        });
-      }
-
+      verified = await (account ? connectNetwork('substrate', account) : connectNearAccount());
+    } catch {
       clearNearAccount();
     }
+
+    verified &&
+      account &&
+      openToasterSnack({
+        message: i18n.t('Wallet.Manage.Alert.Connect'),
+        variant: 'success',
+      });
+
+    !verified &&
+      account &&
+      openToasterSnack({
+        message: i18n.t('Wallet.Manage.Alert.Error'),
+        variant: 'error',
+      });
   };
 
-  const connectNearAccount = async (): Promise<void> => {
+  const connectNearAccount = async (): Promise<boolean> => {
+    let verified = false;
+
     const callbackUrl =
       publicRuntimeConfig.appAuthURL + router.route + '?type=manage&action=connect';
 
     try {
-      const data = await connectToNear(callbackUrl);
+      const data = await connectToNear(callbackUrl, callbackUrl);
 
       if (data) {
         const payload = {
@@ -98,24 +105,17 @@ export const ManageCointainer: React.FC = () => {
           signature: data.signature,
         };
 
-        await connectNetwork(undefined, payload);
-
-        dispatch(fetchUserWallets());
+        verified = await connectNetwork('near', payload);
       } else {
         console.log('redirection to near auth page');
       }
-    } catch (error) {
-      if (error instanceof AccountRegisteredError) {
-        openToasterSnack({
-          message: 'Failed! ' + error.message,
-          variant: 'error',
-        });
-      }
-
+    } catch {
       clearNearAccount();
     } finally {
       router.replace(router.route, undefined, {shallow: true});
     }
+
+    return verified;
   };
 
   const onConnect = (type: string) => {
@@ -142,6 +142,9 @@ export const ManageCointainer: React.FC = () => {
         onSelect={handleConnect}
         onClose={closeAccountList}
       />
+      <Backdrop className={styles.backdrop} open={isSignerLoading}>
+        <CircularProgress color="primary" />
+      </Backdrop>
     </BoxComponent>
   );
 };

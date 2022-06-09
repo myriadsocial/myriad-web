@@ -22,5 +22,9 @@ export const useStyles = makeStyles((theme: Theme) =>
         padding: '12px 16px',
       },
     },
+    backdrop: {
+      zIndex: theme.zIndex.drawer + 1,
+      color: '#fff',
+    },
   }),
 );
