@@ -987,7 +987,9 @@
     },
     "Manage": {
       "Alert": {
-        "Copy_Msg": "Wallet address copied to clipboard!"
+        "Copy_Msg": "Wallet address copied to clipboard!",
+        "Connect": "Your wallet account successfully connected!",
+        "Error": "The wallet account connected with another account!"
       },
       "Btn_Connect": "Connect"
     }
