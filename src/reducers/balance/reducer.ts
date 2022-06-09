@@ -1,6 +1,5 @@
 import {HYDRATE} from 'next-redux-wrapper';
 
-import * as BaseConstants from '../base/constants';
 import {State as BaseState} from '../base/state';
 import {Actions} from './actions';
 import * as constants from './constants';
@@ -72,7 +71,7 @@ export const BalanceReducer: Redux.Reducer<BalanceState, Actions> = (
       };
     }
 
-    case BaseConstants.ACTION_LOADING: {
+    case constants.BALANCE_LOADING: {
       return update(state, {
         loading: {$set: action.loading},
       });

@@ -2,7 +2,7 @@ import {User} from '@sentry/types';
 
 import getConfig from 'next/config';
 
-import {Actions as BaseAction, setLoading, setError} from '../base/actions';
+import {Actions as BaseAction, setError} from '../base/actions';
 import {RootState} from '../index';
 import * as constants from './constants';
 
@@ -42,6 +42,11 @@ export interface DecreaseBalance extends Action {
   change: number;
 }
 
+export interface BalanceLoading extends Action {
+  type: constants.BALANCE_LOADING;
+  loading: boolean;
+}
+
 /**
  * Union Action Types
  */
@@ -51,6 +56,7 @@ export type Actions =
   | IncreaseBalance
   | DecreaseBalance
   | FetchCurrenciesId
+  | BalanceLoading
   | BaseAction;
 
 /**
@@ -67,6 +73,11 @@ export const decreaseBalance = (currencyId: CurrencyId, change: number): Decreas
   type: constants.DECREASE_BALANCE,
   currencyId,
   change,
+});
+
+export const setBalanceLoading = (loading: boolean): BalanceLoading => ({
+  type: constants.BALANCE_LOADING,
+  loading,
 });
 
 /**
@@ -111,7 +122,7 @@ export const fetchBalancesPolkadot: ThunkActionCreator<Actions, RootState> =
     const address = user.wallets[0].id;
     const tokenBalances: BalanceDetail[] = [];
 
-    dispatch(setLoading(true));
+    dispatch(setBalanceLoading(true));
 
     try {
       const retrieveBalance = async (currency: Currency): Promise<RetrieveBalanceProps> => {
@@ -162,7 +173,7 @@ export const fetchBalancesPolkadot: ThunkActionCreator<Actions, RootState> =
         }),
       );
     } finally {
-      dispatch(setLoading(false));
+      dispatch(setBalanceLoading(false));
     }
   };
 
@@ -181,7 +192,7 @@ export const fetchBalancesNear: ThunkActionCreator<Actions, RootState> =
       });
     }
 
-    dispatch(setLoading(true));
+    dispatch(setBalanceLoading(true));
 
     try {
       const retrieveBalance = async (currency: Currency): Promise<RetrieveBalanceProps> => {
@@ -228,13 +239,13 @@ export const fetchBalancesNear: ThunkActionCreator<Actions, RootState> =
         }),
       );
     } finally {
-      dispatch(setLoading(false));
+      dispatch(setBalanceLoading(false));
     }
   };
 
 export const getUserCurrencies: ThunkActionCreator<Actions, RootState> =
   () => async (dispatch, getState) => {
-    dispatch(setLoading(true));
+    dispatch(setBalanceLoading(true));
 
     try {
       const {
@@ -254,7 +265,7 @@ export const getUserCurrencies: ThunkActionCreator<Actions, RootState> =
     } catch (error) {
       dispatch(setError(error));
     } finally {
-      dispatch(setLoading(false));
+      dispatch(setBalanceLoading(false));
     }
   };
 

@@ -1,6 +1,7 @@
 import {CurrencyDollarIcon} from '@heroicons/react/outline';
 
 import React, {useState} from 'react';
+import {useSelector} from 'react-redux';
 
 import {
   Button,
@@ -26,6 +27,8 @@ import * as CommentAPI from 'src/lib/api/comment';
 import * as PostAPI from 'src/lib/api/post';
 import * as UserAPI from 'src/lib/api/user';
 import i18n from 'src/locale';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
 type SendTipButtonProps = ButtonProps & {
   label?: string;
@@ -58,11 +61,24 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
   const tipping = useTipping();
 
   const [promptFailedTip, setPromptFailedTip] = useState(false);
+  const [tipInfoOpened, setTipInfoOpened] = useState(false);
+
+  const {anonymous} = useSelector<RootState, UserState>(state => state.userState);
 
   const icon = <SvgIcon color="inherit" component={CurrencyDollarIcon} viewBox="0 0 24 24" />;
 
+  const handleCloseTipInfo = () => {
+    setTipInfoOpened(false);
+  };
+
   const handleSendTip = async () => {
     let receiver: UserWithWalletDetail | PeopleWithWalletDetail | null = null;
+
+    if (anonymous) {
+      setTipInfoOpened(true);
+      return;
+    }
+
     try {
       // if tipping to User
       if ('username' in reference) {
@@ -114,12 +130,23 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
         variant={mobile ? 'text' : variant}
         {...restProps}>
         {label}
-        <ShowIf condition={!tipping.enabled && !mobile}>
+        <ShowIf condition={tipping.loading && !mobile}>
           <div className={styles.loading}>
             <CircularProgress size={14} color={props.color as CircularProgressProps['color']} />
           </div>
         </ShowIf>
       </Button>
+
+      <PromptComponent
+        icon="warning"
+        title={i18n.t('Tipping.Prompt_Mobile.Title')}
+        subtitle={i18n.t('Tipping.Prompt_Mobile.Subtitle')}
+        open={tipInfoOpened}
+        onCancel={handleCloseTipInfo}>
+        <Button variant="contained" color="primary" onClick={handleCloseTipInfo}>
+          Back
+        </Button>
+      </PromptComponent>
 
       <PromptComponent
         icon="danger"

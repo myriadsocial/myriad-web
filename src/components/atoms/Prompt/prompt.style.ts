@@ -2,12 +2,34 @@ import {createStyles, Theme, makeStyles} from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    root: {
+      '& .MuiPaper-rounded': {
+        borderRadius: '20px',
+      },
+      [theme.breakpoints.down('xs')]: {
+        alignItems: 'flex-end',
+      },
+    },
+    container: {
+      [theme.breakpoints.down('xs')]: {
+        alignItems: 'flex-end',
+      },
+    },
+    paper: {
+      [theme.breakpoints.down('xs')]: {
+        marginRight: 0,
+        marginLeft: 0,
+        marginBottom: 0,
+        borderRadius: '20px 20px 0 0',
+        width: '100%',
+      },
+    },
     prompt: {
       width: 480,
       minHeight: 260,
       textAlign: 'center',
       padding: 30,
-      [theme.breakpoints.down('md')]: {
+      [theme.breakpoints.down('xs')]: {
         width: '100%',
       },
     },
@@ -24,19 +46,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     'flex-center': {
       display: 'flex',
       justifyContent: 'center',
-    },
-    root: {
-      '& .MuiPaper-rounded': {
-        borderRadius: '20px',
-      },
-      [theme.breakpoints.down('md')]: {
-        alignItems: 'flex-end',
-      },
-    },
-    container: {
-      [theme.breakpoints.down('xs')]: {
-        alignItems: 'flex-end',
-      },
     },
     content: {
       padding: 0,

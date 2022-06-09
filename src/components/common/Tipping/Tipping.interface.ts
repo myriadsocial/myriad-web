@@ -28,6 +28,7 @@ export interface TippingProviderProps {
   balances: BalanceDetail[];
   currentWallet?: WalletTypeEnum;
   currentNetwork?: NetworkTypeEnum;
+  loading: boolean;
 }
 
 export type SendTipProps = {
