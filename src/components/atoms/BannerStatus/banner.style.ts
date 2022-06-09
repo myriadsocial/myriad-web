@@ -32,6 +32,10 @@ const useStyles = makeStyles((theme: Theme) =>
       color: '#FFF',
       alignItems: 'center',
       fontWeight: 600,
+      [theme.breakpoints.down('xs')]: {
+        width: '80%',
+        fontSize: '0.7rem',
+      },
     },
   }),
 );

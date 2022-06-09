@@ -598,7 +598,7 @@
   "Tipping": {
     "Modal_Main": {
       "Title": "Send Tip",
-      "Subtitle": "Finding this post is insightful? Send a tip!",
+      "Subtitle": "Finding this post insightful? Send a tip!",
       "Balance": "Balance",
       "Tooltip": "If the receiver's balance is below the existential deposit after the tipping was done, the account will be reaped. ",
       "Tooltip_Read_More": "Read more",
