@@ -987,7 +987,9 @@
     },
     "Manage": {
       "Alert": {
-        "Copy_Msg": "Alamat dompet disalin!"
+        "Copy_Msg": "Alamat dompet disalin!",
+        "Connect": "Akun dompet Anda berhasil terhubung!",
+        "Error": "Akun dompet terhubung dengan akun lain!"
       },
       "Btn_Connect": "Hubungkan"
     }

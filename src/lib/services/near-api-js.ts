@@ -99,6 +99,7 @@ export const connectToNearWallet = async (
   near: nearAPI.Near,
   wallet: nearAPI.WalletConnection,
   callbackUrl?: string,
+  failedCallbackUrl?: string,
 ): Promise<NearConnectResponseProps | null> => {
   try {
     const {publicRuntimeConfig} = getConfig();
@@ -112,6 +113,7 @@ export const connectToNearWallet = async (
     if (!wallet.isSignedIn()) {
       await wallet.requestSignIn({
         successUrl: callbackUrl ?? `${publicRuntimeConfig.appAuthURL}/?auth=${WalletTypeEnum.NEAR}`,
+        failureUrl: failedCallbackUrl,
       });
 
       return null;
@@ -151,16 +153,13 @@ export const createNearSignature = async (
     // *** REQUIRES SignIn using walletConnection.requestSignIn() ***
 
     const keyStore = new keyStores.BrowserLocalStorageKeyStore();
-
-    // parse to wallet.near format
-    const parsedNearAddress = nearAddress.split('/')[1];
-    const keyPair = await keyStore.getKey(chainId ?? '', parsedNearAddress);
+    const keyPair = await keyStore.getKey(chainId ?? '', nearAddress);
     const userSignature: Signature = keyPair.sign(Buffer.from(numberToHex(nonce)));
 
     const publicKey = u8aToHex(userSignature.publicKey.data);
     const userSignatureHex = u8aToHex(userSignature.signature);
 
-    const publicAddress = `${publicKey}/${parsedNearAddress}`;
+    const publicAddress = `${publicKey}/${nearAddress}`;
 
     return {signature: userSignatureHex, publicAddress};
   } catch (error) {

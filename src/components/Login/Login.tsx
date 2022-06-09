@@ -17,6 +17,7 @@ import {useAuthHook} from 'src/hooks/auth.hook';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {useProfileHook} from 'src/hooks/use-profile.hook';
 import {WalletTypeEnum, NetworkTypeEnum} from 'src/lib/api/ext-auth';
+import {toHexPublicKey} from 'src/lib/crypto';
 
 type LoginProps = {
   redirectAuth: WalletTypeEnum | null;
@@ -28,7 +29,7 @@ export const Login: React.FC<LoginProps> = props => {
 
   const styles = useStyles();
 
-  const {anonymous, fetchUserNonce, fetchNearUserNonce, signInWithExternalAuth} = useAuthHook();
+  const {anonymous, fetchUserNonce, signInWithExternalAuth} = useAuthHook();
   const {checkUsernameAvailable} = useProfileHook();
   const {connectToNear} = useNearApi();
 
@@ -113,7 +114,8 @@ export const Login: React.FC<LoginProps> = props => {
               setLoading(true);
               setSignatureCancelled(false);
 
-              const {nonce} = await fetchUserNonce(currentAccount);
+              const address = toHexPublicKey(currentAccount);
+              const {nonce} = await fetchUserNonce(address);
 
               if (nonce > 0) {
                 const success = await signInWithExternalAuth(
@@ -146,7 +148,7 @@ export const Login: React.FC<LoginProps> = props => {
               return;
             }
 
-            const {nonce} = await fetchNearUserNonce(address);
+            const {nonce} = await fetchUserNonce(address);
 
             if (nonce > 0) {
               setWalletLoading(false);
