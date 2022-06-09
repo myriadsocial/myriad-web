@@ -254,11 +254,11 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
           alignItems="flex-start"
           justifyContent="space-between"
           className={style.detail}>
-          <div className={style.detailItem}>
+          <div className={style.metric}>
             <Metric data={person.metric} official={person.username === 'myriad_official'} profile />
           </div>
 
-          <div className={style.detailItem}>
+          <div className={style.actionItem}>
             <Grid container justifyContent="space-between" alignItems="center" direction="row">
               <ShowIf condition={self && !!user}>
                 <Button

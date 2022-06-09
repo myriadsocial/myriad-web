@@ -24,7 +24,7 @@ export const TabsComponent = <T,>(props: TabsComponentProps<T>): JSX.Element => 
   const {
     tabs,
     selected,
-    position = 'space-evenly',
+    position,
     mark = 'underline',
     size = 'medium',
     onChangeTab,

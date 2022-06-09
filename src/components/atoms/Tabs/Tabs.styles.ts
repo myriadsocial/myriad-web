@@ -3,7 +3,7 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import {TabPosition, TabMark, TabSize} from '../TabList';
 
 type StylesProps = {
-  position: TabPosition;
+  position?: TabPosition;
   mark: TabMark;
   size: TabSize;
 };

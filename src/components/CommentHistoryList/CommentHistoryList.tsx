@@ -27,6 +27,7 @@ export const CommentHistoryList: React.FC<CommentHistoryListProps> = props => {
   const {comments, user, hasMore, sort, loadMore, onSort} = props;
 
   const styles = useStyles();
+
   const sortOptions: MenuOptions<SortType>[] = [
     {id: 'DESC', title: i18n.t('Friends.Sort.Latest')},
     {id: 'ASC', title: i18n.t('Friends.Sort.Oldest')},

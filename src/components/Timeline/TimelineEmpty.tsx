@@ -8,7 +8,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       minHeight: '66vh',
       background: 'white',
-      borderRadius: 8, //height: 320,
+      borderRadius: 8,
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',

@@ -351,7 +351,8 @@
       "Empty": {
         "Title": "Tidak ada yang bisa dilihat di sini!",
         "Private": "Akun ini bersifat pribadi. Kirimi mereka permintaan pertemanan untuk melihat profil lengkap mereka.",
-        "Not_Connect": "Pengguna ini belum terhubung ke media sosial mana pun."
+        "Not_Connect": "Pengguna ini belum terhubung ke media sosial mana pun.",
+        "Owner_Not_Connect": "Anda belum menghubugkan media sosial mana pun."
       }
     },
     "Setting": {
