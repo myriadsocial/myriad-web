@@ -23,7 +23,7 @@ import {ProfileState} from 'src/reducers/profile/reducer';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      justifyContent: 'space-beetween',
+      justifyContent: 'space-between',
       [theme.breakpoints.down('xs')]: {
         justifyContent: 'flex-end',
       },

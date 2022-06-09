@@ -13,6 +13,7 @@ export const useStyles = makeStyles<Theme, EmptyProps>(theme =>
       justifyContent: 'center',
       textAlign: 'center',
       height: '335px',
+      width: '100%',
     },
     title: {
       marginTop: props => (props.margin ? 54 : 0),

@@ -7,6 +7,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       borderRadius: 10,
       marginTop: 27,
       padding: theme.spacing(2.5, 3.75, 3),
+
+      [theme.breakpoints.down('xs')]: {
+        padding: 0,
+      },
     },
     title: {
       fontWeight: 700,

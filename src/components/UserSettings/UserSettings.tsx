@@ -33,7 +33,10 @@ export const UserSettings: React.FC<UserSettingsProps> = props => {
       <div className={styles.root}>
         <div className={styles.account}>
           {wallets.map(option => (
-            <ListItem alignItems={option.isConnect ? 'flex-start' : 'center'} key={option.id}>
+            <ListItem
+              alignItems={option.isConnect ? 'flex-start' : 'center'}
+              key={option.id}
+              disableGutters>
               <ListItemAvatar>{option.icons}</ListItemAvatar>
               <ListItemText>
                 <Typography

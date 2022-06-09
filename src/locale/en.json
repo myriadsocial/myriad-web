@@ -351,7 +351,8 @@
       "Empty": {
         "Title": "Nothing to see here!",
         "Private": "This account is private. Send them a friend request to see their full profile.",
-        "Not_Connect": "This user hasn't connected to any social media yet."
+        "Not_Connect": "This user hasn't connected to any social media yet.",
+        "Owner_Not_Connect": "You haven't connected to any social media yet."
       }
     },
     "Setting": {

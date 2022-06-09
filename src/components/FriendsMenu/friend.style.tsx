@@ -76,6 +76,11 @@ export const useStyles = makeStyles<Theme, FriendListProps>(theme =>
       '&.MuiListItem-gutters': {
         paddingLeft: theme.spacing(3),
         paddingRight: theme.spacing(3),
+
+        [theme.breakpoints.down('xs')]: {
+          paddingLeft: theme.spacing(2),
+          paddingRight: theme.spacing(2),
+        },
       },
     },
     iconbutton: {

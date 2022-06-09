@@ -90,8 +90,14 @@ export const useStyles = makeStyles((theme: Theme) =>
         flexDirection: 'column',
       },
     },
-    detailItem: {
-      width: 250,
+    metric: {
+      width: 225,
+      [theme.breakpoints.down('xs')]: {
+        width: '100%',
+      },
+    },
+    actionItem: {
+      width: 270,
       [theme.breakpoints.down('xs')]: {
         width: '100%',
       },
@@ -121,7 +127,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         maxWidth: 150,
       },
       [theme.breakpoints.down('xs')]: {
-        width: 160,
+        width: 152,
       },
     },
     fill: {
