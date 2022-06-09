@@ -55,8 +55,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginTop: '70px',
     },
     blocked: {
-      height: 'calc(100vh - 360px)',
-      minHeight: 300,
+      background: 'white',
+      textAlign: 'center',
+      height: 'calc(100vh - 400px)',
+      marginTop: 20,
+      padding: 20,
     },
     blockedTitle: {
       fontWeight: 700,
