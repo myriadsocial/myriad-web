@@ -103,7 +103,7 @@
         "Remove": "Remove from experience"
       },
       "Helper": {
-        "Name": "Must Between 1-50 character",
+        "Name": "Must between 1-50 character",
         "Image": "Required",
         "Tag": "Add at least one tag",
         "People": "Add at least one people"
