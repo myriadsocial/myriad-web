@@ -17,6 +17,7 @@ import {DropdownMenu} from '../atoms/DropdownMenu';
 import {Empty} from '../atoms/Empty';
 import ShowIf from '../common/show-if.component';
 import {useStyles} from './HistoryDetailList.styles';
+import {HistoryFilterModal} from './HistoryFilterModal';
 import {transactionSortOptions, transactionStatusOptions} from './default';
 
 import {SortIcon} from 'src/components/atoms/Icons';
@@ -73,6 +74,7 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
   const [selectedStatus, setSelectedStatus] = useState<string>(
     filter?.from ? 'sent' : filter.to ? 'received' : 'all',
   );
+  const [showFilter, setShowFilter] = useState(false);
 
   const currencyOptions: MenuOptions<string>[] = [
     {id: 'all', title: i18n.t('Wallet.History.Coin_Opt.All')},
@@ -148,6 +150,10 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
     }
   };
 
+  const toggleShowFilter = () => {
+    setShowFilter(!showFilter);
+  };
+
   return (
     <>
       <div className={classes.headerActionWrapper}>
@@ -177,8 +183,13 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
             {i18n.t('Wallet.History.Header')}
           </Typography>
           <IconButton
-            onClick={() => console.log('click filter')}
-            disabled={transactions.length === 0 && !isLoading}>
+            onClick={toggleShowFilter}
+            disabled={
+              transactions.length === 0 &&
+              !isLoading &&
+              selectedStatus === 'all' &&
+              selectedCurrency === 'all'
+            }>
             <SortIcon />
           </IconButton>
         </div>
@@ -319,6 +330,18 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
             )}
           </TableBody>
         </Table>
+        <ShowIf condition={isMobile}>
+          <HistoryFilterModal
+            open={showFilter}
+            onClose={toggleShowFilter}
+            filterOption={transactionStatusOptions}
+            changeFilter={handleFilterTransactionStatus}
+            selectedFilter={selectedStatus}
+            currencyOption={currencyOptions}
+            selectedCurrency={selectedCurrency}
+            changeCurrency={handleCurrencyChange}
+          />
+        </ShowIf>
       </TableContainer>
     </>
   );

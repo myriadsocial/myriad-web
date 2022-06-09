@@ -972,6 +972,10 @@
         "All": "All",
         "Received": "Received",
         "Sent": "Sent"
+      },
+      "Filter": {
+        "Btn_Apply": "Apply",
+        "Btn_Reset": "Reset"
       }
     },
     "Tip": {

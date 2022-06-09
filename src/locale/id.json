@@ -972,6 +972,10 @@
         "All": "Semua",
         "Received": "Diterima",
         "Sent": "Terkirim"
+      },
+      "Filter": {
+        "Btn_Apply": "Terapkan",
+        "Btn_Reset": "Atur Ulang"
       }
     },
     "Tip": {

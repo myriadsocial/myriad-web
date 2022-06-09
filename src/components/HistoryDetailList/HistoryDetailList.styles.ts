@@ -127,5 +127,73 @@ export const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       height: 360,
     },
+    filterList: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      flexDirection: 'column',
+      padding: 0,
+      marginTop: 0,
+      marginBottom: 20,
+
+      '& .MuiListItem-container': {
+        marginBottom: 8,
+      },
+      '& .MuiListItem-root': {
+        height: 36,
+        width: 'auto',
+        padding: theme.spacing(1, 0),
+
+        [theme.breakpoints.down('md')]: {
+          paddingRight: 40,
+        },
+
+        '&.Mui-selected': {
+          fontWeight: 'bold',
+          backgroundColor: alpha('#FFC857', 0.15),
+
+          '&::before,&::after': {
+            content: '""',
+            position: 'absolute',
+            width: 30,
+            height: 36,
+            top: 0,
+            backgroundColor: alpha('#FFC857', 0.15),
+          },
+          '&::before': {
+            left: -30,
+          },
+          '&::after': {
+            right: -30,
+          },
+        },
+      },
+
+      '& .MuiListItemText-root': {
+        margin: 0,
+      },
+
+      '& .MuiTypography-root': {
+        lineHeight: '18px',
+      },
+
+      '& .MuiSvgIcon-root': {
+        fill: 'currentColor',
+      },
+    },
+    optionFilterText: {
+      '& .MuiTypography-root': {
+        marginLeft: 10,
+      },
+    },
+    btnApply: {
+      width: '90%',
+      position: 'absolute',
+      bottom: 74,
+    },
+    btnReset: {
+      width: '90%',
+      position: 'absolute',
+      bottom: 20,
+    },
   }),
 );
