@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React from 'react';
+import {isMobile} from 'react-device-detect';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {useSession} from 'next-auth/client';
@@ -31,8 +32,6 @@ export const SocialsContainer: React.FC = () => {
 
   const {user, socials, anonymous} = useSelector<RootState, UserState>(state => state.userState);
 
-  const [useBlockchain] = useState<boolean>(true);
-
   const address = session?.user.address as string;
 
   const handleDisconnectSocial = (people: SocialMedia) => {
@@ -45,7 +44,7 @@ export const SocialsContainer: React.FC = () => {
     account?: InjectedAccountWithMeta,
     callback?: () => void,
   ) => {
-    if (useBlockchain && account) {
+    if (!isMobile && account) {
       verifySocialMedia(social, profileUrl, account, ({isVerified}) => {
         callback && callback();
 
@@ -62,7 +61,7 @@ export const SocialsContainer: React.FC = () => {
           });
       });
     } else {
-      verifyPublicKeyShared(social, profileUrl, address, true, () => {
+      verifyPublicKeyShared(social, profileUrl, address, () => {
         resetVerification();
 
         openToasterSnack({
@@ -84,11 +83,11 @@ export const SocialsContainer: React.FC = () => {
         socials={socials}
         address={address}
         anonymous={anonymous}
-        verifying={useBlockchain ? isSignerLoading : isVerifying}
+        verifying={!isMobile ? isSignerLoading : isVerifying}
         onVerifySocialMedia={handleVerifySocial}
         onDisconnectSocial={handleDisconnectSocial}
         onSetAsPrimary={handleSetUserSocialAsPrimary}
-        useBlockchain={useBlockchain}
+        onBlockchain={!isMobile}
       />
     </>
   );

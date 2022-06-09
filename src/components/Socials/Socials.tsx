@@ -37,7 +37,7 @@ type SocialsProps = {
   address: string;
   anonymous?: boolean;
   verifying?: boolean;
-  useBlockchain?: boolean;
+  onBlockchain?: boolean;
   onVerifySocialMedia: (
     social: SocialsEnum,
     profileUrl: string,
@@ -54,7 +54,7 @@ export const Socials: React.FC<SocialsProps> = props => {
     user,
     address,
     verifying = false,
-    useBlockchain = true,
+    onBlockchain = true,
     onDisconnectSocial,
     onVerifySocialMedia,
     onSetAsPrimary,
@@ -130,7 +130,7 @@ export const Socials: React.FC<SocialsProps> = props => {
   };
 
   const closeAddSocialMedia = () => {
-    if (useBlockchain) {
+    if (onBlockchain) {
       setAddSocial(false);
     } else {
       toggleAddSocialMedia();
@@ -189,7 +189,7 @@ export const Socials: React.FC<SocialsProps> = props => {
   };
 
   const verifySocialMedia = (social: SocialsEnum, profileUrl: string, callback?: () => void) => {
-    if (useBlockchain) {
+    if (onBlockchain) {
       checkExtensionInstalled(social, profileUrl);
       setCallback(() => callback);
     } else {
@@ -275,7 +275,7 @@ export const Socials: React.FC<SocialsProps> = props => {
             onClose={closeAddSocialMedia}
             verifying={verifying}
             verify={verifySocialMedia}
-            useBlockchain={useBlockchain}
+            onBlockchain={onBlockchain}
           />
           <PolkadotAccountList
             align="left"
