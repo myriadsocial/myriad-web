@@ -95,6 +95,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   const [image, setImage] = useState<string | undefined>(experience.experienceImageURL);
   const [, setDetailChanged] = useState<boolean>(false);
   const [isLoading, setIsloading] = useState<boolean>(false);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [errors, setErrors] = useState({
     name: false,
     picture: false,
@@ -109,6 +110,12 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       loadPostExperience(experienceId);
     }
   }, []);
+
+  useEffect(() => {
+    if (isSubmitted) {
+      validateExperience();
+    }
+  }, [isSubmitted, newExperience]);
 
   const handleSearchTags = (event: React.ChangeEvent<HTMLInputElement>) => {
     const debounceSubmit = debounce(() => {
@@ -296,6 +303,8 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   };
 
   const saveExperience = () => {
+    setIsSubmitted(true);
+
     const valid = validateExperience();
 
     if (valid) {
@@ -373,7 +382,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         />
         <FormHelperText id="experience-name-error">&nbsp;</FormHelperText>
         <Typography variant="subtitle1" className={styles.counter}>
-          {newExperience?.description ?? 0}/280
+          {newExperience?.description?.length ?? 0}/280
         </Typography>
       </FormControl>
 

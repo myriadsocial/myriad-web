@@ -95,9 +95,9 @@
         "Desc": "Pos yang ditambahkan akan muncul di sini. Anda dapat menambahkan postingan ke pengalaman dengan memilih 'tambahkan postingan ke pengalaman' pada opsi lainnya."
       },
       "Btn": {
-        "Save": "Simpan Perubahan",
         "Clone": "Klon Pengalaman",
-        "Create": "Buat Pengalaman"
+        "Create": "Buat Pengalaman",
+        "Edit": "Simpan Pengalaman"
       },
       "Menu_Post": {
         "Remove": "Hapus dari pengalaman"

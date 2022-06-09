@@ -95,9 +95,9 @@
         "Desc": "Added posts will appear here. You can add a post to experience by select 'add post to experience' on more option."
       },
       "Btn": {
-        "Save": "Save Changes",
         "Clone": "Clone Experience",
-        "Create": "Create Experience"
+        "Create": "Create Experience",
+        "Edit": "Save Changes"
       },
       "Menu_Post": {
         "Remove": "Remove from experience"
