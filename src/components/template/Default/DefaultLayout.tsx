@@ -56,7 +56,9 @@ const Default: React.FC<DefaultLayoutProps> = props => {
   const {user, anonymous, currentWallet} = useSelector<RootState, UserState>(
     state => state.userState,
   );
-  const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
+  const {balanceDetails, loading} = useSelector<RootState, BalanceState>(
+    state => state.balanceState,
+  );
 
   const [showNotification, setShowNotification] = useState(false);
 
@@ -127,6 +129,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
 
   return (
     <TippingProvider
+      loading={loading}
       anonymous={anonymous}
       balances={balanceDetails}
       sender={user}

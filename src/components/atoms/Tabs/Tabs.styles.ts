@@ -11,6 +11,10 @@ type StylesProps = {
 export const useStyles = makeStyles<Theme, StylesProps>(theme =>
   createStyles({
     root: {},
-    tabs: {},
+    tabs: {
+      '& .MuiTabs-flexContainer': {
+        justifyContent: props => props.position ?? null,
+      },
+    },
   }),
 );

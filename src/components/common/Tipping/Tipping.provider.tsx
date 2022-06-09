@@ -10,7 +10,6 @@ import SendTipContext, {HandleSendTip} from './Tipping.context';
 import {TippingProviderProps, TippingOptions} from './Tipping.interface';
 import {ButtonNotify} from './render/ButtonNotify';
 
-import {PromptComponent as MobilePromptComponent} from 'src/components/Mobile/PromptDrawer/Prompt';
 import {Modal} from 'src/components/atoms/Modal';
 import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
 import {BalanceDetail} from 'src/interfaces/balance';
@@ -29,9 +28,9 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
   balances,
   currentWallet,
   currentNetwork,
+  loading,
 }) => {
   const [tipFormOpened, setOpenTipForm] = useState(false);
-  const [tipInfoOpened, setTipInfoOpened] = useState(false);
   const [options, setOptions] = useState<TippingOptions>();
   const [enabled, setTippingEnabled] = useState(false);
   const [defaultCurrency, setDefaultCurrency] = useState<BalanceDetail>();
@@ -45,24 +44,20 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
     if (balances.length > 0) {
       setDefaultCurrency(balances[0]);
     }
-  }, [balances]);
+  }, [balances, anonymous]);
 
   const tipping = useCallback<HandleSendTip>(
     options => {
-      setOptions(options);
-
-      if (anonymous) setTipInfoOpened(true);
-      else setOpenTipForm(true);
+      if (!anonymous) {
+        setOptions(options);
+        setOpenTipForm(true);
+      }
     },
     [anonymous, currentWallet],
   );
 
   const handleCloseTipForm = useCallback(() => {
     setOpenTipForm(false);
-  }, [options]);
-
-  const handleCloseTipInfo = useCallback(() => {
-    setTipInfoOpened(false);
   }, [options]);
 
   const handleSuccessTipping = useCallback(
@@ -83,7 +78,7 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
 
   return (
     <>
-      <SendTipContext.Provider value={{currentWallet, enabled, send: tipping}}>
+      <SendTipContext.Provider value={{currentWallet, enabled, loading, send: tipping}}>
         {children}
       </SendTipContext.Provider>
 
@@ -105,13 +100,6 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
           />
         </Modal>
       )}
-
-      <MobilePromptComponent
-        title={i18n.t('Tipping.Prompt_Mobile.Title')}
-        subtitle={i18n.t('Tipping.Prompt_Mobile.Subtitle')}
-        open={tipInfoOpened}
-        onCancel={handleCloseTipInfo}
-      />
 
       <PromptComponent
         icon="success"
