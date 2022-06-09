@@ -353,7 +353,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         <InputLabel htmlFor="experience-name">{i18n.t('Experience.Editor.Subtitle_1')}</InputLabel>
         <OutlinedInput
           id="experience-name"
-          placeholder="Experience Name"
+          placeholder={i18n.t('Experience.Editor.Subtitle_1')}
           value={newExperience?.name || ''}
           onChange={handleChange('name')}
           labelWidth={110}
@@ -373,7 +373,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         </InputLabel>
         <OutlinedInput
           id="experience-description"
-          placeholder="Description"
+          placeholder={i18n.t('Experience.Editor.Subtitle_2')}
           value={newExperience?.description || ''}
           onChange={handleChange('description')}
           labelWidth={70}
