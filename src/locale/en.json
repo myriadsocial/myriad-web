@@ -144,7 +144,8 @@
     "Alert_Connect": {
       "Title": "Connect your Social Media!",
       "Subtitle": "Get rewards by connecting your Twitter or Reddit account."
-    }
+    },
+    "Polkadot_Alert": "Polkadot available for desktop only"
   },
   "Login": {
     "Description": "A social platform that’s entirely under your control. Remain anonymous, look for your own topics, choose your interface and control what you see.",

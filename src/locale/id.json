@@ -144,7 +144,8 @@
     "Alert_Connect": {
       "Title": "Hubungkan Media Sosial Anda!",
       "Subtitle": "Dapatkan hadiah dengan menghubungkan akun Twitter atau Reddit Anda."
-    }
+    },
+    "Polkadot_Alert": "Polkadot hanya tersedia dalam mode desktop"
   },
   "Login": {
     "Description": "Platform sosial yang sepenuhnya berada di bawah kendali Anda. Tetap anonim, cari topik Anda sendiri, pilih antarmuka Anda dan kendalikan apa yang Anda lihat.",

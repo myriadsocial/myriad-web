@@ -501,9 +501,7 @@ export const Options: React.FC<OptionProps> = props => {
                             <Typography>{formatTitle(option.id)}</Typography>
                           </div>
                         </ListItem>
-                        <Typography color="primary">
-                          * Polkadot available for desktop only
-                        </Typography>
+                        <Typography color="primary">* {i18n.t('Mobile.Polkadot_Alert')}</Typography>
                       </>
                     ) : (
                       <ListItem
