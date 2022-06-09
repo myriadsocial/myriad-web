@@ -103,10 +103,10 @@
         "Remove": "Hapus dari pengalaman"
       },
       "Helper": {
-        "Name": "Harus Diantar 1-50 Karakter",
-        "Image": "Harus Di Isi",
+        "Name": "Harus diantara 1-50 karakter",
+        "Image": "Harus di isi",
         "Tag": "Tambah minimal satu tag",
-        "People": "Tambah minimal satu Orang"
+        "People": "Tambah minimal satu orang"
       }
     },
     "Modal_Add_Post": {
