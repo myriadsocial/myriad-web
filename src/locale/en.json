@@ -950,6 +950,7 @@
       "Btn_Apply": "Apply Changes"
     },
     "History": {
+      "Header": "Tap to view on explorer",
       "Empty": {
         "Title": "You don't have any transaction",
         "Subtitle": "Start to send tips in a post!"

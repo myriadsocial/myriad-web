@@ -950,6 +950,7 @@
       "Btn_Apply": "Terapkan perubahan"
     },
     "History": {
+      "Header": "Ketuk untuk melihat di explorer",
       "Empty": {
         "Title": "Anda tidak memiliki transaksi apapun",
         "Subtitle": "Mulai mengirim tip dalam sebuah postingan!"

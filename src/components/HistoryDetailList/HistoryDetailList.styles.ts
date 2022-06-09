@@ -37,8 +37,19 @@ export const useStyles = makeStyles((theme: Theme) =>
       borderBottom: 'none',
       paddingLeft: 0,
       paddingRight: 0,
+      [theme.breakpoints.down('xs')]: {
+        columnGap: theme.spacing(0),
+      },
     },
     headerActionWrapper: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      [theme.breakpoints.down('xs')]: {
+        display: 'none',
+      },
+    },
+    headerActionMobile: {
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
@@ -48,6 +59,25 @@ export const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'flex-end',
       alignItems: 'center',
       columnGap: theme.spacing(1.5),
+    },
+    textSenderWrapper: {
+      [theme.breakpoints.down('xs')]: {
+        marginLeft: theme.spacing(1),
+      },
+    },
+    textSender: {
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '14px',
+        width: '120px',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+      },
+    },
+    textTime: {
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '12px',
+      },
     },
     sent: {
       width: 80,
@@ -69,6 +99,18 @@ export const useStyles = makeStyles((theme: Theme) =>
       '& .MuiTypography-root': {
         color: theme.status.warning.pressed,
         fontWeight: 'bold',
+      },
+    },
+    textSent: {
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '12px',
+        color: theme.palette.primary.main,
+      },
+    },
+    textReceived: {
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '12px',
+        color: theme.status.warning.main,
       },
     },
     textAmountReceived: {
