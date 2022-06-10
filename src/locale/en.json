@@ -147,7 +147,8 @@
     "Alert_Connect": {
       "Title": "Connect your Social Media!",
       "Subtitle": "Get rewards by connecting your Twitter or Reddit account."
-    }
+    },
+    "Polkadot_Alert": "Polkadot available for desktop only"
   },
   "Login": {
     "Description": "A social platform that’s entirely under your control. Remain anonymous, look for your own topics, choose your interface and control what you see.",
@@ -953,6 +954,7 @@
       "Btn_Apply": "Apply Changes"
     },
     "History": {
+      "Header": "Tap to view on explorer",
       "Empty": {
         "Title": "You don't have any transaction",
         "Subtitle": "Start to send tips in a post!"
@@ -974,6 +976,10 @@
         "All": "All",
         "Received": "Received",
         "Sent": "Sent"
+      },
+      "Filter": {
+        "Btn_Apply": "Apply",
+        "Btn_Reset": "Reset"
       }
     },
     "Tip": {

@@ -7,11 +7,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         padding: '0px 20px',
       },
     },
-    tabsComponent: {
-      [theme.breakpoints.down('xs')]: {
-        display: 'none',
-      },
-    },
+    tabsComponent: {},
     mobile: {
       display: 'none',
       [theme.breakpoints.down('xs')]: {

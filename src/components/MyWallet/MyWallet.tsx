@@ -79,9 +79,6 @@ export const MyWallet: React.FC<MyWalletProps> = () => {
           padding={0}
         />
       </div>
-      <div className={style.mobile}>
-        <BalanceDetailListContainer />
-      </div>
     </>
   );
 };

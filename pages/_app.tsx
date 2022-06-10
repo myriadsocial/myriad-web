@@ -6,7 +6,7 @@ import {AppProps, NextWebVitalsMetric} from 'next/app';
 import getConfig from 'next/config';
 import Head from 'next/head';
 
-import CssBaseline from '@material-ui/core/CssBaseline';
+import {CssBaseline, useMediaQuery, useTheme} from '@material-ui/core';
 import {ThemeProvider} from '@material-ui/core/styles';
 import {withStyles, WithStyles} from '@material-ui/core/styles';
 
@@ -45,6 +45,8 @@ const {publicRuntimeConfig} = getConfig();
 
 const App = ({classes, ...props}: AppProps & WithStyles<typeof snackbarStyles>) => {
   const {Component, pageProps} = props;
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
   const {
     notifications,
@@ -83,7 +85,7 @@ const App = ({classes, ...props}: AppProps & WithStyles<typeof snackbarStyles>) 
         <SnackbarProvider
           ref={notistackRef}
           anchorOrigin={{
-            vertical: 'top',
+            vertical: isMobile ? 'bottom' : 'top',
             horizontal: 'right',
           }}
           maxSnack={5}>

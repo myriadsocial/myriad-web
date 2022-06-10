@@ -3,7 +3,7 @@ import {DuplicateIcon} from '@heroicons/react/outline';
 import React from 'react';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
-import {TextField, InputAdornment} from '@material-ui/core';
+import {TextField, InputAdornment, useTheme, useMediaQuery} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import ListItem from '@material-ui/core/ListItem';
@@ -28,6 +28,8 @@ export type ManageProps = {
 
 export const Manage: React.FC<ManageProps> = ({wallets, onConnect}) => {
   const style = useStyles();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
   const {openToasterSnack} = useToasterSnackHook();
   const {walletList} = useWalletList(wallets);
 
@@ -81,6 +83,8 @@ export const Manage: React.FC<ManageProps> = ({wallets, onConnect}) => {
                   variant="outlined"
                   size="small"
                   color="secondary"
+                  disabled={isMobile}
+                  className={style.btnConnect}
                   onClick={() => handleConnectWallet(option.id)}>
                   {i18n.t('Wallet.Manage.Btn_Connect')}
                 </Button>

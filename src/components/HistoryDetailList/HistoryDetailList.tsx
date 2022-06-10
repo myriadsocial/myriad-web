@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
+import {useMediaQuery, useTheme, IconButton} from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import List from '@material-ui/core/List';
 import Table from '@material-ui/core/Table';
@@ -16,8 +17,10 @@ import {DropdownMenu} from '../atoms/DropdownMenu';
 import {Empty} from '../atoms/Empty';
 import ShowIf from '../common/show-if.component';
 import {useStyles} from './HistoryDetailList.styles';
+import {HistoryFilterModal} from './HistoryFilterModal';
 import {transactionSortOptions, transactionStatusOptions} from './default';
 
+import {SortIcon} from 'src/components/atoms/Icons';
 import {Loading} from 'src/components/atoms/Loading';
 import {formatUsd} from 'src/helpers/balance';
 import {timeAgo} from 'src/helpers/date';
@@ -62,6 +65,8 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
   } = props;
 
   const classes = useStyles();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
   const {loading, exchangeRates} = useExchangeRate();
 
   const [selectedSort, setSelectedSort] = useState(orderType);
@@ -69,6 +74,7 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
   const [selectedStatus, setSelectedStatus] = useState<string>(
     filter?.from ? 'sent' : filter.to ? 'received' : 'all',
   );
+  const [showFilter, setShowFilter] = useState(false);
 
   const currencyOptions: MenuOptions<string>[] = [
     {id: 'all', title: i18n.t('Wallet.History.Coin_Opt.All')},
@@ -144,6 +150,10 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
     }
   };
 
+  const toggleShowFilter = () => {
+    setShowFilter(!showFilter);
+  };
+
   return (
     <>
       <div className={classes.headerActionWrapper}>
@@ -166,6 +176,24 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
           onChange={handleFilterTransactionStatus}
         />
       </div>
+
+      <ShowIf condition={isMobile}>
+        <div className={classes.headerActionMobile}>
+          <Typography variant="body1" color="textSecondary">
+            {i18n.t('Wallet.History.Header')}
+          </Typography>
+          <IconButton
+            onClick={toggleShowFilter}
+            disabled={
+              transactions.length === 0 &&
+              !isLoading &&
+              selectedStatus === 'all' &&
+              selectedCurrency === 'all'
+            }>
+            <SortIcon />
+          </IconButton>
+        </div>
+      </ShowIf>
 
       <ShowIf condition={transactions.length === 0 && !isLoading}>
         <Empty
@@ -231,8 +259,8 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                             }
                           />
 
-                          <div>
-                            <Typography variant="body1">
+                          <div className={classes.textSenderWrapper}>
+                            <Typography variant="body1" className={classes.textSender}>
                               {tx.toWallet?.userId === userId
                                 ? tx.fromWallet?.user.deletedAt
                                   ? i18n.t('Tipping_History.Modal.User_Banned')
@@ -241,27 +269,44 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                                 ? i18n.t('Tipping_History.Modal.User_Banned')
                                 : tx.toWallet?.user.name ?? DEFAULT_NAME}
                             </Typography>
-                            <Typography variant="caption" color="textSecondary">
+                            <Typography
+                              variant="caption"
+                              color="textSecondary"
+                              className={classes.textTime}>
                               {timeAgo(tx.createdAt)}
                             </Typography>
+                            <ShowIf condition={isMobile}>
+                              {tx.toWallet?.userId === userId && (
+                                <Typography className={classes.textReceived}>
+                                  {i18n.t('Wallet.History.Received')}
+                                </Typography>
+                              )}
+                              {tx.fromWallet?.userId === userId && (
+                                <Typography className={classes.textSent}>
+                                  {i18n.t('Wallet.History.Sent')}
+                                </Typography>
+                              )}
+                            </ShowIf>
                           </div>
                         </TableCell>
-                        <TableCell align="center">
-                          {tx.toWallet?.userId === userId && (
-                            <div className={classes.received}>
-                              <Typography variant="caption">
-                                {i18n.t('Wallet.History.Received')}
-                              </Typography>
-                            </div>
-                          )}
-                          {tx.fromWallet?.userId === userId && (
-                            <div className={classes.sent}>
-                              <Typography variant="caption">
-                                {i18n.t('Wallet.History.Sent')}
-                              </Typography>
-                            </div>
-                          )}
-                        </TableCell>
+                        <ShowIf condition={!isMobile}>
+                          <TableCell align="center">
+                            {tx.toWallet?.userId === userId && (
+                              <div className={classes.received}>
+                                <Typography variant="caption">
+                                  {i18n.t('Wallet.History.Received')}
+                                </Typography>
+                              </div>
+                            )}
+                            {tx.fromWallet?.userId === userId && (
+                              <div className={classes.sent}>
+                                <Typography variant="caption">
+                                  {i18n.t('Wallet.History.Sent')}
+                                </Typography>
+                              </div>
+                            )}
+                          </TableCell>
+                        </ShowIf>
                         <TableCell align="right">
                           <div className={classes.currencyDetailWrapper}>
                             <div>
@@ -279,14 +324,16 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                                 {`~${formatUsd(tx.amount, getConversion(tx.currencyId))} USD`}
                               </Typography>
                             </div>
-                            <div>
-                              <Avatar
-                                name={tx.currency.name}
-                                size={AvatarSize.TINY}
-                                alt={tx.currency.name}
-                                src={tx.currency.image}
-                              />
-                            </div>
+                            <ShowIf condition={!isMobile}>
+                              <div>
+                                <Avatar
+                                  name={tx.currency.name}
+                                  size={AvatarSize.TINY}
+                                  alt={tx.currency.name}
+                                  src={tx.currency.image}
+                                />
+                              </div>
+                            </ShowIf>
                           </div>
                         </TableCell>
                       </TableRow>
@@ -296,6 +343,18 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
             )}
           </TableBody>
         </Table>
+        <ShowIf condition={isMobile}>
+          <HistoryFilterModal
+            open={showFilter}
+            onClose={toggleShowFilter}
+            filterOption={transactionStatusOptions}
+            changeFilter={handleFilterTransactionStatus}
+            selectedFilter={selectedStatus}
+            currencyOption={currencyOptions}
+            selectedCurrency={selectedCurrency}
+            changeCurrency={handleCurrencyChange}
+          />
+        </ShowIf>
       </TableContainer>
     </>
   );

@@ -60,6 +60,13 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     formControl: {
       marginRight: '0px',
+      [theme.breakpoints.down('xs')]: {},
+      '& .MuiTypography-body1': {
+        width: '120px',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+      },
     },
     menu: {
       maxWidth: 'max-content',

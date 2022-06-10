@@ -37,8 +37,19 @@ export const useStyles = makeStyles((theme: Theme) =>
       borderBottom: 'none',
       paddingLeft: 0,
       paddingRight: 0,
+      [theme.breakpoints.down('xs')]: {
+        columnGap: theme.spacing(0),
+      },
     },
     headerActionWrapper: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      [theme.breakpoints.down('xs')]: {
+        display: 'none',
+      },
+    },
+    headerActionMobile: {
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
@@ -48,6 +59,25 @@ export const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'flex-end',
       alignItems: 'center',
       columnGap: theme.spacing(1.5),
+    },
+    textSenderWrapper: {
+      [theme.breakpoints.down('xs')]: {
+        marginLeft: theme.spacing(1),
+      },
+    },
+    textSender: {
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '14px',
+        width: '120px',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+      },
+    },
+    textTime: {
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '12px',
+      },
     },
     sent: {
       width: 80,
@@ -71,6 +101,18 @@ export const useStyles = makeStyles((theme: Theme) =>
         fontWeight: 'bold',
       },
     },
+    textSent: {
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '12px',
+        color: theme.palette.primary.main,
+      },
+    },
+    textReceived: {
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '12px',
+        color: theme.status.warning.main,
+      },
+    },
     textAmountReceived: {
       fontWeight: 'bold',
       color: theme.status.warning.main,
@@ -84,6 +126,74 @@ export const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'center',
       alignItems: 'center',
       height: 360,
+    },
+    filterList: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      flexDirection: 'column',
+      padding: 0,
+      marginTop: 0,
+      marginBottom: 20,
+
+      '& .MuiListItem-container': {
+        marginBottom: 8,
+      },
+      '& .MuiListItem-root': {
+        height: 36,
+        width: 'auto',
+        padding: theme.spacing(1, 0),
+
+        [theme.breakpoints.down('md')]: {
+          paddingRight: 40,
+        },
+
+        '&.Mui-selected': {
+          fontWeight: 'bold',
+          backgroundColor: alpha('#FFC857', 0.15),
+
+          '&::before,&::after': {
+            content: '""',
+            position: 'absolute',
+            width: 30,
+            height: 36,
+            top: 0,
+            backgroundColor: alpha('#FFC857', 0.15),
+          },
+          '&::before': {
+            left: -30,
+          },
+          '&::after': {
+            right: -30,
+          },
+        },
+      },
+
+      '& .MuiListItemText-root': {
+        margin: 0,
+      },
+
+      '& .MuiTypography-root': {
+        lineHeight: '18px',
+      },
+
+      '& .MuiSvgIcon-root': {
+        fill: 'currentColor',
+      },
+    },
+    optionFilterText: {
+      '& .MuiTypography-root': {
+        marginLeft: 10,
+      },
+    },
+    btnApply: {
+      width: '90%',
+      position: 'absolute',
+      bottom: 74,
+    },
+    btnReset: {
+      width: '90%',
+      position: 'absolute',
+      bottom: 20,
     },
   }),
 );

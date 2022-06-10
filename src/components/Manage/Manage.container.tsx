@@ -4,6 +4,7 @@ import {useSelector} from 'react-redux';
 import getConfig from 'next/config';
 import {useRouter} from 'next/router';
 
+import {useTheme, useMediaQuery} from '@material-ui/core';
 import {Backdrop, CircularProgress} from '@material-ui/core';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
@@ -23,6 +24,8 @@ import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const ManageCointainer: React.FC = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
   const styles = useStyles();
   const {enablePolkadotExtension} = usePolkadotExtension();
   const {getRegisteredAccounts, connectNetwork, isSignerLoading} = useAuthHook();
@@ -132,7 +135,11 @@ export const ManageCointainer: React.FC = () => {
   };
 
   return (
-    <BoxComponent isWithChevronRightIcon={false} marginTop={'20px'}>
+    <BoxComponent
+      isWithChevronRightIcon={false}
+      marginTop={'20px'}
+      paddingLeft={isMobile ? 0 : 1}
+      paddingRight={isMobile ? 0 : theme.spacing(3.75)}>
       <Manage currentWallet={currentWallet} wallets={wallets} onConnect={onConnect} />
       <PolkadotAccountList
         align="left"

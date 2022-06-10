@@ -22,6 +22,11 @@ export const useStyles = makeStyles((theme: Theme) =>
         padding: '12px 16px',
       },
     },
+    btnConnect: {
+      [theme.breakpoints.down('xs')]: {
+        maxWidth: '120px',
+      },
+    },
     backdrop: {
       zIndex: theme.zIndex.drawer + 1,
       color: '#fff',
