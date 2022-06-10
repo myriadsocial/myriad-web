@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {isMobile} from 'react-device-detect';
 import {useSelector} from 'react-redux';
 
 import {useSession} from 'next-auth/client';
@@ -48,8 +49,6 @@ export const SocialMediaListContainer: React.FC = () => {
 
   const [selectedSocial, setSelectedSocial] = useState<SocialsEnum | null>(null);
 
-  const [useBlockchain] = useState<boolean>(true);
-
   const address = session?.user.address as string;
 
   const handleOpenSocialPage = () => {
@@ -65,10 +64,10 @@ export const SocialMediaListContainer: React.FC = () => {
   };
 
   const verifySocialMedia = (social: SocialsEnum, profileUrl: string) => {
-    if (useBlockchain) {
+    if (!isMobile) {
       checkExtensionInstalled(social, profileUrl);
     } else {
-      verifyPublicKeyShared(social, profileUrl, address, true, () => {
+      verifyPublicKeyShared(social, profileUrl, address, () => {
         setSelectedSocial(null);
         openToasterSnack({
           message: i18n.t('SocialMedia.Alert.Verify', {social: social}),
@@ -170,10 +169,10 @@ export const SocialMediaListContainer: React.FC = () => {
               social={selectedSocial}
               address={address}
               onClose={closeAddSocialMedia}
-              verifying={useBlockchain ? isSignerLoading : isVerifying}
+              verifying={!isMobile ? isSignerLoading : isVerifying}
               verify={verifySocialMedia}
-              useBlockchain={useBlockchain}
-              fromDrawer={true}
+              onBlockchain={!isMobile}
+              onDrawer={true}
             />
             <PolkadotAccountList
               align="left"

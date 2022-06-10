@@ -32,8 +32,8 @@ type AddSocialMediaProps = Pick<ModalProps, 'onClose' | 'open'> & {
   address?: string;
   verifying?: boolean;
   verify: (social: SocialsEnum, profileUrl: string, callback?: () => void) => void;
-  useBlockchain?: boolean;
-  fromDrawer?: boolean;
+  onBlockchain?: boolean;
+  onDrawer?: boolean;
 };
 
 const prefix: Record<SocialsEnum, string> = {
@@ -56,8 +56,8 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
     verifying = false,
     onClose,
     verify,
-    useBlockchain = true,
-    fromDrawer = false,
+    onBlockchain = true,
+    onDrawer = false,
   } = props;
 
   const styles = useStyles();
@@ -101,12 +101,12 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
   };
 
   const handleShared = () => {
-    if (useBlockchain) {
+    if (onBlockchain) {
       verify(social, profileUrl, handleClose);
     } else {
       verify(social, profileUrl);
 
-      if (fromDrawer) clear();
+      if (onDrawer) clear();
       else handleClose();
     }
   };
@@ -276,11 +276,11 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
         {i18n.t('SocialMedia.Modal.OK', {platform: capitalize(social)})}
       </Button>
 
-      <ShowIf condition={!useBlockchain && verifying}>
+      <ShowIf condition={!onBlockchain && verifying}>
         <CircularProgress size={40} className={styles.loading} />
       </ShowIf>
 
-      <ShowIf condition={useBlockchain}>
+      <ShowIf condition={onBlockchain}>
         <Backdrop className={styles.backdrop} open={verifying}>
           <CircularProgress color="primary" />
         </Backdrop>
