@@ -17,8 +17,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
 
       [theme.breakpoints.down('xs')]: {
-        width: 224,
-        paddingRight: 30,
+        width: 210,
+        paddingRight: 10,
       },
     },
     section: {

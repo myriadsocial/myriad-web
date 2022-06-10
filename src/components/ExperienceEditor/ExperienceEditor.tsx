@@ -345,9 +345,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
 
   return (
     <div className={styles.root} ref={ref}>
-      <Typography className={styles.title}>
-        {type ? type : i18n.t('Experience.Create.Header')} {i18n.t('Experience.Editor.Text_1')}
-      </Typography>
+      <Typography className={styles.title}>{i18n.t(`Experience.Editor.Title.${type}`)}</Typography>
 
       <FormControl fullWidth variant="outlined" error={errors.name}>
         <InputLabel htmlFor="experience-name">{i18n.t('Experience.Editor.Subtitle_1')}</InputLabel>

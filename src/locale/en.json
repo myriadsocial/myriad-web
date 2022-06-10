@@ -76,11 +76,14 @@
       }
     },
     "Create": {
-      "Title": "Create Experience",
-      "Header": "Create new"
+      "Title": "Create Experience"
     },
     "Editor": {
-      "Text_1": "Experience",
+      "Title": {
+        "Clone": "Clone Experience",
+        "Create": "Create Experience",
+        "Edit": "Edit Experience"
+      },
       "Subtitle_1": "Experience Name",
       "Subtitle_2": "Description",
       "Subtitle_3": "Picture",
