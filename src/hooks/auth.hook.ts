@@ -178,7 +178,6 @@ export const useAuthHook = () => {
   ): Promise<boolean> => {
     if (!user) return false;
     if (!account) return false;
-
     const {nonce} = await WalletAPI.getUserNonceByUserId(user?.id);
 
     if (!nonce) return false;

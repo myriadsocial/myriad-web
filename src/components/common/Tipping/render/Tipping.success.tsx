@@ -49,7 +49,10 @@ export const TippingSuccess = () => {
   const search = router.query.q;
 
   useEffect(() => {
-    const url = new URL(router.pathname, publicRuntimeConfig.appAuthURL);
+    const url = new URL(router.asPath, publicRuntimeConfig.appAuthURL);
+    // clear previous query param
+    url.hash = '';
+    url.search = '';
 
     if (search && !Array.isArray(search)) {
       url.searchParams.set('q', search);

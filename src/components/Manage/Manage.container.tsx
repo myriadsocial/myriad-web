@@ -39,12 +39,14 @@ export const ManageCointainer: React.FC = () => {
   const [extensionInstalled, setExtensionInstalled] = React.useState(false);
   const [accounts, setAccounts] = React.useState<InjectedAccountWithMeta[]>([]);
 
+  const action = router.query.action as string | string[] | null;
+  const accountId = router.query.account_id as string | string[] | null;
+
   useEffect(() => {
-    const query = router.query;
-    if (!Array.isArray(query.action) && query.action === 'connect' && query.account_id) {
+    if (!Array.isArray(action) && action === 'connect' && accountId) {
       connectNearAccount();
     }
-  }, [router.query]);
+  }, [action, accountId]);
 
   const closeAccountList = () => {
     setShowAccountList(false);

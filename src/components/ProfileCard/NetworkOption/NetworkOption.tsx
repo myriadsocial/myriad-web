@@ -68,6 +68,9 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({
   const [accounts, setAccounts] = React.useState<InjectedAccountWithMeta[]>([]);
   const [network, setNetwork] = React.useState<NetworkTypeEnum | null>(null);
 
+  const accountId = router.query.account_id as string | null;
+  const action = router.query.action as string | string[] | null;
+
   const icons = React.useMemo(
     () => ({
       polkadot: <PolkadotNetworkIcon />,
@@ -83,12 +86,10 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({
   }, [currentWallet]);
 
   useEffect(() => {
-    const query = router.query;
-
-    if (!Array.isArray(query.action) && query.action === 'switch' && query.account_id) {
+    if (!Array.isArray(action) && action === 'switch' && accountId) {
       handleSelected('near', NetworkTypeEnum.NEAR, true);
     }
-  }, [router.query]);
+  }, [accountId, action]);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -125,8 +126,15 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({
         }
 
         case 'near': {
+          console.log('router', router);
+
           const callbackUrl = new URL(router.asPath, publicRuntimeConfig.appAuthURL);
           const redirectUrl = new URL(router.asPath, publicRuntimeConfig.appAuthURL);
+          // clear previous query param
+          redirectUrl.hash = '';
+          redirectUrl.search = '';
+          callbackUrl.hash = '';
+          callbackUrl.search = '';
 
           callbackUrl.searchParams.set('action', 'switch');
 
