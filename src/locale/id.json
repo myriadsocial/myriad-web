@@ -35,7 +35,7 @@
       "Menu": {
         "View": "Lihat rincian",
         "Edit": "Ubah pengalaman",
-        "Clone": "Clone",
+        "Clone": "Klon",
         "Subscribe": "Berlangganan",
         "Unsubscribe": "Berhenti berlangganan",
         "Delete": "Hapus",
@@ -76,11 +76,14 @@
       }
     },
     "Create": {
-      "Title": "Buat Pengalaman",
-      "Header": "Buat"
+      "Title": "Buat Pengalaman"
     },
     "Editor": {
-      "Text_1": "Pengalaman",
+      "Title": {
+        "Clone": "Klon Pengalaman",
+        "Create": "Buat Pengalaman",
+        "Edit": "Ubah Pengalaman"
+      },
       "Subtitle_1": "Nama pengalaman",
       "Subtitle_2": "Deskripsi",
       "Subtitle_3": "Foto",
