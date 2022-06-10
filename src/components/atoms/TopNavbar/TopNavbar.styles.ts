@@ -30,7 +30,7 @@ export const useStyles = makeStyles<Theme, TopNavbarProps>(theme =>
         color: '#404040',
       },
     },
-    sectionTitle: {
+    title: {
       fontWeight: 700,
       fontSize: 20,
       textOverflow: 'ellipsis',

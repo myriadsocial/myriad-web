@@ -63,7 +63,7 @@ export const TopNavbarComponent: React.FC<TopNavbarProps> = props => {
       </div>
 
       <Grid container direction={reverse ? 'column-reverse' : 'column'}>
-        <Typography className={classes.sectionTitle} color="primary">
+        <Typography className={classes.title} color="primary">
           {sectionTitle}
         </Typography>
         <Typography className={classes.description}>{description}</Typography>

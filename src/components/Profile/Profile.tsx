@@ -82,9 +82,8 @@ export const ProfileTimeline: React.FC<Props> = ({loading, isBanned = false}) =>
       <div className={style.scroll}>
         <div className={style.mb}>
           <TopNavbarComponent
-            description={profile.name}
-            sectionTitle={i18n.t('TopNavbar.Title.Profile')}
-            reverse
+            sectionTitle={profile.name}
+            description={i18n.t('TopNavbar.Title.Profile')}
           />
         </div>
 
