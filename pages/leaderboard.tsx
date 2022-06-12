@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {getSession} from 'next-auth/client';
+import {getSession} from 'next-auth/react';
 
 import {LeaderBoardComponent} from 'src/components/Leaderboard/LeaderBoard';
 import {generateAnonymousUser} from 'src/helpers/auth';

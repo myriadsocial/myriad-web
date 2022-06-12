@@ -10,7 +10,7 @@ import {useStyles} from './ProfileCard.style';
 import {ProfileContent} from './index';
 
 import ShowIf from 'src/components/common/show-if.component';
-import {convertToPolkadotAddress} from 'src/helpers/extension';
+import {formatAddress} from 'src/helpers/wallet';
 
 export const ProfileCard: React.FC<ProfileCardProps> = props => {
   const {
@@ -27,25 +27,6 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
     userWalletAddress,
   } = props;
   const classes = useStyles();
-
-  const formatAddress = (address: null | string) => {
-    if (address && address.length > 14) {
-      let validAddress = '';
-
-      if (currentWallet?.network?.blockchainPlatform === 'substrate') {
-        validAddress = convertToPolkadotAddress(address, currentWallet);
-      } else {
-        validAddress = address;
-      }
-
-      return (
-        validAddress.substring(0, 4) +
-        '...' +
-        validAddress.substring(validAddress.length - 4, validAddress.length)
-      );
-    }
-    return address;
-  };
 
   return (
     <div className={classes.root}>
@@ -73,7 +54,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
               <NetworkOption currentWallet={currentWallet} wallets={wallets} networks={networks} />
 
               <Typography component="div" className={classes.address}>
-                {formatAddress(userWalletAddress)}
+                {formatAddress(currentWallet, userWalletAddress)}
               </Typography>
             </ShowIf>
             <ShowIf condition={!currentWallet}>

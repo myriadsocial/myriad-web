@@ -11,7 +11,7 @@ import _ from 'lodash';
 import {formatBalance} from 'src/helpers/balance';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
-import {WalletDetail, WalletReferenceType} from 'src/interfaces/wallet';
+import {BlockchainPlatform, WalletDetail, WalletReferenceType} from 'src/interfaces/wallet';
 import {storeTransaction} from 'src/lib/api/transaction';
 import {estimateFee, signAndSendExtrinsic} from 'src/lib/services/polkadot-js';
 import i18n from 'src/locale';
@@ -42,7 +42,7 @@ export const usePolkadotApi = () => {
       !anonymous &&
       currencies.length > 0 &&
       balanceDetails.length === 0 &&
-      currentWallet?.network?.blockchainPlatform === 'substrate'
+      currentWallet?.network?.blockchainPlatform === BlockchainPlatform.SUBSTRATE
     ) {
       dispatch(fetchBalances());
     }

@@ -27,7 +27,7 @@ import {timeAgo} from 'src/helpers/date';
 import {parseScientificNotatedNumber} from 'src/helpers/number';
 import {useExchangeRate} from 'src/hooks/use-exchange-rate.hook';
 import {Currency} from 'src/interfaces/currency';
-import {NetworkTypeEnum} from 'src/interfaces/network';
+import {NetworkIdEnum} from 'src/interfaces/network';
 import {Transaction, TransactionOrderType} from 'src/interfaces/transaction';
 import {UserWallet} from 'src/interfaces/user';
 import i18n from 'src/locale';
@@ -221,9 +221,8 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                     <a
                       key={tx.id}
                       style={{textDecoration: 'none'}}
-                      //TODO: moved parsing for href to BE
                       href={
-                        tx.currency.network.id === NetworkTypeEnum.NEAR
+                        tx.currency.network.id === NetworkIdEnum.NEAR
                           ? `${tx.currency.network.explorerURL}/transactions/${tx.hash}`
                           : `${tx.currency.network.explorerURL}/${tx.hash}`
                       }

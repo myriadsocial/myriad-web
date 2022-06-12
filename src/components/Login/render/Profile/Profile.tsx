@@ -13,7 +13,8 @@ import {MyriadFullIcon} from 'src/components/atoms/Icons';
 import useConfirm from 'src/components/common/Confirm/use-confirm.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import {useAuthHook} from 'src/hooks/auth.hook';
-import {WalletTypeEnum, NetworkTypeEnum} from 'src/lib/api/ext-auth';
+import {NetworkIdEnum} from 'src/interfaces/network';
+import {WalletTypeEnum} from 'src/interfaces/wallet';
 import {toHexPublicKey} from 'src/lib/crypto';
 import {nearInitialize} from 'src/lib/services/near-api-js';
 import i18n from 'src/locale';
@@ -21,7 +22,7 @@ import i18n from 'src/locale';
 type ProfileProps = {
   checkUsernameAvailability: (username: string, callback: (available: boolean) => void) => void;
   walletType: WalletTypeEnum | null;
-  networkType: NetworkTypeEnum | null;
+  networkId: NetworkIdEnum | null;
   account?: InjectedAccountWithMeta | null;
   publicAddress?: string;
   isMobileSignIn?: boolean;
@@ -39,14 +40,8 @@ const USERNAME_HELPER_TEXT = i18n.t('Login.Profile.Helper_Text_Username', {
 });
 
 export const Profile: React.FC<ProfileProps> = props => {
-  const {
-    walletType,
-    checkUsernameAvailability,
-    account,
-    publicAddress,
-    networkType,
-    isMobileSignIn,
-  } = props;
+  const {walletType, checkUsernameAvailability, account, publicAddress, networkId, isMobileSignIn} =
+    props;
 
   const styles = useStyles();
   const confirm = useConfirm();
@@ -246,7 +241,7 @@ export const Profile: React.FC<ProfileProps> = props => {
       address,
       profile.name.value,
       profile.username.value,
-      networkType as NetworkTypeEnum,
+      networkId,
       substrateAccount,
     );
 

@@ -7,17 +7,16 @@ import {RootState} from '../index';
 import {ShowToasterSnack, showToasterSnack} from '../toaster-snack/actions';
 import * as constants from './constants';
 
-import axios, {AxiosError} from 'axios';
+import axios from 'axios';
 import {Action} from 'redux';
 import {Currency, CurrencyId} from 'src/interfaces/currency';
 import {WrappedExperience} from 'src/interfaces/experience';
 import {SocialsEnum} from 'src/interfaces/index';
+import {NetworkIdEnum, Network} from 'src/interfaces/network';
 import {SocialMedia} from 'src/interfaces/social';
 import {User, UserTransactionDetail, UserWallet} from 'src/interfaces/user';
-import {Network} from 'src/interfaces/wallet';
+import {BlockchainPlatform} from 'src/interfaces/wallet';
 import * as ExperienceAPI from 'src/lib/api/experience';
-import {NetworkTypeEnum} from 'src/lib/api/ext-auth';
-import {BaseErrorResponse} from 'src/lib/api/interfaces/error-response.interface';
 import * as SocialAPI from 'src/lib/api/social';
 import * as TokenAPI from 'src/lib/api/token';
 import * as UserAPI from 'src/lib/api/user';
@@ -254,7 +253,7 @@ export const fetchUserWalletAddress: ThunkActionCreator<Actions, RootState> =
     if (currentWallet.network === undefined) return;
 
     switch (currentWallet?.network?.blockchainPlatform) {
-      case 'substrate':
+      case BlockchainPlatform.SUBSTRATE:
         try {
           const data = await getMetadata(currentWallet.network.rpcURL);
 
@@ -262,20 +261,20 @@ export const fetchUserWalletAddress: ThunkActionCreator<Actions, RootState> =
 
           if (data !== null) {
             walletAddress = encodeAddress(hexToU8a(currentWallet.id), data);
+
             dispatch({
               type: constants.FETCH_USER_WALLET_ADDRESS,
               payload: walletAddress,
             });
           }
         } catch (error) {
-          console.log({error});
           dispatch(setError(error.message));
         } finally {
           dispatch(setLoading(false));
         }
         break;
 
-      case 'near':
+      case BlockchainPlatform.NEAR:
         dispatch({
           type: constants.FETCH_USER_WALLET_ADDRESS,
           payload: currentWallet.id,
@@ -337,14 +336,6 @@ export const fetchUserWallets: ThunkActionCreator<Actions, RootState> =
     }
   };
 
-export const addNewWallet: ThunkActionCreator<Actions, RootState> =
-  (newWallet: UserWallet) => async dispatch => {
-    dispatch({
-      type: constants.ADD_USER_WALLET,
-      payload: newWallet,
-    });
-  };
-
 export const verifySocialMediaConnected: ThunkActionCreator<Actions, RootState> =
   (platform: SocialsEnum, socialName: string, address: string, callback?: () => void) =>
   async (dispatch, getState) => {
@@ -368,42 +359,6 @@ export const verifySocialMediaConnected: ThunkActionCreator<Actions, RootState> 
       dispatch(setError(error));
 
       dispatch(resetVerifyingSocial());
-    }
-  };
-
-// TODO: handle this on social API
-export const handleVerifyError: ThunkActionCreator<Actions, RootState> =
-  (error: AxiosError<BaseErrorResponse>) => async dispatch => {
-    if (error.response) {
-      dispatch(
-        setError({
-          message: error.response.data.error.message,
-        }),
-      );
-    }
-  };
-
-export const fetchUserTransactionDetails: ThunkActionCreator<Actions, RootState> =
-  () => async (dispatch, getState) => {
-    dispatch(setLoading(true));
-
-    const {
-      userState: {user},
-    } = getState();
-
-    if (!user) return;
-
-    try {
-      const transactionDetail = await UserAPI.getUserTransactionDetail(user.id);
-
-      dispatch({
-        type: constants.FETCH_USER_TRANSACTION_DETAIL,
-        payload: transactionDetail,
-      });
-    } catch (error) {
-      dispatch(setError(error));
-    } finally {
-      dispatch(setLoading(false));
     }
   };
 
@@ -556,10 +511,10 @@ export const fetchNetwork: ThunkActionCreator<Actions, RootState> =
       const {data: networks, meta} = await WalletAPI.getNetworks();
 
       let filterNetwork: Network[] = [];
-      const myriadNetwork = networks.find(option => option.id === NetworkTypeEnum.MYRIAD);
+      const myriadNetwork = networks.find(option => option.id === NetworkIdEnum.MYRIAD);
 
       if (myriadNetwork) {
-        const otherNetworks = networks.filter(network => network.id !== NetworkTypeEnum.MYRIAD);
+        const otherNetworks = networks.filter(network => network.id !== NetworkIdEnum.MYRIAD);
         filterNetwork = [myriadNetwork, ...otherNetworks];
       }
 

@@ -3,11 +3,11 @@ import {BN} from '@polkadot/util';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {Comment} from 'src/interfaces/comment';
 import {ReferenceType} from 'src/interfaces/interaction';
+import {NetworkIdEnum} from 'src/interfaces/network';
 import {People} from 'src/interfaces/people';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
-import {WalletDetail} from 'src/interfaces/wallet';
-import {WalletTypeEnum, NetworkTypeEnum} from 'src/lib/api/ext-auth';
+import {WalletDetail, WalletTypeEnum} from 'src/interfaces/wallet';
 
 interface UserWithWalletDetail extends User {
   walletDetail?: WalletDetail;
@@ -27,7 +27,7 @@ export interface TippingProviderProps {
   sender?: User;
   balances: BalanceDetail[];
   currentWallet?: WalletTypeEnum;
-  currentNetwork?: NetworkTypeEnum;
+  currentNetwork?: NetworkIdEnum;
   loading: boolean;
 }
 
@@ -38,6 +38,6 @@ export type SendTipProps = {
   referenceType: ReferenceType;
   defaultCurrency: BalanceDetail;
   balances: BalanceDetail[];
-  currentNetwork: NetworkTypeEnum;
+  currentNetwork: NetworkIdEnum;
   onSuccess: (currency: BalanceDetail, transactionHash: string, amount: BN) => Promise<void> | void;
 };

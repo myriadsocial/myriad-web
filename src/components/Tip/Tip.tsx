@@ -19,13 +19,14 @@ import {
   KusamaNetworkIcon,
 } from 'src/components/atoms/Icons';
 import ShowIf from 'src/components/common/show-if.component';
+import {NetworkIdEnum} from 'src/interfaces/network';
 import {UserWallet} from 'src/interfaces/user';
 import {TipResult} from 'src/lib/services/polkadot-js';
 import i18n from 'src/locale';
 
 type TipProps = {
   tips: TipResult[];
-  network: string;
+  networkId: NetworkIdEnum;
   loading: boolean;
   currentWallet?: UserWallet;
   onClaim: (networkId: string, ftIdentifier: string) => void;
@@ -52,7 +53,7 @@ const networkOptions: MenuOptions<string>[] = [
 ];
 
 export const Tip: React.FC<TipProps> = props => {
-  const {tips, network, onClaim, onClaimAll, currentWallet, loading} = props;
+  const {tips, networkId, onClaim, onClaimAll, currentWallet, loading} = props;
   const style = useStyles();
 
   const icons = React.useMemo(
@@ -71,28 +72,29 @@ export const Tip: React.FC<TipProps> = props => {
   };
 
   const handleClaimAll = () => {
-    onClaimAll(network);
+    onClaimAll(networkId);
   };
 
   const formatNetworkName = () => {
-    const result = networkOptions.find(option => option.id == network);
-    return result?.title;
+    const selected = networkOptions.find(network => network.id == networkId);
+
+    return selected?.title;
   };
 
   return (
     <>
       <ListItem alignItems="center" className={style.listItem}>
-        <ListItemAvatar>{icons[network as keyof typeof icons]}</ListItemAvatar>
+        <ListItemAvatar>{icons[networkId as keyof typeof icons]}</ListItemAvatar>
         <ListItemText>
           <Typography variant="h6" component="span" color="textPrimary">
             {formatNetworkName()}
           </Typography>
         </ListItemText>
         <div className={style.secondaryAction}>
-          <ShowIf condition={!!currentWallet && currentWallet.networkId !== network}>
+          <ShowIf condition={!!currentWallet && currentWallet.networkId !== networkId}>
             <Typography>{i18n.t('Wallet.Tip.Switch')}</Typography>
           </ShowIf>
-          <ShowIf condition={!!currentWallet && currentWallet.networkId == network}>
+          <ShowIf condition={!!currentWallet && currentWallet.networkId == networkId}>
             <Button
               className={style.button}
               size="small"
@@ -118,8 +120,8 @@ export const Tip: React.FC<TipProps> = props => {
                   </Typography>
                 </div>
                 <Button
-                  disabled={(currentWallet && currentWallet.networkId !== network) || loading}
-                  onClick={() => handleClaim(network, tip.tipsBalanceInfo.ftIdentifier)}
+                  disabled={(currentWallet && currentWallet.networkId !== networkId) || loading}
+                  onClick={() => handleClaim(networkId, tip.tipsBalanceInfo.ftIdentifier)}
                   size="small"
                   className={style.buttonClaim}
                   color="primary"

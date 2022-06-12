@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 
-import {getSession} from 'next-auth/client';
+import {getSession} from 'next-auth/react';
 import getConfig from 'next/config';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -123,26 +123,28 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   const anonymous = Boolean(session?.user.anonymous);
-  const userId = session?.user.address as string;
+  const userId = session?.user.address;
 
   if (anonymous || !userId) {
-    const username = session?.user.name as string;
-    await dispatch(setAnonymous(username));
+    await dispatch(setAnonymous(session.user.name));
   } else {
     await dispatch(fetchUser(userId));
 
     await Promise.all([
       dispatch(fetchConnectedSocials()),
-      dispatch(fetchAvailableToken()),
-      dispatch(countNewNotification()),
       dispatch(getUserCurrencies()),
-      dispatch(fetchFriend()),
       dispatch(fetchUserWallets()),
+      dispatch(countNewNotification()),
+      dispatch(fetchFriend()),
     ]);
   }
 
-  await dispatch(fetchNetwork());
-  await dispatch(fetchExchangeRates());
+  await Promise.all([
+    dispatch(fetchAvailableToken()),
+    dispatch(fetchNetwork()),
+    dispatch(fetchExchangeRates()),
+  ]);
+
   await dispatch(fetchUserExperience());
 
   return {

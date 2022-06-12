@@ -1,37 +1,21 @@
 import MyriadAPI from './base';
 
-export enum WalletTypeEnum {
-  POLKADOT = 'polkadot{.js}',
-  TRUST = 'trust',
-  METAMASK = 'metamask',
-  COINBASE = 'coinbase',
-  NEAR = 'near',
-  SENDER = 'sender-wallet',
-}
-
-export enum NetworkTypeEnum {
-  ETHEREUM = 'ethereum',
-  POLKADOT = 'polkadot',
-  BINANCE = 'binance',
-  POLYGON = 'polygon',
-  NEAR = 'near',
-  MYRIAD = 'myriad',
-  KUSAMA = 'kusama',
-}
+import {NetworkIdEnum} from 'src/interfaces/network';
+import {WalletTypeEnum} from 'src/interfaces/wallet';
 
 type LoginProps = {
   nonce: number;
   publicAddress: string;
   signature: string;
   walletType: WalletTypeEnum;
-  networkType: NetworkTypeEnum;
+  networkType: NetworkIdEnum;
 };
 
 type SignUpProps = {
   name: string;
   username: string;
   address: string;
-  network: NetworkTypeEnum;
+  network: NetworkIdEnum;
 };
 
 type SignUpResponseProps = {

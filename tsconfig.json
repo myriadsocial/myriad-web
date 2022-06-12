@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "downlevelIteration": true,
-    "target": "es5",    
+    "target": "es5",
     "lib": [
       "dom",
       "es5",
@@ -27,6 +27,6 @@
       "atoms/*": ["src/components/atoms*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "@types/**/*.ts"],
   "exclude": ["node_modules"]
 }

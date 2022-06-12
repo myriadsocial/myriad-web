@@ -9,7 +9,7 @@ import {Empty} from 'src/components/atoms/Empty';
 import ShowIf from 'src/components/common/show-if.component';
 import {useClaimTip} from 'src/hooks/use-claim-tip.hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
-import {Network} from 'src/interfaces/wallet';
+import {Network} from 'src/interfaces/network';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
@@ -84,7 +84,7 @@ export const TipContainer: React.FC = () => {
               <Tip
                 loading={claiming}
                 tips={tipWithBalances(network)}
-                network={network.id}
+                networkId={network.id}
                 currentWallet={currentWallet}
                 onClaim={handleClaimTip}
                 onClaimAll={handleClaimTipAll}

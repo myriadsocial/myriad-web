@@ -10,7 +10,7 @@ import {Action} from 'redux';
 import {formatNumber} from 'src/helpers/balance';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {Currency, CurrencyId} from 'src/interfaces/currency';
-import {WalletTypeEnum} from 'src/lib/api/ext-auth';
+import {WalletTypeEnum} from 'src/interfaces/wallet';
 import * as TokenAPI from 'src/lib/api/token';
 import {nearInitialize, getNearBalance} from 'src/lib/services/near-api-js';
 import {checkAccountBalance} from 'src/lib/services/polkadot-js';

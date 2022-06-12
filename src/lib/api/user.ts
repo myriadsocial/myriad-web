@@ -2,13 +2,7 @@ import MyriadAPI from './base';
 import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
 
-import {
-  User,
-  UserTransactionDetail,
-  ActivityLog,
-  BlockedProps,
-  ActivityLogType,
-} from 'src/interfaces/user';
+import {User, ActivityLog, BlockedProps, ActivityLogType} from 'src/interfaces/user';
 import {WalletDetail} from 'src/interfaces/wallet';
 
 type UserList = BaseList<User>;
@@ -85,16 +79,6 @@ export const getUserByAddress = async (address: string[]): Promise<UserList> => 
   return data;
 };
 
-export const createUser = async (values: Partial<User>): Promise<User> => {
-  const {data} = await MyriadAPI().request<User>({
-    url: '/users',
-    method: 'POST',
-    data: values,
-  });
-
-  return data;
-};
-
 export const updateUser = async (userId: string, values: Partial<User>): Promise<User> => {
   const {data} = await MyriadAPI().request<User>({
     url: `/users/${userId}`,
@@ -128,31 +112,6 @@ export const searchUsers = async (page = 1, query?: string): Promise<UserList> =
     url: '/users',
     method: 'GET',
     params,
-  });
-
-  return data;
-};
-
-export const getUserTransactionDetail = async (id: string): Promise<UserTransactionDetail> => {
-  const {data} = await MyriadAPI().request<UserTransactionDetail>({
-    url: `/users/${id}/transaction-summary`,
-    method: 'GET',
-  });
-
-  return data;
-};
-
-export const searchUsername = async (query: string): Promise<UserList> => {
-  const {data} = await MyriadAPI().request<UserList>({
-    url: '/users',
-    method: 'GET',
-    params: {
-      filter: {
-        where: {
-          username: query,
-        },
-      },
-    },
   });
 
   return data;

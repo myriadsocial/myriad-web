@@ -1,7 +1,10 @@
 import {BaseModel} from './base.interface';
 import {Currency} from './currency';
+import {BlockchainPlatform} from './wallet';
 
-export enum NetworkTypeEnum {
+import {TipResult} from 'src/lib/services/polkadot-js';
+
+export enum NetworkIdEnum {
   ETHEREUM = 'ethereum',
   POLKADOT = 'polkadot',
   BINANCE = 'binance',
@@ -16,12 +19,14 @@ export type NetworkProps = {
   image: string;
   rpcURL: string;
   explorerURL: string;
-  blockchainPlatform: string;
+  blockchainPlatform: BlockchainPlatform;
   walletURL?: string;
   helperURL?: string;
 };
 
 export type Network = NetworkProps &
   BaseModel & {
+    id: NetworkIdEnum;
     currencies: Currency[];
+    tips: TipResult[];
   };

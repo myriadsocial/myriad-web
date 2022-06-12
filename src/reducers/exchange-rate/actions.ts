@@ -3,7 +3,8 @@ import {RootState} from '../index';
 import * as constants from './constants';
 
 import {ExchangeRate} from 'src/interfaces/exchange';
-// import * as ExchangeRateApi from 'src/lib/api/exchange';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import * as ExchangeRateApi from 'src/lib/api/exchange';
 import {ThunkActionCreator} from 'src/types/thunk';
 
 export interface FetchExchangeRates {
@@ -17,11 +18,12 @@ export const fetchExchangeRates: ThunkActionCreator<Actions, RootState> = () => 
   dispatch(setLoading(true));
 
   try {
-    const exchangeRates: ExchangeRate[] = []; //await ExchangeRateApi.getExchangeRate();
+    // NOTE: temporary skip, keep for future use
+    // const exchangeRates: ExchangeRate[] = await ExchangeRateApi.getExchangeRate();
 
     dispatch({
       type: constants.FETCH_EXCHANGE_RATES,
-      exchangeRates,
+      exchangeRates: [],
     });
   } catch (error) {
     dispatch(setError(error));

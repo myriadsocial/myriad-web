@@ -3,8 +3,8 @@ import {AccountRegisteredError} from './errors/account-registered.error';
 import {BaseList} from './interfaces/base-list.interface';
 
 import axios from 'axios';
-import {ActivityLogType, BlockedProps, User, UserWallet, Wallet} from 'src/interfaces/user';
-import {Network} from 'src/interfaces/wallet';
+import {Network} from 'src/interfaces/network';
+import {BlockedProps, User, UserWallet, Wallet} from 'src/interfaces/user';
 
 type WalletList = BaseList<UserWallet>;
 type Networks = BaseList<Network>;
@@ -52,16 +52,6 @@ export const getUserByWalletAddress = async (address: string): Promise<User & Bl
       include: [
         {
           relation: 'people',
-        },
-        {
-          relation: 'activityLogs',
-          scope: {
-            where: {
-              type: {
-                inq: [ActivityLogType.SKIP, ActivityLogType.USERNAME],
-              },
-            },
-          },
         },
         {
           relation: 'wallets',
@@ -141,13 +131,15 @@ export const connectNetwork = async (
   }
 };
 
-export const switchNetwork = async (payload: ConnectNetwork, id: string): Promise<void> => {
+export const switchNetwork = async (payload: ConnectNetwork, id: string): Promise<any> => {
   try {
-    await MyriadAPI().request({
+    const data = await MyriadAPI().request({
       url: `users/${id}/networks`,
       method: 'PATCH',
       data: payload,
     });
+
+    return data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const data = error.response?.data;

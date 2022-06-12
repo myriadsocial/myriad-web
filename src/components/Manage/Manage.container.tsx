@@ -18,6 +18,7 @@ import {useAuthHook} from 'src/hooks/auth.hook';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
+import {BlockchainPlatform} from 'src/interfaces/wallet';
 import {clearNearAccount} from 'src/lib/services/near-api-js';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
@@ -73,7 +74,9 @@ export const ManageCointainer: React.FC = () => {
     let verified = false;
 
     try {
-      verified = await (account ? connectNetwork('substrate', account) : connectNearAccount());
+      verified = await (account
+        ? connectNetwork(BlockchainPlatform.NEAR, account)
+        : connectNearAccount());
     } catch {
       clearNearAccount();
     }
@@ -110,7 +113,7 @@ export const ManageCointainer: React.FC = () => {
           signature: data.signature,
         };
 
-        verified = await connectNetwork('near', payload);
+        verified = await connectNetwork(BlockchainPlatform.NEAR, payload);
       } else {
         console.log('redirection to near auth page');
       }

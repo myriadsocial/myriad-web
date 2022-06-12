@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {getSession} from 'next-auth/client';
+import {getSession} from 'next-auth/react';
 import getConfig from 'next/config';
 import Head from 'next/head';
 import {useRouter} from 'next/router';

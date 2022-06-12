@@ -2,8 +2,7 @@ import {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 
 import _ from 'lodash';
-import {Network} from 'src/interfaces/wallet';
-import {NetworkTypeEnum} from 'src/lib/api/ext-auth';
+import {Network, NetworkIdEnum} from 'src/interfaces/network';
 import {updateTransaction} from 'src/lib/api/transaction';
 import * as WalletAPI from 'src/lib/api/wallet';
 import {getClaimTip, TipResult, claimMyria} from 'src/lib/services/polkadot-js';
@@ -45,7 +44,7 @@ export const useClaimTip = () => {
         referenceId: user.id,
         ftIdentifier: 'native',
       };
-      const selectedNetwork = networks.find(option => option.id == NetworkTypeEnum.MYRIAD);
+      const selectedNetwork = networks.find(network => network.id == NetworkIdEnum.MYRIAD);
       if (!selectedNetwork) return;
 
       // GET MYRIA TIP
@@ -67,11 +66,11 @@ export const useClaimTip = () => {
 
         setTipsEachNetwork(
           sortNetwork(
-            tipsEachNetwork.map(option => {
-              if (option.id == NetworkTypeEnum.MYRIAD) {
-                option.tips = [result];
+            tipsEachNetwork.map(network => {
+              if (network.id == NetworkIdEnum.MYRIAD) {
+                network.tips = [result];
               }
-              return option;
+              return network;
             }),
             currentWallet?.networkId,
           ),
@@ -98,8 +97,8 @@ export const useClaimTip = () => {
         referenceId: user.id,
         ftIdentifier: ftIdentifier,
       };
-      if (networkId == NetworkTypeEnum.MYRIAD) {
-        const selectedNetwork = networks.find(option => option.id == NetworkTypeEnum.MYRIAD);
+      if (networkId == NetworkIdEnum.MYRIAD) {
+        const selectedNetwork = networks.find(network => network.id == NetworkIdEnum.MYRIAD);
         if (!selectedNetwork) return;
 
         await claimMyria(tipBalanceInfo, selectedNetwork?.rpcURL, currentWallet);
@@ -129,7 +128,7 @@ export const useClaimTip = () => {
 
     try {
       switch (networkId) {
-        case NetworkTypeEnum.MYRIAD:
+        case NetworkIdEnum.MYRIAD:
           await Promise.all([claimTipMyria(networkId, 'native')]);
           break;
 

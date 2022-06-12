@@ -1,22 +1,13 @@
+import {NetworkIdEnum} from './network';
+import {WalletTypeEnum} from './wallet';
+
 export interface SignInCredential {
-  token: string;
-  initVec: string;
   nonce: number;
   signature: string;
   name: string;
-  anonymous: boolean;
+  anonymous: 'false' | 'true';
   address: string;
   publicAddress: string;
-}
-export interface UserSession {
-  token?: string;
-  initVec?: string;
-  nonce?: number;
-  signature?: string;
-  name: string;
-  profilePictureURL?: string;
-  publicAddress: string;
-  anonymous: boolean;
-  welcome: boolean;
-  address: string;
+  networkId: NetworkIdEnum;
+  walletType: WalletTypeEnum;
 }

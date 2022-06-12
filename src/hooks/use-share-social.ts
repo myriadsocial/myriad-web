@@ -3,9 +3,8 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
-import {NetworkTypeEnum} from 'src/interfaces/network';
+import {NetworkIdEnum} from 'src/interfaces/network';
 import {SocialsEnum} from 'src/interfaces/social';
-import {UserSocialMedia} from 'src/interfaces/user';
 import * as NetworkAPI from 'src/lib/api/network';
 import * as UserSocialAPI from 'src/lib/api/social';
 import * as WalletAPI from 'src/lib/api/wallet';
@@ -80,7 +79,7 @@ export const useShareSocial = () => {
     let verified = false;
 
     try {
-      const {rpcURL} = await NetworkAPI.getNetwork(NetworkTypeEnum.MYRIAD);
+      const {rpcURL} = await NetworkAPI.getNetwork(NetworkIdEnum.MYRIAD);
       const serverId = await WalletAPI.getServerId();
       const response = await fetch('/api/access-token');
       const {accessToken} = await response.json();

@@ -8,7 +8,7 @@ import Identicon from '@polkadot/react-identicon';
 
 import {useStyles} from './Accounts.style';
 
-import {WalletTypeEnum} from 'src/lib/api/ext-auth';
+import {WalletTypeEnum} from 'src/interfaces/wallet';
 import i18n from 'src/locale';
 
 type AccountListProps = {

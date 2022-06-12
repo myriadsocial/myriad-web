@@ -12,19 +12,14 @@ import Typography from '@material-ui/core/Typography';
 
 import {BalanceDetail} from '../../../interfaces/balance';
 import {Avatar, AvatarSize} from '../Avatar';
+import {CurrencyOptionProps} from './currencyOption.interface';
 import {useStyles} from './currencyOption.style';
 
 import {debounce} from 'lodash';
 import {CurrencyId} from 'src/interfaces/currency';
 import i18n from 'src/locale';
 
-type Props = {
-  balanceDetails: BalanceDetail[];
-  onSelect: (selected: BalanceDetail) => void;
-  isOtherTippingCurrencyDisabled: boolean;
-};
-
-export const CurrencyOptionComponent: React.FC<Props> = props => {
+export const CurrencyOptionComponent: React.FC<CurrencyOptionProps> = props => {
   const {balanceDetails, onSelect, isOtherTippingCurrencyDisabled} = props;
   const [search, setSearch] = useState('');
   const style = useStyles();

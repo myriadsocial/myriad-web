@@ -11,22 +11,6 @@ type FriendsFilterParams = FilterParams & {
 type FriendList = BaseList<Friend>;
 type FriendRequestList = BaseList<Friend>;
 
-export const getSentRequests = async (userId: string): Promise<FriendList> => {
-  const {data} = await MyriadAPI().request<FriendList>({
-    url: `/friends`,
-    method: 'GET',
-    params: {
-      filter: {
-        where: {
-          and: [{requestorId: userId}, {status: FriendStatus.PENDING}],
-        },
-      },
-    },
-  });
-
-  return data;
-};
-
 export const getFriendRequests = async (userId: string, page = 1): Promise<FriendRequestList> => {
   const {data} = await MyriadAPI().request<FriendRequestList>({
     url: `/friends`,

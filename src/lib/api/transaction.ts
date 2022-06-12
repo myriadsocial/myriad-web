@@ -73,13 +73,6 @@ export const getTransactions = async (
   return data;
 };
 
-export const removeTransaction = async (transactionId: string): Promise<void> => {
-  await MyriadAPI().request({
-    url: `/transactions/${transactionId}`,
-    method: 'DELETE',
-  });
-};
-
 export const updateTransaction = async (transactionInfo: TransactionInfo): Promise<void> => {
   await MyriadAPI().request({
     url: `/transactions`,

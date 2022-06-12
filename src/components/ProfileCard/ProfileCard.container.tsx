@@ -8,25 +8,20 @@ import {ProfileCard} from './ProfileCard';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {RootState} from 'src/reducers';
-import {NotificationState} from 'src/reducers/notification/reducer';
 import {fetchUserWalletAddress, fetchCurrentUserWallets} from 'src/reducers/user/actions';
-import {UserState} from 'src/reducers/user/reducer';
 
 type Props = {
   toggleNotification: () => void;
 };
 
 export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
-  const {user, alias, anonymous, currentWallet, wallets, networks} = useSelector<
-    RootState,
-    UserState
-  >(state => state.userState);
-  const {total} = useSelector<RootState, NotificationState>(state => state.notificationState);
+  const total = useSelector<RootState, number>(state => state.notificationState.total);
 
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const {userWalletAddress} = useUserHook();
+  const {user, anonymous, alias, currentWallet, wallets, networks, userWalletAddress} =
+    useUserHook();
   const {logout} = useAuthHook();
 
   useEffect(() => {

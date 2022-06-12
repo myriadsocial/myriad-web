@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {isMobile} from 'react-device-detect';
 import {useSelector} from 'react-redux';
 
-import {useSession} from 'next-auth/client';
+import {useSession} from 'next-auth/react';
 import {useRouter} from 'next/router';
 
 import {NoSsr} from '@material-ui/core';
@@ -25,7 +25,7 @@ import {UserState} from 'src/reducers/user/reducer';
 
 export const SocialMediaListContainer: React.FC = () => {
   const router = useRouter();
-  const [session] = useSession();
+  const {data: session} = useSession();
 
   const {enablePolkadotExtension} = usePolkadotExtension();
   const {getRegisteredAccounts} = useAuthHook();
