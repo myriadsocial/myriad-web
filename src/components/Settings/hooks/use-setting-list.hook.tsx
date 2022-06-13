@@ -37,6 +37,12 @@ export const useSettingList = (): SettingsOption<SettingsType>[] => {
 
   const panel: SettingsOption<SettingsType>[] = [
     {
+      id: 'language',
+      title: i18n.t('Setting.List_Menu.Language_Title'),
+      subtitle: i18n.t('Setting.List_Menu.Language_Subtitle'),
+      component: <LanguageSettingsContainer />,
+    },
+    {
       id: 'help',
       title: i18n.t('Setting.List_Menu.Help_Title'),
       subtitle: i18n.t('Setting.List_Menu.Help_Subtitle'),
@@ -77,12 +83,6 @@ export const useSettingList = (): SettingsOption<SettingsType>[] => {
         title: i18n.t('Setting.List_Menu.Blocked_Title'),
         subtitle: i18n.t('Setting.List_Menu.Blocked_Subtitle'),
         component: <BlockListContainer />,
-      },
-      {
-        id: 'language',
-        title: i18n.t('Setting.List_Menu.Language_Title'),
-        subtitle: i18n.t('Setting.List_Menu.Language_Subtitle'),
-        component: <LanguageSettingsContainer />,
       },
     );
   }
