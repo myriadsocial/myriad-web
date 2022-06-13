@@ -70,6 +70,7 @@
     "axios": "^0.26.1",
     "date-fns": "^2.28.0",
     "detect-browser": "^5.3.0",
+    "dotenv": "^16.0.1",
     "express": "^4.17.3",
     "firebase": "^8.6.2",
     "global": "^4.4.0",
