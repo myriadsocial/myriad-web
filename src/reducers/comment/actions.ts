@@ -18,10 +18,6 @@ export interface LoadComments extends PaginationAction {
   comments: Comment[];
 }
 
-export interface ClearComments extends Action {
-  type: constants.CLEAR_COMMENT;
-}
-
 export interface UpdateCommentFilter extends Action {
   type: constants.SET_COMMENT_FILTER;
   params: PaginationParams;
@@ -31,7 +27,7 @@ export interface UpdateCommentFilter extends Action {
  * Union Action Types
  */
 
-export type Actions = LoadComments | UpdateCommentFilter | ClearComments | BaseAction;
+export type Actions = LoadComments | UpdateCommentFilter | BaseAction;
 
 /**
  *
@@ -40,10 +36,6 @@ export type Actions = LoadComments | UpdateCommentFilter | ClearComments | BaseA
 export const updateCommentParams = (params: PaginationParams): UpdateCommentFilter => ({
   type: constants.SET_COMMENT_FILTER,
   params,
-});
-
-export const clearComments = (): ClearComments => ({
-  type: constants.CLEAR_COMMENT,
 });
 
 /**

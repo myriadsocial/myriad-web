@@ -6,7 +6,7 @@ import {TipHistory as TipHistoryComponent} from '.';
 import {CurrencyId} from '../../interfaces/currency';
 import {ContentType} from '../../interfaces/wallet';
 
-import {NetworkTypeEnum} from 'src/lib/api/ext-auth';
+import {NetworkIdEnum} from 'src/interfaces/network';
 
 export default {
   title: 'UI Revamp v2.0/components/Tip History',
@@ -35,7 +35,7 @@ TipHistory.args = {
       type: ContentType.POST,
       fromWallet: {
         id: '0x76709daddc7f97dede94a4ab9bc168fd4f5b5a96bf15adfdb247d6f0d2276d39',
-        networkId: NetworkTypeEnum.POLKADOT,
+        networkId: NetworkIdEnum.POLKADOT,
         primary: true,
         userId: '6232d3a5dbe01066471dca12',
         createdAt: new Date('2021-08-11T16:28:12.000Z'),
@@ -64,7 +64,7 @@ TipHistory.args = {
       },
       toWallet: {
         id: '0xd6a98971eb249a031daebf0856c693ef73018cc4a77a703061f44794abc1931a',
-        networkId: NetworkTypeEnum.POLKADOT,
+        networkId: NetworkIdEnum.POLKADOT,
         primary: true,
         userId: '6232d3a5dbe01066471dca12',
         createdAt: new Date('2021-08-11T16:28:12.000Z'),
@@ -132,7 +132,7 @@ TipHistory.args = {
       currencyId: 'AUSD',
       fromWallet: {
         id: '0x76709daddc7f97dede94a4ab9bc168fd4f5b5a96bf15adfdb247d6f0d2276d39',
-        networkId: NetworkTypeEnum.POLKADOT,
+        networkId: NetworkIdEnum.POLKADOT,
         primary: true,
         userId: '6232d3a5dbe01066471dca12',
         createdAt: new Date('2021-08-11T16:28:12.000Z'),
@@ -161,7 +161,7 @@ TipHistory.args = {
       },
       toWallet: {
         id: '0xd6a98971eb249a031daebf0856c693ef73018cc4a77a703061f44794abc1931a',
-        networkId: NetworkTypeEnum.POLKADOT,
+        networkId: NetworkIdEnum.POLKADOT,
         primary: true,
         userId: '6232d3a5dbe01066471dca12',
         createdAt: new Date('2021-08-11T16:28:12.000Z'),

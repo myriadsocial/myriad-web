@@ -2,13 +2,20 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {SocialsEnum} from 'src/interfaces';
-import {User} from 'src/interfaces/user';
+import {Network} from 'src/interfaces/network';
+import {User, UserWallet} from 'src/interfaces/user';
 import {firebaseCloudMessaging} from 'src/lib/firebase';
 import {RootState} from 'src/reducers';
 import {updateUser, deleteSocial} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 type UserHookProps = {
+  user: User;
+  anonymous: boolean;
+  alias: string;
+  networks: Network[];
+  currentWallet?: UserWallet;
+  wallets: UserWallet[];
   disconnectSocial: (social: SocialsEnum) => void;
   updateUserFcmToken: () => void;
   updateUser: (values: Partial<User>) => void;
@@ -20,9 +27,8 @@ export const useUserHook = (): UserHookProps => {
 
   const {openToasterSnack} = useToasterSnackHook();
 
-  const {user, socials, userWalletAddress} = useSelector<RootState, UserState>(
-    state => state.userState,
-  );
+  const {user, anonymous, alias, socials, networks, currentWallet, wallets, userWalletAddress} =
+    useSelector<RootState, UserState>(state => state.userState);
 
   const disconnectSocial = async (social: SocialsEnum): Promise<void> => {
     if (!user) return;
@@ -59,6 +65,12 @@ export const useUserHook = (): UserHookProps => {
   };
 
   return {
+    user,
+    anonymous,
+    alias,
+    networks,
+    currentWallet,
+    wallets,
     disconnectSocial,
     updateUserFcmToken,
     updateUser: updateUserDetail,

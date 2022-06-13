@@ -34,7 +34,7 @@ export const fetchPopularTopic: ThunkActionCreator<Actions, RootState> = () => a
   dispatch(setLoading(true));
 
   try {
-    const {data: topics} = await TagAPI.trendingTopic();
+    const {data: topics} = await TagAPI.trendingTags();
 
     dispatch({
       type: constants.FETCH_POPULAR_TOPIC,

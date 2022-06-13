@@ -12,7 +12,6 @@ import {NotificationIcon} from '../atoms/Icons';
 import {ProfileCardProps} from './ProfileCard.interfaces';
 import {useStyles} from './profileContent.style';
 
-import {capitalize} from 'lodash';
 import {
   NearNetworkIcon24,
   MyriadCircleIcon,
@@ -21,7 +20,9 @@ import {
 } from 'src/components/atoms/Icons';
 import {Modal} from 'src/components/atoms/Modal';
 import {formatCount} from 'src/helpers/number';
-import {NetworkTypeEnum, WalletTypeEnum} from 'src/lib/api/ext-auth';
+import {formatNetworkTitle, formatWalletTitle} from 'src/helpers/wallet';
+import {NetworkIdEnum} from 'src/interfaces/network';
+import {WalletTypeEnum} from 'src/interfaces/wallet';
 import i18n from 'src/locale';
 
 export const ProfileContent: React.FC<ProfileCardProps> = props => {
@@ -49,29 +50,6 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
     }),
     [],
   );
-
-  const formatWallet = (blockchainPlatform?: string, a?: object) => {
-    switch (blockchainPlatform) {
-      case 'substrate':
-        return 'Polkadot{.js}';
-      case 'near':
-        return 'NEAR Wallet';
-      default:
-        return 'Unknown wallet';
-    }
-  };
-
-  const formatNetwork = (blockchainPlatform?: string, networkId?: string) => {
-    switch (blockchainPlatform) {
-      case 'substrate':
-        return capitalize(networkId);
-      case 'near':
-        return networkId?.toUpperCase();
-      default:
-        return '';
-    }
-  };
-
   const [open, setOpen] = React.useState(false);
 
   const handleOpenProfile = () => {
@@ -83,17 +61,19 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
   };
 
   const getSelectedIcon = (isWallet?: boolean) => {
-    const match = currentWallet?.networkId;
+    const networkId = currentWallet?.networkId;
+
     if (isWallet) {
-      switch (match) {
-        case NetworkTypeEnum.NEAR:
+      switch (networkId) {
+        case NetworkIdEnum.NEAR:
           return icons[WalletTypeEnum.NEAR];
 
         default:
           return icons[WalletTypeEnum.POLKADOT];
       }
     }
-    return match && icons[match as keyof typeof icons];
+
+    return networkId && icons[networkId as keyof typeof icons];
   };
 
   return (
@@ -160,18 +140,14 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
             <div className={classes.column}>
               <Typography component="span">{i18n.t('Profile_Card.Network')}</Typography>
               <Typography component="span" className={classes.flex}>
-                {getSelectedIcon()}{' '}
-                {formatNetwork(
-                  currentWallet?.network?.blockchainPlatform,
-                  currentWallet?.networkId,
-                )}
+                {getSelectedIcon()} {formatNetworkTitle(currentWallet?.network)}
               </Typography>
             </div>
             <div className={classes.column}>
               <Typography component="span">{i18n.t('Profile_Card.Wallet')}</Typography>
               <Typography component="span" className={classes.flex}>
                 {getSelectedIcon(true)}
-                {formatWallet(currentWallet?.network?.blockchainPlatform, currentWallet)}
+                {formatWalletTitle(currentWallet?.network)}
               </Typography>
             </div>
           </div>

@@ -303,7 +303,6 @@ export const createPost: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      // TODO: simplify this
       const data = await PostAPI.createPost({
         ...post,
         createdBy: user.id,

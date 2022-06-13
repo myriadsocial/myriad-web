@@ -1,14 +1,9 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
-import {getSession} from 'next-auth/client';
-import getConfig from 'next/config';
+import {getSession} from 'next-auth/react';
 
 import {decryptMessage} from 'src/lib/crypto';
 
-const {serverRuntimeConfig} = getConfig();
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const {appSecret} = serverRuntimeConfig;
-
   let result = {};
 
   try {
@@ -16,11 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (!session?.user?.token) return res.status(200).json({});
 
-    result = decryptMessage(
-      session.user.token as string,
-      appSecret,
-      session.user.initVec as string,
-    );
+    result = decryptMessage(session.user.token, session.user.address);
   } catch (err) {
     console.log(err);
     // ignore

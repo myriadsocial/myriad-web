@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import BN from 'bn.js';
 import * as nearAPI from 'near-api-js';
+import {BlockchainPlatform} from 'src/interfaces/wallet';
 import {
   nearInitialize,
   connectToNearWallet,
@@ -27,7 +28,7 @@ export const useNearApi = () => {
       !anonymous &&
       currencies.length > 0 &&
       balanceDetails.length === 0 &&
-      currentWallet?.network?.blockchainPlatform === 'near'
+      currentWallet?.network?.blockchainPlatform === BlockchainPlatform.NEAR
     ) {
       dispatch(fetchBalances());
     }

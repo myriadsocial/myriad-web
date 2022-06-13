@@ -56,10 +56,6 @@ export const CommentReducer: Redux.Reducer<CommentState, Actions> = (
       };
     }
 
-    case constants.CLEAR_COMMENT: {
-      return initalState;
-    }
-
     default: {
       return state;
     }

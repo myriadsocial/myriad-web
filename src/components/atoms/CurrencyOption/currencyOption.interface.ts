@@ -1,10 +1,7 @@
-export type Props = {
-  currencies: Currency[];
+import {BalanceDetail} from 'src/interfaces/balance';
+
+export type CurrencyOptionProps = {
+  balanceDetails: BalanceDetail[];
+  onSelect: (selected: BalanceDetail) => void;
+  isOtherTippingCurrencyDisabled: boolean;
 };
-// TEMP INTERFACE DELETE THIS IF NO NEED
-interface Currency {
-  key: number;
-  tokenSymbol: string;
-  tokenImage: string;
-  balance: string;
-}

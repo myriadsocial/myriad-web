@@ -1,7 +1,7 @@
 import React from 'react';
 import {CookiesProvider} from 'react-cookie';
 
-import {Provider as AuthProvider} from 'next-auth/client';
+import {SessionProvider} from 'next-auth/react';
 import {AppProps, NextWebVitalsMetric} from 'next/app';
 import getConfig from 'next/config';
 import Head from 'next/head';
@@ -91,31 +91,13 @@ const App = ({classes, ...props}: AppProps & WithStyles<typeof snackbarStyles>) 
           maxSnack={5}>
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
-          <AuthProvider
-            // Provider options are not required but can be useful in situations where
-            // you have a short session maxAge time. Shown here with default values.
-            options={{
-              // Client Max Age controls how often the useSession in the client should
-              // contact the server to sync the session state. Value in seconds.
-              // e.g.
-              // * 0  - Disabled (always use cache value)
-              // * 60 - Sync session state with server if it's older than 60 seconds
-              clientMaxAge: 0,
-              // Keep Alive tells windows / tabs that are signed in to keep sending
-              // a keep alive request (which extends the current session expiry) to
-              // prevent sessions in open windows from expiring. Value in seconds.
-              //
-              // Note: If a session has expired when keep alive is triggered, all open
-              // windows / tabs will be updated to reflect the user is signed out.
-              keepAlive: 0,
-            }}
-            session={pageProps.session}>
+          <SessionProvider session={pageProps.session}>
             <CookiesProvider>
               <AppContextProvider>
                 <Component {...pageProps} />
               </AppContextProvider>
             </CookiesProvider>
-          </AuthProvider>
+          </SessionProvider>
         </SnackbarProvider>
       </ThemeProvider>
     </I18nextProvider>

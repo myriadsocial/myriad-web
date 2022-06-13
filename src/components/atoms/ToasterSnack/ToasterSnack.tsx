@@ -66,3 +66,5 @@ export const ToasterSnack = forwardRef<HTMLDivElement, ToasterSnackProps>((props
     </SnackbarContent>
   );
 });
+
+ToasterSnack.displayName = 'ToasterSnack';

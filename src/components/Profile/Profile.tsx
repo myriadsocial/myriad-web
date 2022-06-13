@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import dynamic from 'next/dynamic';
@@ -41,24 +41,19 @@ export const ProfileTimeline: React.FC<Props> = ({loading, isBanned = false}) =>
   const {detail: profile, friendStatus} = useSelector<RootState, ProfileState>(
     state => state.profileState,
   );
-  const [isEdit, setIsEdit] = useState<boolean>(false);
+  const isEditing = router.query?.edit === 'edit';
 
   useEffect(() => {
-    if (profile?.id) {
+    if (!isEditing && profile?.id) {
       dispatch(fetchProfileFriend());
     }
 
-    if (profile?.id && !anonymous) {
+    if (!isEditing && profile?.id && !anonymous) {
       dispatch(checkFriendedStatus());
     }
 
     return undefined;
-  }, [profile?.id, anonymous]);
-
-  useEffect(() => {
-    const section = router.query.edit as string | undefined;
-    setIsEdit(!!section);
-  }, [router.query]);
+  }, [profile?.id, anonymous, isEditing]);
 
   const handleOpenEdit = () => {
     router.push(
@@ -72,7 +67,13 @@ export const ProfileTimeline: React.FC<Props> = ({loading, isBanned = false}) =>
   };
 
   const handleCloseEdit = () => {
-    setIsEdit(false);
+    router.push(
+      {
+        pathname: `/profile/${profile?.id}`,
+      },
+      undefined,
+      {shallow: true},
+    );
   };
 
   if (!profile?.id) return <ProfileNotFound />;
@@ -87,11 +88,11 @@ export const ProfileTimeline: React.FC<Props> = ({loading, isBanned = false}) =>
           />
         </div>
 
-        <ShowIf condition={isEdit}>
+        <ShowIf condition={isEditing}>
           <ProfileEditContainer onClose={handleCloseEdit} />
         </ShowIf>
 
-        <ShowIf condition={!isEdit}>
+        <ShowIf condition={!isEditing}>
           <ProfileHeaderContainer edit={handleOpenEdit} />
           <ShowIf condition={friendStatus?.status !== FriendStatus.BLOCKED}>
             <UserMenuContainer isMyriad={profile.username === 'myriad_official'} />

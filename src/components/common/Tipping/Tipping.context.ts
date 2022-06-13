@@ -2,7 +2,7 @@ import {createContext} from 'react';
 
 import {TippingOptions} from './Tipping.interface';
 
-import {WalletTypeEnum} from 'src/lib/api/ext-auth';
+import {WalletTypeEnum} from 'src/interfaces/wallet';
 
 export type HandleSendTip = (options: TippingOptions) => void;
 

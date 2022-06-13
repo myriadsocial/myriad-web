@@ -181,10 +181,3 @@ export const processNotification: ThunkActionCreator<Actions, RootState> =
       dispatch(fetchFriend(user));
     }
   };
-
-export const clearNotificationCount: ThunkActionCreator<Actions, RootState> =
-  () => async dispatch => {
-    dispatch({
-      type: constants.CLEAR_NOTIFIACTION_COUNT,
-    });
-  };

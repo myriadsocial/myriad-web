@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 
-import {getSession} from 'next-auth/client';
+import {getSession} from 'next-auth/react';
 import getConfig from 'next/config';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -11,8 +11,8 @@ import ShowIf from 'src/components/common/show-if.component';
 import {LoginLayout} from 'src/components/template/Login';
 import {MobileLayout} from 'src/components/template/Login';
 import {useAlertHook} from 'src/hooks/use-alert.hook';
+import {WalletTypeEnum} from 'src/interfaces/wallet';
 import {initialize} from 'src/lib/api/base';
-import {WalletTypeEnum} from 'src/lib/api/ext-auth';
 import i18n from 'src/locale';
 import {fetchNetwork} from 'src/reducers/user/actions';
 import {wrapper} from 'src/store';

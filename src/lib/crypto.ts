@@ -1,3 +1,5 @@
+import getConfig from 'next/config';
+
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {Keyring, decodeAddress} from '@polkadot/keyring';
 import type {KeyringPair} from '@polkadot/keyring/types';
@@ -11,19 +13,20 @@ type KeyDetail = {
   key: string;
 };
 
-type EncryptionPayload = {
+export type EncryptionPayload = {
   encryptedMessage: string;
-  initVec: string;
+  iv: string;
 };
 
-export const encryptMessage = (message: string, secret: string): EncryptionPayload => {
-  const algorithm = 'aes-256-cbc';
+const {serverRuntimeConfig} = getConfig();
 
+export const encryptMessage = (message: string, address: string): EncryptionPayload => {
+  const algorithm = 'aes-256-cbc';
   // generate 16 bytes of random data
-  const initVector = crypto.randomBytes(16).toString('hex').slice(0, 16);
+  const iv = address.slice(0, 16);
 
   // the cipher function
-  const cipher = crypto.createCipheriv(algorithm, secret, initVector);
+  const cipher = crypto.createCipheriv(algorithm, serverRuntimeConfig.appSecret, iv);
 
   // encrypt the message
   // input encoding
@@ -34,16 +37,18 @@ export const encryptMessage = (message: string, secret: string): EncryptionPaylo
 
   const encryptionPayload = {
     encryptedMessage,
-    initVec: initVector,
+    iv,
   };
 
   return encryptionPayload;
 };
 
-export const decryptMessage = (encrypted: string, secret: string, initVector: string): string => {
+export const decryptMessage = (encrypted: string, address: string): string => {
   const algorithm = 'aes-256-cbc';
+  // generate 16 bytes of random data
+  const iv = address.slice(0, 16);
 
-  const decipher = crypto.createDecipheriv(algorithm, secret, initVector);
+  const decipher = crypto.createDecipheriv(algorithm, serverRuntimeConfig.appSecret, iv);
 
   let decryptedMessage = decipher.update(encrypted, 'hex', 'utf-8');
 

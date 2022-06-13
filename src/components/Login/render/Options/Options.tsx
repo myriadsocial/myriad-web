@@ -34,17 +34,19 @@ import {
 import {PromptComponent as Prompt} from 'src/components/atoms/Prompt/prompt.component';
 import {PolkadotLink} from 'src/components/common/PolkadotLink.component';
 import ShowIf from 'src/components/common/show-if.component';
+import {formatNetworkTitle} from 'src/helpers/wallet';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
-import {NetworkTypeEnum, WalletTypeEnum} from 'src/lib/api/ext-auth';
+import {NetworkIdEnum} from 'src/interfaces/network';
+import {WalletTypeEnum} from 'src/interfaces/wallet';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
 type OptionProps = {
   network?: string;
-  onConnect?: (accounts: InjectedAccountWithMeta[], network: NetworkTypeEnum) => void;
-  onConnectNear?: (nearId: string, callback: () => void, network: NetworkTypeEnum) => void;
+  onConnect?: (accounts: InjectedAccountWithMeta[], networkId: NetworkIdEnum) => void;
+  onConnectNear?: (nearId: string, callback: () => void, networkId: NetworkIdEnum) => void;
   isMobileSignIn?: boolean;
 };
 
@@ -56,10 +58,9 @@ export const Options: React.FC<OptionProps> = props => {
 
   const navigate = useNavigate();
   const {enablePolkadotExtension, getPolkadotAccounts} = usePolkadotExtension();
-
   const {connectToNear} = useNearApi();
 
-  const [network, setNetwork] = useState<NetworkTypeEnum | null>(null);
+  const [networkId, setNetworkId] = useState<NetworkIdEnum | null>(null);
   const [wallet, setWallet] = useState<WalletTypeEnum | null>(null);
   const [termApproved, setTermApproved] = useState(false);
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
@@ -68,7 +69,7 @@ export const Options: React.FC<OptionProps> = props => {
   const [connectAttempted, setConnectAttempted] = useState(false);
 
   const networksOnMobile = networks.filter(
-    network => network.id === NetworkTypeEnum.POLKADOT || network.id === NetworkTypeEnum.NEAR,
+    network => network.id === NetworkIdEnum.POLKADOT || network.id === NetworkIdEnum.NEAR,
   );
 
   const getMobileIconStyles = isMobileSignIn ? styles.rowCardIcon : styles.icon;
@@ -92,45 +93,20 @@ export const Options: React.FC<OptionProps> = props => {
     [],
   );
 
-  const formatTitle = (id?: string, wallet?: boolean) => {
-    if (wallet)
-      switch (id) {
-        case WalletTypeEnum.POLKADOT:
-          return 'Polkadot{.js}';
-        case WalletTypeEnum.NEAR:
-          return 'NEAR Wallet';
-        default:
-          return id;
-      }
+  const setSelectedNetwork = (networkId: NetworkIdEnum) => () => {
+    setNetworkId(networkId);
 
-    switch (id) {
-      case NetworkTypeEnum.POLKADOT:
-        return 'Polkadot';
-      case NetworkTypeEnum.NEAR:
-        return 'NEAR';
-      case NetworkTypeEnum.KUSAMA:
-        return 'Kusama';
-      case NetworkTypeEnum.MYRIAD:
-        return 'Myriad';
-      default:
-        return id;
-    }
-  };
-
-  const setSelectedNetwork = (value: NetworkTypeEnum) => () => {
-    setNetwork(value);
-
-    switch (value) {
-      case NetworkTypeEnum.POLKADOT:
+    switch (networkId) {
+      case NetworkIdEnum.POLKADOT:
         setSelectedWallet(WalletTypeEnum.POLKADOT)();
         break;
-      case NetworkTypeEnum.MYRIAD:
+      case NetworkIdEnum.MYRIAD:
         setSelectedWallet(WalletTypeEnum.POLKADOT)();
         break;
-      case NetworkTypeEnum.KUSAMA:
+      case NetworkIdEnum.KUSAMA:
         setSelectedWallet(WalletTypeEnum.POLKADOT)();
         break;
-      case NetworkTypeEnum.NEAR:
+      case NetworkIdEnum.NEAR:
         setSelectedWallet(WalletTypeEnum.NEAR)();
         break;
       default:
@@ -177,14 +153,13 @@ export const Options: React.FC<OptionProps> = props => {
 
     switch (wallet) {
       case WalletTypeEnum.POLKADOT:
-        // eslint-disable-next-line no-case-declarations
         const polkadotAccounts = await getPolkadotAccounts();
 
         accounts.push(...polkadotAccounts);
 
         if (accounts.length > 0) {
           setAccounts(accounts);
-          onConnect && onConnect(accounts, network as NetworkTypeEnum);
+          onConnect && onConnect(accounts, networkId);
 
           navigate('/account');
         } else {
@@ -203,7 +178,7 @@ export const Options: React.FC<OptionProps> = props => {
               () => {
                 navigate('/profile');
               },
-              network as NetworkTypeEnum,
+              networkId,
             );
         } else {
           console.log('redirection to near auth page');
@@ -233,15 +208,15 @@ export const Options: React.FC<OptionProps> = props => {
               justifyContent="flex-start"
               alignContent="center"
               classes={{root: styles.list}}>
-              {networks.map(option => (
-                <Grid item xs={3} key={option.id}>
+              {networks.map(network => (
+                <Grid item xs={3} key={network.id}>
                   <ListItem
                     disableGutters
-                    selected={network === option.id}
-                    onClick={setSelectedNetwork(option.id as NetworkTypeEnum)}>
+                    selected={networkId === network.id}
+                    onClick={setSelectedNetwork(network.id as NetworkIdEnum)}>
                     <div className={styles.card}>
-                      {icons[option.id as keyof typeof icons]}
-                      <Typography>{formatTitle(option.id)}</Typography>
+                      {icons[network.id as keyof typeof icons]}
+                      <Typography>{formatNetworkTitle(network)}</Typography>
                     </div>
                   </ListItem>
                 </Grid>
@@ -293,20 +268,20 @@ export const Options: React.FC<OptionProps> = props => {
               classes={{root: styles.list}}>
               <ShowIf
                 condition={
-                  network === null ||
-                  network === NetworkTypeEnum.POLKADOT ||
-                  network === NetworkTypeEnum.KUSAMA ||
-                  network === NetworkTypeEnum.MYRIAD
+                  networkId === null ||
+                  networkId === NetworkIdEnum.POLKADOT ||
+                  networkId === NetworkIdEnum.KUSAMA ||
+                  networkId === NetworkIdEnum.MYRIAD
                 }>
                 <Grid item xs={3}>
                   <ListItem
                     component={'button'}
                     disableGutters
-                    disabled={network === null}
+                    disabled={networkId === null}
                     selected={wallet === WalletTypeEnum.POLKADOT}
                     onClick={setSelectedWallet(WalletTypeEnum.POLKADOT)}
                     className={
-                      network !== NetworkTypeEnum.POLKADOT ? styles.walletCardDisabled : ''
+                      networkId !== NetworkIdEnum.POLKADOT ? styles.walletCardDisabled : ''
                     }>
                     <div className={styles.walletCard}>
                       <PolkadotNetworkIcon className={styles.icon} />
@@ -315,15 +290,15 @@ export const Options: React.FC<OptionProps> = props => {
                   </ListItem>
                 </Grid>
               </ShowIf>
-              <ShowIf condition={network === null || network === NetworkTypeEnum.NEAR}>
+              <ShowIf condition={networkId === null || networkId === NetworkIdEnum.NEAR}>
                 <Grid item xs={3}>
                   <ListItem
                     component={'button'}
                     disableGutters
-                    disabled={network === null || network !== NetworkTypeEnum.NEAR}
+                    disabled={networkId === null || networkId !== NetworkIdEnum.NEAR}
                     selected={wallet === WalletTypeEnum.NEAR}
                     onClick={setSelectedWallet(WalletTypeEnum.NEAR)}
-                    className={network !== NetworkTypeEnum.NEAR ? styles.walletCardDisabled : ''}>
+                    className={networkId !== NetworkIdEnum.NEAR ? styles.walletCardDisabled : ''}>
                     <div className={styles.card}>
                       <NearNetworkIcon className={styles.icon} />
                       <Typography>NEAR</Typography>
@@ -331,7 +306,7 @@ export const Options: React.FC<OptionProps> = props => {
                   </ListItem>
                 </Grid>
               </ShowIf>
-              <ShowIf condition={network === null || network === NetworkTypeEnum.NEAR}>
+              <ShowIf condition={networkId === null || networkId === NetworkIdEnum.NEAR}>
                 <Grid item xs={3}>
                   <Tooltip
                     title={
@@ -455,7 +430,7 @@ export const Options: React.FC<OptionProps> = props => {
               extensionChecked &&
               extensionEnabled &&
               accounts.length === 0 &&
-              network === NetworkTypeEnum.POLKADOT
+              networkId === NetworkIdEnum.POLKADOT
             }
             onCancel={closeExtensionDisableModal}
             subtitle={<Typography>{i18n.t('Login.Options.Prompt_Account.Subtitle')}</Typography>}>
@@ -491,14 +466,14 @@ export const Options: React.FC<OptionProps> = props => {
                 justifyContent="flex-start"
                 direction="column"
                 classes={{root: styles.list}}>
-                {networksOnMobile.map(option => (
-                  <Grid item xs={12} key={option.id}>
-                    {option.id === NetworkTypeEnum.POLKADOT ? (
+                {networksOnMobile.map(network => (
+                  <Grid item xs={12} key={network.id}>
+                    {network.id === NetworkIdEnum.POLKADOT ? (
                       <>
                         <ListItem disableGutters disabled>
                           <div className={styles.rowCard}>
                             {icons['polkadot']}
-                            <Typography>{formatTitle(option.id)}</Typography>
+                            <Typography>{formatNetworkTitle(network)}</Typography>
                           </div>
                         </ListItem>
                         <Typography color="primary">* {i18n.t('Mobile.Polkadot_Alert')}</Typography>
@@ -506,11 +481,11 @@ export const Options: React.FC<OptionProps> = props => {
                     ) : (
                       <ListItem
                         disableGutters
-                        selected={network === option.id}
-                        onClick={setSelectedNetwork(option.id as NetworkTypeEnum)}>
+                        selected={networkId === network.id}
+                        onClick={setSelectedNetwork(network.id)}>
                         <div className={styles.rowCard}>
-                          {icons[option.id as keyof typeof icons]}
-                          <Typography>{formatTitle(option.id)}</Typography>
+                          {icons[network.id as keyof typeof icons]}
+                          <Typography>{formatNetworkTitle(network)}</Typography>
                         </div>
                       </ListItem>
                     )}
@@ -529,15 +504,15 @@ export const Options: React.FC<OptionProps> = props => {
                 justifyContent="flex-start"
                 direction="column"
                 classes={{root: styles.list}}>
-                <ShowIf condition={network === null || network === NetworkTypeEnum.NEAR}>
+                <ShowIf condition={networkId === null || networkId === NetworkIdEnum.NEAR}>
                   <Grid item xs={12}>
                     <ListItem
                       component={'button'}
                       disableGutters
-                      disabled={network === null || network !== NetworkTypeEnum.NEAR}
+                      disabled={networkId === null || networkId !== NetworkIdEnum.NEAR}
                       selected={wallet === WalletTypeEnum.NEAR}
                       onClick={setSelectedWallet(WalletTypeEnum.NEAR)}
-                      className={network !== NetworkTypeEnum.NEAR ? styles.walletCardDisabled : ''}>
+                      className={networkId !== NetworkIdEnum.NEAR ? styles.walletCardDisabled : ''}>
                       <div className={styles.rowCard}>
                         {walletIcons['near']}
                         <Typography>NEAR</Typography>
@@ -545,7 +520,7 @@ export const Options: React.FC<OptionProps> = props => {
                     </ListItem>
                   </Grid>
                 </ShowIf>
-                <ShowIf condition={network === null || network === NetworkTypeEnum.NEAR}>
+                <ShowIf condition={networkId === null || networkId === NetworkIdEnum.NEAR}>
                   <Grid item xs={12}>
                     <Tooltip
                       title={
@@ -568,20 +543,20 @@ export const Options: React.FC<OptionProps> = props => {
                 </ShowIf>
                 <ShowIf
                   condition={
-                    network === null ||
-                    network === NetworkTypeEnum.POLKADOT ||
-                    network === NetworkTypeEnum.KUSAMA ||
-                    network === NetworkTypeEnum.MYRIAD
+                    networkId === null ||
+                    networkId === NetworkIdEnum.POLKADOT ||
+                    networkId === NetworkIdEnum.KUSAMA ||
+                    networkId === NetworkIdEnum.MYRIAD
                   }>
                   <Grid item xs={12}>
                     <ListItem
                       component={'button'}
                       disableGutters
-                      disabled={network === null}
+                      disabled={networkId === null}
                       selected={wallet === WalletTypeEnum.POLKADOT}
                       onClick={setSelectedWallet(WalletTypeEnum.POLKADOT)}
                       className={
-                        network !== NetworkTypeEnum.POLKADOT ? styles.walletCardDisabled : ''
+                        networkId !== NetworkIdEnum.POLKADOT ? styles.walletCardDisabled : ''
                       }>
                       <div className={styles.rowCard}>
                         {walletIcons['polkadot']}
@@ -658,7 +633,7 @@ export const Options: React.FC<OptionProps> = props => {
               extensionChecked &&
               extensionEnabled &&
               accounts.length === 0 &&
-              network === NetworkTypeEnum.POLKADOT
+              networkId === NetworkIdEnum.POLKADOT
             }
             onCancel={closeExtensionDisableModal}
             subtitle={<Typography>{i18n.t('Login.Options.Prompt_Account.Subtitle')}</Typography>}>

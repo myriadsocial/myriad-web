@@ -7,7 +7,8 @@ import * as nearAPI from 'near-api-js';
 import {ConnectConfig} from 'near-api-js';
 import {Signature} from 'near-api-js/lib/utils/key_pair';
 import {formatBalance} from 'src/helpers/balance';
-import {WalletTypeEnum, NetworkTypeEnum} from 'src/lib/api/ext-auth';
+import {NetworkIdEnum} from 'src/interfaces/network';
+import {WalletTypeEnum} from 'src/interfaces/wallet';
 import * as NetworkAPI from 'src/lib/api/network';
 import * as WalletAPI from 'src/lib/api/wallet';
 
@@ -63,7 +64,7 @@ export const nearInitialize = async (): Promise<NearInitializeProps> => {
     // *** REQUIRES SignIn using walletConnection.requestSignIn() ***
 
     const keyStore = new keyStores.BrowserLocalStorageKeyStore();
-    const network = await NetworkAPI.getNetwork(NetworkTypeEnum.NEAR);
+    const network = await NetworkAPI.getNetwork(NetworkIdEnum.NEAR);
 
     // set config for near network
     const config: ConnectConfig = {
@@ -147,7 +148,7 @@ export const createNearSignature = async (
   nonce: number,
 ): Promise<NearSignatureProps | null> => {
   try {
-    const {chainId} = await NetworkAPI.getNetwork(NetworkTypeEnum.NEAR);
+    const {chainId} = await NetworkAPI.getNetwork(NetworkIdEnum.NEAR);
     const {keyStores} = nearAPI;
     // creates keyStore using private key in local storage
     // *** REQUIRES SignIn using walletConnection.requestSignIn() ***

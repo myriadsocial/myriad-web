@@ -1,5 +1,5 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
-import {getSession} from 'next-auth/client';
+import {getSession} from 'next-auth/react';
 import httpProxyMiddleware from 'next-http-proxy-middleware';
 import getConfig from 'next/config';
 
@@ -15,22 +15,14 @@ export const config = {
   },
 };
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const {appSecret} = serverRuntimeConfig;
-
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   let headers = {};
 
   try {
     const session = await getSession({req});
 
     if (session && session.user && session.user.token) {
-      let userToken = '';
-
-      userToken = decryptMessage(
-        session.user.token as string,
-        appSecret,
-        session.user.initVec as string,
-      );
+      const userToken = decryptMessage(session.user.token, session.user.address);
 
       headers = {
         Authorization: `Bearer ${userToken}`,
@@ -67,4 +59,4 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     console.error('[api-proxy][error]', {error: message});
     res.status(500).send({error: message});
   }
-};
+}

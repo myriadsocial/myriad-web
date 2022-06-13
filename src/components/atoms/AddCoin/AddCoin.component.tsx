@@ -21,7 +21,6 @@ import {Modal} from '../Modal';
 import {useStyles} from './AddCoin.style';
 import {Props} from './addCoin.interface';
 
-import {debounce} from 'lodash';
 import {Currency, CurrencyId} from 'src/interfaces/currency';
 import {RootState} from 'src/reducers';
 import {ConfigState} from 'src/reducers/config/reducer';
@@ -30,13 +29,13 @@ import {UserState} from 'src/reducers/user/reducer';
 
 export const AddCoin: React.FC<Props> = props => {
   const {open, onClose} = props;
+  const style = useStyles();
   const dispatch = useDispatch();
+
   const {availableCurrencies} = useSelector<RootState, ConfigState>(state => state.configState);
   const {currencies} = useSelector<RootState, UserState>(state => state.userState);
-  const style = useStyles();
 
   const [searchedCurrencies, setSearchedCurrencies] = useState<Currency[]>([]);
-
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [selectedAsset, setSelectedAsset] = useState<string | null>(null);
@@ -47,14 +46,8 @@ export const AddCoin: React.FC<Props> = props => {
     setMyAsset(assetId());
   }, [currencies]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // TODO FILTER WHEN TYPING
+  const handleChangeSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
-    const debounceSubmit = debounce(() => {
-      // code
-    }, 300);
-
-    debounceSubmit();
   };
 
   const assetId = () => {
@@ -119,7 +112,7 @@ export const AddCoin: React.FC<Props> = props => {
           className={style.input}
           onKeyUp={submitSearch}
           value={search}
-          onChange={handleChange}
+          onChange={handleChangeSearch}
           placeholder={`Search Coin`}
           inputProps={{
             'aria-label': 'search',

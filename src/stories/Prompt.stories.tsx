@@ -2,7 +2,8 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import {ButtonComponent} from '../components/atoms/Prompt/button';
+import {Button, Grid} from '@material-ui/core';
+
 import {PromptComponent} from '../components/atoms/Prompt/prompt.component';
 
 export default {
@@ -25,5 +26,14 @@ Prompt.args = {
   onCancel: console.log,
   title: 'Careful!',
   subtitle: 'This action cannot be undone',
-  children: <ButtonComponent />,
+  children: (
+    <Grid container justifyContent="space-evenly">
+      <Button size="small" variant="outlined" color="secondary">
+        No, let me rethink
+      </Button>
+      <Button size="small" variant="contained" color="primary">
+        Yes, proceed to delete
+      </Button>
+    </Grid>
+  ),
 };

@@ -36,6 +36,7 @@ const comment: Comment = {
   user: {
     id: '6123614bf6c45c2728e43aca',
     name: 'Storybook User',
+    username: 'Storybook User',
     profilePictureURL:
       'https://res.cloudinary.com/dsget80gs/image/upload/v1626320502/bd75blw2pnmpj9aqwdxm.png',
     bannerImageURL: '',
@@ -43,6 +44,9 @@ const comment: Comment = {
     updatedAt: new Date('2021-07-15T03:40:23.000Z'),
     currencies: [],
     wallets: [],
+    fcmTokens: [],
+    verified: true,
+    onTimeline: 'TEST',
   },
 
   replies: [
@@ -66,6 +70,7 @@ const comment: Comment = {
       user: {
         id: '6123614bf6c45c2728e43aca',
         name: 'Reply one',
+        username: 'Reply one',
         profilePictureURL:
           'https://res.cloudinary.com/dsget80gs/image/upload/v1626320502/bd75blw2pnmpj9aqwdxm.png',
         bannerImageURL: '',
@@ -73,6 +78,9 @@ const comment: Comment = {
         updatedAt: new Date('2021-07-15T03:40:23.000Z'),
         currencies: [],
         wallets: [],
+        fcmTokens: [],
+        verified: true,
+        onTimeline: 'TEST',
       },
 
       replies: [
@@ -96,6 +104,7 @@ const comment: Comment = {
           user: {
             id: '6123614bf6c45c2728e43aca',
             name: 'Reply two',
+            username: 'Reply two',
             profilePictureURL:
               'https://res.cloudinary.com/dsget80gs/image/upload/v1626320502/bd75blw2pnmpj9aqwdxm.png',
             bannerImageURL: '',
@@ -103,6 +112,9 @@ const comment: Comment = {
             updatedAt: new Date('2021-07-15T03:40:23.000Z'),
             currencies: [],
             wallets: [],
+            fcmTokens: [],
+            verified: true,
+            onTimeline: 'TEST',
           },
         },
       ],
@@ -127,6 +139,7 @@ const comment: Comment = {
       user: {
         id: '6123614bf6c45c2728e43aca',
         name: 'Reply one',
+        username: 'Reply one',
         profilePictureURL:
           'https://res.cloudinary.com/dsget80gs/image/upload/v1626320502/bd75blw2pnmpj9aqwdxm.png',
         bannerImageURL: '',
@@ -134,6 +147,9 @@ const comment: Comment = {
         updatedAt: new Date('2021-07-15T03:40:23.000Z'),
         currencies: [],
         wallets: [],
+        fcmTokens: [],
+        verified: true,
+        onTimeline: 'TEST',
       },
     },
   ],

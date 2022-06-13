@@ -4,7 +4,7 @@ import {MenuIcon} from '@heroicons/react/solid';
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
-import {useSession} from 'next-auth/client';
+import {useSession} from 'next-auth/react';
 import {useRouter} from 'next/router';
 
 import {Button} from '@material-ui/core';
@@ -25,30 +25,26 @@ import {useStyles} from 'src/components/Mobile/MenuDrawer/menuDrawer.style';
 import {PromptComponent} from 'src/components/Mobile/PromptDrawer/Prompt';
 import {ProfileContent} from 'src/components/ProfileCard';
 import {ListItemComponent} from 'src/components/atoms/ListItem';
-import {convertToPolkadotAddress} from 'src/helpers/extension';
+import {formatAddress} from 'src/helpers/wallet';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {RootState} from 'src/reducers';
 import {NotificationState} from 'src/reducers/notification/reducer';
 import {clearUser} from 'src/reducers/user/actions';
-import {UserState} from 'src/reducers/user/reducer';
 
 export const MenuDrawerComponent: React.FC = () => {
-  const {user, alias, anonymous, networks, currentWallet, wallets} = useSelector<
-    RootState,
-    UserState
-  >(state => state.userState);
   const {total} = useSelector<RootState, NotificationState>(state => state.notificationState);
   const [selected, setSelected] = React.useState<MenuId>('home');
   const [openDrawer, setOpenDrawer] = React.useState(false);
   const [openPromptDrawer, setOpenPromptDrawer] = React.useState(false);
 
   const {logout} = useAuthHook();
-  const {userWalletAddress} = useUserHook();
+  const {user, alias, anonymous, userWalletAddress, networks, currentWallet, wallets} =
+    useUserHook();
 
   const router = useRouter();
   const dispatch = useDispatch();
-  const [session] = useSession();
+  const {data: session} = useSession();
   const menu = useMenuList(selected);
   const style = useStyles();
 
@@ -121,25 +117,6 @@ export const MenuDrawerComponent: React.FC = () => {
     }
   };
 
-  const formatAddress = (address: null | string) => {
-    if (address && address.length > 14) {
-      let validAddress = '';
-
-      if (currentWallet?.network?.blockchainPlatform === 'substrate') {
-        validAddress = convertToPolkadotAddress(address, currentWallet);
-      } else {
-        validAddress = address;
-      }
-
-      return (
-        validAddress.substring(0, 4) +
-        '...' +
-        validAddress.substring(validAddress.length - 4, validAddress.length)
-      );
-    }
-    return address;
-  };
-
   return (
     <>
       <SvgIcon
@@ -187,7 +164,7 @@ export const MenuDrawerComponent: React.FC = () => {
                     />
 
                     <Typography component="div" className={style.address}>
-                      {formatAddress(userWalletAddress)}
+                      {formatAddress(currentWallet, userWalletAddress)}
                     </Typography>
                   </ShowIf>
                   <ShowIf condition={!currentWallet}>

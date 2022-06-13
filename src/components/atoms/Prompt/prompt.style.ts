@@ -43,10 +43,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: 30,
       marginTop: 12,
     },
-    'flex-center': {
-      display: 'flex',
-      justifyContent: 'center',
-    },
     content: {
       padding: 0,
     },
@@ -69,9 +65,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     success: {
       color: '#39BF87',
-    },
-    m1: {
-      marginRight: theme.spacing(2),
     },
   }),
 );

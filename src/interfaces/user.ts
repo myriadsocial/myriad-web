@@ -1,11 +1,9 @@
 import {BaseModel} from './base.interface';
 import {Currency} from './currency';
 import {FriendStatus} from './friend';
+import {NetworkIdEnum, Network} from './network';
 import {People} from './people';
 import {TransactionDetail} from './transaction';
-import {Network} from './wallet';
-
-import {NetworkTypeEnum} from 'src/lib/api/ext-auth';
 
 export interface UserSocialMedia {
   id: string;
@@ -27,7 +25,7 @@ export type UserOnTransaction = BaseUser & {
 
 export interface Wallet extends BaseModel {
   network?: Network;
-  networkId: NetworkTypeEnum;
+  networkId: NetworkIdEnum;
   primary: boolean;
   userId: string;
 }
@@ -37,17 +35,13 @@ export type UserWallet = Wallet & {
 };
 
 export type UserProps = BaseUser & {
-  wallets: Wallet[];
   bio?: string;
   bannerImageURL?: string;
-  fcmTokens?: string[];
-  skipTour?: boolean;
+  fcmTokens: string[];
   onTimeline?: string;
-  skipWelcome?: boolean;
   websiteURL?: string;
-  username?: string;
-  verified?: boolean;
-  publicAddress?: string;
+  username: string;
+  verified: boolean;
   deletedAt?: string;
 };
 
@@ -67,11 +61,10 @@ export type UserMetric = {
 export interface Importer extends UserProps, BaseModel {}
 
 export interface User extends UserProps, BaseModel {
-  nonce?: number;
+  wallets: Wallet[];
   currencies: Currency[];
   people?: People[];
   metric?: UserMetric;
-  activityLogs?: ActivityLog[];
   deletedAt?: string;
 }
 

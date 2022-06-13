@@ -18,6 +18,7 @@ import {useAuthHook} from 'src/hooks/auth.hook';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
+import {BlockchainPlatform} from 'src/interfaces/wallet';
 import {clearNearAccount} from 'src/lib/services/near-api-js';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
@@ -39,12 +40,14 @@ export const ManageCointainer: React.FC = () => {
   const [extensionInstalled, setExtensionInstalled] = React.useState(false);
   const [accounts, setAccounts] = React.useState<InjectedAccountWithMeta[]>([]);
 
+  const action = router.query.action as string | string[] | null;
+  const accountId = router.query.account_id as string | string[] | null;
+
   useEffect(() => {
-    const query = router.query;
-    if (!Array.isArray(query.action) && query.action === 'connect' && query.account_id) {
+    if (!Array.isArray(action) && action === 'connect' && accountId) {
       connectNearAccount();
     }
-  }, [router.query]);
+  }, [action, accountId]);
 
   const closeAccountList = () => {
     setShowAccountList(false);
@@ -71,7 +74,9 @@ export const ManageCointainer: React.FC = () => {
     let verified = false;
 
     try {
-      verified = await (account ? connectNetwork('substrate', account) : connectNearAccount());
+      verified = await (account
+        ? connectNetwork(BlockchainPlatform.NEAR, account)
+        : connectNearAccount());
     } catch {
       clearNearAccount();
     }
@@ -108,7 +113,7 @@ export const ManageCointainer: React.FC = () => {
           signature: data.signature,
         };
 
-        verified = await connectNetwork('near', payload);
+        verified = await connectNetwork(BlockchainPlatform.NEAR, payload);
       } else {
         console.log('redirection to near auth page');
       }

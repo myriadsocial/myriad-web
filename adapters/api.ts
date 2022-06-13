@@ -1,39 +1,42 @@
-import {AppOptions, User} from 'next-auth';
-import {Session, AdapterInstance} from 'next-auth/adapters';
+import {Account} from 'next-auth';
+import type {Adapter, AdapterSession, AdapterUser, VerificationToken} from 'next-auth/adapters';
 import jwt from 'next-auth/jwt';
 import getConfig from 'next/config';
 
 import axios from 'axios';
 import {isErrorWithMessage} from 'src/helpers/error';
-import {SocialsEnum} from 'src/interfaces/social';
-import * as PeopleAPI from 'src/lib/api/people';
+import {NetworkIdEnum} from 'src/interfaces/network';
+import * as AuthAPI from 'src/lib/api/ext-auth';
 import * as WalletAPI from 'src/lib/api/wallet';
-import {userToSession} from 'src/lib/serializers/session';
 
 const {serverRuntimeConfig} = getConfig();
 
-//@ts-ignore
-function Adapter() {
-  async function getAdapter(appOptions: AppOptions): Promise<AdapterInstance<any, any, any, any>> {
-    // Display debug output if debug option enabled
-    function _debug(...args: Array<any>) {
-      if (appOptions.debug) {
-        console.log('[next-auth][adapter][debug]', ...args);
-      }
-    }
+export default function APIAdapter(): Adapter {
+  function _debug(...args: Array<any>) {
+    console.debug('[next-auth][adapter]', ...args);
+  }
 
-    async function createUser(profile: any) {
-      _debug('createUser', profile);
-      return null;
-    }
+  return {
+    async createUser(user: Omit<AdapterUser, 'id'>) {
+      _debug('createUser', user);
 
-    async function getUser(address: string) {
+      await AuthAPI.signUp({
+        name: '',
+        username: '',
+        address: '',
+        network: NetworkIdEnum.MYRIAD,
+      });
+
+      return user as AdapterUser;
+    },
+
+    async getUser(address: string): Promise<AdapterUser | null> {
+      _debug('getUser', address);
+
       try {
         const user = await WalletAPI.getUserByWalletAddress(address);
 
-        _debug('getUser', address, user);
-
-        return userToSession(user, address);
+        return {id: user.id} as AdapterUser;
       } catch (error) {
         if (axios.isAxiosError(error)) {
           _debug('getUser error', error.response?.data);
@@ -41,58 +44,61 @@ function Adapter() {
           _debug('getUser error', error.message);
         }
 
-        return Promise.reject(error);
+        return null;
       }
-    }
+    },
 
-    async function getUserByEmail(email: string) {
+    async getUserByEmail(email: string): Promise<AdapterUser | null> {
       _debug('getUserByEmail', email);
-      return null;
-    }
-
-    async function getUserByProviderAccountId(providerId: SocialsEnum, providerAccountId: string) {
-      const people = await PeopleAPI.getPeopleByPlatform(providerId, providerAccountId);
-
-      if (people) {
-        _debug('getUserByProviderAccountId data', people);
-      } else {
-        _debug('getUserByProviderAccountId not found');
-      }
 
       return null;
-    }
+    },
 
-    async function updateUser(user: any) {
+    async getUserByAccount(
+      account: Pick<Account, 'provider' | 'providerAccountId'>,
+    ): Promise<AdapterUser | null> {
+      _debug('getUserByAccount', account);
+
+      return null;
+    },
+
+    async updateUser(user): Promise<AdapterUser> {
       _debug('updateUser', user);
-      return null;
-    }
 
-    async function linkAccount(
-      userId: string,
-      providerId: SocialsEnum,
-      providerType: string,
-      providerAccountId: string,
-    ): Promise<void> {
-      _debug('Adapter linkAccount', userId, providerId, providerType, providerAccountId);
-    }
+      return {} as AdapterUser;
+    },
 
-    async function createSession(user: User) {
-      _debug('createSession', user);
-      return null;
-    }
+    async deleteUser(userId): Promise<void> {
+      _debug('deleteUser', userId);
+    },
 
-    async function getSession(sessionToken: string) {
-      _debug('getSession', sessionToken);
+    async linkAccount(account): Promise<void> {
+      _debug('linkAccount', account);
+    },
 
+    async unlinkAccount(account: Pick<Account, 'provider' | 'providerAccountId'>): Promise<void> {
+      _debug('unlinkAccount', account);
+    },
+
+    async createSession({sessionToken, userId, expires}): Promise<AdapterSession> {
+      _debug('createSession', sessionToken, userId, expires);
+
+      return {} as AdapterSession;
+    },
+
+    async getSessionAndUser(sessionToken): Promise<{
+      session: AdapterSession;
+      user: AdapterUser;
+    } | null> {
       try {
-        const session = jwt.decode({
+        const session = await jwt.decode({
           token: sessionToken,
           secret: serverRuntimeConfig.appSecret,
         });
 
         _debug('decoded session', session);
 
-        return session;
+        return null;
       } catch (error) {
         if (isErrorWithMessage(error)) {
           _debug('decoded session error', error);
@@ -100,36 +106,28 @@ function Adapter() {
 
         return null;
       }
-    }
+    },
 
-    async function updateSession(session: Session, force: boolean) {
-      _debug('updateSession', session);
+    async updateSession({sessionToken}): Promise<AdapterSession | null> {
+      _debug('updateSession', sessionToken);
+
       return null;
-    }
+    },
 
-    async function deleteSession(sessionToken: string): Promise<void> {
-      _debug('deleteSession', sessionToken);
-    }
+    async deleteSession(sessionToken): Promise<void> {
+      _debug('updateSession', sessionToken);
+    },
 
-    return {
-      createUser,
-      getUser,
-      getUserByEmail,
-      getUserByProviderAccountId,
-      updateUser,
-      linkAccount,
-      createSession,
-      getSession,
-      updateSession,
-      deleteSession,
-    };
-  }
+    async createVerificationToken({identifier, expires, token}): Promise<VerificationToken | null> {
+      _debug('createVerificationToken', identifier, expires, token);
 
-  return {
-    getAdapter,
+      return null;
+    },
+
+    async useVerificationToken({identifier, token}): Promise<VerificationToken | null> {
+      _debug('createVerificationToken', identifier, token);
+
+      return null;
+    },
   };
 }
-
-export default {
-  Adapter,
-};

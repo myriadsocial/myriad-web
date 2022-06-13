@@ -3,7 +3,7 @@ import getConfig from 'next/config';
 import {encodeAddress} from '@polkadot/keyring';
 import {hexToU8a, isHex} from '@polkadot/util';
 
-import {NetworkTypeEnum} from 'src/interfaces/network';
+import {NetworkIdEnum} from 'src/interfaces/network';
 import {UserWallet} from 'src/interfaces/user';
 
 const {publicRuntimeConfig} = getConfig();
@@ -49,15 +49,15 @@ export const unsubscribeFromAccounts = async (): Promise<void> => {
 export const convertToPolkadotAddress = (address: string, currentWallet: UserWallet): string => {
   if (isHex(address)) {
     switch (currentWallet.networkId) {
-      case NetworkTypeEnum.MYRIAD: {
+      case NetworkIdEnum.MYRIAD: {
         return encodeAddress(hexToU8a(address), 42);
       }
 
-      case NetworkTypeEnum.KUSAMA: {
+      case NetworkIdEnum.KUSAMA: {
         return encodeAddress(hexToU8a(address), 2);
       }
 
-      case NetworkTypeEnum.POLKADOT: {
+      case NetworkIdEnum.POLKADOT: {
         return encodeAddress(hexToU8a(address), 0);
       }
 

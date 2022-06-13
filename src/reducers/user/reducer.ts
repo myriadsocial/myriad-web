@@ -7,9 +7,9 @@ import * as constants from './constants';
 import * as Redux from 'redux';
 import {Currency} from 'src/interfaces/currency';
 import {WrappedExperience} from 'src/interfaces/experience';
+import {Network} from 'src/interfaces/network';
 import {SocialMedia} from 'src/interfaces/social';
 import {User, UserTransactionDetail, UserWallet} from 'src/interfaces/user';
-import {Network} from 'src/interfaces/wallet';
 
 export interface UserState extends BaseState {
   user?: User;

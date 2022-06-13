@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {getSession} from 'next-auth/client';
+import {getSession} from 'next-auth/react';
 import getConfig from 'next/config';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
@@ -34,11 +34,7 @@ const Settings: React.FC = () => {
   const settings = useSettingList();
 
   const currentSection = query.section as SettingsType | undefined;
-
   const selected = settings.find(item => item.id === currentSection);
-
-  //TODO: any logic + components which replace
-  // the middle column of home page should go here
 
   return (
     <DefaultLayout isOnProfilePage={false}>

@@ -1,7 +1,7 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 
-import {getSession} from 'next-auth/client';
+import {getSession} from 'next-auth/react';
 import getConfig from 'next/config';
 import Head from 'next/head';
 
@@ -30,9 +30,6 @@ const {publicRuntimeConfig} = getConfig();
 
 const Notification: React.FC = () => {
   const {total} = useSelector<RootState, NotificationState>(state => state.notificationState);
-
-  //TODO: any logic + components which replace
-  // the middle column of home page should go here
 
   return (
     <DefaultLayout isOnProfilePage={false}>

@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 
 import {CarouselLoginView} from 'src/components/Mobile/OnBoardingView/CarouselLoginView';
 import {useAuthHook} from 'src/hooks/auth.hook';
-import {WalletTypeEnum} from 'src/lib/api/ext-auth';
+import {WalletTypeEnum} from 'src/interfaces/wallet';
 
 const Login = dynamic(() => import('src/components/Login/Login'), {
   ssr: false,

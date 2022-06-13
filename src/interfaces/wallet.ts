@@ -1,11 +1,15 @@
-import {BaseModel} from './base.interface';
-import {Currency} from './currency';
-
-import {TipResult} from 'src/lib/services/polkadot-js';
-
 export enum ContentType {
   COMMENT = 'comment',
   POST = 'post',
+}
+
+export enum WalletTypeEnum {
+  POLKADOT = 'polkadot{.js}',
+  TRUST = 'trust',
+  METAMASK = 'metamask',
+  COINBASE = 'coinbase',
+  NEAR = 'near',
+  SENDER = 'sender-wallet',
 }
 
 export enum WalletReferenceType {
@@ -21,11 +25,7 @@ export interface WalletDetail {
   ftIdentifier?: string;
 }
 
-export interface Network extends BaseModel {
-  image: string;
-  rpcURL: string;
-  explorerURL: string;
-  blockchainPlatform: string;
-  currencies?: Currency[];
-  tips: TipResult[];
+export enum BlockchainPlatform {
+  SUBSTRATE = 'substrate',
+  NEAR = 'near',
 }

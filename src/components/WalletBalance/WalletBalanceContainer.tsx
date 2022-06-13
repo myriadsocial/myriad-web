@@ -9,6 +9,7 @@ import {BoxComponent} from '../atoms/Box';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
+import {BlockchainPlatform} from 'src/interfaces/wallet';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
@@ -29,7 +30,7 @@ export const WalletBalancesContainer: React.FC = () => {
 
   const handleFilterCurrencies = (): void => {
     if (currenciesId.length) {
-      if (currentWallet?.network?.blockchainPlatform === 'substrate') {
+      if (currentWallet?.network?.blockchainPlatform === BlockchainPlatform.SUBSTRATE) {
         const data: BalanceDetail[] = [];
 
         polkadotBalance.forEach(coin => {
@@ -37,14 +38,14 @@ export const WalletBalancesContainer: React.FC = () => {
         });
 
         setFilteredBalanced(data);
-      } else if (currentWallet?.network?.blockchainPlatform === 'near') {
+      } else if (currentWallet?.network?.blockchainPlatform === BlockchainPlatform.NEAR) {
         //TODO need to filtered by currenciesId from backend
         setFilteredBalanced(nearBalance);
       }
     } else {
-      if (currentWallet?.network?.blockchainPlatform === 'substrate') {
+      if (currentWallet?.network?.blockchainPlatform === BlockchainPlatform.SUBSTRATE) {
         setFilteredBalanced(polkadotBalance);
-      } else if (currentWallet?.network?.blockchainPlatform === 'near') {
+      } else if (currentWallet?.network?.blockchainPlatform === BlockchainPlatform.NEAR) {
         setFilteredBalanced(nearBalance);
       }
     }

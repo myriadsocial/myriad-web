@@ -2,6 +2,7 @@ import React from 'react';
 
 import {NearNetworkIcon24, PolkadotNetworkIcon} from 'src/components/atoms/Icons';
 import {Wallet} from 'src/interfaces/user';
+import {BlockchainPlatform} from 'src/interfaces/wallet';
 
 export type WalletOption = {
   id: string;
@@ -17,10 +18,10 @@ type WalletListHook = {
 
 export const useWalletList = (wallets: Wallet[]): WalletListHook => {
   const walletList = React.useMemo<WalletOption[]>(() => {
-    const findWalletId = (optionId: string) => {
+    const findWalletId = (platform: BlockchainPlatform) => {
       let walletId;
       wallets.forEach(wallet => {
-        if (wallet?.network?.blockchainPlatform === optionId) walletId = wallet.id;
+        if (wallet?.network?.blockchainPlatform === platform) walletId = wallet.id;
       });
 
       return walletId;
@@ -31,15 +32,19 @@ export const useWalletList = (wallets: Wallet[]): WalletListHook => {
         id: 'near',
         title: 'NEAR Wallet',
         icons: <NearNetworkIcon24 width={40} height={40} />,
-        isConnect: Boolean(wallets.find(i => i?.network?.blockchainPlatform === 'near')),
-        walletId: findWalletId('near') ?? 'nearId.near',
+        isConnect: Boolean(
+          wallets.find(i => i?.network?.blockchainPlatform === BlockchainPlatform.NEAR),
+        ),
+        walletId: findWalletId(BlockchainPlatform.NEAR) ?? 'nearId.near',
       },
       {
         id: 'polkadot',
         title: 'polkadot{.js}',
         icons: <PolkadotNetworkIcon width={40} height={40} />,
-        isConnect: Boolean(wallets.find(i => i?.network?.blockchainPlatform === 'substrate')),
-        walletId: findWalletId('substrate') ?? 'polkadotId',
+        isConnect: Boolean(
+          wallets.find(i => i?.network?.blockchainPlatform === BlockchainPlatform.SUBSTRATE),
+        ),
+        walletId: findWalletId(BlockchainPlatform.SUBSTRATE) ?? 'polkadotId',
       },
     ];
   }, [wallets]);

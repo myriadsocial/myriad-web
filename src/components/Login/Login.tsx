@@ -16,7 +16,8 @@ import {last} from 'lodash';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {useProfileHook} from 'src/hooks/use-profile.hook';
-import {WalletTypeEnum, NetworkTypeEnum} from 'src/lib/api/ext-auth';
+import {NetworkIdEnum} from 'src/interfaces/network';
+import {WalletTypeEnum} from 'src/interfaces/wallet';
 import {toHexPublicKey} from 'src/lib/crypto';
 
 type LoginProps = {
@@ -34,7 +35,7 @@ export const Login: React.FC<LoginProps> = props => {
   const {connectToNear} = useNearApi();
 
   const [walletType, setWalletType] = useState<WalletTypeEnum | null>(redirectAuth);
-  const [networkType, setNetworkType] = useState<NetworkTypeEnum | null>(null);
+  const [networkId, setNetworkId] = useState<NetworkIdEnum | null>(null);
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
   const [nearWallet, setNearWallet] = useState('');
   const [selectedAccount, setSelectedAccount] = useState<InjectedAccountWithMeta | null>(null);
@@ -61,7 +62,7 @@ export const Login: React.FC<LoginProps> = props => {
     checkAccountRegistered(
       () => {
         setInitialEntries(['/profile']);
-        setNetworkType(NetworkTypeEnum.NEAR);
+        setNetworkId(NetworkIdEnum.NEAR);
         setWalletLoading(false);
       },
       undefined,
@@ -70,18 +71,14 @@ export const Login: React.FC<LoginProps> = props => {
     );
   }, []);
 
-  const handleOnconnect = (accounts: InjectedAccountWithMeta[], networkType: NetworkTypeEnum) => {
-    setNetworkType(networkType);
+  const handleOnconnect = (accounts: InjectedAccountWithMeta[], networkId: NetworkIdEnum) => {
+    setNetworkId(networkId);
     setAccounts(accounts);
     setWalletType(WalletTypeEnum.POLKADOT);
   };
 
-  const handleOnConnectNear = (
-    nearId: string,
-    callback: () => void,
-    networkType: NetworkTypeEnum,
-  ) => {
-    setNetworkType(networkType);
+  const handleOnConnectNear = (nearId: string, callback: () => void, networkId: NetworkIdEnum) => {
+    setNetworkId(networkId);
     setNearWallet(nearId);
     setWalletType(WalletTypeEnum.NEAR);
 
@@ -118,11 +115,7 @@ export const Login: React.FC<LoginProps> = props => {
               const {nonce} = await fetchUserNonce(address);
 
               if (nonce > 0) {
-                const success = await signInWithExternalAuth(
-                  networkType as NetworkTypeEnum,
-                  nonce,
-                  currentAccount,
-                );
+                const success = await signInWithExternalAuth(networkId, nonce, currentAccount);
 
                 if (!success) {
                   setSignatureCancelled(true);
@@ -152,12 +145,7 @@ export const Login: React.FC<LoginProps> = props => {
 
             if (nonce > 0) {
               setWalletLoading(false);
-              const success = await signInWithExternalAuth(
-                networkType as NetworkTypeEnum,
-                nonce,
-                undefined,
-                nearId,
-              );
+              const success = await signInWithExternalAuth(networkId, nonce, undefined, nearId);
 
               if (!success) {
                 setSignatureCancelled(true);
@@ -220,7 +208,7 @@ export const Login: React.FC<LoginProps> = props => {
             path="/profile"
             element={
               <Profile
-                networkType={networkType}
+                networkId={networkId}
                 walletType={walletType}
                 publicAddress={nearWallet}
                 account={selectedAccount}

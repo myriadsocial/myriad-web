@@ -1,33 +1,48 @@
-import NextAuth from 'next-auth';
-import Providers from 'next-auth/providers';
+import NextAuth, {Session} from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
 import getConfig from 'next/config';
 
-import APIAdapter from '../../../adapters/api';
-
-import {WalletTypeEnum, NetworkTypeEnum} from 'src/lib/api/ext-auth';
+import APIAdapter from 'adapters/api';
+import {NetworkIdEnum} from 'src/interfaces/network';
+import {SignInCredential} from 'src/interfaces/session';
+import {WalletTypeEnum} from 'src/interfaces/wallet';
 import * as AuthAPI from 'src/lib/api/ext-auth';
 import {encryptMessage} from 'src/lib/crypto';
+import {credentialToSession} from 'src/lib/serializers/session';
 
 const {serverRuntimeConfig} = getConfig();
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
 export default NextAuth({
-  adapter: APIAdapter.Adapter(),
+  // used when session strategy is database
+  adapter: APIAdapter(),
   // https://next-auth.js.org/configuration/providers
   providers: [
-    Providers.Credentials({
+    CredentialsProvider({
       // The name to display on the sign in form (e.g. 'Sign in with...')
-      name: 'Address',
+      name: 'Wallet Credential',
       // The credentials is used to generate a suitable form on the sign in page.
       // You can specify whatever fields you are expecting to be submitted.
       // e.g. domain, username, password, 2FA token, etc.
       credentials: {
         name: {label: 'Name', type: 'text'},
+        anonymous: {label: 'Anonymous', type: 'text'},
         address: {label: 'Address', type: 'text'},
+        signature: {label: 'Wallet Signature', type: 'text'},
+        nonce: {label: 'Nonce', type: 'text'},
+        walletType: {label: 'Wallet Type', type: 'text'},
+        networkId: {label: 'Network ID', type: 'text'},
+        publicAddress: {label: 'Public Address', type: 'text'},
       },
-      async authorize(credentials: Record<string, string>) {
-        if (credentials.anonymous === 'false') {
+      async authorize(credentials, req) {
+        if (credentials.anonymous === 'true') {
+          // Any object returned will be saved in `user` property of the JWT
+          return {
+            ...credentials,
+            anonymous: true,
+          };
+        } else {
           if (!credentials?.signature) throw Error('no signature!');
 
           const data = await AuthAPI.login({
@@ -35,31 +50,16 @@ export default NextAuth({
             publicAddress: credentials.publicAddress,
             signature: credentials.signature,
             walletType: credentials.walletType as WalletTypeEnum,
-            networkType: credentials.networkType as NetworkTypeEnum,
+            networkType: credentials.networkId as NetworkIdEnum,
           });
 
-          if (!data?.accessToken) throw Error('authorization problem!');
+          if (!data?.accessToken) throw Error('Failed to authorize user!');
 
-          const {encryptedMessage, initVec} = encryptMessage(
-            data.accessToken,
-            serverRuntimeConfig.appSecret,
-          );
+          const payload = encryptMessage(data.accessToken, credentials.address);
 
-          return {
-            name: credentials.name,
-            anonymous: false,
-            address: credentials.address,
-            token: encryptedMessage,
-            nonce: credentials.nonce,
-            initVec,
-          };
+          // Any object returned will be saved in `user` property of the JWT
+          return credentialToSession(credentials as unknown as SignInCredential, payload);
         }
-
-        return {
-          name: credentials.name,
-          address: credentials.address,
-          anonymous: true,
-        };
       },
     }),
   ],
@@ -75,12 +75,11 @@ export default NextAuth({
   // It is used to sign cookies and to sign and encrypt JSON Web Tokens, unless
   // a separate secret is defined explicitly for encrypting the JWT.
   secret: serverRuntimeConfig.appSecret,
-  useJwtSession: true,
   session: {
     // Use JSON Web Tokens for session instead of database sessions.
     // This option can be used with or without a database for users/accounts.
-    // Note: `jwt` is automatically set to `true` if no database is specified.
-    jwt: true,
+    // Note: `strategy` should be set to 'jwt' if no database is used.
+    strategy: 'jwt',
 
     // Seconds - How long until an idle session expires and is no longer valid.
     // maxAge: 30 * 24 * 60 * 60, // 30 days
@@ -91,12 +90,12 @@ export default NextAuth({
     // updateAge: 24 * 60 * 60, // 24 hours
   },
 
-  // JSON Web tokens are only used for sessions if the `jwt: true` session
+  // JSON Web tokens are only used for sessions if the `strategy: 'jwt'` session
   // option is set - or by default if no database is specified.
   // https://next-auth.js.org/configuration/options#jwt
   jwt: {
     // A secret to use for key generation (you should set this explicitly)
-    // secret: 'INp8IvdIyeMcoGAgFGoA61DdBglwwSqnXJZkgz8PSnw',
+    secret: serverRuntimeConfig.appSecret,
     // Set to true to use encryption (default: false)
     // encryption: true,
     // You can define your own encode/decode functions for signing and encryption
@@ -114,7 +113,6 @@ export default NextAuth({
     signIn: '/', // Displays signin buttons
     signOut: '/', // Displays form with sign out button
     error: '/', // Error code passed in query string as ?error=
-
     // verifyRequest: '/auth/verify-request', // Used for check email page
     // newUser: null // If set, new users will be directed here on first sign in
   },
@@ -125,19 +123,22 @@ export default NextAuth({
   callbacks: {
     // async signIn(user, account, profile) { return true },
     // async redirect(url, baseUrl) { return baseUrl },
-    // @ts-ignore
-    async session(session, user: Record<string, string>) {
+    async session({session, user, token}) {
+      // The return type will match the one returned in `useSession()`
       return {
         ...session,
-        user,
-      };
+        user: token,
+      } as Session;
     },
-    async jwt(token, user, account, profile) {
-      token = {...token, ...user};
-
-      if (account && account.type === 'credentials') {
-        token.address = profile.address;
-        token.anonymous = profile.anonymous;
+    async jwt({token, user, account, profile, isNewUser}) {
+      if (user) {
+        token = {
+          ...token,
+          anonymous: user.anonymous,
+          address: user.address,
+          nonce: user.nonce,
+          token: user.token,
+        };
       }
 
       return token;
@@ -146,11 +147,7 @@ export default NextAuth({
 
   // Events are useful for logging
   // https://next-auth.js.org/configuration/events
-  events: {
-    async error(message) {
-      console.error(message);
-    },
-  },
+  events: {},
 
   // Enable debug messages in the console if you are having problems
   debug: true,

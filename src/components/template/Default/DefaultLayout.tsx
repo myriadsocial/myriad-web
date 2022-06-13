@@ -18,12 +18,11 @@ import {TippingProvider} from 'src/components/common/Tipping/Tipping.provider';
 import ShowIf from 'src/components/common/show-if.component';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {NotificationProps} from 'src/interfaces/notification';
-import {WalletTypeEnum} from 'src/lib/api/ext-auth';
+import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
 import {firebaseApp, firebaseAnalytics, firebaseCloudMessaging} from 'src/lib/firebase';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
 import {countNewNotification, processNotification} from 'src/reducers/notification/actions';
-import {UserState} from 'src/reducers/user/reducer';
 
 const WalletBalancesContainer = dynamic(
   () => import('../../WalletBalance/WalletBalanceContainer'),
@@ -51,11 +50,8 @@ const Default: React.FC<DefaultLayoutProps> = props => {
   const dispatch = useDispatch();
 
   const [cookies] = useCookies([COOKIE_CONSENT_NAME]);
-  const {updateUserFcmToken} = useUserHook();
+  const {user, anonymous, currentWallet, updateUserFcmToken} = useUserHook();
 
-  const {user, anonymous, currentWallet} = useSelector<RootState, UserState>(
-    state => state.userState,
-  );
   const {balanceDetails, loading} = useSelector<RootState, BalanceState>(
     state => state.balanceState,
   );
@@ -114,12 +110,12 @@ const Default: React.FC<DefaultLayoutProps> = props => {
     setShowNotification(!showNotification);
   };
 
-  const getWallet = (blockchainPlatform?: string) => {
+  const getWallet = (blockchainPlatform?: BlockchainPlatform) => {
     switch (blockchainPlatform) {
-      case 'substrate':
+      case BlockchainPlatform.SUBSTRATE:
         return WalletTypeEnum.POLKADOT;
 
-      case 'near':
+      case BlockchainPlatform.NEAR:
         return WalletTypeEnum.NEAR;
 
       default:

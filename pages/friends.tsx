@@ -1,7 +1,7 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 
-import {getSession} from 'next-auth/client';
+import {getSession} from 'next-auth/react';
 import getConfig from 'next/config';
 import Head from 'next/head';
 
@@ -36,9 +36,6 @@ const Friends: React.FC = () => {
   const metric = useSelector<RootState, UserMetric | undefined>(
     state => state.userState.user?.metric,
   );
-
-  //TODO: any logic + components which replace
-  // the middle column of home page should go here
 
   return (
     <DefaultLayout isOnProfilePage={false}>

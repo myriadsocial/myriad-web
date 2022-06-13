@@ -1,7 +1,7 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {useSession} from 'next-auth/client';
+import {useSession} from 'next-auth/react';
 import getConfig from 'next/config';
 import {useRouter} from 'next/router';
 
@@ -27,7 +27,7 @@ export const BannedDialog: React.FC<BannedDialogProps> = props => {
   const {currentWallet} = useSelector<RootState, UserState>(state => state.userState);
 
   const dispatch = useDispatch();
-  const [session] = useSession();
+  const {data: session} = useSession();
   const router = useRouter();
 
   const {logout} = useAuthHook();
