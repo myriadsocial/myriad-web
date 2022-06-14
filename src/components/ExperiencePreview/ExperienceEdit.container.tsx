@@ -41,7 +41,7 @@ export const ExperienceEditContainer: React.FC = () => {
     if (!experience) return;
 
     updateExperience(experience.id, attributes, () => {
-      router.push(`/experience/${experience.id}/preview`);
+      router.push(`/experience/${experience.id}`);
     });
   };
 

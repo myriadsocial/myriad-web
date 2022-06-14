@@ -55,6 +55,7 @@ export const useStyles = makeStyles((theme: Theme) =>
 
       '& .MuiTypography-root': {
         lineHeight: '18px',
+        fontWeight: 600,
       },
 
       '& .MuiSvgIcon-root': {
@@ -75,15 +76,23 @@ export const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'row',
       alignItems: 'center',
       boxShadow: 'none',
+
+      [theme.breakpoints.down('md')]: {
+        '& .MuiTypography-root': {
+          fontSize: 12,
+          marginBottom: 0,
+        },
+      },
+
+      '& .MuiCardContent-root': {
+        flexGrow: 1,
+        paddingRight: 0,
+      },
     },
     action: {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
-
-      '& .MuiButton-root': {
-        width: 180,
-      },
     },
   }),
 );

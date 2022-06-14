@@ -18,6 +18,9 @@ const moduleExports = {
       return version;
     }
   },
+  images: {
+    domains: ['storage.googleapis.com'],
+  },
   serverRuntimeConfig: {
     // Will only be available on the server side
     appSecret: process.env.SECRET ?? 'd98b4af078b46a9984829a72030976e0',

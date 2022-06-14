@@ -70,7 +70,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
   const isOwnExperience = userExperience.experience.user.id === user?.id;
   const experienceId = userExperience.experience.id;
   const userExperienceId = userExperience.id;
-  const link = publicRuntimeConfig.appAuthURL + `/experience/${experienceId}/preview`;
+  const link = publicRuntimeConfig.appAuthURL + `/experience/${experienceId}`;
 
   const handleClickExperience = () => {
     handleCloseSettings();
@@ -203,10 +203,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
         transformOrigin={{vertical: 'bottom', horizontal: 'center'}}
         open={Boolean(menuAnchorElement)}
         onClose={handleCloseSettings}>
-        <Link
-          href={`/experience/[experienceId]/preview`}
-          as={`/experience/${experienceId}/preview`}
-          passHref>
+        <Link href={`/experience/[experienceId]`} as={`/experience/${experienceId}`} passHref>
           <MenuItem onClick={handleCloseSettings}>{i18n.t('Experience.List.Menu.View')}</MenuItem>
         </Link>
 

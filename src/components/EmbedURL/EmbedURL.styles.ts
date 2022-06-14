@@ -8,7 +8,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       background: '#FFF',
 
       [theme.breakpoints.down('xs')]: {
-        width: 288,
+        width: 256,
       },
     },
     input: {

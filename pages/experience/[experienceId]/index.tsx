@@ -16,6 +16,7 @@ import {healthcheck} from 'src/lib/api/healthcheck';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
+import {fetchFriend} from 'src/reducers/friend/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
 import {
   setAnonymous,
@@ -90,21 +91,28 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     await dispatch(setAnonymous(username));
   } else {
     await dispatch(fetchUser(userAddress));
+
     await Promise.all([
       dispatch(fetchConnectedSocials()),
-      dispatch(fetchAvailableToken()),
       dispatch(countNewNotification()),
       dispatch(getUserCurrencies()),
       dispatch(fetchUserWallets()),
+      dispatch(fetchFriend()),
     ]);
   }
 
-  await dispatch(fetchNetwork());
-  await dispatch(fetchExchangeRates());
+  await Promise.all([
+    dispatch(fetchAvailableToken()),
+    dispatch(fetchNetwork()),
+    dispatch(fetchExchangeRates()),
+  ]);
+
   await dispatch(fetchUserExperience());
 
   try {
     const experience = await ExperienceAPI.getExperienceDetail(experienceId);
+
+    console.log('experience', experience);
 
     return {
       props: {
