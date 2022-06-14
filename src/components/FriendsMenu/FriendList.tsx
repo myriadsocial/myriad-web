@@ -1,4 +1,4 @@
-import {DotsHorizontalIcon} from '@heroicons/react/outline';
+import {DotsHorizontalIcon, DotsVerticalIcon} from '@heroicons/react/outline';
 
 import React, {useState} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -312,6 +312,21 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
                     <SvgIcon
                       component={DotsHorizontalIcon}
                       classes={{root: style.icon}}
+                      fontSize="small"
+                    />
+                  </IconButton>
+                </div>
+
+                <div className={style.mobile}>
+                  <IconButton
+                    aria-label="friend-setting"
+                    onClick={handleOpenFriendSetting(friend)}
+                    disableRipple={true}
+                    disableFocusRipple={true}
+                    disableTouchRipple>
+                    <SvgIcon
+                      classes={{root: style.icon2}}
+                      component={DotsVerticalIcon}
                       fontSize="small"
                     />
                   </IconButton>
