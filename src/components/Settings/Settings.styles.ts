@@ -6,6 +6,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(3.75, 0),
       minHeight: 'calc(100vh - 245px)',
       position: 'relative',
+      [theme.breakpoints.down('xs')]: {
+        minHeight: 'calc(100vh - 180px)',
+      },
     },
     title: {
       fontSize: theme.typography.h4.fontSize,
@@ -37,6 +40,10 @@ export const useStyles = makeStyles((theme: Theme) =>
         paddingLeft: 20,
         paddingBottom: theme.spacing(1),
         paddingTop: theme.spacing(1),
+        '& .MuiTypography-body1': {
+          fontSize: '12px',
+          width: '205px',
+        },
       },
     },
     primary: {
