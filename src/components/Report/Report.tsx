@@ -146,13 +146,14 @@ export const Report: React.FC<ReportProps> = props => {
       </Card>
 
       <div className={styles.action}>
-        <Button variant="outlined" color="secondary" onClick={onClose}>
+        <Button variant="outlined" color="secondary" size="small" onClick={onClose}>
           {i18n.t('General.Cancel')}
         </Button>
 
         <Button
           disabled={!type || description.length === 0}
           variant="contained"
+          size="small"
           color="primary"
           onClick={submitReport}>
           {i18n.t('Post_Comment.Modal_Report.Btn_Confirm')}

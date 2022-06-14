@@ -79,10 +79,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
-
-      '& .MuiButton-root': {
-        width: 180,
-      },
     },
     fontSize: {
       fontSize: '12px',

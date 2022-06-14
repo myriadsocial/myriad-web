@@ -1,24 +1,14 @@
-import {XIcon} from '@heroicons/react/outline';
-
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {ErrorCode, FileError, useDropzone} from 'react-dropzone';
 
-import {
-  Button,
-  capitalize,
-  IconButton,
-  ImageList,
-  ImageListItem,
-  SvgIcon,
-  Typography,
-} from '@material-ui/core';
+import {Button, capitalize, Typography} from '@material-ui/core';
 
 import {UploadIcon} from '../Icons';
 import {useStyles} from './Dropzone.styles';
-import {Skeleton as FileSkeleton} from './File.skeleton';
+import MultipleImagePreview from './Render/PreviewImage/Multiple';
+import SingleImagePreview from './Render/PreviewImage/Single';
+import VideoPreview from './Render/PreviewVideo';
 
-import {detect} from 'detect-browser';
-import muxjs from 'mux.js';
 import ShowIf from 'src/components/common/show-if.component';
 import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import i18n from 'src/locale';
@@ -26,24 +16,18 @@ import i18n from 'src/locale';
 type DropzoneProps = {
   value?: string;
   type?: 'image' | 'video';
-  border?: boolean;
+  width?: number;
+  height?: number;
+  border?: 'solid' | 'dashed';
   placeholder?: string;
+  label?: string;
   loading?: boolean;
   accept?: string[];
   maxSize?: number;
   multiple?: boolean;
   usage?: string;
-  isEdit?: boolean;
-  editorType?: string;
   error?: boolean;
   onImageSelected: (files: File[]) => void;
-};
-
-type FileUploaded = File & {
-  preview: string;
-  loading: boolean;
-  width?: number;
-  height?: number;
 };
 
 export const Dropzone: React.FC<DropzoneProps> = props => {
@@ -55,27 +39,18 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
     maxSize = 20,
     loading = false,
     multiple = false,
-    border = true,
     placeholder = i18n.t('Dropzone.Placeholder'),
+    label = i18n.t('Dropzone.Btn_Upload'),
     usage = '',
-    isEdit = false,
-    editorType = '',
-    error,
+    width,
+    height,
   } = props;
-  const styles = useStyles({border, multiple, error});
 
+  const styles = useStyles(props);
   const {openToasterSnack} = useToasterSnackHook();
 
-  const [files, setFiles] = useState<FileUploaded[]>([]);
-  const [videoCodecSupported, setVideoCodecSupported] = useState(true);
-  const [preview, setPreview] = useState<string[]>([]);
-  const [isFileRemoved, setIsFileRemoved] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (value) {
-      setPreview([value]);
-    }
-  }, [value]);
+  const [files, setFiles] = useState<File[]>([]);
+  const [preview, setPreview] = useState<string[]>(value ? [value] : []);
 
   const {getRootProps, getInputProps, open} = useDropzone({
     accept,
@@ -83,90 +58,17 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
     noClick: true,
     noKeyboard: true,
     multiple,
-    onDrop: acceptedFiles => {
-      let newFiles: FileUploaded[] = [];
-
+    onDrop: files => {
       if (multiple) {
-        newFiles = [
-          ...files,
-          ...acceptedFiles.map((file, index) => {
-            const url = URL.createObjectURL(file);
-            const img = new Image();
-            img.src = url;
-
-            img.onload = function () {
-              // @ts-expect-error
-              const width = this.width as number;
-              // @ts-expect-error
-              const height = this.height as number;
-
-              setFiles(prevFiles =>
-                prevFiles.map((file, i) => {
-                  if (i === index) {
-                    file.width = width;
-                    file.height = height;
-                  }
-
-                  return file;
-                }),
-              );
-            };
-
-            return Object.assign(file, {
-              preview: url,
-              loading: type === 'image',
-            });
-          }),
-        ];
-
-        setFiles(newFiles);
-
-        setPreview(prevPreview => [
-          ...prevPreview,
-          ...acceptedFiles.map(file => URL.createObjectURL(file)),
-        ]);
+        setFiles(prevFiles => [...prevFiles, ...files]);
+        setPreview(prevPreview => [...prevPreview, ...files.map(URL.createObjectURL)]);
       } else {
-        newFiles = acceptedFiles.map((file, index) => {
-          const url = URL.createObjectURL(file);
-          const img = new Image();
-
-          img.src = url;
-
-          img.onload = function () {
-            // @ts-expect-error
-            const width = this.width;
-            // @ts-expect-error
-            const height = this.height;
-
-            setFiles(prevFiles =>
-              prevFiles.map((file, i) => {
-                if (i === index) {
-                  file.width = width;
-                  file.height = height;
-                }
-
-                return file;
-              }),
-            );
-          };
-
-          return Object.assign(file, {
-            preview: url,
-            loading: type === 'image',
-          });
-        });
-
-        setFiles(newFiles);
-
-        setPreview(acceptedFiles.map(file => URL.createObjectURL(file)));
-
-        if (acceptedFiles.length && type === 'video') {
-          checkCodec(acceptedFiles[0]);
-        }
+        setFiles(files);
+        setPreview(files.map(URL.createObjectURL));
       }
 
-      if (newFiles.length > 0) {
-        onImageSelected(newFiles);
+      if (files.length > 0) {
+        onImageSelected(files);
       }
     },
     onDropRejected: rejection => {
@@ -177,80 +79,21 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
     },
   });
 
-  const checkCodec = async (file: File) => {
-    const raw = await readFile(file);
+  const removeFile = (index: number) => {
+    const currentFiles = files.filter((file, i) => index !== i);
+    const currentPreview = preview.filter((url, i) => index !== i);
 
-    if (raw !== null && typeof raw !== 'string') {
-      const data = new Uint8Array(raw);
-      const [video] = muxjs.mp4.probe.tracks(data);
+    setFiles(currentFiles);
+    setPreview(currentPreview);
 
-      // browser codec name for HEVC (H.265)
-      if (video?.codec === 'hvc1') {
-        const browser = detect();
-        setVideoCodecSupported(browser !== null && !['firefox', 'chrome'].includes(browser.name));
-      } else {
-        setVideoCodecSupported(true);
-      }
-    }
-  };
-
-  const readFile = (file: File): Promise<ArrayBuffer | string | null> => {
-    return new Promise((resolve, reject) => {
-      // Create file reader
-      const reader = new FileReader();
-
-      // Register event listeners
-      reader.addEventListener('loadend', e => resolve(e.target?.result || null));
-      reader.addEventListener('error', reject);
-
-      // Read file
-      reader.readAsArrayBuffer(file);
-    });
-  };
-
-  const imageLoaded = (index: number) => () => {
-    setFiles(prevFiles =>
-      prevFiles.map((file, i) => {
-        if (i === index) {
-          file.loading = false;
-        }
-
-        return file;
-      }),
-    );
-  };
-
-  const removeFile = (index?: number) => {
-    if (isEdit && !isFileRemoved && editorType !== '') {
-      setPreview([]);
-      const currentFiles = files.filter((file, i) => index !== -1);
-      onImageSelected(currentFiles);
-      setIsFileRemoved(true);
-    } else {
-      const currentFiles = files.filter((file, i) => index !== i);
-      const currentPreview = preview.filter((url, i) => index !== i);
-
-      setFiles(currentFiles);
-      setPreview(currentPreview);
-
-      onImageSelected(currentFiles);
-    }
+    onImageSelected(currentFiles);
   };
 
   const handleReuploadImage = () => {
     open();
   };
 
-  const getCols = (): number => {
-    return preview.length === 1 ? 6 : 2;
-  };
-
-  const getRows = (): number => {
-    const cols = getCols();
-
-    return cols === 6 ? 3 : 1;
-  };
-
+  // TODO: replace this by parsing label as prop
   const formatButtonLable = () => {
     if (usage == 'post') {
       if (type == 'video') {
@@ -261,7 +104,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
     if (!multiple && preview.length === 1) {
       return i18n.t('Dropzone.Btn_Reupload');
     }
-    return i18n.t('Dropzone.Btn_Upload');
+    return label;
   };
 
   const getErrorMessage = (error: FileError): string => {
@@ -276,96 +119,23 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
     <div className={styles.root}>
       <div {...getRootProps({className: 'dropzone'})} className={styles.dropzone}>
         <input {...getInputProps()} />
-        {preview.length ? (
-          <>
-            <ShowIf condition={isEdit && !isFileRemoved && editorType !== ''}>
-              <img
-                style={{visibility: 'visible'}}
-                src={preview[0]}
-                alt=""
-                className={styles.imageSingle}
-              />
-            </ShowIf>
-            <ShowIf condition={type === 'image' && !isEdit}>
-              <ShowIf condition={!multiple}>
-                <img
-                  style={{visibility: 'visible'}}
-                  src={preview[0]}
-                  alt=""
-                  className={styles.image}
-                />
-              </ShowIf>
-              <ShowIf condition={multiple}>
-                <ShowIf condition={files.length === 1}>
-                  <img
-                    style={{visibility: 'visible'}}
-                    src={preview[0]}
-                    alt=""
-                    className={styles.imageSingle}
-                  />
-                  <IconButton
-                    size="small"
-                    aria-label={`remove image`}
-                    className={styles.iconSingle}
-                    onClick={() => removeFile(0)}>
-                    <SvgIcon component={XIcon} style={{fontSize: '1rem'}} />
-                  </IconButton>
-                </ShowIf>
-                <ShowIf condition={files.length > 1}>
-                  <ImageList rowHeight={128} cols={6} className={styles.preview}>
-                    {files.map((item, i) => (
-                      <ImageListItem
-                        key={i}
-                        cols={getCols()}
-                        rows={getRows()}
-                        classes={{item: styles.item}}>
-                        {item.loading && (
-                          <FileSkeleton width={115 * getCols()} height={128 * getRows()} />
-                        )}
-                        <img
-                          style={{visibility: item.loading ? 'hidden' : 'visible'}}
-                          src={item.preview}
-                          alt=""
-                          className={styles.image}
-                          onLoad={imageLoaded(i)}
-                        />
 
-                        <IconButton
-                          size="small"
-                          aria-label={`remove image`}
-                          className={styles.icon}
-                          onClick={() => removeFile(i)}>
-                          <SvgIcon component={XIcon} style={{fontSize: '1rem'}} />
-                        </IconButton>
-                      </ImageListItem>
-                    ))}
-                  </ImageList>
-                </ShowIf>
-              </ShowIf>
-            </ShowIf>
+        <ShowIf condition={type === 'image' && !multiple && preview.length > 0}>
+          <SingleImagePreview src={preview[0]} width={width} height={height} />
+        </ShowIf>
 
-            <ShowIf condition={type === 'video'}>
-              <ShowIf condition={!videoCodecSupported}>
-                <Typography>{i18n.t('Dropzone.Video.Not_Preview')}</Typography>
-              </ShowIf>
-              <ShowIf condition={videoCodecSupported}>
-                {files.map((item, i) => (
-                  <video key={item.name} controls style={{width: '100%'}}>
-                    <track kind="captions" />
-                    <source src={item.preview} type="video/mp4" />
-                    <div>{i18n.t('Dropzone.Video.Not_Support')}</div>
-                  </video>
-                ))}
-              </ShowIf>
-            </ShowIf>
-          </>
-        ) : (
-          <>
-            <UploadIcon />
+        <ShowIf condition={type === 'image' && multiple && preview.length > 0}>
+          <MultipleImagePreview files={preview} onRemoveFile={removeFile} disableRemove={loading} />
+        </ShowIf>
 
-            <Typography>{placeholder}</Typography>
-          </>
-        )}
+        <ShowIf condition={type === 'video'}>
+          <VideoPreview files={files} />
+        </ShowIf>
+
+        <ShowIf condition={preview.length === 0}>
+          <UploadIcon />
+          <Typography>{placeholder}</Typography>
+        </ShowIf>
 
         {!loading && (
           <Button

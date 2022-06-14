@@ -7,7 +7,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       background: '#FFF',
       width: 720,
       [theme.breakpoints.down('xs')]: {
-        width: 288,
+        width: 256,
       },
     },
     confirm: {

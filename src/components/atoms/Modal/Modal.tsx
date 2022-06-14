@@ -49,6 +49,7 @@ export const Modal: React.FC<ModalProps> = props => {
       {...otherProps}
       fullScreen={fullScreen}
       className={styles.root}
+      classes={{paper: styles.paper}}
       disableEnforceFocus>
       <ShowIf condition={!fullScreen}>
         <DialogTitle disableTypography className={[styles.title, className].join(' ')}>

@@ -15,12 +15,21 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
         borderRadius: '10px',
       },
     },
+    paper: {
+      [theme.breakpoints.down('xs')]: {
+        margin: 20,
+      },
+    },
     nav: {
       marginBottom: 20,
     },
     title: {
       textAlign: props => props.align,
       padding: 30,
+
+      [theme.breakpoints.down('xs')]: {
+        padding: 20,
+      },
 
       '& .MuiTypography-h4': {
         lineHeight: '30px',
@@ -36,6 +45,11 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
       position: 'absolute',
       right: 30,
       top: 30,
+
+      [theme.breakpoints.down('xs')]: {
+        right: 20,
+        top: 20,
+      },
 
       '& .MuiSvgIcon-colorPrimary': {
         fill: 'currentColor',

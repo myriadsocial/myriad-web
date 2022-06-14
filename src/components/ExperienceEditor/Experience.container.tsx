@@ -36,7 +36,7 @@ export const ExperienceContainer: React.FC = () => {
 
   const onSave = (attributes: ExperienceProps) => {
     saveExperience(attributes, (experienceId: string) => {
-      router.push(`/experience/${experienceId}/preview`);
+      router.push(`/experience/${experienceId}`);
 
       loadExperience();
     });

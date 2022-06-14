@@ -67,7 +67,6 @@ const DEFAULT_EXPERIENCE: ExperienceProps = {
 export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   const {
     type = 'Create',
-    isEdit,
     experience = DEFAULT_EXPERIENCE,
     people,
     tags,
@@ -396,9 +395,10 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
           error={errors.picture}
           onImageSelected={handleImageUpload}
           value={image}
+          border="solid"
           maxSize={3}
-          isEdit={isEdit ? isEdit : type ? true : false}
-          editorType={type}
+          width={80}
+          height={80}
         />
         <ShowIf condition={isLoading}>
           <div className={styles.loading}>
