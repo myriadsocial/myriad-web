@@ -28,6 +28,10 @@ export const DropdownMenu = <T,>(props: DropdownMenuProps<T>): JSX.Element => {
   const [current, setCurrent] = useState<T>(selected);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
+  React.useEffect(() => {
+    setCurrent(selected);
+  }, [selected]);
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
