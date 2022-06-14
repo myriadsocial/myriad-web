@@ -19,18 +19,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 700,
       lineHeight: '23px',
       letterSpacing: '0em',
-    },
-    mobile: {
-      display: 'none',
       [theme.breakpoints.down('xs')]: {
-        display: 'block',
+        padding: '30px 20px 16px 20px',
       },
     },
-    tabs: {
-      [theme.breakpoints.down('xs')]: {
-        display: 'none',
-      },
-    },
+    tabs: {},
     padding: {
       width: '100%',
       [theme.breakpoints.down('xs')]: {

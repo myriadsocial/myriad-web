@@ -60,9 +60,6 @@ export const FriendMenuComponent: React.FC = () => {
             onChangeTab={handleChangeTab}
           />
         </div>
-        <div className={style.mobile}>
-          <FriendListContainer user={user} disableFilter disableSort />
-        </div>
       </Paper>
     </div>
   );
