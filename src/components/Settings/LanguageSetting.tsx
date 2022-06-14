@@ -30,6 +30,13 @@ export const LanguageSetting: React.FC<LanguageSettingsProps> = props => {
     setLanguage(value);
   }, [value]);
 
+  React.useEffect(() => {
+    const selectedLang = localStorage.getItem('i18nextLng') as LanguageSettingType | null;
+    if (selectedLang) {
+      setLanguage(selectedLang);
+    }
+  }, []);
+
   const styles = useStyles();
 
   const saveLanguageSetting = () => {

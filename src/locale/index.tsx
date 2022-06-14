@@ -1,5 +1,6 @@
 import enMessages from './en.json';
 import idMessages from './id.json';
+import ruMessages from './ru.json';
 
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
@@ -8,6 +9,7 @@ import {initReactI18next} from 'react-i18next';
 export const allMessage = {
   en: enMessages,
   id: idMessages,
+  ru: ruMessages,
 };
 
 export const optionDetection = {
@@ -17,6 +19,7 @@ export const optionDetection = {
 const resources = {
   en: {translation: enMessages},
   id: {translation: idMessages},
+  ru: {translation: ruMessages},
 };
 
 i18n
