@@ -22,10 +22,10 @@ type DropdownMenuProps<T> = {
 };
 
 export const DropdownMenu = <T,>(props: DropdownMenuProps<T>): JSX.Element => {
-  const {title, options, onChange, disabled = false, useIconOnMobile = true} = props;
+  const {title, options, onChange, disabled = false, useIconOnMobile = true, selected} = props;
   const styles = useStyles({useIconOnMobile});
 
-  const [current, setCurrent] = useState<T>();
+  const [current, setCurrent] = useState<T>(selected);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
