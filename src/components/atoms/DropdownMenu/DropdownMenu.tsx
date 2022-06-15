@@ -12,6 +12,8 @@ import ShowIf from '../../common/show-if.component';
 import {useStyles} from './DropdownMenu.styles';
 import {MenuOptions} from './DropdownMenu.types';
 
+import {SortIcon} from 'src/components/atoms/Icons';
+
 type DropdownMenuProps<T> = {
   title: string;
   options: MenuOptions<T>[];
@@ -83,6 +85,10 @@ export const DropdownMenu = <T,>(props: DropdownMenuProps<T>): JSX.Element => {
           />
         </IconButton>
       </Grid>
+
+      <IconButton onClick={handleClick} color="primary" aria-label="expand" className={styles.sort}>
+        <SortIcon />
+      </IconButton>
 
       <Menu
         anchorEl={anchorEl}

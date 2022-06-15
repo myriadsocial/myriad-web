@@ -6,18 +6,19 @@ type StylesProps = {
   align: AllignTitle;
   titleSize: TitleSize;
   gutter: 'none' | 'default' | 'custom';
+  fullScreen?: boolean;
 };
 
 export const useStyles = makeStyles<Theme, StylesProps>(theme =>
   createStyles({
     root: {
       '& .MuiPaper-rounded': {
-        borderRadius: '10px',
+        borderRadius: props => (props.fullScreen ? 0 : 10),
       },
     },
     paper: {
       [theme.breakpoints.down('xs')]: {
-        margin: 20,
+        margin: props => (props.fullScreen ? 0 : 20),
       },
     },
     nav: {

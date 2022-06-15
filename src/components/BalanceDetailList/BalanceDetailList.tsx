@@ -164,6 +164,7 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
           options={balanceSortOptions}
           onChange={handleSortChanged}
           disabled={isSearch}
+          useIconOnMobile={false}
         />
         <FormGroup>
           <FormControlLabel

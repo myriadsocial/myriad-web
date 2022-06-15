@@ -37,7 +37,7 @@ export const Modal: React.FC<ModalProps> = props => {
     ...otherProps
   } = props;
 
-  const styles = useStyles({align, titleSize, gutter});
+  const styles = useStyles({align, titleSize, gutter, fullScreen});
 
   const handleClose = () => {
     onClose();

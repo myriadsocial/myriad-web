@@ -117,7 +117,7 @@ export const Report: React.FC<ReportProps> = props => {
         value={description}
         margin="none"
         inputProps={{
-          maxlength: CHARACTER_LIMIT,
+          maxLength: CHARACTER_LIMIT,
         }}
         className={styles.description}
         helperText={`${description.length}/${CHARACTER_LIMIT}`}
@@ -138,7 +138,7 @@ export const Report: React.FC<ReportProps> = props => {
             {i18n.t('Post_Comment.Modal_Report.Footer')}
           </Typography>
           <Link href="/term-of-use" target="_blank">
-            <Typography variant="caption" color="primary" component="a">
+            <Typography variant="caption" color="primary" component="span">
               {i18n.t('Post_Comment.Modal_Report.Review_Content_Policy')}
             </Typography>
           </Link>
