@@ -16,16 +16,34 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       padding: '20px 40px 60px 40px',
+      [theme.breakpoints.down('xs')]: {
+        padding: '20px',
+        width: '100vw',
+      },
     },
     content: {
       width: '800px',
       margin: 'auto',
       fontSize: '16px',
+      [theme.breakpoints.down('xs')]: {
+        width: 'calc(100% - 52px)',
+        fontSize: '14px',
+      },
     },
     center: {textAlign: 'center'},
-    title: {fontSize: '56px'},
+    title: {
+      fontSize: '56px',
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '36px',
+      },
+    },
     subtitle: {fontWeight: 400},
-    paragraph: {fontWeight: 600},
+    paragraph: {
+      fontWeight: 600,
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '14px',
+      },
+    },
     link: {color: 'inherit'},
   }),
 );
