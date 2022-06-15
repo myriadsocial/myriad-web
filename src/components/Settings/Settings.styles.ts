@@ -26,6 +26,16 @@ export const useStyles = makeStyles((theme: Theme) =>
       paddingLeft: theme.spacing(3.75),
       paddingBottom: theme.spacing(1),
     },
+    subtitleLang: {
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '12px',
+        fontWeight: 400,
+        lineHeight: '15px',
+        marginLeft: 30,
+        marginTop: -30,
+        paddingRight: '30px',
+      },
+    },
     option: {
       paddingLeft: 30,
       paddingTop: 18,
