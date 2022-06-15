@@ -10,6 +10,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: 20,
       marginTop: 0,
     },
+    [theme.breakpoints.down('xs')]: {
+      wrapperTitle: {
+        paddingRight: 30,
+        paddingLeft: 30,
+      },
+    },
     steps: {
       width: 400,
       '& .MuiListItem-root:nth-child(even)': {
@@ -18,6 +24,14 @@ export const useStyles = makeStyles((theme: Theme) =>
 
       '& .MuiFormControl-root': {
         marginBottom: 10,
+      },
+      [theme.breakpoints.down('xs')]: {
+        paddingRight: 10,
+        paddingBottom: 30,
+        paddingLeft: 10,
+        backgroundColor: 'white',
+        width: 335,
+        alignItem: 'center',
       },
     },
     caption: {
@@ -28,6 +42,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       width: '100%',
       marginTop: 20,
+      marginBottom: 20,
     },
     fullWidth: {
       width: '100%',
@@ -67,6 +82,11 @@ export const useStyles = makeStyles((theme: Theme) =>
     backdrop: {
       zIndex: theme.zIndex.drawer + 1,
       color: '#fff',
+    },
+    wrapperTermCondition: {
+      [theme.breakpoints.down('xs')]: {
+        marginTop: 109,
+      },
     },
   }),
 );
