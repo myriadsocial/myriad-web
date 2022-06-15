@@ -56,20 +56,20 @@ export const ExperienceContainer: React.FC = () => {
         <TopNavbarComponent
           description={i18n.t('TopNavbar.Subtitle.Experience_Create')}
           sectionTitle={i18n.t('TopNavbar.Title.Experience')}
-          reverse
         />
       </div>
-
-      <ExperienceEditor
-        isEdit={false}
-        experience={selectedExperience}
-        tags={tags}
-        people={people}
-        onSearchTags={handleSearchTags}
-        onImageUpload={onImageUpload}
-        onSearchPeople={handleSearchPeople}
-        onSave={onSave}
-      />
+      <div className={style.box}>
+        <ExperienceEditor
+          isEdit={false}
+          experience={selectedExperience}
+          tags={tags}
+          people={people}
+          onSearchTags={handleSearchTags}
+          onImageUpload={onImageUpload}
+          onSearchPeople={handleSearchPeople}
+          onSave={onSave}
+        />
+      </div>
     </>
   );
 };

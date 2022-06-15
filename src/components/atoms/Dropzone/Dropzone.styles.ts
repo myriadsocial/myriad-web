@@ -31,5 +31,11 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
     button: {
       marginTop: 20,
     },
+    placeholder: {
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '12px',
+        color: '#757575',
+      },
+    },
   }),
 );

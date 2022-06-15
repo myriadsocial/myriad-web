@@ -6,6 +6,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: 30,
       background: '#FFF',
       borderRadius: 10,
+      [theme.breakpoints.down('xs')]: {
+        padding: 20,
+      },
     },
     avatar: {
       width: '100px',
@@ -114,36 +117,43 @@ export const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'space-between',
       marginTop: '8px',
       [theme.breakpoints.down('xs')]: {
-        justifyContent: 'center',
-        flexDirection: 'column',
-        alignItem: 'center',
+        display: 'none',
       },
     },
-    subscribe: {
-      width: '221px',
+    mobileButton: {
+      display: 'none',
+      marginBottom: theme.spacing(2),
+      [theme.breakpoints.down('xs')]: {
+        display: 'flex',
+        justifyContent: 'space-between',
+      },
+    },
+    actionButton: {
+      width: '200px',
       marginRight: theme.spacing(1.5),
       [theme.breakpoints.down('xs')]: {
         marginRight: 0,
         marginBottom: theme.spacing(1.5),
-        width: '160px',
+        width: '143.5px',
       },
     },
-    clone: {
-      width: '221px',
-      marginRight: theme.spacing(1.5),
-      [theme.breakpoints.down('xs')]: {
-        marginRight: 0,
-        marginBottom: theme.spacing(1.5),
-        width: '160px',
-      },
-    },
-    center: {
+    editButton: {
       marginTop: '8px',
       width: '240px',
+      [theme.breakpoints.down('xs')]: {
+        display: 'none',
+      },
+    },
+    mobileEditButton: {
+      display: 'none',
+      marginBottom: theme.spacing(2),
+      [theme.breakpoints.down('xs')]: {
+        display: 'flex',
+      },
     },
     box: {
       [theme.breakpoints.down('xs')]: {
-        padding: '0px 20px',
+        padding: '0px 20px 20px 20px',
       },
     },
     chevron: {

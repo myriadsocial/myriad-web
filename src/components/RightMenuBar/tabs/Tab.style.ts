@@ -28,8 +28,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       '&:hover': {
         textDecoration: 'underline',
       },
+      display: 'flex',
+      alignItems: 'center',
       [theme.breakpoints.down('xs')]: {
-        display: 'none',
+        fontWeight: theme.typography.fontWeightMedium,
+        justifyContent: 'flex-end',
       },
     },
     title: {
