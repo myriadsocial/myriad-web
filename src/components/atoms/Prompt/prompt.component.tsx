@@ -52,7 +52,10 @@ export const PromptComponent: React.FC<Prompt> = props => {
           <Typography variant="h4" className={style.title}>
             {title}
           </Typography>
-          <Typography variant="body1" className={`${style.text} ${style['m-vertical1']}`}>
+          <Typography
+            component="span"
+            variant="body1"
+            className={`${style.text} ${style['m-vertical1']}`}>
             {subtitle}
           </Typography>
           {children}

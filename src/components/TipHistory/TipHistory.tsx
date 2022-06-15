@@ -142,6 +142,7 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
             title={i18n.t('Tipping_History.Modal.Sort')}
             options={sortOptions}
             onChange={handleSortChange}
+            useIconOnMobile={false}
           />
 
           <div>

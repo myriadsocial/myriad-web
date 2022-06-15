@@ -641,6 +641,9 @@
     "Toaster": {
       "Cancelled": "Penandatanganan transaksi dibatalkan",
       "Rejected": "Transaksi ditolak oleh pengguna"
+    },
+    "Send_Tip_Error": {
+      "Not_Connected": "Pengguna tidak dapat menerima tip karena dompet {{wallet}} belum terhubung. Coba dengan jaringan lain"
     }
   },
   "Tipping_History": {

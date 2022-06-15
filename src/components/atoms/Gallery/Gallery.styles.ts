@@ -53,6 +53,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       top: 30,
       right: 30,
       zIndex: 2,
+
+      [theme.breakpoints.down('xs')]: {
+        top: 20,
+        right: 20,
+      },
+
       '& .MuiSvgIcon-root': {
         fill: theme.palette.primary.main,
       },
@@ -60,10 +66,26 @@ export const useStyles = makeStyles((theme: Theme) =>
     preview: {
       height: '100vh',
       textAlign: 'center',
+
+      [theme.breakpoints.down('xs')]: {
+        height: 'auto',
+      },
     },
     navButton: {
       backgroundColor: theme.palette.primary.main,
       color: '#FFF',
+    },
+    image: {
+      height: '100%',
+      [theme.breakpoints.down('xs')]: {
+        width: '100%',
+        height: 'auto',
+      },
+    },
+    alignment: {
+      [theme.breakpoints.down('xs')]: {
+        justifyContent: 'center',
+      },
     },
   }),
 );

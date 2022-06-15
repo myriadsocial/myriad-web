@@ -42,6 +42,13 @@ export const useStyles = makeStyles((theme: Theme) =>
     'm-vertical1': {
       marginBottom: 30,
       marginTop: 12,
+      paddingRight: 20,
+      paddingLeft: 20,
+
+      [theme.breakpoints.down('xs')]: {
+        paddingRight: 5,
+        paddingLeft: 5,
+      },
     },
     content: {
       padding: 0,
