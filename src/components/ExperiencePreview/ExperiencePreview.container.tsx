@@ -62,9 +62,8 @@ export const ExperiencePreviewContainer: React.FC = () => {
   return (
     <>
       <TopNavbarComponent
-        description={experience.name || 'Experience'}
-        sectionTitle={i18n.t('TopNavbar.Title.Experience')}
-        reverse
+        description={i18n.t('TopNavbar.Title.Experience')}
+        sectionTitle={experience.name || 'Experience'}
       />
       <div className={style.box}>
         <ExperiencePreview

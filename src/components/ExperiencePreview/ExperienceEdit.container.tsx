@@ -3,6 +3,7 @@ import React, {useEffect} from 'react';
 import {useRouter} from 'next/router';
 
 import {ExperienceEditor} from '../ExperienceEditor/ExperienceEditor';
+import {useStyles} from './experience.style';
 
 import {debounce} from 'lodash';
 import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
@@ -13,6 +14,7 @@ import i18n from 'src/locale';
 
 export const ExperienceEditContainer: React.FC = () => {
   // TODO: separate hook for tag, people and experience
+  const style = useStyles();
   const {
     experience,
     people,
@@ -60,19 +62,20 @@ export const ExperienceEditContainer: React.FC = () => {
         sectionTitle={i18n.t('TopNavbar.Title.Experience')}
         reverse
       />
-
-      {experience && (
-        <ExperienceEditor
-          type="Edit"
-          experience={experience}
-          tags={tags}
-          people={people}
-          onSearchTags={handleSearchTags}
-          onImageUpload={onImageUpload}
-          onSearchPeople={handleSearchPeople}
-          onSave={onSave}
-        />
-      )}
+      <div className={style.box}>
+        {experience && (
+          <ExperienceEditor
+            type="Edit"
+            experience={experience}
+            tags={tags}
+            people={people}
+            onSearchTags={handleSearchTags}
+            onImageUpload={onImageUpload}
+            onSearchPeople={handleSearchPeople}
+            onSave={onSave}
+          />
+        )}
+      </div>
     </>
   );
 };

@@ -134,7 +134,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
 
         <ShowIf condition={preview.length === 0}>
           <UploadIcon />
-          <Typography>{placeholder}</Typography>
+          <Typography className={styles.placeholder}>{placeholder}</Typography>
         </ShowIf>
 
         {!loading && (

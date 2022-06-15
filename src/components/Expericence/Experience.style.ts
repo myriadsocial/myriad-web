@@ -98,6 +98,9 @@ export const useStyles = makeStyles<Theme, ExperienceStyleProps>(theme =>
       '& .MuiInputLabel-root, .MuiInputBase-root': {
         color: '#616161',
       },
+      [theme.breakpoints.down('xs')]: {
+        width: '100%',
+      },
     },
   }),
 );

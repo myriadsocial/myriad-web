@@ -34,6 +34,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       '& .MuiSvgIcon-root': {
         fill: 'currentColor',
       },
+      [theme.breakpoints.down('xs')]: {
+        padding: '20px',
+      },
     },
     title: {
       marginBottom: 30,
@@ -116,6 +119,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       right: 0,
       bottom: 0,
       color: '#898888',
+    },
+    box: {
+      [theme.breakpoints.down('xs')]: {
+        padding: '0px 20px 20px 20px',
+      },
     },
   }),
 );
