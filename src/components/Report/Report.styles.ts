@@ -19,6 +19,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       '& .MuiListItem-container': {
         marginBottom: 8,
       },
+      // TODO: create custom component for check list
       '& .MuiListItem-root': {
         height: 36,
         width: 'auto',
@@ -42,9 +43,17 @@ export const useStyles = makeStyles((theme: Theme) =>
           },
           '&::before': {
             left: -30,
+            [theme.breakpoints.down('md')]: {
+              left: -20,
+              width: 20,
+            },
           },
           '&::after': {
             right: -30,
+            [theme.breakpoints.down('md')]: {
+              right: -20,
+              width: 20,
+            },
           },
         },
       },
@@ -55,6 +64,7 @@ export const useStyles = makeStyles((theme: Theme) =>
 
       '& .MuiTypography-root': {
         lineHeight: '18px',
+        fontWeight: 600,
       },
 
       '& .MuiSvgIcon-root': {
@@ -75,15 +85,23 @@ export const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'row',
       alignItems: 'center',
       boxShadow: 'none',
+
+      [theme.breakpoints.down('md')]: {
+        '& .MuiTypography-root': {
+          fontSize: 12,
+          marginBottom: 0,
+        },
+      },
+
+      '& .MuiCardContent-root': {
+        flexGrow: 1,
+        paddingRight: 0,
+      },
     },
     action: {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
-
-      '& .MuiButton-root': {
-        width: 180,
-      },
     },
   }),
 );

@@ -12,6 +12,8 @@ import ShowIf from '../../common/show-if.component';
 import {useStyles} from './DropdownMenu.styles';
 import {MenuOptions} from './DropdownMenu.types';
 
+import {SortIcon} from 'src/components/atoms/Icons';
+
 type DropdownMenuProps<T> = {
   title: string;
   options: MenuOptions<T>[];
@@ -22,11 +24,15 @@ type DropdownMenuProps<T> = {
 };
 
 export const DropdownMenu = <T,>(props: DropdownMenuProps<T>): JSX.Element => {
-  const {title, options, onChange, disabled = false, useIconOnMobile = true} = props;
+  const {title, options, onChange, disabled = false, useIconOnMobile = true, selected} = props;
   const styles = useStyles({useIconOnMobile});
 
-  const [current, setCurrent] = useState<T>();
+  const [current, setCurrent] = useState<T>(selected);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  React.useEffect(() => {
+    setCurrent(selected);
+  }, [selected]);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -79,6 +85,10 @@ export const DropdownMenu = <T,>(props: DropdownMenuProps<T>): JSX.Element => {
           />
         </IconButton>
       </Grid>
+
+      <IconButton onClick={handleClick} color="primary" aria-label="expand" className={styles.sort}>
+        <SortIcon />
+      </IconButton>
 
       <Menu
         anchorEl={anchorEl}

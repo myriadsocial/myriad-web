@@ -1,8 +1,11 @@
+import {PlusIcon} from '@heroicons/react/outline';
+
 import React from 'react';
 import {useSelector} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
+import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from './Tab.style';
@@ -45,14 +48,15 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
         Experience
       </Typography>
 
-      <ShowIf condition={Boolean(user)}>
+      <ShowIf condition={Boolean(user) && experienceType === 'user'}>
         <Typography
           variant={'caption'}
           color={'primary'}
           component="div"
           className={styles.action}
           onClick={handleCreateExperience}>
-          + {i18n.t('Experience.Create.Title')}
+          <SvgIcon component={PlusIcon} viewBox="0 0 24 24" style={{fontSize: 14}} />
+          {i18n.t('Experience.Create.Title')}
         </Typography>
       </ShowIf>
 
@@ -60,6 +64,8 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
         selectable
         owner={experienceType === 'user' ? ExperienceOwner.CURRENT_USER : ExperienceOwner.TRENDING}
         filterTimeline
+        enableClone={experienceType === 'trending'}
+        enableSubscribe={experienceType === 'trending'}
       />
 
       <ShowIf condition={experiences.length === 0 && experienceType === 'user'}>

@@ -538,7 +538,7 @@
       "Oldest": "Oldest"
     },
     "Origin_Filter": {
-      "All": "all",
+      "All": "All",
       "Myriad": "{{name}} Post",
       "Imported": "Imported Posts"
     },
@@ -641,6 +641,9 @@
     "Toaster": {
       "Cancelled": "Transaction signing cancelled",
       "Rejected": "Transaction rejected by user"
+    },
+    "Send_Tip_Error": {
+      "Not_Connected": "This user is unable to receive tips because their {{wallet}} wallet is not connected yet. Try using another network"
     }
   },
   "Tipping_History": {
@@ -819,7 +822,7 @@
   "Setting": {
     "Title": "{{appname}} - Settings",
     "Default_Title": "Set Privacy and Notification settings",
-    "Header": "Setting",
+    "Header": "Settings",
     "List_Menu": {
       "Account_Title": "Privacy Settings",
       "Account_Subtitle": "Account privacy, social media privacy",

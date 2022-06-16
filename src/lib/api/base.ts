@@ -12,36 +12,41 @@ let API: AxiosInstance;
 
 const {publicRuntimeConfig} = getConfig();
 
-export const initialize = (params?: MyriadAPIParams): AxiosInstance => {
+const setupAPIClient = () => {
+  API = axios.create({
+    baseURL: publicRuntimeConfig.appAuthURL + '/api',
+  });
+
+  API.interceptors.response.use(
+    response => {
+      return response;
+    },
+    error => {
+      if (error.response) {
+        console.error(
+          JSON.stringify({
+            name: '[myriad-api][error]',
+            detail: error.response?.data,
+          }),
+        );
+      } else {
+        console.error('[error]', error);
+      }
+
+      Sentry.captureException(error);
+
+      return Promise.reject(error);
+    },
+  );
+};
+
+export const initialize = (params?: MyriadAPIParams, anonymous?: boolean): AxiosInstance => {
   // always create new axios instance when cookie changed
-  if (params?.cookie || !API) {
-    API = axios.create({
-      baseURL: publicRuntimeConfig.appAuthURL + '/api',
-    });
-
-    API.interceptors.response.use(
-      response => {
-        return response;
-      },
-      error => {
-        if (error.response) {
-          console.error(
-            JSON.stringify({
-              name: '[myriad-api][error]',
-              detail: error.response?.data,
-            }),
-          );
-        } else {
-          console.error('[error]', error);
-        }
-
-        Sentry.captureException(error);
-
-        return Promise.reject(error);
-      },
-    );
+  if (params?.cookie || !API || anonymous) {
+    setupAPIClient();
   }
 
+  // add auth header
   if (params?.cookie) {
     API.interceptors.request.use(config => {
       config.headers = {

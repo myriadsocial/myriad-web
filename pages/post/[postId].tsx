@@ -16,13 +16,9 @@ import {TippingSuccess} from 'src/components/common/Tipping/render/Tipping.succe
 import ShowIf from 'src/components/common/show-if.component';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {generateAnonymousUser} from 'src/helpers/auth';
-import {FriendStatus} from 'src/interfaces/friend';
-import {Post, PostVisibility} from 'src/interfaces/post';
-import {Privacy} from 'src/interfaces/setting';
+import {Post} from 'src/interfaces/post';
 import {initialize} from 'src/lib/api/base';
-import * as FriendAPI from 'src/lib/api/friends';
 import * as PostAPI from 'src/lib/api/post';
-import * as SettingAPI from 'src/lib/api/setting';
 import i18n from 'src/locale';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
@@ -105,13 +101,13 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const session = await getSession(context);
 
-  initialize({cookie: req.headers.cookie});
-
   const anonymous = session?.user.anonymous || !session ? true : false;
   const userAddress = session?.user.address as string;
 
   let userId: string | undefined = undefined;
   let post: Post | undefined = undefined;
+
+  initialize({cookie: req.headers.cookie}, anonymous);
 
   try {
     if (!anonymous) {
@@ -119,13 +115,8 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       const user = (await dispatch(fetchUser(userAddress))) as any;
       userId = user?.id;
     }
-    post = await PostAPI.getPostDetail(params.postId, userId);
-    const setting = await SettingAPI.getAccountSettings(post.createdBy);
 
-    // TODO: remove this later when friend only post API changed
-    if (!post.id) {
-      throw new Error('Post invalid');
-    }
+    post = await PostAPI.getPostDetail(params.postId, userId);
 
     const upVotes = post.votes
       ? post.votes.filter(vote => vote.userId === userId && vote.state)
@@ -138,44 +129,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
     if (post.platform === 'reddit') {
       post.text = post.text.replace(new RegExp('&amp;#x200B;', 'g'), '&nbsp;');
-    }
-    // TODO: remove this later when friend only post API changed
-    const importerIds = post.importers ? post.importers.map(importer => importer.id) : [];
-    // show deleted post if the current user is the post creator or importer
-    if (userId) {
-      if (post.deletedAt) {
-        showAsDeleted = userId !== post.createdBy && !importerIds.includes(userId);
-      } else {
-        if (post.visibility === PostVisibility.PRIVATE) {
-          showAsDeleted = userId !== post.createdBy && !importerIds.includes(userId);
-        }
-
-        if (
-          post.visibility === PostVisibility.FRIEND &&
-          ((importerIds.length > 0 && !importerIds.includes(userId)) || post.createdBy !== userId)
-        ) {
-          const {data: requests} = await FriendAPI.checkFriendStatus(userId, [
-            ...importerIds,
-            post.createdBy,
-          ]);
-
-          showAsDeleted =
-            requests.filter(request => request.status === FriendStatus.APPROVED).length === 0;
-        }
-
-        if (
-          setting.accountPrivacy === Privacy.PRIVATE &&
-          ((importerIds.length > 0 && !importerIds.includes(userId)) || post.createdBy !== userId)
-        ) {
-          const {data: requests} = await FriendAPI.checkFriendStatus(userId, [
-            ...importerIds,
-            post.createdBy,
-          ]);
-
-          showAsDeleted =
-            requests.filter(request => request.status === FriendStatus.APPROVED).length === 0;
-        }
-      }
     }
 
     dispatch(setPost(post));
@@ -196,11 +149,8 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
     await dispatch(setAnonymous(username));
   } else {
-    await dispatch(fetchUser(userAddress));
-
     await Promise.all([
       dispatch(fetchConnectedSocials()),
-      dispatch(fetchAvailableToken()),
       dispatch(countNewNotification()),
       dispatch(getUserCurrencies()),
       dispatch(fetchFriend()),
@@ -208,8 +158,12 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     ]);
   }
 
-  await dispatch(fetchNetwork());
-  await dispatch(fetchExchangeRates());
+  await Promise.all([
+    dispatch(fetchAvailableToken()),
+    dispatch(fetchNetwork()),
+    dispatch(fetchExchangeRates()),
+  ]);
+
   await dispatch(fetchUserExperience());
 
   let description =

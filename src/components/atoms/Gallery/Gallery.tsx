@@ -160,7 +160,7 @@ export const Gallery: React.FC<GalleryProps> = props => {
         </Grid>
       </ShowIf>
 
-      <Dialog open={viewerIsOpen} fullScreen>
+      <Dialog open={viewerIsOpen} fullScreen classes={{paper: style.alignment}}>
         <IconButton
           color="primary"
           aria-label="close"
@@ -182,7 +182,7 @@ export const Gallery: React.FC<GalleryProps> = props => {
           navButtonsProps={{className: style.navButton}}>
           {list.images.map((image, i) => (
             <Paper key={i} className={style.preview}>
-              <img src={image.sizes.large} alt="" style={{height: '100%'}} />
+              <img src={image.sizes.large} alt="" className={style.image} />
             </Paper>
           ))}
         </Carousel>

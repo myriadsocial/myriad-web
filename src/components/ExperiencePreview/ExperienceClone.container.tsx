@@ -3,6 +3,7 @@ import React, {useEffect} from 'react';
 import {useRouter} from 'next/router';
 
 import {ExperienceEditor} from '../ExperienceEditor/ExperienceEditor';
+import {useStyles} from './experience.style';
 
 import {debounce} from 'lodash';
 import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
@@ -17,6 +18,7 @@ export const ExperienceCloneContainer: React.FC = () => {
     useExperienceHook();
   const {uploadImage} = useUpload();
   const router = useRouter();
+  const style = useStyles();
   const {experienceId} = router.query;
 
   useEffect(() => {
@@ -33,7 +35,7 @@ export const ExperienceCloneContainer: React.FC = () => {
     if (!experience) return;
 
     cloneExperience(experience.id, attributes, (experienceId: string) => {
-      router.push(`/experience/${experienceId}/preview`);
+      router.push(`/experience/${experienceId}`);
     });
   };
 
@@ -50,21 +52,21 @@ export const ExperienceCloneContainer: React.FC = () => {
       <TopNavbarComponent
         description={i18n.t('TopNavbar.Subtitle.Experience_Clone')}
         sectionTitle={i18n.t('TopNavbar.Title.Experience')}
-        reverse
       />
-
-      {experience && (
-        <ExperienceEditor
-          type="Clone"
-          experience={experience}
-          tags={tags}
-          people={people}
-          onSearchTags={handleSearchTags}
-          onImageUpload={onImageUpload}
-          onSearchPeople={handleSearchPeople}
-          onSave={handleCloneExperience}
-        />
-      )}
+      <div className={style.box}>
+        {experience && (
+          <ExperienceEditor
+            type="Clone"
+            experience={experience}
+            tags={tags}
+            people={people}
+            onSearchTags={handleSearchTags}
+            onImageUpload={onImageUpload}
+            onSearchPeople={handleSearchPeople}
+            onSave={handleCloneExperience}
+          />
+        )}
+      </div>
     </>
   );
 };

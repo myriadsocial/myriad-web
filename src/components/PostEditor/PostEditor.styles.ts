@@ -28,7 +28,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     wrapper: {
       position: 'relative',
       [theme.breakpoints.down('xs')]: {
-        height: 468,
+        minHeight: 'calc(100vh - 290px)',
       },
     },
     limit: {

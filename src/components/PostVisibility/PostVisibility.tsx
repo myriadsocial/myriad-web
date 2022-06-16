@@ -96,13 +96,14 @@ export const PostVisibility: React.FC<ReportProps> = props => {
       </div>
 
       <div className={styles.action}>
-        <Button variant="outlined" color="secondary" onClick={onClose}>
+        <Button variant="outlined" color="secondary" size="small" onClick={onClose}>
           {i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Cancel')}
         </Button>
 
         <Button
           variant="contained"
           color="primary"
+          size="small"
           onClick={handlePostVisibility}
           disabled={reference.visibility === type}>
           {i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm')}

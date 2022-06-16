@@ -117,7 +117,7 @@ export const Report: React.FC<ReportProps> = props => {
         value={description}
         margin="none"
         inputProps={{
-          maxlength: CHARACTER_LIMIT,
+          maxLength: CHARACTER_LIMIT,
         }}
         className={styles.description}
         helperText={`${description.length}/${CHARACTER_LIMIT}`}
@@ -138,7 +138,7 @@ export const Report: React.FC<ReportProps> = props => {
             {i18n.t('Post_Comment.Modal_Report.Footer')}
           </Typography>
           <Link href="/term-of-use" target="_blank">
-            <Typography variant="caption" color="primary" component="a">
+            <Typography variant="caption" color="primary" component="span">
               {i18n.t('Post_Comment.Modal_Report.Review_Content_Policy')}
             </Typography>
           </Link>
@@ -146,13 +146,14 @@ export const Report: React.FC<ReportProps> = props => {
       </Card>
 
       <div className={styles.action}>
-        <Button variant="outlined" color="secondary" onClick={onClose}>
+        <Button variant="outlined" color="secondary" size="small" onClick={onClose}>
           {i18n.t('General.Cancel')}
         </Button>
 
         <Button
           disabled={!type || description.length === 0}
           variant="contained"
+          size="small"
           color="primary"
           onClick={submitReport}>
           {i18n.t('Post_Comment.Modal_Report.Btn_Confirm')}

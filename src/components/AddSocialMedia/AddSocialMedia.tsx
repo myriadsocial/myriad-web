@@ -17,6 +17,8 @@ import {
   InputAdornment,
   Backdrop,
   CircularProgress,
+  useMediaQuery,
+  useTheme,
 } from '@material-ui/core';
 
 import {socials} from '../atoms/Icons';
@@ -61,7 +63,8 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
   } = props;
 
   const styles = useStyles();
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
   const [profileUrl, setProfileUrl] = useState('');
   const [shared, setShared] = useState(false);
   const [termApproved, setTermApproved] = useState(false);
@@ -118,15 +121,25 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
 
   return (
     <Modal
+      fullScreen={isMobile}
       title={i18n.t('SocialMedia.Modal.Title')}
+      subtitle={isMobile && 'Connect your Twitter account'}
       onClose={handleClose}
       open={open}
       className={styles.root}>
-      <div className={styles.title}>
-        <Typography component="div" variant="body1">
-          {i18n.t('SocialMedia.Modal.Header', {platform: capitalize(social)})}
-        </Typography>
-      </div>
+      {isMobile ? (
+        <div className={styles.wrapperTitle}>
+          <Typography component="div" variant="h3">
+            Add Twitter account
+          </Typography>
+        </div>
+      ) : (
+        <div className={styles.title}>
+          <Typography component="div" variant="body1">
+            {i18n.t('SocialMedia.Modal.Header', {platform: capitalize(social)})}
+          </Typography>
+        </div>
+      )}
       <div className={styles.steps}>
         <List dense={true}>
           <ListItem>
@@ -248,6 +261,8 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
               </Typography>
             </ListItemText>
           </ListItem>
+        </List>
+        <div className={styles.wrapperTermCondition}>
           <ListItem>
             <ListItemText disableTypography>
               <FormControlLabel
@@ -264,17 +279,16 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
               />
             </ListItemText>
           </ListItem>
-        </List>
+        </div>
+        <Button
+          onClick={handleShared}
+          disabled={!shared || !termApproved || profileUrl.length === 0}
+          fullWidth
+          variant="contained"
+          color="primary">
+          {i18n.t('SocialMedia.Modal.OK', {platform: capitalize(social)})}
+        </Button>
       </div>
-
-      <Button
-        onClick={handleShared}
-        disabled={!shared || !termApproved || profileUrl.length === 0}
-        fullWidth
-        variant="contained"
-        color="primary">
-        {i18n.t('SocialMedia.Modal.OK', {platform: capitalize(social)})}
-      </Button>
 
       <ShowIf condition={!onBlockchain && verifying}>
         <CircularProgress size={40} className={styles.loading} />

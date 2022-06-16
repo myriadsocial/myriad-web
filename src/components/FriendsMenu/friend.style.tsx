@@ -12,7 +12,7 @@ export const useStyles = makeStyles<Theme, FriendListProps>(theme =>
     search: {
       padding: '0px 24px',
       [theme.breakpoints.down('xs')]: {
-        display: 'none',
+        padding: '0px',
       },
     },
     list: {
@@ -38,6 +38,9 @@ export const useStyles = makeStyles<Theme, FriendListProps>(theme =>
       lineHeight: '20.08px',
       fontWeight: 400,
       textDecoration: 'none',
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '14px',
+      },
     },
     friend: {
       fontSize: '12px',
@@ -69,6 +72,9 @@ export const useStyles = makeStyles<Theme, FriendListProps>(theme =>
       },
       '&:hover .hidden-button': {
         display: 'flex',
+        [theme.breakpoints.down('xs')]: {
+          display: 'none',
+        },
       },
       '&:hover': {
         background: 'rgba(255, 200, 87, 0.15)',
@@ -78,8 +84,8 @@ export const useStyles = makeStyles<Theme, FriendListProps>(theme =>
         paddingRight: theme.spacing(3),
 
         [theme.breakpoints.down('xs')]: {
-          paddingLeft: theme.spacing(2),
-          paddingRight: theme.spacing(2),
+          paddingLeft: theme.spacing(0),
+          paddingRight: theme.spacing(0),
         },
       },
     },
@@ -113,6 +119,15 @@ export const useStyles = makeStyles<Theme, FriendListProps>(theme =>
       [theme.breakpoints.down('xs')]: {
         justifyContent: () => 'flex-end',
       },
+    },
+    mobile: {
+      display: 'none',
+      [theme.breakpoints.down('xs')]: {
+        display: 'flex',
+      },
+    },
+    icon2: {
+      color: '#404040',
     },
   }),
 );

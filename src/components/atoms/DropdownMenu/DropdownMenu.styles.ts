@@ -16,7 +16,11 @@ export const useStyles = makeStyles<Theme, DropdownMenuStyleProp>(theme =>
         marginTop: 20,
       },
     },
-    content: {},
+    content: {
+      [theme.breakpoints.down('xs')]: {
+        display: props => (props.useIconOnMobile ? 'none' : 'flex'),
+      },
+    },
     title: {
       [theme.breakpoints.down('xs')]: {
         display: 'none',

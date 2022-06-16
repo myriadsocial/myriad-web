@@ -6,13 +6,19 @@ type StylesProps = {
   align: AllignTitle;
   titleSize: TitleSize;
   gutter: 'none' | 'default' | 'custom';
+  fullScreen?: boolean;
 };
 
 export const useStyles = makeStyles<Theme, StylesProps>(theme =>
   createStyles({
     root: {
       '& .MuiPaper-rounded': {
-        borderRadius: '10px',
+        borderRadius: props => (props.fullScreen ? 0 : 10),
+      },
+    },
+    paper: {
+      [theme.breakpoints.down('xs')]: {
+        margin: props => (props.fullScreen ? 0 : 20),
       },
     },
     nav: {
@@ -21,6 +27,10 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
     title: {
       textAlign: props => props.align,
       padding: 30,
+
+      [theme.breakpoints.down('xs')]: {
+        padding: 20,
+      },
 
       '& .MuiTypography-h4': {
         lineHeight: '30px',
@@ -36,6 +46,11 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
       position: 'absolute',
       right: 30,
       top: 30,
+
+      [theme.breakpoints.down('xs')]: {
+        right: 20,
+        top: 20,
+      },
 
       '& .MuiSvgIcon-colorPrimary': {
         fill: 'currentColor',

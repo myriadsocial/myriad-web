@@ -6,6 +6,7 @@ import React from 'react';
 import Link from 'next/link';
 
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
@@ -94,6 +95,34 @@ export const FriendRequestComponent: React.FC<FriendRequestProps> = props => {
                   {i18n.t('Friends.Button.Decline')}
                 </Typography>
               </Button>
+              <div className={style.iconButton}>
+                <IconButton
+                  aria-label="accept-friend"
+                  onClick={() => onAcceptRequest(request.friend)}
+                  disableRipple={true}
+                  disableFocusRipple={true}
+                  disableTouchRipple>
+                  <SvgIcon
+                    classes={{root: style.fill}}
+                    component={CheckCircleIcon}
+                    viewBox="0 0 24 24"
+                    color="primary"
+                  />
+                </IconButton>
+                <IconButton
+                  aria-label="decline-friend"
+                  onClick={() => onDeclineRequest(request.friend)}
+                  disableRipple={true}
+                  disableFocusRipple={true}
+                  disableTouchRipple>
+                  <SvgIcon
+                    classes={{root: style.fill}}
+                    component={XCircleIcon}
+                    viewBox="0 0 24 24"
+                    color="secondary"
+                  />
+                </IconButton>
+              </div>
             </ListItemSecondaryAction>
           </ListItem>
         ))}

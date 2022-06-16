@@ -1,5 +1,6 @@
 import {User} from '@sentry/types';
 
+import {signOut} from 'next-auth/react';
 import getConfig from 'next/config';
 
 import {Actions as BaseAction, setError} from '../base/actions';
@@ -10,7 +11,6 @@ import {Action} from 'redux';
 import {formatNumber} from 'src/helpers/balance';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {Currency, CurrencyId} from 'src/interfaces/currency';
-import {WalletTypeEnum} from 'src/interfaces/wallet';
 import * as TokenAPI from 'src/lib/api/token';
 import {nearInitialize, getNearBalance} from 'src/lib/services/near-api-js';
 import {checkAccountBalance} from 'src/lib/services/polkadot-js';
@@ -186,9 +186,11 @@ export const fetchBalancesNear: ThunkActionCreator<Actions, RootState> =
     const tokenBalances: BalanceDetail[] = [];
     const {near, wallet} = await nearInitialize();
 
+    // if wallet changed on other browser session, force logout
     if (!wallet.isSignedIn()) {
-      await wallet.requestSignIn({
-        successUrl: `${publicRuntimeConfig.appAuthURL}/?auth=${WalletTypeEnum.NEAR}`,
+      await signOut({
+        callbackUrl: publicRuntimeConfig.appAuthURL,
+        redirect: true,
       });
     }
 

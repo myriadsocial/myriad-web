@@ -52,6 +52,10 @@ export const useStyles = makeStyles((theme: Theme) =>
     option: {
       display: 'flex',
       alignItems: 'center',
+
+      [theme.breakpoints.down('xs')]: {
+        marginLeft: 20,
+      },
     },
     markdown: {
       width: 120,

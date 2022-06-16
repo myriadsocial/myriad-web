@@ -155,7 +155,9 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
         title="Send tip couldn't be processed"
         subtitle={
           <Typography component="div">
-            {`This user is unable to receive tips because their ${tipping.currentWallet?.toUpperCase()} \n wallet is not connected yet. Try using another network`}
+            {i18n.t('Tipping.Send_Tip_Error.Not_Connected', {
+              wallet: tipping.currentWallet?.toUpperCase(),
+            })}
           </Typography>
         }>
         <div

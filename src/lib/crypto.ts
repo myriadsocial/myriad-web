@@ -23,8 +23,7 @@ const {serverRuntimeConfig} = getConfig();
 export const encryptMessage = (message: string, address: string): EncryptionPayload => {
   const algorithm = 'aes-256-cbc';
   // generate 16 bytes of random data
-  const iv = address.slice(0, 16);
-
+  const iv = address.slice(0, 16).padEnd(16, '0');
   // the cipher function
   const cipher = crypto.createCipheriv(algorithm, serverRuntimeConfig.appSecret, iv);
 
@@ -46,7 +45,7 @@ export const encryptMessage = (message: string, address: string): EncryptionPayl
 export const decryptMessage = (encrypted: string, address: string): string => {
   const algorithm = 'aes-256-cbc';
   // generate 16 bytes of random data
-  const iv = address.slice(0, 16);
+  const iv = address.slice(0, 16).padEnd(16, '0');
 
   const decipher = crypto.createDecipheriv(algorithm, serverRuntimeConfig.appSecret, iv);
 

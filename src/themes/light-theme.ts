@@ -270,6 +270,10 @@ const theme = createTheme({
       sizeSmall: {
         width: 180,
         height: 40,
+
+        [breakpoints.down(breakpointsValue.xs)]: {
+          width: 120,
+        },
       },
       sizeLarge: {
         width: 583,

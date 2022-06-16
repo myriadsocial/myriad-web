@@ -199,7 +199,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
                 disabled={isDisable()}
                 variant="outlined"
                 color="secondary"
-                className={style.clone}
+                className={style.actionButton}
                 onClick={handleCloneExperience}>
                 {i18n.t('Experience.Preview.Button.Clone')}
               </Button>
@@ -207,7 +207,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
                 disabled={isDisable()}
                 variant="contained"
                 color="primary"
-                className={style.subscribe}
+                className={style.actionButton}
                 onClick={isSubscribed() ? openUnsubscribeConfirmation : handleSubscribeExperience}>
                 {isSubscribed()
                   ? i18n.t('Experience.Preview.Button.Unsubscribe')
@@ -219,7 +219,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
           {experience?.createdBy === user?.id && (
             <Button
               fullWidth
-              className={style.center}
+              className={style.editButton}
               variant="contained"
               color="primary"
               onClick={handleEditExperience}>
@@ -229,6 +229,38 @@ export const ExperiencePreview: React.FC<Props> = props => {
         </div>
       </div>
       <Typography className={style.description}>{experience.description}</Typography>
+      {(experience?.createdBy !== user?.id || anonymous) && (
+        <div className={style.mobileButton}>
+          <Button
+            disabled={isDisable()}
+            variant="outlined"
+            color="secondary"
+            className={style.actionButton}
+            onClick={handleCloneExperience}>
+            {i18n.t('Experience.Preview.Button.Clone')}
+          </Button>
+          <Button
+            disabled={isDisable()}
+            variant="contained"
+            color="primary"
+            className={style.actionButton}
+            onClick={isSubscribed() ? openUnsubscribeConfirmation : handleSubscribeExperience}>
+            {isSubscribed()
+              ? i18n.t('Experience.Preview.Button.Unsubscribe')
+              : i18n.t('Experience.Preview.Button.Subscribe')}
+          </Button>
+        </div>
+      )}
+      {experience?.createdBy === user?.id && (
+        <Button
+          fullWidth
+          className={style.mobileEditButton}
+          variant="contained"
+          color="primary"
+          onClick={handleEditExperience}>
+          {i18n.t('Experience.Preview.Button.Edit')}
+        </Button>
+      )}
       <div className={style.mb30}>
         <Typography className={style.subtitle}>
           {i18n.t('Experience.Preview.Subheader.Author')}

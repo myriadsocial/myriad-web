@@ -40,22 +40,30 @@ export const useStyles = makeStyles<Theme, FriendStyleProps>(theme =>
       lineHeight: '20.08px',
       fontWeight: 400,
       textDecoration: 'none',
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '14px',
+      },
     },
     friend: {
       fontSize: '12px',
       lineHeight: '15.06px',
       fontWeight: 400,
     },
-    button: {width: 'auto'},
+    button: {
+      width: 'auto',
+      [theme.breakpoints.down('xs')]: {
+        display: 'none',
+      },
+    },
     fill: {fill: 'none'},
     buttonText: {
       fontWeight: 600,
       fontSize: '14px',
     },
-    icon: {
-      color: '#FFF',
-      '&:hover': {
-        color: theme.palette.primary.main,
+    iconButton: {
+      display: 'none',
+      [theme.breakpoints.down('xs')]: {
+        display: 'flex',
       },
     },
     error: {
@@ -80,8 +88,8 @@ export const useStyles = makeStyles<Theme, FriendStyleProps>(theme =>
         paddingRight: theme.spacing(3),
 
         [theme.breakpoints.down('xs')]: {
-          paddingLeft: theme.spacing(2),
-          paddingRight: theme.spacing(2),
+          paddingLeft: theme.spacing(0),
+          paddingRight: theme.spacing(0),
         },
       },
     },

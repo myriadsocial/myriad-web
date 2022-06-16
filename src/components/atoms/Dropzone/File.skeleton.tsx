@@ -13,6 +13,7 @@ export const Skeleton: React.FC<SkeletonProps> = props => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        background: '##EDEDED',
       }}
       {...props}>
       <MyriadGreyIcon />
