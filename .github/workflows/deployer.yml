@@ -148,7 +148,9 @@ jobs:
       - name: Sleuth webhook
         shell: bash
         run: |
-          curl -X POST -d api_key=${{ secrets.SLEUTH_API_KEY }} -d environment=development -d sha=$GITHUB_SHA https://app.sleuth.io/api/1/deployments/blocksphre/myriad-web/register_deploy
+          curl -X POST -d api_key=${{ secrets.SLEUTH_API_KEY }} \
+          -d environment=${{ secrets.DEV_SLEUTH_ENVIRONMENT }} \
+          -d sha=$GITHUB_SHA ${{ secrets.WEB_SLEUTH_WEBHOOK }}
 
   deploy-beta-release:
     if: "startsWith(github.ref, 'refs/tags/') && github.event.release.prerelease && contains(needs.compute-build-info.outputs.latest_tag, 'beta')"
@@ -256,7 +258,9 @@ jobs:
       - name: Sleuth webhook
         shell: bash
         run: |
-          curl -X POST -d api_key=${{ secrets.SLEUTH_API_KEY }} -d environment=testnet -d sha=$GITHUB_SHA https://app.sleuth.io/api/1/deployments/blocksphre/myriad-web/register_deploy
+          curl -X POST -d api_key=${{ secrets.SLEUTH_API_KEY }} \
+          -d environment=${{ secrets.TESTNET_SLEUTH_ENVIRONMENT }} \
+          -d sha=$GITHUB_SHA ${{ secrets.WEB_SLEUTH_WEBHOOK }}
 
   deploy-pre-release:
     if: "startsWith(github.ref, 'refs/tags/') && github.event.release.prerelease && contains(needs.compute-build-info.outputs.latest_tag, 'rc')"
@@ -364,7 +368,9 @@ jobs:
       - name: Sleuth webhook
         shell: bash
         run: |
-          curl -X POST -d api_key=${{ secrets.SLEUTH_API_KEY }} -d environment=mainnet -d sha=$GITHUB_SHA https://app.sleuth.io/api/1/deployments/blocksphre/myriad-web/register_deploy
+          curl -X POST -d api_key=${{ secrets.SLEUTH_API_KEY }} \
+          -d environment=${{ secrets.MAINNET_SLEUTH_ENVIRONMENT }} \
+          -d sha=$GITHUB_SHA ${{ secrets.WEB_SLEUTH_WEBHOOK }}
 
   deploy-release:
     if: "startsWith(github.ref, 'refs/tags/') && !github.event.release.prerelease"
@@ -472,4 +478,6 @@ jobs:
       - name: Sleuth webhook
         shell: bash
         run: |
-          curl -X POST -d api_key=${{ secrets.SLEUTH_API_KEY }} -d environment=mainnet -d sha=$GITHUB_SHA https://app.sleuth.io/api/1/deployments/blocksphre/myriad-web/register_deploy
+          curl -X POST -d api_key=${{ secrets.SLEUTH_API_KEY }} \
+          -d environment=${{ secrets.MAINNET_SLEUTH_ENVIRONMENT }} \
+          -d sha=$GITHUB_SHA ${{ secrets.WEB_SLEUTH_WEBHOOK }}
