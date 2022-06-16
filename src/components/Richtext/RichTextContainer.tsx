@@ -10,6 +10,7 @@ import {useStyles} from './richtext.style';
 import {PromptComponent} from 'src/components/Mobile/PromptDrawer/Prompt';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {TimelineType} from 'src/interfaces/timeline';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -56,6 +57,7 @@ export const RichTextContainer: React.FC = () => {
         onOpenCreatePost={handleOpenCreatePost}
         alias={alias}
         name={user?.name}
+        placeholder={i18n.t('Home.RichText.Placeholder')}
       />
       <PromptComponent
         title={'Create or Import Posts'}

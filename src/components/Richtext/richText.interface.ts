@@ -3,4 +3,5 @@ export type Props = {
   onOpenCreatePost: () => void;
   name?: string;
   alias?: string;
+  placeholder: string;
 };
