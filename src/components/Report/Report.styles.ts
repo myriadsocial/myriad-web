@@ -19,6 +19,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       '& .MuiListItem-container': {
         marginBottom: 8,
       },
+      // TODO: create custom component for check list
       '& .MuiListItem-root': {
         height: 36,
         width: 'auto',

@@ -20,6 +20,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       '& .MuiListItem-container': {
         marginBottom: 8,
       },
+      // TODO: create custom component for check list
       '& .MuiListItem-root': {
         height: 36,
         width: 'auto',
@@ -39,9 +40,17 @@ export const useStyles = makeStyles((theme: Theme) =>
           },
           '&::before': {
             left: -30,
+            [theme.breakpoints.down('md')]: {
+              left: -20,
+              width: 20,
+            },
           },
           '&::after': {
             right: -30,
+            [theme.breakpoints.down('md')]: {
+              right: -20,
+              width: 20,
+            },
           },
         },
       },
