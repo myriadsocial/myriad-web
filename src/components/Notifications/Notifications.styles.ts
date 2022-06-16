@@ -12,6 +12,10 @@ export const useStyles = makeStyles<Theme, NotificationComponentProps>(theme =>
       margin: theme.spacing(1, 0),
       padding: props => (props.gutter ? theme.spacing(1 * props.gutter) : 0),
       borderRadius: props => (props.size === 'medium' ? 10 : 20),
+      [theme.breakpoints.down('xs')]: {
+        minHeight: 'calc(100vh - 100px)',
+        maxWidth: '90%',
+      },
     },
     header: {
       paddingTop: 14,
@@ -79,6 +83,9 @@ export const useStyles = makeStyles<Theme, NotificationComponentProps>(theme =>
     description: {
       width: 'calc(100% - 86px)',
       fontWeight: 400,
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '12px',
+      },
     },
     time: {
       top: 8,

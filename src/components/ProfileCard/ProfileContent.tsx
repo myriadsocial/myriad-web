@@ -12,6 +12,7 @@ import {NotificationIcon} from '../atoms/Icons';
 import {ProfileCardProps} from './ProfileCard.interfaces';
 import {useStyles} from './profileContent.style';
 
+import ShowIf from 'components/common/show-if.component';
 import {
   NearNetworkIcon24,
   MyriadCircleIcon,
@@ -106,16 +107,18 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
             </Typography>
           </div>
         </div>
-        <div className={classes.notification}>
-          <IconButton aria-label="avatar" disabled={!!alias} onClick={onShowNotificationList}>
-            <Badge
-              invisible={notificationCount === 0}
-              badgeContent={formatCount(notificationCount)}
-              color="error">
-              <NotificationIcon />
-            </Badge>
-          </IconButton>
-        </div>
+        <ShowIf condition={Boolean(user?.username)}>
+          <div className={classes.notification}>
+            <IconButton aria-label="avatar" disabled={!!alias} onClick={onShowNotificationList}>
+              <Badge
+                invisible={notificationCount === 0}
+                badgeContent={formatCount(notificationCount)}
+                color="error">
+                <NotificationIcon />
+              </Badge>
+            </IconButton>
+          </div>
+        </ShowIf>
       </Grid>
       <Modal title={i18n.t('Profile_Card.Account')} onClose={handleOpenProfile} open={open}>
         <div className={classes.modal}>
