@@ -39,6 +39,7 @@ const Notification: React.FC = () => {
       <TopNavbarComponent
         description={i18n.t('TopNavbar.Subtitle.Notification', {total: total})}
         sectionTitle={i18n.t('TopNavbar.Title.Notification')}
+        type={'menu'}
       />
       <NotificationsContainer gutter={2} infinite />
     </DefaultLayout>
