@@ -125,7 +125,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(2),
       [theme.breakpoints.down('xs')]: {
         display: 'flex',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
+        gap: 8,
       },
     },
     actionButton: {
@@ -134,7 +135,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.down('xs')]: {
         marginRight: 0,
         marginBottom: theme.spacing(1.5),
-        width: '143.5px',
+        width: 'calc(50% - 4px)',
+        maxWidth: '143.5px',
       },
     },
     editButton: {
@@ -149,6 +151,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(2),
       [theme.breakpoints.down('xs')]: {
         display: 'flex',
+        maxWidth: '295px',
       },
     },
     box: {
