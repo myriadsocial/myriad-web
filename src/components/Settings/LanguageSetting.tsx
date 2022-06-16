@@ -86,6 +86,7 @@ export const LanguageSetting: React.FC<LanguageSettingsProps> = props => {
               selected={language}
               options={settingLanguageOptions}
               onChange={setLanguage}
+              useIconOnMobile={false}
             />
           </ListItem>
         </List>
