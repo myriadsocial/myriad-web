@@ -101,13 +101,13 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const session = await getSession(context);
 
-  initialize({cookie: req.headers.cookie});
-
   const anonymous = session?.user.anonymous || !session ? true : false;
   const userAddress = session?.user.address as string;
 
   let userId: string | undefined = undefined;
   let post: Post | undefined = undefined;
+
+  initialize({cookie: req.headers.cookie}, anonymous);
 
   try {
     if (!anonymous) {

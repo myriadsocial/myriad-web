@@ -40,9 +40,9 @@ const setupAPIClient = () => {
   );
 };
 
-export const initialize = (params?: MyriadAPIParams): AxiosInstance => {
+export const initialize = (params?: MyriadAPIParams, anonymous?: boolean): AxiosInstance => {
   // always create new axios instance when cookie changed
-  if (params?.cookie || !API || typeof window === 'undefined') {
+  if (params?.cookie || !API || anonymous) {
     setupAPIClient();
   }
 

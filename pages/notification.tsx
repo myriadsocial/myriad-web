@@ -63,8 +63,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const session = await getSession(context);
 
-  initialize({cookie: req.headers.cookie});
-
   if (!session) {
     return {
       redirect: {
@@ -76,6 +74,8 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const anonymous = Boolean(session?.user.anonymous);
   const userId = session?.user.address as string;
+
+  initialize({cookie: req.headers.cookie}, anonymous);
 
   if (anonymous || !userId) {
     const username = session?.user.name as string;
