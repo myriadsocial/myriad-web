@@ -117,6 +117,16 @@ export const MenuDrawerComponent: React.FC = () => {
     }
   };
 
+  const handleShowNotification = () => {
+    router.push(`/notification`);
+  };
+
+  const handleViewProfile = () => {
+    if (user && !anonymous) {
+      router.push(`/profile/${user.id}`);
+    }
+  };
+
   return (
     <>
       <SvgIcon
@@ -142,8 +152,8 @@ export const MenuDrawerComponent: React.FC = () => {
                 alias={alias}
                 networks={networks}
                 notificationCount={total}
-                onShowNotificationList={console.log}
-                onViewProfile={console.log}
+                onShowNotificationList={handleShowNotification}
+                onViewProfile={handleViewProfile}
                 isMobile={true}
                 userWalletAddress={userWalletAddress}
               />
