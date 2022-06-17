@@ -75,7 +75,7 @@ export const ManageCointainer: React.FC = () => {
 
     try {
       verified = await (account
-        ? connectNetwork(BlockchainPlatform.NEAR, account)
+        ? connectNetwork(BlockchainPlatform.SUBSTRATE, account)
         : connectNearAccount());
     } catch {
       clearNearAccount();
