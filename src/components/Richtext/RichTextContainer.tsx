@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 
 import dynamic from 'next/dynamic';
@@ -12,6 +12,7 @@ import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {TimelineType} from 'src/interfaces/timeline';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
+import {ConfigState} from 'src/reducers/config/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 
 const PostCreateContainer = dynamic(() => import('../PostCreate/PostCreate.container'), {
@@ -25,10 +26,11 @@ export const RichTextContainer: React.FC = () => {
   const {query} = useQueryParams();
 
   const {user, alias, anonymous} = useSelector<RootState, UserState>(state => state.userState);
-
+  const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
   const [createPostOpened, setCreatePostOpened] = useState(false);
   const [openPromptDrawer, setOpenPromptDrawer] = useState(false);
 
+  const [textPlaceholder, setTextPlaceholder] = useState('');
   const handleOpenCreatePost = () => {
     if (anonymous) {
       setOpenPromptDrawer(true);
@@ -50,6 +52,10 @@ export const RichTextContainer: React.FC = () => {
     setOpenPromptDrawer(false);
   };
 
+  useEffect(() => {
+    setTextPlaceholder(i18n.t('Home.RichText.Placeholder'));
+  }, [settings.language]);
+
   return (
     <div className={style.box}>
       <RichTextComponent
@@ -57,7 +63,7 @@ export const RichTextContainer: React.FC = () => {
         onOpenCreatePost={handleOpenCreatePost}
         alias={alias}
         name={user?.name}
-        placeholder={i18n.t('Home.RichText.Placeholder')}
+        placeholder={textPlaceholder}
       />
       <PromptComponent
         title={'Create or Import Posts'}
