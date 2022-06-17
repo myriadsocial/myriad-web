@@ -43,6 +43,7 @@ export const TippingSuccess = () => {
   const {openToasterSnack} = useToasterSnackHook();
   const [options, setOptions] = useState<TippingStorageProps>();
   const [openPrompt, setOpenPrompt] = useState(false);
+  const [trxHash, setTrxHash] = useState<string | null>(null);
   const transactionHashes = router.query.transactionHashes as string | null;
   const errorCode = router.query.errorCode as string | null;
   const errorMessage = router.query.errorMessage as string | null;
@@ -65,6 +66,7 @@ export const TippingSuccess = () => {
     }
 
     if (transactionHashes) {
+      setTrxHash(transactionHashes);
       setOpenPrompt(true);
       processTips(transactionHashes);
 
@@ -137,8 +139,7 @@ export const TippingSuccess = () => {
             <Button
               href={`${
                 'currency' in options.attributes
-                  ? options?.attributes.currency.network.explorerURL +
-                    `/transactions/${transactionHashes}`
+                  ? options?.attributes.currency.network.explorerURL + `/transactions/${trxHash}`
                   : null
               }`}
               target="_blank"
