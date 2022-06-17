@@ -51,7 +51,7 @@ export const RichTextContainer: React.FC = () => {
   const handleCancel = () => {
     setOpenPromptDrawer(false);
   };
-
+  //TODO: to be improved
   useEffect(() => {
     setTextPlaceholder(i18n.t('Home.RichText.Placeholder'));
   }, [settings.language]);
