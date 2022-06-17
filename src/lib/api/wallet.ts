@@ -1,3 +1,5 @@
+import {isHex} from '@polkadot/util';
+
 import MyriadAPI from './base';
 import {AccountRegisteredError} from './errors/account-registered.error';
 import {BaseList} from './interfaces/base-list.interface';
@@ -38,8 +40,9 @@ export interface Server {
 }
 
 export const getUserNonce = async (id: string): Promise<UserNonceProps> => {
+  const address = isHex(`0x${id}`) ? `0x${id}` : id;
   const {data} = await MyriadAPI().request({
-    url: `wallets/${id}/nonce`,
+    url: `wallets/${address}/nonce`,
     method: 'GET',
   });
 
@@ -47,6 +50,7 @@ export const getUserNonce = async (id: string): Promise<UserNonceProps> => {
 };
 
 export const getUserByWalletAddress = async (address: string): Promise<User & BlockedProps> => {
+  const addr = isHex(`0x${address}`) ? `0x${address}` : address;
   const params: Record<string, any> = {
     filter: {
       include: [
@@ -66,7 +70,7 @@ export const getUserByWalletAddress = async (address: string): Promise<User & Bl
   };
 
   const {data} = await MyriadAPI().request<User & BlockedProps>({
-    url: `wallets/${address}/user`,
+    url: `wallets/${addr}/user`,
     method: 'GET',
     params,
   });

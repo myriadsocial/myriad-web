@@ -7,6 +7,7 @@ import {signIn, signOut} from 'next-auth/react';
 import getConfig from 'next/config';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
+import {isHex} from '@polkadot/util';
 
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {NetworkIdEnum} from 'src/interfaces/network';
@@ -226,7 +227,7 @@ export const useAuthHook = () => {
             networkType: NetworkIdEnum.NEAR,
             walletType: WalletTypeEnum.NEAR,
             data: {
-              id: nearAddress,
+              id: isHex(`0x${nearAddress}`) ? `0x${nearAddress}` : nearAddress,
             },
           };
 
