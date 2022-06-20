@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {DragDropContext, Droppable, Draggable, DropResult} from 'react-beautiful-dnd';
 
+import {useMediaQuery, useTheme} from '@material-ui/core';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
@@ -25,6 +26,8 @@ type PrimaryCoinMenuProps = {
 };
 
 export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
   const {togglePrimaryCoinMenu, balanceDetails, user, currenciesId} = props;
   const classes = useStyles();
 
@@ -100,16 +103,29 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
     <>
       <div className={classes.root}>
         <div className={classes.innerRoot}>
-          <div className={classes.primaryCoinWrapper}>
-            <Typography variant="body1" style={{fontWeight: 'bold'}}>
-              {i18n.t('Wallet.Primary_Coin.Text_1')}
-            </Typography>
-            <div style={{marginLeft: 'auto'}}>
+          {isMobile ? (
+            <div className={classes.primaryCoinWrapper}>
               <Typography variant="body1" color="textSecondary">
                 {i18n.t('Wallet.Primary_Coin.Text_2')}
               </Typography>
+              <div className={classes.title}>
+                <Typography variant="body1" style={{fontWeight: 'bold'}}>
+                  {i18n.t('Wallet.Primary_Coin.Text_1')}
+                </Typography>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className={classes.primaryCoinWrapper}>
+              <Typography variant="body1" style={{fontWeight: 'bold'}}>
+                {i18n.t('Wallet.Primary_Coin.Text_1')}
+              </Typography>
+              <div style={{marginLeft: 'auto'}}>
+                <Typography variant="body1" color="textSecondary">
+                  {i18n.t('Wallet.Primary_Coin.Text_2')}
+                </Typography>
+              </div>
+            </div>
+          )}
 
           <DragDropContext onDragEnd={handleOnDragEnd}>
             <Droppable droppableId="balanceCard">
@@ -125,9 +141,11 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
                         {provided =>
                           index === 1 ? (
                             <>
-                              <Typography variant="body1" style={{fontWeight: 'bold'}}>
-                                Favorite coin
-                              </Typography>
+                              <div className={classes.title}>
+                                <Typography variant="body1" style={{fontWeight: 'bold'}}>
+                                  Favorite coin
+                                </Typography>
+                              </div>
                               <ListItem
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
@@ -171,7 +189,7 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
             {i18n.t('General.Cancel')}
           </Button>
           <Button onClick={handleSetDefaultCurrency} variant={ButtonVariant.CONTAINED}>
-            {i18n.t('Wallet.Primary_Coin.Btn_Apply')}
+            {i18n.t('General.Save')}
           </Button>
         </div>
       </div>

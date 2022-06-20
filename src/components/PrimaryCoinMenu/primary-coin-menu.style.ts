@@ -6,6 +6,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       backgroundColor: theme.palette.background.paper,
       paddingLeft: 0,
+      [theme.breakpoints.down('xs')]: {
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+      },
     },
     innerRoot: {
       marginTop: theme.spacing(2.5),
@@ -13,6 +17,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'column',
       rowGap: theme.spacing(1.5),
+      [theme.breakpoints.down('xs')]: {
+        marginTop: -10,
+        marginLeft: -10,
+        marginRight: -10,
+      },
     },
     listRoot: {
       margin: 0,
@@ -28,6 +37,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       justifyContent: 'flex-start',
       alignItems: 'center',
+      [theme.breakpoints.down('xs')]: {
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+      },
     },
     balanceTabActions: {
       display: 'flex',
@@ -63,6 +76,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     cursor: {
       cursor: 'pointer',
+    },
+    title: {
+      marginTop: 16,
     },
   }),
 );
