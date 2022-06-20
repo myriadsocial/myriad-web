@@ -1038,7 +1038,7 @@
   "Dropzone": {
     "Placeholder": "File must be .jpeg or .png",
     "Btn_Upload": "Upload Image",
-    "Btn_Reupload": "Reupload Image",
+    "Btn_Reupload": "Reupload Picture",
     "Btn_Add_Image": "Add Image",
     "Btn_Upload_Video": "Add {{type}}",
     "Btn_Replace_Video": "Replace {{type}}",

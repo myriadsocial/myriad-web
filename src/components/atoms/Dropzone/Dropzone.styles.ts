@@ -30,6 +30,11 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
     },
     button: {
       marginTop: 20,
+      [theme.breakpoints.down('xs')]: {
+        width: 'auto',
+        paddingRight: theme.spacing(2),
+        paddingLeft: theme.spacing(2),
+      },
     },
     placeholder: {
       [theme.breakpoints.down('xs')]: {

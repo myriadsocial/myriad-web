@@ -3,11 +3,11 @@ import React from 'react';
 import Link from 'next/link';
 
 import {Button, Typography} from '@material-ui/core';
-import {createStyles, makeStyles} from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import i18n from 'src/locale';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     empty: {
       marginTop: 30,
@@ -29,6 +29,13 @@ const useStyles = makeStyles(() =>
       marginBottom: '40px',
       fontSize: '14px',
     },
+    button: {
+      [theme.breakpoints.down('xs')]: {
+        width: 'auto',
+        paddingRight: theme.spacing(2),
+        paddingLeft: theme.spacing(2),
+      },
+    },
   }),
 );
 
@@ -45,8 +52,8 @@ export const EmptyExperience: React.FC = () => {
           {i18n.t('Experience.List.Empty.Text_2')}
         </Typography>
       </div>
-      <Link href={'/experience/create'}>
-        <Button color="primary" variant="contained" size="small">
+      <Link href={'/experience/create'} passHref>
+        <Button color="primary" variant="contained" size="small" className={style.button}>
           {i18n.t('Experience.List.Empty.Btn_Create')}
         </Button>
       </Link>

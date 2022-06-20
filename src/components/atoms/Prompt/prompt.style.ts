@@ -30,6 +30,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       textAlign: 'center',
       padding: 30,
       [theme.breakpoints.down('xs')]: {
+        padding: '0px 20px 20px 20px',
         width: '100%',
       },
     },
