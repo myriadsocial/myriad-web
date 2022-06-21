@@ -15,6 +15,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       '& .MuiSvgIcon-root': {
         fill: 'currentColor',
       },
+
+      [theme.breakpoints.down('xs')]: {
+        '& .slate-ToolbarButton:not(.slate-ToolbarButton-active):hover': {
+          color: 'inherit!important',
+        },
+      },
     },
     header: {
       padding: '12px 24px!important',
