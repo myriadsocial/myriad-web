@@ -488,7 +488,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         options={people}
         getOptionSelected={(option, value) => option.id === value.id}
         filterSelectedOptions={true}
-        getOptionLabel={option => option.name}
+        getOptionLabel={option => `${option.username} ${option.name}`}
         disableClearable
         autoHighlight={false}
         popupIcon={<SvgIcon component={SearchIcon} viewBox={'0 0 20 20'} />}
