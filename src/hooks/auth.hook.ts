@@ -164,10 +164,11 @@ export const useAuthHook = () => {
       dictionaries: [adjectives, colors],
       separator: ' ',
     });
+    const regex = /black|white/gi;
 
     await signIn('credentials', {
       address: null,
-      name: name,
+      name: name.replace(regex, 'gray'),
       anonymous: true,
       callbackUrl: publicRuntimeConfig.appAuthURL,
     });
