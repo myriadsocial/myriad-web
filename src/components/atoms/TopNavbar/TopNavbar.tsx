@@ -42,7 +42,11 @@ export const TopNavbarComponent: React.FC<TopNavbarProps> = props => {
       if (router.pathname === '/settings' && section && settings.includes(section)) {
         router.push('/settings', undefined, {shallow: true});
       } else {
-        router.push('/home', undefined, {shallow: true});
+        if (window.history.length > 2) {
+          router.back();
+        } else {
+          router.push('/home', undefined, {shallow: true});
+        }
       }
     }
   };
