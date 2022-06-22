@@ -1,4 +1,4 @@
-import {isSafari} from 'react-device-detect';
+import {isSafari, isIOS} from 'react-device-detect';
 
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
@@ -7,7 +7,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       background: '#F6F7FC',
       overflow: 'auto',
-      position: isSafari ? 'unset' : 'fixed',
+      position: isSafari || isIOS ? 'unset' : 'fixed',
       height: 'calc(var(--vh, 1vh) * 100)',
       width: '284px',
       zIndex: 99999,
