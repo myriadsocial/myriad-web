@@ -3,8 +3,9 @@ import {isHex} from '@polkadot/util';
 import MyriadAPI from './base';
 import {AccountRegisteredError} from './errors/account-registered.error';
 import {BaseList} from './interfaces/base-list.interface';
+import {BaseErrorResponse} from './interfaces/error-response.interface';
 
-import axios from 'axios';
+import axios, {AxiosError} from 'axios';
 import {Network} from 'src/interfaces/network';
 import {BlockedProps, User, UserWallet, Wallet} from 'src/interfaces/user';
 
@@ -124,10 +125,10 @@ export const connectNetwork = async (
     return data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const data = error.response?.data;
+      const {response} = error as AxiosError<BaseErrorResponse>;
 
-      if (data?.error?.name === 'UnprocessableEntityError') {
-        throw new AccountRegisteredError();
+      if (response.data.error.name === 'UnprocessableEntityError') {
+        throw new AccountRegisteredError(response.data.error);
       }
     }
 
@@ -146,10 +147,10 @@ export const switchNetwork = async (payload: ConnectNetwork, id: string): Promis
     return data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const data = error.response?.data;
+      const {response} = error as AxiosError<BaseErrorResponse>;
 
-      if (data?.error?.name === 'UnprocessableEntityError') {
-        throw new AccountRegisteredError();
+      if (response.data.error.name === 'UnprocessableEntityError') {
+        throw new AccountRegisteredError(response.data.error);
       }
     } else {
       throw error;

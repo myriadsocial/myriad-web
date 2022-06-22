@@ -49,6 +49,7 @@ export interface Experience extends ExperienceProps, BaseModel {
 }
 
 export interface UserExperience extends BaseModel {
+  userId: string;
   experienceId: string;
   subscribed?: boolean;
   experience: Experience;

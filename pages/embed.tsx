@@ -46,7 +46,6 @@ const PostEmbed: React.FC<PostEmbedProps> = props => {
         <meta name="og:description" content={description} />
         {image && <meta name="og:image" content={image} />}
         <meta name="og:type" content="website" />
-        <meta name="fb:app_id" content={publicRuntimeConfig.facebookAppId} />
         {/* Twitter Card tags */}
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
