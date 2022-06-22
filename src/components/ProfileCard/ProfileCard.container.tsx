@@ -25,11 +25,11 @@ export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
   const {logout} = useAuthHook();
 
   useEffect(() => {
-    dispatch(fetchCurrentUserWallets());
-  }, []);
-
-  useEffect(() => {
-    if (currentWallet && currentWallet.network?.id) dispatch(fetchUserWalletAddress());
+    if (currentWallet) {
+      dispatch(fetchUserWalletAddress());
+    } else {
+      dispatch(fetchCurrentUserWallets());
+    }
   }, [currentWallet]);
 
   const handleViewProfile = () => {
