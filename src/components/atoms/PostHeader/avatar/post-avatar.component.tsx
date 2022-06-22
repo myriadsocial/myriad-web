@@ -25,7 +25,7 @@ export default function PostAvatar({origin, avatar, name, onClick}: Props) {
   return (
     <IconButton className={style.action} aria-label="avatar-icon" onClick={onClick}>
       <StyledBadge badgeContent={socials[origin]} className={style[origin]} color="default">
-        <Avatar aria-label="avatar" src={avatar} name={name} size={AvatarSize.LARGE} />
+        <Avatar aria-label="avatar" src={avatar} name={name} size={AvatarSize.MEDIUM} />
       </StyledBadge>
     </IconButton>
   );
