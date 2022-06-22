@@ -1,37 +1,47 @@
 import React from 'react';
 
+import Image from 'next/image';
 import Link from 'next/link';
 
+import {useMediaQuery, useTheme} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import {MyriadFullIcon} from 'components/atoms/Icons';
-import Illustration from 'src/images/illustration/404_Page_Not_Found__Isometric_2_1.svg';
 import i18n from 'src/locale';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      position: 'relative',
-      textAlign: 'center',
       background: '#FFF',
       height: '100vh',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
+      flexDirection: 'column',
+      [theme.breakpoints.up('xs')]: {
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          width: '1.48vw',
+          top: 0,
+          left: 0,
+          height: '100%',
+          backgroundColor: '#FFC857',
+        },
+      },
+      [theme.breakpoints.down('xs')]: {
+        fontSize: 18,
+        borderLeft: 0,
+        padding: '0 20px',
+      },
     },
     logo: {
       marginBottom: 32,
     },
-    illustration: {},
-    bar: {
-      background: '#FFC857',
-      position: 'absolute',
-      width: '1.48vw',
-      height: '100%',
-      left: 0,
-      top: 0,
+    illustration: {
+      marginBottom: 16,
     },
     title: {
       lineHeight: '33.6px',
@@ -42,6 +52,12 @@ const useStyles = makeStyles((theme: Theme) =>
         marginBottom: 8,
         fontSize: 20,
       },
+      [theme.breakpoints.down('xs')]: {
+        fontSize: 18,
+        lineHeight: '140%',
+        fontWeight: 600,
+        color: '#0A0A0A',
+      },
     },
     subtitle: {
       lineHeight: '25.1px',
@@ -51,37 +67,40 @@ const useStyles = makeStyles((theme: Theme) =>
         marginBottom: 42,
         fontSize: 14,
       },
+      [theme.breakpoints.down('xs')]: {
+        marginBottom: 24,
+        lineHeight: '19.6px',
+      },
     },
-    button: {},
   }),
 );
 
 const NotFound: React.FC = () => {
   const style = useStyles();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
   return (
     <div className={style.root}>
-      <div>
-        <div className={style.bar} />
-        <div className={style.logo}>
-          <MyriadFullIcon />
-        </div>
-        <div className={style.illustration}>
-          <Illustration />
-        </div>
-        <Typography className={style.title}>{i18n.t('404.Title')}</Typography>
-        <Typography className={style.subtitle}>
-          {i18n.t('404.Subtitle')}
-          <span aria-label="sad" role="img">
-            😢
-          </span>
-        </Typography>
-        <Link href={'/home'} passHref>
-          <Button component="a" className={style.button} variant="contained" color="primary">
-            {i18n.t('404.Btn_Back')}
-          </Button>
-        </Link>
+      <div className={style.logo}>
+        <MyriadFullIcon />
       </div>
+      <div className={style.illustration}>
+        <Image
+          src="/images/illustration/404.png"
+          alt={i18n.t('404.Title')}
+          width={isMobile ? 320 : 372}
+          height={isMobile ? 240 : 280}
+          quality={100}
+        />
+      </div>
+      <Typography className={style.title}>{i18n.t('404.Title')}</Typography>
+      <Typography className={style.subtitle}>{i18n.t('404.Subtitle')}</Typography>
+      <Link href="/" passHref prefetch={false}>
+        <Button component="a" variant="contained" color="primary">
+          {i18n.t('404.Btn_Back')}
+        </Button>
+      </Link>
     </div>
   );
 };
