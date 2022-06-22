@@ -129,6 +129,11 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
     onClose();
   };
 
+  const handleErrorImport = () => {
+    setValidPost(false);
+    setImport(undefined);
+  };
+
   return (
     <Modal
       title={header[activeTab].title}
@@ -165,7 +170,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
       </TabPanel>
 
       <TabPanel value={activeTab} index="import">
-        <PostImport value={importUrl} onChange={handlePostUrlChange} />
+        <PostImport value={importUrl} onChange={handlePostUrlChange} onError={handleErrorImport} />
       </TabPanel>
 
       <div className={styles.action}>

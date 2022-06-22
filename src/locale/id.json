@@ -389,9 +389,12 @@
       "Placeholder": "Apa yang ada dalam pikiranmu?",
       "Prompt_Import": {
         "Title": "Impor Gagal!",
-        "Subtitle_Deleted": "Kamu berusaha mengimpor postingan yang telah dihapus sebelumnya \n oleh admin Myriad",
-        "Subtitle_Private": "Kamu tidak bisa mengimpor postingan ini, \n karena akun ini adalah private",
-        "Subtitle_Duplicate": "Maaf, kamu tidak bisa mengimpot postingan ini, \n karena postingan ini telah diimpor sebelumnya"
+        "Error": {
+          "400": "Maaf, Kamu berusaha mengimpor postingan yang tidak valid",
+          "404": "Maaf, Kamu berusaha mengimpor postingan yang tidak valid",
+          "403": "Maaf, Kamu tidak bisa mengimpor postingan ini, \n karena akun ini adalah private",
+          "409": "Maaf, kamu tidak bisa mengimpot postingan ini, \n karena postingan ini telah diimpor sebelumnya"
+        }
       }
     }
   },
@@ -528,8 +531,11 @@
     "Tab_Label": "Impor",
     "Importer_List_Title": "Siapa saja yang mengimpor postingan ini?",
     "Importer_List_Subtitle": "pengguna mengimpor postingan ini",
-    "Form_Helper_Text": "Sementara postingan yang dapat diimpor hanya dari reddit dan twitter",
-    "Post_Preview": "Pratinjau Postingan"
+    "Post_Preview": "Pratinjau Postingan",
+    "Validation_Message": {
+      "unsupported": "Sementara postingan yang dapat diimpor hanya dari reddit dan twitter",
+      "invalid": "Maaf, Kamu berusaha mengimpor postingan yang tidak valid"
+    }
   },
   "Post_Sorting": {
     "Title_Filter": "Saring menurut",

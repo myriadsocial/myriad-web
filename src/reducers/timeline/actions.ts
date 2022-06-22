@@ -3,7 +3,6 @@ import {RootState} from '../index';
 import {ShowToasterSnack, showToasterSnack} from '../toaster-snack/actions';
 import * as constants from './constants';
 
-import axios from 'axios';
 import {Action} from 'redux';
 import {Comment} from 'src/interfaces/comment';
 import {FriendStatus} from 'src/interfaces/friend';
@@ -338,7 +337,7 @@ export const importPost: ThunkActionCreator<Actions, RootState> =
   (
     postUrl: string,
     attributes: Pick<PostProps, 'NSFWTag' | 'visibility'>,
-    callback?: (errorCode: number) => void,
+    callback?: (error: PostImportError) => void,
   ) =>
   async (dispatch, getState) => {
     dispatch(setLoading(true));
@@ -373,19 +372,10 @@ export const importPost: ThunkActionCreator<Actions, RootState> =
         }),
       );
     } catch (error) {
-      if (
-        axios.isAxiosError(error) &&
-        (error.response?.status === 422 ||
-          error.response?.status === 404 ||
-          error.response?.status === 409)
-      ) {
-        if (callback) {
-          callback(error.response.status);
-        } else {
-          dispatch(setError(new PostImportError(error.response.data.error.message)));
-        }
+      if (callback && error instanceof PostImportError) {
+        callback(error);
       } else {
-        setError(error);
+        dispatch(setError(error));
       }
     } finally {
       dispatch(setLoading(false));
