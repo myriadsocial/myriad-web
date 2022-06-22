@@ -736,7 +736,7 @@
   },
   "404": {
     "Title": "Whoops! You've moved so fast and you got lost",
-    "Subtitle": "The page you are looking for is not found ",
+    "Subtitle": "The page you are looking for is not found 😢. Please check the URL or maybe this page was deleted or might never exist.",
     "Btn_Back": "Back to home"
   },
   "Notification": {
