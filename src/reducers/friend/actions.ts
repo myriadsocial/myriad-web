@@ -106,10 +106,7 @@ export const searchFriend: ThunkActionCreator<Actions, RootState> =
 
       dispatch({
         type: constants.FILTER_FRIEND,
-        friends: friends.map(friend => ({
-          ...friend,
-          totalMutual: friend.mutual,
-        })),
+        friends: friends,
         meta,
         filter: query,
       });
