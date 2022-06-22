@@ -77,7 +77,7 @@ const NotFound: React.FC = () => {
           </span>
         </Typography>
         <Link href={'/home'} passHref>
-          <Button className={style.button} variant="contained" color="primary">
+          <Button component="a" className={style.button} variant="contained" color="primary">
             {i18n.t('404.Btn_Back')}
           </Button>
         </Link>
