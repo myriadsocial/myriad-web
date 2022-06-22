@@ -56,6 +56,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       '& .MuiCardContent-root:last-child': {
         paddingBottom: theme.spacing(2),
       },
+      [theme.breakpoints.down('xs')]: {
+        '& .MuiCardContent-root:last-child': {
+          padding: 8,
+        },
+      },
     },
     cardContentWrapper: {
       display: 'flex',
@@ -66,6 +71,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
       columnGap: theme.spacing(2.5),
+      [theme.breakpoints.down('xs')]: {
+        columnGap: 8,
+      },
     },
     rightJustifiedWrapper: {
       marginLeft: 'auto',
@@ -73,9 +81,16 @@ export const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'center',
       alignItems: 'center',
       columnGap: theme.spacing(1.875),
+      [theme.breakpoints.down('xs')]: {
+        columnGap: 8,
+      },
     },
     cursor: {
       cursor: 'pointer',
+      [theme.breakpoints.down('xs')]: {
+        heigth: 20,
+        width: 20,
+      },
     },
     title: {
       marginTop: 16,
