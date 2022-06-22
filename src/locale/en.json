@@ -414,7 +414,13 @@
     "other": "other",
     "others": "others",
     "via": "via",
-    "Navbar_Title": "Post Detail",
+    "Navbar": {
+      "Title": "Post Detail",
+      "Removed": {
+        "Title": "Unknown Post",
+        "Description": "Post not found"
+      }
+    },
     "Post_Action": {
       "Comments": "Comments",
       "Share": "Share",
@@ -730,8 +736,8 @@
   },
   "Maintenance": {
     "Title_Head": "{{appname}} - Maintenance",
-    "Title": "Yep there's no one here",
-    "Subtitle": "We're currently under maintenance, please come back later",
+    "Title": "Under maintenance",
+    "Subtitle": "Our website is currently under maintenance, please comeback later.",
     "Btn_Web": "Myriad web"
   },
   "404": {

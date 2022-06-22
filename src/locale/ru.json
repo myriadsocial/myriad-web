@@ -414,7 +414,13 @@
     "other": "другие",
     "others": "других",
     "via": "с помощью",
-    "Navbar_Title": "Детали публикации",
+    "Navbar": {
+      "Title": "Детали публикации",
+      "Removed": {
+        "Title": "Unknown Post",
+        "Description": "Post not found"
+      }
+    },
     "Post_Action": {
       "Comments": "Комментарии",
       "Share": "Делиться",
