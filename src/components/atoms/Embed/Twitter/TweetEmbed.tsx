@@ -65,9 +65,6 @@ export const TweetEmbed: React.FC<TwitterTweetEmbedProps> = props => {
     });
   };
 
-  console.log('LOADING', loading);
-  console.log('ERROR', error);
-
   return (
     <React.Fragment>
       <Script src="https://platform.twitter.com/widgets.js" onLoad={setWidgetInitialized} />

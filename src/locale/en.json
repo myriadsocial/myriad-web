@@ -390,10 +390,10 @@
       "Prompt_Import": {
         "Title": "Import Failed!",
         "Error": {
-          "400": "Sorry, You can not import this post, \n because the link is invalid",
-          "404": "Sorry, You can not import this post, \n because the link is invalid",
-          "403": "Sorry, You can not import this post, \n because the account is private",
-          "409": "Sorry, you can not import this post, \n because this post has been imported"
+          "400": "Sorry, You can not import this post because the link is invalid",
+          "404": "Sorry, You can not import this post because the link is invalid",
+          "403": "Sorry, You can not import this post because the account is private",
+          "409": "Sorry, you can not import this post because this post has been imported"
         }
       }
     }
@@ -534,7 +534,7 @@
     "Post_Preview": "Post Preview",
     "Validation_Message": {
       "unsupported": "Currently we can only import post from reddit and twitter",
-      "invalid": "Sorry, You can not import this post, \n because the link is invalid"
+      "invalid": "Sorry, You can not import this post because the link is invalid"
     }
   },
   "Post_Sorting": {

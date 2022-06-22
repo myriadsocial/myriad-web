@@ -89,9 +89,6 @@ export const PostImport: React.FC<PostImportProps> = props => {
     onError();
   };
 
-  console.log('social', social, 'postId', postId);
-  console.log('error', error);
-
   return (
     <div className={styles.root}>
       <FormControl fullWidth className={styles.input} error={Boolean(error)}>
