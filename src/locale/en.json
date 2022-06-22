@@ -365,7 +365,7 @@
     },
     "Modal_Report": {
       "Title": "Report User",
-      "Subtitle_1": "Why are you reporting ",
+      "Subtitle_1": "Why are you reporting",
       "Subtitle_2": "Help us understand the problem",
       "Description_Placeholder": "Description",
       "Description_Validation": "Must be between 4 to 200 characters",
