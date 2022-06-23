@@ -399,7 +399,9 @@
     }
   },
   "Post_Lists": {
-    "Sort_By": "Sort by"
+    "Sort_By": "Sort by",
+    "Load_New_Posts": "Load new posts",
+    "New_Posts": "New Posts"
   },
   "Post_Share": {
     "Action": "Share",
