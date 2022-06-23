@@ -52,5 +52,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       zIndex: theme.zIndex.drawer + 1,
       color: '#fff',
     },
+    avatar: {
+      height: '32px',
+      width: '32px',
+    },
   }),
 );

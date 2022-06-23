@@ -5,6 +5,7 @@ import _ from 'lodash';
 import {Network, NetworkIdEnum} from 'src/interfaces/network';
 import {updateTransaction} from 'src/lib/api/transaction';
 import * as WalletAPI from 'src/lib/api/wallet';
+import {getClaimTipNear} from 'src/lib/services/near-api-js';
 import {getClaimTip, TipResult, claimMyria} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
@@ -44,38 +45,69 @@ export const useClaimTip = () => {
         referenceId: user.id,
         ftIdentifier: 'native',
       };
-      const selectedNetwork = networks.find(network => network.id == NetworkIdEnum.MYRIAD);
-      if (!selectedNetwork) return;
 
-      // GET MYRIA TIP
-      const data = await getClaimTip(tipBalanceInfo, selectedNetwork?.rpcURL);
-      if (data !== null) {
-        const result: TipResult = {
-          accountId: data.accountId,
-          amount:
-            data.amount == '0'
-              ? data.amount
-              : (parseFloat(data.amount.replace(/,/g, '')) / 10 ** 18).toFixed(3).toString(),
-          tipsBalanceInfo: {
-            ftIdentifier: data.tipsBalanceInfo.ftIdentifier,
-            referenceId: data.tipsBalanceInfo.ftIdentifier,
-            referenceType: data.tipsBalanceInfo.referenceType,
-            serverId: data.tipsBalanceInfo.serverId,
-          },
-        };
+      const promises = networks.map(async network => {
+        switch (network.id) {
+          case NetworkIdEnum.MYRIAD: {
+            const data = await getClaimTip(tipBalanceInfo, network.rpcURL);
+            if (!data) return network;
+            const result: TipResult = {
+              accountId: data.accountId,
+              amount:
+                data.amount == '0'
+                  ? data.amount
+                  : (parseFloat(data.amount.replace(/,/g, '')) / 10 ** 18).toFixed(3).toString(),
+              tipsBalanceInfo: {
+                ftIdentifier: data.tipsBalanceInfo.ftIdentifier,
+                referenceId: data.tipsBalanceInfo.ftIdentifier,
+                referenceType: data.tipsBalanceInfo.referenceType,
+                serverId: data.tipsBalanceInfo.serverId,
+              },
+              symbol: 'MYRIA',
+              imageURL: network.currencies[0].image,
+            };
 
-        setTipsEachNetwork(
-          sortNetwork(
-            tipsEachNetwork.map(network => {
-              if (network.id == NetworkIdEnum.MYRIAD) {
-                network.tips = [result];
-              }
-              return network;
-            }),
-            currentWallet?.networkId,
-          ),
-        );
-      }
+            network.tips = [result];
+
+            return network;
+          }
+
+          case NetworkIdEnum.NEAR: {
+            const {serverId, referenceType, referenceId} = tipBalanceInfo;
+            const data = await getClaimTipNear(serverId, referenceType, referenceId);
+            if (!data) return network;
+            const tips = data.data.map(e => {
+              const {formatted_amount, tips_balance, symbol} = e;
+              const {account_id, tips_balance_info} = tips_balance;
+              const {server_id, reference_type, reference_id, ft_identifier} = tips_balance_info;
+              const currency = network.currencies.find(e => e.symbol === symbol);
+              return {
+                symbol,
+                accountId: account_id,
+                amount: Number(formatted_amount).toFixed(3),
+                tipsBalanceInfo: {
+                  serverId: server_id,
+                  referenceType: reference_type,
+                  referenceId: reference_id,
+                  ftIdentifier: ft_identifier,
+                },
+                imageURL: currency.image,
+              };
+            });
+
+            network.tips = tips;
+            return network;
+          }
+
+          default:
+            return network;
+        }
+      });
+
+      const networksWithTip = await Promise.all(promises);
+      const sortedNetwork = sortNetwork(networksWithTip, currentWallet?.networkId);
+
+      setTipsEachNetwork(sortedNetwork);
     } catch (error) {
       console.log(error);
       setError(error as any);

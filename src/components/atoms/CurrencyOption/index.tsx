@@ -16,11 +16,10 @@ import {CurrencyOptionProps} from './currencyOption.interface';
 import {useStyles} from './currencyOption.style';
 
 import {debounce} from 'lodash';
-import {CurrencyId} from 'src/interfaces/currency';
 import i18n from 'src/locale';
 
 export const CurrencyOptionComponent: React.FC<CurrencyOptionProps> = props => {
-  const {balanceDetails, onSelect, isOtherTippingCurrencyDisabled} = props;
+  const {balanceDetails, onSelect} = props;
   const [search, setSearch] = useState('');
   const style = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -99,7 +98,6 @@ export const CurrencyOptionComponent: React.FC<CurrencyOptionProps> = props => {
             <MenuItem
               classes={{root: style.hover}}
               key={item.id}
-              disabled={isOtherTippingCurrencyDisabled && item.symbol !== CurrencyId.MYRIA}
               onClick={() => handleSelect(item)}>
               <div className={style.flex}>
                 <div className={style.tokenColumn}>
