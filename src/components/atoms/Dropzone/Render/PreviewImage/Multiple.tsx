@@ -1,6 +1,6 @@
 import {XIcon} from '@heroicons/react/outline';
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import NextImage from 'next/image';
 
@@ -62,12 +62,16 @@ export const Multiple: React.FC<PreviewMultipleProps> = props => {
 
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
-  const [previews, setPreviews] = useState(
-    files.map(url => ({
-      url,
-      loading: true,
-    })),
-  );
+  const [previews, setPreviews] = useState([]);
+
+  useEffect(() => {
+    setPreviews(
+      files.map(url => ({
+        url,
+        loading: true,
+      })),
+    );
+  }, [files]);
 
   const cols = files.length === 1 ? 12 : 4;
   const colWidth = width ?? cols === 4 ? (isMobile ? 80 : 215) : isMobile ? 220 : 605;
