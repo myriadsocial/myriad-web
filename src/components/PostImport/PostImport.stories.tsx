@@ -14,6 +14,4 @@ const Template: ComponentStory<typeof PostImportComponent> = args => (
 );
 
 export const PostImport = Template.bind({});
-PostImport.args = {
-  value: 'https://www.youtube.com/watch?v=zPKxNTt-8A4',
-};
+PostImport.args = {};

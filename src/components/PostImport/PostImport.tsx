@@ -14,7 +14,10 @@ import i18n from 'src/locale';
 type PostImportProps = {
   value?: string;
   onChange: (url: string | null) => void;
+  onError: () => void;
 };
+
+type ErrorType = 'unsupported' | 'invalid';
 
 const regex = {
   [SocialsEnum.TWITTER]: /^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(es)?\/(\d+)/,
@@ -24,52 +27,43 @@ const regex = {
 };
 
 export const PostImport: React.FC<PostImportProps> = props => {
-  const {value = '', onChange} = props;
+  const {value, onChange, onError} = props;
   const styles = useStyles();
 
-  const [social, setSocial] = useState<SocialsEnum | null>(null);
-  const [postId, setPostId] = useState<string | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [url, setUrl] = useState('');
-  const [isValidUrl, setIsValidUrl] = useState(false);
-  const showError = url.length > 0 && !isValidUrl;
+  const [url, setUrl] = useState<string>('');
+
+  const [social, setSocial] = useState<SocialsEnum>();
+  const [postId, setPostId] = useState<string>();
+  const [error, setError] = useState<ErrorType | null>(null);
 
   useEffect(() => {
-    setUrl(value);
-
-    if (isUrl(value)) {
+    if (value && value.length > 0 && value !== url) {
       parseUrl(value);
-    } else {
-      setIsValidUrl(false);
     }
   }, [value]);
 
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const url = event.target.value;
 
+    setError(null);
     setUrl(url);
-    setPreviewUrl(null);
     setSocial(null);
     setPostId(null);
 
     if (isUrl(url)) {
       parseUrl(url);
     } else {
-      setIsValidUrl(false);
+      setError('unsupported');
       onChange(null);
     }
   };
 
   const parseUrl = (url: string) => {
-    setIsValidUrl(false);
     const matchTwitter = regex[SocialsEnum.TWITTER].exec(url);
 
     if (matchTwitter) {
       setSocial(SocialsEnum.TWITTER);
       setPostId(matchTwitter[3]);
-      setPreviewUrl(url);
-      setIsValidUrl(true);
-      onChange(url);
 
       return;
     }
@@ -79,34 +73,48 @@ export const PostImport: React.FC<PostImportProps> = props => {
     if (matchReddit) {
       setSocial(SocialsEnum.REDDIT);
       setPostId(matchReddit[1]);
-      setPreviewUrl(url);
-      setIsValidUrl(true);
-      onChange(url);
 
       return;
     }
+
+    setError('unsupported');
+  };
+
+  const handleOnLoad = () => {
+    onChange(url);
+  };
+
+  const handleOnError = () => {
+    setError('invalid');
+    onError();
   };
 
   return (
     <div className={styles.root}>
-      <FormControl fullWidth className={styles.input} error={showError}>
+      <FormControl fullWidth className={styles.input} error={Boolean(error)}>
         <InputLabel htmlFor="link-to-post">{i18n.t('Post_Import.Text_Placeholder')}</InputLabel>
         <Input id="link-to-post" value={url} onChange={handleUrlChange} />
-        <ShowIf condition={showError}>
+        <ShowIf condition={Boolean(error)}>
           <FormHelperText id="component-error-text">
-            {i18n.t('Post_Import.Form_Helper_Text')}
+            {i18n.t(`Post_Import.Validation_Message.${error}`)}
           </FormHelperText>
         </ShowIf>
       </FormControl>
 
-      {previewUrl && (
+      {!error && social && postId && (
         <div>
           <Typography variant="h5" gutterBottom className={styles.title}>
             {i18n.t('Post_Import.Post_Preview')}
           </Typography>
 
           <div className={styles.preview}>
-            {social && postId && <Embed social={social} postId={postId} url={previewUrl} />}
+            <Embed
+              social={social}
+              postId={postId}
+              url={url}
+              onError={handleOnError}
+              onLoad={handleOnLoad}
+            />
           </div>
         </div>
       )}

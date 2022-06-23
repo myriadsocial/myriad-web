@@ -389,9 +389,12 @@
       "Placeholder": "What's on your mind?",
       "Prompt_Import": {
         "Title": "Import Failed!",
-        "Subtitle_Deleted": "You are trying to import a post formerly deleted \n by a Myriad administrator",
-        "Subtitle_Private": "You can not import this post, \n because the account is private",
-        "Subtitle_Duplicate": "Sorry, you can not import this post, \n because this post has been imported"
+        "Error": {
+          "400": "Sorry, You can not import this post because the link is invalid",
+          "404": "Sorry, You can not import this post because the link is invalid",
+          "403": "Sorry, You can not import this post because the account is private",
+          "409": "Sorry, you can not import this post because this post has been imported"
+        }
       }
     }
   },
@@ -528,8 +531,11 @@
     "Tab_Label": "Import",
     "Importer_List_Title": "Who else imported this post?",
     "Importer_List_Subtitle": "users imported this post",
-    "Form_Helper_Text": "Currently we can only import post from reddit and twitter",
-    "Post_Preview": "Post Preview"
+    "Post_Preview": "Post Preview",
+    "Validation_Message": {
+      "unsupported": "Currently we can only import post from reddit and twitter",
+      "invalid": "Sorry, You can not import this post because the link is invalid"
+    }
   },
   "Post_Sorting": {
     "Title_Filter": "Filter by",

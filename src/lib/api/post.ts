@@ -1,9 +1,12 @@
 import MyriadAPI from './base';
 import {PAGINATION_LIMIT} from './constants/pagination';
+import {PostImportError} from './errors/post-import.error';
 import {BaseList} from './interfaces/base-list.interface';
+import {BaseErrorResponse} from './interfaces/error-response.interface';
 import {LoopbackWhere} from './interfaces/loopback-query.interface';
 import {PaginationParams, FilterParams, SortType} from './interfaces/pagination-params.interface';
 
+import axios, {AxiosError} from 'axios';
 import {Post, PostProps, ImportPostProps, PostVisibility, PostStatus} from 'src/interfaces/post';
 import {TimelineOrderType, TimelineFilter, TimelineType} from 'src/interfaces/timeline';
 import {WalletDetail} from 'src/interfaces/wallet';
@@ -239,21 +242,27 @@ export const createPost = async (values: PostProps): Promise<Post> => {
 };
 
 export const importPost = async (values: ImportPostProps): Promise<Post> => {
-  const attributes: ImportPostProps = {
-    ...values,
-  };
+  try {
+    const {data} = await MyriadAPI().request<Post>({
+      url: `/posts/import`,
+      method: 'POST',
+      data: values,
+    });
 
-  const {data} = await MyriadAPI().request<Post>({
-    url: `/posts/import`,
-    method: 'POST',
-    data: attributes,
-  });
+    if (data.platform === 'reddit') {
+      data.text = data.text.replace(new RegExp('&amp;#x200B;', 'g'), '&nbsp;');
+    }
 
-  if (data.platform === 'reddit') {
-    data.text = data.text.replace(new RegExp('&amp;#x200B;', 'g'), '&nbsp;');
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const {response} = error as AxiosError<BaseErrorResponse>;
+
+      throw new PostImportError(response.data.error);
+    } else {
+      throw error;
+    }
   }
-
-  return data;
 };
 
 export const getPostDetail = async (id: string, currentUserId?: string): Promise<Post> => {

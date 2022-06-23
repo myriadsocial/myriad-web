@@ -1,6 +1,7 @@
 import MyriadAPI from './base';
 import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
+import {LoopbackWhere} from './interfaces/loopback-query.interface';
 import {FilterParams, PaginationParams} from './interfaces/pagination-params.interface';
 
 import {Comment, CommentProps} from 'src/interfaces/comment';
@@ -21,7 +22,7 @@ export const loadComments = async (
 ): Promise<CommentList> => {
   const {page = 1, limit = PAGINATION_LIMIT, orderField = 'createdAt', sort = 'DESC'} = pagination;
 
-  let where: Record<string, any> = {
+  let where: LoopbackWhere<CommentProps> = {
     referenceId: params.referenceId,
   };
 
@@ -97,7 +98,7 @@ export const loadUserComments = async (
 ): Promise<CommentList> => {
   const {page = 1, limit = PAGINATION_LIMIT, orderField = 'createdAt', sort = 'DESC'} = pagination;
 
-  const where: Record<string, any> = {
+  const where: LoopbackWhere<CommentProps> = {
     userId,
   };
 

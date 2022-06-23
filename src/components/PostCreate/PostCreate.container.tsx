@@ -12,6 +12,7 @@ import {debounce} from 'lodash';
 import {useUpload} from 'src/hooks/use-upload.hook';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
+import {PostImportError} from 'src/lib/api/errors/post-import.error';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {loadUsers, searchUsers} from 'src/reducers/search/actions';
@@ -80,23 +81,15 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   ) => {
     if (typeof post === 'string') {
       dispatch(
-        importPost(post, attributes, (errorCode: number) => {
-          if (errorCode === 404) {
-            setDialogFailedImport({
-              open: true,
-              message: i18n.t('Home.RichText.Prompt_Import.Subtitle_Deleted'),
-            });
-          } else if (errorCode === 422) {
-            setDialogFailedImport({
-              open: true,
-              message: i18n.t('Home.RichText.Prompt_Import.Subtitle_Private'),
-            });
-          } else if (errorCode === 409) {
-            setDialogFailedImport({
-              open: true,
-              message: i18n.t('Home.RichText.Prompt_Import.Subtitle_Duplicate'),
-            });
+        importPost(post, attributes, (error: PostImportError) => {
+          const {statusCode} = error.getErrorData();
+          let message: string = error.message;
+
+          if ([400, 403, 404, 409].includes(statusCode)) {
+            message = i18n.t(`Home.RichText.Prompt_Import.Error.${statusCode}`);
           }
+
+          setDialogFailedImport({open: true, message});
         }),
       );
     } else {
