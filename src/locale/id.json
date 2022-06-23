@@ -417,7 +417,13 @@
     "other": "lainnya",
     "others": "lainnya",
     "via": "melalui",
-    "Navbar_Title": "Detail Postingan",
+    "Navbar": {
+      "Title": "Detail Postingan",
+      "Removed": {
+        "Title": "Postingan tidak dikenal",
+        "Description": "Postingan tidak ditemukan"
+      }
+    },
     "Post_Action": {
       "Comments": "Komentar",
       "Share": "Bagikan",
@@ -736,8 +742,8 @@
   },
   "Maintenance": {
     "Title_Head": "{{appname}} - Perbaikan",
-    "Title": "Yah, tidak ada seorang pun disini",
-    "Subtitle": "Kami sedang dalam perbaikan, silakan kembali lagi nanti",
+    "Title": "Dalam perbaikan",
+    "Subtitle": "Website kami sedang dalam perbaikan, silakan kembali lagi nanti",
     "Btn_Web": "Myriad web"
   },
   "404": {

@@ -75,12 +75,19 @@ const PostPage: React.FC<PostPageProps> = props => {
         <meta name="twitter:card" content="summary" />
       </Head>
 
-      <TopNavbarComponent
-        description={i18n.t('Post_Detail.Navbar_Title')}
-        sectionTitle={i18n.t('Section.Timeline')}
-      />
+      <ShowIf condition={!removed}>
+        <TopNavbarComponent
+          description={i18n.t('Post_Detail.Navbar.Title')}
+          sectionTitle={i18n.t('Section.Timeline')}
+        />
+      </ShowIf>
 
       <ShowIf condition={removed}>
+        <TopNavbarComponent
+          description={i18n.t('Post_Detail.Navbar.Removed.Title')}
+          sectionTitle={i18n.t('Post_Detail.Navbar.Removed.Description')}
+        />
+
         <ResourceDeleted />
       </ShowIf>
 
