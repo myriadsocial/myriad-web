@@ -1,5 +1,6 @@
 import React from 'react';
 
+import Avatar from '@material-ui/core/Avatar';
 import Backdrop from '@material-ui/core/Backdrop';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -112,11 +113,9 @@ export const Tip: React.FC<TipProps> = props => {
             <div className={style.content}>
               <div className={style.flex}>
                 <div>
-                  <MyriadCircleIcon width={'32px'} height={'32px'} />
+                  <Avatar className={style.avatar} src={tip.imageURL} />
                   <Typography component="p" variant="h5">
-                    {tip.tipsBalanceInfo.ftIdentifier == 'native'
-                      ? 'MYRIA'
-                      : tip.tipsBalanceInfo.ftIdentifier}
+                    {tip.symbol}
                   </Typography>
                 </div>
                 <Button
