@@ -650,3 +650,24 @@ export const updatePostMetric: ThunkActionCreator<Actions, RootState> =
       dispatch(setError(error));
     }
   };
+
+export const checkNewTimeline: ThunkActionCreator<Actions, RootState> =
+  (callback: (diff: number) => void) => async (_, getState) => {
+    const {
+      userState: {user},
+      timelineState: {meta},
+    } = getState();
+    try {
+      const {meta: newMeta} = await PostAPI.getPost(
+        1,
+        user.id,
+        TimelineType.ALL,
+        TimelineOrderType.LATEST,
+      );
+      const diffItemCount = newMeta.totalItemCount - meta.totalItemCount;
+      callback(diffItemCount);
+      return diffItemCount;
+    } catch (err) {
+      return err;
+    }
+  };
