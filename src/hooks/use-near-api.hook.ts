@@ -1,9 +1,11 @@
 import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
+import getConfig from 'next/config';
+
 import BN from 'bn.js';
 import * as nearAPI from 'near-api-js';
-import {BlockchainPlatform} from 'src/interfaces/wallet';
+import {BlockchainPlatform, WalletDetail, WalletReferenceType} from 'src/interfaces/wallet';
 import {
   nearInitialize,
   connectToNearWallet,
@@ -14,6 +16,8 @@ import {RootState} from 'src/reducers';
 import {fetchBalances} from 'src/reducers/balance/actions';
 import {BalanceState} from 'src/reducers/balance/reducer';
 import {UserState} from 'src/reducers/user/reducer';
+
+const {publicRuntimeConfig} = getConfig();
 
 export const useNearApi = () => {
   const dispatch = useDispatch();
@@ -51,41 +55,123 @@ export const useNearApi = () => {
     return {gasPrice};
   };
 
-  const sendAmount = async (receiver: string, amount: BN, referenceId?: string): Promise<void> => {
+  const sendAmount = async (
+    walletDetail: WalletDetail,
+    amount: BN,
+    tokenContractId?: string,
+  ): Promise<void> => {
     const {wallet} = await nearInitialize();
     const account = wallet.account();
-    if (referenceId) {
-      const ONE_YOCTO = '1';
-      const MAX_GAS = '300000000000000';
-      const ATTACHED_AMOUNT = '1250000000000000000000';
-      const ATTACHED_GAS = '10000000000000';
-      const contract = await contractInitialize(referenceId);
-      const action: nearAPI.transactions.Action[] = [];
-      const isDeposit = await contract.storage_balance_of({account_id: receiver});
-      if (!isDeposit) {
-        action.push(
+    const walletReferenceType = walletDetail.referenceType;
+    const receiver =
+      walletReferenceType === WalletReferenceType.WALLET_ADDRESS
+        ? walletDetail.referenceId
+        : undefined;
+
+    if (receiver) await sendAmountToMyriadUser(account, receiver, amount, tokenContractId);
+    else await sendAmountToNonMyriadUser(account, walletDetail, amount, tokenContractId);
+  };
+
+  const sendAmountToMyriadUser = async (
+    account: nearAPI.ConnectedWalletAccount,
+    receiver: string,
+    amount: BN,
+    tokenContractId?: string,
+  ): Promise<void> => {
+    if (tokenContractId) {
+      await account.sendMoney(receiver, amount);
+      return;
+    }
+
+    const ONE_YOCTO = '1';
+    const MAX_GAS = '300000000000000';
+    const ATTACHED_AMOUNT = '1250000000000000000000';
+    const ATTACHED_GAS = '10000000000000';
+    const contract = await contractInitialize(tokenContractId);
+    const isDeposit = await contract.storage_balance_of({account_id: receiver});
+    const actions: nearAPI.transactions.Action[] = !isDeposit
+      ? [
           nearAPI.transactions.functionCall(
             'storage_deposit',
             Buffer.from(JSON.stringify({account_id: receiver})),
             new BN(ATTACHED_GAS),
             new BN(ATTACHED_AMOUNT),
           ),
-        );
+        ]
+      : [];
+
+    actions.push(
+      nearAPI.transactions.functionCall(
+        'ft_transfer',
+        Buffer.from(JSON.stringify({receiver_id: receiver, amount: amount.toString()})),
+        new BN(MAX_GAS).sub(new BN(ATTACHED_GAS)),
+        new BN(ONE_YOCTO),
+      ),
+    );
+    //TODO: fix error protected class for multiple sign and send transactions
+    // @ts-ignore: protected class
+    await account.signAndSendTransaction({receiverId: tokenContractId, actions});
+  };
+
+  const sendAmountToNonMyriadUser = async (
+    account: nearAPI.ConnectedWalletAccount,
+    walletDetail: WalletDetail,
+    amount: BN,
+    tokenContractId?: string,
+  ): Promise<void> => {
+    const tippingContractId = publicRuntimeConfig.nearTippingContractId;
+    const tipsBalanceInfo = {
+      server_id: walletDetail.serverId,
+      reference_type: walletDetail.referenceType,
+      reference_id: walletDetail.referenceId,
+      ft_identifier: walletDetail.ftIdentifier,
+    };
+
+    let maxAttachedGas = new BN('300000000000000');
+    let receiverId = tippingContractId;
+    let method = 'send_tip';
+    let data = JSON.stringify({tips_balance_info: tipsBalanceInfo});
+    let attachedAmount = amount;
+    let initActions: nearAPI.transactions.Action[] = [];
+
+    if (tokenContractId) {
+      const contract = await contractInitialize(walletDetail.ftIdentifier);
+      const isDeposit = await contract.storage_balance_of({account_id: tippingContractId});
+
+      if (!isDeposit) {
+        const ATTACHED_AMOUNT = '1250000000000000000000';
+        const ATTACHED_GAS = '10000000000000';
+
+        initActions = [
+          nearAPI.transactions.functionCall(
+            'storage_deposit',
+            Buffer.from(JSON.stringify({account_id: tippingContractId})),
+            new BN(ATTACHED_GAS),
+            new BN(ATTACHED_AMOUNT),
+          ),
+        ];
+
+        maxAttachedGas = maxAttachedGas.sub(new BN(ATTACHED_GAS));
       }
-      action.push(
-        nearAPI.transactions.functionCall(
-          'ft_transfer',
-          Buffer.from(JSON.stringify({receiver_id: receiver, amount: amount.toString()})),
-          new BN(MAX_GAS).sub(new BN(ATTACHED_GAS)),
-          new BN(ONE_YOCTO),
-        ),
-      );
-      //TODO: fix error protected class for multiple sign and send transactions
-      // @ts-ignore: protected class
-      await wallet.account().signAndSendTransaction({receiverId: referenceId, actions: action});
-    } else {
-      await account.sendMoney(receiver, amount);
+
+      receiverId = tokenContractId;
+      method = 'ft_transfer_call';
+      attachedAmount = new BN('1');
+      data = JSON.stringify({
+        receiver_id: tippingContractId,
+        amount: amount.toString(),
+        msg: JSON.stringify(tipsBalanceInfo),
+      });
     }
+
+    const actions = [
+      ...initActions,
+      nearAPI.transactions.functionCall(method, Buffer.from(data), maxAttachedGas, attachedAmount),
+    ];
+
+    //TODO: fix error protected class for multiple sign and send transactions
+    // @ts-ignore: protected class
+    await account.signAndSendTransaction({receiverId, actions});
   };
 
   return {

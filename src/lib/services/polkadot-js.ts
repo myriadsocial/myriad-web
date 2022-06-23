@@ -385,6 +385,8 @@ export interface TipResult {
   tipsBalanceInfo: TipBalanceInfo;
   accountId: string;
   amount: string;
+  symbol: string;
+  imageURL: string;
 }
 
 export const getClaimTip = async (

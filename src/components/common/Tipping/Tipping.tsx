@@ -24,7 +24,6 @@ import {toBigNumber} from 'src/helpers/string';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
-import {CurrencyId} from 'src/interfaces/currency';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
@@ -51,29 +50,11 @@ export const Tipping: React.FC<SendTipProps> = props => {
   const [transactionFee, setTransactionFee] = useState<BN>(INITIAL_AMOUNT);
   const [currency, setCurrency] = useState<BalanceDetail>(defaultCurrency);
   const [agreementChecked, setAgreementChecked] = useState(false);
-  const [disableExternalCurrency, setDisableExternalCurrency] = useState(false);
   const [loadingFee, setLoadingFee] = useState(true);
   const [tippingAmountValid, setTippingAmountValid] = useState(false);
 
   useEffect(() => {
-    // disable other currencies when tipping to unclaimed imported posts
-    if (
-      referenceType === 'post' &&
-      'people' in reference &&
-      reference.people &&
-      !('userSocialMedia' in reference.people)
-    ) {
-      const enabledCurrency = balances.find(balance => balance.symbol === CurrencyId.MYRIA);
-
-      if (enabledCurrency) {
-        setCurrency(enabledCurrency);
-        calculateTransactionFee(enabledCurrency);
-      }
-
-      setDisableExternalCurrency(true);
-    } else {
-      calculateTransactionFee(defaultCurrency);
-    }
+    calculateTransactionFee(defaultCurrency);
   }, []);
 
   const getAddressByUser = (user: User) => {
@@ -180,7 +161,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
     }
 
     if (currency.network.blockchainPlatform === 'near') {
-      sendAmount(receiver.walletDetail.referenceId, amount, currency.referenceId);
+      sendAmount(receiver.walletDetail, amount, currency.referenceId);
     }
   };
 
@@ -203,11 +184,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
           title={currency.symbol}
           subtitle={currency.freeBalance === 0 ? '0' : parseFloat(currency.freeBalance.toFixed(4))}
           action={
-            <CurrencyOptionComponent
-              onSelect={handleChangeCurrency}
-              balanceDetails={balances}
-              isOtherTippingCurrencyDisabled={disableExternalCurrency}
-            />
+            <CurrencyOptionComponent onSelect={handleChangeCurrency} balanceDetails={balances} />
           }
         />
         <form className={classes.formRoot} autoComplete="off">
