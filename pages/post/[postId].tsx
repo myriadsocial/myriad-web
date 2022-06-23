@@ -68,7 +68,6 @@ const PostPage: React.FC<PostPageProps> = props => {
         <meta property="og:description" content={description} />
         <meta property="og:title" content={title} />
         {image && <meta property="og:image" content={image} />}
-        <meta property="fb:app_id" content={publicRuntimeConfig.facebookAppId} />
         {/* Twitter Card tags */}
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />

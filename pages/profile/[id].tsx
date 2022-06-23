@@ -61,7 +61,6 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = props => {
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         {image && <meta property="og:image" content={image} />}
-        <meta property="fb:app_id" content={publicRuntimeConfig.facebookAppId} />
         {/* Twitter Card tags */}
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
