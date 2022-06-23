@@ -58,18 +58,19 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
     noClick: true,
     noKeyboard: true,
     multiple,
-    onDrop: files => {
+    onDrop: acceptedFiles => {
+      let newFiles = files;
+
       if (multiple) {
-        setFiles(prevFiles => [...prevFiles, ...files]);
-        setPreview(prevPreview => [...prevPreview, ...files.map(URL.createObjectURL)]);
+        newFiles = [...files, ...acceptedFiles];
+        setFiles(newFiles);
+        setPreview(prevPreview => [...prevPreview, ...acceptedFiles.map(URL.createObjectURL)]);
       } else {
-        setFiles(files);
+        setFiles(acceptedFiles);
         setPreview(files.map(URL.createObjectURL));
       }
 
-      if (files.length > 0) {
-        onImageSelected(files);
-      }
+      onImageSelected(newFiles);
     },
     onDropRejected: rejection => {
       openToasterSnack({
