@@ -742,7 +742,7 @@
   },
   "Maintenance": {
     "Title_Head": "{{appname}} - Сервис",
-    "Title": "Yep there's no one here",
+    "Title": "Да, здесь никого нет",
     "Subtitle": "В данный момент вы в разделе Сервиса, пожалуйста вернитесь позже",
     "Btn_Web": "Сеть Myriad"
   },
