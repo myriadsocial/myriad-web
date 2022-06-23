@@ -41,6 +41,7 @@ const moduleExports = {
       process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ?? 'myriad-social-development.appspot.com',
     firebaseAppId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
     firebaseMeasurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+    nearTippingContractId: process.env.NEAR_TIPPING_CONTRACT_ID ?? 'myriadcore.testnet',
   },
   sentry: {
     disableServerWebpackPlugin: true,
