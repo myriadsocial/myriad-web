@@ -583,7 +583,7 @@
     "Deleted_Comment": "Komentar telah dihapus oleh pengguna.",
     "Send_Tip": "Kirim tip",
     "Private_Account": "[Komentar ini dari pengguna privat]",
-    "Banned_Account": "[komentar dihapus]",
+    "Banned_Account": "[komentar dihapus oleh Admin Myriad karna {{reportingLabel}}]",
     "Confirm_Delete": {
       "Title": "Hapus Komentar",
       "Description": "Apa kamu yakin ingin menghapus komentar ini?",

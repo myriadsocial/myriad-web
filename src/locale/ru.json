@@ -589,7 +589,7 @@
       "Cancel_Text": "Нет, я передумал"
     },
     "Private_Account": "[этот комментарий из закрытой учетной записи]",
-    "Banned_Account": "[комментарий удален]",
+    "Banned_Account": "[комментарий удален администратором Myriad из-за {{reportingLabel}}]",
     "Modal_Report": {
       "Title": "Пожаловаться",
       "Subtitle_1": "В чем причина Вашей жалобы?",

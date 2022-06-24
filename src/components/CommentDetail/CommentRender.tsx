@@ -20,8 +20,30 @@ type CommentRenderProps = {
   onShowAll: () => void;
 };
 
+type ReportTypeCategory =
+  | 'abusive_violent'
+  | 'unauthorize_copyright'
+  | 'child_exploitation'
+  | 'pornography'
+  | 'private_information'
+  | 'spam'
+  | 'unauthorize_trademark';
+
+const ReportTypeCategoryMapper: Record<ReportTypeCategory, string> = {
+  abusive_violent: i18n.t('Post_Comment.Modal_Report.Reason_Abuse'),
+  unauthorize_copyright: i18n.t('Post_Comment.Modal_Report.Reason_Copyright'),
+  child_exploitation: i18n.t('Post_Comment.Modal_Report.Reason_Child_Sexual'),
+  pornography: i18n.t('Post_Comment.Modal_Report.Reason_Porn'),
+  private_information: i18n.t('Post_Comment.Modal_Report.Reason_Private'),
+  spam: i18n.t('Post_Comment.Modal_Report.Reason_Spam'),
+  unauthorize_trademark: i18n.t('Post_Comment.Modal_Report.Reason_Trademark'),
+};
+
 export const CommentRender: React.FC<CommentRenderProps> = props => {
   const {comment, max, onShowAll} = props;
+
+  const category = comment.reportType;
+
   let nodes = deserialize(comment);
 
   const originText = nodes.map(formatToString).join('');
@@ -48,7 +70,9 @@ export const CommentRender: React.FC<CommentRenderProps> = props => {
         return i18n.t('Post_Comment.Private_Account');
 
       case '[comment removed]':
-        return i18n.t('Post_Comment.Banned_Account');
+        return i18n.t('Post_Comment.Banned_Account', {
+          reportingLabel: ReportTypeCategoryMapper[category],
+        });
 
       default:
         return comment;
