@@ -399,7 +399,9 @@
     }
   },
   "Post_Lists": {
-    "Sort_By": "Сортировать по"
+    "Sort_By": "Сортировать по",
+    "Load_New_Posts": "Load new posts",
+    "New_Posts": "New Posts"
   },
   "Post_Share": {
     "Action": "Делиться",

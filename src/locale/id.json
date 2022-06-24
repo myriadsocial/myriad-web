@@ -399,7 +399,9 @@
     }
   },
   "Post_Lists": {
-    "Sort_By": "Urutkan yang"
+    "Sort_By": "Urutkan yang",
+    "Load_New_Posts": "Muat postingan baru",
+    "New_Posts": "Postingan Baru"
   },
   "Post_Share": {
     "Action": "Bagikan",
