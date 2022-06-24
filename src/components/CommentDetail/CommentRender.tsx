@@ -65,7 +65,6 @@ export const CommentRender: React.FC<CommentRenderProps> = props => {
   };
 
   const translationComment = (comment: string) => {
-    // console.log('ini comment', comment);
     switch (comment) {
       case '[This comment is from a private account]':
         return i18n.t('Post_Comment.Private_Account');
