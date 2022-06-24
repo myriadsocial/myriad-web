@@ -18,10 +18,12 @@ export interface CommentProps {
   section: SectionType;
   userId: string;
   mentions: MentionUserProps[];
+  reportType?: string;
 }
 
 export interface Comment extends CommentProps, BaseModel {
   deleteByUser?: boolean;
+  deletedAt?: string;
   user: User;
   post?: Post;
   metric: CommentMetric;
