@@ -20,6 +20,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       marginTop: '30px',
       marginBottom: '22px',
+      cursor: 'pointer',
     },
     badge: {
       minWidth: '28px',
