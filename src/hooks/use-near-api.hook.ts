@@ -78,7 +78,7 @@ export const useNearApi = () => {
     amount: BN,
     tokenContractId?: string,
   ): Promise<void> => {
-    if (tokenContractId) {
+    if (!tokenContractId) {
       await account.sendMoney(receiver, amount);
       return;
     }
