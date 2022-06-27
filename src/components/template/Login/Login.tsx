@@ -6,10 +6,13 @@ import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from './Login.styles';
 
+import {settingLanguageOptions} from 'src/components/Settings/default';
+import {DropdownMenu} from 'src/components/atoms/DropdownMenu';
 import {MyriadFullIcon} from 'src/components/atoms/Icons';
 import {CookieConsent} from 'src/components/common/CookieConsent';
 import Purple from 'src/images/illustration/Bank_note_Isometric_1.svg';
 import Yellow from 'src/images/illustration/Conversation__Isometric_1.svg';
+import {LanguageSettingType} from 'src/interfaces/setting';
 import i18n from 'src/locale';
 
 type LoginProps = {
@@ -18,8 +21,8 @@ type LoginProps = {
 
 export const LoginLayout: React.FC<LoginProps> = ({children}) => {
   const style = useStyles();
-
-  const settings: CarouselProps = {
+  const [language, setLanguage] = React.useState<LanguageSettingType | null>(null);
+  const settingsCarousel: CarouselProps = {
     autoPlay: true,
     animation: 'slide',
     indicators: true,
@@ -32,6 +35,25 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
     cycleNavigation: true,
     fullHeightHover: true,
     swipe: true,
+  };
+
+  React.useEffect(() => {
+    const langStorage = localStorage.getItem('i18nextLng');
+
+    console.log('masuk', langStorage);
+    if (langStorage) {
+      setLanguage(langStorage as LanguageSettingType);
+    } else {
+      setLanguage('en');
+    }
+  }, []);
+
+  const saveLanguageSetting = (select: LanguageSettingType) => {
+    if (select) {
+      setLanguage(select);
+      localStorage.setItem('i18nextLng', select);
+      i18n.changeLanguage(select);
+    }
   };
 
   return (
@@ -49,6 +71,14 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
             </Typography>
 
             {children}
+            <div>
+              <DropdownMenu<LanguageSettingType>
+                title=""
+                selected={language}
+                options={settingLanguageOptions}
+                onChange={saveLanguageSetting}
+              />
+            </div>
           </div>
         </Grid>
         <Grid item xs={5}>
@@ -58,7 +88,7 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
               <Purple className={style.imagePurple} />
             </div>
             <div className={style.carousel}>
-              <Carousel {...settings}>
+              <Carousel {...settingsCarousel}>
                 <div>
                   <div className={`${style.mb1}`}>
                     <Typography
