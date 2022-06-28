@@ -6,9 +6,9 @@ import {CarouselLoginView} from 'src/components/Mobile/OnBoardingView/CarouselLo
 import {settingLanguageOptions} from 'src/components/Settings/default';
 import {DropdownMenu} from 'src/components/atoms/DropdownMenu';
 import {useAuthHook} from 'src/hooks/auth.hook';
+import {useLanguage} from 'src/hooks/use-language.hook';
 import {LanguageSettingType} from 'src/interfaces/setting';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
-import i18n from 'src/locale';
 
 const Login = dynamic(() => import('src/components/Login/Login'), {
   ssr: false,
@@ -19,8 +19,8 @@ type OnBoardingContainerProps = {
 };
 
 export const OnBoardingContainer: React.FC<OnBoardingContainerProps> = props => {
-  const [language, setLanguage] = React.useState<LanguageSettingType | null>(null);
   const {redirectAuth} = props;
+  const {language, changeLanguage} = useLanguage();
 
   useEffect(() => {
     if (redirectAuth === WalletTypeEnum.NEAR) {
@@ -28,30 +28,12 @@ export const OnBoardingContainer: React.FC<OnBoardingContainerProps> = props => 
     }
   }, [redirectAuth]);
 
-  React.useEffect(() => {
-    const langStorage = localStorage.getItem('i18nextLng');
-
-    if (langStorage) {
-      setLanguage(langStorage as LanguageSettingType);
-    } else {
-      setLanguage('en');
-    }
-  }, []);
-
   const {anonymous} = useAuthHook();
 
   const [isMobileSignIn, setIsMobileSignIn] = useState(false);
 
   const handleMobileSignIn = () => {
     setIsMobileSignIn(true);
-  };
-
-  const changeLanguage = (select: LanguageSettingType) => {
-    if (select) {
-      setLanguage(select);
-      localStorage.setItem('i18nextLng', select);
-      i18n.changeLanguage(select);
-    }
   };
 
   return (

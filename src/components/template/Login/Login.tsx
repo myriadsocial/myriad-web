@@ -10,6 +10,7 @@ import {settingLanguageOptions} from 'src/components/Settings/default';
 import {DropdownMenu} from 'src/components/atoms/DropdownMenu';
 import {MyriadFullIcon} from 'src/components/atoms/Icons';
 import {CookieConsent} from 'src/components/common/CookieConsent';
+import {useLanguage} from 'src/hooks/use-language.hook';
 import Purple from 'src/images/illustration/Bank_note_Isometric_1.svg';
 import Yellow from 'src/images/illustration/Conversation__Isometric_1.svg';
 import {LanguageSettingType} from 'src/interfaces/setting';
@@ -21,7 +22,8 @@ type LoginProps = {
 
 export const LoginLayout: React.FC<LoginProps> = ({children}) => {
   const style = useStyles();
-  const [language, setLanguage] = React.useState<LanguageSettingType | null>(null);
+  const {language, changeLanguage} = useLanguage();
+
   const settingsCarousel: CarouselProps = {
     autoPlay: true,
     animation: 'slide',
@@ -37,24 +39,6 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
     swipe: true,
   };
 
-  React.useEffect(() => {
-    const langStorage = localStorage.getItem('i18nextLng');
-
-    if (langStorage) {
-      setLanguage(langStorage as LanguageSettingType);
-    } else {
-      setLanguage('en');
-    }
-  }, []);
-
-  const changeLanguage = (select: LanguageSettingType) => {
-    if (select) {
-      setLanguage(select);
-      localStorage.setItem('i18nextLng', select);
-      i18n.changeLanguage(select);
-    }
-  };
-
   return (
     <div className={style.root}>
       <Grid container spacing={0}>
@@ -68,7 +52,6 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
               {i18n.t('Login.Layout.Title_left')}{' '}
               <span className={style.titlePrimary}>{i18n.t('Login.Layout.Title_right')}</span>
             </Typography>
-
             {children}
             <div>
               <DropdownMenu<LanguageSettingType>
