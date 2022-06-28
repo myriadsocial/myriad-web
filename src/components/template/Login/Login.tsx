@@ -40,7 +40,6 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
   React.useEffect(() => {
     const langStorage = localStorage.getItem('i18nextLng');
 
-    console.log('masuk', langStorage);
     if (langStorage) {
       setLanguage(langStorage as LanguageSettingType);
     } else {
@@ -48,7 +47,7 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
     }
   }, []);
 
-  const saveLanguageSetting = (select: LanguageSettingType) => {
+  const changeLanguage = (select: LanguageSettingType) => {
     if (select) {
       setLanguage(select);
       localStorage.setItem('i18nextLng', select);
@@ -76,7 +75,7 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
                 title=""
                 selected={language}
                 options={settingLanguageOptions}
-                onChange={saveLanguageSetting}
+                onChange={changeLanguage}
               />
             </div>
           </div>
@@ -88,6 +87,7 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
               <Purple className={style.imagePurple} />
             </div>
             <div className={style.carousel}>
+              {/* TODO: FIX MARGIN BETWEEN CIRCLE INDICATOR CAROUSEL */}
               <Carousel {...settingsCarousel}>
                 <div>
                   <div className={`${style.mb1}`}>
