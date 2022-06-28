@@ -9,10 +9,10 @@ import CardHeader from '@material-ui/core/CardHeader';
 import IconButton from '@material-ui/core/IconButton';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
-import PostAvatarComponent from '../atoms/PostHeader/avatar/post-avatar.component';
-import {useStyles} from '../atoms/PostHeader/postHeader.style';
-import {PostSubHeader} from '../atoms/PostHeader/subHeader/post-sub-header.component';
+import {useStyles} from '../PostHeader/postHeader.style';
 
+import {PostSubHeader} from 'components/PostHeader/subHeader/post-sub-header.component';
+import {SocialAvatar} from 'components/atoms/SocialAvatar';
 import {Post} from 'src/interfaces/post';
 import {SocialsEnum} from 'src/interfaces/social';
 import i18n from 'src/locale';
@@ -92,7 +92,7 @@ export const HeaderComponentExperience: React.FC<PostHeaderExperienceProps> = pr
         className={style.header}
         disableTypography
         avatar={
-          <PostAvatarComponent
+          <SocialAvatar
             name={post.user?.name ?? 'Unknown Myrian'}
             origin={post.platform}
             avatar={

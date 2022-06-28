@@ -1,8 +1,8 @@
 import {Actions as BaseAction, setLoading, setError} from '../base/actions';
 import {RootState} from '../index';
-import {ShowToasterSnack, showToasterSnack} from '../toaster-snack/actions';
 import * as constants from './constants';
 
+import axios from 'axios';
 import {Action} from 'redux';
 import {Comment} from 'src/interfaces/comment';
 import {FriendStatus} from 'src/interfaces/friend';
@@ -152,7 +152,6 @@ export type Actions =
   | IncreaseCommentCount
   | DecreaseCommentCount
   | UpdatePostMetric
-  | ShowToasterSnack
   | UpdatePostVisibility
   | ResetDownvoting
   | TimelineLoading
@@ -290,7 +289,7 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
   };
 
 export const createPost: ThunkActionCreator<Actions, RootState> =
-  (post: PostProps, images: string[]) => async (dispatch, getState) => {
+  (post: PostProps, images: string[], callback: () => void) => async (dispatch, getState) => {
     const {
       userState: {user},
     } = getState();
@@ -301,7 +300,7 @@ export const createPost: ThunkActionCreator<Actions, RootState> =
       if (!user) {
         throw new Error('User not found');
       }
-
+      console.log('CREATING IMAGE');
       const data = await PostAPI.createPost({
         ...post,
         createdBy: user.id,
@@ -316,18 +315,13 @@ export const createPost: ThunkActionCreator<Actions, RootState> =
         },
       });
 
-      dispatch(
-        showToasterSnack({
-          message: i18n.t('Post_Create.Success_Toaster'),
-          variant: 'success',
-        }),
-      );
+      callback();
     } catch (error) {
-      dispatch(
-        setError({
-          message: i18n.t('Post_Create.Failed_Toaster'),
-        }),
-      );
+      if (axios.isAxiosError(error) && error.response?.status === 413) {
+        dispatch(setError(new Error(i18n.t('Post_Create.Error.ImageTooLarge'))));
+      } else {
+        dispatch(setError(new Error(i18n.t('Post_Create.Error.Default'))));
+      }
     } finally {
       dispatch(setLoading(false));
     }
@@ -337,7 +331,7 @@ export const importPost: ThunkActionCreator<Actions, RootState> =
   (
     postUrl: string,
     attributes: Pick<PostProps, 'NSFWTag' | 'visibility'>,
-    callback?: (error: PostImportError) => void,
+    callback?: (error: PostImportError | null) => void,
   ) =>
   async (dispatch, getState) => {
     dispatch(setLoading(true));
@@ -365,12 +359,7 @@ export const importPost: ThunkActionCreator<Actions, RootState> =
         post,
       });
 
-      dispatch(
-        showToasterSnack({
-          message: i18n.t('Post_Import.Success_Toaster'),
-          variant: 'success',
-        }),
-      );
+      callback(null);
     } catch (error) {
       if (callback && error instanceof PostImportError) {
         callback(error);

@@ -4,7 +4,6 @@ import {hexToU8a} from '@polkadot/util';
 import {sortBalances} from '../balance/actions';
 import {Actions as BaseAction, setLoading, setError, PaginationAction} from '../base/actions';
 import {RootState} from '../index';
-import {ShowToasterSnack, showToasterSnack} from '../toaster-snack/actions';
 import * as constants from './constants';
 
 import axios from 'axios';
@@ -126,7 +125,6 @@ export type Actions =
   | FetchUserTransactionDetail
   | SetVerifyingSocial
   | ResetVerifyingSocial
-  | ShowToasterSnack
   | BaseAction;
 
 /**
@@ -479,22 +477,10 @@ export const addUserCurrency: ThunkActionCreator<Actions, RootState> =
         payload: selectedCurrency,
       });
 
-      dispatch(
-        showToasterSnack({
-          message: 'Added successfully, please refresh browser!',
-          variant: 'success',
-        }),
-      );
-
       callback && callback();
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 422) {
-        dispatch(
-          showToasterSnack({
-            message: 'Token already added to your wallet!',
-            variant: 'error',
-          }),
-        );
+        dispatch(setError(new Error('Token already added to your wallet!')));
       } else {
         dispatch(setError(error));
       }

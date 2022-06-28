@@ -1,7 +1,6 @@
 import React from 'react';
 
 import {
-  Button,
   List,
   ListItem,
   ListItemSecondaryAction,
@@ -10,6 +9,7 @@ import {
   Switch,
   Typography,
 } from '@material-ui/core';
+import BaseButton from '@material-ui/core/Button';
 
 import {useStyles} from './Settings.styles';
 import {
@@ -17,6 +17,7 @@ import {
   NotificationSettingsOption,
 } from './hooks/use-notification-setting.hook';
 
+import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorizeAction';
 import {NotificationSettingItems} from 'src/interfaces/setting';
 import i18n from 'src/locale';
 
@@ -24,6 +25,8 @@ type NotificationSettingsProps = {
   value: NotificationSettingItems;
   onSaveSetting: (props: NotificationSettingItems) => void;
 };
+
+const Button = WithAuthorizeAction(BaseButton);
 
 export const NotificationSettings: React.FC<NotificationSettingsProps> = props => {
   const {value, onSaveSetting} = props;

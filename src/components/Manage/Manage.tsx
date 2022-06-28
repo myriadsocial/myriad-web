@@ -5,7 +5,7 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {isMobile} from 'react-device-detect';
 
 import {TextField, InputAdornment} from '@material-ui/core';
-import Button from '@material-ui/core/Button';
+import BaseButton from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
@@ -16,8 +16,9 @@ import Typography from '@material-ui/core/Typography';
 import {useStyles} from './manage.style';
 import {useWalletList} from './use-wallet-list.hook';
 
+import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorizeAction';
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import ShowIf from 'src/components/common/show-if.component';
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {UserWallet} from 'src/interfaces/user';
 import i18n from 'src/locale';
 
@@ -27,13 +28,15 @@ export type ManageProps = {
   onConnect: (type: string) => void;
 };
 
+const Button = WithAuthorizeAction(BaseButton);
+
 export const Manage: React.FC<ManageProps> = ({wallets, onConnect}) => {
   const style = useStyles();
-  const {openToasterSnack} = useToasterSnackHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
   const {walletList} = useWalletList(wallets);
 
   const handleLinkCopied = () => {
-    openToasterSnack({
+    enqueueSnackbar({
       message: i18n.t('Wallet.Manage.Alert.Copy_Msg'),
       variant: 'success',
     });

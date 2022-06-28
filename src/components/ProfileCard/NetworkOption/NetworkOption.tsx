@@ -18,6 +18,7 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {PolkadotAccountList} from '../../PolkadotAccountList';
 import {useStyles} from './networkOption.style';
 
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {
   NearNetworkIcon24,
   MyriadCircleIcon,
@@ -30,7 +31,6 @@ import {useAuthHook} from 'src/hooks/auth.hook';
 import {NearPayload} from 'src/hooks/auth.hook';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {NetworkIdEnum, Network} from 'src/interfaces/network';
 import {UserWallet} from 'src/interfaces/user';
 import {BlockchainPlatform} from 'src/interfaces/wallet';
@@ -58,7 +58,7 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({
   const {switchNetwork, getRegisteredAccounts} = useAuthHook();
   const {connectToNear} = useNearApi();
   const confirm = useConfirm();
-  const {openToasterSnack} = useToasterSnackHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
   const {publicRuntimeConfig} = getConfig();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -178,7 +178,7 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({
       if (error instanceof AccountRegisteredError) {
         await clearNearAccount();
 
-        openToasterSnack({
+        enqueueSnackbar({
           message: 'Failed! ' + error.message,
           variant: 'error',
         });

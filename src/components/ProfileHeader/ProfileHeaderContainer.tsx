@@ -3,6 +3,7 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {ProfileHeaderComponent} from '.';
 
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {debounce} from 'lodash';
 import {useTimelineFilter} from 'src/components/Timeline/hooks/use-timeline-filter.hook';
 import {TipHistoryContainer} from 'src/components/TipHistory';
@@ -10,7 +11,6 @@ import {useTipHistory} from 'src/hooks/tip-history.hook';
 import {useFriendRequest} from 'src/hooks/use-friend-request.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {useReport} from 'src/hooks/use-report.hook';
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Friend, FriendStatus} from 'src/interfaces/friend';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {ReportProps} from 'src/interfaces/report';
@@ -37,7 +37,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
     useFriendRequest();
   const {sendReportWithAttributes} = useReport();
   const {openTipHistory} = useTipHistory();
-  const {openToasterSnack} = useToasterSnackHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
   const {query} = useQueryParams();
   const {filterTimeline} = useTimelineFilter({
     owner: profile?.id,
@@ -80,7 +80,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
     await dispatch(fetchProfileDetail(profile.id));
     await reloadFriendStatus();
 
-    openToasterSnack({
+    enqueueSnackbar({
       message: i18n.t('Profile.Header.Alert.Success_Block'),
       variant: 'success',
     });
@@ -94,7 +94,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
     if (friendStatus) {
       toggleRequest(friendStatus, FriendStatus.APPROVED);
 
-      openToasterSnack({
+      enqueueSnackbar({
         message: i18n.t('Profile.Header.Alert.Success_Req'),
         variant: 'success',
       });
@@ -105,7 +105,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
     if (friendStatus) {
       removeFriendRequest(friendStatus);
 
-      openToasterSnack({
+      enqueueSnackbar({
         message: i18n.t('Profile.Header.Alert.Unfriend', {name: profile?.name}),
         variant: 'success',
       });

@@ -7,9 +7,9 @@ import {BN, BN_ONE, BN_TWO, BN_TEN} from '@polkadot/util';
 
 import {SimpleSendTipProps} from '../interfaces/transaction';
 
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import _ from 'lodash';
 import {formatBalance} from 'src/helpers/balance';
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {BlockchainPlatform, WalletDetail, WalletReferenceType} from 'src/interfaces/wallet';
 import {storeTransaction} from 'src/lib/api/transaction';
@@ -30,7 +30,7 @@ export const usePolkadotApi = () => {
     state => state.balanceState,
   );
 
-  const {openToasterSnack} = useToasterSnackHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
 
   const [loading, setLoading] = useState(false);
   const [isFetchingFee, setIsFetchingFee] = useState(false);
@@ -127,12 +127,12 @@ export const usePolkadotApi = () => {
     } catch (error) {
       console.error(error);
       if (error.message === 'Cancelled') {
-        openToasterSnack({
+        enqueueSnackbar({
           variant: 'warning',
           message: i18n.t('Tipping.Toaster.Cancelled'),
         });
       } else {
-        openToasterSnack({
+        enqueueSnackbar({
           variant: 'warning',
           message: error.message,
         });

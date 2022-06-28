@@ -11,9 +11,9 @@ import {User} from '../../interfaces/user';
 import {Button, ButtonVariant, ButtonColor} from '../atoms/Button';
 import {DraggableBalanceCard} from './DraggableBalanceCard';
 
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import _ from 'lodash';
 import {useCurrency} from 'src/hooks/use-currency.hook';
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {CurrencyId} from 'src/interfaces/currency';
 import i18n from 'src/locale';
@@ -31,7 +31,7 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
   const {togglePrimaryCoinMenu, balanceDetails, user, currenciesId} = props;
   const classes = useStyles();
 
-  const {openToasterSnack} = useToasterSnackHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
   const {updateCurrencySet} = useCurrency();
 
   const initialCoinState = () => {
@@ -89,7 +89,7 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
     const coinsId = coins.map(coin => coin.id);
 
     updateCurrencySet(user.id, coinsId, () => {
-      openToasterSnack({
+      enqueueSnackbar({
         message: i18n.t('Wallet.Primary_Coin.Alert.Msg'),
         variant: 'success',
       });

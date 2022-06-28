@@ -5,9 +5,9 @@ import {useRouter} from 'next/router';
 import {ExperiencePreview} from './ExperiencePreview';
 import {useStyles} from './experience.style';
 
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import i18n from 'src/locale';
 
 export const ExperiencePreviewContainer: React.FC = () => {
@@ -18,7 +18,7 @@ export const ExperiencePreviewContainer: React.FC = () => {
     subscribeExperience,
     unsubscribeExperience,
   } = useExperienceHook();
-  const {openToasterSnack} = useToasterSnackHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
   const style = useStyles();
   const router = useRouter();
   const {experienceId} = router.query;
@@ -29,7 +29,7 @@ export const ExperiencePreviewContainer: React.FC = () => {
 
   const handleSubscribeExperience = (experienceId: string) => {
     if (userExperiences.length === 10) {
-      openToasterSnack({
+      enqueueSnackbar({
         message: i18n.t('Experience.Alert.Max_Exp'),
         variant: 'warning',
       });
@@ -44,7 +44,7 @@ export const ExperiencePreviewContainer: React.FC = () => {
 
   const handleCloneExperience = (experienceId: string) => {
     if (userExperiences.length === 10) {
-      openToasterSnack({
+      enqueueSnackbar({
         message: i18n.t('Experience.Alert.Max_Exp'),
         variant: 'warning',
       });

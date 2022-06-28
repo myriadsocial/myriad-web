@@ -14,10 +14,10 @@ import {PolkadotAccountList} from '../PolkadotAccountList';
 import {SocialMediaList as SocialMediaListComponent} from './SocialMediaList';
 import {SocialDetail} from './use-social-media-list.hook';
 
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {useShareSocial} from 'src/hooks/use-share-social';
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {SocialsEnum} from 'src/interfaces/social';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
@@ -38,7 +38,7 @@ export const SocialMediaListContainer: React.FC = () => {
   } = useShareSocial();
 
   const {user, socials} = useSelector<RootState, UserState>(state => state.userState);
-  const {openToasterSnack} = useToasterSnackHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
 
   const [showAccountList, setShowAccountList] = React.useState(false);
   const [extensionInstalled, setExtensionInstalled] = React.useState(false);
@@ -69,7 +69,7 @@ export const SocialMediaListContainer: React.FC = () => {
     } else {
       verifyPublicKeyShared(social, profileUrl, address, () => {
         setSelectedSocial(null);
-        openToasterSnack({
+        enqueueSnackbar({
           message: i18n.t('SocialMedia.Alert.Verify', {social: social}),
           variant: 'success',
         });
@@ -115,13 +115,13 @@ export const SocialMediaListContainer: React.FC = () => {
     if (account) {
       verifySocMed(social, profileUrl, account, ({isVerified}) => {
         isVerified &&
-          openToasterSnack({
+          enqueueSnackbar({
             message: i18n.t('SocialMedia.Alert.Verify', {social: social}),
             variant: 'success',
           });
 
         !isVerified &&
-          openToasterSnack({
+          enqueueSnackbar({
             message: i18n.t('SocialMedia.Alert.Error'),
             variant: 'error',
           });

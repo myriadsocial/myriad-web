@@ -3,6 +3,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {WrappedExperience, ExperienceProps, Experience} from '../interfaces/experience';
 import {RootState} from '../reducers';
 
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {pick} from 'lodash';
 import {
   searchExperiences,
@@ -36,6 +37,7 @@ export enum ExperienceOwner {
 // it's not obvious if we want to searchPeople we can use this hook
 export const useExperienceHook = () => {
   const dispatch = useDispatch();
+  const enqueueSnackbar = useEnqueueSnackbar();
 
   const {
     experiences,
@@ -125,7 +127,16 @@ export const useExperienceHook = () => {
       'people',
     ]);
 
-    dispatch(cloneExperience(experienceId, attributes, callback));
+    dispatch(
+      cloneExperience(experienceId, attributes, id => {
+        callback && callback(id);
+
+        enqueueSnackbar({
+          variant: 'success',
+          message: 'Experience successfully cloned!',
+        });
+      }),
+    );
   };
 
   const editExperience = (
@@ -142,11 +153,29 @@ export const useExperienceHook = () => {
       'people',
     ]);
 
-    dispatch(updateExperience(experienceId, attributes, callback));
+    dispatch(
+      updateExperience(experienceId, attributes, id => {
+        callback && callback(id);
+
+        enqueueSnackbar({
+          variant: 'success',
+          message: 'experience succesfully updated!',
+        });
+      }),
+    );
   };
 
   const saveExperience = (newExperience: ExperienceProps, callback?: (id: string) => void) => {
-    dispatch(createExperience(newExperience, callback));
+    dispatch(
+      createExperience(newExperience, id => {
+        callback && callback(id);
+
+        enqueueSnackbar({
+          variant: 'success',
+          message: 'Experience succesfully created!',
+        });
+      }),
+    );
   };
 
   const beSubscribeExperience = (experienceId: string, callback?: () => void) => {
@@ -154,6 +183,11 @@ export const useExperienceHook = () => {
       subscribeExperience(experienceId, () => {
         dispatch(fetchUserExperience());
         callback && callback();
+
+        enqueueSnackbar({
+          variant: 'success',
+          message: 'subscribed successfully!',
+        });
       }),
     );
   };
@@ -173,6 +207,11 @@ export const useExperienceHook = () => {
       unsubscribeExperience(experienceId, () => {
         dispatch(fetchUserExperience());
         callback && callback();
+
+        enqueueSnackbar({
+          variant: 'success',
+          message: 'unsubscribed successfully!',
+        });
       }),
     );
   };

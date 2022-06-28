@@ -8,6 +8,7 @@ import {useTheme} from '@material-ui/core/styles';
 
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
 
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {debounce} from 'lodash';
 import {useUpload} from 'src/hooks/use-upload.hook';
 import {Post} from 'src/interfaces/post';
@@ -33,6 +34,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   const theme = useTheme();
   const {progress, uploadImage, uploadVideo} = useUpload();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
+  const enqueueSnackbar = useEnqueueSnackbar();
 
   const people = useSelector<RootState, User[]>(state => state.searchState.searchedUsers);
   const {user} = useSelector<RootState, UserState>(state => state.userState);
@@ -81,19 +83,33 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   ) => {
     if (typeof post === 'string') {
       dispatch(
-        importPost(post, attributes, (error: PostImportError) => {
-          const {statusCode} = error.getErrorData();
-          let message: string = error.message;
+        importPost(post, attributes, (error: PostImportError | null) => {
+          if (error) {
+            const {statusCode} = error.getErrorData();
+            let message: string = error.message;
 
-          if ([400, 403, 404, 409].includes(statusCode)) {
-            message = i18n.t(`Home.RichText.Prompt_Import.Error.${statusCode}`);
+            if ([400, 403, 404, 409].includes(statusCode)) {
+              message = i18n.t(`Home.RichText.Prompt_Import.Error.${statusCode}`);
+            }
+
+            setDialogFailedImport({open: true, message});
+          } else {
+            enqueueSnackbar({
+              message: i18n.t('Post_Import.Success_Toaster'),
+              variant: 'success',
+            });
           }
-
-          setDialogFailedImport({open: true, message});
         }),
       );
     } else {
-      dispatch(createPost(post));
+      dispatch(
+        createPost(post, [], () => {
+          enqueueSnackbar({
+            message: i18n.t('Post_Create.Success_Toaster'),
+            variant: 'success',
+          });
+        }),
+      );
     }
 
     onClose();

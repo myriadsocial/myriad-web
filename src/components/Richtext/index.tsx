@@ -1,6 +1,6 @@
 import {PlusCircleIcon} from '@heroicons/react/outline';
 
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 
 import {IconButton} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
@@ -11,14 +11,28 @@ import {acronym} from '../../helpers/string';
 import {Props} from './richText.interface';
 import {useStyles} from './richtext.style';
 
+import {AuthorizationContext} from 'components/common/Authorization/Authorization.context';
+
 export const RichTextComponent: React.FC<Props> = props => {
   const {userProfilePict, onOpenCreatePost, alias, name, placeholder} = props;
+
+  const authorization = useContext(AuthorizationContext);
+
   const style = useStyles();
   const [post, setPost] = useState<string>('');
 
   const updatePostText = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const text = event.target.value;
+
     setPost(text);
+  };
+
+  const openPostCreateDialog = () => {
+    if (authorization.authorized) {
+      onOpenCreatePost();
+    } else {
+      authorization.alert();
+    }
   };
 
   return (
@@ -47,7 +61,7 @@ export const RichTextComponent: React.FC<Props> = props => {
         </IconButton>
       </div>
       <div
-        onClick={onOpenCreatePost}
+        onClick={openPostCreateDialog}
         role="button"
         tabIndex={0}
         aria-hidden="true"

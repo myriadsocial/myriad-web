@@ -8,8 +8,8 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import {Socials as SocialsComponent} from '.';
 
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {useShareSocial} from 'src/hooks/use-share-social';
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {SocialMedia, SocialsEnum} from 'src/interfaces/social';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
@@ -28,7 +28,7 @@ export const SocialsContainer: React.FC = () => {
     verifySocialMedia,
   } = useShareSocial();
 
-  const {openToasterSnack} = useToasterSnackHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
 
   const {user, socials, anonymous} = useSelector<RootState, UserState>(state => state.userState);
 
@@ -53,13 +53,13 @@ export const SocialsContainer: React.FC = () => {
           : i18n.t('SocialMedia.Alert.Error');
         const variant = isVerified ? 'success' : 'error';
 
-        openToasterSnack({message, variant});
+        enqueueSnackbar({message, variant});
       });
     } else {
       verifyPublicKeyShared(social, profileUrl, address, () => {
         resetVerification();
 
-        openToasterSnack({
+        enqueueSnackbar({
           message: i18n.t('SocialMedia.Alert.Verify', {social: social}),
           variant: 'success',
         });

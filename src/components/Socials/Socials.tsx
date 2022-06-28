@@ -2,17 +2,9 @@ import {XCircleIcon} from '@heroicons/react/solid';
 
 import React, {useEffect, useState} from 'react';
 
-import {
-  Box,
-  Button,
-  Typography,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  SvgIcon,
-  NoSsr,
-} from '@material-ui/core';
+import {Box, Typography, List, ListItem, ListItemText, SvgIcon, NoSsr} from '@material-ui/core';
+import BaseButton from '@material-ui/core/Button';
+import BaseIconButton from '@material-ui/core/IconButton';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
@@ -22,6 +14,7 @@ import {useSocialMediaList} from '../SocialMediaList/use-social-media-list.hook'
 import useConfirm from '../common/Confirm/use-confirm.hook';
 import {useStyles} from './Socials.styles';
 
+import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorizeAction';
 import {PromptComponent as PromtMobile} from 'src/components/Mobile/PromptDrawer/Prompt';
 import {ListItemSocialComponent} from 'src/components/atoms/ListItem/ListItemSocial';
 import {capitalize} from 'src/helpers/string';
@@ -47,6 +40,9 @@ type SocialsProps = {
   onDisconnectSocial: (people: SocialMedia) => void;
   onSetAsPrimary: (people: SocialMedia) => void;
 };
+
+const Button = WithAuthorizeAction(BaseButton);
+const IconButton = WithAuthorizeAction(BaseIconButton);
 
 export const Socials: React.FC<SocialsProps> = props => {
   const {
@@ -212,14 +208,14 @@ export const Socials: React.FC<SocialsProps> = props => {
 
         <div className={styles.list}>
           {socialList.map(social => (
-            <IconButton
+            <BaseIconButton
               key={social.id}
               size="small"
               className={[styles.icon, ...getStyles(social.id)].join(' ')}
               disabled={!enabledSocial.includes(social.id)}
               onClick={handleChangeSelecedSocial(social.id)}>
               {social.icon}
-            </IconButton>
+            </BaseIconButton>
           ))}
         </div>
 

@@ -1,6 +1,5 @@
 import {Actions as BaseAction, PaginationAction, setLoading, setError} from '../base/actions';
 import {RootState} from '../index';
-import {ShowToasterSnack, showToasterSnack} from '../toaster-snack/actions';
 import {fetchUserExperience} from '../user/actions';
 import * as constants from './constants';
 
@@ -71,7 +70,6 @@ export type Actions =
   | SearchExperience
   | SearchPeople
   | SearchTags
-  | ShowToasterSnack
   | ExperienceLoading
   | ClearExperiences
   | BaseAction;
@@ -244,7 +242,7 @@ export const fetchPostsExperience: ThunkActionCreator<Actions, RootState> =
   };
 
 export const cloneExperience: ThunkActionCreator<Actions, RootState> =
-  (experienceId: string, experience: ExperienceProps, callback?: (id: string) => void) =>
+  (experienceId: string, experience: ExperienceProps, callback: (id: string) => void) =>
   async (dispatch, getState) => {
     dispatch(setLoading(true));
     try {
@@ -261,13 +259,7 @@ export const cloneExperience: ThunkActionCreator<Actions, RootState> =
         experience,
         experienceId,
       );
-      callback && callback(cloneExperience.id);
-      await dispatch(
-        showToasterSnack({
-          variant: 'success',
-          message: 'Experience successfully cloned!',
-        }),
-      );
+      callback(cloneExperience.id);
     } catch (error) {
       dispatch(setError(error));
     } finally {
@@ -325,7 +317,7 @@ export const searchTags: ThunkActionCreator<Actions, RootState> =
   };
 
 export const createExperience: ThunkActionCreator<Actions, RootState> =
-  (experience: ExperienceProps, callback?: (id: string) => void) => async (dispatch, getState) => {
+  (experience: ExperienceProps, callback: (id: string) => void) => async (dispatch, getState) => {
     dispatch(setLoading(true));
     try {
       const {
@@ -338,14 +330,7 @@ export const createExperience: ThunkActionCreator<Actions, RootState> =
 
       const newExperience = await ExperienceAPI.createExperience(user.id, experience);
 
-      callback && callback(newExperience.id);
-
-      await dispatch(
-        showToasterSnack({
-          variant: 'success',
-          message: 'Experience succesfully created!',
-        }),
-      );
+      callback(newExperience.id);
     } catch (error) {
       dispatch(setError(error));
     } finally {
@@ -354,7 +339,7 @@ export const createExperience: ThunkActionCreator<Actions, RootState> =
   };
 
 export const subscribeExperience: ThunkActionCreator<Actions, RootState> =
-  (experienceId: string, callback?: () => void) => async (dispatch, getState) => {
+  (experienceId: string, callback: () => void) => async (dispatch, getState) => {
     dispatch(setLoading(true));
     try {
       const {
@@ -367,14 +352,7 @@ export const subscribeExperience: ThunkActionCreator<Actions, RootState> =
 
       await ExperienceAPI.subscribeExperience(user.id, experienceId);
 
-      callback && callback();
-
-      await dispatch(
-        showToasterSnack({
-          variant: 'success',
-          message: 'subscribed successfully!',
-        }),
-      );
+      callback();
     } catch (error) {
       dispatch(setError(error));
     } finally {
@@ -398,14 +376,7 @@ export const updateExperience: ThunkActionCreator<Actions, RootState> =
       await ExperienceAPI.updateExperience(user.id, experienceId, experience);
       await fetchUserExperience();
 
-      callback && callback(experienceId);
-
-      await dispatch(
-        showToasterSnack({
-          variant: 'success',
-          message: 'experience succesfully updated!',
-        }),
-      );
+      callback(experienceId);
     } catch (error) {
       dispatch(setError(error));
     } finally {
@@ -436,7 +407,7 @@ export const deleteExperience: ThunkActionCreator<Actions, RootState> =
   };
 
 export const unsubscribeExperience: ThunkActionCreator<Actions, RootState> =
-  (experienceId: string, callback?: () => void) => async (dispatch, getState) => {
+  (experienceId: string, callback: () => void) => async (dispatch, getState) => {
     dispatch(setLoading(true));
     try {
       const {
@@ -449,14 +420,7 @@ export const unsubscribeExperience: ThunkActionCreator<Actions, RootState> =
 
       await ExperienceAPI.unsubscribeExperience(experienceId);
 
-      callback && callback();
-
-      await dispatch(
-        showToasterSnack({
-          variant: 'success',
-          message: 'unsubscribed successfully!',
-        }),
-      );
+      callback();
     } catch (error) {
       dispatch(setError(error));
     } finally {

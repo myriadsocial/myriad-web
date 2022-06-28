@@ -21,6 +21,7 @@ import {Modal} from '../Modal';
 import {useStyles} from './AddCoin.style';
 import {Props} from './addCoin.interface';
 
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {Currency, CurrencyId} from 'src/interfaces/currency';
 import {RootState} from 'src/reducers';
 import {ConfigState} from 'src/reducers/config/reducer';
@@ -31,6 +32,7 @@ export const AddCoin: React.FC<Props> = props => {
   const {open, onClose} = props;
   const style = useStyles();
   const dispatch = useDispatch();
+  const enqueueSnackbar = useEnqueueSnackbar();
 
   const {availableCurrencies} = useSelector<RootState, ConfigState>(state => state.configState);
   const {currencies} = useSelector<RootState, UserState>(state => state.userState);
@@ -85,7 +87,16 @@ export const AddCoin: React.FC<Props> = props => {
   const handleAddNewCurrency = () => {
     if (selectedAsset) {
       setLoading(true);
-      dispatch(addUserCurrency(filterSelectedCurrency()));
+
+      dispatch(
+        addUserCurrency(filterSelectedCurrency(), () => {
+          enqueueSnackbar({
+            message: 'Added successfully, please refresh browser!',
+            variant: 'success',
+          });
+          setLoading(false);
+        }),
+      );
     }
 
     onClose();

@@ -292,6 +292,10 @@
         "Experience": "Experience"
       }
     },
+    "Banned": {
+      "Title": "Account banned",
+      "Description": "This account has been banned by Myriad due to violating our <policy>Privacy Policy</policy>."
+    },
     "Edit": {
       "Title": "Edit Profile",
       "Subtitle_1": "Profile Picture",
@@ -474,7 +478,6 @@
   },
   "Post_Create": {
     "Success_Toaster": "Post successfully created!",
-    "Failed_Toaster": "Failed to create post, try again later",
     "Text_Placeholder": "Type...",
     "Title": "Create Post",
     "Subtitle": "Create your own post",
@@ -523,6 +526,10 @@
         "Placeholder": "{{prefix}} Link URL",
         "Btn_Confirm": "Confirm"
       }
+    },
+    "Error": {
+      "Default": "Failed to create post, try again later",
+      "ImageTooLarge": "Failed to create post, image too large"
     }
   },
   "Post_Delete": {
@@ -1083,7 +1090,8 @@
     "Text_2": "Terms and Conditions"
   },
   "Banner": {
-    "Text": "{{appName}} {{version}} is not fully audited, please use at your own risk."
+    "Demo": "{{appName}} {{version}} is not fully audited, please use at your own risk.",
+    "Banned": "Your account has been temporarily banned because after we review the reports, you are violating the rules. Therefore, you are restricted from taking action in Myriad."
   },
   "Tooltip": {
     "Chat": "Chat feature, coming soon",

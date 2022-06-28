@@ -4,17 +4,20 @@ import {ArrowCircleUpIcon} from '@heroicons/react/outline';
 import React from 'react';
 import {useSelector} from 'react-redux';
 
-import {Typography} from '@material-ui/core';
-import {IconButton} from '@material-ui/core';
+import BaseIconButton from '@material-ui/core/IconButton';
 import SvgIcon from '@material-ui/core/SvgIcon';
+import Typography from '@material-ui/core/Typography';
 
 import {VoteProps} from './voting.interface';
 import {useStyles} from './voting.style';
 
+import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorizeAction';
 import {debounce} from 'lodash';
 import {PromptComponent} from 'src/components/Mobile/PromptDrawer/Prompt';
 import {formatCount} from 'src/helpers/number';
 import {RootState} from 'src/reducers';
+
+const IconButton = WithAuthorizeAction(BaseIconButton);
 
 export const VotingComponent: React.FC<VoteProps> = props => {
   const {

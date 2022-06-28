@@ -14,10 +14,10 @@ import {BoxComponent} from '../atoms/Box';
 import {Manage} from './Manage';
 import {useStyles} from './manage.style';
 
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {BlockchainPlatform} from 'src/interfaces/wallet';
 import {clearNearAccount} from 'src/lib/services/near-api-js';
 import i18n from 'src/locale';
@@ -33,7 +33,7 @@ export const ManageCointainer: React.FC = () => {
   const {connectToNear} = useNearApi();
   const router = useRouter();
   const {publicRuntimeConfig} = getConfig();
-  const {openToasterSnack} = useToasterSnackHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
 
   const {currentWallet, wallets} = useSelector<RootState, UserState>(state => state.userState);
   const [showAccountList, setShowAccountList] = React.useState(false);
@@ -83,14 +83,14 @@ export const ManageCointainer: React.FC = () => {
 
     verified &&
       account &&
-      openToasterSnack({
+      enqueueSnackbar({
         message: i18n.t('Wallet.Manage.Alert.Connect'),
         variant: 'success',
       });
 
     !verified &&
       account &&
-      openToasterSnack({
+      enqueueSnackbar({
         message: i18n.t('Wallet.Manage.Alert.Error'),
         variant: 'error',
       });

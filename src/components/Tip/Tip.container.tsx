@@ -5,10 +5,10 @@ import {BoxComponent} from '../atoms/Box';
 import {ShimerComponent} from './Shimer';
 import {Tip} from './Tip';
 
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {Empty} from 'src/components/atoms/Empty';
 import ShowIf from 'src/components/common/show-if.component';
 import {useClaimTip} from 'src/hooks/use-claim-tip.hook';
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Network} from 'src/interfaces/network';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
@@ -19,7 +19,7 @@ export const TipContainer: React.FC = () => {
   const {currentWallet} = useSelector<RootState, UserState>(state => state.userState);
   const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
   const {loading, claiming, tipsEachNetwork, claimTipMyria, claimAll} = useClaimTip();
-  const {openToasterSnack} = useToasterSnackHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
 
   const handleClaimTip = (networkId: string, ftIdentifier: string) => {
     const isNative = ftIdentifier === 'native';
@@ -29,13 +29,13 @@ export const TipContainer: React.FC = () => {
     if (balanceGasClaim.length > 0) {
       //TODO: get estimate fee gas from polkadot
       if (balanceGasClaim[0].originBalance < 1) {
-        openToasterSnack({
+        enqueueSnackbar({
           message: i18n.t('Wallet.Tip.Alert.Insufficient'),
           variant: 'warning',
         });
       } else {
         claimTipMyria(networkId, ftIdentifier, () => {
-          openToasterSnack({
+          enqueueSnackbar({
             message: i18n.t('Wallet.Tip.Alert.Success'),
             variant: 'success',
           });
@@ -46,7 +46,7 @@ export const TipContainer: React.FC = () => {
 
   const handleClaimTipAll = (networkId: string) => {
     claimAll(networkId, () => {
-      openToasterSnack({
+      enqueueSnackbar({
         message: i18n.t('Wallet.Tip.Alert.Success'),
         variant: 'success',
       });

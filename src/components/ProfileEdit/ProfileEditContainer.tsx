@@ -6,8 +6,8 @@ import {useRouter} from 'next/router';
 import useConfirm from '../common/Confirm/use-confirm.hook';
 import {ProfileEditComponent} from './ProfileEdit';
 
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {useProfileHook} from 'src/hooks/use-profile.hook';
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
@@ -38,7 +38,7 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
     usernameStatus,
     usernameAvailable,
   } = useProfileHook();
-  const {openToasterSnack} = useToasterSnackHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
 
   useEffect(() => {
     checkUsernameStatus();
@@ -77,7 +77,7 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
 
       updateProfile(newUser, openSuccesPrompt);
     } catch (err) {
-      openToasterSnack({
+      enqueueSnackbar({
         message: i18n.t('Profile.Edit.Alert'),
         variant: 'error',
       });
