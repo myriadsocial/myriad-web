@@ -2,6 +2,7 @@ import {makeStyles, Theme} from '@material-ui/core';
 
 export const useStyles = makeStyles<Theme>(theme => ({
   action: {
+    marginTop: 51,
     '& > button': {
       [theme.breakpoints.down('xs')]: {
         width: '100%',
