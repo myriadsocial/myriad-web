@@ -1,4 +1,5 @@
 import React, {useState, useCallback, useEffect} from 'react';
+import {useSelector} from 'react-redux';
 import {MemoryRouter as Router, Routes, Route} from 'react-router-dom';
 
 import {CircularProgress} from '@material-ui/core';
@@ -19,6 +20,9 @@ import {useProfileHook} from 'src/hooks/use-profile.hook';
 import {NetworkIdEnum} from 'src/interfaces/network';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
 import {toHexPublicKey} from 'src/lib/crypto';
+import i18n from 'src/locale';
+import {RootState} from 'src/reducers';
+import {ConfigState} from 'src/reducers/config/reducer';
 
 type LoginProps = {
   redirectAuth: WalletTypeEnum | null;
@@ -27,6 +31,7 @@ type LoginProps = {
 
 export const Login: React.FC<LoginProps> = props => {
   const {redirectAuth, isMobileSignIn} = props;
+  const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
 
   const styles = useStyles();
 
@@ -51,6 +56,10 @@ export const Login: React.FC<LoginProps> = props => {
       checkWalletRegistered();
     }
   }, [redirectAuth]);
+
+  useEffect(() => {
+    i18n.changeLanguage(settings.language);
+  }, [settings.language]);
 
   const checkWalletRegistered = useCallback(async () => {
     const data = await connectToNear();

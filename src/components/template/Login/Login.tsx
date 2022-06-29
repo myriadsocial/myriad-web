@@ -6,10 +6,14 @@ import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from './Login.styles';
 
+import {settingLanguageOptions} from 'src/components/Settings/default';
+import {DropdownMenu} from 'src/components/atoms/DropdownMenu';
 import {MyriadFullIcon} from 'src/components/atoms/Icons';
 import {CookieConsent} from 'src/components/common/CookieConsent';
+import {useLanguage} from 'src/hooks/use-language.hook';
 import Purple from 'src/images/illustration/Bank_note_Isometric_1.svg';
 import Yellow from 'src/images/illustration/Conversation__Isometric_1.svg';
+import {LanguageSettingType} from 'src/interfaces/setting';
 import i18n from 'src/locale';
 
 type LoginProps = {
@@ -18,8 +22,9 @@ type LoginProps = {
 
 export const LoginLayout: React.FC<LoginProps> = ({children}) => {
   const style = useStyles();
+  const {language, changeLanguage} = useLanguage();
 
-  const settings: CarouselProps = {
+  const settingsCarousel: CarouselProps = {
     autoPlay: true,
     animation: 'slide',
     indicators: true,
@@ -47,8 +52,15 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
               {i18n.t('Login.Layout.Title_left')}{' '}
               <span className={style.titlePrimary}>{i18n.t('Login.Layout.Title_right')}</span>
             </Typography>
-
             {children}
+            <div>
+              <DropdownMenu<LanguageSettingType>
+                title=""
+                selected={language}
+                options={settingLanguageOptions}
+                onChange={changeLanguage}
+              />
+            </div>
           </div>
         </Grid>
         <Grid item xs={5}>
@@ -58,7 +70,8 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
               <Purple className={style.imagePurple} />
             </div>
             <div className={style.carousel}>
-              <Carousel {...settings}>
+              {/* TODO: FIX MARGIN BETWEEN CIRCLE INDICATOR CAROUSEL */}
+              <Carousel {...settingsCarousel}>
                 <div>
                   <div className={`${style.mb1}`}>
                     <Typography
