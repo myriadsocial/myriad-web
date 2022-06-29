@@ -48,35 +48,10 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     carousel: {
       position: 'absolute',
-      width: '400px',
+      width: '450px',
       height: '100px',
       bottom: '100px',
-      '& .rec.rec-arrow': {
-        visibility: 'hidden',
-        display: 'none',
-      },
-      '& .rec.rec-dot': {
-        background: theme.palette.background.paper,
-        boxShadow: 'none',
-        width: '12px',
-        height: '12px',
-      },
-      '& .rec.rec-dot.jJKuoL': {
-        width: '28px',
-        background: theme.palette.primary.main,
-        borderRadius: 20,
-      },
-      '& .rec.rec-dot:focus': {
-        background: theme.palette.primary.main,
-        width: '28px',
-        borderRadius: 20,
-      },
-      '& .rec.rec-pagination': {
-        paddingLeft: '8px',
-      },
-      '& .rec-carousel-wrapper': {
-        alignItems: 'flex-start',
-      },
+      left: 40,
     },
     caption: {
       lineHeight: '35.14px',
@@ -91,33 +66,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     border: {
       border: 0,
-    },
-    carouselIndicatior: {
-      color: '#FFF',
-
-      '&:active, :hover': {
-        color: '#FFF',
-      },
-
-      '& .MuiSvgIcon-root': {
-        fill: 'currentColor',
-      },
-    },
-    carouselActiveIndicatior: {
-      color: '#7342CC',
-      width: 28,
-      background: '#7342CC',
-      borderRadius: 20,
-
-      '&:active, :hover': {
-        color: '#7342CC',
-        background: '#7342CC',
-        borderRadius: 20,
-      },
-
-      '& .MuiSvgIcon-root': {
-        fill: 'currentColor',
-      },
     },
   }),
 );

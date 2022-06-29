@@ -27,15 +27,9 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
   const settingsCarousel: CarouselProps = {
     autoPlay: true,
     animation: 'slide',
-    indicators: true,
     timeout: 500,
-    navButtonsAlwaysVisible: false,
     navButtonsAlwaysInvisible: true,
-    indicatorContainerProps: {style: {textAlign: 'left'}},
-    indicatorIconButtonProps: {className: style.carouselIndicatior},
-    activeIndicatorIconButtonProps: {className: style.carouselActiveIndicatior},
-    cycleNavigation: true,
-    fullHeightHover: true,
+    indicatorContainerProps: {style: {textAlign: 'left', marginTop: 50}},
     swipe: true,
   };
 
@@ -70,8 +64,30 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
               <Purple className={style.imagePurple} />
             </div>
             <div className={style.carousel}>
-              {/* TODO: FIX MARGIN BETWEEN CIRCLE INDICATOR CAROUSEL */}
-              <Carousel {...settingsCarousel}>
+              <Carousel
+                {...settingsCarousel}
+                IndicatorIcon={
+                  <div
+                    style={{
+                      height: '12px',
+                      width: '12px',
+                      borderRadius: '6px',
+                    }}
+                  />
+                }
+                indicatorIconButtonProps={{
+                  style: {
+                    backgroundColor: '#FFF',
+                    margin: '4px',
+                  },
+                }}
+                activeIndicatorIconButtonProps={{
+                  style: {
+                    backgroundColor: '#7342CC',
+                    width: '28px',
+                    borderRadius: '20px',
+                  },
+                }}>
                 <div>
                   <div className={`${style.mb1}`}>
                     <Typography
