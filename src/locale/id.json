@@ -247,6 +247,10 @@
         "Subtitle": "Anda tidak dapat melihat postingan mereka atau mengirimi mereka permintaan pertemanan."
       }
     },
+    "Banned": {
+      "Title": "Akun telah diblokir",
+      "Description": "Akun ini telah diblokir oleh Myriad karena melanggar <policy>kebijakan privasi</policy>."
+    },
     "Header": {
       "Tooltip": {
         "Official": "Akun Resmi"
@@ -474,7 +478,6 @@
   },
   "Post_Create": {
     "Success_Toaster": "Postingan berhasil dibuat!",
-    "Failed_Toaster": "Gagal membuat postingan, coba lagi nanti",
     "Text_Placeholder": "Ketik...",
     "Title": "Buat Postingan",
     "Subtitle": "Buat Postinganmu",
@@ -523,6 +526,10 @@
         "Placeholder": "{{prefix}} URL Tautan",
         "Btn_Confirm": "Konfirmasi"
       }
+    },
+    "Error": {
+      "Default": "Gagal membuat postingan, coba lagi nanti",
+      "ImageTooLarge": "Gagal membuat postingan, ukuran foto terlalu besar"
     }
   },
   "Post_Delete": {
@@ -1083,7 +1090,8 @@
     "Text_2": "Syarat dan ketentuan"
   },
   "Banner": {
-    "Text": "{{appName}} {{version}} tidak sepenuhnya diaudit, silakan gunakan dengan risiko Anda sendiri."
+    "Demo": "{{appName}} {{version}} tidak sepenuhnya diaudit, silakan gunakan dengan risiko Anda sendiri.",
+    "Banned": "Akun Anda telah diblokir sementara karena setelah kami meninjau laporan, Anda melanggar aturan. Oleh karena itu, Anda dilarang mengambil tindakan di Myriad."
   },
   "Tooltip": {
     "Chat": "Fitur obrolan, segera hadir",

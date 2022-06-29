@@ -8,11 +8,9 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 
-import {ProfileTimeline} from 'src/components/Profile/Profile';
-import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
-import {ResourceDeleted} from 'src/components/common/ResourceDeleted';
+import {ProfileContainer} from 'components/Profile';
+import {TopNavbarComponent} from 'components/atoms/TopNavbar';
 import {TippingSuccess} from 'src/components/common/Tipping/render/Tipping.success';
-import ShowIf from 'src/components/common/show-if.component';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {generateAnonymousUser} from 'src/helpers/auth';
 import {initialize} from 'src/lib/api/base';
@@ -55,28 +53,23 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = props => {
   return (
     <DefaultLayout isOnProfilePage={true}>
       <Head>
-        <title>{isBanned ? 'Profile Not Found' : title}</title>
+        <title>{title}</title>
         <meta property="og:type" content="profile" />
         <meta property="og:url" content={publicRuntimeConfig.appAuthURL + router.asPath} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
-        {image && <meta property="og:image" content={image} />}
-        {/* Twitter Card tags */}
+        <meta property="og:image" content={image} />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
-        {image && <meta name="twitter:image" content={image} />}
+        <meta name="twitter:image" content={image} />
         <meta name="twitter:card" content="summary" />
       </Head>
 
-      <ProfileTimeline loading={false} isBanned={isBanned} />
+      <>
+        <TopNavbarComponent sectionTitle={title} description={i18n.t('TopNavbar.Title.Profile')} />
+        <ProfileContainer banned={isBanned} />
+      </>
 
-      <ShowIf condition={isBanned}>
-        <TopNavbarComponent
-          description={i18n.t('TopNavbar.Subtitle.Profile')}
-          sectionTitle={i18n.t('TopNavbar.Title.Profile')}
-        />
-        <ResourceDeleted />
-      </ShowIf>
       <TippingSuccess />
     </DefaultLayout>
   );
@@ -130,6 +123,8 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   try {
     const detail = await UserAPI.getUserDetail(profileId, userId);
+
+    console.log('detail', detail);
 
     await dispatch(setProfile(detail));
 

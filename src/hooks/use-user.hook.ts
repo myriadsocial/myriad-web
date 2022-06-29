@@ -1,6 +1,6 @@
 import {useSelector, useDispatch} from 'react-redux';
 
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {SocialsEnum} from 'src/interfaces';
 import {Network} from 'src/interfaces/network';
 import {User, UserWallet} from 'src/interfaces/user';
@@ -25,7 +25,7 @@ type UserHookProps = {
 export const useUserHook = (): UserHookProps => {
   const dispatch = useDispatch();
 
-  const {openToasterSnack} = useToasterSnackHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
 
   const {user, anonymous, alias, socials, networks, currentWallet, wallets, userWalletAddress} =
     useSelector<RootState, UserState>(state => state.userState);
@@ -48,7 +48,7 @@ export const useUserHook = (): UserHookProps => {
     dispatch(updateUser(values));
 
     if (!disableUpdateAlert) {
-      openToasterSnack({
+      enqueueSnackbar({
         message: 'Success update profile',
         variant: 'success',
       });

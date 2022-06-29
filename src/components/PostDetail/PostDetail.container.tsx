@@ -8,10 +8,10 @@ import {PostDetail} from './PostDetail';
 import {usePostDelete} from './hooks/use-post-delete.hook';
 import {usePostInteraction} from './hooks/use-post-interaction.hook';
 
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {PostVisibilityContainer} from 'src/components/PostVisibility';
 import {useTimelineHook} from 'src/components/Timeline/hooks/use-timeline.hook';
 import {useTipHistory} from 'src/hooks/tip-history.hook';
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
 import i18n from 'src/locale';
@@ -40,7 +40,7 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
 
   const {post} = useTimelineHook();
   const {openTipHistory} = useTipHistory();
-  const {openToasterSnack} = useToasterSnackHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
   const {confirmDeletePost} = usePostDelete();
   const {upVotePost, setDownVotingPost, removePostVote} = usePostInteraction();
 
@@ -51,7 +51,7 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
 
   const handleSharePost = (post: Post, type: 'link' | 'post') => {
     if (type === 'post') {
-      openToasterSnack({
+      enqueueSnackbar({
         message: 'This post successfully share to your timeline',
         variant: 'success',
       });

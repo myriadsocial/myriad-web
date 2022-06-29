@@ -14,7 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import {Theme, withStyles, createStyles} from '@material-ui/core/styles';
 
 import {Avatar, AvatarSize} from '../atoms/Avatar';
-import PostAvatar from '../atoms/PostHeader/avatar/post-avatar.component';
+import {SocialAvatar} from '../atoms/SocialAvatar';
 import ShowIf from '../common/show-if.component';
 import {useStyles} from './Notifications.styles';
 import {useNotificationList, NotificationList} from './hooks/use-notification-list.hook';
@@ -126,7 +126,7 @@ export const Notifications: React.FC<NotificationsProps> = props => {
                 <ListItemAvatar className={style.avatarItem}>
                   {notification.user === 'Account unlinked' ||
                   notification.user === 'Account linked' ? (
-                    <PostAvatar
+                    <SocialAvatar
                       origin={notification.platform ?? 'myriad'}
                       name={notification.avatar ?? 'Myriad'}
                       onClick={handleVisitProfile(notification)}

@@ -22,11 +22,11 @@ import {useFriendOptions} from './hooks/use-friend-options.hook';
 import {useStyles} from './profile-header.style';
 import {Website} from './render/Website';
 
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {OfficialBadgeIcon} from 'src/components/atoms/Icons';
 import {ReportComponent} from 'src/components/atoms/Report/Report.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {acronym} from 'src/helpers/string';
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Friend} from 'src/interfaces/friend';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {ReportProps} from 'src/interfaces/report';
@@ -49,7 +49,7 @@ export type Props = {
   onOpenTipHistory: (person: User) => void;
 };
 
-const background = 'https://res.cloudinary.com/dsget80gs/background/profile-default-bg.png';
+const background = '/images/profile-default-bg.png';
 
 export const ProfileHeaderComponent: React.FC<Props> = props => {
   const {
@@ -74,7 +74,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     user,
     status,
   );
-  const {openToasterSnack} = useToasterSnackHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [anchorElFriend, setAnchorElFriend] = React.useState<null | HTMLElement>(null);
@@ -103,7 +103,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
 
   const handleLinkCopied = () => {
     handleCloseMenu();
-    openToasterSnack({
+    enqueueSnackbar({
       message: i18n.t('Profile.Header.Alert.Copy'),
       variant: 'success',
     });

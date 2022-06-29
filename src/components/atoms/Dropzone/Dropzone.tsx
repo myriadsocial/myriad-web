@@ -9,8 +9,8 @@ import MultipleImagePreview from './Render/PreviewImage/Multiple';
 import SingleImagePreview from './Render/PreviewImage/Single';
 import VideoPreview from './Render/PreviewVideo';
 
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import ShowIf from 'src/components/common/show-if.component';
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import i18n from 'src/locale';
 
 type DropzoneProps = {
@@ -47,7 +47,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
   } = props;
 
   const styles = useStyles(props);
-  const {openToasterSnack} = useToasterSnackHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
 
   const [files, setFiles] = useState<File[]>([]);
   const [preview, setPreview] = useState<string[]>(value ? [value] : []);
@@ -73,7 +73,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
       onImageSelected(newFiles);
     },
     onDropRejected: rejection => {
-      openToasterSnack({
+      enqueueSnackbar({
         message: getErrorMessage(rejection[0].errors[0]),
         variant: 'error',
       });

@@ -247,6 +247,10 @@
         "Subtitle": "Вы не можете смотреть посты этого пользователя или отправить ему запрос на друзья."
       }
     },
+    "Banned": {
+      "Title": "Account banned",
+      "Description": "This account has been banned by Myriad due to violating our <policy>Privacy Policy</policy>."
+    },
     "Header": {
       "Tooltip": {
         "Official": "Оффициальный аккаунт"
@@ -474,7 +478,6 @@
   },
   "Post_Create": {
     "Success_Toaster": "Сообщение успешно создано!",
-    "Failed_Toaster": "Не удалось создать запись, попробуйте позже",
     "Text_Placeholder": "Ввод...",
     "Title": "Создать Публикацию",
     "Subtitle": "Создайте свой собственный пост",
@@ -523,6 +526,10 @@
         "Placeholder": "{{prefix}} адрес ссылки URL",
         "Btn_Confirm": "Подтвердить"
       }
+    },
+    "Error": {
+      "Default": "Не удалось создать запись, попробуйте позже",
+      "ImageTooLarge": "Failed to create post, image too large"
     }
   },
   "Post_Delete": {
@@ -1083,7 +1090,8 @@
     "Text_2": "Условия и положения"
   },
   "Banner": {
-    "Text": "{{appName}} {{version}} не полнисть проверен, ответственность на вашей стороне."
+    "Demo": "{{appName}} {{version}} не полнисть проверен, ответственность на вашей стороне.",
+    "Banned": "Your account has been temporarily banned because after we review the reports, you are violating the rules. Therefore, you are restricted from taking action in Myriad."
   },
   "Tooltip": {
     "Chat": "Функция чата, скоро появится",

@@ -7,10 +7,10 @@ import {Box, Button, Grid, Typography} from '@material-ui/core';
 
 import {ButtonNotify} from './ButtonNotify';
 
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import localforage from 'localforage';
 import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
 import {toBigNumber} from 'src/helpers/string';
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Comment} from 'src/interfaces/comment';
 import {Currency} from 'src/interfaces/currency';
 import {ReferenceType} from 'src/interfaces/interaction';
@@ -40,7 +40,7 @@ const {publicRuntimeConfig} = getConfig();
 
 export const TippingSuccess = () => {
   const router = useRouter();
-  const {openToasterSnack} = useToasterSnackHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
   const [options, setOptions] = useState<TippingStorageProps>();
   const [openPrompt, setOpenPrompt] = useState(false);
   const [trxHash, setTrxHash] = useState<string | null>(null);
@@ -74,7 +74,7 @@ export const TippingSuccess = () => {
     }
 
     if (errorCode && errorMessage) {
-      openToasterSnack({
+      enqueueSnackbar({
         variant: 'warning',
         message: i18n.t('Tipping.Toaster.Rejected'),
       });

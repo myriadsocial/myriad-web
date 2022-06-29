@@ -6,16 +6,16 @@ import {useRouter} from 'next/router';
 import {useMediaQuery, useTheme} from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 
+import {PostActionComponent} from '../PostAction';
 import {PostRender} from '../PostEditor/PostRender';
 import {NSFW} from '../atoms/NSFW/NSFW.component';
-import {PostActionComponent} from '../atoms/PostAction';
-import {HeaderComponent} from '../atoms/PostHeader';
 import {TabsComponent} from '../atoms/Tabs';
 import {Video} from '../atoms/Video';
 import {SendTipButton} from '../common/SendTipButton/SendTipButton';
 import {useStyles} from './PostDetail.styles';
 import {useCommentTabs} from './hooks/use-comment-tabs';
 
+import {HeaderComponent} from 'components/PostHeader';
 import {LinkPreview} from 'src/components/atoms/LinkPreview';
 import ShowIf from 'src/components/common/show-if.component';
 import {Comment} from 'src/interfaces/comment';

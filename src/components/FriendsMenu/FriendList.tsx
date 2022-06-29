@@ -7,7 +7,8 @@ import {useSelector, useDispatch} from 'react-redux';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 
-import {IconButton, Menu, MenuItem, Grid} from '@material-ui/core';
+import {Menu, MenuItem, Grid} from '@material-ui/core';
+import BaseIconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
@@ -25,10 +26,11 @@ import {FriendType} from './default';
 import {useStyles} from './friend.style';
 import {UserWithMutual, useFriendList} from './hooks/use-friend-list.hook';
 
+import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorizeAction';
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {Empty} from 'src/components/atoms/Empty';
 import {Loading} from 'src/components/atoms/Loading';
 import ShowIf from 'src/components/common/show-if.component';
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Friend} from 'src/interfaces/friend';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
@@ -55,6 +57,8 @@ export type FriendListProps = {
   onLoadNextPage: () => void;
 };
 
+const IconButton = WithAuthorizeAction(BaseIconButton);
+
 export const FriendListComponent: React.FC<FriendListProps> = props => {
   const {
     type,
@@ -76,7 +80,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   const confirm = useConfirm();
   const tipping = useTipping();
 
-  const {openToasterSnack} = useToasterSnackHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
   const {friendList, removeFromFriendList} = useFriendList(friends, user);
 
   const {user: currentUser} = useSelector<RootState, UserState>(state => state.userState);
@@ -196,7 +200,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
       dispatch(removeFromFriend(removedFriend));
       removeFromFriendList(currentFriend.id);
 
-      openToasterSnack({
+      enqueueSnackbar({
         message: i18n.t('Friends.Alert.Removed', {
           name: currentFriend?.name,
         }),
@@ -215,7 +219,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
 
       removeFromFriendList(currentFriend.id);
 
-      openToasterSnack({
+      enqueueSnackbar({
         message: i18n.t('Friends.Alert.Block'),
         variant: 'success',
       });

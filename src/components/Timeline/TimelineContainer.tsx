@@ -14,11 +14,11 @@ import {useStyles} from './Timeline.styles';
 import {useTimelineFilter} from './hooks/use-timeline-filter.hook';
 import {useTimelineHook} from './hooks/use-timeline.hook';
 
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import ShowIf from 'components/common/show-if.component';
 import {useTipHistory} from 'src/hooks/tip-history.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {useScroll} from 'src/hooks/use-scroll.hook';
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Comment} from 'src/interfaces/comment';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
@@ -63,7 +63,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
   const {filterTimeline} = useTimelineFilter(filters);
   const {query} = useQueryParams();
   const {openTipHistory} = useTipHistory();
-  const {openToasterSnack} = useToasterSnackHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
   const {scrollPosition} = useScroll();
 
   const user = useSelector<RootState, User | undefined>(state => state.userState.user);
@@ -132,7 +132,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
 
   const handleSharePost = (post: Post, type: 'link' | 'post') => {
     if (type === 'post') {
-      openToasterSnack({
+      enqueueSnackbar({
         message: i18n.t('Post_Share.Confirmation_Message'),
         variant: 'success',
       });

@@ -4,8 +4,8 @@ import {useState} from 'react';
 import {useSelector} from 'react-redux';
 
 import axios from 'axios';
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {isErrorWithMessage} from 'src/helpers/error';
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import * as UploadAPI from 'src/lib/api/upload';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
@@ -13,7 +13,7 @@ import {UserState} from 'src/reducers/user/reducer';
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useUpload = () => {
   const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const {openToasterSnack} = useToasterSnackHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
 
   const [image, setImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -25,7 +25,7 @@ export const useUpload = () => {
 
   const uploadImage = async (file: File) => {
     if (!user) {
-      openToasterSnack({
+      enqueueSnackbar({
         message: 'Login to upload file',
         variant: 'error',
       });
@@ -59,7 +59,7 @@ export const useUpload = () => {
 
       Sentry.captureException(error);
 
-      openToasterSnack({
+      enqueueSnackbar({
         message: 'failed to upload image',
         variant: 'warning',
       });
@@ -69,7 +69,7 @@ export const useUpload = () => {
 
   const uploadVideo = async (file: File) => {
     if (!user) {
-      openToasterSnack({
+      enqueueSnackbar({
         message: 'Login to upload file',
         variant: 'error',
       });
@@ -103,7 +103,7 @@ export const useUpload = () => {
 
       Sentry.captureException(error);
 
-      openToasterSnack({
+      enqueueSnackbar({
         message: 'failed to upload video',
         variant: 'warning',
       });

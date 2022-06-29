@@ -10,9 +10,9 @@ import {useTimelineHook} from '../Timeline/hooks/use-timeline.hook';
 import {TipHistoryContainer} from '../TipHistory';
 import {PostsList} from './PostsList';
 
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {PostVisibilityContainer} from 'src/components/PostVisibility';
 import {useTipHistory} from 'src/hooks/tip-history.hook';
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Comment} from 'src/interfaces/comment';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
@@ -35,7 +35,7 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
 
   const {loading, page, posts, hasMore, order, searchPosts} = useTimelineHook();
   const {openTipHistory} = useTipHistory();
-  const {openToasterSnack} = useToasterSnackHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
 
   const user = useSelector<RootState, User | undefined>(state => state.userState.user);
   const anonymous = useSelector<RootState, boolean>(state => state.userState.anonymous);
@@ -84,7 +84,7 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
 
   const handleSharePost = (post: Post, type: 'link' | 'post') => {
     if (type === 'post') {
-      openToasterSnack({
+      enqueueSnackbar({
         message: 'This post successfully share to your timeline',
         variant: 'success',
       });

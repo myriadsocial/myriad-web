@@ -1,23 +1,20 @@
-import React, {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
+import React from 'react';
 
 import {getSession} from 'next-auth/react';
 import getConfig from 'next/config';
-import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 
 import {NavbarComponent} from 'src/components/Mobile/Navbar/Navbar';
 import {RichTextContainer} from 'src/components/Richtext/RichTextContainer';
 import {TimelineContainer} from 'src/components/Timeline/TimelineContainer';
-import Banner from 'src/components/atoms/BannerStatus/BannerStatus';
 import {SearchBoxContainer} from 'src/components/atoms/Search/SearchBoxContainer';
+import {AppStatusBanner} from 'src/components/common/Banner';
 import {TippingSuccess} from 'src/components/common/Tipping/render/Tipping.success';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {initialize} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
@@ -32,28 +29,13 @@ import {
   fetchNetwork,
   fetchCurrentUserWallets,
 } from 'src/reducers/user/actions';
-import {UserState} from 'src/reducers/user/reducer';
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
 const {publicRuntimeConfig} = getConfig();
 
-const BannedDialog = dynamic(() => import('src/components/BannedDialog/BannedDialog'), {
-  ssr: false,
-});
-
 const Home: React.FC = () => {
   const router = useRouter();
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const [dialogBanned, setDialogBanned] = useState({
-    open: false,
-  });
-
-  useEffect(() => {
-    if (user?.deletedAt) {
-      setDialogBanned({...dialogBanned, open: true});
-    }
-  }, [user]);
 
   const performSearch = (query: string) => {
     const DELAY = 100;
@@ -80,16 +62,11 @@ const Home: React.FC = () => {
 
       <NavbarComponent onSubmitSearch={performSearch} />
 
-      <Banner />
       <SearchBoxContainer onSubmitSearch={performSearch} hidden={true} />
       <RichTextContainer />
       <TimelineContainer filterType="type" selectionType="order" />
-
-      <BannedDialog
-        open={dialogBanned.open}
-        onClose={() => setDialogBanned({...dialogBanned, open: false})}
-      />
       <TippingSuccess />
+      <AppStatusBanner />
     </DefaultLayout>
   );
 };

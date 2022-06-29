@@ -15,7 +15,6 @@ import {SearchReducer} from './search/reducer';
 import {TagReducer} from './tag/reducer';
 import {TimelineReducer} from './timeline/reducer';
 import {TipSummaryReducer} from './tip-summary/reducer';
-import {ToasterSnackReducer} from './toaster-snack/reducer';
 import {TransactionReducer} from './transaction/reducer';
 import {UserReducer} from './user/reducer';
 
@@ -39,8 +38,6 @@ const reducers = {
   peopleState: PeopleReducer,
   exchangeRateState: ExchangeRateReducer,
   importersState: ImporterReducer,
-
-  toasterSnackState: ToasterSnackReducer,
   blockState: BlockReducer,
   searchState: SearchReducer,
 };

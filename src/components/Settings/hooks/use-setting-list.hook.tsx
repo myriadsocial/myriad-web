@@ -3,11 +3,11 @@ import {useSelector} from 'react-redux';
 
 import getConfig from 'next/config';
 
-import {BlockListContainer} from '../../BlockUserList/BlockList.container';
-import {HelpComponent} from '../../common/Help/Help';
 import {AccountSettingsContainer} from '../AccountSettingsContainer';
 import {LanguageSettingsContainer} from '../LanguageSettingsContainer';
 import {NotificationSettingsContainer} from '../NotificationSettings.container';
+import {BlockListContainer} from '../render/BlockList';
+import {HelpComponent} from '../render/Help';
 
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';

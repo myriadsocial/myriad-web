@@ -1,7 +1,6 @@
 import {useDispatch, useSelector} from 'react-redux';
 
-import {useToasterSnackHook} from './use-toaster-snack.hook';
-
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {Comment} from 'src/interfaces/comment';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
@@ -16,7 +15,7 @@ export const useReport = () => {
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const dispatch = useDispatch();
 
-  const {openToasterSnack} = useToasterSnackHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
 
   const sendReport = async (reference: Post | Comment, type: string, description: string) => {
     try {
@@ -33,7 +32,7 @@ export const useReport = () => {
 
       await InteractionAPI.report(user.id, attributes);
 
-      openToasterSnack({
+      enqueueSnackbar({
         message: i18n.t('Post_Comment.Modal_Report.Toaster_Success'),
         variant: 'success',
       });
@@ -50,7 +49,7 @@ export const useReport = () => {
 
       await InteractionAPI.report(user.id, value);
 
-      openToasterSnack({
+      enqueueSnackbar({
         message: i18n.t('Profile.Modal_Report.Toaster_Success'),
         variant: 'success',
       });

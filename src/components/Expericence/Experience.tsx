@@ -15,16 +15,17 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import BaseMenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
 import useConfirm from '../common/Confirm/use-confirm.hook';
 import {useStyles} from './Experience.style';
 
+import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorizeAction';
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {Modal} from 'src/components/atoms/Modal';
 import ShowIf from 'src/components/common/show-if.component';
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {WrappedExperience} from 'src/interfaces/experience';
 import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
@@ -41,6 +42,8 @@ type ExperienceProps = {
   onUnsubscribe?: (experienceId: string) => void;
   onDelete?: (experienceId: string) => void;
 };
+
+const MenuItem = WithAuthorizeAction(BaseMenuItem);
 
 const DEFAULT_IMAGE =
   'https://pbs.twimg.com/profile_images/1407599051579617281/-jHXi6y5_400x400.jpg';
@@ -62,7 +65,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
 
   const styles = useStyles(props);
   const confirm = useConfirm();
-  const {openToasterSnack} = useToasterSnackHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
 
   const [menuAnchorElement, setMenuAnchorElement] = useState<null | HTMLElement>(null);
   const [shareAnchorElement, setShareAnchorElement] = useState<null | HTMLElement>(null);
@@ -151,7 +154,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
   };
 
   const handleExperienceLinkCopied = () => {
-    openToasterSnack({
+    enqueueSnackbar({
       message: i18n.t('Experience.List.Copy'),
       variant: 'success',
     });
@@ -204,7 +207,9 @@ export const Experience: React.FC<ExperienceProps> = props => {
         open={Boolean(menuAnchorElement)}
         onClose={handleCloseSettings}>
         <Link href={`/experience/[experienceId]`} as={`/experience/${experienceId}`} passHref>
-          <MenuItem onClick={handleCloseSettings}>{i18n.t('Experience.List.Menu.View')}</MenuItem>
+          <BaseMenuItem onClick={handleCloseSettings}>
+            {i18n.t('Experience.List.Menu.View')}
+          </BaseMenuItem>
         </Link>
 
         <ShowIf condition={isOwnExperience}>
@@ -217,28 +222,42 @@ export const Experience: React.FC<ExperienceProps> = props => {
         </ShowIf>
 
         <ShowIf condition={!isOwnExperience && !isHidden()}>
-          <MenuItem onClick={handleCloneExperience} disabled={anonymous}>
+          <MenuItem
+            onClick={handleCloneExperience}
+            fallback={handleCloseSettings}
+            disabled={anonymous}>
             {i18n.t('Experience.List.Menu.Clone')}
           </MenuItem>
         </ShowIf>
 
         <ShowIf condition={!userExperience.subscribed && !isOwnExperience && !isHidden()}>
-          <MenuItem onClick={handleSubscribeExperience} disabled={anonymous}>
+          <MenuItem
+            onClick={handleSubscribeExperience}
+            fallback={handleCloseSettings}
+            disabled={anonymous}>
             {i18n.t('Experience.List.Menu.Subscribe')}
           </MenuItem>
         </ShowIf>
 
         <ShowIf condition={Boolean(userExperience.subscribed) && !isOwnExperience}>
-          <MenuItem onClick={confirmUnsubscribe} className={styles.delete}>
+          <MenuItem
+            onClick={confirmUnsubscribe}
+            fallback={handleCloseSettings}
+            className={styles.delete}>
             {i18n.t('Experience.List.Menu.Unsubscribe')}
           </MenuItem>
         </ShowIf>
         <ShowIf condition={isOwnExperience}>
-          <MenuItem onClick={confirmDeleteExperience} className={styles.delete}>
+          <MenuItem
+            onClick={confirmDeleteExperience}
+            fallback={handleCloseSettings}
+            className={styles.delete}>
             {i18n.t('Experience.List.Menu.Delete')}
           </MenuItem>
         </ShowIf>
-        <MenuItem onClick={openShareExperience}>{i18n.t('Experience.List.Menu.Share')}</MenuItem>
+        <BaseMenuItem onClick={openShareExperience}>
+          {i18n.t('Experience.List.Menu.Share')}
+        </BaseMenuItem>
       </Menu>
 
       <Modal

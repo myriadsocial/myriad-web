@@ -8,7 +8,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-import PostAvatar from 'src/components/atoms/PostHeader/avatar/post-avatar.component';
+import {SocialAvatar} from '../SocialAvatar';
+
 import {SocialsEnum} from 'src/interfaces/social';
 import {PostOrigin} from 'src/interfaces/timeline';
 
@@ -99,7 +100,7 @@ export const ListItemPeopleComponent: React.FC<ListItemComponentProps> = props =
         </ListItemIcon>
       ) : (
         <ListItemAvatar className={styles.avatar}>
-          <PostAvatar
+          <SocialAvatar
             name={title}
             origin={platform as PostOrigin}
             avatar={avatar}

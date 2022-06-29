@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
@@ -12,53 +12,50 @@ import {useStyles} from './Profile.style';
 
 import {ProfileHeaderContainer} from 'src/components/ProfileHeader/ProfileHeaderContainer';
 import {UserMenuContainer} from 'src/components/UserMenu';
-import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import ShowIf from 'src/components/common/show-if.component';
-import {FriendStatus} from 'src/interfaces/friend';
+import {Friend, FriendStatus} from 'src/interfaces/friend';
+import {BlockedProps, User} from 'src/interfaces/user';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
 import {fetchProfileFriend} from 'src/reducers/profile/actions';
 import {checkFriendedStatus} from 'src/reducers/profile/actions';
-import {ProfileState} from 'src/reducers/profile/reducer';
-import {UserState} from 'src/reducers/user/reducer';
 
 const ProfileEditContainer = dynamic(
   () => import('src/components/ProfileEdit/ProfileEditContainer'),
   {ssr: false},
 );
 
-type Props = {
+type ProfileProps = {
   loading: boolean;
-  isBanned?: boolean;
+  user: User;
+  person: User & BlockedProps;
+  anonymous: boolean;
+  friendStatus: Friend;
 };
 
-export const ProfileTimeline: React.FC<Props> = ({loading, isBanned = false}) => {
+export const Profile: React.FC<ProfileProps> = props => {
+  const {user, person, anonymous, friendStatus} = props;
+
   const style = useStyles();
   const dispatch = useDispatch();
   const router = useRouter();
-
-  const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
-  const {detail: profile, friendStatus} = useSelector<RootState, ProfileState>(
-    state => state.profileState,
-  );
   const isEditing = router.query?.edit === 'edit';
 
   useEffect(() => {
-    if (!isEditing && profile?.id) {
+    if (!isEditing && person?.id) {
       dispatch(fetchProfileFriend());
     }
 
-    if (!isEditing && profile?.id && !anonymous) {
+    if (!isEditing && person?.id && !anonymous) {
       dispatch(checkFriendedStatus());
     }
 
     return undefined;
-  }, [profile?.id, anonymous, isEditing]);
+  }, [person?.id, anonymous, isEditing]);
 
   const handleOpenEdit = () => {
     router.push(
       {
-        pathname: `/profile/${profile?.id}`,
+        pathname: `/profile/${person?.id}`,
         query: {edit: 'edit'},
       },
       undefined,
@@ -69,34 +66,29 @@ export const ProfileTimeline: React.FC<Props> = ({loading, isBanned = false}) =>
   const handleCloseEdit = () => {
     router.push(
       {
-        pathname: `/profile/${profile?.id}`,
+        pathname: `/profile/${person?.id}`,
       },
       undefined,
       {shallow: true},
     );
   };
 
-  if (!profile?.id) return <ProfileNotFound />;
+  if (!person?.id) return <ProfileNotFound />;
 
   return (
-    <div className={style.root} style={{display: isBanned ? 'none' : 'block'}}>
+    <div className={style.root}>
       <div className={style.scroll}>
-        <div className={style.mb}>
-          <TopNavbarComponent
-            sectionTitle={profile.name}
-            description={i18n.t('TopNavbar.Title.Profile')}
-          />
-        </div>
-
         <ShowIf condition={isEditing}>
           <ProfileEditContainer onClose={handleCloseEdit} />
         </ShowIf>
 
         <ShowIf condition={!isEditing}>
           <ProfileHeaderContainer edit={handleOpenEdit} />
+
           <ShowIf condition={friendStatus?.status !== FriendStatus.BLOCKED}>
-            <UserMenuContainer isMyriad={profile.username === 'myriad_official'} />
+            <UserMenuContainer isMyriad={person.username === 'myriad_official'} />
           </ShowIf>
+
           <ShowIf condition={friendStatus?.status === FriendStatus.BLOCKED}>
             <Grid
               container
@@ -105,16 +97,16 @@ export const ProfileTimeline: React.FC<Props> = ({loading, isBanned = false}) =>
               alignItems="center"
               className={style.blocked}>
               <Typography variant="h4" className={style.blockedTitle}>
-                {user?.id === profile.blocker
+                {user?.id === person.blocker
                   ? i18n.t('Profile.Block.User.Title')
                   : i18n.t('Profile.Block.Other.Title')}
               </Typography>
-              <ShowIf condition={user?.id === profile.blocker}>
+              <ShowIf condition={user?.id === person.blocker}>
                 <Typography variant="body1" component="div">
                   {i18n.t('Profile.Block.User.Subtitle')}
                 </Typography>
               </ShowIf>
-              <ShowIf condition={user?.id !== profile.blocker}>
+              <ShowIf condition={user?.id !== person.blocker}>
                 <Typography variant="body1" component="div">
                   {i18n.t('Profile.Block.Other.Subtitle')}
                 </Typography>

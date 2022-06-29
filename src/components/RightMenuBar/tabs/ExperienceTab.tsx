@@ -10,10 +10,10 @@ import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from './Tab.style';
 
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {ExperienceListContainer, EmptyExperience} from 'src/components/ExperienceList';
 import ShowIf from 'src/components/common/show-if.component';
 import {ExperienceOwner} from 'src/hooks/use-experience-hook';
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
@@ -29,11 +29,11 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
 
   const {user, experiences} = useSelector<RootState, UserState>(state => state.userState);
 
-  const {openToasterSnack} = useToasterSnackHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
 
   const handleCreateExperience = () => {
     if (experiences.length === 10) {
-      openToasterSnack({
+      enqueueSnackbar({
         message: i18n.t('Experience.Alert.Max_Exp'),
         variant: 'warning',
       });

@@ -3,9 +3,9 @@ import {useSelector} from 'react-redux';
 
 import {FriendRequestComponent} from './FriendRequest';
 
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {debounce} from 'lodash';
 import {useFriendsHook} from 'src/hooks/use-friends-hook';
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {Friend, FriendStatus} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
@@ -20,7 +20,7 @@ export const FriendRequestListContainer: React.FC<FriendRequestContainerProps> =
   const {user} = props;
 
   const {loadRequests, toggleRequest, removeFriendRequest} = useFriendsHook(user);
-  const {openToasterSnack} = useToasterSnackHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
 
   const {requests} = useSelector<RootState, FriendRequestState>(state => state.friendRequestState);
 
@@ -31,7 +31,7 @@ export const FriendRequestListContainer: React.FC<FriendRequestContainerProps> =
   const acceptFriendRequest = debounce((request: Friend) => {
     toggleRequest(request, FriendStatus.APPROVED);
 
-    openToasterSnack({
+    enqueueSnackbar({
       message: 'Friend request accepted',
       variant: 'success',
     });
@@ -40,7 +40,7 @@ export const FriendRequestListContainer: React.FC<FriendRequestContainerProps> =
   const declineFriendRequest = debounce((request: Friend) => {
     removeFriendRequest(request);
 
-    openToasterSnack({
+    enqueueSnackbar({
       message: 'Friend request rejected',
       variant: 'warning',
     });

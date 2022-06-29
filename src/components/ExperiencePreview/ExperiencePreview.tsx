@@ -9,13 +9,14 @@ import {useRouter} from 'next/router';
 
 import {IconButton, SvgIcon, Typography} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
+import BaseButton from '@material-ui/core/Button';
 
 import {PostDetailExperience} from '../PostDetailExperience/PostDetailExperience';
 import {Loading} from '../atoms/Loading';
 import useConfirm from '../common/Confirm/use-confirm.hook';
 import {useStyles} from './experience.style';
 
+import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorizeAction';
 import {ListItemPeopleComponent} from 'src/components/atoms/ListItem/ListItemPeople';
 import {acronym} from 'src/helpers/string';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
@@ -42,6 +43,8 @@ enum TagsProps {
   ALLOWED = 'allowed',
   PROHIBITED = 'prohibited',
 }
+
+const Button = WithAuthorizeAction(BaseButton);
 
 export const ExperiencePreview: React.FC<Props> = props => {
   const {experience, userExperiences, onSubscribe, onUnsubscribe, onFollow, onUpdate} = props;

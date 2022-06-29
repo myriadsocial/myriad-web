@@ -4,7 +4,7 @@ import {useSelector} from 'react-redux';
 import {useWalletList} from '../Manage/use-wallet-list.hook';
 import {UserSettings} from './UserSettings';
 
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
@@ -15,13 +15,13 @@ type UserSettingsContainerProps = {
 };
 
 export const UserSettingsContainer: React.FC<UserSettingsContainerProps> = props => {
-  const {openToasterSnack} = useToasterSnackHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
 
   const {detail} = useSelector<RootState, ProfileState>(state => state.profileState);
   const {walletList} = useWalletList(detail?.wallets ?? []);
 
   const handlePublicKeyCopied = () => {
-    openToasterSnack({
+    enqueueSnackbar({
       message: i18n.t('Profile.Setting.Copy'),
       variant: 'success',
     });

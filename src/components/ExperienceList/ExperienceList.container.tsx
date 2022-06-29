@@ -7,9 +7,9 @@ import {useRouter} from 'next/router';
 import {ExperienceList} from './ExperienceList';
 import {useExperienceList} from './hooks/use-experience-list.hook';
 
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {Skeleton} from 'src/components/Expericence';
 import {ExperienceOwner, useExperienceHook} from 'src/hooks/use-experience-hook';
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
 import {WrappedExperience} from 'src/interfaces/experience';
 import {TimelineType} from 'src/interfaces/timeline';
 import i18n from 'src/locale';
@@ -45,7 +45,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
   const {loadExperience, removeExperience, unsubscribeExperience, subscribeExperience} =
     useExperienceHook();
   const {list: experiences, limitExceeded} = useExperienceList(owner);
-  const {openToasterSnack} = useToasterSnackHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
 
   const handleViewPostList = (type: TimelineType, userExperience: WrappedExperience) => {
     if (filterTimeline) {
@@ -67,7 +67,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
     if (!enableClone) return;
 
     if (limitExceeded) {
-      openToasterSnack({
+      enqueueSnackbar({
         message: i18n.t('Experience.List.Alert'),
         variant: 'warning',
       });
@@ -80,7 +80,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
     if (!enableSubscribe) return;
 
     if (limitExceeded) {
-      openToasterSnack({
+      enqueueSnackbar({
         message: i18n.t('Experience.List.Alert'),
         variant: 'warning',
       });

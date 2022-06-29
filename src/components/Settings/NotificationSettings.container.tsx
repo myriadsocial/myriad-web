@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {NotificationSettings} from './NotificationSettings';
 
-import {useToasterSnackHook} from 'src/hooks/use-toaster-snack.hook';
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {NotificationSettingItems} from 'src/interfaces/setting';
 import {RootState} from 'src/reducers';
 import {fetchNotificationSetting} from 'src/reducers/config/actions';
@@ -15,7 +15,7 @@ export const NotificationSettingsContainer: React.FC = () => {
   const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const dispatch = useDispatch();
-  const {openToasterSnack} = useToasterSnackHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
 
   React.useEffect(() => {
     user && dispatch(fetchNotificationSetting(user.id));
@@ -24,7 +24,7 @@ export const NotificationSettingsContainer: React.FC = () => {
   const handleSave = (newSettings: NotificationSettingItems) => {
     dispatch(
       updateNotificationSetting(user?.id, newSettings, () => {
-        openToasterSnack({
+        enqueueSnackbar({
           message: 'New notification setting applied',
           variant: 'success',
         });
