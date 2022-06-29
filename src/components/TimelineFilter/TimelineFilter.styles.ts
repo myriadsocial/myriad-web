@@ -15,5 +15,13 @@ export const useStyles = makeStyles<Theme, TimelineFilterProps>(theme =>
         display: 'none',
       },
     },
+    tabs: {
+      '& .MuiTabs-flexContainer': {
+        gap: 20,
+        [theme.breakpoints.down('xs')]: {
+          gap: 8,
+        },
+      },
+    },
   }),
 );

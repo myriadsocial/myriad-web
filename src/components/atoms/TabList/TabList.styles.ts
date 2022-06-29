@@ -47,14 +47,13 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
       },
     },
     tab: {
-      marginRight: 20,
       minHeight: props => (props.size === 'small' ? 36 : 48),
       minWidth: props => (props.size === 'small' ? 36 : 48),
       padding: theme.spacing(0.5),
       color: props =>
         props.mark === 'underline' ? theme.palette.text.secondary : theme.palette.text.primary,
       [theme.breakpoints.down('xs')]: {
-        marginRight: theme.spacing(1.5),
+        padding: theme.spacing(0.5, 1),
       },
     },
     indicator: {
@@ -66,6 +65,7 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
     },
     indicatorColor: {
       backgroundColor: 'transparent',
+      height: 'auto',
     },
   }),
 );

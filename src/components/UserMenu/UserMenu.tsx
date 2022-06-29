@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 
+import {useMediaQuery, useTheme} from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 
 import {User} from '../../interfaces/user';
@@ -22,6 +23,9 @@ export const UserMenu: React.FC<UserMenuProps> = props => {
   const {selected, excludes = []} = props;
   const {detail: profileDetail} = useSelector<RootState, ProfileState>(state => state.profileState);
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
+
   const styles = useStyles();
   const tabs = useUserTabs(excludes);
 
@@ -41,6 +45,7 @@ export const UserMenu: React.FC<UserMenuProps> = props => {
         onChangeTab={setActiveTab}
         size="small"
         background={'#FFFFFF'}
+        position={isMobile ? 'left' : 'space-evenly'}
       />
     </Paper>
   );

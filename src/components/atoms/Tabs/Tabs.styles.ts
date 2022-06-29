@@ -14,6 +14,7 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
     tabs: {
       '& .MuiTabs-flexContainer': {
         justifyContent: props => props.position ?? null,
+        gap: props => (props.position === 'left' ? 20 : null),
       },
     },
   }),
