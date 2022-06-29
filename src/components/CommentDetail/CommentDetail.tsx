@@ -82,7 +82,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
   const [isReplying, setIsReplying] = React.useState(false);
   const [isBlocked, setIsBlocked] = React.useState(blockedUserIds.includes(comment.userId));
   const [maxLength, setMaxLength] = React.useState<number | undefined>(180);
-
+  const banned = Boolean(user?.deletedAt);
   const totalVote = comment.metric.upvotes - comment.metric.downvotes;
   const isOwnComment = comment.userId === user?.id;
 
@@ -344,7 +344,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
       </div>
 
       <div id={`replies-${deep}`} style={{marginLeft: deep < 2 ? 64 : 0}}>
-        {user && isReplying && (
+        {user && !banned && isReplying && (
           <CommentEditor
             ref={editorRef}
             referenceId={comment.id}
@@ -384,3 +384,5 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
     </>
   );
 });
+
+CommentDetail.displayName = 'CommentDetail';

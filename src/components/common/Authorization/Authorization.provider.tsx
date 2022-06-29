@@ -23,7 +23,7 @@ export const AuthorizationProvider: React.ComponentType = ({children}) => {
   const alert = useCallback(() => {
     setCookie(APP_BANNER_COOKIE_KEY, true);
     enqueueSnackbar({
-      message: i18n.t('Banner.Banned'),
+      message: i18n.t('Authorization.Forbidden'),
       variant: 'warning',
       id: 'unauthorized',
     });

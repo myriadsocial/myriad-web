@@ -1093,6 +1093,9 @@
     "Demo": "{{appName}} {{version}} не полнисть проверен, ответственность на вашей стороне.",
     "Banned": "Your account has been temporarily banned because after we review the reports, you are violating the rules. Therefore, you are restricted from taking action in Myriad."
   },
+  "Authorization": {
+    "Forbidden": "You are forbidden to do this action."
+  },
   "Tooltip": {
     "Chat": "Функция чата, скоро появится",
     "Trending_Exp": "Показывает 10 наилучших опытов, основанных на количестве подписчиков и которые были клонированы в течении 24 часов."
