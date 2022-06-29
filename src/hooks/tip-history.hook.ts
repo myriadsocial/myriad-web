@@ -5,6 +5,7 @@ import {Post} from 'src/interfaces/post';
 import {TransactionSort} from 'src/interfaces/transaction';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
+import {ConfigState} from 'src/reducers/config/reducer';
 import {
   fetchTransactionHistory,
   clearTippedContent,
@@ -20,6 +21,7 @@ export const useTipHistory = () => {
   const dispatch = useDispatch();
 
   const {user, currencies} = useSelector<RootState, UserState>(state => state.userState);
+  const {availableCurrencies} = useSelector<RootState, ConfigState>(state => state.configState);
   const {
     transactions,
     reference,
@@ -90,6 +92,7 @@ export const useTipHistory = () => {
     reference,
     tippingDisabled,
     currencies,
+    availableCurrencies,
     transactions,
     openTipHistory,
     closeTipHistory,
