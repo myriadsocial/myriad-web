@@ -69,6 +69,13 @@ export const useStyles = makeStyles((theme: Theme) =>
       paddingRight: theme.spacing(1),
       fontSize: 12,
       marginBottom: 12,
+      width: '200px',
+    },
+    searchIcon: {
+      marginRight: 5,
+    },
+    searchClear: {
+      cursor: 'pointer',
     },
     item: {
       '& .MuiListItem-root': {

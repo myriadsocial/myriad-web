@@ -1,7 +1,8 @@
 import {ChevronDownIcon} from '@heroicons/react/outline';
-import {SearchIcon} from '@heroicons/react/solid';
+import {SearchIcon} from '@heroicons/react/outline';
+import {XIcon} from '@heroicons/react/outline';
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import {
@@ -73,6 +74,14 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<string>(i18n.t('Tipping_History.Modal.All_Coin'));
 
+  useEffect(() => {
+    if (selected === i18n.t('Tipping_History.Modal.All_Coin')) {
+      setSearch('');
+    } else {
+      setSearch(selected);
+    }
+  }, [selected]);
+
   const sortOptions: MenuOptions<TransactionSort>[] = [
     {
       id: 'highest',
@@ -106,7 +115,6 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // TODO FILTER WHEN TYPING
     setSearch(event.target.value);
     const debounceSubmit = debounce(() => {
       console.log(search);
@@ -132,6 +140,12 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
 
   const limitChar = (string = '', limit = 0): string => {
     return string.substring(0, limit);
+  };
+
+  const handleClearSearch = () => {
+    setSearch('');
+    onFilter('');
+    setSelected(i18n.t('Tipping_History.Modal.All_Coin'));
   };
 
   return (
@@ -181,21 +195,39 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
                   inputProps={{
                     'aria-label': 'search',
                   }}
-                  startAdornment={<SvgIcon component={SearchIcon} fontSize="small" />}
+                  startAdornment={
+                    <SvgIcon
+                      component={SearchIcon}
+                      fontSize="small"
+                      className={styles.searchIcon}
+                    />
+                  }
+                  endAdornment={
+                    search !== '' && (
+                      <SvgIcon
+                        component={XIcon}
+                        fontSize="small"
+                        className={styles.searchClear}
+                        onClick={handleClearSearch}
+                      />
+                    )
+                  }
                 />
 
-                {currencies.map(currency => (
-                  <MenuItem
-                    key={currency.id}
-                    onClick={handleFilter(currency)}
-                    className={styles.item}>
-                    <ListItemComponent
-                      size={AvatarSize.TINY}
-                      title={currency.symbol}
-                      avatar={currency.image}
-                    />
-                  </MenuItem>
-                ))}
+                {currencies
+                  .filter(ar => ar.symbol.toLowerCase().includes(search.toLowerCase()))
+                  .map(currency => (
+                    <MenuItem
+                      key={currency.id}
+                      onClick={handleFilter(currency)}
+                      className={styles.item}>
+                      <ListItemComponent
+                        size={AvatarSize.TINY}
+                        title={currency.symbol}
+                        avatar={currency.image}
+                      />
+                    </MenuItem>
+                  ))}
               </div>
             </Menu>
           </div>
