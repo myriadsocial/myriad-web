@@ -1093,6 +1093,9 @@
     "Demo": "{{appName}} {{version}} tidak sepenuhnya diaudit, silakan gunakan dengan risiko Anda sendiri.",
     "Banned": "Akun Anda telah diblokir sementara karena setelah kami meninjau laporan, Anda melanggar aturan. Oleh karena itu, Anda dilarang mengambil tindakan di Myriad."
   },
+  "Authorization": {
+    "Forbidden": "Anda dilarang melakukan tindakan ini."
+  },
   "Tooltip": {
     "Chat": "Fitur obrolan, segera hadir",
     "Trending_Exp": "Tampilkan 10 pengalaman teratas berdasarkan total pelanggan dan kloning dalam 24 jam."

@@ -61,6 +61,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
   const {openTipHistory} = useTipHistory();
 
   const [reported, setReported] = useState<Comment | null>(null);
+  const banned = Boolean(user.deletedAt);
 
   useEffect(() => {
     loadAllBlockedUsers();
@@ -150,7 +151,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
 
   return (
     <>
-      <ShowIf condition={!anonymous}>
+      <ShowIf condition={!anonymous && !banned}>
         <CommentEditor
           referenceId={referenceId}
           placeholder={placeholder}
