@@ -19,7 +19,7 @@ export const TipHistoryContainer: React.FC<TipHistoryContainerProps> = props => 
     hasMore,
     reference,
     tippingDisabled,
-    currencies,
+    availableCurrencies,
     transactions,
     closeTipHistory,
     handleFilterTransaction,
@@ -33,7 +33,7 @@ export const TipHistoryContainer: React.FC<TipHistoryContainerProps> = props => 
       referenceType={referenceType}
       open={isTipHistoryOpen}
       hasMore={hasMore}
-      currencies={currencies}
+      currencies={availableCurrencies}
       tippingDisabled={tippingDisabled}
       tips={transactions.filter(tx => Boolean(tx.currency))}
       onClose={closeTipHistory}
