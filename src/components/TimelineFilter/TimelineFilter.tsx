@@ -59,6 +59,7 @@ export const TimelineFilter: React.FC<TimelineFilterProps> = props => {
           mark="underline"
           size="small"
           onChangeTab={handleFilter}
+          className={styles.tabs}
         />
       </ShowIf>
 
