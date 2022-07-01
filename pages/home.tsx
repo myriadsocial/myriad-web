@@ -64,7 +64,7 @@ const Home: React.FC = () => {
 
       <SearchBoxContainer onSubmitSearch={performSearch} hidden={true} />
       <RichTextContainer />
-      <TimelineContainer filterType="type" selectionType="order" />
+      <TimelineContainer filterType="type" selectionType="order" showCounter={true} />
       <TippingSuccess />
       <AppStatusBanner />
     </DefaultLayout>
