@@ -1,64 +1,67 @@
-import {useSelector, useDispatch} from 'react-redux';
+import {useCallback} from 'react';
+import {useSelector, useDispatch, shallowEqual} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
 import {TimelineFilter, TimelineOrderType} from 'src/interfaces/timeline';
-import {RootState} from 'src/reducers';
 import {
   loadTimeline,
   getDedicatedPost,
   fetchSearchedPosts,
   clearTimeline,
 } from 'src/reducers/timeline/actions';
-import {TimelineState} from 'src/reducers/timeline/reducer';
+import {getPostPagination, getPostList} from 'src/reducers/timeline/selector';
 
 export const useTimelineHook = () => {
-  const timelineState = useSelector<RootState, TimelineState>(state => state.timelineState);
+  const {posts, post} = useSelector(getPostList, shallowEqual);
+  const {order, currentPage, loading, hasMore} = useSelector(getPostPagination, shallowEqual);
+
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const initTimeline = async (page = 1, sort?: TimelineOrderType, filter?: TimelineFilter) => {
-    dispatch(loadTimeline(page, sort, filter));
-  };
+  const initTimeline = useCallback(
+    (page = 1, sort?: TimelineOrderType, filter?: TimelineFilter) => {
+      dispatch(loadTimeline(page, sort, filter));
+    },
+    [],
+  );
 
-  const nextPage = async () => {
-    const page = timelineState.meta.currentPage + 1;
+  const nextPage = useCallback(() => {
+    const page = currentPage + 1;
 
     dispatch(loadTimeline(page));
-  };
+  }, []);
 
-  const orderTimeline = async (sort: TimelineOrderType) => {
+  const orderTimeline = useCallback((sort: TimelineOrderType) => {
     // shallow push, without rerender page
     router.push(`?order=${sort}`, undefined, {shallow: true});
-  };
+  }, []);
 
-  const getPostDetail = (postId: string | string[]) => {
+  const getPostDetail = useCallback((postId: string | string[]) => {
     const id = postId as string;
     dispatch(getDedicatedPost(id));
-  };
+  }, []);
 
-  const searchPosts = async (query: string, page = 1) => {
+  const searchPosts = useCallback((query: string, page = 1) => {
     dispatch(fetchSearchedPosts(query, page));
-  };
+  }, []);
 
-  const clear = () => {
+  const clear = useCallback(() => {
     dispatch(clearTimeline());
-  };
+  }, []);
 
   return {
-    error: timelineState.error,
-    loading: timelineState.loading,
-    hasMore: timelineState.hasMore,
-    sort: timelineState.sort,
-    posts: timelineState.posts,
-    order: timelineState.order,
+    loading,
+    hasMore,
+    posts: posts,
+    page: currentPage,
+    order: order,
+    post,
     searchPosts,
     initTimeline,
     nextPage,
     orderTimeline,
     getPostDetail,
     clearPosts: clear,
-    post: timelineState.post,
-    page: timelineState.meta.currentPage,
   };
 };

@@ -17,3 +17,5 @@ export const Video: React.FC<VideoProps> = props => {
     </Grid>
   );
 };
+
+export default Video;

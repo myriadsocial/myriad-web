@@ -14,13 +14,14 @@ import * as ExperienceAPI from 'src/lib/api/experience';
 import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
 import {RootState} from 'src/reducers';
 import {loadTimeline, clearTimeline} from 'src/reducers/timeline/actions';
+import {TimelineFilters} from 'src/reducers/timeline/reducer';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const useTimelineFilter = (filters?: TimelineFilter) => {
+export const useTimelineFilter = () => {
   const dispatch = useDispatch();
 
-  const filter = useSelector<RootState, TimelineFilter>(
-    state => state.timelineState.filter,
+  const filters = useSelector<RootState, TimelineFilters>(
+    state => state.timelineState.filters,
     shallowEqual,
   );
   const people = useSelector<RootState, User>(state => state.profileState.detail, shallowEqual);
@@ -29,18 +30,18 @@ export const useTimelineFilter = (filters?: TimelineFilter) => {
     shallowEqual,
   );
 
-  const originType: PostOriginType = filter?.platform
-    ? filter.platform.includes.length === 1 && filter.platform.includes('myriad')
+  const originType: PostOriginType = filters.params?.platform
+    ? filters.params.platform.includes.length === 1 && filters.params.platform.includes('myriad')
       ? 'myriad'
       : 'imported'
     : 'all';
 
-  const filterTimeline = useCallback(async (query: ParsedUrlQuery) => {
+  const filterTimeline = useCallback(async (query?: ParsedUrlQuery) => {
     let timelineType = TimelineType.ALL;
     let timelineOrder = TimelineOrderType.LATEST;
-    let tags: string[] = filter?.tags || [];
+    let tags: string[] = filters.params?.tags || [];
 
-    if (query.type) {
+    if (query?.type) {
       const type = Array.isArray(query.type) ? query.type[0] : query.type;
 
       if (
@@ -57,11 +58,11 @@ export const useTimelineFilter = (filters?: TimelineFilter) => {
       }
     }
 
-    if (query.tag) {
+    if (query?.tag) {
       tags = Array.isArray(query.tag) ? query.tag : [query.tag];
     }
 
-    if (query.order) {
+    if (query?.order) {
       const order = Array.isArray(query.order) ? query.order[0] : query.order;
 
       if (Object.values(TimelineOrderType).includes(order as TimelineOrderType)) {
@@ -69,12 +70,11 @@ export const useTimelineFilter = (filters?: TimelineFilter) => {
       }
     }
 
-    if (query.q) {
+    if (query?.q) {
       tags = Array.isArray(query.q) ? query.q : [query.q];
     }
 
     const newFilter: TimelineFilter = {
-      ...filter,
       ...filters,
       tags,
     };
@@ -83,11 +83,11 @@ export const useTimelineFilter = (filters?: TimelineFilter) => {
       // TODO: anonymous user should only see trending posts
     }
 
-    if (query.type === TimelineType.EXPERIENCE && query.id) {
+    if (query?.type === TimelineType.EXPERIENCE && query?.id) {
       const experience = await ExperienceAPI.getExperienceDetail(query.id as string);
 
       const expFilter: TimelineFilter = {
-        ...filter,
+        ...filters,
         tags: experience.allowedTags ? (experience.allowedTags as string[]) : [],
         people: experience.people
           .filter((person: People) => !person.hide)
@@ -108,17 +108,17 @@ export const useTimelineFilter = (filters?: TimelineFilter) => {
 
     switch (origin) {
       case 'myriad':
-        filters.platform = ['myriad'];
-        filters.owner = people.id;
+        filters.params.platform = ['myriad'];
+        filters.params.owner = people.id;
         break;
       case 'imported':
-        filters.platform = ['facebook', 'reddit', 'twitter'];
-        filters.owner = people.id;
+        filters.params.platform = ['facebook', 'reddit', 'twitter'];
+        filters.params.owner = people.id;
         break;
 
       default:
-        filters.owner = people.id;
-        filters.platform = undefined;
+        filters.params.owner = people.id;
+        filters.params.platform = undefined;
         break;
     }
 

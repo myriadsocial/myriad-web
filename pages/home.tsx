@@ -5,9 +5,9 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 
+import {Timeline} from 'components/Timeline/Timeline.layout';
 import {NavbarComponent} from 'src/components/Mobile/Navbar/Navbar';
 import {RichTextContainer} from 'src/components/Richtext/RichTextContainer';
-import {TimelineContainer} from 'src/components/Timeline/TimelineContainer';
 import {SearchBoxContainer} from 'src/components/atoms/Search/SearchBoxContainer';
 import {AppStatusBanner} from 'src/components/common/Banner';
 import {TippingSuccess} from 'src/components/common/Tipping/render/Tipping.success';
@@ -63,8 +63,11 @@ const Home: React.FC = () => {
       <NavbarComponent onSubmitSearch={performSearch} />
 
       <SearchBoxContainer onSubmitSearch={performSearch} hidden={true} />
+
       <RichTextContainer />
-      <TimelineContainer filterType="type" selectionType="order" showCounter={true} />
+
+      <Timeline />
+
       <TippingSuccess />
       <AppStatusBanner />
     </DefaultLayout>

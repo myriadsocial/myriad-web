@@ -1,3 +1,4 @@
+import {useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {Comment} from 'src/interfaces/comment';
@@ -39,7 +40,7 @@ export const useTipHistory = () => {
     return 'post';
   };
 
-  const openTipHistory = (reference: Comment | Post | User) => {
+  const openTipHistory = useCallback((reference: Comment | Post | User) => {
     const type = getReferenceType(reference);
 
     if ('username' in reference) {
@@ -52,13 +53,13 @@ export const useTipHistory = () => {
 
     dispatch(setTippedReference(reference));
     dispatch(fetchTransactionHistory(reference, type));
-  };
+  }, []);
 
-  const closeTipHistory = () => {
+  const closeTipHistory = useCallback(() => {
     dispatch(clearTippedContent());
-  };
+  }, []);
 
-  const handleSortTransaction = (sort: TransactionSort) => {
+  const handleSortTransaction = useCallback((sort: TransactionSort) => {
     dispatch(setTransactionSort(sort));
 
     if (reference) {
@@ -66,9 +67,9 @@ export const useTipHistory = () => {
 
       dispatch(fetchTransactionHistory(reference, type));
     }
-  };
+  }, []);
 
-  const handleFilterTransaction = (currency: string) => {
+  const handleFilterTransaction = useCallback((currency: string) => {
     dispatch(setTransactionCurrency(currency));
 
     if (reference) {
@@ -76,15 +77,15 @@ export const useTipHistory = () => {
 
       dispatch(fetchTransactionHistory(reference, type));
     }
-  };
+  }, []);
 
-  const handleLoadNextPage = () => {
+  const handleLoadNextPage = useCallback(() => {
     if (reference) {
       const type = getReferenceType(reference);
 
       dispatch(fetchTransactionHistory(reference, type, currentPage + 1));
     }
-  };
+  }, []);
 
   return {
     isTipHistoryOpen,

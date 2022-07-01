@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React, {useState, useEffect, useCallback} from 'react';
+import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 
 import {parseQueryToFilter} from '../Timeline/helper';
 import {useTimelineFilter} from '../Timeline/hooks/use-timeline-filter.hook';
@@ -10,7 +10,6 @@ import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {WrappedExperience} from 'src/interfaces/experience';
 import {TimelineFilter, TimelineOrderType, TimelineType} from 'src/interfaces/timeline';
 import {User} from 'src/interfaces/user';
-import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
 import {RootState} from 'src/reducers';
 import {clearTimeline} from 'src/reducers/timeline/actions';
 
@@ -23,14 +22,18 @@ type TimelineFilterContainerProps = {
 
 export const TimelineFilterContainer: React.FC<TimelineFilterContainerProps> = props => {
   const {filters} = props;
-
+  console.log('PROPS', props);
   const dispatch = useDispatch();
   const {originType, filterByOrigin, sortTimeline} = useTimelineFilter(filters);
   const {query, push, replace} = useQueryParams();
 
-  const user = useSelector<RootState, User | undefined>(state => state.userState.user);
+  const user = useSelector<RootState, User | undefined>(
+    state => state.userState.user,
+    shallowEqual,
+  );
   const experiences = useSelector<RootState, WrappedExperience[]>(
     state => state.userState.experiences,
+    shallowEqual,
   );
   const [timelineType, setTimelineType] = useState<TimelineType>(TimelineType.ALL);
   const [timelineOrder, setTimelineOrder] = useState<TimelineOrderType>(TimelineOrderType.LATEST);
@@ -46,15 +49,11 @@ export const TimelineFilterContainer: React.FC<TimelineFilterContainerProps> = p
     setTimelineOrder(filter.order);
   };
 
-  const handleOrderTimeline = (order: TimelineOrderType) => {
+  const handleOrderTimeline = useCallback((order: TimelineOrderType) => {
     push('order', order);
-  };
+  }, []);
 
-  const handleSortimeline = (sort: SortType) => {
-    sortTimeline(sort);
-  };
-
-  const handleFilterTimeline = (type: TimelineType) => {
+  const handleFilterTimeline = useCallback((type: TimelineType) => {
     dispatch(clearTimeline());
 
     // automatically select first experience as timeline filter
@@ -69,7 +68,7 @@ export const TimelineFilterContainer: React.FC<TimelineFilterContainerProps> = p
     } else {
       push('type', type, true);
     }
-  };
+  }, []);
 
   return (
     <>
@@ -78,7 +77,7 @@ export const TimelineFilterContainer: React.FC<TimelineFilterContainerProps> = p
         type={timelineType}
         order={timelineOrder}
         originType={originType}
-        sortTimeline={handleSortimeline}
+        sortTimeline={sortTimeline}
         orderTimeline={handleOrderTimeline}
         filterTimeline={handleFilterTimeline}
         filterOrigin={filterByOrigin}

@@ -1,10 +1,13 @@
-export type VoteProps = {
+export type VoteActionProps = {
+  onUpvote: () => void;
+  onDownVote: () => void;
+};
+
+export type VoteProps = VoteActionProps & {
   variant?: 'row' | 'column';
   vote: number;
   size?: 'small' | 'medium';
   isDownVoted: boolean;
   isUpVoted: boolean;
-  onUpvote: () => void;
-  onDownVote: () => void;
   disabled?: boolean;
 };

@@ -13,14 +13,22 @@ import {TimelineType, TimelineOrderType, TimelineFilter} from 'src/interfaces/ti
 import {WalletDetail} from 'src/interfaces/wallet';
 import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
 
+export interface TimelineFilters {
+  params?: TimelineFilter;
+  query?: string;
+  sort: SortType;
+  order: TimelineOrderType;
+}
 export interface TimelineState extends BasePaginationState {
   type: TimelineType;
+  posts: Post[];
+  filters: TimelineFilters;
   sort: SortType;
   order: TimelineOrderType;
   filter?: TimelineFilter;
   search?: string;
   hasMore: boolean;
-  posts: Post[];
+
   walletDetails: WalletDetail[];
   post?: Post;
   interaction: {
@@ -31,6 +39,10 @@ export interface TimelineState extends BasePaginationState {
 const initalState: TimelineState = {
   loading: true,
   type: TimelineType.TRENDING,
+  filters: {
+    sort: 'DESC',
+    order: TimelineOrderType.LATEST,
+  },
   sort: 'DESC',
   order: TimelineOrderType.LATEST,
   hasMore: false,
