@@ -62,7 +62,7 @@ const Topic: React.FC<TopicPageProps> = ({experience}) => {
         }
       />
 
-      <TimelineContainer />
+      <TimelineContainer showCounter={true} />
     </DefaultLayout>
   );
 };

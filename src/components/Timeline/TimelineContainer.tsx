@@ -41,6 +41,7 @@ type TimelineContainerProps = {
   filterType?: 'origin' | 'type';
   selectionType?: 'order' | 'sort';
   anonymous?: boolean;
+  showCounter?: boolean;
 };
 
 const TimelineComponent = dynamic(() => import('./Timeline'), {ssr: false});
@@ -53,7 +54,7 @@ const PostImporterContainer = dynamic(() => import('../PostImporterList/PostImpo
 });
 
 export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
-  const {filters, fetchInitial = true} = props;
+  const {filters, fetchInitial = true, showCounter = false} = props;
 
   const style = useStyles();
   const dispatch = useDispatch();
@@ -148,14 +149,19 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
     initTimeline();
   };
 
+  const handleLoadPost = () => {
+    setNewPostCount(0);
+    initTimeline();
+  };
+
   return (
     <div className={style.box}>
       <Grid container justifyContent="space-between" alignItems="center">
         <TimelineFilterContainer {...props} />
       </Grid>
 
-      <ShowIf condition={newPostCount > 0 && !loading}>
-        <div className={style.wrapperLoadPost} onClick={() => initTimeline()}>
+      <ShowIf condition={newPostCount > 0 && !loading && showCounter}>
+        <div className={style.wrapperLoadPost} onClick={handleLoadPost}>
           <Typography color="primary">{i18n.t('Post_Lists.Load_New_Posts')}</Typography>
           <div className={style.badge}>
             <Typography className={style.badgeText}>
@@ -165,7 +171,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
         </div>
       </ShowIf>
 
-      <ShowIf condition={scrollPosition > 0.23 && newPostCount > 0}>
+      <ShowIf condition={scrollPosition > 0.23 && newPostCount > 0 && showCounter}>
         <Button
           color="primary"
           variant="contained"
