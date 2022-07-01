@@ -205,7 +205,7 @@
       "Helper_Validate_Name_Min": "Display name must be provided and contain at least {{min_length}} character",
       "Helper_Validate_Name_Char": "Display name cannot contain disallowed character.",
       "Helper_Validate_Username_Min": "Username must be provided and contain at least {{min_length}} character",
-      "Helper_Validate_Username_Char": "Display name cannot contain disallowed character.",
+      "Helper_Validate_Username_Char": "Username cannot contain disallowed character.",
       "Helper_Validate_Username_Taken": "Username already taken",
       "Placeholder_Display_Name": "Display name",
       "Placeholder_Username": "Username",
