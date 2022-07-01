@@ -1,4 +1,5 @@
 import React, {useCallback, useState} from 'react';
+import {useSelector} from 'react-redux';
 import {useNavigate} from 'react-router';
 
 import {useRouter} from 'next/router';
@@ -18,6 +19,8 @@ import {WalletTypeEnum} from 'src/interfaces/wallet';
 import {toHexPublicKey} from 'src/lib/crypto';
 import {nearInitialize} from 'src/lib/services/near-api-js';
 import i18n from 'src/locale';
+import {RootState} from 'src/reducers';
+import {ConfigState} from 'src/reducers/config/reducer';
 
 type ProfileProps = {
   checkUsernameAvailability: (username: string, callback: (available: boolean) => void) => void;
@@ -42,6 +45,7 @@ const USERNAME_HELPER_TEXT = i18n.t('Login.Profile.Helper_Text_Username', {
 export const Profile: React.FC<ProfileProps> = props => {
   const {walletType, checkUsernameAvailability, account, publicAddress, networkId, isMobileSignIn} =
     props;
+  const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
 
   const styles = useStyles();
   const confirm = useConfirm();
@@ -62,6 +66,44 @@ export const Profile: React.FC<ProfileProps> = props => {
       helper: USERNAME_HELPER_TEXT,
     },
   });
+
+  React.useEffect(() => {
+    let nameHelper = i18n.t('Login.Profile.Helper_Text_Name', {
+      min_length: DISPLAY_NAME_MIN_LENGTH,
+    });
+    let usernameHelper = i18n.t('Login.Profile.Helper_Text_Username', {
+      min_length: USERNAME_MIN_LENGTH,
+    });
+
+    if (profile.name.value && profile.name.value.length < DISPLAY_NAME_MIN_LENGTH) {
+      nameHelper = i18n.t('Login.Profile.Helper_Validate_Name_Min', {
+        min_length: DISPLAY_NAME_MIN_LENGTH,
+      });
+    } else {
+      const valid = /^([^"'*\\]*)$/.test(profile.name.value);
+      if (!valid) nameHelper = i18n.t('Login.Profile.Helper_Validate_Name_Char');
+    }
+
+    if (profile.username.value && profile.username.value.length < USERNAME_MIN_LENGTH) {
+      usernameHelper = i18n.t('Login.Profile.Helper_Validate_Username_Min', {
+        min_length: USERNAME_MIN_LENGTH,
+      });
+    } else {
+      const valid = /^[a-zA-Z0-9]+$/.test(profile.username.value);
+      if (!valid) usernameHelper = i18n.t('Login.Profile.Helper_Validate_Username_Char');
+    }
+
+    setProfile(prevSetting => ({
+      name: {
+        ...prevSetting.name,
+        helper: nameHelper,
+      },
+      username: {
+        ...prevSetting.username,
+        helper: usernameHelper,
+      },
+    }));
+  }, [settings.language]);
 
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     const name = event.target.value;
@@ -147,7 +189,7 @@ export const Profile: React.FC<ProfileProps> = props => {
         username: {
           ...prevSetting.username,
           error,
-          helper: i18n.t('Login.Profile.Helper_Validate_Username_Char', {
+          helper: i18n.t('Login.Profile.Helper_Validate_Username_Min', {
             min_length: USERNAME_MIN_LENGTH,
           }),
         },
@@ -164,9 +206,7 @@ export const Profile: React.FC<ProfileProps> = props => {
           username: {
             ...prevSetting.username,
             error: true,
-            helper: i18n.t('Login.Profile.Helper_Validate_Username_Char', {
-              min_length: USERNAME_MIN_LENGTH,
-            }),
+            helper: i18n.t('Login.Profile.Helper_Validate_Username_Char'),
           },
         }));
       } else {
