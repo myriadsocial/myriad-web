@@ -40,7 +40,7 @@ export type NotificationList = {
 const getPlatform = (message: string) => {
   const result = message.split(' ');
 
-  return result[2];
+  return result[3];
 };
 
 const parseTipAmountContainingENumber = (message: string) => {
