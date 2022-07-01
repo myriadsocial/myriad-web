@@ -1,9 +1,12 @@
+import {DotsVerticalIcon} from '@heroicons/react/outline';
+
 import React, {useEffect, useRef, forwardRef} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 
+import {IconButton, Menu, MenuItem, SvgIcon, useMediaQuery, useTheme} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -72,6 +75,8 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
   const style = useStyles({...props, deep});
   const router = useRouter();
   const confirm = useConfirm();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
   const downvoting = useSelector<RootState, Post | Comment | null>(
     state => state.timelineState.interaction.downvoting,
@@ -79,6 +84,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
 
   const editorRef = useRef<HTMLDivElement>(null);
 
+  const [menuAnchorElement, setMenuAnchorElement] = React.useState<null | HTMLElement>(null);
   const [isReplying, setIsReplying] = React.useState(false);
   const [isBlocked, setIsBlocked] = React.useState(blockedUserIds.includes(comment.userId));
   const [maxLength, setMaxLength] = React.useState<number | undefined>(180);
@@ -168,12 +174,25 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
     );
   };
 
+  const handleClickSettings = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setMenuAnchorElement(e.currentTarget);
+  };
+
+  const handleCloseSettings = () => {
+    setMenuAnchorElement(null);
+  };
+
   const handleOpenTipHistory = () => {
     onOpenTipHistory(comment);
+
+    handleCloseSettings();
   };
 
   const handleReport = () => {
     onReport(comment);
+
+    handleCloseSettings();
   };
 
   const handleViewProfile = () => {
@@ -290,7 +309,6 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                 />
 
                 <Button
-                  className={style.hidden}
                   classes={{root: style.button}}
                   disabled={!user}
                   onClick={handleOpenReply}
@@ -306,36 +324,65 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                     size="small"
                     variant="text"
                     classes={{root: style.button}}
-                    className={style.hidden}
                   />
                 </ShowIf>
 
-                <Button
-                  classes={{root: style.button}}
-                  size="small"
-                  variant="text"
-                  onClick={handleOpenTipHistory}>
-                  {i18n.t('Post_Comment.Tip_History')}
-                </Button>
-                <ShowIf condition={!isOwnComment}>
+                <ShowIf condition={!isMobile}>
                   <Button
-                    className={style.hidden}
                     classes={{root: style.button}}
-                    disabled={!user}
                     size="small"
                     variant="text"
-                    onClick={handleReport}>
-                    {i18n.t('Post_Comment.Report')}
+                    onClick={handleOpenTipHistory}>
+                    {i18n.t('Post_Comment.Tip_History')}
                   </Button>
+                  <ShowIf condition={!isOwnComment}>
+                    <Button
+                      classes={{root: style.button}}
+                      disabled={!user}
+                      size="small"
+                      variant="text"
+                      onClick={handleReport}>
+                      {i18n.t('Post_Comment.Report')}
+                    </Button>
+                  </ShowIf>
+                  <ShowIf condition={isOwnComment}>
+                    <Button
+                      classes={{root: style.button}}
+                      size="small"
+                      variant="text"
+                      onClick={() => onDelete(comment)}>
+                      {i18n.t('Post_Comment.Delete')}
+                    </Button>
+                  </ShowIf>
                 </ShowIf>
-                <ShowIf condition={isOwnComment}>
-                  <Button
-                    classes={{root: style.button}}
-                    size="small"
-                    variant="text"
-                    onClick={() => onDelete(comment)}>
-                    {i18n.t('Post_Comment.Delete')}
-                  </Button>
+
+                <ShowIf condition={isMobile}>
+                  <div style={{marginLeft: 'auto'}}>
+                    <IconButton aria-label="settings" onClick={handleClickSettings}>
+                      <SvgIcon component={DotsVerticalIcon} viewBox="0 0 24 24" />
+                    </IconButton>
+
+                    <Menu
+                      anchorEl={menuAnchorElement}
+                      getContentAnchorEl={null}
+                      anchorOrigin={{vertical: 'top', horizontal: 'center'}}
+                      transformOrigin={{vertical: 'bottom', horizontal: 'center'}}
+                      open={Boolean(menuAnchorElement)}
+                      onClose={handleCloseSettings}>
+                      <MenuItem onClick={handleOpenTipHistory}>
+                        {i18n.t('Post_Comment.Tip_History')}
+                      </MenuItem>
+                      <ShowIf condition={!isOwnComment}>
+                        <MenuItem onClick={handleReport}> {i18n.t('Post_Comment.Report')}</MenuItem>
+                      </ShowIf>
+                      <ShowIf condition={isOwnComment}>
+                        <MenuItem onClick={() => onDelete(comment)}>
+                          {' '}
+                          {i18n.t('Post_Comment.Delete')}
+                        </MenuItem>
+                      </ShowIf>
+                    </Menu>
+                  </div>
                 </ShowIf>
               </CardActions>
             </ShowIf>
