@@ -146,6 +146,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = props => {
 
   const scrollToTop = () => {
     window.scrollTo(0, 0);
+    setNewPostCount(0);
     initTimeline();
   };
 
