@@ -1,0 +1,50 @@
+name: Create Tags
+
+on:
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'TAGS'
+        required: true 
+        type: string
+      commit_sha:
+        description: 'COMMIT_SHA'
+        required: false 
+        type: string
+
+concurrency:
+  group: create-tags
+
+jobs:
+  create-tags:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: commit_sha check
+        id: commit-sha
+        shell: bash
+        run: |
+          COMMIT_SHA=${{ inputs.commit_sha }}
+          INPUT_TAGS="${{ inputs.tags }}"
+          RELEASE_TAGS=${INPUT_TAGS##* }
+
+          if [[ $COMMIT_SHA != "" ]]
+          then
+            CUSTOME_COMMIT_SHA=${{ inputs.commit_sha }}
+          else
+            CUSTOME_COMMIT_SHA=${{ github.sha }}
+          fi
+
+          echo "::set-output name=commit_sha::$CUSTOME_COMMIT_SHA"
+          echo "::set-output name=release_tags::$RELEASE_TAGS"
+      - name: create and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.0
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
+          commit_sha: ${{ steps.commit-sha.outputs.commit_sha }}
+          custom_tag: ${{ steps.commit-sha.outputs.release_tags }}
+          tag_prefix: ""
