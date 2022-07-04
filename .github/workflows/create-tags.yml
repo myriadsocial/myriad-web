@@ -41,10 +41,11 @@ jobs:
           echo "::set-output name=commit_sha::$CUSTOME_COMMIT_SHA"
           echo "::set-output name=release_tags::$RELEASE_TAGS"
       - name: create and push tag
-        id: tag_version
-        uses: mathieudutour/github-tag-action@v6.0
-        with:
-          github_token: ${{ secrets.GH_TOKEN }}
-          commit_sha: ${{ steps.commit-sha.outputs.commit_sha }}
-          custom_tag: ${{ steps.commit-sha.outputs.release_tags }}
-          tag_prefix: ""
+        shell: bash
+        run: |
+          curl \
+            -X POST \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/git/refs \
+            -d '{"ref":"refs/tags/${{ steps.commit-sha.outputs.release_tags }}","sha":"${{ steps.commit-sha.outputs.commit_sha }}"}'
