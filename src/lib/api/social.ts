@@ -42,7 +42,7 @@ export const verifySocialAccount = async (
 ): Promise<void> => {
   await MyriadAPI().request({
     method: 'POST',
-    url: `/user-social-medias/verify?blockchain=${true}`,
+    url: `/user-social-medias/verify`,
     data: {
       username,
       platform,

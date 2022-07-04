@@ -471,37 +471,31 @@ export const verify = async (
   socialMediaCredential: object,
   ftIdentifier: string,
   callback?: (param: SignTransactionCallbackProps) => void,
-): Promise<ApiPromise | null> => {
+): Promise<ApiPromise> => {
   const {web3FromSource} = await import('@polkadot/extension-dapp');
+  const api: ApiPromise = await connectToBlockchain(rpcURL);
 
-  let api: ApiPromise | null;
-  try {
-    api = await connectToBlockchain(rpcURL);
+  callback && callback({apiConnected: true});
 
-    callback && callback({apiConnected: true});
+  const injector = await web3FromSource(account.meta.source);
 
-    const injector = await web3FromSource(account.meta.source);
-
-    callback &&
-      callback({
-        apiConnected: true,
-        signerOpened: true,
-      });
-
-    const extrinsic = api.tx.tipping.verifySocialMedia(
-      serverId,
-      accessToken,
-      socialMediaCredential,
-      ftIdentifier,
-    );
-
-    await extrinsic.signAndSend(account.address, {
-      signer: injector.signer,
-      nonce: -1,
+  callback &&
+    callback({
+      apiConnected: true,
+      signerOpened: true,
     });
-  } catch (err) {
-    return null;
-  }
+
+  const extrinsic = api.tx.tipping.verifySocialMedia(
+    serverId,
+    accessToken,
+    socialMediaCredential,
+    ftIdentifier,
+  );
+
+  await extrinsic.signAndSend(account.address, {
+    signer: injector.signer,
+    nonce: -1,
+  });
 
   return api;
 };

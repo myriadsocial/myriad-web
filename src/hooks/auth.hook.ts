@@ -177,7 +177,6 @@ export const useAuthHook = () => {
   const connectNetwork = async (
     blockchainPlatform: BlockchainPlatform,
     account?: InjectedAccountWithMeta | NearPayload,
-    onBlockchain = true,
   ): Promise<boolean> => {
     if (!user) return false;
     if (!account) return false;
@@ -194,8 +193,6 @@ export const useAuthHook = () => {
           const polkadotSignature = await signWithExtension(polkadotAccount, nonce);
 
           if (!polkadotSignature) return false;
-          if (onBlockchain)
-            return connectAccount(account as InjectedAccountWithMeta, polkadotSignature);
 
           const polkadotAddress = toHexPublicKey(polkadotAccount);
 

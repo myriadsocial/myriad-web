@@ -1,10 +1,7 @@
 import React from 'react';
-import {isMobile} from 'react-device-detect';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {useSession} from 'next-auth/react';
-
-import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import {Socials as SocialsComponent} from '.';
 
@@ -20,13 +17,7 @@ export const SocialsContainer: React.FC = () => {
   const {data: session} = useSession();
   const dispatch = useDispatch();
 
-  const {
-    isVerifying,
-    resetVerification,
-    verifyPublicKeyShared,
-    isSignerLoading,
-    verifySocialMedia,
-  } = useShareSocial();
+  const {isVerifying, resetVerification, verifyPublicKeyShared} = useShareSocial();
 
   const enqueueSnackbar = useEnqueueSnackbar();
 
@@ -38,33 +29,15 @@ export const SocialsContainer: React.FC = () => {
     dispatch(deleteSocial(people.id));
   };
 
-  const handleVerifySocial = async (
-    social: SocialsEnum,
-    profileUrl: string,
-    account?: InjectedAccountWithMeta,
-    callback?: () => void,
-  ) => {
-    if (!isMobile && account) {
-      verifySocialMedia(social, profileUrl, account, ({isVerified}) => {
-        callback && callback();
+  const handleVerifySocial = async (social: SocialsEnum, profileUrl: string) => {
+    verifyPublicKeyShared(social, profileUrl, address, () => {
+      resetVerification();
 
-        const message = isVerified
-          ? i18n.t('SocialMedia.Alert.Verify', {social: social})
-          : i18n.t('SocialMedia.Alert.Error');
-        const variant = isVerified ? 'success' : 'error';
-
-        enqueueSnackbar({message, variant});
+      enqueueSnackbar({
+        message: i18n.t('SocialMedia.Alert.Verify', {social: social}),
+        variant: 'success',
       });
-    } else {
-      verifyPublicKeyShared(social, profileUrl, address, () => {
-        resetVerification();
-
-        enqueueSnackbar({
-          message: i18n.t('SocialMedia.Alert.Verify', {social: social}),
-          variant: 'success',
-        });
-      });
-    }
+    });
   };
 
   const handleSetUserSocialAsPrimary = (people: SocialMedia) => {
@@ -78,11 +51,10 @@ export const SocialsContainer: React.FC = () => {
         socials={socials}
         address={address}
         anonymous={anonymous}
-        verifying={!isMobile ? isSignerLoading : isVerifying}
+        verifying={isVerifying}
         onVerifySocialMedia={handleVerifySocial}
         onDisconnectSocial={handleDisconnectSocial}
         onSetAsPrimary={handleSetUserSocialAsPrimary}
-        onBlockchain={!isMobile}
       />
     </>
   );

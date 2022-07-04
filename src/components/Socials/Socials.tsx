@@ -6,10 +6,7 @@ import {Box, Typography, List, ListItem, ListItemText, SvgIcon, NoSsr} from '@ma
 import BaseButton from '@material-ui/core/Button';
 import BaseIconButton from '@material-ui/core/IconButton';
 
-import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
-
 import {AddSocialMedia} from '../AddSocialMedia';
-import {PolkadotAccountList} from '../PolkadotAccountList';
 import {useSocialMediaList} from '../SocialMediaList/use-social-media-list.hook';
 import useConfirm from '../common/Confirm/use-confirm.hook';
 import {useStyles} from './Socials.styles';
@@ -18,8 +15,6 @@ import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorize
 import {PromptComponent as PromtMobile} from 'src/components/Mobile/PromptDrawer/Prompt';
 import {ListItemSocialComponent} from 'src/components/atoms/ListItem/ListItemSocial';
 import {capitalize} from 'src/helpers/string';
-import {useAuthHook} from 'src/hooks/auth.hook';
-import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {SocialMedia, SocialsEnum} from 'src/interfaces/social';
 import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
@@ -30,13 +25,7 @@ type SocialsProps = {
   address: string;
   anonymous?: boolean;
   verifying?: boolean;
-  onBlockchain?: boolean;
-  onVerifySocialMedia: (
-    social: SocialsEnum,
-    profileUrl: string,
-    account?: InjectedAccountWithMeta,
-    callback?: () => void,
-  ) => void;
+  onVerifySocialMedia: (social: SocialsEnum, profileUrl: string) => void;
   onDisconnectSocial: (people: SocialMedia) => void;
   onSetAsPrimary: (people: SocialMedia) => void;
 };
@@ -50,7 +39,6 @@ export const Socials: React.FC<SocialsProps> = props => {
     user,
     address,
     verifying = false,
-    onBlockchain = true,
     onDisconnectSocial,
     onVerifySocialMedia,
     onSetAsPrimary,
@@ -61,19 +49,11 @@ export const Socials: React.FC<SocialsProps> = props => {
   const confirm = useConfirm();
   const socialList = useSocialMediaList(socials);
 
-  const {enablePolkadotExtension} = usePolkadotExtension();
-  const {getRegisteredAccounts} = useAuthHook();
   const [selectedSocial, setSelectedSocial] = useState<SocialsEnum>(SocialsEnum.TWITTER);
   const [people, setPeople] = useState<SocialMedia[]>([]);
   const [selectedPeople, setSelectedPeople] = useState<string | null>(null);
   const [addSocial, setAddSocial] = useState(false);
   const [openPromptDrawer, setOpenPromptDrawer] = useState(false);
-  const [showAccountList, setShowAccountList] = React.useState(false);
-  const [extensionInstalled, setExtensionInstalled] = React.useState(false);
-  const [accounts, setAccounts] = React.useState<InjectedAccountWithMeta[]>([]);
-  const [social, setSocial] = React.useState<SocialsEnum | null>(null);
-  const [profileUrl, setProfileUrl] = React.useState<string | null>(null);
-  const [addSocialCallback, setCallback] = React.useState<() => void | null>(null);
 
   const enabledSocial = [SocialsEnum.TWITTER, SocialsEnum.REDDIT];
 
@@ -105,7 +85,7 @@ export const Socials: React.FC<SocialsProps> = props => {
     return classname;
   };
 
-  const handleChangeSelecedSocial = (socialId: SocialsEnum) => () => {
+  const handleChangeSelectedSocial = (socialId: SocialsEnum) => () => {
     setSelectedSocial(socialId);
 
     setSelectedPeople(null);
@@ -125,12 +105,9 @@ export const Socials: React.FC<SocialsProps> = props => {
     }
   };
 
-  const closeAddSocialMedia = () => {
-    if (onBlockchain) {
-      setAddSocial(false);
-    } else {
-      toggleAddSocialMedia();
-    }
+  const verifySocialMedia = (social: SocialsEnum, profileUrl: string) => {
+    onVerifySocialMedia(social, profileUrl);
+    toggleAddSocialMedia();
   };
 
   const confirmDisconnectSocial = (social: SocialMedia): void => {
@@ -152,48 +129,6 @@ export const Socials: React.FC<SocialsProps> = props => {
     setOpenPromptDrawer(false);
   };
 
-  const closeAccountList = () => {
-    setShowAccountList(false);
-  };
-
-  const handleConnect = async (account?: InjectedAccountWithMeta) => {
-    closeAccountList();
-
-    if (account) {
-      onVerifySocialMedia(social, profileUrl, account, addSocialCallback);
-      setCallback(null);
-      setSocial(null);
-      setProfileUrl(null);
-    }
-  };
-
-  const checkExtensionInstalled = async (social: SocialsEnum, profileUrl: string) => {
-    const installed = await enablePolkadotExtension();
-
-    setShowAccountList(true);
-    setExtensionInstalled(installed);
-    setSocial(social);
-    setProfileUrl(profileUrl);
-
-    getAvailableAccounts();
-  };
-
-  const getAvailableAccounts = async () => {
-    const accounts = await getRegisteredAccounts();
-
-    setAccounts(accounts);
-  };
-
-  const verifySocialMedia = (social: SocialsEnum, profileUrl: string, callback?: () => void) => {
-    if (onBlockchain) {
-      checkExtensionInstalled(social, profileUrl);
-      setCallback(() => callback);
-    } else {
-      onVerifySocialMedia(social, profileUrl);
-      toggleAddSocialMedia();
-    }
-  };
-
   return (
     <div className={styles.box}>
       <Box className={styles.root}>
@@ -213,7 +148,7 @@ export const Socials: React.FC<SocialsProps> = props => {
               size="small"
               className={[styles.icon, ...getStyles(social.id)].join(' ')}
               disabled={!enabledSocial.includes(social.id)}
-              onClick={handleChangeSelecedSocial(social.id)}>
+              onClick={handleChangeSelectedSocial(social.id)}>
               {social.icon}
             </BaseIconButton>
           ))}
@@ -268,18 +203,9 @@ export const Socials: React.FC<SocialsProps> = props => {
             open={addSocial}
             social={selectedSocial}
             address={address}
-            onClose={closeAddSocialMedia}
+            onClose={toggleAddSocialMedia}
             verifying={verifying}
             verify={verifySocialMedia}
-            onBlockchain={onBlockchain}
-          />
-          <PolkadotAccountList
-            align="left"
-            title="Select account"
-            isOpen={showAccountList && extensionInstalled}
-            accounts={accounts}
-            onSelect={handleConnect}
-            onClose={closeAccountList}
           />
         </NoSsr>
       </Box>
