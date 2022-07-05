@@ -198,7 +198,7 @@ export const fetchBalancesNear: ThunkActionCreator<Actions, RootState> =
 
     try {
       const retrieveBalance = async (currency: Currency): Promise<RetrieveBalanceProps> => {
-        const originBalance = 0;
+        let originBalance = 0;
         let freeBalance = 0;
         const previousNonce = 0;
 
@@ -209,7 +209,7 @@ export const fetchBalancesNear: ThunkActionCreator<Actions, RootState> =
           currency.decimal,
         );
         freeBalance = parseFloat(balance.replace(/,/g, ''));
-
+        originBalance = parseFloat(balance.replace(/,/g, ''));
         return {originBalance, freeBalance, previousNonce};
       };
 

@@ -18,7 +18,7 @@ import {UserState} from 'src/reducers/user/reducer';
 export const TipContainer: React.FC = () => {
   const {currentWallet} = useSelector<RootState, UserState>(state => state.userState);
   const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
-  const {loading, claiming, tipsEachNetwork, claimTipMyria, claimAll} = useClaimTip();
+  const {loading, claiming, tipsEachNetwork, claim, claimAll} = useClaimTip();
   const enqueueSnackbar = useEnqueueSnackbar();
 
   const handleClaimTip = (networkId: string, ftIdentifier: string) => {
@@ -34,7 +34,7 @@ export const TipContainer: React.FC = () => {
           variant: 'warning',
         });
       } else {
-        claimTipMyria(networkId, ftIdentifier, () => {
+        claim(networkId, ftIdentifier, () => {
           enqueueSnackbar({
             message: i18n.t('Wallet.Tip.Alert.Success'),
             variant: 'success',
@@ -54,7 +54,7 @@ export const TipContainer: React.FC = () => {
   };
 
   const tipWithBalances = (network: Network) => {
-    return network.tips.filter(tip => tip.amount !== '0');
+    return network?.tips.filter(tip => Math.ceil(Number(tip.amount)) > 0) ?? [];
   };
 
   const isShow = (network: Network) => {

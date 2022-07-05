@@ -454,12 +454,16 @@ export const claimMyria = async (
         } else if (result.isError) {
           console.log(`\tFinalized     : null`);
           api.disconnect();
-          reject();
+          reject('FailedToClaim');
         }
       });
     });
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    if (err === 'FailedToClaim') {
+      throw new Error(err);
+    } else {
+      throw new Error('CancelTransactions');
+    }
   }
 };
 
