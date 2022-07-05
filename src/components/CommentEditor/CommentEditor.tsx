@@ -20,6 +20,7 @@ import {
   isSelectionAtBlockStart,
   useStoreEditorState,
   createNormalizeTypesPlugin,
+  usePlateActions,
 } from '@udecode/plate';
 import {ELEMENT_MENTION, MentionNodeData, useMentionPlugin} from '@udecode/plate-mention';
 
@@ -169,6 +170,7 @@ export const CommentEditor: React.FC<PostEditorProps> = props => {
   }, [mentionPlugin]);
 
   const editor = useStoreEditorState(referenceId);
+  const {resetEditor, setValue} = usePlateActions(referenceId);
   const [showMediaEmbed, setShowMediaEmbed] = useState(expand);
   const [comment, setComment] = useState<TNode[] | undefined>();
 
@@ -193,6 +195,13 @@ export const CommentEditor: React.FC<PostEditorProps> = props => {
     else return true;
   };
 
+  const blank = [
+    {
+      children: [{text: ''}],
+      type: 'p',
+    },
+  ];
+
   const submitComment = () => {
     if (comment) {
       const attributes = serialize(comment);
@@ -204,6 +213,8 @@ export const CommentEditor: React.FC<PostEditorProps> = props => {
       });
 
       setComment(undefined);
+      setValue(blank);
+      resetEditor();
     }
     setShowMediaEmbed(false);
   };
