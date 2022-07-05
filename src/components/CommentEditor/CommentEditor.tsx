@@ -25,7 +25,15 @@ import {ELEMENT_MENTION, MentionNodeData, useMentionPlugin} from '@udecode/plate
 
 import React, {useMemo, useEffect, useState} from 'react';
 
-import {ButtonGroup, CardActions, Grid, IconButton, SvgIcon, Tooltip} from '@material-ui/core';
+import {
+  ButtonGroup,
+  CardActions,
+  Grid,
+  IconButton,
+  SvgIcon,
+  Tooltip,
+  useMediaQuery,
+} from '@material-ui/core';
 
 import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {useStyles} from './CommentEditor.style';
@@ -66,6 +74,7 @@ const MAX_CHARACTER_LIMIT = 5000;
 export const CommentEditor: React.FC<PostEditorProps> = props => {
   const styles = useStyles();
   const options = createPlateOptions();
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
   const {
     ref,
@@ -201,7 +210,11 @@ export const CommentEditor: React.FC<PostEditorProps> = props => {
 
   return (
     <Grid container className={styles.root} direction="row">
-      <Avatar src={user?.profilePictureURL} name={user?.name} size={AvatarSize.MEDIUM} />
+      <Avatar
+        src={user?.profilePictureURL}
+        name={user?.name}
+        size={isMobile ? AvatarSize.TINY : AvatarSize.MEDIUM}
+      />
 
       <div className={styles.editor} ref={ref}>
         <Plate
