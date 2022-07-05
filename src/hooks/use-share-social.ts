@@ -72,11 +72,12 @@ export const useShareSocial = () => {
     social: string,
     username: string,
     account: InjectedAccountWithMeta,
-    callback?: ({isVerified: boolean}) => void,
+    callback?: ({isVerified: boolean, errorMessage: string}) => void,
   ) => {
     if (!user) return;
 
     let verified = false;
+    let errorMessage = '';
 
     try {
       const {rpcURL} = await NetworkAPI.getNetwork(NetworkIdEnum.MYRIAD);
@@ -103,8 +104,6 @@ export const useShareSocial = () => {
         },
       );
 
-      if (!api) throw new Error('Cancel transaction');
-
       await new Promise(resolve => {
         api.query.system.events(events => {
           events.forEach(({event}) => {
@@ -122,18 +121,25 @@ export const useShareSocial = () => {
       const updatedSocialMedia = await UserSocialAPI.getUserSocials(user.id, true);
       const updatedTotal = updatedSocialMedia.data.length;
 
-      if (currentTotal === updatedTotal) verified = false;
       if (currentTotal < updatedTotal) verified = true;
+      if (currentTotal === updatedTotal) {
+        verified = false;
+        errorMessage = 'Error';
+      }
 
       dispatch({
         type: constants.FETCH_USER_SOCIALS,
         payload: updatedSocialMedia.data,
       });
     } catch (err) {
-      console.log(err);
+      if (err.message === 'Cancelled') {
+        errorMessage = 'ErrorTransaction';
+      } else {
+        errorMessage = 'ErrorBalance';
+      }
     } finally {
       setSignerLoading(false);
-      callback && callback({isVerified: verified});
+      callback && callback({isVerified: verified, errorMessage});
     }
   };
 

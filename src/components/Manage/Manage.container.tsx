@@ -5,14 +5,12 @@ import getConfig from 'next/config';
 import {useRouter} from 'next/router';
 
 import {useTheme, useMediaQuery} from '@material-ui/core';
-import {Backdrop, CircularProgress} from '@material-ui/core';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import {PolkadotAccountList} from '../PolkadotAccountList';
 import {BoxComponent} from '../atoms/Box';
 import {Manage} from './Manage';
-import {useStyles} from './manage.style';
 
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {useAuthHook} from 'src/hooks/auth.hook';
@@ -27,9 +25,8 @@ import {UserState} from 'src/reducers/user/reducer';
 export const ManageCointainer: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
-  const styles = useStyles();
   const {enablePolkadotExtension} = usePolkadotExtension();
-  const {getRegisteredAccounts, connectNetwork, isSignerLoading} = useAuthHook();
+  const {getRegisteredAccounts, connectNetwork} = useAuthHook();
   const {connectToNear} = useNearApi();
   const router = useRouter();
   const {publicRuntimeConfig} = getConfig();
@@ -154,9 +151,6 @@ export const ManageCointainer: React.FC = () => {
         onSelect={handleConnect}
         onClose={closeAccountList}
       />
-      <Backdrop className={styles.backdrop} open={isSignerLoading}>
-        <CircularProgress color="primary" />
-      </Backdrop>
     </BoxComponent>
   );
 };

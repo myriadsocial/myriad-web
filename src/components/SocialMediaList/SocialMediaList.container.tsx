@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {isMobile} from 'react-device-detect';
 import {useSelector} from 'react-redux';
 
 import {useSession} from 'next-auth/react';
@@ -7,16 +6,11 @@ import {useRouter} from 'next/router';
 
 import {NoSsr} from '@material-ui/core';
 
-import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
-
 import {AddSocialMedia} from '../AddSocialMedia';
-import {PolkadotAccountList} from '../PolkadotAccountList';
 import {SocialMediaList as SocialMediaListComponent} from './SocialMediaList';
 import {SocialDetail} from './use-social-media-list.hook';
 
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {useAuthHook} from 'src/hooks/auth.hook';
-import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {useShareSocial} from 'src/hooks/use-share-social';
 import {SocialsEnum} from 'src/interfaces/social';
 import i18n from 'src/locale';
@@ -27,26 +21,10 @@ export const SocialMediaListContainer: React.FC = () => {
   const router = useRouter();
   const {data: session} = useSession();
 
-  const {enablePolkadotExtension} = usePolkadotExtension();
-  const {getRegisteredAccounts} = useAuthHook();
-
-  const {
-    isVerifying,
-    verifyPublicKeyShared,
-    isSignerLoading,
-    verifySocialMedia: verifySocMed,
-  } = useShareSocial();
+  const {isVerifying, verifyPublicKeyShared} = useShareSocial();
 
   const {user, socials} = useSelector<RootState, UserState>(state => state.userState);
   const enqueueSnackbar = useEnqueueSnackbar();
-
-  const [showAccountList, setShowAccountList] = React.useState(false);
-  const [extensionInstalled, setExtensionInstalled] = React.useState(false);
-  const [social, setSocial] = React.useState<SocialsEnum | null>(null);
-  const [profileUrl, setProfileUrl] = React.useState<string | null>(null);
-
-  const [accounts, setAccounts] = React.useState<InjectedAccountWithMeta[]>([]);
-
   const [selectedSocial, setSelectedSocial] = useState<SocialsEnum | null>(null);
 
   const address = session?.user.address as string;
@@ -64,17 +42,13 @@ export const SocialMediaListContainer: React.FC = () => {
   };
 
   const verifySocialMedia = (social: SocialsEnum, profileUrl: string) => {
-    if (!isMobile) {
-      checkExtensionInstalled(social, profileUrl);
-    } else {
-      verifyPublicKeyShared(social, profileUrl, address, () => {
-        setSelectedSocial(null);
-        enqueueSnackbar({
-          message: i18n.t('SocialMedia.Alert.Verify', {social: social}),
-          variant: 'success',
-        });
+    verifyPublicKeyShared(social, profileUrl, address, () => {
+      setSelectedSocial(null);
+      enqueueSnackbar({
+        message: i18n.t('SocialMedia.Alert.Verify', {social: social}),
+        variant: 'success',
       });
-    }
+    });
   };
 
   const getPlatformUrl = (social: SocialDetail): string => {
@@ -105,51 +79,6 @@ export const SocialMediaListContainer: React.FC = () => {
     }
   };
 
-  const closeAccountList = () => {
-    setShowAccountList(false);
-  };
-
-  const handleConnect = async (account?: InjectedAccountWithMeta) => {
-    closeAccountList();
-
-    if (account) {
-      verifySocMed(social, profileUrl, account, ({isVerified}) => {
-        isVerified &&
-          enqueueSnackbar({
-            message: i18n.t('SocialMedia.Alert.Verify', {social: social}),
-            variant: 'success',
-          });
-
-        !isVerified &&
-          enqueueSnackbar({
-            message: i18n.t('SocialMedia.Alert.Error'),
-            variant: 'error',
-          });
-
-        setSelectedSocial(null);
-        setSocial(null);
-        setProfileUrl(null);
-      });
-    }
-  };
-
-  const checkExtensionInstalled = async (social: SocialsEnum, profileUrl: string) => {
-    const installed = await enablePolkadotExtension();
-
-    setShowAccountList(true);
-    setExtensionInstalled(installed);
-    setSocial(social);
-    setProfileUrl(profileUrl);
-
-    getAvailableAccounts();
-  };
-
-  const getAvailableAccounts = async () => {
-    const accounts = await getRegisteredAccounts();
-
-    setAccounts(accounts);
-  };
-
   if (!user) return null;
 
   return (
@@ -169,18 +98,9 @@ export const SocialMediaListContainer: React.FC = () => {
               social={selectedSocial}
               address={address}
               onClose={closeAddSocialMedia}
-              verifying={!isMobile ? isSignerLoading : isVerifying}
+              verifying={isVerifying}
               verify={verifySocialMedia}
-              onBlockchain={!isMobile}
               onDrawer={true}
-            />
-            <PolkadotAccountList
-              align="left"
-              title="Select account"
-              isOpen={showAccountList && extensionInstalled}
-              accounts={accounts}
-              onSelect={handleConnect}
-              onClose={closeAccountList}
             />
           </>
         )}
