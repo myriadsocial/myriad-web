@@ -20,7 +20,7 @@ import {SectionType} from 'src/interfaces/interaction';
 import {deletePost, editPost} from 'src/reducers/timeline/actions';
 
 export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => {
-  const {post, type, expandComment = false} = props;
+  const {post, type, expandComment = false, user} = props;
 
   const styles = useStyles();
   const dispatch = useDispatch();
@@ -28,7 +28,7 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
   const report = useReport();
   const ref = useRef<HTMLDivElement>(null);
 
-  const {selected, setSelected, tabs} = useCommentTabs(post, ref);
+  const {selected, setSelected, tabs} = useCommentTabs(post, ref, user);
   const {upvotePost, toggleDownvotePost, removePostVote} = usePostInteractionHook();
 
   const [showImporterList, toggleImporterList] = useToggle(false);

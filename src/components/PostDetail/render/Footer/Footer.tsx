@@ -71,16 +71,19 @@ export const PostFooter: React.FC<PostFooterProps> = props => {
           color="primary">
           <SvgIcon classes={{root: style.fill}} component={ChatAltIcon} viewBox="0 0 24 24" />
         </IconButton>
-
-        <Hidden xsDown>
-          <Text
-            locale="Post_Detail.Post_Action.Comments"
-            color="primary"
+        <Typography component="span" color="primary" variant="body1" className={style.comment}>
+          <Typography component="span" color="primary" variant="body1">
+            {formatCount(discussions + debates)}
+          </Typography>
+          &nbsp;
+          <Typography
             component="span"
+            color="primary"
             variant="body1"
-            values={{total: formatCount(discussions + debates)}}
-          />
-        </Hidden>
+            className={style.commentLabel}>
+            {i18n.t('Post_Detail.Post_Action.Comments')}
+          </Typography>
+        </Typography>
       </div>
 
       <ShowIf condition={type !== 'share'}>

@@ -31,6 +31,9 @@ type PostActionProps = {
   children?: React.ReactNode;
 };
 
+/**
+ * @deprecated moved to post footer
+ */
 export const PostActionComponent: React.FC<PostActionProps> = props => {
   const style = useStyles();
 

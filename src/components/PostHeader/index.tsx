@@ -23,6 +23,9 @@ import i18n from 'src/locale';
 
 const MenuItem = WithAuthorizeAction(BaseMenuItem);
 
+/**
+ * @deprecated moved to post header
+ */
 export const HeaderComponent: React.FC<PostHeaderProps> = props => {
   const {
     user,

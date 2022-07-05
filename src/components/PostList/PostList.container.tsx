@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import {shallowEqual, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 import Grid from '@material-ui/core/Grid';
 
@@ -13,25 +13,30 @@ import {useTimelineFilter} from './hooks/use-timeline-filter.hook';
 
 import {PostDetailContainer} from 'components/PostDetail/PostDetail.container';
 import {ParsedUrlQuery} from 'querystring';
+import {useBlockList} from 'src/hooks/use-blocked-list.hook';
 import {TimelineFilterFields} from 'src/interfaces/timeline';
 import {User} from 'src/interfaces/user';
-import {RootState} from 'src/reducers';
+import {loadUsers} from 'src/reducers/search/actions';
 
 type PostsListContainerProps = {
   query?: ParsedUrlQuery;
   filters?: TimelineFilterFields;
+  user?: User;
 };
 
 export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
-  const {query, filters} = props;
+  const {query, filters, user} = props;
   const styles = useStyles();
+  const dispatch = useDispatch();
 
   const {posts, loading, empty, hasMore, filterTimeline, nextPage} = useTimelineFilter(filters);
-  const user = useSelector<RootState, User>(state => state.userState.user, shallowEqual);
+  const {loadAll: loadAllBlockedUser} = useBlockList(user);
 
   useEffect(() => {
     filterTimeline(query);
 
+    loadAllBlockedUser();
+    dispatch(loadUsers());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 

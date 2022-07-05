@@ -17,7 +17,7 @@ import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
-import {loadUsers, searchUsers} from 'src/reducers/search/actions';
+import {searchUsers} from 'src/reducers/search/actions';
 import {downvote, removeVote, upvote} from 'src/reducers/timeline/actions';
 
 const CommentEditor = dynamic(() => import('../CommentEditor/CommentEditor.container'), {
@@ -25,6 +25,7 @@ const CommentEditor = dynamic(() => import('../CommentEditor/CommentEditor.conta
 });
 
 type CommentListContainerProps = {
+  user?: User;
   referenceId: string;
   placeholder?: string;
   section: SectionType;
@@ -34,7 +35,7 @@ type CommentListContainerProps = {
 };
 
 export const CommentListContainer: React.FC<CommentListContainerProps> = props => {
-  const {placeholder, referenceId, section, focus, expand, scrollToPost} = props;
+  const {placeholder, referenceId, section, focus, expand, user, scrollToPost} = props;
 
   const dispatch = useDispatch();
   const confirm = useConfirm();
@@ -49,28 +50,18 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
     updateRemoveUpvote,
     remove,
   } = useCommentHook(referenceId);
+  const {blockedUserIds} = useBlockList(user);
 
-  const {user, anonymous} = useSelector<RootState, {user: User; anonymous: boolean}>(
-    state => ({
-      user: state.userState.user,
-      anonymous: state.userState.anonymous,
-    }),
+  const anonymous = useSelector<RootState, boolean>(
+    state => state.userState.anonymous,
     shallowEqual,
   );
   const downvoting = useSelector<RootState, Post | Comment | null>(
     state => state.timelineState.interaction.downvoting,
     shallowEqual,
   );
-
-  const {blockedUserIds, loadAll: loadAllBlockedUsers} = useBlockList(user);
-
   const [reported, setReported] = useState<Comment | null>(null);
   const banned = Boolean(user?.deletedAt);
-
-  useEffect(() => {
-    loadAllBlockedUsers();
-    dispatch(loadUsers());
-  }, []);
 
   useEffect(() => {
     loadInitComment(section);

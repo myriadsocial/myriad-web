@@ -10,6 +10,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'space-between',
       '& > div': {
         marginRight: 20,
+        [theme.breakpoints.down('xs')]: {
+          marginRight: 0,
+        },
       },
 
       [theme.breakpoints.between('sm', 'md')]: {
@@ -79,6 +82,15 @@ export const useStyles = makeStyles((theme: Theme) =>
       background: '#E0E0E0',
       marginTop: 32,
       marginBottom: 32,
+    },
+    comment: {
+      fontSize: 14,
+      fontWeight: 600,
+    },
+    commentLabel: {
+      [theme.breakpoints.down('xs')]: {
+        display: 'none',
+      },
     },
     wording: {
       fontSize: 14,

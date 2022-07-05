@@ -62,11 +62,7 @@ const Topic: React.FC<TopicPageProps> = ({experience}) => {
         }
       />
 
-<<<<<<< HEAD
-      <TimelineContainer showCounter={true} />
-=======
       <Timeline />
->>>>>>> aee057b0 (MYR-1826: refactor timeline component)
     </DefaultLayout>
   );
 };
