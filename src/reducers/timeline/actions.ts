@@ -1,6 +1,7 @@
 import {Actions as BaseAction, setLoading, setError} from '../base/actions';
 import {RootState} from '../index';
 import * as constants from './constants';
+import {TimelineFilters} from './reducer';
 
 import axios from 'axios';
 import {Action} from 'redux';
@@ -8,7 +9,7 @@ import {Comment} from 'src/interfaces/comment';
 import {FriendStatus} from 'src/interfaces/friend';
 import {ReferenceType, SectionType, Vote} from 'src/interfaces/interaction';
 import {Post, PostMetric, PostProps, PostVisibility} from 'src/interfaces/post';
-import {TimelineFilter, TimelineOrderType, TimelineType} from 'src/interfaces/timeline';
+import {TimelineFilterFields, TimelineOrderType, TimelineType} from 'src/interfaces/timeline';
 import {UserProps} from 'src/interfaces/user';
 import {WalletDetail} from 'src/interfaces/wallet';
 import {PostImportError} from 'src/lib/api/errors/post-import.error';
@@ -26,11 +27,9 @@ import {ThunkActionCreator} from 'src/types/thunk';
 export interface LoadTimeline extends Action {
   type: constants.LOAD_TIMELINE;
   payload: {
-    posts: Post[];
-    sort?: SortType;
-    filter?: TimelineFilter;
     type?: TimelineType;
-    order?: TimelineOrderType;
+    posts: Post[];
+    filters?: TimelineFilters;
     meta: ListMeta;
   };
 }
@@ -47,7 +46,7 @@ export interface RemovePost extends Action {
 
 export interface UpdateTimelineFilter extends Action {
   type: constants.UPDATE_TIMELINE_FILTER;
-  filter: TimelineFilter;
+  filter: TimelineFilterFields;
 }
 
 export interface FetchWalletDetails extends Action {
@@ -158,7 +157,7 @@ export type Actions =
   | SetTimelineSort
   | BaseAction;
 
-export const updateFilter = (filter: TimelineFilter): UpdateTimelineFilter => ({
+export const updateFilter = (filter: TimelineFilterFields): UpdateTimelineFilter => ({
   type: constants.UPDATE_TIMELINE_FILTER,
   filter,
 });
@@ -224,13 +223,7 @@ export const setTimelineLoading = (loading: boolean): TimelineLoading => ({
  * Action Creator
  */
 export const loadTimeline: ThunkActionCreator<Actions, RootState> =
-  (
-    page = 1,
-    order?: TimelineOrderType,
-    filter?: TimelineFilter,
-    type?: TimelineType,
-    sort?: SortType,
-  ) =>
+  (page = 1, filters?: TimelineFilters, type?: TimelineType) =>
   async (dispatch, getState) => {
     dispatch(setTimelineLoading(true));
     let asFriend = false;
@@ -244,11 +237,9 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
       const {timelineState, userState} = getState();
       const userId = userState.user?.id as string;
       const timelineType = type ?? timelineState.type;
-      const timelineFilter = filter ?? timelineState.filter;
-      const timelineSort = sort ?? timelineState.sort;
-      const timelineOrder = order ?? timelineState.order;
+      const timelineFilter = filters ?? timelineState.filters;
 
-      if (user && (timelineFilter?.owner || timelineFilter?.importer)) {
+      if (user && (timelineFilter?.fields?.owner || timelineFilter?.fields?.importer)) {
         asFriend = friendStatus?.status === FriendStatus.APPROVED;
       }
 
@@ -256,15 +247,14 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
         page,
         userId,
         timelineType,
-        timelineOrder,
         timelineFilter,
         asFriend,
-        timelineSort,
       );
 
       dispatch({
         type: constants.LOAD_TIMELINE,
         payload: {
+          type,
           posts: posts.map(post => {
             const upvoted = post.votes?.filter(vote => vote.userId === userId && vote.state);
             const downvoted = post.votes?.filter(vote => vote.userId === userId && !vote.state);
@@ -274,14 +264,12 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
 
             return post;
           }),
-          sort,
-          filter: timelineFilter,
-          type,
+          filters: timelineFilter,
           meta,
-          order,
         },
       });
     } catch (error) {
+      console.error(error);
       dispatch(setError(error));
     } finally {
       dispatch(setTimelineLoading(false));
@@ -594,14 +582,18 @@ export const fetchSearchedPosts: ThunkActionCreator<Actions, RootState> =
 
     const {
       userState: {user},
-      timelineState: {order, sort},
+      timelineState: {filters},
     } = getState();
 
     const userId = user?.id as string;
 
     try {
       const filter = {userId: user?.id, query};
-      const {data: posts, meta} = await PostAPI.findPosts(filter, {page, orderField: order, sort});
+      const {data: posts, meta} = await PostAPI.findPosts(filter, {
+        page,
+        orderField: filters.order,
+        sort: filters.sort,
+      });
 
       dispatch({
         type: constants.LOAD_TIMELINE,
@@ -646,14 +638,15 @@ export const checkNewTimeline: ThunkActionCreator<Actions, RootState> =
       userState: {user},
       timelineState: {meta},
     } = getState();
+
     try {
-      const {meta: newMeta} = await PostAPI.getPost(
-        1,
-        user.id,
-        TimelineType.ALL,
-        TimelineOrderType.LATEST,
-      );
+      const {meta: newMeta} = await PostAPI.getPost(1, user.id, TimelineType.ALL, {
+        sort: 'DESC',
+        order: TimelineOrderType.LATEST,
+      });
+
       const diffItemCount = newMeta.totalItemCount - meta.totalItemCount;
+
       callback(diffItemCount);
       return diffItemCount;
     } catch (err) {

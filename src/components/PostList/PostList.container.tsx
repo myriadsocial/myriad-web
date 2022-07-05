@@ -7,36 +7,39 @@ import Grid from '@material-ui/core/Grid';
 import {Skeleton as PostSkeleton} from '../PostDetail';
 import {EmptyResult} from '../Search/EmptyResult';
 import {EmptyContentEnum} from '../Search/EmptyResult.interfaces';
-import {useTimelineHook} from '../Timeline/hooks/use-timeline.hook';
 import {Loading} from '../atoms/Loading';
-import {PostDetailContainer} from './PostDetail.container';
-import {usePostInteractionHook} from './hooks/use-post-interaction.hook';
+import {useStyles} from './PostList.styles';
 import {useTimelineFilter} from './hooks/use-timeline-filter.hook';
 
+import {PostDetailContainer} from 'components/PostDetail/PostDetail.container';
 import {ParsedUrlQuery} from 'querystring';
-import {getAuthInfo} from 'src/reducers/user/selector';
+import {TimelineFilterFields} from 'src/interfaces/timeline';
+import {User} from 'src/interfaces/user';
+import {RootState} from 'src/reducers';
 
 type PostsListContainerProps = {
   query?: ParsedUrlQuery;
+  filters?: TimelineFilterFields;
 };
 
 export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
-  const {query} = props;
+  const {query, filters} = props;
+  const styles = useStyles();
 
-  const {loading, posts, hasMore} = useTimelineHook();
-  const {filterTimeline} = useTimelineFilter();
-  const {upvotePost, toggleDownvotePost, removePostVote} = usePostInteractionHook();
-  const {user} = useSelector(getAuthInfo, shallowEqual);
+  const {posts, loading, empty, hasMore, filterTimeline, nextPage} = useTimelineFilter(filters);
+  const user = useSelector<RootState, User>(state => state.userState.user, shallowEqual);
 
   useEffect(() => {
     filterTimeline(query);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
   const loadNextPage = () => {
-    console.log('filters', query);
+    nextPage();
   };
 
-  if (loading && posts.length === 0)
+  if (loading)
     return (
       <Grid container justifyContent="center">
         <PostSkeleton />
@@ -44,36 +47,26 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
       </Grid>
     );
 
-  if (!loading && posts.length === 0) return <EmptyResult emptyContent={EmptyContentEnum.POST} />;
+  if (empty) return <EmptyResult emptyContent={EmptyContentEnum.POST} />;
 
   return (
-    <>
+    <div className={styles.root}>
       <InfiniteScroll
         dataLength={posts.length}
         hasMore={hasMore}
         next={loadNextPage}
         loader={<Loading />}>
-        {posts.map(post => (
-          <div key={`post-${post.id}`}>
+        <Grid container direction="column">
+          {posts.map(post => (
             <PostDetailContainer
+              key={`post-${post.id}`}
               user={user}
               post={post}
               votes={post.metric.upvotes - post.metric.downvotes}
-              onDelete={console.log}
-              onUpvote={upvotePost}
-              onToggleDownvote={toggleDownvotePost}
-              onRemoveVote={removePostVote}
-              onOpenTipHistory={console.log}
-              onReport={console.log}
-              onShare={console.log}
-              onChangeVisibility={console.log}
-              onShowImporters={console.log}
             />
-
-            <div>HA</div>
-          </div>
-        ))}
+          ))}
+        </Grid>
       </InfiniteScroll>
-    </>
+    </div>
   );
 };

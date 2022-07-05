@@ -2,7 +2,6 @@ import {VoteActionProps} from 'components/atoms/Voting/voting.interface';
 import {PostMetric} from 'src/interfaces/post';
 
 export type PostFooterActionProps = VoteActionProps & {
-  onShare: () => void;
   onShowComments: () => void;
 };
 
@@ -11,4 +10,5 @@ export type PostFooterProps = PostFooterActionProps & {
   metrics: PostMetric;
   downvoted?: boolean;
   upvoted?: boolean;
+  type?: 'share' | 'default';
 };

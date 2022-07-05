@@ -26,6 +26,7 @@ export const PostFooter: React.FC<PostFooterProps> = props => {
     downvoted = false,
     upvoted = false,
     children,
+    type = 'default',
     onShowComments,
     ...restProps
   } = props;
@@ -64,7 +65,7 @@ export const PostFooter: React.FC<PostFooterProps> = props => {
 
       <div className={style.section}>
         <IconButton
-          disabled={false}
+          disabled={type === 'share'}
           onClick={onShowComments}
           className={style.action}
           color="primary">
@@ -82,7 +83,7 @@ export const PostFooter: React.FC<PostFooterProps> = props => {
         </Hidden>
       </div>
 
-      <ShowIf condition={true}>
+      <ShowIf condition={type !== 'share'}>
         <div className={style.section}>
           <IconButton onClick={handleClickShareLink} className={style.action} color="primary">
             <SvgIcon

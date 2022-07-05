@@ -3,12 +3,11 @@ import React from 'react';
 import {getSession} from 'next-auth/react';
 import getConfig from 'next/config';
 import Head from 'next/head';
-import {useRouter} from 'next/router';
 
 import {Timeline} from 'components/Timeline/Timeline.layout';
+import {SearchBoxContainer} from 'components/atoms/Search/SearchBoxContainer';
 import {NavbarComponent} from 'src/components/Mobile/Navbar/Navbar';
 import {RichTextContainer} from 'src/components/Richtext/RichTextContainer';
-import {SearchBoxContainer} from 'src/components/atoms/Search/SearchBoxContainer';
 import {AppStatusBanner} from 'src/components/common/Banner';
 import {TippingSuccess} from 'src/components/common/Tipping/render/Tipping.success';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
@@ -35,40 +34,22 @@ import {ThunkDispatchAction} from 'src/types/thunk';
 const {publicRuntimeConfig} = getConfig();
 
 const Home: React.FC = () => {
-  const router = useRouter();
-
-  const performSearch = (query: string) => {
-    const DELAY = 100;
-    setTimeout(() => {
-      // shallow push, without rerender page
-      router.push(
-        {
-          pathname: 'search',
-          query: {
-            q: query,
-          },
-        },
-        undefined,
-        {shallow: true},
-      );
-    }, DELAY);
-  };
-
   return (
     <DefaultLayout isOnProfilePage={false}>
       <Head>
         <title>{i18n.t('Home.Title', {appname: publicRuntimeConfig.appName})}</title>
       </Head>
 
-      <NavbarComponent onSubmitSearch={performSearch} />
+      <NavbarComponent />
 
-      <SearchBoxContainer onSubmitSearch={performSearch} hidden={true} />
+      <SearchBoxContainer hidden={true} />
 
       <RichTextContainer />
 
       <Timeline />
 
       <TippingSuccess />
+
       <AppStatusBanner />
     </DefaultLayout>
   );

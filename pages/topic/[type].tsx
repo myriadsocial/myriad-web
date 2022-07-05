@@ -7,7 +7,7 @@ import {useRouter} from 'next/router';
 
 import {capitalize} from '@material-ui/core';
 
-import {TimelineContainer} from 'src/components/Timeline/TimelineContainer';
+import {Timeline} from 'components/Timeline';
 import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {Experience} from 'src/interfaces/experience';
@@ -62,7 +62,11 @@ const Topic: React.FC<TopicPageProps> = ({experience}) => {
         }
       />
 
+<<<<<<< HEAD
       <TimelineContainer showCounter={true} />
+=======
+      <Timeline />
+>>>>>>> aee057b0 (MYR-1826: refactor timeline component)
     </DefaultLayout>
   );
 };

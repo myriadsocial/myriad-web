@@ -1,6 +1,6 @@
 import {DotsVerticalIcon} from '@heroicons/react/solid';
 
-import React from 'react';
+import React, {useCallback} from 'react';
 
 import Link from 'next/link';
 import {useRouter} from 'next/router';
@@ -16,6 +16,7 @@ import {PostSubHeader} from '../SubHeader';
 import {PostHeaderProps} from './Header.interface';
 import {useStyles} from './Header.style';
 
+import useTipHistory from 'components/TipHistory/use-tip-history.hook';
 import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorizeAction';
 import useModalAddToPost from 'src/components/Expericence/ModalAddToPost/useModalAddToPost.hook';
 import {SocialAvatar} from 'src/components/atoms/SocialAvatar';
@@ -27,10 +28,11 @@ const MenuItem = WithAuthorizeAction(BaseMenuItem);
 
 export const PostHeader: React.FC<PostHeaderProps> = React.memo(props => {
   const {user, post, owned} = props;
-  const {onDelete, onChangeVisibility, onReport, onShowImporters, onOpenTipHistory} = props;
+  const {onDelete, onChangeVisibility, onReport, onShowImporters} = props;
 
   const style = useStyles();
   const router = useRouter();
+  const tipHistory = useTipHistory();
   const addPostToExperience = useModalAddToPost();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -43,7 +45,7 @@ export const PostHeader: React.FC<PostHeaderProps> = React.memo(props => {
     setAnchorEl(null);
   };
 
-  const openContentProfileUrl = (): void => {
+  const openContentProfileUrl = useCallback((): void => {
     const url = getPlatformProfileUrl();
 
     switch (post.platform) {
@@ -54,7 +56,7 @@ export const PostHeader: React.FC<PostHeaderProps> = React.memo(props => {
         window.open(url, '_blank');
         break;
     }
-  };
+  }, []);
 
   const getPlatformProfileUrl = (): string => {
     let url = '';
@@ -97,16 +99,16 @@ export const PostHeader: React.FC<PostHeaderProps> = React.memo(props => {
     onReport();
   };
 
-  const handleShowImporter = () => {
+  const handleShowImporter = useCallback(() => {
     handleClosePostSetting();
 
     onShowImporters();
-  };
+  }, []);
 
   const handleOpenTipHistory = () => {
     handleClosePostSetting();
 
-    onOpenTipHistory();
+    tipHistory.open(post);
   };
 
   const handleOpenAddPostToExperience = () => {

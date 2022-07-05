@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import React, {useCallback, useEffect, useState} from 'react';
+import {useSelector, useDispatch, shallowEqual} from 'react-redux';
 
 import dynamic from 'next/dynamic';
 
@@ -8,9 +8,7 @@ import {CommentList} from './CommentList';
 
 import {debounce} from 'lodash';
 import {ReportContainer} from 'src/components/Report';
-import {TipHistoryContainer} from 'src/components/TipHistory';
 import ShowIf from 'src/components/common/show-if.component';
-import {useTipHistory} from 'src/hooks/tip-history.hook';
 import {useBlockList} from 'src/hooks/use-blocked-list.hook';
 import {useCommentHook} from 'src/hooks/use-comment.hook';
 import {Comment, CommentProps} from 'src/interfaces/comment';
@@ -21,9 +19,10 @@ import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {loadUsers, searchUsers} from 'src/reducers/search/actions';
 import {downvote, removeVote, upvote} from 'src/reducers/timeline/actions';
-import {UserState} from 'src/reducers/user/reducer';
 
-const CommentEditor = dynamic(() => import('../CommentEditor/CommentEditor'), {ssr: false});
+const CommentEditor = dynamic(() => import('../CommentEditor/CommentEditor.container'), {
+  ssr: false,
+});
 
 type CommentListContainerProps = {
   referenceId: string;
@@ -51,14 +50,19 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
     remove,
   } = useCommentHook(referenceId);
 
-  const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
-  const people = useSelector<RootState, User[]>(state => state.searchState.searchedUsers);
+  const {user, anonymous} = useSelector<RootState, {user: User; anonymous: boolean}>(
+    state => ({
+      user: state.userState.user,
+      anonymous: state.userState.anonymous,
+    }),
+    shallowEqual,
+  );
   const downvoting = useSelector<RootState, Post | Comment | null>(
     state => state.timelineState.interaction.downvoting,
+    shallowEqual,
   );
 
   const {blockedUserIds, loadAll: loadAllBlockedUsers} = useBlockList(user);
-  const {openTipHistory} = useTipHistory();
 
   const [reported, setReported] = useState<Comment | null>(null);
   const banned = Boolean(user?.deletedAt);
@@ -72,7 +76,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
     loadInitComment(section);
   }, [referenceId]);
 
-  const handleSubmitComment = (comment: Partial<CommentProps>) => {
+  const handleSubmitComment = useCallback((comment: Partial<CommentProps>) => {
     if (user) {
       const attributes: CommentProps = {
         ...comment,
@@ -96,9 +100,9 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         }
       });
     }
-  };
+  }, []);
 
-  const handleUpvote = (comment: Comment) => {
+  const handleUpvote = useCallback((comment: Comment) => {
     if (comment.isUpvoted) {
       handleRemoveVote(comment);
     } else {
@@ -108,15 +112,15 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         }),
       );
     }
-  };
+  }, []);
 
-  const handleRemoveVote = (comment: Comment) => {
+  const handleRemoveVote = useCallback((comment: Comment) => {
     dispatch(
       removeVote(comment, () => {
         updateRemoveUpvote(comment.id);
       }),
     );
-  };
+  }, []);
 
   const showConfirmDeleteDialog = (comment: Comment): void => {
     confirm({
@@ -139,11 +143,15 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
     setReported(null);
   };
 
-  const handleSearchPeople = debounce((query: string) => {
-    if (user) {
-      dispatch(searchUsers(query));
-    }
-  }, 300);
+  const handleSearchPeople = useCallback(
+    () =>
+      debounce((query: string) => {
+        if (user) {
+          dispatch(searchUsers(query));
+        }
+      }, 300),
+    [],
+  );
 
   const handleLoadMoreComment = (): void => {
     loadMoreComment();
@@ -157,13 +165,6 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
           placeholder={placeholder}
           user={user}
           expand={expand}
-          mentionables={people.map(item => ({
-            value: item.id,
-            name: item.name,
-            username: item.username ?? item.name.replace(' ', ''),
-            avatar: item.profilePictureURL,
-          }))}
-          onSearchMention={handleSearchPeople}
           onSubmit={handleSubmitComment}
         />
       </ShowIf>
@@ -171,7 +172,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
       <CommentList
         section={section}
         user={user}
-        mentionables={people}
+        mentionables={[]}
         blockedUserIds={blockedUserIds}
         placeholder={placeholder}
         focus={focus}
@@ -183,13 +184,11 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         onRemoveVote={handleRemoveVote}
         onUpdateDownvote={updateDownvote}
         onReport={handleReport}
-        onOpenTipHistory={openTipHistory}
+        onOpenTipHistory={console.log}
         onSearchPeople={handleSearchPeople}
         onDelete={showConfirmDeleteDialog}
         scrollToPost={scrollToPost}
       />
-
-      <TipHistoryContainer referenceType={ReferenceType.COMMENT} />
 
       <ReportContainer reference={reported} onClose={closeReportPost} />
     </>

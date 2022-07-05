@@ -14,16 +14,13 @@ import {SearchBoxContainer} from 'src/components/atoms/Search/SearchBoxContainer
 import ShowIf from 'src/components/common/show-if.component';
 
 type SearchBoxContainerProps = {
-  onSubmitSearch?: (args: string) => void;
   iconPosition?: 'start' | 'end';
   outlined?: boolean;
   searched?: boolean;
 };
 
-export const NavbarComponent: React.FC<SearchBoxContainerProps> = ({
-  onSubmitSearch,
-  searched = false,
-}) => {
+export const NavbarComponent: React.FC<SearchBoxContainerProps> = ({searched = false}) => {
+  const style = useStyles();
   const router = useRouter();
   const [isSearch, setIsSearch] = React.useState(searched);
 
@@ -34,7 +31,24 @@ export const NavbarComponent: React.FC<SearchBoxContainerProps> = ({
       setIsSearch(!isSearch);
     }
   };
-  const style = useStyles();
+
+  const performSearch = (query: string) => {
+    const DELAY = 100;
+    setTimeout(() => {
+      // shallow push, without rerender page
+      router.push(
+        {
+          pathname: 'search',
+          query: {
+            q: query,
+          },
+        },
+        undefined,
+        {shallow: true},
+      );
+    }, DELAY);
+  };
+
   return (
     <Grid
       container
@@ -61,7 +75,7 @@ export const NavbarComponent: React.FC<SearchBoxContainerProps> = ({
           className={style.icon}
           onClick={toggleOpenSearch}
         />
-        <SearchBoxContainer onSubmitSearch={onSubmitSearch} />
+        <SearchBoxContainer onSubmitSearch={performSearch} />
       </ShowIf>
     </Grid>
   );

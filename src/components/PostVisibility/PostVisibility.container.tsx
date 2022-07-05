@@ -94,10 +94,10 @@ export const PostVisibilityContainer: React.FC<PostVisibilityContainerProps> = p
   return (
     <>
       <PostVisibility
-        open={Boolean(reference)}
+        open={false}
         reference={reference}
         onClose={onClose}
-        onVisibility={handlePostVisibility}
+        onVisibilityChanged={handlePostVisibility}
       />
     </>
   );

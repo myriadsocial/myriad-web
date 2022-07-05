@@ -28,7 +28,9 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
         <ShowIf condition={platform !== 'myriad'}>{i18n.t('Post_Detail.Imported_Post')} </ShowIf>
 
         <Link href={`/post/[postId]`} as={`/post/${postId}`} shallow>
-          <a className={style.linkGrey}>{timeAgo(date)}&nbsp;</a>
+          <a href={`/post/${postId}`} className={style.linkGrey}>
+            {timeAgo(date)}&nbsp;
+          </a>
         </Link>
 
         <ShowIf condition={platform !== 'myriad'}>

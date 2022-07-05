@@ -2,7 +2,7 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 import React from 'react';
 
-import {CommentEditor as CommentEditorComponent} from './CommentEditor';
+import CommentEditorComponent from './CommentEditor';
 
 export default {
   title: 'UI Revamp v2.0/atoms/Comment Editor',

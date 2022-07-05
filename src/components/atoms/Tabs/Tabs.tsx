@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 
-import {TabsProps} from '@material-ui/core/Tabs';
+import {TabsProps} from '@material-ui/core';
 
 import {TabList, TabPosition, TabMark, TabSize} from '../TabList';
 import {TabPanel} from '../TabPanel';
@@ -20,7 +20,10 @@ type TabsComponentProps<T> = TabsProps & {
   onChangeTab: (currentTab: T) => void;
 };
 
-export const TabsComponent = <T,>(props: TabsComponentProps<T>): JSX.Element => {
+const Tabs = <T,>(
+  props: TabsComponentProps<T>,
+  ref: React.ForwardedRef<HTMLDivElement>,
+): JSX.Element => {
   const {
     tabs,
     selected,
@@ -47,7 +50,7 @@ export const TabsComponent = <T,>(props: TabsComponentProps<T>): JSX.Element => 
   };
 
   return (
-    <>
+    <div ref={ref}>
       <TabList {...props} onChangeTab={handleTabChange} className={styles.tabs} />
 
       {tabs.map(tab => {
@@ -63,6 +66,10 @@ export const TabsComponent = <T,>(props: TabsComponentProps<T>): JSX.Element => 
           </TabPanel>
         ) : null;
       })}
-    </>
+    </div>
   );
 };
+
+export const TabsComponent = React.forwardRef(Tabs) as <T>(
+  props: TabsComponentProps<T> & {ref?: React.ForwardedRef<HTMLDivElement>},
+) => ReturnType<typeof Tabs>;

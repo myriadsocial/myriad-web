@@ -49,14 +49,14 @@ export const PostImporter: React.FC<Props> = props => {
   };
 
   useEffect(() => {
-    if (post) {
+    if (post && open) {
       if (post.importers?.length === 0) {
         dispatch(fetchImporter(post.originPostId, post.platform, '', currentPage + 1));
       } else {
         dispatch(fetchImporter(post.originPostId, post.platform, post.createdBy, currentPage + 1));
       }
     }
-  }, [dispatch, post]);
+  }, [dispatch, post, open]);
 
   return (
     <Modal

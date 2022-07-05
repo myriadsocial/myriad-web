@@ -3,25 +3,25 @@ import {useSelector, useDispatch, shallowEqual} from 'react-redux';
 
 import {ParsedUrlQuery} from 'querystring';
 import {People} from 'src/interfaces/people';
+import {Post} from 'src/interfaces/post';
 import {
   TimelineType,
-  TimelineFilter,
   TimelineOrderType,
   PostOriginType,
+  TimelineFilterFields,
 } from 'src/interfaces/timeline';
 import {User} from 'src/interfaces/user';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
 import {RootState} from 'src/reducers';
 import {loadTimeline, clearTimeline} from 'src/reducers/timeline/actions';
-import {TimelineFilters} from 'src/reducers/timeline/reducer';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const useTimelineFilter = () => {
+export const useTimelineFilter = (filters?: TimelineFilterFields) => {
   const dispatch = useDispatch();
 
-  const filters = useSelector<RootState, TimelineFilters>(
-    state => state.timelineState.filters,
+  const filterFields = useSelector<RootState, TimelineFilterFields>(
+    state => state.timelineState.filters.fields,
     shallowEqual,
   );
   const people = useSelector<RootState, User>(state => state.profileState.detail, shallowEqual);
@@ -29,9 +29,24 @@ export const useTimelineFilter = () => {
     state => state.userState.anonymous,
     shallowEqual,
   );
-
-  const originType: PostOriginType = filters.params?.platform
-    ? filters.params.platform.includes.length === 1 && filters.params.platform.includes('myriad')
+  const {posts, empty, loading, hasMore} = useSelector<
+    RootState,
+    {posts: Post[]; empty: boolean; loading: boolean; hasMore: boolean}
+  >(
+    state => ({
+      posts: state.timelineState.posts,
+      empty: state.timelineState.meta.totalItemCount === 0 && !state.timelineState.loading,
+      loading: state.timelineState.meta.totalItemCount === 0 && state.timelineState.loading,
+      hasMore: state.timelineState.meta.totalPageCount > state.timelineState.meta.currentPage,
+    }),
+    shallowEqual,
+  );
+  const currentPage = useSelector<RootState, number>(
+    state => state.timelineState.meta.currentPage,
+    shallowEqual,
+  );
+  const originType: PostOriginType = filterFields?.platform
+    ? filterFields.platform.includes.length === 1 && filterFields.platform.includes('myriad')
       ? 'myriad'
       : 'imported'
     : 'all';
@@ -39,7 +54,8 @@ export const useTimelineFilter = () => {
   const filterTimeline = useCallback(async (query?: ParsedUrlQuery) => {
     let timelineType = TimelineType.ALL;
     let timelineOrder = TimelineOrderType.LATEST;
-    let tags: string[] = filters.params?.tags || [];
+    let tags: string[] = [];
+    let search: string;
 
     if (query?.type) {
       const type = Array.isArray(query.type) ? query.type[0] : query.type;
@@ -71,10 +87,11 @@ export const useTimelineFilter = () => {
     }
 
     if (query?.q) {
-      tags = Array.isArray(query.q) ? query.q : [query.q];
+      search = query.q as string;
     }
 
-    const newFilter: TimelineFilter = {
+    const newFilterFields: TimelineFilterFields = {
+      ...filterFields,
       ...filters,
       tags,
     };
@@ -86,8 +103,8 @@ export const useTimelineFilter = () => {
     if (query?.type === TimelineType.EXPERIENCE && query?.id) {
       const experience = await ExperienceAPI.getExperienceDetail(query.id as string);
 
-      const expFilter: TimelineFilter = {
-        ...filters,
+      const expFilterFields: TimelineFilterFields = {
+        ...filterFields,
         tags: experience.allowedTags ? (experience.allowedTags as string[]) : [],
         people: experience.people
           .filter((person: People) => !person.hide)
@@ -95,9 +112,29 @@ export const useTimelineFilter = () => {
         experienceId: experience.id,
       };
 
-      dispatch(loadTimeline(1, timelineOrder, expFilter, timelineType));
+      dispatch(
+        loadTimeline(
+          1,
+          {
+            fields: expFilterFields,
+            order: timelineOrder,
+            query: search,
+          },
+          timelineType,
+        ),
+      );
     } else {
-      dispatch(loadTimeline(1, timelineOrder, newFilter, timelineType));
+      dispatch(
+        loadTimeline(
+          1,
+          {
+            fields: newFilterFields,
+            order: timelineOrder,
+            query: search,
+          },
+          timelineType,
+        ),
+      );
     }
   }, []);
 
@@ -108,17 +145,17 @@ export const useTimelineFilter = () => {
 
     switch (origin) {
       case 'myriad':
-        filters.params.platform = ['myriad'];
-        filters.params.owner = people.id;
+        filterFields.platform = ['myriad'];
+        filterFields.owner = people.id;
         break;
       case 'imported':
-        filters.params.platform = ['facebook', 'reddit', 'twitter'];
-        filters.params.owner = people.id;
+        filterFields.platform = ['facebook', 'reddit', 'twitter'];
+        filterFields.owner = people.id;
         break;
 
       default:
-        filters.params.owner = people.id;
-        filters.params.platform = undefined;
+        filterFields.owner = people.id;
+        filterFields.platform = undefined;
         break;
     }
 
@@ -133,10 +170,27 @@ export const useTimelineFilter = () => {
     dispatch(loadTimeline(1, timelineOrder, filters, TimelineType.ALL, sort));
   }, []);
 
+  const nextPage = useCallback(() => {
+    const page = currentPage + 1;
+
+    dispatch(loadTimeline(page));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
+
+  const clear = useCallback(() => {
+    dispatch(clearTimeline());
+  }, []);
+
   return {
+    empty,
+    loading,
+    hasMore,
+    posts,
     originType,
     filterTimeline,
     filterByOrigin,
     sortTimeline,
+    nextPage,
+    clear,
   };
 };

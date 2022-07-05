@@ -9,7 +9,7 @@ import {UserSettingsContainer} from 'src/components/UserSettings';
 import {UserSocialContainer} from 'src/components/UserSocials';
 import {TabItems} from 'src/components/atoms/Tabs';
 import {Post} from 'src/interfaces/post';
-import {TimelineFilter} from 'src/interfaces/timeline';
+import {TimelineFilterFields} from 'src/interfaces/timeline';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {ExperienceState} from 'src/reducers/experience/reducer';
@@ -28,7 +28,7 @@ export const useUserTabs = (excludes: UserMenuTabs[]): TabItems<UserMenuTabs>[] 
 
   const isOwnProfile = profileUser?.id === user?.id;
 
-  const filters: TimelineFilter = {
+  const filtersFields: TimelineFilterFields = {
     owner: profileUser?.id,
   };
 
@@ -37,7 +37,9 @@ export const useUserTabs = (excludes: UserMenuTabs[]): TabItems<UserMenuTabs>[] 
       {
         id: 'post',
         title: i18n.t('Profile.Tab.Post'),
-        component: <ProfilePostsTab filterType="origin" sortType="created" filters={filters} />,
+        component: (
+          <ProfilePostsTab filterType="origin" sortType="created" filters={filtersFields} />
+        ),
       },
       {
         id: 'comments',

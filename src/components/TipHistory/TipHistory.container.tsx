@@ -6,37 +6,37 @@ import {useTipHistory} from 'src/hooks/tip-history.hook';
 import {Comment} from 'src/interfaces/comment';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
+import {User} from 'src/interfaces/user';
 
 type TipHistoryContainerProps = {
+  reference: Post | User | Comment;
   referenceType: ReferenceType;
+  onClose: () => void;
 };
 
 export const TipHistoryContainer: React.FC<TipHistoryContainerProps> = props => {
-  const {referenceType} = props;
+  const {reference, referenceType, onClose} = props;
 
   const {
-    isTipHistoryOpen,
     hasMore,
-    reference,
-    tippingDisabled,
+    disabled,
     availableCurrencies,
     transactions,
-    closeTipHistory,
     handleFilterTransaction,
     handleSortTransaction,
     handleLoadNextPage,
-  } = useTipHistory();
+  } = useTipHistory(reference, referenceType);
 
   return (
     <TipHistory
-      reference={reference as Post | Comment}
+      reference={reference}
       referenceType={referenceType}
-      open={isTipHistoryOpen}
+      open={Boolean(reference)}
       hasMore={hasMore}
       currencies={availableCurrencies}
-      tippingDisabled={tippingDisabled}
+      tippingDisabled={disabled}
       tips={transactions.filter(tx => Boolean(tx.currency))}
-      onClose={closeTipHistory}
+      onClose={onClose}
       onSort={handleSortTransaction}
       onFilter={handleFilterTransaction}
       nextPage={handleLoadNextPage}

@@ -1,2 +1,1 @@
-export * from './Timeline';
-export * from './TimelineContainer';
+export * from './Timeline.layout';

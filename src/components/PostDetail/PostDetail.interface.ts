@@ -5,10 +5,9 @@ import {User} from 'src/interfaces/user';
 
 export type PostDetailActionProps = PostHeaderActionProps & {
   onUpvote: (post: Post) => void;
-  onShare: (post: Post) => void;
   onToggleDownvote: (post: Post) => void;
   onRemoveVote: (post: Post) => void;
-  onShowComment: () => void;
+  onToggleShowComment: () => void;
 };
 
 export type PostDetailProps = PostDetailActionProps & {
@@ -16,6 +15,15 @@ export type PostDetailProps = PostDetailActionProps & {
   post: Post;
   // trigger variable for rerender post detail
   votes: number;
+  type?: 'share' | 'default';
+  expandComment?: boolean;
 };
 
-export type PostDetailContainerProps = Omit<PostDetailProps, 'onShowComment'>;
+export type PostDetailContainerProps = {
+  user: User;
+  post: Post;
+  // trigger variable for rerender post detail
+  votes: number;
+  type?: 'share' | 'default';
+  expandComment?: boolean;
+};
