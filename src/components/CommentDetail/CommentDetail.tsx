@@ -231,7 +231,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
           <Avatar
             name={comment.user?.name}
             src={comment.user?.profilePictureURL}
-            size={AvatarSize.MEDIUM}
+            size={isMobile ? AvatarSize.TINY : AvatarSize.MEDIUM}
             onClick={handleViewProfile}
           />
           {(deep === 0 || deep > 2 || replies.length > 0) && <div className={style.verticalTree} />}
