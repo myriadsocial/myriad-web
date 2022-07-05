@@ -75,7 +75,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
   const initializeMessaging = async () => {
     await firebaseCloudMessaging.init();
 
-    if (!user.deletedAt) {
+    if (!user?.deletedAt) {
       await updateUserFcmToken();
     }
 
