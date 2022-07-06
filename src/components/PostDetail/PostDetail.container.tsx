@@ -1,7 +1,7 @@
 import React, {useCallback, useRef} from 'react';
 import {useDispatch} from 'react-redux';
 
-import {Collapse, Paper} from '@material-ui/core';
+import {Collapse, Paper, Typography} from '@material-ui/core';
 
 import useConfirm from '../common/Confirm/use-confirm.hook';
 import {PostDetail} from './PostDetail';
@@ -17,6 +17,8 @@ import {TabsComponent} from 'components/atoms/Tabs';
 import {Text} from 'components/atoms/Text';
 import {useToggle} from 'src/hooks/use-toggle.hook';
 import {SectionType} from 'src/interfaces/interaction';
+import {Post, PostVisibility as Visibility} from 'src/interfaces/post';
+import i18n from 'src/locale';
 import {deletePost, editPost} from 'src/reducers/timeline/actions';
 
 export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => {
@@ -51,20 +53,68 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
     toggleDownvotePost(null);
   }, []);
 
-  const handleVisibilityChange = useCallback((visibility: string) => {
+  const handleVisibilityChange = useCallback((visibility: Visibility) => {
+    toggleVisibility();
+
+    const payload: Partial<Post> = {
+      visibility,
+    };
+
+    if (visibility === Visibility.PRIVATE) {
+      confirmChangeToPrivate(payload);
+    } else {
+      handleUdatePost(payload);
+    }
+  }, []);
+
+  const confirmChangeToPrivate = (payload: Partial<Post>) => {
+    confirm({
+      title: i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Private_Title'),
+      description: i18n.t(
+        'Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Private_Description',
+      ),
+      confirmationText: i18n.t(
+        'Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Private_Text',
+      ),
+      cancellationText: i18n.t(
+        'Post_Detail.Post_Options.Post_Visibility_Setting.Cancel_Private_Text',
+      ),
+      onConfirm: () => {
+        handleUdatePost(payload);
+      },
+    });
+  };
+
+  const handleUdatePost = (payload: Partial<Post>) => {
     dispatch(
-      editPost(post.id, visibility, () => {
-        confirm({
-          title: <Text locale="Post_Visibility_Setting.Confirm.Title" />,
-          description: (
-            <Text locale="Post_Visibility_Setting.Confirm.Description" values={{visibility}} />
-          ),
-          confirmationText: <Text locale="Post_Visibility_Setting.Confirm.Label" />,
-          hideCancel: true,
-        });
+      editPost(post.id, payload, () => {
+        openSuccessPrompt(payload.visibility);
       }),
     );
-  }, []);
+  };
+
+  const openSuccessPrompt = (updatedVisibility: string) => {
+    confirm({
+      title: i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Title'),
+      description: (
+        <Typography>
+          {updatedVisibility === Visibility.FRIEND
+            ? i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Description', {
+                visibility: 'Friend Only',
+              })
+            : updatedVisibility === Visibility.PRIVATE
+            ? i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Description', {
+                visibility: 'Only Me',
+              })
+            : i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Description', {
+                visibility: updatedVisibility,
+              })}
+        </Typography>
+      ),
+      confirmationText: i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Text'),
+      hideCancel: true,
+    });
+  };
 
   const handleDeletePost = useCallback(() => {
     confirm({

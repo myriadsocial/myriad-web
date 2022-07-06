@@ -1,6 +1,6 @@
 import {CheckCircleIcon} from '@heroicons/react/solid';
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import {
   Button,
@@ -20,32 +20,38 @@ import {usePostVisibilityList} from './use-post-visibility-list.hook';
 import {Post, PostVisibility as Visibility} from 'src/interfaces/post';
 import i18n from 'src/locale';
 
-type PostVisibilityProps = {
+type ReportProps = {
   open: boolean;
   reference: Post;
   onVisibilityChanged: (type: string) => void;
   onClose: () => void;
 };
 
-export const PostVisibility: React.FC<PostVisibilityProps> = props => {
+export const PostVisibility: React.FC<ReportProps> = props => {
   const {open, onClose, onVisibilityChanged, reference} = props;
   const styles = useStyles();
 
   const list = usePostVisibilityList();
-  const [visibility, setVisibility] = useState<Visibility>(reference.visibility);
+  const [type, setType] = useState<Visibility | null>(null);
+
+  useEffect(() => {
+    reference.visibility && setType(reference.visibility);
+  }, []);
 
   const handleSelectItem =
     (value: Visibility | string) => (event: React.ChangeEvent<HTMLInputElement>) => {
       if (event.target.checked) {
         const type = value as Visibility;
-        setVisibility(type);
+        setType(type);
       } else {
-        setVisibility(null);
+        setType(null);
       }
     };
 
   const handlePostVisibility = () => {
-    onVisibilityChanged(visibility);
+    if (type) {
+      onVisibilityChanged(type);
+    }
   };
 
   return (
@@ -67,14 +73,14 @@ export const PostVisibility: React.FC<PostVisibilityProps> = props => {
 
       <List dense={false} className={styles.list}>
         {list.map(option => (
-          <ListItem key={option.id} button selected={visibility === option.id}>
+          <ListItem key={option.id} button selected={type === option.id}>
             <ListItemText primary={option.title} />
             <ListItemSecondaryAction>
               <Radio
                 edge="end"
                 color="primary"
                 onChange={handleSelectItem(option.id)}
-                checked={visibility === option.id}
+                checked={type === option.id}
                 checkedIcon={<SvgIcon component={CheckCircleIcon} viewBox="0 0 20 20" />}
                 inputProps={{'aria-labelledby': option.id}}
               />
@@ -99,7 +105,7 @@ export const PostVisibility: React.FC<PostVisibilityProps> = props => {
           color="primary"
           size="small"
           onClick={handlePostVisibility}
-          disabled={reference.visibility === visibility}>
+          disabled={reference.visibility === type}>
           {i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm')}
         </Button>
       </div>
