@@ -23,7 +23,7 @@ export const useCommentTabs = (
 ): TabHookProps<SectionType> => {
   const {query} = useQueryParams();
 
-  const [selected, setSelected] = useState<SectionType>();
+  const [selected, setSelected] = useState<SectionType | null>(null);
 
   useEffect(() => {
     const section = query.section as SectionType | SectionType[];

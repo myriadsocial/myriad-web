@@ -3,6 +3,8 @@ import {ChatAltIcon, DuplicateIcon, ShareIcon} from '@heroicons/react/outline';
 import React, {useState} from 'react';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
+import getConfig from 'next/config';
+
 import {TextField, Typography, InputAdornment, Hidden, IconButton} from '@material-ui/core';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
@@ -17,9 +19,10 @@ import ShowIf from 'src/components/common/show-if.component';
 import {formatCount} from 'src/helpers/number';
 import i18n from 'src/locale';
 
+const {publicRuntimeConfig} = getConfig();
+
 export const PostFooter: React.FC<PostFooterProps> = props => {
   const style = useStyles();
-
   const {
     postId,
     metrics: {discussions = 0, debates = 0, upvotes = 0, downvotes = 0},
@@ -34,8 +37,8 @@ export const PostFooter: React.FC<PostFooterProps> = props => {
   const enqueueSnackbar = useEnqueueSnackbar();
 
   const [shareAnchorEl, setShareAnchorEl] = useState<null | HTMLElement>(null);
-  const postUrl = `post/${postId}`;
-  const embedUrl = `embed/${postId}`;
+  const postUrl = `${publicRuntimeConfig.appAuthURL}/post/${postId}`;
+  const embedUrl = `${publicRuntimeConfig.appAuthURL}/embed?id=${postId}&type=post`;
 
   const handleClickShareLink = (event: React.MouseEvent<HTMLButtonElement>) => {
     setShareAnchorEl(event.currentTarget);

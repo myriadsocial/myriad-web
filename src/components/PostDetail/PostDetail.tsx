@@ -21,7 +21,7 @@ const Twitter = dynamic(() => import('./render/Twitter'), {ssr: false});
 const Gallery = dynamic(() => import('src/components/atoms/Gallery/Gallery'), {ssr: false});
 const Video = dynamic(() => import('src/components/atoms/Video/Video'), {ssr: false});
 
-export const PostDetail: React.FC<PostDetailProps> = React.memo(props => {
+export const PostDetail: React.FC<PostDetailProps> = props => {
   const {user, post, type, ...restProps} = props;
   const {onRemoveVote, onToggleDownvote, onUpvote, onToggleShowComment} = restProps;
 
@@ -127,6 +127,4 @@ export const PostDetail: React.FC<PostDetailProps> = React.memo(props => {
       </div>
     </>
   );
-});
-
-PostDetail.displayName = 'PostDetail';
+};

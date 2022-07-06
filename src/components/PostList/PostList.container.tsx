@@ -63,12 +63,7 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
         loader={<Loading />}>
         <Grid container direction="column">
           {posts.map(post => (
-            <PostDetailContainer
-              key={`post-${post.id}`}
-              user={user}
-              post={post}
-              votes={post.metric.upvotes - post.metric.downvotes}
-            />
+            <PostDetailContainer key={`post-${post.id}`} user={user} post={post} />
           ))}
         </Grid>
       </InfiniteScroll>

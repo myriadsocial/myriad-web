@@ -26,7 +26,7 @@ import i18n from 'src/locale';
 
 const MenuItem = WithAuthorizeAction(BaseMenuItem);
 
-export const PostHeader: React.FC<PostHeaderProps> = React.memo(props => {
+export const PostHeader: React.FC<PostHeaderProps> = props => {
   const {user, post, owned} = props;
   const {onDelete, onChangeVisibility, onReport, onShowImporters} = props;
 
@@ -251,6 +251,4 @@ export const PostHeader: React.FC<PostHeaderProps> = React.memo(props => {
       </Menu>
     </>
   );
-});
-
-PostHeader.displayName = 'PostHeader';
+};

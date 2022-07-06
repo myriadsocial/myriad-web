@@ -153,12 +153,14 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
           onReport={handleReport}
         />
         <Collapse in={showComment} onEntering={initComments}>
-          <TabsComponent<SectionType>
-            tabs={tabs}
-            position="space-evenly"
-            selected={selected as SectionType}
-            onChangeTab={handleChangeTab}
-          />
+          {selected && (
+            <TabsComponent<SectionType>
+              tabs={tabs}
+              position="space-evenly"
+              selected={selected}
+              onChangeTab={handleChangeTab}
+            />
+          )}
         </Collapse>
       </Paper>
 

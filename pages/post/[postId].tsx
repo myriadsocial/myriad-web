@@ -97,12 +97,7 @@ const PostPage: React.FC<PostPageProps> = props => {
       </ShowIf>
 
       <ShowIf condition={!removed}>
-        <PostDetailContainer
-          post={post}
-          user={user}
-          votes={post.metric.upvotes - post.metric.downvotes}
-          expandComment
-        />
+        <PostDetailContainer post={post} user={user} expandComment />
       </ShowIf>
       <TippingSuccess />
     </DefaultLayout>
