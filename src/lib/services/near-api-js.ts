@@ -49,7 +49,9 @@ export type ContractStorageBalanceProps = {
 export type ContractTipsBalanceInfoProps = {
   server_id: string;
   reference_type: string;
-  reference_id: string;
+  reference_ids: string[];
+  main_ref_type: string;
+  main_ref_id: string;
 };
 
 interface TipBalanceInfo {
@@ -69,6 +71,7 @@ interface TipResult {
   formatted_amount: string;
   symbol: string;
   tips_balance: TipsBalance;
+  unclaimed_reference_ids: string[];
 }
 
 interface Meta {
@@ -232,8 +235,8 @@ export const getNearBalance = async (
 
 export const getClaimTipNear = async (
   serverId: string,
-  referenceType: string,
   referenceId: string,
+  referenceIds: string[],
 ): Promise<TipResultWithPagination> => {
   try {
     const {publicRuntimeConfig} = getConfig();
@@ -241,8 +244,10 @@ export const getClaimTipNear = async (
     const contract = await contractInitialize(tippingContractId);
     const tipsBalances = await contract.get_tips_balances({
       server_id: serverId,
-      reference_type: referenceType,
-      reference_id: referenceId,
+      reference_type: 'people',
+      reference_ids: referenceIds,
+      main_ref_type: 'user',
+      main_ref_id: referenceId,
     });
 
     return tipsBalances;

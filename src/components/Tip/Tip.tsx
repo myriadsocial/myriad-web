@@ -73,6 +73,7 @@ export const Tip: React.FC<TipProps> = props => {
   };
 
   const handleClaimAll = () => {
+    // const claimableTip = tips.filter(tip => tip.accountId);
     onClaimAll(networkId);
   };
 
@@ -119,7 +120,11 @@ export const Tip: React.FC<TipProps> = props => {
                   </Typography>
                 </div>
                 <Button
-                  disabled={(currentWallet && currentWallet.networkId !== networkId) || loading}
+                  disabled={
+                    (currentWallet && currentWallet.networkId !== networkId) ||
+                    loading ||
+                    !tip.accountId
+                  }
                   onClick={() => handleClaim(networkId, tip.tipsBalanceInfo.ftIdentifier)}
                   size="small"
                   className={style.buttonClaim}

@@ -11,7 +11,7 @@ import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const useClaimTip = () => {
-  const {user, networks, currentWallet} = useSelector<RootState, UserState>(
+  const {user, networks, currentWallet, socials} = useSelector<RootState, UserState>(
     state => state.userState,
   );
   const [loading, setLoading] = useState(false);
@@ -38,15 +38,15 @@ export const useClaimTip = () => {
     setLoading(true);
 
     try {
-      const serverId = await WalletAPI.getServerId();
-      const tipBalanceInfo = {
-        serverId: serverId,
-        referenceType: 'user',
-        referenceId: user.id,
-        ftIdentifier: 'native',
-      };
-
       const promises = networks.map(async network => {
+        const serverId = await WalletAPI.getServerId(network.id);
+        const tipBalanceInfo = {
+          serverId: serverId,
+          referenceType: 'user',
+          referenceId: user.id,
+          ftIdentifier: 'native',
+        };
+
         switch (network.id) {
           case NetworkIdEnum.MYRIAD: {
             const data = await getClaimTip(tipBalanceInfo, network.rpcURL);
@@ -59,7 +59,7 @@ export const useClaimTip = () => {
                   : (parseFloat(data.amount.replace(/,/g, '')) / 10 ** 18).toFixed(3).toString(),
               tipsBalanceInfo: {
                 ftIdentifier: data.tipsBalanceInfo.ftIdentifier,
-                referenceId: data.tipsBalanceInfo.ftIdentifier,
+                referenceId: data.tipsBalanceInfo.referenceId,
                 referenceType: data.tipsBalanceInfo.referenceType,
                 serverId: data.tipsBalanceInfo.serverId,
               },
@@ -69,21 +69,24 @@ export const useClaimTip = () => {
 
             network.tips = [result];
 
-            return network;
+            break;
           }
 
           case NetworkIdEnum.NEAR: {
-            const {serverId, referenceType, referenceId} = tipBalanceInfo;
-            const data = await getClaimTipNear(serverId, referenceType, referenceId);
-            if (!data) return network;
-            const tips = data.data.map(e => {
-              const {formatted_amount, tips_balance, symbol} = e;
+            const {serverId, referenceId} = tipBalanceInfo;
+            const referenceIds = socials.map(social => social.peopleId);
+            const {data} = await getClaimTipNear(serverId, referenceId, referenceIds);
+            if (data.length === 0) return network;
+
+            network.tips = data.map(e => {
+              const {formatted_amount, tips_balance, symbol, unclaimed_reference_ids} = e;
               const {account_id, tips_balance_info} = tips_balance;
               const {server_id, reference_type, reference_id, ft_identifier} = tips_balance_info;
               const currency = network.currencies.find(e => e.symbol === symbol);
+              const accountId = unclaimed_reference_ids.length === 0 ? account_id : null;
               return {
                 symbol,
-                accountId: account_id,
+                accountId,
                 amount: Number(formatted_amount).toFixed(3),
                 tipsBalanceInfo: {
                   serverId: server_id,
@@ -91,17 +94,15 @@ export const useClaimTip = () => {
                   referenceId: reference_id,
                   ftIdentifier: ft_identifier,
                 },
-                imageURL: currency.image,
+                imageURL: currency?.image,
               };
             });
 
-            network.tips = tips;
-            return network;
+            break;
           }
-
-          default:
-            return network;
         }
+
+        return network;
       });
 
       const networksWithTip = await Promise.all(promises);
@@ -116,9 +117,20 @@ export const useClaimTip = () => {
     }
   };
 
-  const claimTipMyria = async (networkId: string, ftIdentifier: string, callback?: () => void) => {
+  const claim = async (
+    networkId: string,
+    ftIdentifier: string,
+    callback?: ({claimSuccess: boolean}) => void,
+  ) => {
     if (!user) return;
     if (!currentWallet) return;
+
+    const selectedNetwork = networks.find(network => network.id == networkId);
+
+    if (!selectedNetwork) return;
+
+    let claimSuccess = false;
+
     setClaiming(true);
 
     try {
@@ -129,28 +141,32 @@ export const useClaimTip = () => {
         referenceId: user.id,
         ftIdentifier: ftIdentifier,
       };
-      if (networkId == NetworkIdEnum.MYRIAD) {
-        const selectedNetwork = networks.find(network => network.id == NetworkIdEnum.MYRIAD);
-        if (!selectedNetwork) return;
 
-        await claimMyria(tipBalanceInfo, selectedNetwork?.rpcURL, currentWallet);
+      switch (selectedNetwork.id) {
+        case NetworkIdEnum.MYRIAD: {
+          await claimMyria(tipBalanceInfo, selectedNetwork?.rpcURL, currentWallet);
+          const currency = selectedNetwork.currencies?.find(currency => currency.native === true);
 
-        const currency = selectedNetwork.currencies?.find(currency => currency.native === true);
-
-        if (currency) {
-          await updateTransaction({
-            userId: currentWallet.userId,
-            walletId: currentWallet.id,
-            currencyId: currency.id,
-          });
+          if (currency) {
+            await updateTransaction({
+              userId: currentWallet.userId,
+              walletId: currentWallet.id,
+              currencyId: currency.id,
+            });
+          }
+          await getTip();
+          break;
         }
-        await getTip();
+
+        case NetworkIdEnum.NEAR:
+        default:
+          throw new Error('CannotClaimTip');
       }
-      callback && callback();
     } catch (error) {
       console.log(error);
     } finally {
       setClaiming(false);
+      callback && callback({claimSuccess});
     }
   };
 
@@ -161,7 +177,7 @@ export const useClaimTip = () => {
     try {
       switch (networkId) {
         case NetworkIdEnum.MYRIAD:
-          await Promise.all([claimTipMyria(networkId, 'native')]);
+          await Promise.all([claim(networkId, 'native')]);
           break;
 
         default:
@@ -182,7 +198,7 @@ export const useClaimTip = () => {
     loading,
     claiming,
     getTip,
-    claimTipMyria,
+    claim,
     claimAll,
   };
 };
