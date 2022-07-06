@@ -59,7 +59,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
     noKeyboard: true,
     multiple,
     onDrop: acceptedFiles => {
-      let newFiles = files;
+      let newFiles: File[] = acceptedFiles;
 
       if (multiple) {
         newFiles = [...files, ...acceptedFiles];
