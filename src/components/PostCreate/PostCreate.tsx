@@ -1,6 +1,6 @@
 import {TNode} from '@udecode/plate';
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 
 import {Button} from '@material-ui/core';
 import Tab from '@material-ui/core/Tab';
@@ -51,6 +51,15 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
   const [post, setPost] = useState<Partial<Post>>(initialPost);
   const [importUrl, setImport] = useState<string | undefined>();
   const [validPost, setValidPost] = useState(false);
+
+  const mentionables = useMemo(() => {
+    return people.map(item => ({
+      value: item.id,
+      name: item.name,
+      username: item.username ?? item.name.replace(' ', ''),
+      avatar: item.profilePictureURL,
+    }));
+  }, [people]);
 
   useEffect(() => {
     return () => {
@@ -155,12 +164,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
       <TabPanel value={activeTab} index="create">
         <PostEditor
           value={post.text ? deserialize(post as Post) : undefined}
-          mentionable={people.map(item => ({
-            value: item.id,
-            name: item.name,
-            username: item.username ?? item.name.replace(' ', ''),
-            avatar: item.profilePictureURL,
-          }))}
+          mentionable={mentionables}
           uploadProgress={uploadProgress}
           onChange={handlePostTextChange}
           onSearchMention={onSearchPeople}

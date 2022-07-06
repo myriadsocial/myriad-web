@@ -9,18 +9,20 @@ import * as Redux from 'redux';
 import {Comment} from 'src/interfaces/comment';
 import {SectionType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
-import {TimelineType, TimelineOrderType, TimelineFilter} from 'src/interfaces/timeline';
+import {TimelineType, TimelineOrderType, TimelineFilterFields} from 'src/interfaces/timeline';
 import {WalletDetail} from 'src/interfaces/wallet';
 import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
 
-export interface TimelineState extends BasePaginationState {
-  type: TimelineType;
+export interface TimelineFilters {
+  fields?: TimelineFilterFields;
+  query?: string;
   sort: SortType;
   order: TimelineOrderType;
-  filter?: TimelineFilter;
-  search?: string;
-  hasMore: boolean;
+}
+export interface TimelineState extends BasePaginationState {
+  type: TimelineType;
   posts: Post[];
+  filters: TimelineFilters;
   walletDetails: WalletDetail[];
   post?: Post;
   interaction: {
@@ -31,16 +33,18 @@ export interface TimelineState extends BasePaginationState {
 const initalState: TimelineState = {
   loading: true,
   type: TimelineType.TRENDING,
-  sort: 'DESC',
-  order: TimelineOrderType.LATEST,
-  hasMore: false,
+  filters: {
+    fields: {tags: []},
+    sort: 'DESC',
+    order: TimelineOrderType.LATEST,
+  },
   posts: [],
   walletDetails: [],
   meta: {
     currentPage: 1,
     itemsPerPage: 10,
     totalItemCount: 0,
-    totalPageCount: 0,
+    totalPageCount: 1,
   },
   interaction: {
     downvoting: null,
@@ -59,19 +63,22 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
     case constants.LOAD_TIMELINE: {
       const {meta} = action.payload;
 
-      return {
-        ...state,
-        posts:
-          !meta.currentPage || meta.currentPage === 1
-            ? action.payload.posts
-            : [...state.posts, ...action.payload.posts],
-        type: action.payload.type ?? state.type,
-        sort: action.payload.sort ?? state.sort,
-        order: action.payload.order ?? state.order,
-        filter: action.payload.filter ?? state.filter,
-        hasMore: meta.currentPage < meta.totalPageCount,
-        meta,
-      };
+      return update(state, {
+        type: {$set: action.payload.type ?? state.type},
+        meta: {$set: meta},
+        filters: {
+          $set: {
+            ...state.filters,
+            ...action.payload.filters,
+          },
+        },
+        posts: {
+          $set:
+            !meta.currentPage || meta.currentPage === 1
+              ? action.payload.posts
+              : [...state.posts, ...action.payload.posts],
+        },
+      });
     }
 
     case constants.ADD_POST_TO_TIMELINE: {
@@ -98,10 +105,12 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
 
     case constants.UPDATE_TIMELINE_FILTER: {
       return update(state, {
-        filter: {
-          $set: {
-            ...state.filter,
-            ...action.filter,
+        filters: {
+          fields: {
+            $set: {
+              ...state.filters.fields,
+              ...action.filter,
+            },
           },
         },
       });
@@ -111,7 +120,12 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
       return update(state, {
         loading: {$set: true},
         posts: {$set: []},
-        filter: {$set: undefined},
+        filters: {
+          $set: {
+            sort: 'DESC',
+            order: TimelineOrderType.LATEST,
+          },
+        },
       });
     }
 
@@ -409,8 +423,12 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
 
     case constants.SET_TIMELINE_SORT: {
       return update(state, {
-        order: {$set: action.order},
-        sort: {$set: action.sort ?? 'DESC'},
+        filters: {
+          $set: {
+            order: action.order,
+            sort: action.sort ?? 'DESC',
+          },
+        },
       });
     }
 

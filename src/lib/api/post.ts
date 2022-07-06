@@ -1,14 +1,15 @@
+import {TimelineFilters} from '../../reducers/timeline/reducer';
 import MyriadAPI from './base';
 import {PAGINATION_LIMIT} from './constants/pagination';
 import {PostImportError} from './errors/post-import.error';
 import {BaseList} from './interfaces/base-list.interface';
 import {BaseErrorResponse} from './interfaces/error-response.interface';
 import {LoopbackWhere} from './interfaces/loopback-query.interface';
-import {PaginationParams, FilterParams, SortType} from './interfaces/pagination-params.interface';
+import {PaginationParams, FilterParams} from './interfaces/pagination-params.interface';
 
 import axios, {AxiosError} from 'axios';
 import {Post, PostProps, ImportPostProps, PostVisibility, PostStatus} from 'src/interfaces/post';
-import {TimelineOrderType, TimelineFilter, TimelineType} from 'src/interfaces/timeline';
+import {TimelineOrderType, TimelineType} from 'src/interfaces/timeline';
 import {WalletDetail} from 'src/interfaces/wallet';
 
 type PostList = BaseList<Post>;
@@ -23,17 +24,16 @@ export const getPost = async (
   page: number,
   userId: string,
   type: TimelineType = TimelineType.TRENDING,
-  order: TimelineOrderType = TimelineOrderType.LATEST,
-  filters?: TimelineFilter,
+  filters?: TimelineFilters,
   asFriend = false,
-  sort: SortType = 'DESC',
 ): Promise<PostList> => {
+  const {sort = 'DESC', order = TimelineOrderType.LATEST, fields, query} = filters;
   const where: LoopbackWhere<PostProps> = {};
 
-  if (filters && filters.people && filters.people.length) {
+  if (fields && fields.people && fields.people.length) {
     const condition = {
       peopleId: {
-        inq: filters.people,
+        inq: fields.people,
       },
     };
 
@@ -44,22 +44,22 @@ export const getPost = async (
     }
   }
 
-  if (filters && filters.layout === 'photo') {
+  if (fields && fields.layout === 'photo') {
     // code
   }
 
-  if (filters && filters.platform && filters.platform.length) {
+  if (fields && fields.platform && fields.platform.length) {
     where.platform = {
-      inq: filters.platform,
+      inq: fields.platform,
     };
   }
 
-  if (filters && filters.owner) {
+  if (fields && fields.owner) {
     where.createdBy = {
-      eq: filters.owner,
+      eq: fields.owner,
     };
 
-    if (userId !== filters.owner) {
+    if (userId !== fields.owner) {
       // filter only public post if no friend status provided
       if (asFriend) {
         where.visibility = {
@@ -105,7 +105,7 @@ export const getPost = async (
     });
   }
 
-  const params: Record<string, any> = {
+  let params: Record<string, any> = {
     sortBy: order,
     order: sort,
     importers: true,
@@ -122,21 +122,29 @@ export const getPost = async (
     case TimelineType.EXPERIENCE:
       params.filter = filterParams;
       params.timelineType = type;
-      params.experienceId = filters?.experienceId;
+      params.experienceId = fields?.experienceId;
       break;
     default:
       filterParams.where = where;
 
-      if (!filters?.importer && !filters?.owner && (!filters?.tags || filters.tags?.length === 0)) {
+      if (!fields?.importer && !fields?.owner && (!fields?.tags || fields.tags?.length === 0)) {
         params.timelineType = TimelineType.ALL;
       }
 
-      if (filters?.tags?.length) {
-        params.topic = filters.tags;
+      if (fields?.tags?.length) {
+        params.topic = fields.tags;
       }
 
       params.filter = filterParams;
       break;
+  }
+
+  if (query) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const {filter, timelineType, ...restParams} = Object.assign({}, params);
+
+    params = restParams;
+    params.q = encodeURIComponent(query);
   }
 
   const {data} = await MyriadAPI().request<PostList>({

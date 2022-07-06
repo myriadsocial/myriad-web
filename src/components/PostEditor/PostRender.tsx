@@ -40,7 +40,7 @@ import theme from 'src/themes/light-theme';
 type PostRenderProps = {
   post: Post;
   max?: number;
-  onShowAll: () => void;
+  onShowAll?: () => void;
 };
 
 export const PostRender: React.FC<PostRenderProps> = props => {

@@ -6,6 +6,7 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import {Trans} from 'react-i18next';
 
 type TextProps = TypographyProps & {
+  component?: React.ElementType;
   locale: string;
   weight?: 'default' | 'semi-bold' | 'bold';
   values?: Record<string, string>;

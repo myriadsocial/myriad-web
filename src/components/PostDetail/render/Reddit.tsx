@@ -11,7 +11,7 @@ type RenderRedditProps = {
   title?: string;
   text: string;
   maxLength?: number;
-  onShowMore: () => void;
+  onShowMore?: () => void;
   onHashtagClicked: (hashtag: string) => void;
 };
 

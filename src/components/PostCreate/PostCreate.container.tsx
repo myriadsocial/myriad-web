@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import dynamic from 'next/dynamic';
@@ -49,13 +49,18 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
     }
   }, [dispatch, user]);
 
-  const handleSearchPeople = debounce((query: string) => {
-    if (user) {
-      dispatch(searchUsers(query));
-    }
-  }, 300);
+  const handleSearchPeople = useCallback(
+    debounce((query: string) => {
+      if (user) {
+        dispatch(searchUsers(query));
+      }
+    }, 300),
+    [],
+  );
 
-  const handleFileUpload = async (file: File, type: 'image' | 'video'): Promise<string | null> => {
+  const handleFileUpload = useCallback(async (file: File, type: 'image' | 'video'): Promise<
+    string | null
+  > => {
     let url: string | null = null;
 
     if (type === 'image') {
@@ -75,45 +80,45 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
     }
 
     return url;
-  };
+  }, []);
 
-  const submitPost = (
-    post: string | Partial<Post>,
-    attributes?: Pick<Post, 'NSFWTag' | 'visibility'>,
-  ) => {
-    if (typeof post === 'string') {
-      dispatch(
-        importPost(post, attributes, (error: PostImportError | null) => {
-          if (error) {
-            const {statusCode} = error.getErrorData();
-            let message: string = error.message;
+  const submitPost = useCallback(
+    (post: string | Partial<Post>, attributes?: Pick<Post, 'NSFWTag' | 'visibility'>) => {
+      if (typeof post === 'string') {
+        dispatch(
+          importPost(post, attributes, (error: PostImportError | null) => {
+            if (error) {
+              const {statusCode} = error.getErrorData();
+              let message: string = error.message;
 
-            if ([400, 403, 404, 409].includes(statusCode)) {
-              message = i18n.t(`Home.RichText.Prompt_Import.Error.${statusCode}`);
+              if ([400, 403, 404, 409].includes(statusCode)) {
+                message = i18n.t(`Home.RichText.Prompt_Import.Error.${statusCode}`);
+              }
+
+              setDialogFailedImport({open: true, message});
+            } else {
+              enqueueSnackbar({
+                message: i18n.t('Post_Import.Success_Toaster'),
+                variant: 'success',
+              });
             }
-
-            setDialogFailedImport({open: true, message});
-          } else {
+          }),
+        );
+      } else {
+        dispatch(
+          createPost(post, [], () => {
             enqueueSnackbar({
-              message: i18n.t('Post_Import.Success_Toaster'),
+              message: i18n.t('Post_Create.Success_Toaster'),
               variant: 'success',
             });
-          }
-        }),
-      );
-    } else {
-      dispatch(
-        createPost(post, [], () => {
-          enqueueSnackbar({
-            message: i18n.t('Post_Create.Success_Toaster'),
-            variant: 'success',
-          });
-        }),
-      );
-    }
+          }),
+        );
+      }
 
-    onClose();
-  };
+      onClose();
+    },
+    [],
+  );
 
   return (
     <>

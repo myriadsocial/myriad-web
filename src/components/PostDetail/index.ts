@@ -1,3 +1,3 @@
 export * from './PostDetail';
-export * from './PostDetail.container';
+export * from './PostDetail.interface';
 export * from './PostDetail.skeleton';

@@ -21,7 +21,7 @@ export enum TimelineOrderType {
   TIP = 'tip',
 }
 
-export type TimelineFilter = {
+export type TimelineFilterFields = {
   tags?: string[];
   people?: string[];
   layout?: LayoutType;

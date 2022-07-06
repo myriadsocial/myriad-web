@@ -1,27 +1,27 @@
+import {useCallback} from 'react';
 import {useDispatch} from 'react-redux';
 
-import {Comment} from 'src/interfaces/comment';
 import {Post} from 'src/interfaces/post';
-import {upvote, setDownvoting, removeVote} from 'src/reducers/timeline/actions';
+import {removeVote, setDownvoting, upvote} from 'src/reducers/timeline/actions';
 
-export const usePostInteraction = () => {
+export const usePostInteractionHook = () => {
   const dispatch = useDispatch();
 
-  const upVotePost = (reference: Post | Comment) => {
+  const upvotePost = useCallback((reference: Post) => {
     dispatch(upvote(reference));
-  };
+  }, []);
 
-  const setDownVotingPost = (reference: Post | Comment | null) => {
+  const toggleDownvotePost = useCallback((reference: Post) => {
     dispatch(setDownvoting(reference));
-  };
+  }, []);
 
-  const removePostVote = (reference: Post | Comment) => {
+  const removePostVote = useCallback((reference: Post) => {
     dispatch(removeVote(reference));
-  };
+  }, []);
 
   return {
-    upVotePost,
+    upvotePost,
+    toggleDownvotePost,
     removePostVote,
-    setDownVotingPost,
   };
 };

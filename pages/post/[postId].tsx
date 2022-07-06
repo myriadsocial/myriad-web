@@ -1,6 +1,7 @@
 import * as Sentry from '@sentry/nextjs';
 
 import React from 'react';
+import {useSelector} from 'react-redux';
 
 import {getSession} from 'next-auth/react';
 import getConfig from 'next/config';
@@ -9,7 +10,7 @@ import Head from 'next/head';
 import {useRouter} from 'next/router';
 
 import axios from 'axios';
-import {PostDetailContainer} from 'src/components/PostDetail';
+import {PostDetailContainer} from 'components/PostDetail/PostDetail.container';
 import {deserialize, formatToString} from 'src/components/PostEditor';
 import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {TippingSuccess} from 'src/components/common/Tipping/render/Tipping.success';
@@ -17,9 +18,11 @@ import ShowIf from 'src/components/common/show-if.component';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {generateAnonymousUser} from 'src/helpers/auth';
 import {Post} from 'src/interfaces/post';
+import {User} from 'src/interfaces/user';
 import {initialize} from 'src/lib/api/base';
 import * as PostAPI from 'src/lib/api/post';
 import i18n from 'src/locale';
+import {RootState} from 'src/reducers';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
@@ -58,6 +61,8 @@ const PostPage: React.FC<PostPageProps> = props => {
   const {removed, title, description, image} = props;
 
   const router = useRouter();
+  const user = useSelector<RootState, User>(state => state.userState.user);
+  const post = useSelector<RootState, Post>(state => state.timelineState.post);
 
   return (
     <DefaultLayout isOnProfilePage={false}>
@@ -92,7 +97,12 @@ const PostPage: React.FC<PostPageProps> = props => {
       </ShowIf>
 
       <ShowIf condition={!removed}>
-        <PostDetailContainer />
+        <PostDetailContainer
+          post={post}
+          user={user}
+          votes={post.metric.upvotes - post.metric.downvotes}
+          expandComment
+        />
       </ShowIf>
       <TippingSuccess />
     </DefaultLayout>

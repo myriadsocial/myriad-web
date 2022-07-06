@@ -7,6 +7,7 @@ import {formatCount} from 'src/helpers/number';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {SectionType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
+import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
 
 const CommentListContainer = dynamic(
@@ -17,6 +18,7 @@ const CommentListContainer = dynamic(
 export const useCommentTabs = (
   post: Post,
   ref: React.RefObject<HTMLDivElement>,
+  user?: User,
 ): TabHookProps<SectionType> => {
   const {query} = useQueryParams();
 
@@ -32,8 +34,6 @@ export const useCommentTabs = (
       ) {
         setSelected(section);
       }
-    } else {
-      setSelected(SectionType.DISCUSSION);
     }
   }, [query]);
 
@@ -53,6 +53,7 @@ export const useCommentTabs = (
       icon: '🤔 ',
       component: selected ? (
         <CommentListContainer
+          user={user}
           placeholder={i18n.t('Post_Detail.Discussion.Text_Placeholder')}
           referenceId={post.id}
           section={SectionType.DISCUSSION}
@@ -66,6 +67,7 @@ export const useCommentTabs = (
       icon: '😡 ',
       component: selected ? (
         <CommentListContainer
+          user={user}
           placeholder={i18n.t('Post_Detail.Debate.Text_Placeholder')}
           referenceId={post.id}
           section={SectionType.DEBATE}

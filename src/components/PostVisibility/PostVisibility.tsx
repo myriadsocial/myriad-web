@@ -23,12 +23,12 @@ import i18n from 'src/locale';
 type ReportProps = {
   open: boolean;
   reference: Post;
-  onVisibility: (type: string) => void;
+  onVisibilityChanged: (type: string) => void;
   onClose: () => void;
 };
 
 export const PostVisibility: React.FC<ReportProps> = props => {
-  const {open, onClose, onVisibility, reference} = props;
+  const {open, onClose, onVisibilityChanged, reference} = props;
   const styles = useStyles();
 
   const list = usePostVisibilityList();
@@ -50,7 +50,7 @@ export const PostVisibility: React.FC<ReportProps> = props => {
 
   const handlePostVisibility = () => {
     if (type) {
-      onVisibility(type);
+      onVisibilityChanged(type);
     }
   };
 

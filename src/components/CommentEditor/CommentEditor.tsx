@@ -24,7 +24,7 @@ import {
 } from '@udecode/plate';
 import {ELEMENT_MENTION, MentionNodeData, useMentionPlugin} from '@udecode/plate-mention';
 
-import React, {useMemo, useEffect, useState} from 'react';
+import React, {useMemo, useEffect, useState, forwardRef} from 'react';
 
 import {
   ButtonGroup,
@@ -52,8 +52,7 @@ import {ReferenceType} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
 import theme from 'src/themes/light-theme';
 
-export type PostEditorProps = {
-  ref?: React.RefObject<HTMLDivElement>;
+export type CommentEditorProps = {
   referenceId: string;
   type?: ReferenceType;
   user?: User;
@@ -72,13 +71,12 @@ const resetBlockTypesCommonRule = {
 
 const MAX_CHARACTER_LIMIT = 5000;
 
-export const CommentEditor: React.FC<PostEditorProps> = props => {
+const CommentEditor = (props: CommentEditorProps, ref: React.ForwardedRef<HTMLDivElement>) => {
   const styles = useStyles();
   const options = createPlateOptions();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
   const {
-    ref,
     referenceId,
     type,
     user,
@@ -268,4 +266,4 @@ export const CommentEditor: React.FC<PostEditorProps> = props => {
   );
 };
 
-export default CommentEditor;
+export default forwardRef(CommentEditor);

@@ -1,14 +1,17 @@
 import React from 'react';
+import {useSelector} from 'react-redux';
 
 import getConfig from 'next/config';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 
-import {PostDetailContainer} from 'src/components/PostDetail';
+import {PostDetailContainer} from 'components/PostDetail/PostDetail.container';
 import {formatToString} from 'src/components/PostEditor';
 import {generateAnonymousUser} from 'src/helpers/auth';
-import {PostVisibility} from 'src/interfaces/post';
+import {Post, PostVisibility} from 'src/interfaces/post';
+import {User} from 'src/interfaces/user';
 import * as PostAPI from 'src/lib/api/post';
+import {RootState} from 'src/reducers';
 import {setPost} from 'src/reducers/timeline/actions';
 import {setAnonymous} from 'src/reducers/user/actions';
 import {wrapper} from 'src/store';
@@ -34,6 +37,8 @@ const PostEmbed: React.FC<PostEmbedProps> = props => {
   const {title, description, image} = props;
 
   const router = useRouter();
+  const user = useSelector<RootState, User>(state => state.userState.user);
+  const post = useSelector<RootState, Post>(state => state.timelineState.post);
 
   return (
     <>
@@ -53,7 +58,12 @@ const PostEmbed: React.FC<PostEmbedProps> = props => {
         <meta name="twitter:card" content="summary" />
       </Head>
 
-      <PostDetailContainer type={'share'} expanded={false} />
+      <PostDetailContainer
+        type="share"
+        user={user}
+        post={post}
+        votes={post.metric.upvotes - post.metric.downvotes}
+      />
     </>
   );
 };

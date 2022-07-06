@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 
 import {delay} from 'lodash';
 import {Comment, CommentProps} from 'src/interfaces/comment';
@@ -9,7 +9,6 @@ import * as CommentAPI from 'src/lib/api/comment';
 import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 import {RootState} from 'src/reducers';
 import {increaseCommentCount, updatePostMetric} from 'src/reducers/timeline/actions';
-import {UserState} from 'src/reducers/user/reducer';
 
 type useCommentHookProps = {
   error: any;
@@ -28,7 +27,7 @@ type useCommentHookProps = {
 
 export const useCommentHook = (referenceId: string): useCommentHookProps => {
   const dispatch = useDispatch();
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const user = useSelector<RootState, User>(state => state.userState.user, shallowEqual);
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>(null);

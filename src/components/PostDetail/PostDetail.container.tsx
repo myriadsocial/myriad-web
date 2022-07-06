@@ -1,127 +1,174 @@
-import React, {useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React, {useCallback, useRef} from 'react';
+import {useDispatch} from 'react-redux';
 
-import dynamic from 'next/dynamic';
+import {Collapse, Paper, Typography} from '@material-ui/core';
 
 import useConfirm from '../common/Confirm/use-confirm.hook';
 import {PostDetail} from './PostDetail';
-import {usePostDelete} from './hooks/use-post-delete.hook';
-import {usePostInteraction} from './hooks/use-post-interaction.hook';
+import {PostDetailContainerProps} from './PostDetail.interface';
+import {useStyles} from './PostDetail.styles';
+import {useCommentTabs} from './hooks/use-comment-tabs';
+import {usePostInteractionHook} from './hooks/use-post-interaction.hook';
 
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {PostVisibilityContainer} from 'src/components/PostVisibility';
-import {useTimelineHook} from 'src/components/Timeline/hooks/use-timeline.hook';
-import {useTipHistory} from 'src/hooks/tip-history.hook';
-import {ReferenceType} from 'src/interfaces/interaction';
-import {Post} from 'src/interfaces/post';
+import {PostImporter} from 'components/PostImporterList';
+import {PostVisibility} from 'components/PostVisibility';
+import useReport from 'components/Report/use-report.hook';
+import {TabsComponent} from 'components/atoms/Tabs';
+import {Text} from 'components/atoms/Text';
+import {useToggle} from 'src/hooks/use-toggle.hook';
+import {SectionType} from 'src/interfaces/interaction';
+import {Post, PostVisibility as Visibility} from 'src/interfaces/post';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {removeImporter} from 'src/reducers/importers/actions';
-import {UserState} from 'src/reducers/user/reducer';
-
-type PostDetailContainerProps = {
-  type?: 'share' | 'default';
-  expanded?: boolean;
-};
-
-const ReportContainer = dynamic(() => import('../Report/Report.container'), {ssr: false});
-const TipHistoryContainer = dynamic(() => import('../TipHistory/TipHistory.container'), {
-  ssr: false,
-});
-const PostImporterContainer = dynamic(() => import('../PostImporterList/PostImporter.container'), {
-  ssr: false,
-});
+import {deletePost, editPost} from 'src/reducers/timeline/actions';
 
 export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => {
-  const {type = 'default', expanded = true} = props;
+  const {post, type, expandComment = false, user} = props;
 
+  const styles = useStyles();
   const dispatch = useDispatch();
   const confirm = useConfirm();
+  const report = useReport();
+  const ref = useRef<HTMLDivElement>(null);
 
-  const {post} = useTimelineHook();
-  const {openTipHistory} = useTipHistory();
-  const enqueueSnackbar = useEnqueueSnackbar();
-  const {confirmDeletePost} = usePostDelete();
-  const {upVotePost, setDownVotingPost, removePostVote} = usePostInteraction();
+  const {selected, setSelected, tabs} = useCommentTabs(post, ref, user);
+  const {upvotePost, toggleDownvotePost, removePostVote} = usePostInteractionHook();
 
-  const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
-  const [visibility, setVisibility] = useState<Post | null>(null);
-  const [reported, setReported] = useState<Post | null>(null);
-  const [importedPost, setImportedPost] = useState<Post | null>(null);
+  const [showImporterList, toggleImporterList] = useToggle(false);
+  const [showVisibility, toggleVisibility] = useToggle(false);
+  const [showComment, toggleComments] = useToggle(expandComment);
 
-  const handleSharePost = (post: Post, type: 'link' | 'post') => {
-    if (type === 'post') {
-      enqueueSnackbar({
-        message: 'This post successfully share to your timeline',
-        variant: 'success',
-      });
+  const handleToggleDownvotePost = useCallback(() => {
+    toggleDownvotePost(post);
+
+    toggleComments();
+  }, []);
+
+  const handleToggleShowComment = useCallback(() => {
+    toggleComments();
+  }, []);
+
+  const handleChangeTab = useCallback((tab: SectionType) => {
+    setSelected(tab);
+
+    toggleDownvotePost(null);
+  }, []);
+
+  const handleVisibilityChange = useCallback((visibility: Visibility) => {
+    toggleVisibility();
+
+    const payload: Partial<Post> = {
+      visibility,
+    };
+
+    if (visibility === Visibility.PRIVATE) {
+      confirmChangeToPrivate(payload);
+    } else {
+      handleUdatePost(payload);
     }
-  };
+  }, []);
 
-  const handleReportPost = (post: Post) => {
-    setReported(post);
-  };
-
-  const closeReportPost = () => {
-    setReported(null);
-  };
-
-  const handleImporters = (post: Post) => {
-    dispatch(removeImporter());
-    setImportedPost(post);
-  };
-
-  const closeImportedPost = () => {
-    setImportedPost(null);
-  };
-
-  const handlePostVisibility = (post: Post) => {
-    setVisibility(post);
-  };
-
-  const closePostVisibility = () => {
-    setVisibility(null);
-  };
-
-  const confirmRemovePost = () => {
+  const confirmChangeToPrivate = (payload: Partial<Post>) => {
     confirm({
-      title: i18n.t('Post_Delete.Title'),
-      description: i18n.t('Post_Delete.Description'),
-      icon: 'danger',
-      confirmationText: i18n.t('Post_Delete.Confirmation_Text'),
-      cancellationText: i18n.t('Post_Delete.Cancellation_Text'),
+      title: i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Private_Title'),
+      description: i18n.t(
+        'Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Private_Description',
+      ),
+      confirmationText: i18n.t(
+        'Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Private_Text',
+      ),
+      cancellationText: i18n.t(
+        'Post_Detail.Post_Options.Post_Visibility_Setting.Cancel_Private_Text',
+      ),
       onConfirm: () => {
-        confirmDeletePost();
+        handleUdatePost(payload);
       },
     });
   };
 
-  if (!post) return null;
+  const handleUdatePost = (payload: Partial<Post>) => {
+    dispatch(
+      editPost(post.id, payload, () => {
+        openSuccessPrompt(payload.visibility);
+      }),
+    );
+  };
+
+  const openSuccessPrompt = (updatedVisibility: string) => {
+    confirm({
+      title: i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Title'),
+      description: (
+        <Typography>
+          {updatedVisibility === Visibility.FRIEND
+            ? i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Description', {
+                visibility: 'Friend Only',
+              })
+            : updatedVisibility === Visibility.PRIVATE
+            ? i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Description', {
+                visibility: 'Only Me',
+              })
+            : i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Description', {
+                visibility: updatedVisibility,
+              })}
+        </Typography>
+      ),
+      confirmationText: i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Text'),
+      hideCancel: true,
+    });
+  };
+
+  const handleDeletePost = useCallback(() => {
+    confirm({
+      title: <Text locale="Post_Delete.Title" />,
+      description: <Text locale="Post_Delete.Description" />,
+      icon: 'danger',
+      confirmationText: <Text locale="Post_Delete.Confirmation_Text" />,
+      cancellationText: <Text locale="Post_Delete.Cancellation_Text" />,
+      onConfirm: () => {
+        dispatch(deletePost(post.id));
+      },
+    });
+  }, []);
+
+  const handleReport = useCallback(() => {
+    report.open(post);
+  }, []);
+
+  const initComments = () => {
+    handleChangeTab(SectionType.DISCUSSION);
+  };
 
   return (
     <>
-      <PostDetail
-        user={user}
-        key={`post-${post.id}`}
-        post={post}
-        anonymous={anonymous}
-        onUpvote={upVotePost}
-        toggleDownvoting={setDownVotingPost}
-        onOpenTipHistory={openTipHistory}
-        onDelete={confirmRemovePost}
-        onReport={handleReportPost}
-        onImporters={handleImporters}
-        onShared={handleSharePost}
-        onRemoveVote={removePostVote}
-        onVisibility={handlePostVisibility}
-        expanded={expanded}
-        type={type}
-      />
+      <Paper ref={ref} className={styles.root}>
+        <PostDetail
+          {...props}
+          type={type}
+          onUpvote={upvotePost}
+          onToggleDownvote={handleToggleDownvotePost}
+          onRemoveVote={removePostVote}
+          onToggleShowComment={handleToggleShowComment}
+          onShowImporters={toggleImporterList}
+          onChangeVisibility={toggleVisibility}
+          onDelete={handleDeletePost}
+          onReport={handleReport}
+        />
+        <Collapse in={showComment} onEntering={initComments}>
+          <TabsComponent<SectionType>
+            tabs={tabs}
+            position="space-evenly"
+            selected={selected as SectionType}
+            onChangeTab={handleChangeTab}
+          />
+        </Collapse>
+      </Paper>
 
-      <TipHistoryContainer referenceType={ReferenceType.POST} />
-      <ReportContainer reference={reported} onClose={closeReportPost} />
-      <PostImporterContainer post={importedPost} onClose={closeImportedPost} />
-      <PostVisibilityContainer reference={visibility} onClose={closePostVisibility} />
+      <PostImporter open={showImporterList} post={post} onClose={toggleImporterList} />
+      <PostVisibility
+        open={showVisibility}
+        reference={post}
+        onClose={toggleVisibility}
+        onVisibilityChanged={handleVisibilityChange}
+      />
     </>
   );
 };

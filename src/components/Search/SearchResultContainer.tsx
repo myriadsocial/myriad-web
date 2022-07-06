@@ -6,12 +6,12 @@ import Typography from '@material-ui/core/Typography';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import {SearchExperienceListContainer} from '../ExperienceList';
-import {PostsListContainer} from '../PostsList/PostsListContainer';
-import {useTimelineHook} from '../Timeline/hooks/use-timeline.hook';
 import {UsersListContainer} from '../UsersList/UsersListContainer';
 import {SearchBoxContainer} from '../atoms/Search/SearchBoxContainer';
 import {TabsComponent} from '../atoms/Tabs';
 
+import {PostsListContainer} from 'components/PostList';
+import {useTimelineFilter} from 'components/PostList/hooks/use-timeline-filter.hook';
 import {NavbarComponent} from 'src/components/Mobile/Navbar/Navbar';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
 import {useSearchHook} from 'src/hooks/use-search.hooks';
@@ -40,7 +40,7 @@ export const SearchResultContainer: React.FC = () => {
 
   const {searchExperience, clearExperiences} = useExperienceHook();
   const {searchUsers, clearUsers} = useSearchHook();
-  const {searchPosts, clearPosts} = useTimelineHook();
+  const {clear: clearPosts} = useTimelineFilter();
 
   const [selectedTab, setSelectedTab] = useState('posts-tab');
   const searchKeyword = router.query.q as string;
@@ -48,11 +48,6 @@ export const SearchResultContainer: React.FC = () => {
   useEffect(() => {
     if (searchKeyword.length) {
       switch (selectedTab) {
-        case 'posts-tab': {
-          searchPosts(searchKeyword);
-          break;
-        }
-
         case 'users-tab': {
           searchUsers(searchKeyword);
           break;
@@ -64,7 +59,6 @@ export const SearchResultContainer: React.FC = () => {
         }
 
         default: {
-          searchPosts(searchKeyword);
           break;
         }
       }
@@ -76,7 +70,7 @@ export const SearchResultContainer: React.FC = () => {
       {
         id: 'posts-tab',
         title: i18n.t('Search_Result.Post_Tab'),
-        component: <PostsListContainer query={searchKeyword} />,
+        component: <PostsListContainer query={router.query} />,
       },
       {
         id: 'users-tab',
@@ -114,7 +108,7 @@ export const SearchResultContainer: React.FC = () => {
 
   return (
     <>
-      <NavbarComponent onSubmitSearch={onSubmitSearch} searched={true} />
+      <NavbarComponent searched={true} />
       <SearchBoxContainer onSubmitSearch={onSubmitSearch} hidden={true} />
       <div className={style.box}>
         <Typography className={style.text}>

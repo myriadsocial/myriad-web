@@ -3,16 +3,14 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {ProfileHeaderComponent} from '.';
 
+import {useTimelineFilter} from 'components/PostList/hooks/use-timeline-filter.hook';
+import useTipHistoryHook from 'components/TipHistory/use-tip-history.hook';
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {debounce} from 'lodash';
-import {useTimelineFilter} from 'src/components/Timeline/hooks/use-timeline-filter.hook';
-import {TipHistoryContainer} from 'src/components/TipHistory';
-import {useTipHistory} from 'src/hooks/tip-history.hook';
 import {useFriendRequest} from 'src/hooks/use-friend-request.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {useReport} from 'src/hooks/use-report.hook';
 import {Friend, FriendStatus} from 'src/interfaces/friend';
-import {ReferenceType} from 'src/interfaces/interaction';
 import {ReportProps} from 'src/interfaces/report';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
@@ -36,7 +34,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
   const {requestFriend, removeFriendRequest, toggleRequest, reloadFriendStatus} =
     useFriendRequest();
   const {sendReportWithAttributes} = useReport();
-  const {openTipHistory} = useTipHistory();
+  const {open: openTipHistory} = useTipHistoryHook();
   const enqueueSnackbar = useEnqueueSnackbar();
   const {query} = useQueryParams();
   const {filterTimeline} = useTimelineFilter({
@@ -131,8 +129,6 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
         onAcceptFriend={handleAcceptFriend}
         onOpenTipHistory={openTipHistory}
       />
-
-      <TipHistoryContainer referenceType={ReferenceType.PEOPLE} />
     </>
   );
 };
