@@ -19,6 +19,7 @@ export const useCommentTabs = (
   post: Post,
   ref: React.RefObject<HTMLDivElement>,
   user?: User,
+  expand?: boolean,
 ): TabHookProps<SectionType> => {
   const {query} = useQueryParams();
 
@@ -34,8 +35,12 @@ export const useCommentTabs = (
       ) {
         setSelected(section);
       }
+    } else {
+      if (expand) {
+        setSelected(SectionType.DISCUSSION);
+      }
     }
-  }, [query]);
+  }, [query, expand]);
 
   const scrollToPost = useCallback(() => {
     ref.current?.scrollIntoView({

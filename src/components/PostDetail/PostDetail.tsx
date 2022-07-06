@@ -33,10 +33,10 @@ export const PostDetail: React.FC<PostDetailProps> = React.memo(props => {
 
   const owned = post.createdBy === user?.id;
   const downvoted = post.votes
-    ? post.votes.filter(vote => vote.userId === user.id && !vote.state).length > 0
+    ? post.votes.filter(vote => vote.userId === user?.id && !vote.state).length > 0
     : false;
   const upvoted = post.votes
-    ? post.votes.filter(vote => vote.userId === user.id && vote.state).length > 0
+    ? post.votes.filter(vote => vote.userId === user?.id && vote.state).length > 0
     : false;
   const isOwnSocialPost = user?.people?.find(person => person.id === post.peopleId) ? true : false;
   const isImportedPost = post.platform !== 'myriad' || post.createdBy !== user?.id ? true : false;
