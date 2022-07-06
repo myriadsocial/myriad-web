@@ -9,7 +9,7 @@ import {useTheme} from '@material-ui/core/styles';
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
 
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {debounce} from 'lodash';
+import debounce from 'lodash/debounce';
 import {useUpload} from 'src/hooks/use-upload.hook';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';

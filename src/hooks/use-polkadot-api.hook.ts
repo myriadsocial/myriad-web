@@ -8,7 +8,7 @@ import {BN, BN_ONE, BN_TWO, BN_TEN} from '@polkadot/util';
 import {SimpleSendTipProps} from '../interfaces/transaction';
 
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import {formatBalance} from 'src/helpers/balance';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {BlockchainPlatform, WalletDetail, WalletReferenceType} from 'src/interfaces/wallet';
@@ -97,7 +97,7 @@ export const usePolkadotApi = () => {
         },
       );
 
-      if (_.isEmpty(txHash)) {
+      if (isEmpty(txHash)) {
         throw {
           message: 'Cancelled',
         };

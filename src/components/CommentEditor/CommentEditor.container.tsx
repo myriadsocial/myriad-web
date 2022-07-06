@@ -3,7 +3,7 @@ import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 
 import CommentEditor from './CommentEditor';
 
-import {debounce} from 'lodash';
+import debounce from 'lodash/debounce';
 import {CommentProps} from 'src/interfaces/comment';
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';

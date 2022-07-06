@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 
-import {debounce} from 'lodash';
+import debounce from 'lodash/debounce';
 
 export const useScroll = () => {
   const [isScroll, setIsScroll] = useState<boolean>(false);

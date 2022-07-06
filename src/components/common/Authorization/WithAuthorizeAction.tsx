@@ -15,9 +15,15 @@ export function WithAuthorizeAction<T>(WrappedComponent: React.ComponentType<T &
   const ComponentWithBannedAction: React.FC<T & BaseAction> = props => {
     const authorization = useContext(AuthorizationContext);
 
-    const onClick = (...args: any) => {
+    const onClick = (event: React.MouseEvent<any>) => {
+      if (authorization.anonymous) {
+        event.preventDefault();
+
+        return;
+      }
+
       if (authorization.authorized) {
-        props.onClick(...args);
+        props.onClick(event);
       } else {
         props.fallback && props.fallback();
         authorization.alert();

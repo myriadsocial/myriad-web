@@ -6,7 +6,7 @@ import {useEnqueueSnackbar} from '../Snackbar/useEnqueueSnackbar.hook';
 import ShowIf from '../show-if.component';
 import {AuthorizationContext} from './Authorization.context';
 
-import {isNil} from 'lodash';
+import isNil from 'lodash/isNil';
 import {BannedBanner, APP_BANNER_COOKIE_KEY} from 'src/components/common/Banner';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
@@ -17,6 +17,10 @@ export const AuthorizationProvider: React.ComponentType = ({children}) => {
 
   const authorized = useSelector<RootState, boolean>(
     state => isNil(state.userState.user?.deletedAt),
+    shallowEqual,
+  );
+  const anonymous = useSelector<RootState, boolean>(
+    state => state.userState.anonymous,
     shallowEqual,
   );
 
@@ -31,7 +35,7 @@ export const AuthorizationProvider: React.ComponentType = ({children}) => {
 
   return (
     <>
-      <AuthorizationContext.Provider value={{alert, authorized}}>
+      <AuthorizationContext.Provider value={{alert, authorized, anonymous}}>
         {children}
       </AuthorizationContext.Provider>
 

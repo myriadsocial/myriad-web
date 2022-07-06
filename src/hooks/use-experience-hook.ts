@@ -4,7 +4,7 @@ import {WrappedExperience, ExperienceProps, Experience} from '../interfaces/expe
 import {RootState} from '../reducers';
 
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {pick} from 'lodash';
+import pick from 'lodash/pick';
 import {
   searchExperiences,
   searchPeople,

@@ -1,9 +1,9 @@
-import {BN} from '@polkadot/util';
+import {BN} from '@polkadot/util/bn';
 
 import {BalanceDetail} from '../interfaces/balance';
 import {CurrencyId} from '../interfaces/currency';
 
-import _ from 'lodash';
+import remove from 'lodash/remove';
 
 // TODO: check if needs to be removed
 export const formatNumber = (number: number, decimals: number): number => {
@@ -21,7 +21,7 @@ export const formatUsd = (value: number, conversion: number): string => {
 export const removeMyriad = (balanceDetails: BalanceDetail[]): BalanceDetail[] => {
   const newCoins = [...balanceDetails];
 
-  const myriadlessCoins = _.remove(newCoins, function (n) {
+  const myriadlessCoins = remove(newCoins, function (n) {
     return n.id !== CurrencyId.MYRIA;
   });
 

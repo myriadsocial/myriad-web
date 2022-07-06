@@ -7,6 +7,7 @@ const noop = () => {};
 
 const defaultContext: Actions = {
   authorized: false,
+  anonymous: true,
   alert: noop,
 };
 

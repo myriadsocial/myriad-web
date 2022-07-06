@@ -2,7 +2,7 @@ import React from 'react';
 
 import Typography, {TypographyProps} from '@material-ui/core/Typography';
 
-import {uniqueId} from 'lodash';
+import uniqueId from 'lodash/uniqueId';
 import {parseHashtag} from 'src/helpers/string';
 
 type LinkifyProps = TypographyProps & {

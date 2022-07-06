@@ -12,7 +12,7 @@ import {Button, ButtonVariant, ButtonColor} from '../atoms/Button';
 import {DraggableBalanceCard} from './DraggableBalanceCard';
 
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import _ from 'lodash';
+import remove from 'lodash/remove';
 import {useCurrency} from 'src/hooks/use-currency.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {CurrencyId} from 'src/interfaces/currency';
@@ -52,7 +52,7 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
   const putDefaultFirst = (balanceDetails: BalanceDetail[], defaultCurrencyId: CurrencyId) => {
     const newDefaultCoins = [...balanceDetails];
 
-    const defaultCoin = _.remove(newDefaultCoins, function (n) {
+    const defaultCoin = remove(newDefaultCoins, function (n) {
       return n.id === defaultCurrencyId;
     });
 

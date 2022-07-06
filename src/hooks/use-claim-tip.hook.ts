@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 
-import _ from 'lodash';
+import remove from 'lodash/remove';
 import {Network, NetworkIdEnum} from 'src/interfaces/network';
 import {updateTransaction} from 'src/lib/api/transaction';
 import * as WalletAPI from 'src/lib/api/wallet';
@@ -25,7 +25,7 @@ export const useClaimTip = () => {
 
   const sortNetwork = (networks: Network[], selectedNetwork?: string) => {
     const newDefaultNetworks = [...networks];
-    const defaultNetworks = _.remove(newDefaultNetworks, function (n) {
+    const defaultNetworks = remove(newDefaultNetworks, function (n) {
       return n.id === selectedNetwork;
     });
     const resultDefaultCoins = [...defaultNetworks, ...newDefaultNetworks];
@@ -129,7 +129,7 @@ export const useClaimTip = () => {
 
     if (!selectedNetwork) return;
 
-    let claimSuccess = false;
+    const claimSuccess = false;
 
     setClaiming(true);
 

@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 
-import {delay} from 'lodash';
+import delay from 'lodash/delay';
 import {Comment, CommentProps} from 'src/interfaces/comment';
 import {SectionType, Vote} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';

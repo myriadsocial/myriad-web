@@ -5,7 +5,7 @@ import {useRouter} from 'next/router';
 import {useStyles} from './Experience.styles';
 import {ExperienceEditor} from './ExperienceEditor';
 
-import {debounce} from 'lodash';
+import debounce from 'lodash/debounce';
 import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
 import {useUpload} from 'src/hooks/use-upload.hook';
