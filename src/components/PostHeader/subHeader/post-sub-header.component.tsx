@@ -31,7 +31,7 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
       <Typography component="div" className={style.root}>
         <ShowIf condition={platform !== 'myriad'}>{i18n.t('Post_Detail.Imported_Post')} </ShowIf>
 
-        <Link href={`/post/[postId]`} as={`/post/${postId}`} shallow>
+        <Link href={`/post/[postId]`} as={`/post/${postId}`} shallow prefetch={false}>
           <a className={style.linkGrey}>{timeAgo(date)}&nbsp;</a>
         </Link>
 
@@ -41,7 +41,11 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
               {i18n.t('Post_Detail.by')}&nbsp;
               {importers.map(importer => (
                 <span key={importer.id}>
-                  <Link href={'/profile/[id]'} as={`/profile/${importer.id}`} shallow>
+                  <Link
+                    href={'/profile/[id]'}
+                    as={`/profile/${importer.id}`}
+                    shallow
+                    prefetch={false}>
                     <a className={style.link}>{importer.name}</a>
                   </Link>
                   <ShowIf condition={totalImporters > 1}>
