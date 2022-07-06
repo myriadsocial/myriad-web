@@ -3,9 +3,9 @@ import {useSelector} from 'react-redux';
 
 import {getSession} from 'next-auth/react';
 import getConfig from 'next/config';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 
-import {SocialsContainer} from 'src/components/Socials/Socials.container';
 import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {initialize} from 'src/lib/api/base';
@@ -27,6 +27,10 @@ import {
 import {UserState} from 'src/reducers/user/reducer';
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
+
+const SocialsContainer = dynamic(() => import('src/components/Socials/Socials.container'), {
+  ssr: false,
+});
 
 const {publicRuntimeConfig} = getConfig();
 

@@ -108,3 +108,5 @@ export const SocialMediaListContainer: React.FC = () => {
     </>
   );
 };
+
+export default SocialMediaListContainer;

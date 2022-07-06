@@ -1,7 +1,7 @@
 import {InformationCircleIcon} from '@heroicons/react/outline';
 
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {shallowEqual, useSelector} from 'react-redux';
 
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
@@ -15,15 +15,17 @@ import {useStyles} from './Tab.style';
 import {ExperienceListContainer} from 'src/components/ExperienceList';
 import ShowIf from 'src/components/common/show-if.component';
 import {ExperienceOwner, useExperienceHook} from 'src/hooks/use-experience-hook';
+import {Experience} from 'src/interfaces/experience';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
-import {ExperienceState} from 'src/reducers/experience/reducer';
 
 export const TrendingExperienceTab: React.FC = () => {
-  const {loadTrendingExperience, loading} = useExperienceHook();
   const styles = useStyles();
-  const {trendingExperiences} = useSelector<RootState, ExperienceState>(
-    state => state.experienceState,
+  const {loadTrendingExperience, loading} = useExperienceHook();
+
+  const trendingExperiences = useSelector<RootState, Experience[]>(
+    state => state.experienceState.trendingExperiences,
+    shallowEqual,
   );
   const toolTipText = i18n.t('Tooltip.Trending_Exp');
 

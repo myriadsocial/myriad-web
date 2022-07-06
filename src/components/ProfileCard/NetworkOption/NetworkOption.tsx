@@ -290,3 +290,5 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({
     </>
   );
 };
+
+export default NetworkOption;

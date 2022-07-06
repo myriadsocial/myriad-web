@@ -1,12 +1,17 @@
 import React, {useCallback, useState} from 'react';
 
-import TipHistoryContainer from './TipHistory.container';
+import dynamic from 'next/dynamic';
+
 import {TipHistoryContext} from './TipHistory.context';
 
 import {Comment} from 'src/interfaces/comment';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
+
+const TipHistoryContainer = dynamic(() => import('./TipHistory.container'), {
+  ssr: false,
+});
 
 export const TipHistoryProvider: React.ComponentType = ({children}) => {
   const [reference, setReference] = useState<Post | Comment | User>(null);

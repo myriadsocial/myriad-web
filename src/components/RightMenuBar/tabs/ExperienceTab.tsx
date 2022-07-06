@@ -1,7 +1,7 @@
 import {PlusIcon} from '@heroicons/react/outline';
 
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {shallowEqual, useSelector} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
@@ -14,9 +14,10 @@ import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.
 import {ExperienceListContainer, EmptyExperience} from 'src/components/ExperienceList';
 import ShowIf from 'src/components/common/show-if.component';
 import {ExperienceOwner} from 'src/hooks/use-experience-hook';
+import {WrappedExperience} from 'src/interfaces/experience';
+import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
-import {UserState} from 'src/reducers/user/reducer';
 
 type ExperienceTabProps = {
   experienceType?: 'user' | 'trending';
@@ -27,7 +28,14 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
   const router = useRouter();
   const styles = useStyles();
 
-  const {user, experiences} = useSelector<RootState, UserState>(state => state.userState);
+  const user = useSelector<RootState, User | undefined>(
+    state => state.userState.user,
+    shallowEqual,
+  );
+  const experiences = useSelector<RootState, WrappedExperience[]>(
+    state => state.userState.experiences,
+    shallowEqual,
+  );
 
   const enqueueSnackbar = useEnqueueSnackbar();
 
