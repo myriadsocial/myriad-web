@@ -1,3 +1,4 @@
+import {Experience} from 'src/interfaces/experience';
 import {User} from 'src/interfaces/user';
 
 export type PostSubHeaderProps = {
@@ -7,5 +8,7 @@ export type PostSubHeaderProps = {
   importers?: User[];
   totalImporters: number;
   url: string;
+  totalExperience: number;
+  experiences?: Experience[];
   onImporters: () => void;
 };
