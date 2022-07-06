@@ -474,6 +474,13 @@
     "Debate": {
       "Title": "Debat",
       "Text_Placeholder": "Voting tidak suka terhadap postingan ini akan muncul setelah kamu memberikan komentar"
+    },
+    "Experience": {
+      "Added": "added to",
+      "And": "and",
+      "Other_Exp": "{{number}} other experiences",
+      "Modal_Title": "Post in Experience",
+      "Modal_Sub": "This post is already added to this experience"
     }
   },
   "Post_Create": {

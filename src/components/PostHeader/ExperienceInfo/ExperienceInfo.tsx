@@ -11,8 +11,7 @@ import {Modal} from 'src/components/atoms/Modal';
 import ShowIf from 'src/components/common/show-if.component';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
 import {Experience} from 'src/interfaces/experience';
-
-// import i18n from 'src/locale';
+import i18n from 'src/locale';
 
 export type ExperienceInfo = {
   postId: string;
@@ -41,21 +40,21 @@ export const ExperienceInfo: React.FC<ExperienceInfo> = props => {
 
   return (
     <>
-      &nbsp;• added to&nbsp;
+      &nbsp;• {i18n.t('Post_Detail.Experience.Added')}&nbsp;
       {!!experiences && !!experiences.length && (
         <>
           <Link href={`/experience/${experiences[0].id}`} shallow passHref>
             <span className={style.link}>{experiences[0].name}</span>
           </Link>
           <ShowIf condition={totalExperience > 1}>
-            &nbsp;and&nbsp;
+            &nbsp;{i18n.t('Post_Detail.Experience.And')}&nbsp;
             <span className={style.link} onClick={handleOpen}>
-              {totalExperience - 1} other experiences
+              {i18n.t('Post_Detail.Experience.Other_exp', {number: totalExperience - 1})}
             </span>
           </ShowIf>
           <Modal
-            title={'Post in Experience'}
-            subtitle={<Typography>{'This post is already added to this experience'}</Typography>}
+            title={i18n.t('Post_Detail.Experience.Modal_Title')}
+            subtitle={<Typography>{i18n.t('ost_Detail.Experience.Modal_Sub')}</Typography>}
             open={open}
             onClose={handleClose}>
             <div className={style.list}>
