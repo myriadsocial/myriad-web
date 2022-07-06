@@ -179,7 +179,7 @@ export const PostHeader: React.FC<PostHeaderProps> = React.memo(props => {
         </BaseMenuItem>
 
         <ShowIf condition={!owned}>
-          <BaseMenuItem>
+          <BaseMenuItem className={style.link}>
             <Link href={`post/${post.id}`} passHref>
               {i18n.t('Post_Detail.Post_Options.View_Post')}
             </Link>
@@ -188,17 +188,21 @@ export const PostHeader: React.FC<PostHeaderProps> = React.memo(props => {
 
         <ShowIf condition={!owned && post.platform !== 'myriad'}>
           <BaseMenuItem>
-            <ExternalLink href={post.url} target="_blank">
+            <ExternalLink href={post.url} target="_blank" color="inherit" underline="none">
               {i18n.t('Post_Detail.Post_Options.View_Source_Post')}
             </ExternalLink>
           </BaseMenuItem>
-          <BaseMenuItem>
+          <BaseMenuItem className={style.link}>
             <Link href={`profile/${post.user.id}`} passHref>
               {i18n.t('Post_Detail.Post_Options.Visit_Myriad_Profile')}
             </Link>
           </BaseMenuItem>
           <BaseMenuItem>
-            <ExternalLink href={getPlatformProfileUrl()} target="_blank">
+            <ExternalLink
+              href={getPlatformProfileUrl()}
+              target="_blank"
+              color="inherit"
+              underline="none">
               {i18n.t('Post_Detail.Post_Options.Visit_Post_Platform', {
                 postPlatform: capitalize(post.platform),
               })}
@@ -207,7 +211,7 @@ export const PostHeader: React.FC<PostHeaderProps> = React.memo(props => {
         </ShowIf>
 
         <ShowIf condition={!owned && post.platform === 'myriad'}>
-          <BaseMenuItem>
+          <BaseMenuItem className={style.link}>
             <Link href={`profile/${post.user.id}`} passHref>
               {i18n.t('Post_Detail.Post_Options.Visit_Profile')}
             </Link>

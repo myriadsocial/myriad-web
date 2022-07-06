@@ -48,5 +48,11 @@ export const useStyles = makeStyles((theme: Theme) =>
         color: '#404040',
       },
     },
+    link: {
+      '& > a': {
+        textDecoration: 'none',
+        color: 'inherit',
+      },
+    },
   }),
 );
