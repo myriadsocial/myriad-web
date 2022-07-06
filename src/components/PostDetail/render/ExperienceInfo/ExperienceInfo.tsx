@@ -49,12 +49,12 @@ export const ExperienceInfo: React.FC<ExperienceInfo> = props => {
           <ShowIf condition={totalExperience > 1}>
             &nbsp;{i18n.t('Post_Detail.Experience.And')}&nbsp;
             <span className={style.link} onClick={handleOpen}>
-              {i18n.t('Post_Detail.Experience.Other_exp', {number: totalExperience - 1})}
+              {i18n.t('Post_Detail.Experience.Other_Exp', {number: totalExperience - 1})}
             </span>
           </ShowIf>
           <Modal
             title={i18n.t('Post_Detail.Experience.Modal_Title')}
-            subtitle={<Typography>{i18n.t('ost_Detail.Experience.Modal_Sub')}</Typography>}
+            subtitle={<Typography>{i18n.t('Post_Detail.Experience.Modal_Sub')}</Typography>}
             open={open}
             onClose={handleClose}>
             <div className={style.list}>

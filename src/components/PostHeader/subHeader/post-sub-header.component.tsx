@@ -4,7 +4,6 @@ import Link from 'next/link';
 
 import Typography from '@material-ui/core/Typography';
 
-import {ExperienceInfo} from '../ExperienceInfo/ExperienceInfo';
 import {PostSubHeaderProps} from './post-sub-header.interface';
 import {useStyles} from './post-sub-header.style';
 
@@ -20,8 +19,6 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
   totalImporters,
   url,
   onImporters,
-  totalExperience,
-  experiences,
 }) => {
   const style = useStyles();
 
@@ -78,13 +75,6 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
               </a>
             </>
           )}
-        </ShowIf>
-        <ShowIf condition={totalExperience > 0}>
-          <ExperienceInfo
-            postId={postId}
-            totalExperience={totalExperience}
-            experiences={experiences}
-          />
         </ShowIf>
       </Typography>
     </>

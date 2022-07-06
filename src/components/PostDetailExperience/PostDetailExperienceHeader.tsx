@@ -117,8 +117,6 @@ export const HeaderComponentExperience: React.FC<PostHeaderExperienceProps> = pr
             url={post.url}
             totalImporters={post.totalImporter}
             onImporters={handleImporter}
-            totalExperience={post.totalExperience}
-            experiences={post.experiences}
           />
         }
         action={
