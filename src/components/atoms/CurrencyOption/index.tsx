@@ -15,7 +15,7 @@ import {Avatar, AvatarSize} from '../Avatar';
 import {CurrencyOptionProps} from './currencyOption.interface';
 import {useStyles} from './currencyOption.style';
 
-import {debounce} from 'lodash';
+import debounce from 'lodash/debounce';
 import i18n from 'src/locale';
 
 export const CurrencyOptionComponent: React.FC<CurrencyOptionProps> = props => {

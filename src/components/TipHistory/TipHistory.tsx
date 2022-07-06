@@ -27,8 +27,7 @@ import {Modal, ModalProps} from '../atoms/Modal';
 import {SendTipButton} from '../common/SendTipButton/SendTipButton';
 import {useStyles} from './TipHistory.styles';
 
-// import {sortOptions} from './default';
-import {debounce} from 'lodash';
+import debounce from 'lodash/debounce';
 import {Empty} from 'src/components/atoms/Empty';
 import {Loading} from 'src/components/atoms/Loading';
 import ShowIf from 'src/components/common/show-if.component';

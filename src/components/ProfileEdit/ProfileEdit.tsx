@@ -12,7 +12,7 @@ import {IconButtonUpload} from './IconButtonUpload.component';
 import {ImageButton} from './ImageButton.component';
 import {useStyles} from './profile-edit.style';
 
-import {debounce} from 'lodash';
+import debounce from 'lodash/debounce';
 import {acronym} from 'src/helpers/string';
 import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';

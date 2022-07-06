@@ -25,7 +25,7 @@ import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {DropdownMenu, MenuOptions} from '../atoms/DropdownMenu';
 import SearchComponent from '../atoms/Search/SearchBox';
 
-import _ from 'lodash';
+import orderBy from 'lodash/orderBy';
 import {Empty} from 'src/components/atoms/Empty';
 import ShowIf from 'src/components/common/show-if.component';
 import {formatUsd} from 'src/helpers/balance';
@@ -115,13 +115,13 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
   const handleSortChanged = (sort: BalanceSortType) => {
     switch (sort) {
       case 'highest': {
-        const sortedHighestBalances = _.orderBy(defaultBalanceDetails, 'freeBalance', 'desc');
+        const sortedHighestBalances = orderBy(defaultBalanceDetails, 'freeBalance', 'desc');
         setDefaultBalanceDetails(sortedHighestBalances);
         break;
       }
 
       case 'lowest': {
-        const sortedLowestBalances = _.orderBy(defaultBalanceDetails, 'freeBalance', 'asc');
+        const sortedLowestBalances = orderBy(defaultBalanceDetails, 'freeBalance', 'asc');
         setDefaultBalanceDetails(sortedLowestBalances);
         break;
       }

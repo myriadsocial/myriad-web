@@ -13,7 +13,7 @@ import {Login as LoginComponent} from './render/Login';
 import {Options} from './render/Options';
 import {Profile} from './render/Profile';
 
-import {last} from 'lodash';
+import last from 'lodash/last';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {useProfileHook} from 'src/hooks/use-profile.hook';

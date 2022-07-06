@@ -31,7 +31,7 @@ import {deserialize, formatToString} from './formatter';
 import {ELEMENT_HASHTAG} from './plugins/hashtag';
 
 import escapeHtml from 'escape-html';
-import {uniqueId} from 'lodash';
+import uniqueId from 'lodash/uniqueId';
 import {Gallery} from 'src/components/atoms/Gallery';
 import {Video} from 'src/components/atoms/Video/Video';
 import {Post} from 'src/interfaces/post';

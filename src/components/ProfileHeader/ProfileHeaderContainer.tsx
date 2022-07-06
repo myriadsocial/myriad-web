@@ -6,7 +6,7 @@ import {ProfileHeaderComponent} from '.';
 import {useTimelineFilter} from 'components/PostList/hooks/use-timeline-filter.hook';
 import useTipHistoryHook from 'components/TipHistory/use-tip-history.hook';
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {debounce} from 'lodash';
+import debounce from 'lodash/debounce';
 import {useFriendRequest} from 'src/hooks/use-friend-request.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {useReport} from 'src/hooks/use-report.hook';

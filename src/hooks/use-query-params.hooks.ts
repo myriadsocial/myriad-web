@@ -1,6 +1,6 @@
 import {useRouter} from 'next/router';
 
-import {isArray} from 'lodash';
+import isArray from 'lodash/isArray';
 import {Url} from 'url';
 
 export const useQueryParams = () => {

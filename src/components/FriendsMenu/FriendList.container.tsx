@@ -4,7 +4,7 @@ import {useSelector} from 'react-redux';
 import {FriendListComponent} from './FriendList';
 import {FriendType} from './default';
 
-import {uniqBy} from 'lodash';
+import uniqBy from 'lodash/uniqBy';
 import {Empty} from 'src/components/atoms/Empty';
 import {useFriendsHook} from 'src/hooks/use-friends-hook';
 import {useProfileFriend} from 'src/hooks/use-profile-friend.hook';

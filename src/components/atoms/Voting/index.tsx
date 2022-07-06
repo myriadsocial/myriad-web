@@ -12,7 +12,7 @@ import {VoteProps} from './voting.interface';
 import {useStyles} from './voting.style';
 
 import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorizeAction';
-import {debounce} from 'lodash';
+import debounce from 'lodash/debounce';
 import {PromptComponent} from 'src/components/Mobile/PromptDrawer/Prompt';
 import {formatCount} from 'src/helpers/number';
 import {RootState} from 'src/reducers';

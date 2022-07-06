@@ -4,7 +4,7 @@ import {useSelector} from 'react-redux';
 import {FriendRequestComponent} from './FriendRequest';
 
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {debounce} from 'lodash';
+import debounce from 'lodash/debounce';
 import {useFriendsHook} from 'src/hooks/use-friends-hook';
 import {Friend, FriendStatus} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';

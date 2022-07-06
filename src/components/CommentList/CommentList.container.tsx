@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic';
 import useConfirm from '../common/Confirm/use-confirm.hook';
 import {CommentList} from './CommentList';
 
-import {debounce} from 'lodash';
+import debounce from 'lodash/debounce';
 import {ReportContainer} from 'src/components/Report';
 import ShowIf from 'src/components/common/show-if.component';
 import {useBlockList} from 'src/hooks/use-blocked-list.hook';

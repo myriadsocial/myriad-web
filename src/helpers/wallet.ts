@@ -1,6 +1,6 @@
 import {convertToPolkadotAddress} from './extension';
 
-import {capitalize} from 'lodash';
+import capitalize from 'lodash/capitalize';
 import {Network, NetworkIdEnum} from 'src/interfaces/network';
 import {UserWallet} from 'src/interfaces/user';
 import {BlockchainPlatform} from 'src/interfaces/wallet';

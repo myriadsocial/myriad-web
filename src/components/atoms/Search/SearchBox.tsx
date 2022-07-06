@@ -9,7 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import {SearchBoxProps, SearchBoxColor, useStyles} from '.';
 import {SearchIcon} from '../Icons';
 
-import {debounce} from 'lodash';
+import debounce from 'lodash/debounce';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {ConfigState} from 'src/reducers/config/reducer';
