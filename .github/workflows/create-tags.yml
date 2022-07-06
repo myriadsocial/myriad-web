@@ -1,0 +1,77 @@
+name: Create Tags
+
+on:
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'TAGS'
+        required: true 
+        type: string
+      commit_sha:
+        description: 'COMMIT_SHA'
+        required: false 
+        type: string
+
+concurrency:
+  group: create-tags
+
+jobs:
+  create-tags:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: commit_sha check
+        id: commit-sha
+        shell: bash
+        run: |
+          COMMIT_SHA=${{ inputs.commit_sha }}
+          INPUT_TAGS="${{ inputs.tags }}"
+          RELEASE_TAGS=${INPUT_TAGS##* }
+          PRE_RELEASE=true
+
+          if [[ $COMMIT_SHA != "" ]]
+          then
+            CUSTOME_COMMIT_SHA=${{ inputs.commit_sha }}
+          else
+            CUSTOME_COMMIT_SHA=${{ github.sha }}
+          fi
+
+          if [[ $RELEASE_TAGS =~ [0-9]+.[0-9]+.[0-9]+$ ]] ;
+          then
+            PRE_RELEASE=false
+          fi
+
+          echo $RELEASE_TAGS
+          echo $PRE_RELEASE
+
+          echo "::set-output name=commit_sha::$CUSTOME_COMMIT_SHA"
+          echo "::set-output name=release_tags::$RELEASE_TAGS"
+          echo "::set-output name=pre_release::$PRE_RELEASE"
+      - name: create and push tag
+        shell: bash
+        run: |
+          curl \
+            -X POST \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/git/refs \
+            -d '{"ref":"refs/tags/${{ steps.commit-sha.outputs.release_tags }}","sha":"${{ steps.commit-sha.outputs.commit_sha }}"}'
+      - name: Build changelog
+        id: build_changelog
+        uses: mikepenz/release-changelog-builder-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          toTag: ${{ steps.commit-sha.outputs.release_tags }}
+          configuration: '.github/workflows/rcb_config.json'
+      - name: Create draft release
+        uses: softprops/action-gh-release@v1
+        with:
+          body: ${{ steps.build_changelog.outputs.changelog }}
+          draft: true
+          prerelease: ${{ steps.commit-sha.outputs.pre_release }}
+          name: ${{ steps.commit-sha.outputs.release_tags }}
+          tag_name: ${{ steps.commit-sha.outputs.release_tags }}
