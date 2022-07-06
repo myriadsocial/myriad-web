@@ -14,7 +14,6 @@ export type PostDetailProps = PostDetailActionProps & {
   user: User;
   post: Post;
   // trigger variable for rerender post detail
-  votes: number;
   type?: 'share' | 'default';
   expandComment?: boolean;
 };
@@ -23,7 +22,6 @@ export type PostDetailContainerProps = {
   user: User;
   post: Post;
   // trigger variable for rerender post detail
-  votes: number;
   type?: 'share' | 'default';
   expandComment?: boolean;
 };

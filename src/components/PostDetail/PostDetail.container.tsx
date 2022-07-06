@@ -30,7 +30,7 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
   const report = useReport();
   const ref = useRef<HTMLDivElement>(null);
 
-  const {selected, setSelected, tabs} = useCommentTabs(post, ref, user);
+  const {selected, setSelected, tabs} = useCommentTabs(post, ref, user, expandComment);
   const {upvotePost, toggleDownvotePost, removePostVote} = usePostInteractionHook();
 
   const [showImporterList, toggleImporterList] = useToggle(false);
@@ -153,12 +153,14 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
           onReport={handleReport}
         />
         <Collapse in={showComment} onEntering={initComments}>
-          <TabsComponent<SectionType>
-            tabs={tabs}
-            position="space-evenly"
-            selected={selected as SectionType}
-            onChangeTab={handleChangeTab}
-          />
+          {selected && (
+            <TabsComponent<SectionType>
+              tabs={tabs}
+              position="space-evenly"
+              selected={selected}
+              onChangeTab={handleChangeTab}
+            />
+          )}
         </Collapse>
       </Paper>
 
