@@ -16,12 +16,6 @@ export function WithAuthorizeAction<T>(WrappedComponent: React.ComponentType<T &
     const authorization = useContext(AuthorizationContext);
 
     const onClick = (event: React.MouseEvent<any>) => {
-      if (authorization.anonymous) {
-        event.preventDefault();
-
-        return;
-      }
-
       if (authorization.authorized) {
         props.onClick(event);
       } else {
