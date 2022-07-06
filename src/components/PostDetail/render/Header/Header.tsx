@@ -180,7 +180,7 @@ export const PostHeader: React.FC<PostHeaderProps> = React.memo(props => {
 
         <ShowIf condition={!owned}>
           <BaseMenuItem className={style.link}>
-            <Link href={`post/${post.id}`} passHref>
+            <Link href={`post/${post.id}`} passHref prefetch={false}>
               {i18n.t('Post_Detail.Post_Options.View_Post')}
             </Link>
           </BaseMenuItem>
@@ -193,7 +193,7 @@ export const PostHeader: React.FC<PostHeaderProps> = React.memo(props => {
             </ExternalLink>
           </BaseMenuItem>
           <BaseMenuItem className={style.link}>
-            <Link href={`profile/${post.user.id}`} passHref>
+            <Link href={`profile/${post.user.id}`} passHref prefetch={false}>
               {i18n.t('Post_Detail.Post_Options.Visit_Myriad_Profile')}
             </Link>
           </BaseMenuItem>
@@ -212,7 +212,7 @@ export const PostHeader: React.FC<PostHeaderProps> = React.memo(props => {
 
         <ShowIf condition={!owned && post.platform === 'myriad'}>
           <BaseMenuItem className={style.link}>
-            <Link href={`profile/${post.user.id}`} passHref>
+            <Link href={`profile/${post.user.id}`} passHref prefetch={false}>
               {i18n.t('Post_Detail.Post_Options.Visit_Profile')}
             </Link>
           </BaseMenuItem>
