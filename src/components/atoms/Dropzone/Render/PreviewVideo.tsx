@@ -18,6 +18,7 @@ export const Video: React.FC<PreviewVideoProps> = props => {
     Array<{
       url: string;
       codecSupported: boolean;
+      name: string;
     }>
   >([]);
 
@@ -33,7 +34,7 @@ export const Video: React.FC<PreviewVideoProps> = props => {
       const codecSupported = await checkCodec(file);
       const url = URL.createObjectURL(file);
 
-      setPreviews(prev => [...prev, {codecSupported, url}]);
+      setPreviews([{codecSupported, url, name: file.name}]);
     }
   };
 
@@ -79,7 +80,7 @@ export const Video: React.FC<PreviewVideoProps> = props => {
       </ShowIf>
       <ShowIf condition={codecSupported}>
         {previews.map((item, i) => (
-          <video key={i} controls style={{width: '100%'}}>
+          <video key={item.name} controls style={{width: '100%'}}>
             <track kind="captions" />
             <source src={item.url} type="video/mp4" />
             <div>{i18n.t('Dropzone.Video.Not_Support')}</div>
