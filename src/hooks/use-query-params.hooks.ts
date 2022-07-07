@@ -5,6 +5,7 @@ import {Url} from 'url';
 
 export const useQueryParams = () => {
   const router = useRouter();
+  const query = router.query;
 
   const replace = (url: Partial<Url>): void => {
     router.push(url, undefined, {shallow: true});
@@ -12,10 +13,7 @@ export const useQueryParams = () => {
 
   const push = (key: string, value: string | string[], force = false): void => {
     if (!force) {
-      const query = router.query;
-
       query[key] = value;
-
       router.push({query}, undefined, {shallow: true});
     } else {
       router.push({query: {[key]: value}}, undefined, {shallow: true});
@@ -37,7 +35,7 @@ export const useQueryParams = () => {
   };
 
   return {
-    query: router.query,
+    query,
     push,
     replace,
     getIdByType,
