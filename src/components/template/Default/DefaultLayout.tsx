@@ -12,7 +12,6 @@ import {withError, WithErrorProps} from 'src/components/Error';
 import {MenuContainer} from 'src/components/Menu';
 import {NotificationsContainer} from 'src/components/Notifications';
 import {RightMenuBar} from 'src/components/RightMenuBar/RightMenuBar';
-import {SocialMediaListContainer} from 'src/components/SocialMediaList';
 import {CookieConsent, COOKIE_CONSENT_NAME} from 'src/components/common/CookieConsent';
 import {TippingProvider} from 'src/components/common/Tipping/Tipping.provider';
 import ShowIf from 'src/components/common/show-if.component';
@@ -33,6 +32,13 @@ const WalletBalancesContainer = dynamic(
 
 const ProfileCardContainer = dynamic(
   () => import('src/components/ProfileCard/ProfileCard.container'),
+  {
+    ssr: false,
+  },
+);
+
+const SocialMediaListContainer = dynamic(
+  () => import('src/components/SocialMediaList/SocialMediaList.container'),
   {
     ssr: false,
   },

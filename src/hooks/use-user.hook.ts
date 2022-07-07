@@ -1,3 +1,4 @@
+import {useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
@@ -27,8 +28,12 @@ export const useUserHook = (): UserHookProps => {
 
   const enqueueSnackbar = useEnqueueSnackbar();
 
-  const {user, anonymous, alias, socials, networks, currentWallet, wallets, userWalletAddress} =
-    useSelector<RootState, UserState>(state => state.userState);
+  const {user, anonymous, alias, socials} = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
+  const {networks, currentWallet, wallets, userWalletAddress} = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
 
   const disconnectSocial = async (social: SocialsEnum): Promise<void> => {
     if (!user) return;
@@ -42,27 +47,30 @@ export const useUserHook = (): UserHookProps => {
     }
   };
 
-  const updateUserDetail = async (values: Partial<User>, disableUpdateAlert = false) => {
-    if (!user) return;
+  const updateUserDetail = useCallback(
+    (values: Partial<User>, disableUpdateAlert = false) => {
+      if (!user) return;
 
-    dispatch(updateUser(values));
+      dispatch(updateUser(values));
 
-    if (!disableUpdateAlert) {
-      enqueueSnackbar({
-        message: 'Success update profile',
-        variant: 'success',
-      });
-    }
-  };
+      if (!disableUpdateAlert) {
+        enqueueSnackbar({
+          message: 'Success update profile',
+          variant: 'success',
+        });
+      }
+    },
+    [user],
+  );
 
-  const updateUserFcmToken = async () => {
+  const updateUserFcmToken = useCallback(async () => {
     const token = await firebaseCloudMessaging.getToken();
     const disableUpdateAlert = true;
 
     if (token && user && user.fcmTokens && !user.fcmTokens.includes(token)) {
       updateUserDetail({fcmTokens: [token as string]}, disableUpdateAlert);
     }
-  };
+  }, [user]);
 
   return {
     user,

@@ -3,15 +3,19 @@ import {SearchIcon} from '@heroicons/react/solid';
 
 import React from 'react';
 
+import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 
 import {SvgIcon, Grid} from '@material-ui/core';
 
-import {MenuDrawerComponent} from 'src/components/Mobile/MenuDrawer/MenuDrawer';
 import {useStyles} from 'src/components/Mobile/Navbar/navbar.style';
 import {MyriadFullIcon} from 'src/components/atoms/Icons';
 import {SearchBoxContainer} from 'src/components/atoms/Search/SearchBoxContainer';
 import ShowIf from 'src/components/common/show-if.component';
+
+const MenuDrawerComponent = dynamic(() => import('src/components/Mobile/MenuDrawer/MenuDrawer'), {
+  ssr: false,
+});
 
 type SearchBoxContainerProps = {
   iconPosition?: 'start' | 'end';

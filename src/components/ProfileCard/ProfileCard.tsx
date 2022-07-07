@@ -1,16 +1,21 @@
 import React from 'react';
 
+import dynamic from 'next/dynamic';
+
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
 import {Skeleton} from './Network.skeleton';
-import {NetworkOption} from './NetworkOption/NetworkOption';
 import {ProfileCardProps} from './ProfileCard.interfaces';
 import {useStyles} from './ProfileCard.style';
 import {ProfileContent} from './index';
 
 import ShowIf from 'src/components/common/show-if.component';
 import {formatAddress} from 'src/helpers/wallet';
+
+const NetworkOption = dynamic(() => import('./NetworkOption/NetworkOption'), {
+  ssr: false,
+});
 
 export const ProfileCard: React.FC<ProfileCardProps> = props => {
   const {

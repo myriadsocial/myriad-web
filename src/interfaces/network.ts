@@ -2,7 +2,19 @@ import {BaseModel} from './base.interface';
 import {Currency} from './currency';
 import {BlockchainPlatform} from './wallet';
 
-import {TipResult} from 'src/lib/services/polkadot-js';
+export interface TipBalanceInfo {
+  serverId: string;
+  referenceType: string;
+  referenceId: string;
+  ftIdentifier: string;
+}
+export interface TipResult {
+  tipsBalanceInfo: TipBalanceInfo;
+  accountId: string;
+  amount: string;
+  symbol: string;
+  imageURL: string;
+}
 
 export enum NetworkIdEnum {
   ETHEREUM = 'ethereum',

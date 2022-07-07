@@ -1,4 +1,4 @@
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector, useDispatch, shallowEqual} from 'react-redux';
 
 import {WrappedExperience, ExperienceProps, Experience} from '../interfaces/experience';
 import {RootState} from '../reducers';
@@ -53,9 +53,11 @@ export const useExperienceHook = () => {
   } = useSelector<RootState, ExperienceState>(state => state.experienceState);
   const profileExperiences = useSelector<RootState, WrappedExperience[]>(
     state => state.profileState.experience.data,
+    shallowEqual,
   );
   const userExperiences = useSelector<RootState, WrappedExperience[]>(
     state => state.userState.experiences,
+    shallowEqual,
   );
 
   const loadExperience = () => {

@@ -59,3 +59,5 @@ export const SocialsContainer: React.FC = () => {
     </>
   );
 };
+
+export default SocialsContainer;

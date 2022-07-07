@@ -2,11 +2,11 @@ import {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 
 import remove from 'lodash/remove';
-import {Network, NetworkIdEnum} from 'src/interfaces/network';
+import {Network, NetworkIdEnum, TipResult} from 'src/interfaces/network';
 import {updateTransaction} from 'src/lib/api/transaction';
 import * as WalletAPI from 'src/lib/api/wallet';
 import {getClaimTipNear} from 'src/lib/services/near-api-js';
-import {getClaimTip, TipResult, claimMyria} from 'src/lib/services/polkadot-js';
+import {getClaimTip, claimMyria} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 

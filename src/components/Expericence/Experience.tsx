@@ -5,6 +5,7 @@ import React, {useState} from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
 import getConfig from 'next/config';
+import NextImage from 'next/image';
 import Link from 'next/link';
 
 import {Grid} from '@material-ui/core';
@@ -12,7 +13,6 @@ import {TextField, InputAdornment} from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import BaseMenuItem from '@material-ui/core/MenuItem';
@@ -171,10 +171,16 @@ export const Experience: React.FC<ExperienceProps> = props => {
       <Card className={styles.root}>
         <CardActionArea onClick={handleClickExperience} disableRipple component="div">
           <Grid container alignItems="center" justifyContent="space-between" wrap="nowrap">
-            <CardMedia
-              component="img"
+            <NextImage
+              alt={userExperience.experience.name}
+              src={userExperience.experience.experienceImageURL ?? DEFAULT_IMAGE}
+              placeholder="empty"
+              objectFit="cover"
+              objectPosition="center"
+              width={68}
+              height={68}
+              quality={90}
               className={styles.image}
-              image={userExperience.experience.experienceImageURL ?? DEFAULT_IMAGE}
             />
 
             <CardContent classes={{root: styles.cardContent}}>

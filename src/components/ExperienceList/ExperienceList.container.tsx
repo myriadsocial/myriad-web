@@ -1,6 +1,6 @@
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import {useSelector} from 'react-redux';
+import {shallowEqual, useSelector} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
@@ -12,9 +12,9 @@ import {Skeleton} from 'src/components/Expericence';
 import {ExperienceOwner, useExperienceHook} from 'src/hooks/use-experience-hook';
 import {WrappedExperience} from 'src/interfaces/experience';
 import {TimelineType} from 'src/interfaces/timeline';
+import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
-import {UserState} from 'src/reducers/user/reducer';
 
 type ExperienceListContainerProps = {
   owner?: ExperienceOwner;
@@ -38,14 +38,21 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
     refreshExperience,
   } = props;
 
-  const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
-
   const router = useRouter();
+  const enqueueSnackbar = useEnqueueSnackbar();
+
+  const user = useSelector<RootState, User | undefined>(
+    state => state.userState.user,
+    shallowEqual,
+  );
+  const anonymous = useSelector<RootState, boolean>(
+    state => state.userState.anonymous,
+    shallowEqual,
+  );
 
   const {loadExperience, removeExperience, unsubscribeExperience, subscribeExperience} =
     useExperienceHook();
   const {list: experiences, limitExceeded} = useExperienceList(owner);
-  const enqueueSnackbar = useEnqueueSnackbar();
 
   const handleViewPostList = (type: TimelineType, userExperience: WrappedExperience) => {
     if (filterTimeline) {

@@ -20,9 +20,8 @@ import {
   KusamaNetworkIcon,
 } from 'src/components/atoms/Icons';
 import ShowIf from 'src/components/common/show-if.component';
-import {NetworkIdEnum} from 'src/interfaces/network';
+import {NetworkIdEnum, TipResult} from 'src/interfaces/network';
 import {UserWallet} from 'src/interfaces/user';
-import {TipResult} from 'src/lib/services/polkadot-js';
 import i18n from 'src/locale';
 
 type TipProps = {

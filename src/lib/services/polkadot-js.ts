@@ -15,6 +15,7 @@ import {SignRawException} from './errors/SignRawException';
 
 import {BalanceDetail} from 'src/interfaces/balance';
 import {Currency, CurrencyId} from 'src/interfaces/currency';
+import {TipBalanceInfo, TipResult} from 'src/interfaces/network';
 import {UserWallet} from 'src/interfaces/user';
 import {WalletDetail, WalletReferenceType} from 'src/interfaces/wallet';
 
@@ -373,21 +374,6 @@ const listenToTokenBalanceChange = async (
     },
   );
 };
-
-interface TipBalanceInfo {
-  serverId: string;
-  referenceType: string;
-  referenceId: string;
-  ftIdentifier: string;
-}
-
-export interface TipResult {
-  tipsBalanceInfo: TipBalanceInfo;
-  accountId: string;
-  amount: string;
-  symbol: string;
-  imageURL: string;
-}
 
 export const getClaimTip = async (
   {serverId, referenceType, referenceId, ftIdentifier}: TipBalanceInfo,
