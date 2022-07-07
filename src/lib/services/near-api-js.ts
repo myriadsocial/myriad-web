@@ -5,8 +5,9 @@ import {numberToHex} from '@polkadot/util/number';
 import {u8aToHex} from '@polkadot/util/u8a';
 
 import assign from 'lodash/assign';
-import nearAPI, {ConnectConfig} from 'near-api-js';
-import {Signature} from 'near-api-js/lib/utils/key_pair';
+import * as nearAPI from 'near-api-js';
+import type {ConnectConfig} from 'near-api-js';
+import type {Signature} from 'near-api-js/lib/utils/key_pair';
 import {formatBalance} from 'src/helpers/balance';
 import {NetworkIdEnum} from 'src/interfaces/network';
 import {WalletTypeEnum} from 'src/interfaces/wallet';

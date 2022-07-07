@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 import Typography from '@material-ui/core/Typography';
 
+import {ExperienceInfo} from '../ExperienceInfo/ExperienceInfo';
 import {PostSubHeaderProps} from './SubHeader.interface';
 import {useStyles} from './SubHeader.style';
 
@@ -19,6 +20,8 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
   totalImporters,
   url,
   onShowImporters,
+  totalExperience,
+  experiences,
 }) => {
   const style = useStyles();
 
@@ -48,14 +51,14 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
                 </span>
               ))}
               <ShowIf condition={importers.length === 0}>
-                <span className={style.link} style={{cursor: 'pointer'}} onClick={onShowImporters}>
+                <span className={style.link} onClick={onShowImporters}>
                   {totalImporters}&nbsp;
                   <ShowIf condition={totalImporters === 1}>{i18n.t('Post_Detail.other')}</ShowIf>
                   <ShowIf condition={totalImporters > 1}>{i18n.t('Post_Detail.others')}</ShowIf>
                 </span>
               </ShowIf>
               <ShowIf condition={importers.length > 0 && totalImporters > importers.length}>
-                <span className={style.link} style={{cursor: 'pointer'}} onClick={onShowImporters}>
+                <span className={style.link} onClick={onShowImporters}>
                   {totalImporters - importers.length}&nbsp;
                   <ShowIf condition={totalImporters - importers.length === 1}>
                     {i18n.t('Post_Detail.other')}
@@ -71,6 +74,13 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
               </a>
             </>
           )}
+        </ShowIf>
+        <ShowIf condition={totalExperience > 0}>
+          <ExperienceInfo
+            postId={postId}
+            totalExperience={totalExperience}
+            experiences={experiences}
+          />
         </ShowIf>
       </Typography>
     </>

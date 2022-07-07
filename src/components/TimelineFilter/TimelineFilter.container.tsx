@@ -49,26 +49,32 @@ export const TimelineFilterContainer: React.FC<TimelineFilterContainerProps> = p
     setTimelineOrder(filter.order);
   };
 
-  const handleOrderTimeline = useCallback((order: TimelineOrderType) => {
-    push('order', order);
-  }, []);
+  const handleOrderTimeline = useCallback(
+    (order: TimelineOrderType) => {
+      push('order', order);
+    },
+    [query],
+  );
 
-  const handleFilterTimeline = useCallback((type: TimelineType) => {
-    dispatch(clearTimeline());
+  const handleFilterTimeline = useCallback(
+    (type: TimelineType) => {
+      dispatch(clearTimeline());
 
-    // automatically select first experience as timeline filter
-    if (type === TimelineType.EXPERIENCE && experiences.length > 0) {
-      replace({
-        path: 'home',
-        query: {
-          type,
-          id: experiences[0].experience.id,
-        },
-      });
-    } else {
-      push('type', type, true);
-    }
-  }, []);
+      // automatically select first experience as timeline filter
+      if (type === TimelineType.EXPERIENCE && experiences.length > 0) {
+        replace({
+          path: 'home',
+          query: {
+            type,
+            id: experiences[0].experience.id,
+          },
+        });
+      } else {
+        push('type', type, true);
+      }
+    },
+    [query],
+  );
 
   return (
     <>

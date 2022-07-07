@@ -474,6 +474,13 @@
     "Debate": {
       "Title": "Дебаты",
       "Text_Placeholder": "Ваш голос будет учтен после публикации комментария к этой записи"
+    },
+    "Experience": {
+      "Added": "added to",
+      "And": "and",
+      "Other_Exp": "{{number}} other experiences",
+      "Modal_Title": "Post in Experience",
+      "Modal_Sub": "This post is already added to this experience"
     }
   },
   "Post_Create": {

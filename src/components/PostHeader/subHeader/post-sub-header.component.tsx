@@ -30,11 +30,9 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
     <>
       <Typography component="div" className={style.root}>
         <ShowIf condition={platform !== 'myriad'}>{i18n.t('Post_Detail.Imported_Post')} </ShowIf>
-
         <Link href={`/post/[postId]`} as={`/post/${postId}`} shallow prefetch={false}>
           <a className={style.linkGrey}>{timeAgo(date)}&nbsp;</a>
         </Link>
-
         <ShowIf condition={platform !== 'myriad'}>
           {totalImporters > 0 && (
             <>
@@ -54,20 +52,14 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
                 </span>
               ))}
               <ShowIf condition={importers.length === 0}>
-                <span
-                  className={style.link}
-                  style={{cursor: 'pointer'}}
-                  onClick={handleImporterList}>
+                <span className={style.link} onClick={handleImporterList}>
                   {totalImporters}&nbsp;
                   <ShowIf condition={totalImporters === 1}>{i18n.t('Post_Detail.other')}</ShowIf>
                   <ShowIf condition={totalImporters > 1}>{i18n.t('Post_Detail.others')}</ShowIf>
                 </span>
               </ShowIf>
               <ShowIf condition={importers.length > 0 && totalImporters > importers.length}>
-                <span
-                  className={style.link}
-                  style={{cursor: 'pointer'}}
-                  onClick={handleImporterList}>
+                <span className={style.link} onClick={handleImporterList}>
                   {totalImporters - importers.length}&nbsp;
                   <ShowIf condition={totalImporters - importers.length === 1}>
                     {i18n.t('Post_Detail.other')}

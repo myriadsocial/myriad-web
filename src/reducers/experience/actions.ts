@@ -111,6 +111,33 @@ export const loadExperiences: ThunkActionCreator<Actions, RootState> =
     }
   };
 
+export const loadExperiencesAdded: ThunkActionCreator<Actions, RootState> =
+  (postId: string, callback: (postsExperiences: Experience[]) => void) =>
+  async (dispatch, getState) => {
+    try {
+      const {
+        userState: {user},
+      } = getState();
+      dispatch(setExperienceLoading(true));
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      const {data: experiences} = await ExperienceAPI.getExperiencesAdded(postId);
+
+      callback(experiences);
+    } catch (error) {
+      dispatch(
+        setError({
+          message: error.message,
+        }),
+      );
+    } finally {
+      dispatch(setExperienceLoading(false));
+    }
+  };
+
 export const loadExperiencesPostList: ThunkActionCreator<Actions, RootState> =
   (postId: string, callback: (postsExperiences: Experience[]) => void) =>
   async (dispatch, getState) => {

@@ -474,6 +474,13 @@
     "Debate": {
       "Title": "Debate",
       "Text_Placeholder": "Your downvote will be submitted after you post a comment"
+    },
+    "Experience": {
+      "Added": "added to",
+      "And": "and",
+      "Other_Exp": "{{number}} other experiences",
+      "Modal_Title": "Post in Experience",
+      "Modal_Sub": "This post is already added to this experience"
     }
   },
   "Post_Create": {

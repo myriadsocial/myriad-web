@@ -11,6 +11,7 @@ import {
   searchTags,
   cloneExperience,
   loadExperiences,
+  loadExperiencesAdded,
   loadExperiencesPostList,
   fetchPostsExperience,
   addPostsExperience,
@@ -62,6 +63,13 @@ export const useExperienceHook = () => {
 
   const loadExperience = () => {
     dispatch(loadExperiences());
+  };
+
+  const loadExperienceAdded = (
+    postId: string,
+    callback: (postsExperiences: Experience[]) => void,
+  ) => {
+    dispatch(loadExperiencesAdded(postId, callback));
   };
 
   const loadExperiencePostList = (
@@ -236,6 +244,7 @@ export const useExperienceHook = () => {
     tags,
     people,
     loadExperience,
+    loadExperienceAdded,
     loadExperiencePostList,
     addPostsToExperience,
     loadPostExperience,
