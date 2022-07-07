@@ -3,6 +3,8 @@ import React, {useCallback} from 'react';
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 
+import {useMediaQuery, useTheme} from '@material-ui/core';
+
 import {PostDetailProps} from './PostDetail.interface';
 import {useStyles} from './PostDetail.styles';
 import {PostFooter} from './render/Footer';
@@ -27,7 +29,8 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
 
   const router = useRouter();
   const styles = useStyles();
-  const mobile = false;
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
   const [hiddenContent, toggleHiddenContent] = useToggle(post.isNSFW);
 
@@ -117,8 +120,8 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           <SendTipButton
             reference={post}
             referenceType={ReferenceType.POST}
-            showIcon={mobile}
-            mobile={mobile}
+            showIcon={isMobile}
+            mobile={isMobile}
             variant="outlined"
             color="secondary"
             size="small"

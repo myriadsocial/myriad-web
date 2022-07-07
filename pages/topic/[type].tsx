@@ -1,4 +1,5 @@
 import React from 'react';
+import {useSelector} from 'react-redux';
 
 import {getSession} from 'next-auth/react';
 import getConfig from 'next/config';
@@ -7,14 +8,16 @@ import {useRouter} from 'next/router';
 
 import {capitalize} from '@material-ui/core';
 
-import {Timeline} from 'components/Timeline';
+import {PostsListContainer} from 'src/components/PostList';
 import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {Experience} from 'src/interfaces/experience';
 import {People} from 'src/interfaces/people';
+import {User} from 'src/interfaces/user';
 import {initialize} from 'src/lib/api/base';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import i18n from 'src/locale';
+import {RootState} from 'src/reducers';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
@@ -49,6 +52,8 @@ const Topic: React.FC<TopicPageProps> = ({experience}) => {
 
   const {type, tag} = query as TopicsQueryProps;
 
+  const user = useSelector<RootState, User>(state => state.userState.user);
+
   return (
     <DefaultLayout isOnProfilePage={false}>
       <Head>
@@ -62,7 +67,7 @@ const Topic: React.FC<TopicPageProps> = ({experience}) => {
         }
       />
 
-      <Timeline />
+      <PostsListContainer user={user} />
     </DefaultLayout>
   );
 };

@@ -4,25 +4,20 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       borderRadius: 10,
-      width: 644,
+      minWidth: 644,
       marginBottom: 12,
 
       [theme.breakpoints.down('md')]: {
-        width: 590,
+        minWidth: 590,
       },
 
       [theme.breakpoints.down('xs')]: {
-        maxWidth: 0,
+        minWidth: 0,
       },
     },
     content: {
       padding: '0 20px',
       wordBreak: 'break-word',
-      width: 644,
-
-      [theme.breakpoints.down('md')]: {
-        width: 590,
-      },
     },
     tags: {
       marginBottom: theme.spacing(1.5),
