@@ -5,6 +5,8 @@ import {People} from './people';
 import {PostOrigin} from './timeline';
 import {User} from './user';
 
+import {Experience} from 'src/interfaces/experience';
+
 export type ImageData = {
   src: string;
   width: number;
@@ -62,6 +64,8 @@ export type PostProps = {
   visibility: PostVisibility;
   deletedAt?: Date;
   totalImporter: number;
+  totalExperience: number;
+  experiences?: Experience[];
 };
 
 export type ImportPostProps = {

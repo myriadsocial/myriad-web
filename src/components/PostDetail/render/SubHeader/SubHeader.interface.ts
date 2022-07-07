@@ -1,3 +1,4 @@
+import {Experience} from 'src/interfaces/experience';
 import {User} from 'src/interfaces/user';
 
 export type PostSubheaderActionProps = {
@@ -11,4 +12,6 @@ export type PostSubHeaderProps = PostSubheaderActionProps & {
   importers?: User[];
   totalImporters: number;
   url: string;
+  totalExperience: number;
+  experiences?: Experience[];
 };

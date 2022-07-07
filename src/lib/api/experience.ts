@@ -297,3 +297,19 @@ export const addPostsExperience = async (
   });
   return data;
 };
+
+export const getExperiencesAdded = async (postId: string, page = 1): Promise<ExperienceList> => {
+  const {data} = await MyriadAPI().request<ExperienceList>({
+    url: `/posts/${postId}/experiences`,
+    method: 'GET',
+    params: {
+      pageNumber: page,
+      pageLimit: PAGINATION_LIMIT,
+      filter: {
+        include: [{relation: 'user'}],
+      },
+    },
+  });
+
+  return data;
+};

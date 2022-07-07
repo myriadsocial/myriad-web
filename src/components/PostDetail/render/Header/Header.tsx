@@ -151,6 +151,8 @@ export const PostHeader: React.FC<PostHeaderProps> = props => {
             url={post.url}
             totalImporters={post.totalImporter}
             onShowImporters={handleShowImporter}
+            totalExperience={post.totalExperience}
+            experiences={post.experiences}
           />
         }
         action={
