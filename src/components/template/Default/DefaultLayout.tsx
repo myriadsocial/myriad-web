@@ -16,6 +16,7 @@ import {CookieConsent, COOKIE_CONSENT_NAME} from 'src/components/common/CookieCo
 import {TippingProvider} from 'src/components/common/Tipping/Tipping.provider';
 import ShowIf from 'src/components/common/show-if.component';
 import {useUserHook} from 'src/hooks/use-user.hook';
+import {BalanceDetail} from 'src/interfaces/balance';
 import {NotificationProps} from 'src/interfaces/notification';
 import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
 import {firebaseApp, firebaseAnalytics, firebaseCloudMessaging} from 'src/lib/firebase';
@@ -58,11 +59,20 @@ const Default: React.FC<DefaultLayoutProps> = props => {
   const [cookies] = useCookies([COOKIE_CONSENT_NAME]);
   const {user, anonymous, currentWallet, updateUserFcmToken} = useUserHook();
 
-  const {balanceDetails, loading} = useSelector<RootState, BalanceState>(
+  const {balanceDetails, loading, currenciesId} = useSelector<RootState, BalanceState>(
     state => state.balanceState,
   );
 
   const [showNotification, setShowNotification] = useState(false);
+  const [filteredBalances, setFilteredBalanced] = useState<BalanceDetail[]>([]);
+
+  useEffect(() => {
+    const data: BalanceDetail[] = [];
+    balanceDetails.forEach(coin => {
+      data[currenciesId.indexOf(coin.id)] = coin;
+    });
+    setFilteredBalanced(data);
+  }, [currenciesId, balanceDetails]);
 
   useEffect(() => {
     initializeFirebase();
@@ -135,7 +145,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
     <TippingProvider
       loading={loading}
       anonymous={anonymous}
-      balances={balanceDetails}
+      balances={filteredBalances}
       sender={user}
       currentWallet={getWallet(currentWallet?.network?.blockchainPlatform)}
       currentNetwork={currentWallet?.networkId}>

@@ -43,13 +43,18 @@ export const getUserCurrencies = async (userId: string): Promise<UserCurrencyLis
   return data;
 };
 
-export const updateCurrencySet = async (userId: string, currenciesId: string[]): Promise<void> => {
+export const updateCurrencySet = async (
+  userId: string,
+  currenciesId: string[],
+  networkId: string,
+): Promise<void> => {
   await MyriadAPI().request({
     url: `/user-currencies`,
     method: 'PATCH',
     data: {
+      networkId: networkId,
       userId: userId,
-      currencies: currenciesId,
+      currencyIds: currenciesId,
     },
   });
 };
