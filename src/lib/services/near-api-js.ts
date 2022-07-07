@@ -221,12 +221,13 @@ export const getNearBalance = async (
   decimal?: number,
 ): Promise<NearBalanceProps> => {
   try {
-    const account = await near.account(nearAddress);
     if (contractId && decimal) {
       const contract = await contractInitialize(contractId);
       const contractBalance = await contract.ft_balance_of({account_id: nearAddress});
       return {balance: formatBalance(new BN(contractBalance), decimal).toString()};
     }
+
+    const account = await near.account(nearAddress);
     const balance = await account.getAccountBalance();
     return {balance: nearAPI.utils.format.formatNearAmount(balance.available)};
   } catch (error) {
