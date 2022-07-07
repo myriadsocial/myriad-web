@@ -14,7 +14,6 @@ import {PostImporter} from 'components/PostImporterList';
 import {PostVisibility} from 'components/PostVisibility';
 import useReport from 'components/Report/use-report.hook';
 import {TabsComponent} from 'components/atoms/Tabs';
-import {Text} from 'components/atoms/Text';
 import {useToggle} from 'src/hooks/use-toggle.hook';
 import {SectionType} from 'src/interfaces/interaction';
 import {Post, PostVisibility as Visibility} from 'src/interfaces/post';
@@ -118,11 +117,11 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
 
   const handleDeletePost = useCallback(() => {
     confirm({
-      title: <Text locale="Post_Delete.Title" />,
-      description: <Text locale="Post_Delete.Description" />,
+      title: i18n.t('Post_Delete.Title'),
+      description: i18n.t('Post_Delete.Description'),
       icon: 'danger',
-      confirmationText: <Text locale="Post_Delete.Confirmation_Text" />,
-      cancellationText: <Text locale="Post_Delete.Cancellation_Text" />,
+      confirmationText: i18n.t('Post_Delete.Confirmation_Text'),
+      cancellationText: i18n.t('Post_Delete.Cancellation_Text'),
       onConfirm: () => {
         dispatch(deletePost(post.id));
       },
