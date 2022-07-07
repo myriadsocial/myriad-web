@@ -2,7 +2,7 @@ import {ArrowCircleDownIcon} from '@heroicons/react/outline';
 import {ArrowCircleUpIcon} from '@heroicons/react/outline';
 
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {shallowEqual, useSelector} from 'react-redux';
 
 import BaseIconButton from '@material-ui/core/IconButton';
 import SvgIcon from '@material-ui/core/SvgIcon';
@@ -12,8 +12,8 @@ import {VoteProps} from './voting.interface';
 import {useStyles} from './voting.style';
 
 import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorizeAction';
+import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import debounce from 'lodash/debounce';
-import {PromptComponent} from 'src/components/Mobile/PromptDrawer/Prompt';
 import {formatCount} from 'src/helpers/number';
 import {RootState} from 'src/reducers';
 
@@ -30,14 +30,19 @@ export const VotingComponent: React.FC<VoteProps> = props => {
     isUpVoted,
     disabled = false,
   } = props;
-  const anonymous = useSelector<RootState, boolean>(state => state.userState.anonymous);
-  const [openPromptDrawer, setOpenPromptDrawer] = React.useState(false);
+  const confirm = useConfirm();
+
+  const anonymous = useSelector<RootState, boolean>(
+    state => state.userState.anonymous,
+    shallowEqual,
+  );
 
   const style = useStyles({variant, size});
 
   const handleUpVote = debounce(() => {
+    console.log('WAIT upvote');
     if (anonymous) {
-      setOpenPromptDrawer(true);
+      openVoteAlert();
     } else {
       onUpvote();
     }
@@ -45,14 +50,18 @@ export const VotingComponent: React.FC<VoteProps> = props => {
 
   const handleDownVote = debounce(() => {
     if (anonymous) {
-      setOpenPromptDrawer(true);
+      openVoteAlert();
     } else {
       onDownVote();
     }
   }, 300);
 
-  const handleCancel = () => {
-    setOpenPromptDrawer(false);
+  const openVoteAlert = () => {
+    confirm({
+      title: 'Vote',
+      description: 'You can upvote or downvote on posts and comment.',
+      hideCancel: true,
+    });
   };
 
   return (
@@ -79,12 +88,6 @@ export const VotingComponent: React.FC<VoteProps> = props => {
           />
         </IconButton>
       </div>
-      <PromptComponent
-        title={'Vote'}
-        subtitle={'You can upvote or downvote on posts and comment.'}
-        open={openPromptDrawer}
-        onCancel={handleCancel}
-      />
     </div>
   );
 };
