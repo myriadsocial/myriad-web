@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'VERSION'
-        required: true 
+        description: "VERSION"
+        required: true
         type: string
 
 concurrency:
@@ -40,7 +40,7 @@ jobs:
           signoff: false
           branch: bump-version
           delete-branch: true
-          title: 'bump version'
+          title: "bump version to ${{ steps.version.outputs.release_version }}"
           body: bump version
           labels: Document
           assignees: ${{ github.actor }}
