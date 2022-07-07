@@ -56,5 +56,26 @@ export const useStyles = makeStyles((theme: Theme) =>
       height: '32px',
       width: '32px',
     },
+    contentReference: {
+      marginTop: 22,
+      background: '#F6F7FC',
+      padding: 20,
+      height: 237,
+      justifyContent: 'center',
+      alignItems: 'center',
+      display: 'flex',
+      flexDirection: 'column',
+      borderRadius: 20,
+    },
+    title: {
+      fontWeight: 700,
+      marginBottom: 8,
+    },
+    desc: {
+      textAlign: 'center',
+      marginBottom: 24,
+      marginLeft: 30,
+      marginRight: 30,
+    },
   }),
 );
