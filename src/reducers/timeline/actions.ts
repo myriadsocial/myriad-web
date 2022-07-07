@@ -231,11 +231,11 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
     const {
       profileState: {friendStatus},
       userState: {user},
+      timelineState,
     } = getState();
 
     try {
-      const {timelineState, userState} = getState();
-      const userId = userState.user?.id as string;
+      const userId = user?.id as string;
       const timelineType = type ?? timelineState.type;
       const timelineFilter = filters ?? timelineState.filters;
 
@@ -634,16 +634,22 @@ export const updatePostMetric: ThunkActionCreator<Actions, RootState> =
 
 export const checkNewTimeline: ThunkActionCreator<Actions, RootState> =
   (callback: (diff: number) => void) => async (_, getState) => {
+    let asFriend = false;
+
     const {
+      profileState: {friendStatus},
       userState: {user},
-      timelineState: {meta},
+      timelineState: {filters, type, meta},
     } = getState();
 
     try {
-      const {meta: newMeta} = await PostAPI.getPost(1, user.id, TimelineType.ALL, {
-        sort: 'DESC',
-        order: TimelineOrderType.LATEST,
-      });
+      const userId = user?.id as string;
+
+      if (user && (filters?.fields?.owner || filters?.fields?.importer)) {
+        asFriend = friendStatus?.status === FriendStatus.APPROVED;
+      }
+
+      const {meta: newMeta} = await PostAPI.getPost(1, userId, type, filters, asFriend);
 
       const diffItemCount = newMeta.totalItemCount - meta.totalItemCount;
 
