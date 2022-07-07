@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
     inputs:
       release:
-        description: 'RELEASE'
-        required: true 
+        description: "RELEASE"
+        required: true
         type: string
 
 concurrency:

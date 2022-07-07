@@ -4,12 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       tags:
-        description: 'TAGS'
-        required: true 
+        description: "TAGS"
+        required: true
         type: string
       commit_sha:
-        description: 'COMMIT_SHA'
-        required: false 
+        description: "COMMIT_SHA"
+        required: false
         type: string
 
 concurrency:
@@ -66,7 +66,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           toTag: ${{ steps.commit-sha.outputs.release_tags }}
-          configuration: '.github/workflows/rcb_config.json'
+          configuration: ".github/workflows/rcb_config.json"
       - name: Create draft release
         uses: softprops/action-gh-release@v1
         with:
