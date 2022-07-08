@@ -8,15 +8,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       border: '1px solid #F6F6F6',
       borderRadius: 10,
 
-      [theme.breakpoints.down('xs')]: {
-        width: '100%',
-      },
-
       '& .MuiSvgIcon-root': {
         fill: 'currentColor',
       },
 
       [theme.breakpoints.down('xs')]: {
+        width: '100%',
         '& .slate-ToolbarButton:not(.slate-ToolbarButton-active):hover': {
           color: 'inherit!important',
         },
