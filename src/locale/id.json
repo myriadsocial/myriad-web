@@ -247,10 +247,6 @@
         "Subtitle": "Anda tidak dapat melihat postingan mereka atau mengirimi mereka permintaan pertemanan."
       }
     },
-    "Banned": {
-      "Title": "Akun telah diblokir",
-      "Description": "Akun ini telah diblokir oleh Myriad karena melanggar <policy>kebijakan privasi</policy>."
-    },
     "Header": {
       "Tooltip": {
         "Official": "Akun Resmi"
@@ -295,6 +291,10 @@
         "Friends": "Teman",
         "Experience": "Pengalaman"
       }
+    },
+    "Banned": {
+      "Title": "Akun telah diblokir",
+      "Description": "Akun ini telah diblokir oleh Myriad karena melanggar <policy>kebijakan privasi</policy>."
     },
     "Edit": {
       "Title": "Ubah Profil",
