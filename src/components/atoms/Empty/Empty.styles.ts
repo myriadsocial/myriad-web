@@ -12,13 +12,16 @@ export const useStyles = makeStyles<Theme, EmptyProps>(theme =>
       alignItems: 'center',
       justifyContent: 'center',
       textAlign: 'center',
-      height: '335px',
+      height: props => (props.height ? undefined : '335px'),
       width: '100%',
     },
     title: {
       marginTop: props => (props.margin ? 54 : 0),
       fontWeight: 700,
       marginBottom: props => (props.margin ? 12 : 0),
+    },
+    subtitle: {
+      marginTop: props => (props.margin === false ? 12 : 0),
     },
   }),
 );
