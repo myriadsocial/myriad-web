@@ -28,21 +28,31 @@ export const useTipHistory = (reference: Post | Comment | User, referenceType: R
   } = useSelector<RootState, TipSummaryState>(state => state.tipSummaryState);
   const disabled = user?.id === reference?.id;
 
-  const handleSortTransaction = useCallback((sort: TransactionSort) => {
-    dispatch(setTransactionSort(sort));
+  const handleSortTransaction = useCallback(
+    (sort: TransactionSort) => {
+      dispatch(setTransactionSort(sort));
 
-    dispatch(fetchTransactionHistory(reference, referenceType));
-  }, []);
+      dispatch(fetchTransactionHistory(reference, referenceType));
+    },
+    [reference, referenceType],
+  );
 
-  const handleFilterTransaction = useCallback((currency: string) => {
-    dispatch(setTransactionCurrency(currency));
+  const handleFilterTransaction = useCallback(
+    (currency: string) => {
+      dispatch(setTransactionCurrency(currency));
 
-    dispatch(fetchTransactionHistory(reference, referenceType));
-  }, []);
+      dispatch(fetchTransactionHistory(reference, referenceType));
+    },
+    [reference, referenceType],
+  );
+
+  const initHistory = useCallback(() => {
+    dispatch(fetchTransactionHistory(reference, referenceType, 1));
+  }, [reference, referenceType]);
 
   const handleLoadNextPage = useCallback(() => {
     dispatch(fetchTransactionHistory(reference, referenceType, currentPage + 1));
-  }, []);
+  }, [reference, referenceType]);
 
   return {
     hasMore,
@@ -53,5 +63,6 @@ export const useTipHistory = (reference: Post | Comment | User, referenceType: R
     handleSortTransaction,
     handleFilterTransaction,
     handleLoadNextPage,
+    initHistory,
   };
 };

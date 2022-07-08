@@ -67,7 +67,7 @@ const Topic: React.FC<TopicPageProps> = ({experience}) => {
         }
       />
 
-      <PostsListContainer user={user} />
+      <PostsListContainer user={user} query={query} />
     </DefaultLayout>
   );
 };
@@ -122,6 +122,14 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   await dispatch(fetchUserExperience());
 
   let experience: Experience | null = null;
+
+  if (query.type === 'hashtag' && query.tag) {
+    await dispatch(
+      updateFilter({
+        tags: Array.isArray(query.tag) ? query.tag : [query.tag],
+      }),
+    );
+  }
 
   if (query.type === 'experience') {
     if (!query.id) {

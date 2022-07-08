@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import {TipHistory} from './TipHistory';
 
@@ -22,10 +22,15 @@ export const TipHistoryContainer: React.FC<TipHistoryContainerProps> = props => 
     disabled,
     availableCurrencies,
     transactions,
+    initHistory,
     handleFilterTransaction,
     handleSortTransaction,
     handleLoadNextPage,
   } = useTipHistory(reference, referenceType);
+
+  useEffect(() => {
+    initHistory();
+  }, []);
 
   return (
     <TipHistory
