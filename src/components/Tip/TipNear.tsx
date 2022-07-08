@@ -1,25 +1,25 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
+import {TipTotalNear} from '../TotalTips/TipTotalNear';
 import {useStyles} from './tip.style';
 
 import {NearNetworkIcon24} from 'src/components/atoms/Icons';
+import {TotalTipsDataInterface} from 'src/interfaces/network';
 import i18n from 'src/locale';
 
-type TipNearProps = {};
+type TipNearProps = {
+  handleVerifyReference: () => void;
+  handleClaimAll: () => void;
+  totalTipsData: Array<TotalTipsDataInterface>;
+};
 
 export const TipNear: React.FC<TipNearProps> = props => {
+  const {handleVerifyReference, totalTipsData, handleClaimAll} = props;
   const style = useStyles();
-
-  const handleClaimAll = () => {
-    return undefined;
-  };
-
-  const handleVerifyReference = () => {
-    return undefined;
-  };
+  const [isShowModalTotalTips, setIsShowModalTotalTips] = useState<boolean>(false);
 
   return (
     <>
@@ -49,7 +49,22 @@ export const TipNear: React.FC<TipNearProps> = props => {
         <Button onClick={handleVerifyReference} size="small" color="primary" variant="contained">
           {i18n.t('Wallet.Tip.Reference.Button')}
         </Button>
+        <div style={{marginTop: 8}}>
+          <Button
+            onClick={() => setIsShowModalTotalTips(true)}
+            size="small"
+            color="primary"
+            variant="text">
+            View total Tips
+          </Button>
+        </div>
       </div>
+      <TipTotalNear
+        handleVerifyReference={handleVerifyReference}
+        totalTipsData={totalTipsData}
+        open={isShowModalTotalTips}
+        onClose={() => setIsShowModalTotalTips(false)}
+      />
     </>
   );
 };

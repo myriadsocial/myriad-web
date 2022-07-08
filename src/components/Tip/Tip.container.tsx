@@ -4,6 +4,7 @@ import {useSelector} from 'react-redux';
 import {BoxComponent} from '../atoms/Box';
 import {ShimerComponent} from './Shimer';
 import {Tip} from './Tip';
+import {TipNear} from './TipNear';
 
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {Empty} from 'src/components/atoms/Empty';
@@ -62,8 +63,36 @@ export const TipContainer: React.FC = () => {
     return false;
   };
 
+  const handleVerifyReference = () => {
+    return undefined;
+  };
+  const handleClaimAll = () => {
+    return undefined;
+  };
+
+  const totalTipsData = tipsEachNetwork
+    .filter(item => item.chainId === 'testnet')
+    .map(item => {
+      return item.tips;
+    });
+
+  const isShowVerifyReference = () => {
+    if (totalTipsData[0].find(item => item.accountId === null && item.amount !== '0.000'))
+      return true;
+    return false;
+  };
+
   return (
     <>
+      <ShowIf condition={isShowVerifyReference()}>
+        <BoxComponent isWithChevronRightIcon={false} marginTop={'30px'}>
+          <TipNear
+            handleVerifyReference={handleVerifyReference}
+            totalTipsData={totalTipsData[0]}
+            handleClaimAll={handleClaimAll}
+          />
+        </BoxComponent>
+      </ShowIf>
       {tipsEachNetwork.map(network => (
         <>
           <ShowIf condition={loading}>

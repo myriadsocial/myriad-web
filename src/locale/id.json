@@ -1028,7 +1028,7 @@
       "Switch": "Ganti network untuk mengklaim",
       "Reference":{
         "Title": "Verifikasi referensi",
-        "Desc": "Verifikasi referensi Anda dan mulailah mengklaim tip Anda. Untuk diproses, Anda perlu membayar biaya gas maksimum 0,01 NEAR.",
+        "Desc": "Verifikasi referensi Anda dan mulailah mengklaim tip Anda. Untuk diproses, Anda perlu membayar biaya gas maksimum 0,03 NEAR.",
         "Button": "Verifikasi referensi"
       }
     },

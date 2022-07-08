@@ -5,7 +5,9 @@ import getConfig from 'next/config';
 
 import BN from 'bn.js';
 import * as nearAPI from 'near-api-js';
+import {NetworkIdEnum} from 'src/interfaces/network';
 import {BlockchainPlatform, WalletDetail, WalletReferenceType} from 'src/interfaces/wallet';
+import * as networkAPI from 'src/lib/api/network';
 import {
   nearInitialize,
   connectToNearWallet,
@@ -174,10 +176,82 @@ export const useNearApi = () => {
     await account.signAndSendTransaction({receiverId, actions});
   };
 
+  const payTransactionFee = async ({
+    serverId,
+    referenceId,
+  }: {
+    serverId: string;
+    referenceId: string;
+  }) => {
+    const tippingContractId = publicRuntimeConfig.nearTippingContractId;
+    const tipsBalanceInfo = {
+      server_id: serverId,
+      reference_type: 'user',
+      reference_id: referenceId,
+      ft_identifier: 'native',
+    };
+    //call rpc near
+    const {rpcURL} = await networkAPI.getNetwork(NetworkIdEnum.NEAR);
+    //call api near
+    const provider = new nearAPI.providers.JsonRpcProvider({url: rpcURL});
+
+    const data = JSON.stringify({tips_balance_info: tipsBalanceInfo});
+
+    const buff = Buffer.from(data);
+
+    const base64Data = buff.toString('base64');
+    // gas price
+    const [{gas_price}, rawResult] = await Promise.all([
+      provider.gasPrice(null),
+      provider.query({
+        request_type: 'call_function',
+        account_id: tippingContractId,
+        method_name: 'get_tips_balance',
+        args_base64: base64Data,
+        finality: 'final',
+      }),
+    ]);
+
+    const result = JSON.parse(Buffer.from((rawResult as any).result).toString());
+
+    const tipBalance = result?.tips_balance;
+    if (!tipBalance) {
+      //handle error
+    }
+
+    const amount = tipBalance.amount;
+    const gasFee = 300000000000000;
+
+    const transactionFee = BigInt(gasFee) * BigInt(gas_price);
+
+    if (BigInt(amount) > transactionFee) {
+      return transactionFee.toString();
+    }
+    //inisialisasi near wallet
+    const {wallet} = await nearInitialize();
+    const account = wallet.account();
+    const action = [
+      nearAPI.transactions.functionCall(
+        'send_tip',
+        Buffer.from(data),
+        new BN(gasFee.toString()),
+        new BN(transactionFee.toString()),
+      ),
+    ];
+    // @ts-ignore: protected class
+    await account.signAndSendTransaction({
+      receiverId: tippingContractId,
+      action,
+    });
+
+    return transactionFee.toString();
+  };
+
   return {
     connectToNear,
     getEstimatedFee,
     sendAmount,
     balanceDetails,
+    payTransactionFee,
   };
 };
