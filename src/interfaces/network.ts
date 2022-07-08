@@ -42,3 +42,19 @@ export type Network = NetworkProps &
     currencies: Currency[];
     tips: TipResult[];
   };
+
+export interface TipsBalanceInfo {
+  ftIdentifier: string;
+  referenceId: string;
+  referenceType: string;
+  serverId: string;
+}
+export interface TotalTipsDataInterface {
+  accountId: string | null;
+  amount: string | number;
+  imageURL: string;
+  symbol: string;
+  tipsBalanceInfo: TipsBalanceInfo;
+  image?: string;
+  id?: string;
+}

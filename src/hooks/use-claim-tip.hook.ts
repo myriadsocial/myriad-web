@@ -80,6 +80,7 @@ export const useClaimTip = () => {
 
           case NetworkIdEnum.NEAR: {
             const {serverId, referenceId} = tipBalanceInfo;
+
             const referenceIds = socials.map(social => social.peopleId);
             const {data} = await getClaimTipNear(serverId, referenceId, referenceIds);
             if (data.length === 0) return network;

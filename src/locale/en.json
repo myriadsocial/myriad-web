@@ -1020,7 +1020,12 @@
       },
       "Claim_All": "Claim all",
       "Claim": "Claim",
-      "Switch": "Switch network to claim"
+      "Switch": "Switch network to claim",
+      "Reference":{
+        "Title": "Reference verification",
+        "Desc": "Verify your reference and start claiming your tips. To be processed, you need to pay a maximum gas fee of 0.03 NEAR.",
+        "Button": "Verify reference"
+      }
     },
     "Manage": {
       "Alert": {

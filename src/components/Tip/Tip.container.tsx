@@ -7,21 +7,25 @@ import {useRouter} from 'next/router';
 import {BoxComponent} from '../atoms/Box';
 import {ShimerComponent} from './Shimer';
 import {Tip} from './Tip';
+import {TipNear} from './TipNear';
 
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {Empty} from 'src/components/atoms/Empty';
 import ShowIf from 'src/components/common/show-if.component';
 import {useClaimTip} from 'src/hooks/use-claim-tip.hook';
+import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {Network, NetworkIdEnum} from 'src/interfaces/network';
+import {claimReference} from 'src/lib/api/claim-reference';
+import {getServerId} from 'src/lib/api/wallet';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
-const {publicRuntimeConfig} = getConfig();
-
 export const TipContainer: React.FC = () => {
   const router = useRouter();
-  const {currentWallet} = useSelector<RootState, UserState>(state => state.userState);
+  const {publicRuntimeConfig} = getConfig();
+  const {currentWallet, user} = useSelector<RootState, UserState>(state => state.userState);
+  const {payTransactionFee} = useNearApi();
   const {loading, claiming, claimingAll, tipsEachNetwork, claim, claimAll} = useClaimTip();
   const enqueueSnackbar = useEnqueueSnackbar();
   const transactionHashes = router.query.transactionHashes as string | null;
@@ -45,11 +49,19 @@ export const TipContainer: React.FC = () => {
       });
     }
 
+    if (txFee && !errorCode && !errorMessage) {
+      claimReferenceFunction().catch(e => console.log('error', e));
+    }
+
     const url = new URL(router.asPath, publicRuntimeConfig.appAuthURL);
 
     url.search = '';
     router.replace(url, undefined, {shallow: true});
   }, [errorCode, transactionHashes, errorMessage, txFee]);
+
+  useEffect(() => {
+    isShowVerifyReference();
+  }, [tipsEachNetwork]);
 
   const handleClaimTip = (networkId: string, ftIdentifier: string) => {
     claim(networkId, ftIdentifier, ({claimSuccess, errorMessage}) => {
@@ -84,8 +96,57 @@ export const TipContainer: React.FC = () => {
     return false;
   };
 
+  const handleVerifyReference = async () => {
+    if (!currentWallet?.networkId) return;
+    if (!user?.id) return;
+    const dataServerId = await getServerId(currentWallet?.networkId);
+
+    const dataTransactionFee = await payTransactionFee({
+      referenceId: user?.id,
+      serverId: dataServerId,
+    });
+    await claimReference({
+      tippingContractId: publicRuntimeConfig.nearTippingContractId,
+      txFee: dataTransactionFee,
+    });
+  };
+
+  const handleClaimAll = () => {
+    return undefined;
+  };
+
+  const totalTipsData = tipsEachNetwork
+    .filter(item => item.chainId === 'testnet')
+    .map(item => {
+      return item.tips;
+    });
+
+  const isShowVerifyReference = () => {
+    if (totalTipsData[0].find(item => item.accountId === null && item.amount !== '0.000'))
+      return true;
+    return false;
+  };
+
+  const claimReferenceFunction = async () => {
+    await claimReference({
+      tippingContractId: publicRuntimeConfig.nearTippingContractId,
+      txFee: txFee,
+    });
+  };
+
+  console.log('tipsEachNetwork', tipsEachNetwork);
+
   return (
     <>
+      <ShowIf condition={isShowVerifyReference()}>
+        <BoxComponent isWithChevronRightIcon={false} marginTop={'30px'}>
+          <TipNear
+            handleVerifyReference={handleVerifyReference}
+            totalTipsData={totalTipsData[0]}
+            handleClaimAll={handleClaimAll}
+          />
+        </BoxComponent>
+      </ShowIf>
       {tipsEachNetwork.map(network => (
         <>
           <ShowIf condition={loading}>
@@ -101,7 +162,7 @@ export const TipContainer: React.FC = () => {
               />
             </div>
           </ShowIf>
-          <ShowIf condition={!!tipWithBalances(network).length}>
+          <ShowIf condition={!!tipWithBalances(network).length && !isShowVerifyReference()}>
             <BoxComponent isWithChevronRightIcon={false} marginTop={'20px'}>
               <ShowIf condition={claimingAll}>
                 <ShowIf condition={isShow(network)}>

@@ -1020,7 +1020,12 @@
       },
       "Claim_All": "Klaim Semua",
       "Claim": "Klaim",
-      "Switch": "Ganti network untuk mengklaim"
+      "Switch": "Ganti network untuk mengklaim",
+      "Reference":{
+        "Title": "Verifikasi referensi",
+        "Desc": "Verifikasi referensi Anda dan mulailah mengklaim tip Anda. Untuk diproses, Anda perlu membayar biaya gas maksimum 0,03 NEAR.",
+        "Button": "Verifikasi referensi"
+      }
     },
     "Manage": {
       "Alert": {
