@@ -49,8 +49,6 @@ export const TipTotalNear: React.FC<TipTotalNearProps> = props => {
     onClose();
   };
 
-  console.log('totalTipsData', totalTipsData);
-
   return (
     <Modal
       fullScreen={isMobile}
@@ -69,7 +67,7 @@ export const TipTotalNear: React.FC<TipTotalNearProps> = props => {
                     <TableCell component="th" scope="row" className={styles.tableCell}>
                       <Avatar
                         name={balanceDetail.symbol}
-                        src={balanceDetail.image}
+                        src={balanceDetail.imageURL}
                         size={AvatarSize.MEDIUM}
                       />
                       <Typography variant="h5" color="textPrimary">

@@ -216,7 +216,6 @@ export const useNearApi = () => {
 
     const tipBalance = result?.tips_balance;
     if (!tipBalance) {
-      //handle error
     }
 
     const amount = tipBalance.amount;
@@ -230,7 +229,7 @@ export const useNearApi = () => {
     //inisialisasi near wallet
     const {wallet} = await nearInitialize();
     const account = wallet.account();
-    const action = [
+    const actions = [
       nearAPI.transactions.functionCall(
         'send_tip',
         Buffer.from(data),
@@ -238,10 +237,14 @@ export const useNearApi = () => {
         new BN(transactionFee.toString()),
       ),
     ];
+    console.log(tipBalance);
+    const appAuthURL = publicRuntimeConfig.appAuthURL;
+    const walletCallbackUrl = `${appAuthURL}/wallet?type=tip&txFee=${transactionFee.toString()}`;
     // @ts-ignore: protected class
     await account.signAndSendTransaction({
       receiverId: tippingContractId,
-      action,
+      actions,
+      walletCallbackUrl,
     });
 
     return transactionFee.toString();
