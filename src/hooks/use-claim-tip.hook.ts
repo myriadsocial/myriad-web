@@ -40,6 +40,7 @@ export const useClaimTip = () => {
   const getTip = async () => {
     if (!user) return;
     setLoading(true);
+    setTipsEachNetwork(networks);
 
     try {
       const promises = networks.map(async network => {

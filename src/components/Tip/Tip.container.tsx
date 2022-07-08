@@ -14,7 +14,7 @@ import {Empty} from 'src/components/atoms/Empty';
 import ShowIf from 'src/components/common/show-if.component';
 import {useClaimTip} from 'src/hooks/use-claim-tip.hook';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
-import {Network, NetworkIdEnum} from 'src/interfaces/network';
+import {Network, NetworkIdEnum, TipResult} from 'src/interfaces/network';
 import {claimReference} from 'src/lib/api/claim-reference';
 import {getServerId} from 'src/lib/api/wallet';
 import i18n from 'src/locale';
@@ -26,7 +26,7 @@ export const TipContainer: React.FC = () => {
   const {publicRuntimeConfig} = getConfig();
   const {currentWallet, user} = useSelector<RootState, UserState>(state => state.userState);
   const {payTransactionFee} = useNearApi();
-  const {loading, claiming, claimingAll, tipsEachNetwork, claim, claimAll} = useClaimTip();
+  const {loading, claiming, claimingAll, tipsEachNetwork, claim, claimAll, getTip} = useClaimTip();
   const enqueueSnackbar = useEnqueueSnackbar();
   const transactionHashes = router.query.transactionHashes as string | null;
   const errorCode = router.query.errorCode as string | null;
@@ -34,7 +34,7 @@ export const TipContainer: React.FC = () => {
   const txFee = router.query.txFee as string | null;
 
   useEffect(() => {
-    if (transactionHashes) {
+    if (!txFee && transactionHashes) {
       enqueueSnackbar({
         message: i18n.t('Wallet.Tip.Alert.Success'),
         variant: 'success',
@@ -50,7 +50,23 @@ export const TipContainer: React.FC = () => {
     }
 
     if (txFee && !errorCode && !errorMessage) {
-      claimReferenceFunction().catch(e => console.log('error', e));
+      claimReferenceFunction()
+        .then(() => {
+          enqueueSnackbar({
+            // TODO: Register Translation
+            message: 'Verifying Success',
+            variant: 'success',
+          });
+          return getTip();
+        })
+        .catch(e => {
+          enqueueSnackbar({
+            // TODO: Register Translation
+            message: e.message,
+            variant: 'error',
+          });
+          return getTip();
+        });
     }
 
     const url = new URL(router.asPath, publicRuntimeConfig.appAuthURL);
@@ -58,10 +74,6 @@ export const TipContainer: React.FC = () => {
     url.search = '';
     router.replace(url, undefined, {shallow: true});
   }, [errorCode, transactionHashes, errorMessage, txFee]);
-
-  useEffect(() => {
-    isShowVerifyReference();
-  }, [tipsEachNetwork]);
 
   const handleClaimTip = (networkId: string, ftIdentifier: string) => {
     claim(networkId, ftIdentifier, ({claimSuccess, errorMessage}) => {
@@ -99,54 +111,44 @@ export const TipContainer: React.FC = () => {
   const handleVerifyReference = async () => {
     if (!currentWallet?.networkId) return;
     if (!user?.id) return;
-    const dataServerId = await getServerId(currentWallet?.networkId);
 
-    const dataTransactionFee = await payTransactionFee({
-      referenceId: user?.id,
-      serverId: dataServerId,
-    });
-    await claimReference({
-      tippingContractId: publicRuntimeConfig.nearTippingContractId,
-      txFee: dataTransactionFee,
-    });
+    try {
+      const serverId = await getServerId(currentWallet?.networkId);
+      const txFee = await payTransactionFee({
+        referenceId: user?.id,
+        serverId,
+      });
+      await claimReference({
+        tippingContractId: publicRuntimeConfig.nearTippingContractId,
+        txFee,
+      });
+    } catch (error) {
+      // TODO: Register Translation
+      enqueueSnackbar({
+        message: error.message,
+        variant: 'error',
+      });
+    } finally {
+      getTip();
+    }
   };
 
-  const handleClaimAll = () => {
-    return undefined;
-  };
-
-  const totalTipsData = tipsEachNetwork
-    .filter(item => item.chainId === 'testnet')
-    .map(item => {
-      return item.tips;
-    });
-
-  const isShowVerifyReference = () => {
-    if (totalTipsData[0].find(item => item.accountId === null && item.amount !== '0.000'))
-      return true;
+  const isShowVerifyReference = (tips: TipResult[], networkId: string) => {
+    if (networkId !== NetworkIdEnum.NEAR) return false;
+    const tip = tips.find(e => e.accountId === null);
+    if (tip) return true;
     return false;
   };
 
   const claimReferenceFunction = async () => {
     await claimReference({
       tippingContractId: publicRuntimeConfig.nearTippingContractId,
-      txFee: txFee,
+      txFee,
     });
   };
 
-  console.log('tipsEachNetwork', tipsEachNetwork);
-
   return (
     <>
-      <ShowIf condition={isShowVerifyReference()}>
-        <BoxComponent isWithChevronRightIcon={false} marginTop={'30px'}>
-          <TipNear
-            handleVerifyReference={handleVerifyReference}
-            totalTipsData={totalTipsData[0]}
-            handleClaimAll={handleClaimAll}
-          />
-        </BoxComponent>
-      </ShowIf>
       {tipsEachNetwork.map(network => (
         <>
           <ShowIf condition={loading}>
@@ -162,13 +164,12 @@ export const TipContainer: React.FC = () => {
               />
             </div>
           </ShowIf>
-          <ShowIf condition={!!tipWithBalances(network).length && !isShowVerifyReference()}>
+          <ShowIf condition={!loading && !!tipWithBalances(network).length}>
             <BoxComponent isWithChevronRightIcon={false} marginTop={'20px'}>
               <ShowIf condition={claimingAll}>
-                <ShowIf condition={isShow(network)}>
+                {isShow(network) ? (
                   <ShimerComponent />
-                </ShowIf>
-                <ShowIf condition={!isShow(network)}>
+                ) : (
                   <Tip
                     loading={claiming}
                     tips={tipWithBalances(network)}
@@ -177,9 +178,9 @@ export const TipContainer: React.FC = () => {
                     onClaim={handleClaimTip}
                     onClaimAll={handleClaimTipAll}
                   />
-                </ShowIf>
+                )}
               </ShowIf>
-              <ShowIf condition={!claimingAll}>
+              <ShowIf condition={!claimingAll && !isShow(network)}>
                 <Tip
                   loading={claiming}
                   tips={tipWithBalances(network)}
@@ -188,6 +189,28 @@ export const TipContainer: React.FC = () => {
                   onClaim={handleClaimTip}
                   onClaimAll={handleClaimTipAll}
                 />
+              </ShowIf>
+              <ShowIf condition={!claimingAll && isShow(network)}>
+                {isShowVerifyReference(network.tips, network.id) ? (
+                  <>
+                    <TipNear
+                      handleVerifyReference={handleVerifyReference}
+                      totalTipsData={network.tips}
+                      handleClaimAll={console.log}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <Tip
+                      loading={claiming}
+                      tips={tipWithBalances(network)}
+                      networkId={network.id}
+                      currentWallet={currentWallet}
+                      onClaim={handleClaimTip}
+                      onClaimAll={handleClaimTipAll}
+                    />
+                  </>
+                )}
               </ShowIf>
             </BoxComponent>
           </ShowIf>
