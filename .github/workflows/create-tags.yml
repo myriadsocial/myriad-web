@@ -32,6 +32,9 @@ jobs:
           RELEASE_TAGS=${INPUT_TAGS##* }
           PRE_RELEASE=true
 
+          SHA_SHORT=$(git rev-parse --short HEAD)
+          LATEST_TAG=latest
+
           if [[ $COMMIT_SHA != "" ]]
           then
             CUSTOME_COMMIT_SHA=${{ inputs.commit_sha }}
@@ -50,6 +53,8 @@ jobs:
           echo "::set-output name=commit_sha::$CUSTOME_COMMIT_SHA"
           echo "::set-output name=release_tags::$RELEASE_TAGS"
           echo "::set-output name=pre_release::$PRE_RELEASE"
+          echo "::set-output name=sha_short::$SHA_SHORT"
+          echo "::set-output name=latest_tag::$LATEST_TAG"
       - name: create and push tag
         shell: bash
         run: |
@@ -59,6 +64,29 @@ jobs:
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             https://api.github.com/repos/${{ github.repository }}/git/refs \
             -d '{"ref":"refs/tags/${{ steps.commit-sha.outputs.release_tags }}","sha":"${{ steps.commit-sha.outputs.commit_sha }}"}'
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-main
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Docker image re-tag
+        uses: akhilerm/tag-push-action@v2.0.0
+        with:
+          src: ${{ github.repository }}:${{ steps.commit-sha.outputs.sha_short }}
+          dst: |
+            ${{ github.repository }}:${{ steps.commit-sha.outputs.release_tags }}
+            ${{ github.repository }}:${{ steps.commit-sha.outputs.latest_tags }}
       - name: Build changelog
         id: build_changelog
         uses: mikepenz/release-changelog-builder-action@v2
