@@ -35,11 +35,9 @@ jobs:
           echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
           version=${GITHUB_REF#refs/*/}
-          echo $version
           echo "::set-output name=latest_tag::$version"
 
           package_version=$(cat ./package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
-          echo $package_version
           echo "::set-output name=package_version::$package_version"
 
   deploy-beta-release:
@@ -111,7 +109,7 @@ jobs:
               --set-string image.tag=${{ needs.compute-build-info.outputs.sha_short }} \
               --set-string config.appEnvironment=${{ steps.secrets.outputs.WEB_APP_ENVIRONMENT }} \
               --set-string config.appName="${{ steps.secrets.outputs.WEB_APP_NAME }}" \
-              --set-string config.appVersion=${{ needs.compute-build-info.outputs.latest_tag }} \
+              --set-string config.appVersion=${{ needs.compute-build-info.outputs.package_version }} \
               --set-string config.appAuthURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
               --set-string config.appSecret=${{ steps.secrets.outputs.WEB_APP_SECRET }} \
               --set-string config.websiteURL=${{ steps.secrets.outputs.WEBSITE_URL }} \

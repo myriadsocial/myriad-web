@@ -25,5 +25,8 @@ export const useStyles = makeStyles<Theme, SendTipButtonProps>(theme =>
       top: 'calc(50% - 7px)',
       right: 30,
     },
+    wrapperButton: {
+      marginTop: 32,
+    },
   }),
 );

@@ -57,8 +57,8 @@ export const TimelineFilterContainer: React.FC<TimelineFilterContainerProps> = p
   );
 
   const handleFilterTimeline = useCallback(
-    (type: TimelineType) => {
-      dispatch(clearTimeline());
+    async (type: TimelineType) => {
+      await dispatch(clearTimeline());
 
       // automatically select first experience as timeline filter
       if (type === TimelineType.EXPERIENCE && experiences.length > 0) {

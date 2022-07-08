@@ -14,58 +14,76 @@ import {Empty} from 'src/components/atoms/Empty';
 import ShowIf from 'src/components/common/show-if.component';
 import {useClaimTip} from 'src/hooks/use-claim-tip.hook';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
-import {Network} from 'src/interfaces/network';
+import {Network, NetworkIdEnum} from 'src/interfaces/network';
 import {claimReference} from 'src/lib/api/claim-reference';
 import {getServerId} from 'src/lib/api/wallet';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
-import {BalanceState} from 'src/reducers/balance/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const TipContainer: React.FC = () => {
   const router = useRouter();
+  const {publicRuntimeConfig} = getConfig();
   const {currentWallet, user} = useSelector<RootState, UserState>(state => state.userState);
-  const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
-  const {loading, claiming, tipsEachNetwork, claim, claimAll} = useClaimTip();
   const {payTransactionFee} = useNearApi();
+  const {loading, claiming, claimingAll, tipsEachNetwork, claim, claimAll} = useClaimTip();
   const enqueueSnackbar = useEnqueueSnackbar();
-
   const transactionHashes = router.query.transactionHashes as string | null;
   const errorCode = router.query.errorCode as string | null;
   const errorMessage = router.query.errorMessage as string | null;
   const txFee = router.query.txFee as string | null;
 
-  const {publicRuntimeConfig} = getConfig();
-
-  const handleClaimTip = (networkId: string, ftIdentifier: string) => {
-    const isNative = ftIdentifier === 'native';
-    const balanceGasClaim = balanceDetails.filter(
-      ar => ar.native === isNative && ar.networkId === networkId,
-    );
-    if (balanceGasClaim.length > 0) {
-      //TODO: get estimate fee gas from polkadot
-      if (balanceGasClaim[0].originBalance < 1) {
-        enqueueSnackbar({
-          message: i18n.t('Wallet.Tip.Alert.Insufficient'),
-          variant: 'warning',
-        });
-      } else {
-        claim(networkId, ftIdentifier, () => {
-          enqueueSnackbar({
-            message: i18n.t('Wallet.Tip.Alert.Success'),
-            variant: 'success',
-          });
-        });
-      }
-    }
-  };
-
-  const handleClaimTipAll = (networkId: string) => {
-    claimAll(networkId, () => {
+  useEffect(() => {
+    if (transactionHashes) {
       enqueueSnackbar({
         message: i18n.t('Wallet.Tip.Alert.Success'),
         variant: 'success',
       });
+    }
+
+    if (errorCode && errorMessage) {
+      enqueueSnackbar({
+        // TODO: Register Translation
+        message: decodeURI(errorMessage),
+        variant: 'warning',
+      });
+    }
+
+    if (txFee) {
+      claimReferenceFunction().catch(e => console.log('error', e));
+    }
+
+    const url = new URL(router.asPath, publicRuntimeConfig.appAuthURL);
+
+    url.search = '';
+    router.replace(url, undefined, {shallow: true});
+  }, [errorCode, transactionHashes, errorMessage, txFee]);
+
+  useEffect(() => {
+    isShowVerifyReference();
+  }, [tipsEachNetwork]);
+
+  const handleClaimTip = (networkId: string, ftIdentifier: string) => {
+    claim(networkId, ftIdentifier, ({claimSuccess, errorMessage}) => {
+      if (networkId === NetworkIdEnum.MYRIAD) {
+        // TODO: Register translation
+        const variant = claimSuccess ? 'success' : 'warning';
+        const message = claimSuccess ? i18n.t('Wallet.Tip.Alert.Success') : errorMessage;
+
+        enqueueSnackbar({message, variant});
+      }
+    });
+  };
+
+  const handleClaimTipAll = (networkId: string) => {
+    claimAll(networkId, ({claimSuccess, errorMessage}) => {
+      if (networkId === NetworkIdEnum.MYRIAD) {
+        // TODO: Register translation
+        const variant = claimSuccess ? 'success' : 'warning';
+        const message = claimSuccess ? i18n.t('Wallet.Tip.Alert.Success') : errorMessage;
+
+        enqueueSnackbar({message, variant});
+      }
     });
   };
 
@@ -118,21 +136,6 @@ export const TipContainer: React.FC = () => {
     });
   };
 
-  useEffect(() => {
-    if (txFee) {
-      claimReferenceFunction().catch(e => console.log('error', e));
-    }
-
-    const url = new URL(router.asPath, publicRuntimeConfig.appAuthURL);
-
-    url.search = '';
-    router.replace(url, undefined, {shallow: true});
-  }, [transactionHashes, errorCode, errorMessage, txFee]);
-
-  useEffect(() => {
-    isShowVerifyReference();
-  }, [tipsEachNetwork]);
-
   //ketika belum verify yan gbawah g muncul, loading, error message/ handling sebelum url dikosongkan lgi
 
   return (
@@ -161,17 +164,33 @@ export const TipContainer: React.FC = () => {
               />
             </div>
           </ShowIf>
-          <ShowIf
-            condition={!loading && !!tipWithBalances(network).length && !isShowVerifyReference}>
+          <ShowIf condition={!!tipWithBalances(network).length && !isShowVerifyReference}>
             <BoxComponent isWithChevronRightIcon={false} marginTop={'20px'}>
-              <Tip
-                loading={claiming}
-                tips={tipWithBalances(network)}
-                networkId={network.id}
-                currentWallet={currentWallet}
-                onClaim={handleClaimTip}
-                onClaimAll={handleClaimTipAll}
-              />
+              <ShowIf condition={claimingAll}>
+                <ShowIf condition={isShow(network)}>
+                  <ShimerComponent />
+                </ShowIf>
+                <ShowIf condition={!isShow(network)}>
+                  <Tip
+                    loading={claiming}
+                    tips={tipWithBalances(network)}
+                    networkId={network.id}
+                    currentWallet={currentWallet}
+                    onClaim={handleClaimTip}
+                    onClaimAll={handleClaimTipAll}
+                  />
+                </ShowIf>
+              </ShowIf>
+              <ShowIf condition={!claimingAll}>
+                <Tip
+                  loading={claiming}
+                  tips={tipWithBalances(network)}
+                  networkId={network.id}
+                  currentWallet={currentWallet}
+                  onClaim={handleClaimTip}
+                  onClaimAll={handleClaimTipAll}
+                />
+              </ShowIf>
             </BoxComponent>
           </ShowIf>
         </>

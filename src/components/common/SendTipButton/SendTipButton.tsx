@@ -143,9 +143,11 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
         subtitle={i18n.t('Tipping.Prompt_Mobile.Subtitle')}
         open={tipInfoOpened}
         onCancel={handleCloseTipInfo}>
-        <Button variant="contained" color="primary" onClick={handleCloseTipInfo}>
-          Back
-        </Button>
+        <div className={styles.wrapperButton}>
+          <Button variant="contained" color="primary" onClick={handleCloseTipInfo}>
+            Back
+          </Button>
+        </div>
       </PromptComponent>
 
       <PromptComponent

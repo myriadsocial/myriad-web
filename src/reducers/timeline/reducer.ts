@@ -126,6 +126,14 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
             order: TimelineOrderType.LATEST,
           },
         },
+        meta: {
+          $set: {
+            currentPage: 1,
+            itemsPerPage: 10,
+            totalItemCount: 0,
+            totalPageCount: 1,
+          },
+        },
       });
     }
 
