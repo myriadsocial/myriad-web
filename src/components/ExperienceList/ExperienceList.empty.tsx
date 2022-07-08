@@ -2,9 +2,10 @@ import React from 'react';
 
 import Link from 'next/link';
 
-import {Button, Typography} from '@material-ui/core';
+import {Button} from '@material-ui/core';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
+import {Empty} from 'components/atoms/Empty';
 import i18n from 'src/locale';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -30,6 +31,8 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: '14px',
     },
     button: {
+      marginTop: '40px',
+      marginBottom: '30px',
       [theme.breakpoints.down('xs')]: {
         width: 'auto',
         paddingRight: theme.spacing(2),
@@ -44,14 +47,12 @@ export const EmptyExperience: React.FC = () => {
 
   return (
     <div className={style.empty}>
-      <Typography className={style.title} component="p">
-        {i18n.t('Experience.List.Empty.Text_1')}
-      </Typography>
-      <div style={{paddingLeft: 8, paddingRight: 8}}>
-        <Typography className={style.subtitle} align="center" color="textSecondary" component="p">
-          {i18n.t('Experience.List.Empty.Text_2')}
-        </Typography>
-      </div>
+      <Empty
+        title={i18n.t('Experience.List.Empty.Text_1')}
+        subtitle={i18n.t('Experience.List.Empty.Text_2')}
+        margin={true}
+        height={true}
+      />
       <Link href={'/experience/create'} passHref>
         <Button color="primary" variant="contained" size="small" className={style.button}>
           {i18n.t('Experience.List.Empty.Btn_Create')}
