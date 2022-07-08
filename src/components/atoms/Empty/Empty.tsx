@@ -8,6 +8,7 @@ export type EmptyProps = {
   title: string;
   subtitle?: string;
   margin?: boolean;
+  height?: boolean;
 };
 
 export const Empty: React.FC<EmptyProps> = props => {
@@ -19,7 +20,7 @@ export const Empty: React.FC<EmptyProps> = props => {
       <Typography variant="h4" className={styles.title} component="p">
         {title}
       </Typography>
-      <Typography variant="body1" color="textSecondary" component="p">
+      <Typography variant="body1" className={styles.subtitle} color="textSecondary" component="p">
         {subtitle}
       </Typography>
       {children}

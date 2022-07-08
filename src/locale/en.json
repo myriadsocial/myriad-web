@@ -624,11 +624,6 @@
       "Toaster_Success": "Post report has been submitted"
     }
   },
-  "Post_Empty": {
-    "Title": "No post to show",
-    "Subtitle_Exp": "Once you create an experience, it will show up here.",
-    "Subtitle_Friend": "Once you add some new friends, their posts will show up here."
-  },
   "Tipping": {
     "Modal_Main": {
       "Title": "Send Tip",

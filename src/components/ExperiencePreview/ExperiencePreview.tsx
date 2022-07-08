@@ -16,6 +16,7 @@ import {Loading} from '../atoms/Loading';
 import useConfirm from '../common/Confirm/use-confirm.hook';
 import {useStyles} from './experience.style';
 
+import {Empty} from 'components/atoms/Empty';
 import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorizeAction';
 import {ListItemPeopleComponent} from 'src/components/atoms/ListItem/ListItemPeople';
 import {acronym} from 'src/helpers/string';
@@ -341,12 +342,10 @@ export const ExperiencePreview: React.FC<Props> = props => {
           loader={<Loading />}>
           {experiencePosts.length === 0 ? (
             <div className={style.postTextContainer}>
-              <Typography className={style.textPost}>
-                {i18n.t('Experience.Preview.Subheader.Post')}
-              </Typography>
-              <Typography className={style.textPostDetail}>
-                {i18n.t('Experience.Preview.Post.Empty')}
-              </Typography>
+              <Empty
+                title={i18n.t('Experience.Preview.Subheader.Post')}
+                subtitle={i18n.t('Experience.Preview.Post.Empty')}
+              />
             </div>
           ) : (
             experiencePosts.map(post => (

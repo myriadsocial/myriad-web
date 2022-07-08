@@ -20,6 +20,7 @@ import ModalAddToPostContext, {HandleConfirmAddPostExperience} from './ModalAddT
 import {ModalAddPostExperienceProps} from './ModalAddToPost.interface';
 import {useStyles} from './ModalAddToPost.styles';
 
+import {Empty} from 'components/atoms/Empty';
 import ShowIf from 'components/common/show-if.component';
 import {Loading} from 'src/components/atoms/Loading';
 import {Modal} from 'src/components/atoms/Modal';
@@ -200,12 +201,12 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
               userExperiences.filter(ar => ar.experience.user.id === user?.id).length === 0
             }>
             <div className={styles.containerEmpty}>
-              <Typography component="p" className={styles.emptyTitle}>
-                {i18n.t('Experience.Modal_Add_Post.Empty_Title')}
-              </Typography>
-              <Typography component="p" className={styles.emptySubtitle}>
-                {i18n.t('Experience.Modal_Add_Post.Empty_Subtitle')}
-              </Typography>
+              <Empty
+                title={i18n.t('Experience.Modal_Add_Post.Empty_Title')}
+                subtitle={i18n.t('Experience.Modal_Add_Post.Empty_Subtitle')}
+                height={true}
+                margin={false}
+              />
             </div>
           </ShowIf>
         </div>
