@@ -39,6 +39,7 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
   const handleToggleDownvotePost = useCallback(() => {
     toggleDownvotePost(post);
 
+    setSelected(SectionType.DEBATE);
     toggleComments();
   }, []);
 
@@ -133,7 +134,9 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
   }, []);
 
   const initComments = () => {
-    handleChangeTab(SectionType.DISCUSSION);
+    if (!selected) {
+      handleChangeTab(SectionType.DISCUSSION);
+    }
   };
 
   return (
