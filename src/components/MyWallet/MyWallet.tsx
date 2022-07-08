@@ -60,6 +60,7 @@ export const MyWallet: React.FC<MyWalletProps> = () => {
   useEffect(() => {
     if (query.type === 'history') setActiveTabId('history');
     if (query.type === 'manage') setActiveTabId('manage');
+    if (query.type === 'tip') setActiveTabId('tip');
   }, [query]);
 
   const handleChangeTab = () => {

@@ -1,7 +1,9 @@
 import {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 
-import remove from 'lodash/remove';
+import {useNearApi} from './use-near-api.hook';
+
+import {remove} from 'lodash';
 import {Network, NetworkIdEnum, TipResult} from 'src/interfaces/network';
 import {updateTransaction} from 'src/lib/api/transaction';
 import * as WalletAPI from 'src/lib/api/wallet';
@@ -14,8 +16,10 @@ export const useClaimTip = () => {
   const {user, networks, currentWallet, socials} = useSelector<RootState, UserState>(
     state => state.userState,
   );
+  const {claimTip, claimAllTip} = useNearApi();
   const [loading, setLoading] = useState(false);
   const [claiming, setClaiming] = useState(false);
+  const [claimingAll, setClaimingAll] = useState(false);
   const [error, setError] = useState(null);
   const [tipsEachNetwork, setTipsEachNetwork] = useState<Network[]>(networks);
 
@@ -46,6 +50,8 @@ export const useClaimTip = () => {
           referenceId: user.id,
           ftIdentifier: 'native',
         };
+
+        if (!serverId) return network;
 
         switch (network.id) {
           case NetworkIdEnum.MYRIAD: {
@@ -120,7 +126,7 @@ export const useClaimTip = () => {
   const claim = async (
     networkId: string,
     ftIdentifier: string,
-    callback?: ({claimSuccess: boolean}) => void,
+    callback?: ({claimSuccess: boolean, errorMessage: string}) => void,
   ) => {
     if (!user) return;
     if (!currentWallet) return;
@@ -129,22 +135,25 @@ export const useClaimTip = () => {
 
     if (!selectedNetwork) return;
 
-    const claimSuccess = false;
+    let errorMessage = null;
+    let claimSuccess = true;
 
     setClaiming(true);
 
     try {
-      const serverId = await WalletAPI.getServerId();
-      const tipBalanceInfo = {
-        serverId: serverId,
-        referenceType: 'user',
-        referenceId: user.id,
-        ftIdentifier: ftIdentifier,
-      };
+      const serverId = await WalletAPI.getServerId(selectedNetwork.id);
+
+      if (!serverId) throw new Error('ServerNotExists');
 
       switch (selectedNetwork.id) {
         case NetworkIdEnum.MYRIAD: {
-          await claimMyria(tipBalanceInfo, selectedNetwork?.rpcURL, currentWallet);
+          const myriadTipBalanceInfo = {
+            serverId,
+            referenceType: 'user',
+            referenceId: user.id,
+            ftIdentifier,
+          };
+          await claimMyria(myriadTipBalanceInfo, selectedNetwork?.rpcURL, currentWallet);
           const currency = selectedNetwork.currencies?.find(currency => currency.native === true);
 
           if (currency) {
@@ -158,37 +167,70 @@ export const useClaimTip = () => {
           break;
         }
 
-        case NetworkIdEnum.NEAR:
+        case NetworkIdEnum.NEAR: {
+          const nearTipBalanceInfo = {
+            server_id: serverId,
+            reference_type: 'user',
+            reference_id: user.id,
+            ft_identifier: ftIdentifier,
+          };
+
+          await claimTip(nearTipBalanceInfo);
+          await getTip();
+          break;
+        }
+
         default:
           throw new Error('CannotClaimTip');
       }
     } catch (error) {
-      console.log(error);
+      errorMessage = error.message;
+      claimSuccess = false;
     } finally {
       setClaiming(false);
-      callback && callback({claimSuccess});
+      callback && callback({claimSuccess, errorMessage});
     }
   };
 
-  const claimAll = async (networkId: string, callback?: () => void) => {
+  const claimAll = async (
+    networkId: string,
+    callback?: ({claimSuccess: boolean, errorMessage: string}) => void,
+  ) => {
     if (!user) return;
-    setLoading(true);
+
+    let errorMessage = null;
+    let claimSuccess = true;
+
+    setClaimingAll(true);
 
     try {
       switch (networkId) {
         case NetworkIdEnum.MYRIAD:
-          await Promise.all([claim(networkId, 'native')]);
+          await claim(networkId, 'native', ({claimSuccess: success, errorMessage: message}) => {
+            errorMessage = message;
+            claimSuccess = success;
+          });
           break;
+
+        case NetworkIdEnum.NEAR: {
+          const serverId = await WalletAPI.getServerId(networkId);
+          const userId = user.id;
+
+          if (!serverId) throw new Error('ServerNotExists');
+
+          await claimAllTip(serverId, userId);
+          break;
+        }
 
         default:
           break;
       }
-
-      callback && callback();
     } catch (error) {
-      console.log(error);
+      errorMessage = error.message;
+      claimSuccess = false;
     } finally {
-      setLoading(false);
+      setClaimingAll(false);
+      callback && callback({claimSuccess, errorMessage});
     }
   };
 
@@ -197,6 +239,7 @@ export const useClaimTip = () => {
     error,
     loading,
     claiming,
+    claimingAll,
     getTip,
     claim,
     claimAll,

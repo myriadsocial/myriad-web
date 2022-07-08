@@ -5,7 +5,9 @@ import getConfig from 'next/config';
 
 import BN from 'bn.js';
 import * as nearAPI from 'near-api-js';
+import {NetworkIdEnum} from 'src/interfaces/network';
 import {BlockchainPlatform, WalletDetail, WalletReferenceType} from 'src/interfaces/wallet';
+import * as NetworkAPI from 'src/lib/api/network';
 import {
   nearInitialize,
   connectToNearWallet,
@@ -18,6 +20,13 @@ import {BalanceState} from 'src/reducers/balance/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 
 const {publicRuntimeConfig} = getConfig();
+
+interface TipBalanceInfo {
+  server_id: string;
+  reference_type: string;
+  reference_id: string;
+  ft_identifier: string;
+}
 
 export const useNearApi = () => {
   const dispatch = useDispatch();
@@ -174,10 +183,66 @@ export const useNearApi = () => {
     await account.signAndSendTransaction({receiverId, actions});
   };
 
+  const claimTip = async (tipBalanceInfo: TipBalanceInfo): Promise<void> => {
+    const {wallet} = await nearInitialize();
+    const account = wallet.account();
+    const tippingContractId = publicRuntimeConfig.nearTippingContractId;
+    const ONE_YOCTO = '1';
+    const MAX_GAS = '300000000000000';
+    const data = JSON.stringify({tips_balance_info: tipBalanceInfo});
+    const actions = [
+      nearAPI.transactions.functionCall(
+        'claim_tip',
+        Buffer.from(data),
+        new BN(MAX_GAS),
+        new BN(ONE_YOCTO),
+      ),
+    ];
+    const walletCallbackUrl = `${publicRuntimeConfig.appAuthURL}/wallet?type=tip`;
+    //TODO: fix error protected class for multiple sign and send transactions
+    // @ts-ignore: protected class
+    await account.signAndSendTransaction({
+      receiverId: tippingContractId,
+      actions,
+      walletCallbackUrl,
+    });
+  };
+
+  const claimAllTip = async (serverId: string, referenceId: string): Promise<void> => {
+    const {wallet} = await nearInitialize();
+    const account = wallet.account();
+    const tippingContractId = publicRuntimeConfig.nearTippingContractId;
+    const ONE_YOCTO = '1';
+    const MAX_GAS = '300000000000000';
+    const data = JSON.stringify({
+      server_id: serverId,
+      reference_type: 'user',
+      reference_id: referenceId,
+    });
+    const actions = [
+      nearAPI.transactions.functionCall(
+        'batch_claim_tips',
+        Buffer.from(data),
+        new BN(MAX_GAS),
+        new BN(ONE_YOCTO),
+      ),
+    ];
+    const walletCallbackUrl = `${publicRuntimeConfig.appAuthURL}/wallet?type=tip`;
+    //TODO: fix error protected class for multiple sign and send transactions
+    // @ts-ignore: protected class
+    await account.signAndSendTransaction({
+      receiverId: tippingContractId,
+      actions,
+      walletCallbackUrl,
+    });
+  };
+
   return {
     connectToNear,
     getEstimatedFee,
     sendAmount,
     balanceDetails,
+    claimTip,
+    claimAllTip,
   };
 };
