@@ -49,7 +49,7 @@ export const TipContainer: React.FC = () => {
       });
     }
 
-    if (txFee) {
+    if (txFee && !errorCode && !errorMessage) {
       claimReferenceFunction().catch(e => console.log('error', e));
     }
 
@@ -105,12 +105,10 @@ export const TipContainer: React.FC = () => {
       referenceId: user?.id,
       serverId: dataServerId,
     });
-    const data = await claimReference({
+    await claimReference({
       tippingContractId: publicRuntimeConfig.nearTippingContractId,
       txFee: dataTransactionFee,
     });
-
-    console.log('data', data);
   };
 
   const handleClaimAll = () => {
@@ -136,7 +134,7 @@ export const TipContainer: React.FC = () => {
     });
   };
 
-  //ketika belum verify yan gbawah g muncul, loading, error message/ handling sebelum url dikosongkan lgi
+  console.log('tipsEachNetwork', tipsEachNetwork);
 
   return (
     <>
@@ -164,7 +162,7 @@ export const TipContainer: React.FC = () => {
               />
             </div>
           </ShowIf>
-          <ShowIf condition={!!tipWithBalances(network).length && !isShowVerifyReference}>
+          <ShowIf condition={!!tipWithBalances(network).length && !isShowVerifyReference()}>
             <BoxComponent isWithChevronRightIcon={false} marginTop={'20px'}>
               <ShowIf condition={claimingAll}>
                 <ShowIf condition={isShow(network)}>
