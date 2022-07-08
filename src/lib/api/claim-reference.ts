@@ -7,9 +7,10 @@ export const claimReference = async ({
   txFee: string;
   tippingContractId?: string;
 }) => {
-  await MyriadAPI().request({
+  const {data} = await MyriadAPI().request({
     url: '/claim-references',
     method: 'POST',
     data: {txFee, tippingContractId},
   });
+  return data;
 };

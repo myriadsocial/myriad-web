@@ -87,7 +87,6 @@ export const TipContainer: React.FC = () => {
       referenceId: user?.id,
       serverId: dataServerId,
     });
-    //to handling error
     const data = await claimReference({
       tippingContractId: publicRuntimeConfig.nearTippingContractId,
       txFee: dataTransactionFee,
