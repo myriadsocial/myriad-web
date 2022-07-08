@@ -4,52 +4,13 @@ on:
   pull_request:
     branches:
       - main
-    paths-ignore:
-      - ".github/**"
-      - ".maintain/**"
-      - ".dockerignore"
-      - ".env-template"
-      - "LICENSE"
 
 concurrency:
   group: tester-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
-  changes:
-    runs-on: ubuntu-latest
-    outputs:
-      test: ${{ steps.filter.outputs.test }}
-      markdown: ${{ steps.filter.outputs.markdown }}
-    steps:
-      - uses: dorny/paths-filter@v2
-        id: filter
-        with:
-          filters: |
-            test:
-              - '__mocks__/**'
-              - '__tests__/**'
-              - '@types/**'
-              - 'adapters/**'
-              - 'pages/**'
-              - 'plugins/**'
-              - 'public/**'
-              - 'server/**'
-              - 'src/**'
-              - 'test/**'
-              - '.**'
-              - '.**/**'
-              - '**.js'
-              - '**.ts'
-              - '**.json'
-              - '**.lock'
-            markdown:
-              - 'docs/**'
-              - '**.md'
-
   test-code:
-    needs: changes
-    if: ${{ needs.changes.outputs.test == 'true' }}
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout code
@@ -67,8 +28,6 @@ jobs:
         run: yarn test
 
   check-link-markdown:
-    needs: changes
-    if: ${{ needs.changes.outputs.markdown == 'true' }}
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout code
