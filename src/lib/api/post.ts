@@ -8,11 +8,18 @@ import {LoopbackWhere} from './interfaces/loopback-query.interface';
 import {PaginationParams, FilterParams} from './interfaces/pagination-params.interface';
 
 import axios, {AxiosError} from 'axios';
-import {Post, PostProps, ImportPostProps, PostVisibility, PostStatus} from 'src/interfaces/post';
+import {
+  Post,
+  PostProps,
+  ImportPostProps,
+  PostVisibility,
+  PostStatus,
+  PostCustomProps,
+} from 'src/interfaces/post';
 import {TimelineOrderType, TimelineType} from 'src/interfaces/timeline';
 import {WalletDetail} from 'src/interfaces/wallet';
 
-type PostList = BaseList<Post>;
+type PostList = BaseList<Omit<Post, keyof PostCustomProps>>;
 type PostsFilterParams = FilterParams & {
   userId?: string;
 };
@@ -273,7 +280,10 @@ export const importPost = async (values: ImportPostProps): Promise<Post> => {
   }
 };
 
-export const getPostDetail = async (id: string, currentUserId?: string): Promise<Post> => {
+export const getPostDetail = async (
+  id: string,
+  currentUserId?: string,
+): Promise<Omit<Post, keyof PostCustomProps>> => {
   const includes: Array<any> = [
     {
       relation: 'user',

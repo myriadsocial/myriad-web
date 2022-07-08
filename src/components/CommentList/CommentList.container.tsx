@@ -93,6 +93,10 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
     }
   }, []);
 
+  const handleUpdateDownvote = useCallback((commentId: string, total: number, vote: Vote) => {
+    updateDownvote(commentId, total, vote);
+  }, []);
+
   const handleUpvote = useCallback((comment: Comment) => {
     if (comment.isUpvoted) {
       handleRemoveVote(comment);
@@ -173,9 +177,8 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         onLoadMoreComments={handleLoadMoreComment}
         onUpvote={handleUpvote}
         onRemoveVote={handleRemoveVote}
-        onUpdateDownvote={updateDownvote}
+        onUpdateDownvote={handleUpdateDownvote}
         onReport={handleReport}
-        onOpenTipHistory={console.log}
         onSearchPeople={handleSearchPeople}
         onDelete={showConfirmDeleteDialog}
         scrollToPost={scrollToPost}

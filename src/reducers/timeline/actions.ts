@@ -255,12 +255,16 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
         type: constants.LOAD_TIMELINE,
         payload: {
           type,
-          posts: posts.map(post => {
-            const upvoted = post.votes?.filter(vote => vote.userId === userId && vote.state);
-            const downvoted = post.votes?.filter(vote => vote.userId === userId && !vote.state);
+          posts: posts.map(origin => {
+            const upvoted = origin.votes?.filter(vote => vote.userId === userId && vote.state);
+            const downvoted = origin.votes?.filter(vote => vote.userId === userId && !vote.state);
 
-            post.isUpvoted = upvoted && upvoted.length > 0;
-            post.isDownVoted = downvoted && downvoted.length > 0;
+            const post: Post = {
+              ...origin,
+              isUpvoted: upvoted && upvoted.length > 0,
+              isDownVoted: downvoted && downvoted.length > 0,
+              totalComment: origin.metric.comments,
+            };
 
             return post;
           }),
@@ -464,7 +468,17 @@ export const getDedicatedPost: ThunkActionCreator<Actions, RootState> =
 
       const post = await PostAPI.getPostDetail(postId, user?.id);
 
-      dispatch(setPost(post));
+      const upvoted = post.votes?.filter(vote => vote.userId === user?.id && vote.state);
+      const downvoted = post.votes?.filter(vote => vote.userId === user?.id && !vote.state);
+
+      dispatch(
+        setPost({
+          ...post,
+          isUpvoted: upvoted && upvoted.length > 0,
+          isDownVoted: downvoted && downvoted.length > 0,
+          totalComment: post.metric.comments,
+        }),
+      );
     } catch (error) {
       dispatch(setError(error));
     } finally {
@@ -598,12 +612,16 @@ export const fetchSearchedPosts: ThunkActionCreator<Actions, RootState> =
       dispatch({
         type: constants.LOAD_TIMELINE,
         payload: {
-          posts: posts.map(post => {
-            const upvoted = post.votes?.filter(vote => vote.userId === userId && vote.state);
-            const downvoted = post.votes?.filter(vote => vote.userId === userId && !vote.state);
+          posts: posts.map(origin => {
+            const upvoted = origin.votes?.filter(vote => vote.userId === userId && vote.state);
+            const downvoted = origin.votes?.filter(vote => vote.userId === userId && !vote.state);
 
-            post.isUpvoted = upvoted && upvoted.length > 0;
-            post.isDownVoted = downvoted && downvoted.length > 0;
+            const post: Post = {
+              ...origin,
+              isUpvoted: upvoted && upvoted.length > 0,
+              isDownVoted: downvoted && downvoted.length > 0,
+              totalComment: origin.metric.comments,
+            };
 
             return post;
           }),

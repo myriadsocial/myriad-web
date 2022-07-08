@@ -57,7 +57,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     } else {
       onUpvote(post);
     }
-  }, []);
+  }, [upvoted]);
 
   const handleDownVote = useCallback(() => {
     if (downvoted || upvoted) {
@@ -65,7 +65,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     } else {
       onToggleDownvote(post);
     }
-  }, []);
+  }, [downvoted, upvoted]);
 
   return (
     <>

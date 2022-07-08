@@ -40,7 +40,6 @@ export const VotingComponent: React.FC<VoteProps> = props => {
   const style = useStyles({variant, size});
 
   const handleUpVote = debounce(() => {
-    console.log('WAIT upvote');
     if (anonymous) {
       openVoteAlert();
     } else {

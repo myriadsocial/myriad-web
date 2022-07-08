@@ -40,7 +40,10 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
     toggleDownvotePost(post);
 
     setSelected(SectionType.DEBATE);
-    toggleComments();
+
+    if (!showComment) {
+      toggleComments();
+    }
   }, []);
 
   const handleToggleShowComment = useCallback(() => {
@@ -63,7 +66,7 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
     if (visibility === Visibility.PRIVATE) {
       confirmChangeToPrivate(payload);
     } else {
-      handleUdatePost(payload);
+      handleUpdatePost(payload);
     }
   }, []);
 
@@ -80,12 +83,12 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
         'Post_Detail.Post_Options.Post_Visibility_Setting.Cancel_Private_Text',
       ),
       onConfirm: () => {
-        handleUdatePost(payload);
+        handleUpdatePost(payload);
       },
     });
   };
 
-  const handleUdatePost = (payload: Partial<Post>) => {
+  const handleUpdatePost = (payload: Partial<Post>) => {
     dispatch(
       editPost(post.id, payload, () => {
         openSuccessPrompt(payload.visibility);

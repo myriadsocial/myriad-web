@@ -421,7 +421,6 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
           onRemoveVote={handleRepliesRemoveVote}
           onUpdateDownvote={updateReplyDownvote}
           onReportReplies={handleReport}
-          onOpenTipHistory={onOpenTipHistory}
           onReport={onReport}
           onSearchPeople={onSearchPeople}
           onDelete={showConfirmDeleteDialog}

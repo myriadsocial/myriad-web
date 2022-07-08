@@ -68,6 +68,13 @@ export type PostProps = {
   experiences?: Experience[];
 };
 
+// props not parsed from BE, percalculate for display purpose
+export type PostCustomProps = {
+  isUpvoted: boolean;
+  isDownVoted: boolean;
+  totalComment: number;
+};
+
 export type ImportPostProps = {
   url: string;
   importer: string;
@@ -95,7 +102,7 @@ export type PostEmbedProps = {
   image?: EmbedMediaProps;
   video?: EmbedMediaProps;
 };
-export interface Post extends PostProps, BaseModel {
+export interface Post extends PostProps, PostCustomProps, BaseModel {
   user: User;
   people?: People;
   comments?: Comment[];
@@ -105,8 +112,6 @@ export interface Post extends PostProps, BaseModel {
   votes?: Vote[];
   mentions?: MentionUserProps[];
   importers?: User[];
-  isUpvoted?: boolean;
-  isDownVoted?: boolean;
 }
 
 export type UpoadedFile = {

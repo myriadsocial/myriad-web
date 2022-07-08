@@ -1,6 +1,6 @@
 import {PostHeaderActionProps} from './render/Header';
 
-import {Post} from 'src/interfaces/post';
+import {Post, PostMetric} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 
 export type PostDetailActionProps = PostHeaderActionProps & {
@@ -23,5 +23,6 @@ export type PostDetailContainerProps = {
   post: Post;
   // trigger variable for rerender post detail
   type?: 'share' | 'default';
+  metric: PostMetric;
   expandComment?: boolean;
 };

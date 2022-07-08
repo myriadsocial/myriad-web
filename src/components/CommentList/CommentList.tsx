@@ -6,11 +6,12 @@ import {CommentDeleted} from '../CommentDeleted';
 import {CommentDetail, CommentDetailProps} from '../CommentDetail';
 import {useStyles} from './CommentList.style';
 
+import useTipHistoryHook from 'components/TipHistory/use-tip-history.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {Comment} from 'src/interfaces/comment';
 import {User} from 'src/interfaces/user';
 
-type CommentListProps = Omit<CommentDetailProps, 'comment' | 'deep'> & {
+type CommentListProps = Omit<CommentDetailProps, 'comment' | 'deep' | 'onOpenTipHistory'> & {
   comments: Comment[];
   user?: User;
   deep?: number;
@@ -30,13 +31,13 @@ export const CommentList: React.FC<CommentListProps> = props => {
     comments,
     deep = 0,
     hasMoreComment = false,
-    onOpenTipHistory,
     onLoadMoreComments,
     ...restProps
   } = props;
 
   const styles = useStyles();
   const {query} = useQueryParams();
+  const tipHistory = useTipHistoryHook();
 
   const refs: RefComment = comments.reduce((acc: RefComment, value: Comment) => {
     acc[value.id] = createRef<HTMLDivElement>();
@@ -56,6 +57,10 @@ export const CommentList: React.FC<CommentListProps> = props => {
     }
   }, [refs, query]);
 
+  const handleOpenTipHistory = (reference: Comment) => {
+    tipHistory.open(reference);
+  };
+
   return (
     <div className={styles.root} id={`comment-list-${deep}`}>
       {deep > 0 && <div className={styles.horizontalTree} />}
@@ -68,7 +73,7 @@ export const CommentList: React.FC<CommentListProps> = props => {
             user={user}
             comment={comment}
             deep={deep}
-            onOpenTipHistory={onOpenTipHistory}
+            onOpenTipHistory={handleOpenTipHistory}
           />
         ) : (
           <CommentDetail
@@ -77,7 +82,7 @@ export const CommentList: React.FC<CommentListProps> = props => {
             user={user}
             deep={deep}
             comment={comment}
-            onOpenTipHistory={onOpenTipHistory}
+            onOpenTipHistory={handleOpenTipHistory}
             {...restProps}
           />
         );
