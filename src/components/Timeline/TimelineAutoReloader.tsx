@@ -3,6 +3,8 @@ import {ArrowNarrowUpIcon} from '@heroicons/react/outline';
 import React, {useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 
+import {useRouter} from 'next/router';
+
 import {Button, SvgIcon} from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 
@@ -21,6 +23,7 @@ type TimelineAutoReloaderProps = {
 export const TimelineAutoReloader: React.FC<TimelineAutoReloaderProps> = props => {
   const styles = useStyles();
   const dispatch = useDispatch();
+  const router = useRouter();
   const {scrollPosition} = useScroll();
   const {loading, filterTimeline} = useTimelineFilter();
 
@@ -46,7 +49,7 @@ export const TimelineAutoReloader: React.FC<TimelineAutoReloaderProps> = props =
   const handleLoadPost = () => {
     setNewPostCount(0);
 
-    filterTimeline();
+    filterTimeline(router.query);
   };
 
   return (

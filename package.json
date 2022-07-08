@@ -112,6 +112,7 @@
     "remark-gfm": "^3.0.1",
     "remark-html": "^15.0.1",
     "serve-index": "^1.9.1",
+    "sharp": "^0.30.7",
     "slate": "^0.81.1",
     "slate-history": "^0.66.0",
     "slate-hyperscript": "^0.77.0",

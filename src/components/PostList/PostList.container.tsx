@@ -62,7 +62,12 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
         next={loadNextPage}
         loader={<Loading />}>
         {posts.map(post => (
-          <PostDetailContainer key={`post-${post.id}`} user={user} post={post} />
+          <PostDetailContainer
+            key={`post-${post.id}`}
+            user={user}
+            post={post}
+            metric={post.metric}
+          />
         ))}
       </InfiniteScroll>
     </div>

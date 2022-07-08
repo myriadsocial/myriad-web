@@ -58,7 +58,7 @@ const PostEmbed: React.FC<PostEmbedProps> = props => {
         <meta name="twitter:card" content="summary" />
       </Head>
 
-      <PostDetailContainer type="share" user={user} post={post} />
+      <PostDetailContainer type="share" user={user} post={post} metric={post.metric} />
     </>
   );
 };
@@ -76,14 +76,14 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   const username = generateAnonymousUser();
 
   try {
-    const post = await PostAPI.getPostDetail(id);
+    const originPost = await PostAPI.getPostDetail(id);
 
-    post.isUpvoted = false;
-    post.isDownVoted = false;
-
-    if (post.platform === 'reddit') {
-      post.text = post.text.replace(new RegExp('&amp;#x200B;', 'g'), '&nbsp;');
-    }
+    const post = {
+      ...originPost,
+      isUpvoted: false,
+      isDownVoted: false,
+      totalComment: originPost.metric.comments,
+    };
 
     if (
       post.deletedAt ||

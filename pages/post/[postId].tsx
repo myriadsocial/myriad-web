@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/nextjs';
 
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {shallowEqual, useSelector} from 'react-redux';
 
 import {getSession} from 'next-auth/react';
 import getConfig from 'next/config';
@@ -61,8 +61,18 @@ const PostPage: React.FC<PostPageProps> = props => {
   const {removed, title, description, image} = props;
 
   const router = useRouter();
-  const user = useSelector<RootState, User>(state => state.userState.user);
-  const post = useSelector<RootState, Post>(state => state.timelineState.post);
+  const user = useSelector<RootState, User>(state => state.userState.user, shallowEqual);
+  const post = useSelector<RootState, Post>(state => state.timelineState.post, shallowEqual);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const vote = useSelector<RootState, number>(
+    state => state.timelineState.post.metric.upvotes - state.timelineState.post.metric.downvotes,
+    shallowEqual,
+  );
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const comments = useSelector<RootState, number>(
+    state => state.timelineState.post.metric.comments,
+    shallowEqual,
+  );
 
   return (
     <DefaultLayout isOnProfilePage={false}>
@@ -97,7 +107,7 @@ const PostPage: React.FC<PostPageProps> = props => {
       </ShowIf>
 
       <ShowIf condition={!removed}>
-        <PostDetailContainer post={post} user={user} expandComment />
+        <PostDetailContainer post={post} user={user} expandComment metric={post.metric} />
       </ShowIf>
       <TippingSuccess />
     </DefaultLayout>
@@ -127,20 +137,17 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       userId = user?.id;
     }
 
-    post = await PostAPI.getPostDetail(params.postId, userId);
+    const originPost = await PostAPI.getPostDetail(params.postId, userId);
 
-    const upVotes = post.votes
-      ? post.votes.filter(vote => vote.userId === userId && vote.state)
-      : [];
-    const downVotes = post.votes
-      ? post.votes.filter(vote => vote.userId === userId && !vote.state)
-      : [];
-    post.isUpvoted = upVotes.length > 0;
-    post.isDownVoted = downVotes.length > 0;
+    const upvoted = originPost.votes?.filter(vote => vote.userId === userId && vote.state);
+    const downvoted = originPost.votes?.filter(vote => vote.userId === userId && !vote.state);
 
-    if (post.platform === 'reddit') {
-      post.text = post.text.replace(new RegExp('&amp;#x200B;', 'g'), '&nbsp;');
-    }
+    post = {
+      ...originPost,
+      isUpvoted: upvoted && upvoted.length > 0,
+      isDownVoted: downvoted && downvoted.length > 0,
+      totalComment: originPost.metric.comments,
+    };
 
     dispatch(setPost(post));
   } catch (error) {

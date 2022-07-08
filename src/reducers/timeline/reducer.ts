@@ -349,6 +349,8 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
         } else {
           post.metric.discussions += 1;
         }
+
+        post.metric.comments = post.metric.debates + post.metric.comments;
       }
 
       return {
@@ -360,6 +362,8 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
             } else {
               post.metric.discussions += 1;
             }
+
+            post.metric.comments = post.metric.debates + post.metric.comments;
           }
 
           return post;
