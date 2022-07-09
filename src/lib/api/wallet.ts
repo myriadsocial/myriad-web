@@ -57,11 +57,9 @@ export const getUserByWalletAddress = async (address: string): Promise<User & Bl
     filter: {
       include: [
         {
-          relation: 'people',
-        },
-        {
           relation: 'wallets',
           scope: {
+            include: [{relation: 'network'}],
             where: {
               primary: true,
             },
@@ -197,5 +195,32 @@ export const getServerId = async (networkId?: string): Promise<string> => {
 
     default:
       return data.id;
+  }
+};
+
+export const claimReference = async ({
+  txFee,
+  tippingContractId,
+}: {
+  txFee: string;
+  tippingContractId?: string;
+}) => {
+  try {
+    const {data} = await MyriadAPI().request({
+      url: '/claim-references',
+      method: 'POST',
+      data: {txFee, tippingContractId},
+    });
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const {response} = error as AxiosError<BaseErrorResponse>;
+
+      if (response.data.error.name === 'UnprocessableEntityError') {
+        throw new Error(response.data.error.message);
+      }
+    }
+
+    return null;
   }
 };

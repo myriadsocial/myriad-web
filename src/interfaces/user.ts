@@ -1,7 +1,7 @@
 import {BaseModel} from './base.interface';
 import {Currency} from './currency';
 import {FriendStatus} from './friend';
-import {NetworkIdEnum, Network} from './network';
+import {NetworkIdEnum, Network, NetworkProps} from './network';
 import {People} from './people';
 import {TransactionDetail} from './transaction';
 
@@ -23,7 +23,7 @@ export type UserOnTransaction = BaseUser & {
   id: string;
 };
 
-export interface Wallet extends BaseModel {
+export interface Wallet extends BaseModel, NetworkProps {
   network?: Network;
   networkId: NetworkIdEnum;
   primary: boolean;

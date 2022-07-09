@@ -1,4 +1,3 @@
-import {options} from '@acala-network/api';
 import {Balance, OrmlAccountData} from '@open-web3/orml-types/interfaces';
 import * as Sentry from '@sentry/nextjs';
 import {AnyObject} from '@udecode/plate';
@@ -16,7 +15,6 @@ import {SignRawException} from './errors/SignRawException';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {Currency, CurrencyId} from 'src/interfaces/currency';
 import {TipBalanceInfo, TipResult} from 'src/interfaces/network';
-import {UserWallet} from 'src/interfaces/user';
 import {WalletDetail, WalletReferenceType} from 'src/interfaces/wallet';
 
 interface signAndSendExtrinsicProps {
@@ -47,7 +45,7 @@ type CheckBalanceResult = {
 
 export const connectToBlockchain = async (wsProvider: string): Promise<ApiPromise> => {
   const provider = new WsProvider(wsProvider);
-  const api: ApiPromise = new ApiPromise(options({provider}));
+  const api: ApiPromise = new ApiPromise({provider});
   await api.isReadyOrError;
   return api;
 };
@@ -400,7 +398,7 @@ export const getClaimTip = async (
 export const claimMyria = async (
   payload: TipBalanceInfo,
   rpcURL: string,
-  currentWallet: UserWallet,
+  walletId: string,
 ): Promise<void> => {
   const {enableExtension} = await import('src/helpers/extension');
   const {web3FromSource} = await import('@polkadot/extension-dapp');
@@ -411,7 +409,7 @@ export const claimMyria = async (
       throw new NoAccountException('Please import your account first!');
 
     const keyring = new Keyring();
-    const baseAddress = keyring.encodeAddress(currentWallet.id);
+    const baseAddress = keyring.encodeAddress(walletId);
     const account = allAccounts.find(account => account.address === baseAddress);
 
     if (!account) throw new NoAccountException('Account not registered on Polkadot.js extension');
@@ -422,7 +420,7 @@ export const claimMyria = async (
 
     let txHash: string | null = null;
 
-    const txInfo = await extrinsic.signAsync(currentWallet.id, {
+    const txInfo = await extrinsic.signAsync(walletId, {
       signer: injector.signer,
       // make sure nonce does not stuck
       nonce: -1,

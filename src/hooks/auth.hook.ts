@@ -379,11 +379,7 @@ export const useAuthHook = () => {
       await WalletAPI.switchNetwork(payload, user.id);
       //TODO: better if joined in one API call
       await dispatch(fetchUser(currentAddress));
-      await Promise.all([
-        dispatch(getUserCurrencies()),
-        dispatch(fetchUserWallets()),
-        dispatch(fetchCurrentUserWallets()),
-      ]);
+      await Promise.all([dispatch(getUserCurrencies()), dispatch(fetchUserWallets())]);
 
       await dispatch(fetchBalances(true));
 

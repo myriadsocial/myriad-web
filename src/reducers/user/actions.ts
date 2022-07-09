@@ -136,6 +136,21 @@ export const setUser = (user: User): FetchUser => ({
   user,
 });
 
+export const setCurrentUserWallet = (user: User): FetchCurrentUserWallet => {
+  const wallet = user.wallets[0];
+  const network = wallet.network;
+  const userWallet: UserWallet = {
+    ...wallet,
+    user,
+    network,
+  };
+
+  return {
+    type: constants.FETCH_CURRENT_USER_WALLETS,
+    payload: userWallet,
+  };
+};
+
 export const setAnonymous = (alias: string): SetUserAsAnonymous => ({
   type: constants.SET_USER_AS_ANONYMOUS,
   alias,
@@ -165,6 +180,7 @@ export const fetchUser: ThunkActionCreator<Actions, RootState> =
     try {
       user = await WalletAPI.getUserByWalletAddress(address);
 
+      dispatch(setCurrentUserWallet(user));
       dispatch(setUser(user));
     } catch (error) {
       dispatch(setError(error));
