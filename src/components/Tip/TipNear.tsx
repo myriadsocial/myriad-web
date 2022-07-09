@@ -11,7 +11,7 @@ import {TotalTipsDataInterface} from 'src/interfaces/network';
 import i18n from 'src/locale';
 
 type TipNearProps = {
-  handleVerifyReference: () => void;
+  handleVerifyReference: (currentBalance: string | number) => void;
   handleClaimAll: () => void;
   totalTipsData: Array<TotalTipsDataInterface>;
 };
@@ -20,6 +20,12 @@ export const TipNear: React.FC<TipNearProps> = props => {
   const {handleVerifyReference, totalTipsData, handleClaimAll} = props;
   const style = useStyles();
   const [isShowModalTotalTips, setIsShowModalTotalTips] = useState<boolean>(false);
+  const onVerifyReference = () => {
+    const tip = totalTipsData.find(item => item.tipsBalanceInfo.ftIdentifier === 'native');
+    const currentBalance = tip ? tip.amount : '0.000';
+
+    handleVerifyReference(currentBalance);
+  };
 
   return (
     <>
@@ -46,7 +52,7 @@ export const TipNear: React.FC<TipNearProps> = props => {
         <Typography variant="body1" className={style.desc} color="textPrimary" component="p">
           {i18n.t('Wallet.Tip.Reference.Desc')}
         </Typography>
-        <Button onClick={handleVerifyReference} size="small" color="primary" variant="contained">
+        <Button onClick={onVerifyReference} size="small" color="primary" variant="contained">
           {i18n.t('Wallet.Tip.Reference.Button')}
         </Button>
         <div style={{marginTop: 8}}>
@@ -60,7 +66,7 @@ export const TipNear: React.FC<TipNearProps> = props => {
         </div>
       </div>
       <TipTotalNear
-        handleVerifyReference={handleVerifyReference}
+        handleVerifyReference={onVerifyReference}
         totalTipsData={totalTipsData}
         open={isShowModalTotalTips}
         onClose={() => setIsShowModalTotalTips(false)}

@@ -183,13 +183,11 @@ export const useNearApi = () => {
     await account.signAndSendTransaction({receiverId, actions});
   };
 
-  const payTransactionFee = async ({
-    serverId,
-    referenceId,
-  }: {
-    serverId: string;
-    referenceId: string;
-  }) => {
+  const payTransactionFee = async (
+    serverId: string,
+    referenceId: string,
+    currentBalance: string | number,
+  ): Promise<void> => {
     const tippingContractId = publicRuntimeConfig.nearTippingContractId;
     const tipsBalanceInfo = {
       server_id: serverId,
@@ -201,38 +199,13 @@ export const useNearApi = () => {
     const {rpcURL} = await NetworkAPI.getNetwork(NetworkIdEnum.NEAR);
     //call api near
     const provider = new nearAPI.providers.JsonRpcProvider({url: rpcURL});
-
     const data = JSON.stringify({tips_balance_info: tipsBalanceInfo});
-
-    const buff = Buffer.from(data);
-
-    const base64Data = buff.toString('base64');
     // gas price
-    const [{gas_price}, rawResult] = await Promise.all([
-      provider.gasPrice(null),
-      provider.query({
-        request_type: 'call_function',
-        account_id: tippingContractId,
-        method_name: 'get_tips_balance',
-        args_base64: base64Data,
-        finality: 'final',
-      }),
-    ]);
+    const {gas_price} = await provider.gasPrice(null);
 
-    const result = JSON.parse(Buffer.from((rawResult as any).result).toString());
-
-    const tipBalance = result?.tips_balance;
-    if (!tipBalance) {
-    }
-
-    const amount = tipBalance.amount;
     const gasFee = 300000000000000;
-
     const transactionFee = BigInt(gasFee) * BigInt(gas_price);
 
-    if (BigInt(amount) > transactionFee) {
-      return transactionFee.toString();
-    }
     //inisialisasi near wallet
     const {wallet} = await nearInitialize();
     const account = wallet.account();
@@ -244,15 +217,14 @@ export const useNearApi = () => {
         new BN(transactionFee.toString()),
       ),
     ];
-    console.log(tipBalance);
     const appAuthURL = publicRuntimeConfig.appAuthURL;
-    const walletCallbackUrl = `${appAuthURL}/wallet?type=tip&txFee=${transactionFee.toString()}`;
+    const url = `${appAuthURL}/wallet?type=tip&txFee=${transactionFee.toString()}&balance=${currentBalance}&networkId=near`;
     //TODO: fix error protected class for multiple sign and send transactions
     // @ts-ignore: protected class
     await account.signAndSendTransaction({
       receiverId: tippingContractId,
       actions,
-      walletCallbackUrl,
+      walletCallbackUrl: url,
     });
   };
 

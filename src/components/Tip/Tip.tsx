@@ -29,6 +29,8 @@ type TipProps = {
   networkId: NetworkIdEnum;
   loading: boolean;
   currentWallet?: UserWallet;
+  onSuccess?: boolean;
+  balance?: string;
   onClaim: (networkId: string, ftIdentifier: string) => void;
   onClaimAll: (networkId: string) => void;
 };
@@ -53,7 +55,16 @@ const networkOptions: MenuOptions<string>[] = [
 ];
 
 export const Tip: React.FC<TipProps> = props => {
-  const {tips, networkId, onClaim, onClaimAll, currentWallet, loading} = props;
+  const {
+    tips,
+    networkId,
+    onClaim,
+    onClaimAll,
+    currentWallet,
+    loading,
+    onSuccess = false,
+    balance,
+  } = props;
   const style = useStyles();
 
   const icons = React.useMemo(
@@ -80,6 +91,11 @@ export const Tip: React.FC<TipProps> = props => {
     const selected = networkOptions.find(network => network.id == networkId);
 
     return selected?.title;
+  };
+
+  const getAmount = (tip: TipResult) => {
+    if (onSuccess && balance) return balance;
+    return tip.amount;
   };
 
   return (
@@ -121,8 +137,8 @@ export const Tip: React.FC<TipProps> = props => {
                 <Button
                   disabled={
                     (currentWallet && currentWallet.networkId !== networkId) ||
-                    loading ||
-                    !tip.accountId
+                    (!tip.accountId && !onSuccess) ||
+                    loading
                   }
                   onClick={() => handleClaim(networkId, tip.tipsBalanceInfo.ftIdentifier)}
                   size="small"
@@ -134,7 +150,7 @@ export const Tip: React.FC<TipProps> = props => {
               </div>
               <div className={style.text}>
                 <Typography variant="h5" component="p" color="textPrimary">
-                  {tip.amount}
+                  {getAmount(tip)}
                 </Typography>
                 <Typography variant="subtitle2" component="p" color="textSecondary">
                   USD {'~'}

@@ -13,11 +13,9 @@ import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const useClaimTip = () => {
-  const {user, networks, currentWallet, socials} = useSelector<RootState, UserState>(
-    state => state.userState,
-  );
+  const {user, networks, socials} = useSelector<RootState, UserState>(state => state.userState);
   const {claimTip, claimAllTip} = useNearApi();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [claiming, setClaiming] = useState(false);
   const [claimingAll, setClaimingAll] = useState(false);
   const [error, setError] = useState(null);
@@ -38,12 +36,12 @@ export const useClaimTip = () => {
   };
 
   const getTip = async () => {
-    if (!user) return;
     setLoading(true);
-    setTipsEachNetwork(networks);
+
+    if (!user) return setLoading(false);
 
     try {
-      const promises = networks.map(async network => {
+      const promises = tipsEachNetwork.map(async network => {
         const serverId = await WalletAPI.getServerId(network.id);
         const tipBalanceInfo = {
           serverId: serverId,
@@ -58,12 +56,10 @@ export const useClaimTip = () => {
           case NetworkIdEnum.MYRIAD: {
             const data = await getClaimTip(tipBalanceInfo, network.rpcURL);
             if (!data) return network;
+            if (data.amount === '0') return network;
             const result: TipResult = {
               accountId: data.accountId,
-              amount:
-                data.amount == '0'
-                  ? data.amount
-                  : (parseFloat(data.amount.replace(/,/g, '')) / 10 ** 18).toFixed(3).toString(),
+              amount: (parseFloat(data.amount.replace(/,/g, '')) / 10 ** 18).toFixed(3).toString(),
               tipsBalanceInfo: {
                 ftIdentifier: data.tipsBalanceInfo.ftIdentifier,
                 referenceId: data.tipsBalanceInfo.referenceId,
@@ -114,7 +110,7 @@ export const useClaimTip = () => {
       });
 
       const networksWithTip = await Promise.all(promises);
-      const sortedNetwork = sortNetwork(networksWithTip, currentWallet?.networkId);
+      const sortedNetwork = sortNetwork(networksWithTip, user.wallets[0].networkId);
 
       setTipsEachNetwork(sortedNetwork);
     } catch (error) {
@@ -131,7 +127,7 @@ export const useClaimTip = () => {
     callback?: ({claimSuccess: boolean, errorMessage: string}) => void,
   ) => {
     if (!user) return;
-    if (!currentWallet) return;
+    if (!user?.wallets[0]) return;
 
     const selectedNetwork = networks.find(network => network.id == networkId);
 
@@ -155,13 +151,13 @@ export const useClaimTip = () => {
             referenceId: user.id,
             ftIdentifier,
           };
-          await claimMyria(myriadTipBalanceInfo, selectedNetwork?.rpcURL, currentWallet);
+          await claimMyria(myriadTipBalanceInfo, selectedNetwork?.rpcURL, user.wallets[0].id);
           const currency = selectedNetwork.currencies?.find(currency => currency.native === true);
 
           if (currency) {
             await updateTransaction({
-              userId: currentWallet.userId,
-              walletId: currentWallet.id,
+              userId: user.id,
+              walletId: user.wallets[0].id,
               currencyId: currency.id,
             });
           }
