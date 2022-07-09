@@ -9,15 +9,25 @@ export const useStyles = makeStyles((theme: Theme) =>
       background: '#FFFFFF',
       borderRadius: 10,
       boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.05)',
+      [theme.breakpoints.down('md')]: {
+        padding: 25,
+        width: 490,
+      },
     },
     wrapper: {
       marginBottom: 8,
+      [theme.breakpoints.down('md')]: {
+        marginBottom: 4,
+      },
     },
     title: {
       marginBottom: 8,
       '& .MuiTypography-h5': {
         fontWeight: 600,
         color: '#0A0A0A',
+      },
+      [theme.breakpoints.down('md')]: {
+        marginBottom: 4,
       },
     },
     titlePrimary: {
@@ -41,6 +51,10 @@ export const useStyles = makeStyles((theme: Theme) =>
         paddingBottom: 7,
         paddingLeft: 1,
         paddingRight: 1,
+        [theme.breakpoints.down('md')]: {
+          paddingTop: 5,
+          paddingBottom: 5,
+        },
       },
     },
     card: {
@@ -49,6 +63,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       padding: 10,
       cursor: 'pointer',
+      [theme.breakpoints.down('md')]: {
+        padding: 5,
+      },
     },
     walletCard: {
       display: 'flex',
@@ -56,6 +73,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       padding: 10,
       cursor: 'pointer',
+      [theme.breakpoints.down('md')]: {
+        padding: 5,
+      },
     },
     walletCardDisabled: {
       backgroundColor: 'rgba(0, 0, 0, 0)',
@@ -65,12 +85,22 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: 80,
       fontSize: 32,
       marginBottom: 8,
+      [theme.breakpoints.down('md')]: {
+        width: 60,
+        fontSize: 26,
+      },
     },
     condition: {
       padding: theme.spacing(2, 0),
     },
     termControl: {
       marginBottom: 24,
+      [theme.breakpoints.down('md')]: {
+        marginBottom: 16,
+      },
+    },
+    termCondition: {
+      color: '#0A0A0A',
     },
     term: {
       fontWeight: 400,

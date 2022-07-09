@@ -574,7 +574,7 @@ export const Options: React.FC<OptionProps> = props => {
                 onChange={toggleTermApproved}
                 control={<Checkbox name="term" color="primary" className={styles.checkbox} />}
                 label={
-                  <Typography style={{color: '#0A0A0A'}}>
+                  <Typography className={styles.termCondition}>
                     {i18n.t('Login.Options.Text_Terms_1')}&nbsp;
                     <Link href="/term-of-use" passHref>
                       <Typography component={'a'} className={styles.term}>
