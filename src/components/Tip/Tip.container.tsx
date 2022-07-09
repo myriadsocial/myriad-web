@@ -14,6 +14,7 @@ import {Empty} from 'src/components/atoms/Empty';
 import {useClaimTip} from 'src/hooks/use-claim-tip.hook';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {Network, NetworkIdEnum, TipResult} from 'src/interfaces/network';
+import {updateTransaction} from 'src/lib/api/transaction';
 import {getServerId} from 'src/lib/api/wallet';
 import * as WalletAPI from 'src/lib/api/wallet';
 import i18n from 'src/locale';
@@ -32,12 +33,13 @@ export const TipContainer: React.FC = () => {
   const errorMessage = router.query.errorMessage as string | null;
   const txFee = router.query.txFee as string | null;
   const amount = router.query.balance as string | null;
+  const txInfo = router.query.txInfo as string | null;
   const {nearTippingContractId: tippingContractId} = publicRuntimeConfig;
   const [verifyingRef, setVerifyingRef] = useState(false);
   const [claimingSuccess, setClaimingSucces] = useState(false);
 
   useEffect(() => {
-    if (!txFee && transactionHashes) {
+    if (!txFee && !txInfo && transactionHashes) {
       enqueueSnackbar({
         message: i18n.t('Wallet.Tip.Alert.Success'),
         variant: 'success',
@@ -50,6 +52,10 @@ export const TipContainer: React.FC = () => {
         message: decodeURI(errorMessage),
         variant: 'warning',
       });
+    }
+
+    if (txInfo && !errorCode && !errorMessage) {
+      updateTransaction(JSON.parse(txInfo)).catch(() => console.log);
     }
 
     if (txFee && !errorCode && !errorMessage) {

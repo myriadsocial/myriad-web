@@ -228,7 +228,7 @@ export const useNearApi = () => {
     });
   };
 
-  const claimTip = async (tipBalanceInfo: TipBalanceInfo): Promise<void> => {
+  const claimTip = async (tipBalanceInfo: TipBalanceInfo, txInfo?: string): Promise<void> => {
     const {wallet} = await nearInitialize();
     const account = wallet.account();
     const tippingContractId = publicRuntimeConfig.nearTippingContractId;
@@ -243,7 +243,7 @@ export const useNearApi = () => {
         new BN(ONE_YOCTO),
       ),
     ];
-    const walletCallbackUrl = `${publicRuntimeConfig.appAuthURL}/wallet?type=tip`;
+    const walletCallbackUrl = `${publicRuntimeConfig.appAuthURL}/wallet?type=tip&txInfo=${txInfo}`;
     //TODO: fix error protected class for multiple sign and send transactions
     // @ts-ignore: protected class
     await account.signAndSendTransaction({
@@ -253,7 +253,11 @@ export const useNearApi = () => {
     });
   };
 
-  const claimAllTip = async (serverId: string, referenceId: string): Promise<void> => {
+  const claimAllTip = async (
+    serverId: string,
+    referenceId: string,
+    transactionInfo?: string,
+  ): Promise<void> => {
     const {wallet} = await nearInitialize();
     const account = wallet.account();
     const tippingContractId = publicRuntimeConfig.nearTippingContractId;
@@ -272,7 +276,7 @@ export const useNearApi = () => {
         new BN(ONE_YOCTO),
       ),
     ];
-    const walletCallbackUrl = `${publicRuntimeConfig.appAuthURL}/wallet?type=tip`;
+    const walletCallbackUrl = `${publicRuntimeConfig.appAuthURL}/wallet?type=tip&txInfo=${transactionInfo}`;
     //TODO: fix error protected class for multiple sign and send transactions
     // @ts-ignore: protected class
     await account.signAndSendTransaction({

@@ -143,44 +143,65 @@ export const useClaimTip = () => {
 
       if (!serverId) throw new Error('ServerNotExists');
 
+      const tipBalanceInfo = {
+        serverId,
+        referenceType: 'user',
+        referenceId: user.id,
+        ftIdentifier,
+      };
+
+      const currency = selectedNetwork.currencies?.find(({native, referenceId}) => {
+        if (tipBalanceInfo.ftIdentifier === 'native' && native) return true;
+        return referenceId === tipBalanceInfo.ftIdentifier;
+      });
+
       switch (selectedNetwork.id) {
         case NetworkIdEnum.MYRIAD: {
-          const myriadTipBalanceInfo = {
-            serverId,
-            referenceType: 'user',
-            referenceId: user.id,
-            ftIdentifier,
-          };
-          await claimMyria(myriadTipBalanceInfo, selectedNetwork?.rpcURL, user.wallets[0].id);
-          const currency = selectedNetwork.currencies?.find(currency => currency.native === true);
-
-          if (currency) {
-            await updateTransaction({
-              userId: user.id,
-              walletId: user.wallets[0].id,
-              currencyId: currency.id,
-            });
-          }
-          await getTip();
+          await claimMyria(tipBalanceInfo, selectedNetwork?.rpcURL, user.wallets[0].id);
           break;
         }
 
         case NetworkIdEnum.NEAR: {
-          const nearTipBalanceInfo = {
-            server_id: serverId,
-            reference_type: 'user',
-            reference_id: user.id,
-            ft_identifier: ftIdentifier,
-          };
+          let txInfo = '';
 
-          await claimTip(nearTipBalanceInfo);
-          await getTip();
+          if (currency) {
+            txInfo = JSON.stringify({
+              userId: user.id,
+              walletId: user.wallets[0].id,
+              currencyIds: [currency.id],
+            });
+          }
+
+          await claimTip(
+            {
+              server_id: serverId,
+              reference_type: 'user',
+              reference_id: user.id,
+              ft_identifier: ftIdentifier,
+            },
+            txInfo,
+          );
+
           break;
         }
 
         default:
           throw new Error('CannotClaimTip');
       }
+
+      const promises = [getTip()];
+
+      if (currency) {
+        promises.push(
+          updateTransaction({
+            userId: user.id,
+            walletId: user.wallets[0].id,
+            currencyIds: [currency.id],
+          }),
+        );
+      }
+
+      await Promise.all(promises);
     } catch (error) {
       errorMessage = error.message;
       claimSuccess = false;
@@ -201,6 +222,10 @@ export const useClaimTip = () => {
 
     setClaimingAll(true);
 
+    const currencyIds =
+      networks.find(network => network.id == networkId)?.currencies?.map(currency => currency.id) ??
+      [];
+
     try {
       switch (networkId) {
         case NetworkIdEnum.MYRIAD:
@@ -216,12 +241,30 @@ export const useClaimTip = () => {
 
           if (!serverId) throw new Error('ServerNotExists');
 
-          await claimAllTip(serverId, userId);
+          let transactionInfo = '';
+
+          if (currencyIds.length > 0) {
+            transactionInfo = JSON.stringify({
+              userId: user.id,
+              walletId: user.wallets[0].id,
+              currencyIds,
+            });
+          }
+
+          await claimAllTip(serverId, userId, transactionInfo);
           break;
         }
 
         default:
           break;
+      }
+
+      if (currencyIds.length > 0 && networkId !== NetworkIdEnum.NEAR) {
+        await updateTransaction({
+          userId: user.id,
+          walletId: user.wallets[0].id,
+          currencyIds,
+        });
       }
     } catch (error) {
       errorMessage = error.message;
