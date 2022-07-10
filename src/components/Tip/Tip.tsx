@@ -10,6 +10,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 
+import {TipClaimReference} from './Tip.claim.reference';
 import {useStyles} from './tip.style';
 
 import {MenuOptions} from 'src/components/atoms/DropdownMenu';
@@ -28,11 +29,14 @@ type TipProps = {
   tips: TipResult[];
   networkId: NetworkIdEnum;
   loading: boolean;
+  nativeToken: string;
   currentWallet?: UserWallet;
+  txFee?: string;
   onSuccess?: boolean;
   balance?: string;
   onClaim: (networkId: string, ftIdentifier: string) => void;
   onClaimAll: (networkId: string) => void;
+  onHandleVerifyRef: (networkId: string, currentBalance: string | number) => void;
 };
 
 const networkOptions: MenuOptions<string>[] = [
@@ -60,10 +64,13 @@ export const Tip: React.FC<TipProps> = props => {
     networkId,
     onClaim,
     onClaimAll,
+    onHandleVerifyRef,
+    nativeToken,
     currentWallet,
     loading,
     onSuccess = false,
     balance,
+    txFee,
   } = props;
   const style = useStyles();
 
@@ -94,35 +101,30 @@ export const Tip: React.FC<TipProps> = props => {
   };
 
   const getAmount = (tip: TipResult) => {
-    if (onSuccess && balance) return balance;
+    if (onSuccess && balance && tip.tipsBalanceInfo.ftIdentifier === 'native') return balance;
     return tip.amount;
   };
 
-  return (
-    <>
-      <ListItem alignItems="center" className={style.listItem}>
-        <ListItemAvatar>{icons[networkId as keyof typeof icons]}</ListItemAvatar>
-        <ListItemText>
-          <Typography variant="h6" component="span" color="textPrimary">
-            {formatNetworkName()}
-          </Typography>
-        </ListItemText>
-        <div className={style.secondaryAction}>
-          <ShowIf condition={!!currentWallet && currentWallet.networkId !== networkId}>
-            <Typography>{i18n.t('Wallet.Tip.Switch')}</Typography>
-          </ShowIf>
-          <ShowIf condition={!!currentWallet && currentWallet.networkId == networkId}>
-            <Button
-              className={style.button}
-              size="small"
-              color="primary"
-              variant="text"
-              onClick={handleClaimAll}>
-              {i18n.t('Wallet.Tip.Claim_All')}
-            </Button>
-          </ShowIf>
-        </div>
-      </ListItem>
+  const isShowVerifyReference = () => {
+    const tip = tips.find(e => e.accountId === null);
+    if (tip) return true;
+    return false;
+  };
+
+  const showTokens = () => {
+    if (isShowVerifyReference() && !onSuccess && networkId === currentWallet.networkId) {
+      return (
+        <TipClaimReference
+          networkId={networkId}
+          totalTipsData={tips}
+          onHandleVerifyRef={onHandleVerifyRef}
+          token={nativeToken}
+          txFee={txFee}
+        />
+      );
+    }
+
+    return (
       <Grid container direction="row" justifyContent="flex-start" alignItems="center" spacing={2}>
         {tips.map((tip, i) => (
           <Grid item xs={6} key={i}>
@@ -160,6 +162,36 @@ export const Tip: React.FC<TipProps> = props => {
           </Grid>
         ))}
       </Grid>
+    );
+  };
+
+  return (
+    <>
+      <ListItem alignItems="center" className={style.listItem}>
+        <ListItemAvatar>{icons[networkId as keyof typeof icons]}</ListItemAvatar>
+        <ListItemText>
+          <Typography variant="h6" component="span" color="textPrimary">
+            {formatNetworkName()}
+          </Typography>
+        </ListItemText>
+        <div className={style.secondaryAction}>
+          <ShowIf condition={!!currentWallet && currentWallet.networkId !== networkId}>
+            <Typography>{i18n.t('Wallet.Tip.Switch')}</Typography>
+          </ShowIf>
+          <ShowIf condition={!!currentWallet && currentWallet.networkId == networkId}>
+            <Button
+              disabled={isShowVerifyReference() && !onSuccess}
+              className={style.button}
+              size="small"
+              color="primary"
+              variant="text"
+              onClick={handleClaimAll}>
+              {i18n.t('Wallet.Tip.Claim_All')}
+            </Button>
+          </ShowIf>
+        </div>
+      </ListItem>
+      {showTokens()}
       <Backdrop className={style.backdrop} open={loading}>
         <CircularProgress color="primary" />
       </Backdrop>

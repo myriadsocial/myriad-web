@@ -1,56 +1,46 @@
 import React, {useState} from 'react';
 
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import {Typography, Button} from '@material-ui/core';
 
-import {TipTotalNear} from '../TotalTips/TipTotalNear';
+import {TipTotal} from '../TotalTips/TipTotal';
 import {useStyles} from './tip.style';
 
-import {NearNetworkIcon24} from 'src/components/atoms/Icons';
-import {TotalTipsDataInterface} from 'src/interfaces/network';
+import {TipResult} from 'src/interfaces/network';
 import i18n from 'src/locale';
 
-type TipNearProps = {
-  handleVerifyReference: (currentBalance: string | number) => void;
-  handleClaimAll: () => void;
-  totalTipsData: Array<TotalTipsDataInterface>;
+type TipClaimReference = {
+  networkId: string;
+  token?: string;
+  txFee?: string;
+  totalTipsData: TipResult[];
+  onHandleVerifyRef: (networkId: string, currentBalance: string | number) => void;
 };
 
-export const TipNear: React.FC<TipNearProps> = props => {
-  const {handleVerifyReference, totalTipsData, handleClaimAll} = props;
+export const TipClaimReference: React.FC<TipClaimReference> = ({
+  networkId,
+  totalTipsData,
+  onHandleVerifyRef,
+  txFee = '0.00',
+  token = '',
+}) => {
   const style = useStyles();
   const [isShowModalTotalTips, setIsShowModalTotalTips] = useState<boolean>(false);
+
   const onVerifyReference = () => {
     const tip = totalTipsData.find(item => item.tipsBalanceInfo.ftIdentifier === 'native');
     const currentBalance = tip ? tip.amount : '0.000';
 
-    handleVerifyReference(currentBalance);
+    onHandleVerifyRef(networkId, currentBalance);
   };
 
   return (
     <>
-      <div className={style.flex}>
-        <div className={style.flex}>
-          <NearNetworkIcon24 width={'24px'} height={'24px'} />
-          <Typography variant="h6" component="span" color="textPrimary">
-            NEAR
-          </Typography>
-        </div>
-        <Button
-          className={style.button}
-          size="small"
-          color="default"
-          variant="text"
-          onClick={handleClaimAll}>
-          {i18n.t('Wallet.Tip.Claim_All')}
-        </Button>
-      </div>
       <div className={style.contentReference}>
         <Typography variant="h4" className={style.title} component="p">
           {i18n.t('Wallet.Tip.Reference.Title')}
         </Typography>
         <Typography variant="body1" className={style.desc} color="textPrimary" component="p">
-          {i18n.t('Wallet.Tip.Reference.Desc')}
+          {i18n.t('Wallet.Tip.Reference.Desc', {txFee, token})}
         </Typography>
         <Button onClick={onVerifyReference} size="small" color="primary" variant="contained">
           {i18n.t('Wallet.Tip.Reference.Button')}
@@ -65,7 +55,7 @@ export const TipNear: React.FC<TipNearProps> = props => {
           </Button>
         </div>
       </div>
-      <TipTotalNear
+      <TipTotal
         handleVerifyReference={onVerifyReference}
         totalTipsData={totalTipsData}
         open={isShowModalTotalTips}

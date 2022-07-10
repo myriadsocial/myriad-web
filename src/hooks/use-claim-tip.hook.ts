@@ -12,36 +12,42 @@ import {getClaimTip, claimMyria} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
+const sortNetwork = (networks: Network[], selectedNetwork?: string) => {
+  const newDefaultNetworks = [...networks];
+  const defaultNetworks = remove(newDefaultNetworks, function (n) {
+    return n.id === selectedNetwork;
+  });
+  const resultDefaultCoins = [...defaultNetworks, ...newDefaultNetworks];
+
+  return resultDefaultCoins;
+};
+
 export const useClaimTip = () => {
   const {user, networks, socials} = useSelector<RootState, UserState>(state => state.userState);
-  const {claimTip, claimAllTip} = useNearApi();
+  const {claimTip, claimAllTip, defaultTxFee} = useNearApi();
   const [loading, setLoading] = useState(true);
   const [claiming, setClaiming] = useState(false);
   const [claimingAll, setClaimingAll] = useState(false);
   const [error, setError] = useState(null);
-  const [tipsEachNetwork, setTipsEachNetwork] = useState<Network[]>(networks);
+  const [tipsEachNetwork, setTipsEachNetwork] = useState<Network[]>([]);
+  const [trxFee, setTxFee] = useState(null);
 
   useEffect(() => {
-    getTip();
-  }, [networks]);
+    const sortedNetwork = sortNetwork(networks, user.wallets[0].networkId);
+    getTip(sortedNetwork);
+  }, [user.wallets[0]]);
 
-  const sortNetwork = (networks: Network[], selectedNetwork?: string) => {
-    const newDefaultNetworks = [...networks];
-    const defaultNetworks = remove(newDefaultNetworks, function (n) {
-      return n.id === selectedNetwork;
-    });
-    const resultDefaultCoins = [...defaultNetworks, ...newDefaultNetworks];
-
-    return resultDefaultCoins;
-  };
-
-  const getTip = async () => {
+  const getTip = async (sortedNetwork: Network[]) => {
     setLoading(true);
 
     if (!user) return setLoading(false);
 
     try {
-      const promises = tipsEachNetwork.map(async network => {
+      let exists = true;
+      let networkId = user.wallets[0].networkId;
+      let nativeDecimal = 0;
+
+      const networkCallback = async (network: Network) => {
         const serverId = await WalletAPI.getServerId(network.id);
         const tipBalanceInfo = {
           serverId: serverId,
@@ -88,6 +94,11 @@ export const useClaimTip = () => {
               const {server_id, reference_type, reference_id, ft_identifier} = tips_balance_info;
               const currency = network.currencies.find(e => e.symbol === symbol);
               const accountId = unclaimed_reference_ids.length === 0 ? account_id : null;
+              if (!accountId) {
+                exists = false;
+                nativeDecimal = network.currencies.find(e => e.native).decimal;
+              }
+
               return {
                 symbol,
                 accountId,
@@ -107,12 +118,29 @@ export const useClaimTip = () => {
         }
 
         return network;
-      });
+      };
 
-      const networksWithTip = await Promise.all(promises);
-      const sortedNetwork = sortNetwork(networksWithTip, user.wallets[0].networkId);
+      const networksWithTip = await Promise.all(sortedNetwork.map(networkCallback)).then(
+        async result => {
+          if (!exists) {
+            switch (networkId) {
+              case NetworkIdEnum.NEAR: {
+                const txFee = await defaultTxFee();
+                const formatted = +txFee / 10 ** nativeDecimal;
+                setTxFee(formatted.toFixed(2));
+                break;
+              }
 
-      setTipsEachNetwork(sortedNetwork);
+              default:
+                setTxFee('0.00');
+            }
+          }
+
+          return result;
+        },
+      );
+
+      setTipsEachNetwork(networksWithTip);
     } catch (error) {
       console.log(error);
       setError(error as any);
@@ -189,7 +217,8 @@ export const useClaimTip = () => {
           throw new Error('CannotClaimTip');
       }
 
-      const promises = [getTip()];
+      const sortedNetwork = sortNetwork(networks, user.wallets[0].networkId);
+      const promises = [getTip(sortedNetwork)];
 
       if (currency) {
         promises.push(
@@ -284,5 +313,6 @@ export const useClaimTip = () => {
     getTip,
     claim,
     claimAll,
+    trxFee,
   };
 };

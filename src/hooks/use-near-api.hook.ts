@@ -5,7 +5,7 @@ import getConfig from 'next/config';
 
 import BN from 'bn.js';
 import * as nearAPI from 'near-api-js';
-import {NetworkIdEnum} from 'src/interfaces/network';
+import {NetworkIdEnum, TipsBalanceInfo} from 'src/interfaces/network';
 import {BlockchainPlatform, WalletDetail, WalletReferenceType} from 'src/interfaces/wallet';
 import * as NetworkAPI from 'src/lib/api/network';
 import {
@@ -21,7 +21,7 @@ import {UserState} from 'src/reducers/user/reducer';
 
 const {publicRuntimeConfig} = getConfig();
 
-interface TipBalanceInfo {
+export interface TipBalanceInfo {
   server_id: string;
   reference_type: string;
   reference_id: string;
@@ -184,41 +184,27 @@ export const useNearApi = () => {
   };
 
   const payTransactionFee = async (
-    serverId: string,
-    referenceId: string,
+    tipsBalanceInfo: TipBalanceInfo,
     currentBalance: string | number,
   ): Promise<void> => {
+    const attachedGas = new BN('300000000000000');
     const tippingContractId = publicRuntimeConfig.nearTippingContractId;
-    const tipsBalanceInfo = {
-      server_id: serverId,
-      reference_type: 'user',
-      reference_id: referenceId,
-      ft_identifier: 'native',
-    };
-    //call rpc near
-    const {rpcURL} = await NetworkAPI.getNetwork(NetworkIdEnum.NEAR);
-    //call api near
-    const provider = new nearAPI.providers.JsonRpcProvider({url: rpcURL});
     const data = JSON.stringify({tips_balance_info: tipsBalanceInfo});
-    // gas price
-    const {gas_price} = await provider.gasPrice(null);
-
-    const gasFee = 300000000000000;
-    const transactionFee = BigInt(gasFee) * BigInt(gas_price);
 
     //inisialisasi near wallet
     const {wallet} = await nearInitialize();
+    const txFee = await defaultTxFee();
     const account = wallet.account();
     const actions = [
       nearAPI.transactions.functionCall(
         'send_tip',
         Buffer.from(data),
-        new BN(gasFee.toString()),
-        new BN(transactionFee.toString()),
+        new BN(attachedGas),
+        new BN(txFee),
       ),
     ];
     const appAuthURL = publicRuntimeConfig.appAuthURL;
-    const url = `${appAuthURL}/wallet?type=tip&txFee=${transactionFee.toString()}&balance=${currentBalance}&networkId=near`;
+    const url = `${appAuthURL}/wallet?type=tip&txFee=${txFee}&balance=${currentBalance}&networkId=near`;
     //TODO: fix error protected class for multiple sign and send transactions
     // @ts-ignore: protected class
     await account.signAndSendTransaction({
@@ -286,6 +272,16 @@ export const useNearApi = () => {
     });
   };
 
+  const defaultTxFee = async (): Promise<string> => {
+    const {rpcURL} = await NetworkAPI.getNetwork(NetworkIdEnum.NEAR);
+    const provider = new nearAPI.providers.JsonRpcProvider({url: rpcURL});
+    const {gas_price} = await provider.gasPrice(null);
+    const gasFee = 300000000000000;
+    const transactionFee = BigInt(gasFee) * BigInt(gas_price);
+
+    return transactionFee.toString();
+  };
+
   return {
     connectToNear,
     getEstimatedFee,
@@ -294,5 +290,6 @@ export const useNearApi = () => {
     payTransactionFee,
     claimTip,
     claimAllTip,
+    defaultTxFee,
   };
 };

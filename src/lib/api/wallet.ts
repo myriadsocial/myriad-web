@@ -191,7 +191,7 @@ export const getServerId = async (networkId?: string): Promise<string> => {
       return data.id;
 
     case 'near':
-      return data?.accountId[networkId];
+      return data?.accountId?.[networkId];
 
     default:
       return data.id;
