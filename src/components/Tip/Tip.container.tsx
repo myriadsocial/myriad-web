@@ -103,10 +103,10 @@ export const TipContainer: React.FC = () => {
 
     const url = new URL(router.asPath, publicRuntimeConfig.appAuthURL);
 
-    url.search = transactionHashes && amount ? `?balance=${amount}` : '';
+    url.search = amount ? `?balance=${amount}` : '';
 
     router.replace(url, undefined, {shallow: true});
-  }, [errorCode, transactionHashes, errorMessage, txFee]);
+  }, [errorCode, transactionHashes, errorMessage, txFee, amount]);
 
   const handleClaimTip = (networkId: string, ftIdentifier: string) => {
     claim(networkId, ftIdentifier, ({claimSuccess, errorMessage}) => {
