@@ -30,7 +30,7 @@ export const useClaimTip = () => {
   const [claimingAll, setClaimingAll] = useState(false);
   const [error, setError] = useState(null);
   const [tipsEachNetwork, setTipsEachNetwork] = useState<Network[]>([]);
-  const [trxFee, setTxFee] = useState(null);
+  const [trxFee, setTxFee] = useState<string>(null);
 
   useEffect(() => {
     const sortedNetwork = sortNetwork(networks, user.wallets[0].networkId);
@@ -44,7 +44,7 @@ export const useClaimTip = () => {
 
     try {
       let exists = true;
-      let networkId = user.wallets[0].networkId;
+      const networkId = user.wallets[0].networkId;
       let nativeDecimal = 0;
 
       const networkCallback = async (network: Network) => {

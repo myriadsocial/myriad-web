@@ -16,6 +16,7 @@ import {Tip} from './Tip';
 
 import {PolkadotAccountList} from 'components/PolkadotAccountList';
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import {utils} from 'near-api-js';
 import {Empty} from 'src/components/atoms/Empty';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useClaimTip} from 'src/hooks/use-claim-tip.hook';
@@ -157,7 +158,9 @@ export const TipContainer: React.FC = () => {
             ft_identifier: 'native',
           };
 
-          await payTransactionFee(tipsBalanceInfo, currentBalance);
+          const amountInYocto = utils.format.parseNearAmount(trxFee);
+
+          await payTransactionFee(tipsBalanceInfo, amountInYocto, currentBalance);
           break;
         }
 
