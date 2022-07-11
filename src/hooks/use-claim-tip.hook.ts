@@ -12,38 +12,42 @@ import {getClaimTip, claimMyria} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
+const sortNetwork = (networks: Network[], selectedNetwork?: string) => {
+  const newDefaultNetworks = [...networks];
+  const defaultNetworks = remove(newDefaultNetworks, function (n) {
+    return n.id === selectedNetwork;
+  });
+  const resultDefaultCoins = [...defaultNetworks, ...newDefaultNetworks];
+
+  return resultDefaultCoins;
+};
+
 export const useClaimTip = () => {
-  const {user, networks, currentWallet, socials} = useSelector<RootState, UserState>(
-    state => state.userState,
-  );
-  const {claimTip, claimAllTip} = useNearApi();
-  const [loading, setLoading] = useState(false);
+  const {user, networks, socials} = useSelector<RootState, UserState>(state => state.userState);
+  const {claimTip, claimAllTip, defaultTxFee} = useNearApi();
+  const [loading, setLoading] = useState(true);
   const [claiming, setClaiming] = useState(false);
   const [claimingAll, setClaimingAll] = useState(false);
   const [error, setError] = useState(null);
-  const [tipsEachNetwork, setTipsEachNetwork] = useState<Network[]>(networks);
+  const [tipsEachNetwork, setTipsEachNetwork] = useState<Network[]>([]);
+  const [trxFee, setTxFee] = useState(null);
 
   useEffect(() => {
-    getTip();
-  }, [networks]);
+    const sortedNetwork = sortNetwork(networks, user.wallets[0].networkId);
+    getTip(sortedNetwork);
+  }, [user.wallets[0]]);
 
-  const sortNetwork = (networks: Network[], selectedNetwork?: string) => {
-    const newDefaultNetworks = [...networks];
-    const defaultNetworks = remove(newDefaultNetworks, function (n) {
-      return n.id === selectedNetwork;
-    });
-    const resultDefaultCoins = [...defaultNetworks, ...newDefaultNetworks];
-
-    return resultDefaultCoins;
-  };
-
-  const getTip = async () => {
-    if (!user) return;
+  const getTip = async (sortedNetwork: Network[]) => {
     setLoading(true);
-    setTipsEachNetwork(networks);
+
+    if (!user) return setLoading(false);
 
     try {
-      const promises = networks.map(async network => {
+      let exists = true;
+      let networkId = user.wallets[0].networkId;
+      let nativeDecimal = 0;
+
+      const networkCallback = async (network: Network) => {
         const serverId = await WalletAPI.getServerId(network.id);
         const tipBalanceInfo = {
           serverId: serverId,
@@ -58,12 +62,10 @@ export const useClaimTip = () => {
           case NetworkIdEnum.MYRIAD: {
             const data = await getClaimTip(tipBalanceInfo, network.rpcURL);
             if (!data) return network;
+            if (data.amount === '0') return network;
             const result: TipResult = {
               accountId: data.accountId,
-              amount:
-                data.amount == '0'
-                  ? data.amount
-                  : (parseFloat(data.amount.replace(/,/g, '')) / 10 ** 18).toFixed(3).toString(),
+              amount: (parseFloat(data.amount.replace(/,/g, '')) / 10 ** 18).toFixed(3).toString(),
               tipsBalanceInfo: {
                 ftIdentifier: data.tipsBalanceInfo.ftIdentifier,
                 referenceId: data.tipsBalanceInfo.referenceId,
@@ -92,6 +94,11 @@ export const useClaimTip = () => {
               const {server_id, reference_type, reference_id, ft_identifier} = tips_balance_info;
               const currency = network.currencies.find(e => e.symbol === symbol);
               const accountId = unclaimed_reference_ids.length === 0 ? account_id : null;
+              if (!accountId) {
+                exists = false;
+                nativeDecimal = network.currencies.find(e => e.native).decimal;
+              }
+
               return {
                 symbol,
                 accountId,
@@ -111,12 +118,29 @@ export const useClaimTip = () => {
         }
 
         return network;
-      });
+      };
 
-      const networksWithTip = await Promise.all(promises);
-      const sortedNetwork = sortNetwork(networksWithTip, currentWallet?.networkId);
+      const networksWithTip = await Promise.all(sortedNetwork.map(networkCallback)).then(
+        async result => {
+          if (!exists) {
+            switch (networkId) {
+              case NetworkIdEnum.NEAR: {
+                const txFee = await defaultTxFee();
+                const formatted = +txFee / 10 ** nativeDecimal;
+                setTxFee(formatted.toFixed(2));
+                break;
+              }
 
-      setTipsEachNetwork(sortedNetwork);
+              default:
+                setTxFee('0.00');
+            }
+          }
+
+          return result;
+        },
+      );
+
+      setTipsEachNetwork(networksWithTip);
     } catch (error) {
       console.log(error);
       setError(error as any);
@@ -131,7 +155,7 @@ export const useClaimTip = () => {
     callback?: ({claimSuccess: boolean, errorMessage: string}) => void,
   ) => {
     if (!user) return;
-    if (!currentWallet) return;
+    if (!user?.wallets[0]) return;
 
     const selectedNetwork = networks.find(network => network.id == networkId);
 
@@ -147,44 +171,66 @@ export const useClaimTip = () => {
 
       if (!serverId) throw new Error('ServerNotExists');
 
+      const tipBalanceInfo = {
+        serverId,
+        referenceType: 'user',
+        referenceId: user.id,
+        ftIdentifier,
+      };
+
+      const currency = selectedNetwork.currencies?.find(({native, referenceId}) => {
+        if (tipBalanceInfo.ftIdentifier === 'native' && native) return true;
+        return referenceId === tipBalanceInfo.ftIdentifier;
+      });
+
       switch (selectedNetwork.id) {
         case NetworkIdEnum.MYRIAD: {
-          const myriadTipBalanceInfo = {
-            serverId,
-            referenceType: 'user',
-            referenceId: user.id,
-            ftIdentifier,
-          };
-          await claimMyria(myriadTipBalanceInfo, selectedNetwork?.rpcURL, currentWallet);
-          const currency = selectedNetwork.currencies?.find(currency => currency.native === true);
-
-          if (currency) {
-            await updateTransaction({
-              userId: currentWallet.userId,
-              walletId: currentWallet.id,
-              currencyId: currency.id,
-            });
-          }
-          await getTip();
+          await claimMyria(tipBalanceInfo, selectedNetwork?.rpcURL, user.wallets[0].id);
           break;
         }
 
         case NetworkIdEnum.NEAR: {
-          const nearTipBalanceInfo = {
-            server_id: serverId,
-            reference_type: 'user',
-            reference_id: user.id,
-            ft_identifier: ftIdentifier,
-          };
+          let txInfo = '';
 
-          await claimTip(nearTipBalanceInfo);
-          await getTip();
+          if (currency) {
+            txInfo = JSON.stringify({
+              userId: user.id,
+              walletId: user.wallets[0].id,
+              currencyIds: [currency.id],
+            });
+          }
+
+          await claimTip(
+            {
+              server_id: serverId,
+              reference_type: 'user',
+              reference_id: user.id,
+              ft_identifier: ftIdentifier,
+            },
+            txInfo,
+          );
+
           break;
         }
 
         default:
           throw new Error('CannotClaimTip');
       }
+
+      const sortedNetwork = sortNetwork(networks, user.wallets[0].networkId);
+      const promises = [getTip(sortedNetwork)];
+
+      if (currency) {
+        promises.push(
+          updateTransaction({
+            userId: user.id,
+            walletId: user.wallets[0].id,
+            currencyIds: [currency.id],
+          }),
+        );
+      }
+
+      await Promise.all(promises);
     } catch (error) {
       errorMessage = error.message;
       claimSuccess = false;
@@ -205,6 +251,10 @@ export const useClaimTip = () => {
 
     setClaimingAll(true);
 
+    const currencyIds =
+      networks.find(network => network.id == networkId)?.currencies?.map(currency => currency.id) ??
+      [];
+
     try {
       switch (networkId) {
         case NetworkIdEnum.MYRIAD:
@@ -220,12 +270,30 @@ export const useClaimTip = () => {
 
           if (!serverId) throw new Error('ServerNotExists');
 
-          await claimAllTip(serverId, userId);
+          let transactionInfo = '';
+
+          if (currencyIds.length > 0) {
+            transactionInfo = JSON.stringify({
+              userId: user.id,
+              walletId: user.wallets[0].id,
+              currencyIds,
+            });
+          }
+
+          await claimAllTip(serverId, userId, transactionInfo);
           break;
         }
 
         default:
           break;
+      }
+
+      if (currencyIds.length > 0 && networkId !== NetworkIdEnum.NEAR) {
+        await updateTransaction({
+          userId: user.id,
+          walletId: user.wallets[0].id,
+          currencyIds,
+        });
       }
     } catch (error) {
       errorMessage = error.message;
@@ -245,5 +313,6 @@ export const useClaimTip = () => {
     getTip,
     claim,
     claimAll,
+    trxFee,
   };
 };

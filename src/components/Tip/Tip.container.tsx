@@ -1,40 +1,60 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 
 import getConfig from 'next/config';
 import {useRouter} from 'next/router';
 
+import {NoSsr} from '@material-ui/core';
+
+import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
+import {encodeAddress} from '@polkadot/keyring';
+import {hexToU8a} from '@polkadot/util';
+
 import {BoxComponent} from '../atoms/Box';
 import {ShimerComponent} from './Shimer';
 import {Tip} from './Tip';
-import {TipNear} from './TipNear';
 
+import {PolkadotAccountList} from 'components/PolkadotAccountList';
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {Empty} from 'src/components/atoms/Empty';
-import ShowIf from 'src/components/common/show-if.component';
+import {useAuthHook} from 'src/hooks/auth.hook';
 import {useClaimTip} from 'src/hooks/use-claim-tip.hook';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
+import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {Network, NetworkIdEnum, TipResult} from 'src/interfaces/network';
-import {claimReference} from 'src/lib/api/claim-reference';
+import {updateTransaction} from 'src/lib/api/transaction';
 import {getServerId} from 'src/lib/api/wallet';
+import * as WalletAPI from 'src/lib/api/wallet';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
+const {publicRuntimeConfig} = getConfig();
+
 export const TipContainer: React.FC = () => {
   const router = useRouter();
-  const {publicRuntimeConfig} = getConfig();
+  const enqueueSnackbar = useEnqueueSnackbar();
+
   const {currentWallet, user} = useSelector<RootState, UserState>(state => state.userState);
   const {payTransactionFee} = useNearApi();
-  const {loading, claiming, claimingAll, tipsEachNetwork, claim, claimAll, getTip} = useClaimTip();
-  const enqueueSnackbar = useEnqueueSnackbar();
+  const {loading, claiming, claimingAll, tipsEachNetwork, claim, claimAll, trxFee} = useClaimTip();
+  const {enablePolkadotExtension} = usePolkadotExtension();
+  const {getRegisteredAccounts} = useAuthHook();
+  const [verifyingRef, setVerifyingRef] = useState(false);
+  const [claimingSuccess, setClaimingSucces] = useState(false);
+  const [showAccountList, setShowAccountList] = useState(false);
+  const [extensionInstalled, setExtensionInstalled] = useState(false);
+  const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
+
   const transactionHashes = router.query.transactionHashes as string | null;
   const errorCode = router.query.errorCode as string | null;
   const errorMessage = router.query.errorMessage as string | null;
   const txFee = router.query.txFee as string | null;
+  const amount = router.query.balance as string | null;
+  const txInfo = router.query.txInfo as string | null;
 
   useEffect(() => {
-    if (!txFee && transactionHashes) {
+    if (!txFee && !txInfo && transactionHashes) {
       enqueueSnackbar({
         message: i18n.t('Wallet.Tip.Alert.Success'),
         variant: 'success',
@@ -49,29 +69,42 @@ export const TipContainer: React.FC = () => {
       });
     }
 
+    if (txInfo && !errorCode && !errorMessage) {
+      updateTransaction(JSON.parse(txInfo)).catch(() => console.log);
+    }
+
     if (txFee && !errorCode && !errorMessage) {
-      claimReferenceFunction()
+      let success = true;
+
+      setVerifyingRef(true);
+
+      const tippingContractId = publicRuntimeConfig.nearTippingContractId;
+      WalletAPI.claimReference({txFee, tippingContractId})
         .then(() => {
           enqueueSnackbar({
             // TODO: Register Translation
             message: 'Verifying Success',
             variant: 'success',
           });
-          return getTip();
         })
         .catch(e => {
+          success = false;
           enqueueSnackbar({
             // TODO: Register Translation
             message: e.message,
             variant: 'error',
           });
-          return getTip();
+        })
+        .finally(() => {
+          setClaimingSucces(success);
+          setVerifyingRef(false);
         });
     }
 
     const url = new URL(router.asPath, publicRuntimeConfig.appAuthURL);
 
-    url.search = '';
+    url.search = transactionHashes && amount ? `?balance=${amount}` : '';
+
     router.replace(url, undefined, {shallow: true});
   }, [errorCode, transactionHashes, errorMessage, txFee]);
 
@@ -108,115 +141,151 @@ export const TipContainer: React.FC = () => {
     return false;
   };
 
-  const handleVerifyReference = async () => {
-    if (!currentWallet?.networkId) return;
+  const handleVerifyReference = async (networkId: string, currentBalance: string | number) => {
     if (!user?.id) return;
 
+    setVerifyingRef(true);
+
     try {
-      const serverId = await getServerId(currentWallet?.networkId);
-      const txFee = await payTransactionFee({
-        referenceId: user?.id,
-        serverId,
-      });
-      await claimReference({
-        tippingContractId: publicRuntimeConfig.nearTippingContractId,
-        txFee,
-      });
+      switch (networkId) {
+        case NetworkIdEnum.NEAR: {
+          const serverId = await getServerId(currentWallet?.networkId);
+          const tipsBalanceInfo = {
+            server_id: serverId,
+            reference_type: 'user',
+            reference_id: user.id,
+            ft_identifier: 'native',
+          };
+
+          await payTransactionFee(tipsBalanceInfo, currentBalance);
+          break;
+        }
+
+        case NetworkIdEnum.MYRIAD: {
+          checkExtensionInstalled();
+          break;
+        }
+
+        default:
+          return;
+      }
     } catch (error) {
       // TODO: Register Translation
       enqueueSnackbar({
         message: error.message,
         variant: 'error',
       });
-    } finally {
-      getTip();
     }
   };
 
-  const isShowVerifyReference = (tips: TipResult[], networkId: string) => {
-    if (networkId !== NetworkIdEnum.NEAR) return false;
-    const tip = tips.find(e => e.accountId === null);
-    if (tip) return true;
-    return false;
+  const closeAccountList = () => {
+    setShowAccountList(false);
+    setVerifyingRef(false);
   };
 
-  const claimReferenceFunction = async () => {
-    await claimReference({
-      tippingContractId: publicRuntimeConfig.nearTippingContractId,
-      txFee,
+  const checkExtensionInstalled = async () => {
+    const installed = await enablePolkadotExtension();
+
+    setShowAccountList(true);
+    setExtensionInstalled(installed);
+
+    getAvailableAccounts();
+  };
+
+  const getAvailableAccounts = async () => {
+    const accounts = await getRegisteredAccounts();
+    const encodeAccount = encodeAddress(hexToU8a(currentWallet.id));
+    const currentAccounts = accounts.filter(account => account.address === encodeAccount);
+
+    setAccounts(currentAccounts);
+  };
+
+  const handleConnect = async (account?: InjectedAccountWithMeta) => {
+    closeAccountList();
+
+    if (!account) return;
+
+    setVerifyingRef(false);
+    enqueueSnackbar({
+      message: 'Reference verification for MYRIA network is underway',
+      variant: 'warning',
     });
+
+    return;
   };
 
-  return (
-    <>
-      {tipsEachNetwork.map(network => (
-        <>
-          <ShowIf condition={loading}>
-            <BoxComponent isWithChevronRightIcon={false} marginTop={'20px'}>
-              <ShimerComponent />
-            </BoxComponent>
-          </ShowIf>
-          <ShowIf condition={!loading && !tipWithBalances(network).length && isShow(network)}>
+  const getNativeToken = (tips: TipResult[]) => {
+    const native = tips.find(tip => tip?.tipsBalanceInfo?.ftIdentifier === 'native');
+    if (native) return native.symbol;
+    return '';
+  };
+
+  const showNetwork = (network: Network) => {
+    const tipBalances = tipWithBalances(network);
+    const nativeToken = getNativeToken(network?.tips ?? []);
+
+    if (!tipBalances.length) {
+      if (!isShow(network)) return;
+      switch (network.id) {
+        case NetworkIdEnum.MYRIAD:
+        case NetworkIdEnum.NEAR:
+          return (
             <div style={{marginTop: 20}}>
               <Empty
                 title={i18n.t('Wallet.Tip.Empty.Title')}
                 subtitle={i18n.t('Wallet.Tip.Empty.Subtitle')}
               />
             </div>
-          </ShowIf>
-          <ShowIf condition={!loading && !!tipWithBalances(network).length}>
-            <BoxComponent isWithChevronRightIcon={false} marginTop={'20px'}>
-              <ShowIf condition={claimingAll}>
-                {isShow(network) ? (
-                  <ShimerComponent />
-                ) : (
-                  <Tip
-                    loading={claiming}
-                    tips={tipWithBalances(network)}
-                    networkId={network.id}
-                    currentWallet={currentWallet}
-                    onClaim={handleClaimTip}
-                    onClaimAll={handleClaimTipAll}
-                  />
-                )}
-              </ShowIf>
-              <ShowIf condition={!claimingAll && !isShow(network)}>
-                <Tip
-                  loading={claiming}
-                  tips={tipWithBalances(network)}
-                  networkId={network.id}
-                  currentWallet={currentWallet}
-                  onClaim={handleClaimTip}
-                  onClaimAll={handleClaimTipAll}
-                />
-              </ShowIf>
-              <ShowIf condition={!claimingAll && isShow(network)}>
-                {isShowVerifyReference(network.tips, network.id) ? (
-                  <>
-                    <TipNear
-                      handleVerifyReference={handleVerifyReference}
-                      totalTipsData={network.tips}
-                      handleClaimAll={console.log}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <Tip
-                      loading={claiming}
-                      tips={tipWithBalances(network)}
-                      networkId={network.id}
-                      currentWallet={currentWallet}
-                      onClaim={handleClaimTip}
-                      onClaimAll={handleClaimTipAll}
-                    />
-                  </>
-                )}
-              </ShowIf>
-            </BoxComponent>
-          </ShowIf>
-        </>
-      ))}
-    </>
+          );
+        default:
+          return;
+      }
+    }
+
+    return (
+      <BoxComponent isWithChevronRightIcon={false} marginTop={'20px'}>
+        {showTip(network, tipBalances, nativeToken)}
+      </BoxComponent>
+    );
+  };
+
+  const showTip = (network: Network, tipBalances: TipResult[], token: string) => {
+    if ((claimingAll || verifyingRef) && isShow(network)) return <ShimerComponent />;
+    return (
+      <Tip
+        loading={claiming}
+        tips={tipBalances}
+        networkId={network.id}
+        currentWallet={currentWallet}
+        onClaim={handleClaimTip}
+        onClaimAll={handleClaimTipAll}
+        onHandleVerifyRef={handleVerifyReference}
+        onSuccess={claimingSuccess}
+        balance={amount}
+        nativeToken={token}
+        txFee={trxFee}
+      />
+    );
+  };
+
+  return (
+    <NoSsr>
+      {loading ? (
+        <BoxComponent isWithChevronRightIcon={false} marginTop={'20px'}>
+          <ShimerComponent />
+        </BoxComponent>
+      ) : (
+        tipsEachNetwork.map(network => showNetwork(network))
+      )}
+      <PolkadotAccountList
+        align="left"
+        title="Select account"
+        isOpen={showAccountList && extensionInstalled}
+        accounts={accounts}
+        onSelect={handleConnect}
+        onClose={closeAccountList}
+      />
+    </NoSsr>
   );
 };
 

@@ -62,5 +62,5 @@ export enum TransactionOrderType {
 export type TransactionInfo = {
   userId: string;
   walletId: string;
-  currencyId: string;
+  currencyIds: string[];
 };

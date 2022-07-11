@@ -122,8 +122,6 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({
         }
 
         case 'near': {
-          console.log('router', router);
-
           const callbackUrl = new URL(router.asPath, publicRuntimeConfig.appAuthURL);
           const redirectUrl = new URL(router.asPath, publicRuntimeConfig.appAuthURL);
           // clear previous query param

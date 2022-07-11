@@ -47,8 +47,6 @@
     "start:storybook": "start-storybook -p 6006"
   },
   "dependencies": {
-    "@acala-network/api": "^3.0.2",
-    "@acala-network/type-definitions": "^0.7.3",
     "@emotion/cache": "latest",
     "@emotion/react": "latest",
     "@emotion/server": "latest",

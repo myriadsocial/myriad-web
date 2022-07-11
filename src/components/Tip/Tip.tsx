@@ -10,6 +10,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 
+import {TipClaimReference} from './Tip.claim.reference';
 import {useStyles} from './tip.style';
 
 import {MenuOptions} from 'src/components/atoms/DropdownMenu';
@@ -28,9 +29,14 @@ type TipProps = {
   tips: TipResult[];
   networkId: NetworkIdEnum;
   loading: boolean;
+  nativeToken: string;
   currentWallet?: UserWallet;
+  txFee?: string;
+  onSuccess?: boolean;
+  balance?: string;
   onClaim: (networkId: string, ftIdentifier: string) => void;
   onClaimAll: (networkId: string) => void;
+  onHandleVerifyRef: (networkId: string, currentBalance: string | number) => void;
 };
 
 const networkOptions: MenuOptions<string>[] = [
@@ -53,7 +59,19 @@ const networkOptions: MenuOptions<string>[] = [
 ];
 
 export const Tip: React.FC<TipProps> = props => {
-  const {tips, networkId, onClaim, onClaimAll, currentWallet, loading} = props;
+  const {
+    tips,
+    networkId,
+    onClaim,
+    onClaimAll,
+    onHandleVerifyRef,
+    nativeToken,
+    currentWallet,
+    loading,
+    onSuccess = false,
+    balance,
+    txFee,
+  } = props;
   const style = useStyles();
 
   const icons = React.useMemo(
@@ -82,6 +100,71 @@ export const Tip: React.FC<TipProps> = props => {
     return selected?.title;
   };
 
+  const getAmount = (tip: TipResult) => {
+    if (onSuccess && balance && tip.tipsBalanceInfo.ftIdentifier === 'native') return balance;
+    return tip.amount;
+  };
+
+  const isShowVerifyReference = () => {
+    const tip = tips.find(e => e.accountId === null);
+    if (tip) return true;
+    return false;
+  };
+
+  const showTokens = () => {
+    if (isShowVerifyReference() && !onSuccess && networkId === currentWallet.networkId) {
+      return (
+        <TipClaimReference
+          networkId={networkId}
+          totalTipsData={tips}
+          onHandleVerifyRef={onHandleVerifyRef}
+          token={nativeToken}
+          txFee={txFee}
+        />
+      );
+    }
+
+    return (
+      <Grid container direction="row" justifyContent="flex-start" alignItems="center" spacing={2}>
+        {tips.map((tip, i) => (
+          <Grid item xs={6} key={i}>
+            <div className={style.content}>
+              <div className={style.flex}>
+                <div>
+                  <Avatar className={style.avatar} src={tip.imageURL} />
+                  <Typography component="p" variant="h5">
+                    {tip.symbol}
+                  </Typography>
+                </div>
+                <Button
+                  disabled={
+                    (currentWallet && currentWallet.networkId !== networkId) ||
+                    (!tip.accountId && !onSuccess) ||
+                    loading
+                  }
+                  onClick={() => handleClaim(networkId, tip.tipsBalanceInfo.ftIdentifier)}
+                  size="small"
+                  className={style.buttonClaim}
+                  color="primary"
+                  variant="contained">
+                  {i18n.t('Wallet.Tip.Claim')}
+                </Button>
+              </div>
+              <div className={style.text}>
+                <Typography variant="h5" component="p" color="textPrimary">
+                  {getAmount(tip)}
+                </Typography>
+                <Typography variant="subtitle2" component="p" color="textSecondary">
+                  USD {'~'}
+                </Typography>
+              </div>
+            </div>
+          </Grid>
+        ))}
+      </Grid>
+    );
+  };
+
   return (
     <>
       <ListItem alignItems="center" className={style.listItem}>
@@ -97,6 +180,7 @@ export const Tip: React.FC<TipProps> = props => {
           </ShowIf>
           <ShowIf condition={!!currentWallet && currentWallet.networkId == networkId}>
             <Button
+              disabled={isShowVerifyReference() && !onSuccess}
               className={style.button}
               size="small"
               color="primary"
@@ -107,43 +191,7 @@ export const Tip: React.FC<TipProps> = props => {
           </ShowIf>
         </div>
       </ListItem>
-      <Grid container direction="row" justifyContent="flex-start" alignItems="center" spacing={2}>
-        {tips.map((tip, i) => (
-          <Grid item xs={6} key={i}>
-            <div className={style.content}>
-              <div className={style.flex}>
-                <div>
-                  <Avatar className={style.avatar} src={tip.imageURL} />
-                  <Typography component="p" variant="h5">
-                    {tip.symbol}
-                  </Typography>
-                </div>
-                <Button
-                  disabled={
-                    (currentWallet && currentWallet.networkId !== networkId) ||
-                    loading ||
-                    !tip.accountId
-                  }
-                  onClick={() => handleClaim(networkId, tip.tipsBalanceInfo.ftIdentifier)}
-                  size="small"
-                  className={style.buttonClaim}
-                  color="primary"
-                  variant="contained">
-                  {i18n.t('Wallet.Tip.Claim')}
-                </Button>
-              </div>
-              <div className={style.text}>
-                <Typography variant="h5" component="p" color="textPrimary">
-                  {tip.amount}
-                </Typography>
-                <Typography variant="subtitle2" component="p" color="textSecondary">
-                  USD {'~'}
-                </Typography>
-              </div>
-            </div>
-          </Grid>
-        ))}
-      </Grid>
+      {showTokens()}
       <Backdrop className={style.backdrop} open={loading}>
         <CircularProgress color="primary" />
       </Backdrop>

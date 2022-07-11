@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {
   Button,
@@ -18,8 +18,9 @@ import {Modal, ModalProps} from '../atoms/Modal';
 import {useStyles} from './totalTips.style';
 
 import {formatUsd} from 'src/helpers/balance';
-import {useExchangeRate} from 'src/hooks/use-exchange-rate.hook';
+import {ExchangeRate} from 'src/interfaces/exchange';
 import {TotalTipsDataInterface} from 'src/interfaces/network';
+import * as TokenAPI from 'src/lib/api/exchange';
 import i18n from 'src/locale';
 
 type TipTotalNearProps = Pick<ModalProps, 'onClose' | 'open'> & {
@@ -27,22 +28,28 @@ type TipTotalNearProps = Pick<ModalProps, 'onClose' | 'open'> & {
   handleVerifyReference: () => void;
 };
 
-export const TipTotalNear: React.FC<TipTotalNearProps> = props => {
+export const TipTotal: React.FC<TipTotalNearProps> = props => {
   const {open, onClose, totalTipsData, handleVerifyReference} = props;
   const styles = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
-  const {loading, exchangeRates} = useExchangeRate();
 
-  const getConversion = (currencyId: string) => {
-    if (loading) {
-      return 0;
-    }
+  const [loading, setLoading] = useState(false);
+  const [exchangeRates, setExchangeRates] = useState<ExchangeRate[]>([]);
 
-    const found = exchangeRates.find(exchangeRate => exchangeRate.id === currencyId);
+  useEffect(() => {
+    setLoading(true);
+    TokenAPI.getExchangeRate()
+      .then(data => {
+        setExchangeRates(data);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [totalTipsData]);
 
-    if (found) return found.price;
-    return 0;
+  const getDetailExchangeRate = (symbol: string) => {
+    return exchangeRates?.find(exchangeRate => exchangeRate.id === symbol)?.price ?? 0;
   };
 
   const handleClose = () => {
@@ -62,8 +69,8 @@ export const TipTotalNear: React.FC<TipTotalNearProps> = props => {
           <Table className={styles.root} aria-label="Balance Detail Table">
             <TableBody>
               {totalTipsData.length > 0 &&
-                totalTipsData.map(balanceDetail => (
-                  <TableRow key={balanceDetail.id} className={styles.tableRow}>
+                totalTipsData.map((balanceDetail, index) => (
+                  <TableRow key={index} className={styles.tableRow}>
                     <TableCell component="th" scope="row" className={styles.tableCell}>
                       <Avatar
                         name={balanceDetail.symbol}
@@ -80,10 +87,14 @@ export const TipTotalNear: React.FC<TipTotalNearProps> = props => {
                           {Number(balanceDetail.amount).toFixed(4)}
                         </Typography>
                         <Typography variant="caption" color="textSecondary">
-                          {`~${formatUsd(
-                            balanceDetail.amount as number,
-                            getConversion(balanceDetail.id),
-                          )} USD`}
+                          {`~${
+                            loading
+                              ? ''
+                              : formatUsd(
+                                  balanceDetail.amount as number,
+                                  getDetailExchangeRate(balanceDetail.symbol),
+                                )
+                          } USD`}
                         </Typography>
                       </div>
                     </TableCell>
