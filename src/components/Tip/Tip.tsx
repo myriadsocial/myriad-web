@@ -72,6 +72,7 @@ export const Tip: React.FC<TipProps> = props => {
     balance,
     txFee,
   } = props;
+
   const style = useStyles();
 
   const icons = React.useMemo(

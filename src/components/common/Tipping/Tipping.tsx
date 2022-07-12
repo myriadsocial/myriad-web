@@ -48,6 +48,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
 
   const [amount, setAmount] = useState<BN>(INITIAL_AMOUNT);
   const [transactionFee, setTransactionFee] = useState<BN>(INITIAL_AMOUNT);
+
   const [currency, setCurrency] = useState<BalanceDetail>(defaultCurrency);
   const [agreementChecked, setAgreementChecked] = useState(false);
   const [loadingFee, setLoadingFee] = useState(true);
@@ -72,6 +73,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
   };
 
   const calculateTransactionFee = async (selected: BalanceDetail) => {
+    console.log('selected', selected);
     const senderAddress = getAddressByUser(sender);
 
     if (!receiver.walletDetail || !senderAddress) return;

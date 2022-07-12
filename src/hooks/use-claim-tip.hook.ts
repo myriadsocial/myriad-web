@@ -1,15 +1,21 @@
-import {useState, useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 
+import {BN, BN_ZERO} from '@polkadot/util';
+
 import {useNearApi} from './use-near-api.hook';
+import {usePolkadotApi} from './use-polkadot-api.hook';
 
 import {remove} from 'lodash';
+import {formatBalance} from 'src/helpers/balance';
 import {Network, NetworkIdEnum, TipResult} from 'src/interfaces/network';
+import {WalletReferenceType} from 'src/interfaces/wallet';
 import {updateTransaction} from 'src/lib/api/transaction';
 import * as WalletAPI from 'src/lib/api/wallet';
 import {getClaimTipNear} from 'src/lib/services/near-api-js';
-import {getClaimTip, claimMyria} from 'src/lib/services/polkadot-js';
+import {claimMyria, getClaimTip} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
+import {BalanceState} from 'src/reducers/balance/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 
 const sortNetwork = (networks: Network[], selectedNetwork?: string) => {
@@ -24,7 +30,9 @@ const sortNetwork = (networks: Network[], selectedNetwork?: string) => {
 
 export const useClaimTip = () => {
   const {user, networks, socials} = useSelector<RootState, UserState>(state => state.userState);
+  const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
   const {claimTip, claimAllTip, defaultTxFee} = useNearApi();
+  const {getEstimatedFee} = usePolkadotApi();
   const [loading, setLoading] = useState(true);
   const [claiming, setClaiming] = useState(false);
   const [claimingAll, setClaimingAll] = useState(false);
@@ -130,7 +138,30 @@ export const useClaimTip = () => {
                 setTxFee(formatted.toFixed(2));
                 break;
               }
+              case NetworkIdEnum.MYRIAD: {
+                const serverId = await WalletAPI.getServerId(user.wallets[0].networkId);
+                const tipBalanceInfo = {
+                  ftIdentifier: 'native',
+                  referenceId: user.id as string,
+                  referenceType: WalletReferenceType.PEOPLE,
+                  serverId: serverId as string,
+                };
+                let fee: BN = BN_ZERO;
+                // call function defaultTx Fee for myriad
+                const gasPrice = await getEstimatedFee(
+                  user?.wallets[0].id,
+                  tipBalanceInfo,
+                  balanceDetails[0],
+                );
+                if (gasPrice) {
+                  fee = gasPrice;
+                }
+                const amount = formatBalance(fee, balanceDetails[0].decimal, 10);
+                const displayAmount = fee.gt(BN_ZERO) ? (amount > 0 ? amount : '< 0.00000001') : 0;
 
+                setTxFee(displayAmount.toString());
+                break;
+              }
               default:
                 setTxFee('0.00');
             }
@@ -142,7 +173,6 @@ export const useClaimTip = () => {
 
       setTipsEachNetwork(networksWithTip);
     } catch (error) {
-      console.log(error);
       setError(error as any);
     } finally {
       setLoading(false);
