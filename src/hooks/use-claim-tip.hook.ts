@@ -161,8 +161,6 @@ export const useClaimTip = () => {
                   accountIdMyriad,
                 );
 
-                console.log('gasPrice', gasPrice);
-
                 if (gasPrice) {
                   fee = gasPrice;
                 }
@@ -171,7 +169,6 @@ export const useClaimTip = () => {
 
                 setTxFee(displayAmount.toString());
 
-                // setTxFee('100990');
                 break;
               }
               default:
