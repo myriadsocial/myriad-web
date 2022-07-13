@@ -187,6 +187,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
               removePicture={handleRemovePicture}
               loading={uploadingAvatar}
               accept="image"
+              imageProfile={imageProfile}
             />
           </div>
         </div>
