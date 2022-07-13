@@ -128,7 +128,7 @@ export const ListItemComponent: React.FC<ListItemComponentProps> = props => {
             component="div"
             variant="h5"
             color={isBanned ? 'textSecondary' : 'textPrimary'}>
-            {title}
+            &#8288;{title}
           </Typography>
         }
         secondary={

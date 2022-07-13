@@ -27,7 +27,6 @@ import {Modal, ModalProps} from '../atoms/Modal';
 import {SendTipButton} from '../common/SendTipButton/SendTipButton';
 import {useStyles} from './TipHistory.styles';
 
-import debounce from 'lodash/debounce';
 import {Empty} from 'src/components/atoms/Empty';
 import {Loading} from 'src/components/atoms/Loading';
 import ShowIf from 'src/components/common/show-if.component';
@@ -115,11 +114,6 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
-    const debounceSubmit = debounce(() => {
-      console.log(search);
-    }, 300);
-
-    debounceSubmit();
   };
 
   const submitSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
