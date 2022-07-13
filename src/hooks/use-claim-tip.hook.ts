@@ -32,7 +32,7 @@ export const useClaimTip = () => {
   const {user, networks, socials} = useSelector<RootState, UserState>(state => state.userState);
   const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
   const {claimTip, claimAllTip, defaultTxFee} = useNearApi();
-  const {getEstimatedFee} = usePolkadotApi();
+  const {getEstimatedFeeReference} = usePolkadotApi();
   const [loading, setLoading] = useState(true);
   const [claiming, setClaiming] = useState(false);
   const [claimingAll, setClaimingAll] = useState(false);
@@ -139,7 +139,13 @@ export const useClaimTip = () => {
                 break;
               }
               case NetworkIdEnum.MYRIAD: {
+                //estimate gas fee
                 const serverId = await WalletAPI.getServerId(user.wallets[0].networkId);
+                const accountIdMyriad = await WalletAPI.getAccountIdMyria(
+                  user.wallets[0].networkId,
+                );
+
+                console.log('accountIdMyriad', accountIdMyriad);
                 const tipBalanceInfo = {
                   ftIdentifier: 'native',
                   referenceId: user.id as string,
@@ -147,12 +153,16 @@ export const useClaimTip = () => {
                   serverId: serverId as string,
                 };
                 let fee: BN = BN_ZERO;
-                // call function defaultTx Fee for myriad
-                const gasPrice = await getEstimatedFee(
+
+                const gasPrice = await getEstimatedFeeReference(
                   user?.wallets[0].id,
                   tipBalanceInfo,
                   balanceDetails[0],
+                  accountIdMyriad,
                 );
+
+                console.log('gasPrice', gasPrice);
+
                 if (gasPrice) {
                   fee = gasPrice;
                 }
@@ -160,6 +170,8 @@ export const useClaimTip = () => {
                 const displayAmount = fee.gt(BN_ZERO) ? (amount > 0 ? amount : '< 0.00000001') : 0;
 
                 setTxFee(displayAmount.toString());
+
+                // setTxFee('100990');
                 break;
               }
               default:

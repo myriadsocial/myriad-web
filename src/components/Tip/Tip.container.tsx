@@ -209,6 +209,7 @@ export const TipContainer: React.FC = () => {
     if (!account) return;
 
     setVerifyingRef(false);
+    //TODO: myr-2286
     enqueueSnackbar({
       message: 'Reference verification for MYRIA network is underway',
       variant: 'warning',

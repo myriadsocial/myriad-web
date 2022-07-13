@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {BN, BN_ONE, BN_TWO, BN_TEN} from '@polkadot/util';
 
 import {SimpleSendTipProps} from '../interfaces/transaction';
+import {estimateFeeReference} from './../lib/services/polkadot-js';
 
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import isEmpty from 'lodash/isEmpty';
@@ -61,6 +62,38 @@ export const usePolkadotApi = () => {
       if (!estimatedFee) {
         // equal 0.01
         estimatedFee = BN_ONE.mul(BN_TEN.pow(new BN(currency.decimal))).div(BN_TEN.pow(BN_TWO));
+      }
+
+      return estimatedFee;
+    } catch (error) {
+      Sentry.captureException(error);
+      return null;
+    } finally {
+      setIsFetchingFee(false);
+    }
+  };
+
+  const getEstimatedFeeReference = async (
+    from: string,
+    walletDetail: WalletDetail,
+    selectedCurrency: BalanceDetail,
+    accountIdMyriad: string,
+  ): Promise<BN | null> => {
+    setIsFetchingFee(true);
+
+    try {
+      let {partialFee: estimatedFee} = await estimateFeeReference(
+        from,
+        walletDetail,
+        selectedCurrency,
+        accountIdMyriad,
+      );
+
+      if (!estimatedFee) {
+        // equal 0.01
+        estimatedFee = BN_ONE.mul(BN_TEN.pow(new BN(selectedCurrency.decimal))).div(
+          BN_TEN.pow(BN_TWO),
+        );
       }
 
       return estimatedFee;
@@ -152,5 +185,6 @@ export const usePolkadotApi = () => {
     error,
     simplerSendTip,
     getEstimatedFee,
+    getEstimatedFeeReference,
   };
 };

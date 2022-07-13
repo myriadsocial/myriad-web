@@ -530,3 +530,57 @@ export const connect = async (
 
   return api;
 };
+
+export const estimateFeeReference = async (
+  from: string,
+  walletDetail: WalletDetail,
+  selectedCurrency: BalanceDetail,
+  accountIdMyriad: string,
+): Promise<EstimateFeeResponseProps | null> => {
+  try {
+    const {enableExtension} = await import('src/helpers/extension');
+
+    const allAccounts = await enableExtension();
+
+    const keyring = new Keyring();
+
+    const baseAddress = keyring.encodeAddress(from);
+
+    let finalPartialFee = new BN(0);
+
+    let api: ApiPromise | null = null;
+
+    if (allAccounts) {
+      // We select the first account matching baseAddress
+      // `account` is of type InjectedAccountWithMeta
+      const account = allAccounts.find(account => {
+        // address from session must match address on polkadot extension
+        return account.address === baseAddress;
+      });
+
+      // if account has not yet been imported to Polkadot.js extension
+      if (!account) {
+        throw {
+          Error: 'Please import your account first!',
+        };
+      }
+
+      // otherwise if account found
+      api = await connectToBlockchain(selectedCurrency.network.rpcURL);
+
+      const {partialFee} = await api.tx.tipping
+        .claimReference(walletDetail, walletDetail.referenceType, walletDetail.referenceId, from)
+        .paymentInfo(accountIdMyriad);
+
+      finalPartialFee = partialFee.toBn();
+    }
+    return {
+      partialFee: finalPartialFee,
+      api,
+    };
+  } catch (error) {
+    console.log({error});
+    Sentry.captureException(error);
+    return null;
+  }
+};
