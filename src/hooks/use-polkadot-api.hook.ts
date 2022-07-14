@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {BN, BN_ONE, BN_TWO, BN_TEN} from '@polkadot/util';
 
 import {SimpleSendTipProps} from '../interfaces/transaction';
-import {estimateFeeReference} from './../lib/services/polkadot-js';
+import {claimFeeReferenceMyria, estimateFeeReference} from './../lib/services/polkadot-js';
 
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import isEmpty from 'lodash/isEmpty';
@@ -14,6 +14,7 @@ import {formatBalance} from 'src/helpers/balance';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {BlockchainPlatform, WalletDetail, WalletReferenceType} from 'src/interfaces/wallet';
 import {storeTransaction} from 'src/lib/api/transaction';
+import * as WalletAPI from 'src/lib/api/wallet';
 import {estimateFee, signAndSendExtrinsic} from 'src/lib/services/polkadot-js';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
@@ -24,7 +25,7 @@ import {UserState} from 'src/reducers/user/reducer';
 export const usePolkadotApi = () => {
   const dispatch = useDispatch();
 
-  const {anonymous, currencies, currentWallet} = useSelector<RootState, UserState>(
+  const {anonymous, currencies, currentWallet, user} = useSelector<RootState, UserState>(
     state => state.userState,
   );
   const {balanceDetails, loading: loadingBalance} = useSelector<RootState, BalanceState>(
@@ -103,6 +104,20 @@ export const usePolkadotApi = () => {
     } finally {
       setIsFetchingFee(false);
     }
+  };
+
+  const getClaimFeeReferenceMyria = async () => {
+    const serverId = await WalletAPI.getServerId(user.wallets[0].networkId);
+    const tipBalanceInfo = {
+      ftIdentifier: 'native',
+      referenceId: user.id as string,
+      referenceType: WalletReferenceType.PEOPLE,
+      serverId: serverId as string,
+    };
+    const data = claimFeeReferenceMyria(user?.wallets[0].id, tipBalanceInfo, balanceDetails[0]);
+    console.log('data', data);
+    try {
+    } catch (error) {}
   };
 
   const simplerSendTip = async (
@@ -186,5 +201,6 @@ export const usePolkadotApi = () => {
     simplerSendTip,
     getEstimatedFee,
     getEstimatedFeeReference,
+    getClaimFeeReferenceMyria,
   };
 };

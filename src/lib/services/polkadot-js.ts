@@ -6,8 +6,7 @@ import {ApiPromise, WsProvider} from '@polkadot/api';
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {Keyring} from '@polkadot/keyring';
 import {u128, u32, UInt} from '@polkadot/types';
-import {numberToHex} from '@polkadot/util';
-import {BN, BN_TEN} from '@polkadot/util';
+import {BN, BN_TEN, numberToHex} from '@polkadot/util';
 
 import {NoAccountException} from './errors/NoAccountException';
 import {SignRawException} from './errors/SignRawException';
@@ -551,21 +550,16 @@ export const estimateFeeReference = async (
     let api: ApiPromise | null = null;
 
     if (allAccounts) {
-      // We select the first account matching baseAddress
-      // `account` is of type InjectedAccountWithMeta
       const account = allAccounts.find(account => {
-        // address from session must match address on polkadot extension
         return account.address === baseAddress;
       });
 
-      // if account has not yet been imported to Polkadot.js extension
       if (!account) {
         throw {
           Error: 'Please import your account first!',
         };
       }
 
-      // otherwise if account found
       api = await connectToBlockchain(selectedCurrency.network.rpcURL);
 
       const {partialFee} = await api.tx.tipping
@@ -582,5 +576,43 @@ export const estimateFeeReference = async (
     console.log({error});
     Sentry.captureException(error);
     return null;
+  }
+};
+
+export const claimFeeReferenceMyria = async (
+  from: string,
+  walletDetail: WalletDetail,
+  selectedCurrency: BalanceDetail,
+) => {
+  try {
+    const {enableExtension} = await import('src/helpers/extension');
+    const allAccounts = await enableExtension();
+
+    const keyring = new Keyring();
+
+    const baseAddress = keyring.encodeAddress(from);
+    let api: ApiPromise | null = null;
+    if (allAccounts) {
+      const account = allAccounts.find(account => {
+        return account.address === baseAddress;
+      });
+
+      if (!account) {
+        throw {
+          Error: 'Please import your account first!',
+        };
+      }
+    }
+    api = await connectToBlockchain(selectedCurrency.network.rpcURL);
+
+    const data = await api.tx.tipping.claimTip(walletDetail);
+    console.log(data);
+
+    return {
+      api,
+      data,
+    };
+  } catch (error) {
+    console.log(error);
   }
 };

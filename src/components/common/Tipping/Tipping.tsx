@@ -73,7 +73,6 @@ export const Tipping: React.FC<SendTipProps> = props => {
   };
 
   const calculateTransactionFee = async (selected: BalanceDetail) => {
-    console.log('selected', selected);
     const senderAddress = getAddressByUser(sender);
 
     if (!receiver.walletDetail || !senderAddress) return;

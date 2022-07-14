@@ -139,13 +139,11 @@ export const useClaimTip = () => {
                 break;
               }
               case NetworkIdEnum.MYRIAD: {
-                //estimate gas fee
                 const serverId = await WalletAPI.getServerId(user.wallets[0].networkId);
                 const accountIdMyriad = await WalletAPI.getAccountIdMyria(
                   user.wallets[0].networkId,
                 );
 
-                console.log('accountIdMyriad', accountIdMyriad);
                 const tipBalanceInfo = {
                   ftIdentifier: 'native',
                   referenceId: user.id as string,
