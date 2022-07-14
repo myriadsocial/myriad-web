@@ -71,7 +71,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
 
   return (
     <>
-      <PostHeader user={user} owned={isPostOwner} post={post} {...restProps} />
+      <PostHeader user={user} owned={isPostCreator} post={post} {...restProps} />
 
       <div className={styles.content}>
         <ShowIf condition={hiddenContent}>
