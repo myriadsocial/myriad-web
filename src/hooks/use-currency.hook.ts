@@ -15,12 +15,13 @@ export const useCurrency = () => {
   const updateCurrencySet = async (
     userId: string,
     currenciesId: string[],
+    networkId: string,
     callback?: () => void,
   ) => {
     try {
       const primaryCoinId = currenciesId[0] as CurrencyId;
 
-      await TokenAPI.updateCurrencySet(userId, currenciesId);
+      await TokenAPI.updateCurrencySet(userId, currenciesId, networkId);
 
       dispatch(setDefaultCurrency(primaryCoinId));
       fetchUserCurrencies();

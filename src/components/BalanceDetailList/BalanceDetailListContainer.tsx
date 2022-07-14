@@ -39,11 +39,15 @@ export const BalanceDetailListContainer: React.FC = () => {
         polkadotBalance.forEach(coin => {
           data[currenciesId.indexOf(coin.id)] = coin;
         });
-
         setFilteredBalanced(data);
       } else if (currentWallet?.network?.blockchainPlatform === BlockchainPlatform.NEAR) {
         //TODO need to filtered by currenciesId from backend
-        setFilteredBalanced(nearBalance);
+        const data: BalanceDetail[] = [];
+
+        nearBalance.forEach(coin => {
+          data[currenciesId.indexOf(coin.id)] = coin;
+        });
+        setFilteredBalanced(data);
       }
     } else {
       if (currentWallet?.network?.blockchainPlatform === BlockchainPlatform.SUBSTRATE) {

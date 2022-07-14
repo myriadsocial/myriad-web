@@ -18,14 +18,14 @@ const TrendingExperienceTab = dynamic(() => import('./tabs/TrendingExperienceTab
 export const RightMenuBar: React.FC = () => {
   const iconTabs = [
     {
-      id: 'trendingExperienceTabPanel',
-      icon: <SvgIcon component={TrendingUpIcon} />,
-      component: <TrendingExperienceTab />,
-    },
-    {
       id: 'experienceTabMenu',
       icon: <SvgIcon component={VariableIcon} />,
       component: <ExperienceTab />,
+    },
+    {
+      id: 'trendingExperienceTabPanel',
+      icon: <SvgIcon component={TrendingUpIcon} />,
+      component: <TrendingExperienceTab />,
     },
     {
       id: 'trendingTabPanel',
@@ -43,7 +43,7 @@ export const RightMenuBar: React.FC = () => {
 
   const classes = useStyles();
 
-  const [activeTab, setActiveTab] = useState('trendingExperienceTabPanel');
+  const [activeTab, setActiveTab] = useState('experienceTabMenu');
 
   const handleChangeTab = (tab: string) => {
     setActiveTab(tab);

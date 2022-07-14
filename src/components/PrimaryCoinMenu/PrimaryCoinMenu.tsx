@@ -23,12 +23,13 @@ type PrimaryCoinMenuProps = {
   togglePrimaryCoinMenu: () => void;
   user: User;
   currenciesId: string[];
+  networkId: string;
 };
 
 export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
-  const {togglePrimaryCoinMenu, balanceDetails, user, currenciesId} = props;
+  const {togglePrimaryCoinMenu, balanceDetails, user, currenciesId, networkId} = props;
   const classes = useStyles();
 
   const enqueueSnackbar = useEnqueueSnackbar();
@@ -88,7 +89,7 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
     const currencyId = coins[0].id as CurrencyId;
     const coinsId = coins.map(coin => coin.id);
 
-    updateCurrencySet(user.id, coinsId, () => {
+    updateCurrencySet(user.id, coinsId, networkId, () => {
       enqueueSnackbar({
         message: i18n.t('Wallet.Primary_Coin.Alert.Msg'),
         variant: 'success',

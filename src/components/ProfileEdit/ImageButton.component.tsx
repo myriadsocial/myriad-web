@@ -55,6 +55,7 @@ type ButtonUploadProps = {
   loading?: boolean;
   onImageSelected: (file: File) => void;
   removePicture: (image: Partial<User>) => void;
+  imageProfile: File | string | undefined;
 };
 
 export const ImageButton: React.FC<ButtonUploadProps> = ({
@@ -62,6 +63,7 @@ export const ImageButton: React.FC<ButtonUploadProps> = ({
   accept,
   loading,
   removePicture,
+  imageProfile,
 }) => {
   const styles = useStyles();
 
@@ -132,7 +134,7 @@ export const ImageButton: React.FC<ButtonUploadProps> = ({
         open={Boolean(anchorEl)}
         onClose={handleClose}>
         <MenuItem onClick={selectFile}>Change picture</MenuItem>
-        <MenuItem onClick={handleRemovePicture} className={styles.delete}>
+        <MenuItem disabled={!imageProfile} onClick={handleRemovePicture} className={styles.delete}>
           Remove picture
         </MenuItem>
       </Menu>
