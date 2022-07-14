@@ -5,7 +5,7 @@ import getConfig from 'next/config';
 
 import BN from 'bn.js';
 import * as nearAPI from 'near-api-js';
-import {NetworkIdEnum, TipsBalanceInfo} from 'src/interfaces/network';
+import {NetworkIdEnum} from 'src/interfaces/network';
 import {BlockchainPlatform, WalletDetail, WalletReferenceType} from 'src/interfaces/wallet';
 import * as NetworkAPI from 'src/lib/api/network';
 import {
