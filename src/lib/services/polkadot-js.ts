@@ -1,4 +1,4 @@
-import {Balance, OrmlAccountData} from '@open-web3/orml-types/interfaces';
+import {Balance} from '@open-web3/orml-types/interfaces';
 import * as Sentry from '@sentry/nextjs';
 import {AnyObject} from '@udecode/plate';
 
@@ -311,13 +311,11 @@ export const checkAccountBalance = async (
 
     listenToSystemBalanceChange(api, account, free as u128, callback);
   } else {
-    const result = await api.query.tokens.accounts<OrmlAccountData>(account, {
-      TOKEN: currency.id,
-    });
+    const result = await api.query.octopusAssets.account(currency.referenceId, account);
 
-    free = result.free;
+    free = (result.toHuman() as any).balance;
 
-    listenToTokenBalanceChange(api, account, currency, result.free, callback);
+    listenToTokenBalanceChange(api, account, currency, free, callback);
   }
 
   return {
@@ -353,24 +351,20 @@ const listenToTokenBalanceChange = async (
   previousFree: Balance,
   callback: (change: BN) => void,
 ) => {
-  api.query.tokens.accounts(
-    account,
-    {
-      TOKEN: currency.id,
-    },
-    ({free}: OrmlAccountData) => {
-      // Calculate the delta
-      const change = free.sub(previousFree);
+  api.query.octopusAssets.account(currency.referenceId, account, ({balance}) => {
+    if (balance.toHuman() == 0) return;
 
-      // Only display positive value changes (Since we are pulling `previous` above already,
-      // the initial balance change will also be zero)
-      if (!change.isZero()) {
-        console.log(`New balance change of ${change}`);
+    // Calculate the delta
+    const change = balance.sub(previousFree);
 
-        callback(change);
-      }
-    },
-  );
+    // Only display positive value changes (Since we are pulling `previous` above already,
+    // the initial balance change will also be zero)
+    if (!change.isZero()) {
+      console.log(`New balance change of ${change}`);
+
+      callback(change);
+    }
+  });
 };
 
 export const getClaimTip = async (

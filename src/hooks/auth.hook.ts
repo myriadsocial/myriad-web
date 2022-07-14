@@ -26,7 +26,7 @@ import {createNearSignature} from 'src/lib/services/near-api-js';
 import {connect, signWithExtension} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
 import {fetchBalances, getUserCurrencies} from 'src/reducers/balance/actions';
-import {fetchUserWallets, fetchCurrentUserWallets, fetchUser} from 'src/reducers/user/actions';
+import {fetchUserWallets, fetchUser} from 'src/reducers/user/actions';
 import * as constants from 'src/reducers/user/constants';
 import {UserState} from 'src/reducers/user/reducer';
 import {uniqueNamesGenerator, adjectives, colors} from 'unique-names-generator';
