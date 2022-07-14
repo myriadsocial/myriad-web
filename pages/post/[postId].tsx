@@ -138,14 +138,17 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     }
 
     const originPost = await PostAPI.getPostDetail(params.postId, userId);
-
-    const upvoted = originPost.votes?.filter(vote => vote.userId === userId && vote.state);
-    const downvoted = originPost.votes?.filter(vote => vote.userId === userId && !vote.state);
+    const upvotes = originPost.votes
+      ? originPost.votes.filter(vote => vote.userId === userId && vote.state)
+      : [];
+    const downvotes = originPost.votes
+      ? originPost.votes.filter(vote => vote.userId === userId && !vote.state)
+      : [];
 
     post = {
       ...originPost,
-      isUpvoted: upvoted && upvoted.length > 0,
-      isDownVoted: downvoted && downvoted.length > 0,
+      isUpvoted: upvotes.length > 0,
+      isDownVoted: downvotes.length > 0,
       totalComment: originPost.metric.comments,
     };
 
