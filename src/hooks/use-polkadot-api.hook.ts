@@ -106,18 +106,26 @@ export const usePolkadotApi = () => {
     }
   };
 
-  const getClaimFeeReferenceMyria = async () => {
-    const serverId = await WalletAPI.getServerId(user.wallets[0].networkId);
-    const tipBalanceInfo = {
-      ftIdentifier: 'native',
-      referenceId: user.id as string,
-      referenceType: WalletReferenceType.PEOPLE,
-      serverId: serverId as string,
-    };
-    const data = claimFeeReferenceMyria(user?.wallets[0].id, tipBalanceInfo, balanceDetails[0]);
-    console.log('data', data);
+  const getClaimFeeReferenceMyria = async (trxFee: string) => {
     try {
-    } catch (error) {}
+      const serverId = await WalletAPI.getServerId(user.wallets[0].networkId);
+      const tipBalanceInfo = {
+        ftIdentifier: 'native',
+        referenceId: user.id as string,
+        referenceType: WalletReferenceType.PEOPLE,
+        serverId: serverId as string,
+      };
+
+      const data = claimFeeReferenceMyria(
+        user?.wallets[0].id,
+        tipBalanceInfo,
+        balanceDetails[0],
+        trxFee,
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const simplerSendTip = async (

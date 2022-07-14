@@ -557,7 +557,7 @@ export const estimateFeeReference = async (
       api = await connectToBlockchain(selectedCurrency.network.rpcURL);
 
       const {partialFee} = await api.tx.tipping
-        .claimReference(walletDetail, walletDetail.referenceType, walletDetail.referenceId, from)
+        .claimReference(walletDetail, walletDetail.referenceType, walletDetail.referenceId, from, 0)
         .paymentInfo(accountIdMyriad);
 
       finalPartialFee = partialFee.toBn();
@@ -577,36 +577,42 @@ export const claimFeeReferenceMyria = async (
   from: string,
   walletDetail: WalletDetail,
   selectedCurrency: BalanceDetail,
+  trxFee: string,
 ) => {
+  const {enableExtension} = await import('src/helpers/extension');
+  const {web3FromSource} = await import('@polkadot/extension-dapp');
+
   try {
-    const {enableExtension} = await import('src/helpers/extension');
     const allAccounts = await enableExtension();
+    if (!allAccounts || allAccounts.length === 0)
+      throw new NoAccountException('Please import your account first!');
 
     const keyring = new Keyring();
-
     const baseAddress = keyring.encodeAddress(from);
-    let api: ApiPromise | null = null;
-    if (allAccounts) {
-      const account = allAccounts.find(account => {
-        return account.address === baseAddress;
-      });
+    const account = allAccounts.find(account => account.address === baseAddress);
 
-      if (!account) {
-        throw {
-          Error: 'Please import your account first!',
-        };
-      }
-    }
-    api = await connectToBlockchain(selectedCurrency.network.rpcURL);
+    if (!account) throw new NoAccountException('Account not registered on Polkadot.js extension');
 
-    const data = await api.tx.tipping.claimTip(walletDetail);
-    console.log(data);
+    const injector = await web3FromSource(account.meta.source);
+    const api = await connectToBlockchain(selectedCurrency.network.rpcURL);
+
+    const extrinsic = await api.tx.tipping.sendTip(walletDetail, Number(trxFee));
+
+    const data = await extrinsic.signAsync(from, {
+      signer: injector.signer,
+      // make sure nonce does not stuck
+      nonce: -1,
+    });
 
     return {
       api,
       data,
     };
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    if (err === 'FailedToClaim') {
+      throw new Error(err);
+    } else {
+      throw new Error('CancelTransactions');
+    }
   }
 };

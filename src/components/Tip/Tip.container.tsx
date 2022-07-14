@@ -24,7 +24,6 @@ import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {Network, NetworkIdEnum, TipResult} from 'src/interfaces/network';
-import {BlockchainPlatform} from 'src/interfaces/wallet';
 import {updateTransaction} from 'src/lib/api/transaction';
 import * as WalletAPI from 'src/lib/api/wallet';
 import {getServerId} from 'src/lib/api/wallet';
@@ -43,7 +42,7 @@ export const TipContainer: React.FC = () => {
   const {getClaimFeeReferenceMyria} = usePolkadotApi();
   const {loading, claiming, claimingAll, tipsEachNetwork, claim, claimAll, trxFee} = useClaimTip();
   const {enablePolkadotExtension} = usePolkadotExtension();
-  const {getRegisteredAccounts, connectNetwork} = useAuthHook();
+  const {getRegisteredAccounts} = useAuthHook();
   const [verifyingRef, setVerifyingRef] = useState(false);
   const [claimingSuccess, setClaimingSucces] = useState(false);
   const [showAccountList, setShowAccountList] = useState(false);
@@ -213,26 +212,24 @@ export const TipContainer: React.FC = () => {
 
     setVerifyingRef(false);
     //TODO: myr-2286
+    const data = await getClaimFeeReferenceMyria(trxFee);
 
-    const data = await getClaimFeeReferenceMyria();
-    console.log('>>>>', data);
-    let verified = false;
+    console.log('data >>>', data);
 
-    verified = await connectNetwork(BlockchainPlatform.SUBSTRATE, account);
+    //  WalletAPI.claimReference({txFee, tippingContractId})
+    // verified &&
+    //   account &&
+    //   enqueueSnackbar({
+    //     message: i18n.t('Wallet.Manage.Alert.Connect'),
+    //     variant: 'success',
+    //   });
 
-    verified &&
-      account &&
-      enqueueSnackbar({
-        message: i18n.t('Wallet.Manage.Alert.Connect'),
-        variant: 'success',
-      });
-
-    !verified &&
-      account &&
-      enqueueSnackbar({
-        message: i18n.t('Wallet.Manage.Alert.Error'),
-        variant: 'error',
-      });
+    // !verified &&
+    //   account &&
+    //   enqueueSnackbar({
+    //     message: i18n.t('Wallet.Manage.Alert.Error'),
+    //     variant: 'error',
+    //   });
 
     return;
   };
