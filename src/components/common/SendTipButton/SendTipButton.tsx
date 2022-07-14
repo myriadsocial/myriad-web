@@ -1,7 +1,7 @@
 import {CurrencyDollarIcon} from '@heroicons/react/outline';
 
 import React, {useState} from 'react';
-import {useSelector} from 'react-redux';
+import {shallowEqual, useSelector} from 'react-redux';
 
 import {
   Button,
@@ -28,23 +28,19 @@ import * as PostAPI from 'src/lib/api/post';
 import * as UserAPI from 'src/lib/api/user';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
-import {UserState} from 'src/reducers/user/reducer';
 
 type SendTipButtonProps = ButtonProps & {
   label?: string;
   reference: Post | Comment | User;
   referenceType: ReferenceType;
+  owned?: boolean;
   showIcon?: boolean;
   mobile?: boolean;
 };
 
-interface UserWithWalletDetail extends User {
+type WithWalletDetail<T> = T & {
   walletDetail?: WalletDetail;
-}
-
-interface PeopleWithWalletDetail extends People {
-  walletDetail?: WalletDetail;
-}
+};
 
 export const SendTipButton: React.FC<SendTipButtonProps> = props => {
   const {
@@ -54,6 +50,7 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
     showIcon = false,
     mobile = false,
     variant,
+    owned = false,
     ...restProps
   } = props;
 
@@ -63,7 +60,10 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
   const [promptFailedTip, setPromptFailedTip] = useState(false);
   const [tipInfoOpened, setTipInfoOpened] = useState(false);
 
-  const {anonymous} = useSelector<RootState, UserState>(state => state.userState);
+  const anonymous = useSelector<RootState, boolean>(
+    state => state.userState.anonymous,
+    shallowEqual,
+  );
 
   const icon = <SvgIcon color="inherit" component={CurrencyDollarIcon} viewBox="0 0 24 24" />;
 
@@ -72,7 +72,7 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
   };
 
   const handleSendTip = async () => {
-    let receiver: UserWithWalletDetail | PeopleWithWalletDetail | null = null;
+    let receiver: WithWalletDetail<User | People> | WithWalletDetail<People> | null = null;
 
     if (anonymous) {
       setTipInfoOpened(true);
@@ -123,7 +123,7 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
   return (
     <>
       <Button
-        disabled={!tipping.enabled}
+        disabled={tipping.enabled ? owned : false}
         classes={{root: styles.button}}
         onClick={handleSendTip}
         startIcon={showIcon ? icon : null}

@@ -26,7 +26,33 @@ export const useTipHistory = (reference: Post | Comment | User, referenceType: R
     hasMore,
     meta: {currentPage},
   } = useSelector<RootState, TipSummaryState>(state => state.tipSummaryState);
-  const disabled = user?.id === reference?.id;
+
+  const isTippingDisabled = useCallback((): boolean => {
+    // disable tipping to own comment
+    if ('section' in reference) {
+      return user?.id === reference.userId;
+    }
+
+    // disable tipping to own profile
+    if ('username' in reference) {
+      return user?.id === reference.id;
+    }
+
+    // disable tipping on owned post
+    if ('platform' in reference) {
+      const isPostCreator = reference.createdBy === user?.id;
+      const isInternalPost = reference.platform === 'myriad';
+      const isOriginOwner = user?.people?.find(person => person.id === reference.peopleId)
+        ? true
+        : false;
+
+      const isPostOwner = isInternalPost ? isPostCreator : isOriginOwner;
+
+      return isPostOwner;
+    }
+
+    return false;
+  }, [reference, user]);
 
   const handleSortTransaction = useCallback(
     (sort: TransactionSort) => {
@@ -56,10 +82,10 @@ export const useTipHistory = (reference: Post | Comment | User, referenceType: R
 
   return {
     hasMore,
-    disabled,
     currencies,
     availableCurrencies,
     transactions,
+    isTippingDisabled,
     handleSortTransaction,
     handleFilterTransaction,
     handleLoadNextPage,

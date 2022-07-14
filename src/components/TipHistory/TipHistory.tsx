@@ -66,7 +66,6 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
     nextPage,
   } = props;
   const {loading, exchangeRates} = useExchangeRate();
-
   const styles = useStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [search, setSearch] = useState('');

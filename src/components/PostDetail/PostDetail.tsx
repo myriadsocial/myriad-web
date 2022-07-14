@@ -34,16 +34,18 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
 
   const [hiddenContent, toggleHiddenContent] = useToggle(post.isNSFW);
 
-  const owned = post.createdBy === user?.id;
   const downvoted = post.votes
     ? post.votes.filter(vote => vote.userId === user?.id && !vote.state).length > 0
     : false;
   const upvoted = post.votes
     ? post.votes.filter(vote => vote.userId === user?.id && vote.state).length > 0
     : false;
-  const isOwnSocialPost = user?.people?.find(person => person.id === post.peopleId) ? true : false;
-  const isImportedPost = post.platform !== 'myriad' || post.createdBy !== user?.id ? true : false;
-  const showTipButton = isImportedPost && !isOwnSocialPost;
+
+  const isPostCreator = post.createdBy === user?.id;
+  const isInternalPost = post.platform === 'myriad';
+  const isOriginOwner = user?.people?.find(person => person.id === post.peopleId) ? true : false;
+  const showTipButton = isInternalPost || (!isInternalPost && !isOriginOwner);
+  const isPostOwner = isInternalPost ? isPostCreator : isOriginOwner;
 
   const handleHashtagClicked = useCallback((hashtag: string) => {
     router.push(`/topic/hashtag?tag=${hashtag.replace('#', '')}`, undefined, {
@@ -69,7 +71,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
 
   return (
     <>
-      <PostHeader user={user} owned={owned} post={post} {...restProps} />
+      <PostHeader user={user} owned={isPostOwner} post={post} {...restProps} />
 
       <div className={styles.content}>
         <ShowIf condition={hiddenContent}>
@@ -120,6 +122,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           <SendTipButton
             reference={post}
             referenceType={ReferenceType.POST}
+            owned={isPostOwner}
             showIcon={isMobile}
             mobile={isMobile}
             variant="outlined"

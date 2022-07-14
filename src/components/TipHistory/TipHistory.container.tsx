@@ -19,14 +19,16 @@ export const TipHistoryContainer: React.FC<TipHistoryContainerProps> = props => 
 
   const {
     hasMore,
-    disabled,
     availableCurrencies,
     transactions,
     initHistory,
+    isTippingDisabled,
     handleFilterTransaction,
     handleSortTransaction,
     handleLoadNextPage,
   } = useTipHistory(reference, referenceType);
+
+  const disabled = isTippingDisabled();
 
   useEffect(() => {
     initHistory();

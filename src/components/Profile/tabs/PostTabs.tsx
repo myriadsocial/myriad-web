@@ -58,7 +58,7 @@ export const ProfilePostsTab: React.FC<ProfilePostsTabProps> = props => {
       </ShowIf>
 
       <ShowIf condition={totalPost > 0}>
-        <PostsListContainer filters={filters} />
+        <PostsListContainer filters={filters} user={user} />
       </ShowIf>
     </>
   );
