@@ -141,37 +141,69 @@ export const useTimelineFilter = (filters?: TimelineFilterFields) => {
     [filterFields],
   );
 
-  const filterByOrigin = useCallback((origin: PostOriginType) => {
-    const timelineSort = TimelineOrderType.LATEST;
+  const filterByOrigin = useCallback(
+    (origin: PostOriginType) => {
+      const timelineOrder = TimelineOrderType.LATEST;
 
-    if (!people || !filters) return;
+      if (!people || !filters) return;
 
-    switch (origin) {
-      case 'myriad':
-        filterFields.platform = ['myriad'];
-        filterFields.owner = people.id;
-        break;
-      case 'imported':
-        filterFields.platform = ['facebook', 'reddit', 'twitter'];
-        filterFields.owner = people.id;
-        break;
+      switch (origin) {
+        case 'myriad':
+          filterFields.platform = ['myriad'];
+          filterFields.owner = people.id;
+          break;
+        case 'imported':
+          filterFields.platform = ['facebook', 'reddit', 'twitter'];
+          filterFields.owner = people.id;
+          break;
 
-      default:
-        filterFields.owner = people.id;
-        filterFields.platform = undefined;
-        break;
-    }
+        default:
+          filterFields.owner = people.id;
+          filterFields.platform = undefined;
+          break;
+      }
 
-    dispatch(clearTimeline());
-    dispatch(loadTimeline(1, timelineSort, filters, TimelineType.ALL));
-  }, []);
+      const newFilterFields: TimelineFilterFields = {
+        ...filterFields,
+        ...filters,
+      };
 
-  const sortTimeline = useCallback((sort: SortType) => {
-    const timelineOrder = TimelineOrderType.LATEST;
+      dispatch(
+        loadTimeline(
+          1,
+          {
+            fields: newFilterFields,
+            order: timelineOrder,
+          },
+          TimelineType.ALL,
+        ),
+      );
+    },
+    [filterFields],
+  );
 
-    dispatch(clearTimeline());
-    dispatch(loadTimeline(1, timelineOrder, filters, TimelineType.ALL, sort));
-  }, []);
+  const sortTimeline = useCallback(
+    (sort: SortType) => {
+      const newFilterFields: TimelineFilterFields = {
+        ...filterFields,
+        ...filters,
+      };
+      const timelineOrder = TimelineOrderType.LATEST;
+
+      dispatch(
+        loadTimeline(
+          1,
+          {
+            fields: newFilterFields,
+            order: timelineOrder,
+            sort,
+          },
+          TimelineType.ALL,
+        ),
+      );
+    },
+    [filterFields, filters],
+  );
 
   const nextPage = useCallback(() => {
     const page = currentPage + 1;
