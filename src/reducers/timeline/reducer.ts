@@ -439,6 +439,7 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
           $set: {
             order: action.order,
             sort: action.sort ?? 'DESC',
+            fields: state.filters.fields,
           },
         },
       });

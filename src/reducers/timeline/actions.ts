@@ -238,7 +238,6 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
       const userId = user?.id as string;
       const timelineType = type ?? timelineState.type;
       const timelineFilter = filters ?? timelineState.filters;
-
       if (user && (timelineFilter?.fields?.owner || timelineFilter?.fields?.importer)) {
         asFriend = friendStatus?.status === FriendStatus.APPROVED;
       }

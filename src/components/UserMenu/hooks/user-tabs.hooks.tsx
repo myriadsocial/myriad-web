@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react';
-import {useSelector} from 'react-redux';
+import {shallowEqual, useSelector} from 'react-redux';
 
 import {CommentHistoryListContainer} from 'src/components/CommentHistoryList';
 import {FriendListContainer} from 'src/components/FriendsMenu/FriendList.container';
@@ -8,28 +8,22 @@ import {ProfilePostsTab} from 'src/components/Profile/tabs/PostTabs';
 import {UserSettingsContainer} from 'src/components/UserSettings';
 import {UserSocialContainer} from 'src/components/UserSocials';
 import {TabItems} from 'src/components/atoms/Tabs';
-import {Post} from 'src/interfaces/post';
 import {TimelineFilterFields} from 'src/interfaces/timeline';
+import {BlockedProps, User} from 'src/interfaces/user';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
-import {ExperienceState} from 'src/reducers/experience/reducer';
-import {FriendState} from 'src/reducers/friend/reducer';
-import {ProfileState} from 'src/reducers/profile/reducer';
-import {UserState} from 'src/reducers/user/reducer';
 
 export type UserMenuTabs = 'post' | 'comments' | 'experience' | 'social' | 'friend' | 'setting';
 
 export const useUserTabs = (excludes: UserMenuTabs[]): TabItems<UserMenuTabs>[] => {
-  const {detail: profileUser} = useSelector<RootState, ProfileState>(state => state.profileState);
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const {experiences} = useSelector<RootState, ExperienceState>(state => state.experienceState);
-  const {friends} = useSelector<RootState, FriendState>(state => state.friendState);
-  const posts = useSelector<RootState, Post[]>(state => state.timelineState.posts);
-
-  const isOwnProfile = profileUser?.id === user?.id;
-
+  const profile = useSelector<RootState, User & BlockedProps>(
+    state => state.profileState.detail,
+    shallowEqual,
+  );
+  const user = useSelector<RootState, User>(state => state.userState.user, shallowEqual);
+  const isOwnProfile = profile?.id === user?.id;
   const filtersFields: TimelineFilterFields = {
-    owner: profileUser?.id,
+    owner: profile?.id,
   };
 
   const tabs: TabItems<UserMenuTabs>[] = useMemo(() => {
@@ -38,18 +32,23 @@ export const useUserTabs = (excludes: UserMenuTabs[]): TabItems<UserMenuTabs>[] 
         id: 'post',
         title: i18n.t('Profile.Tab.Post'),
         component: (
-          <ProfilePostsTab filterType="origin" sortType="created" filters={filtersFields} />
+          <ProfilePostsTab
+            user={user}
+            filterType="origin"
+            sortType="created"
+            filters={filtersFields}
+          />
         ),
       },
       {
         id: 'comments',
         title: i18n.t('Profile.Tab.Comments'),
-        component: <CommentHistoryListContainer profile={profileUser} />,
+        component: <CommentHistoryListContainer profile={profile} />,
       },
       {
         id: 'experience',
         title: i18n.t('Profile.Tab.Experience'),
-        component: <ProfileExperienceTab user={profileUser} type="personal" />,
+        component: <ProfileExperienceTab user={profile} type="personal" />,
       },
       {
         id: 'friend',
@@ -57,7 +56,7 @@ export const useUserTabs = (excludes: UserMenuTabs[]): TabItems<UserMenuTabs>[] 
         component: (
           <FriendListContainer
             type="contained"
-            user={profileUser}
+            user={profile}
             disableFilter={isOwnProfile}
             isProfile
           />
@@ -66,22 +65,22 @@ export const useUserTabs = (excludes: UserMenuTabs[]): TabItems<UserMenuTabs>[] 
       {
         id: 'social',
         title: i18n.t('Profile.Tab.Social_Media'),
-        component: <UserSocialContainer user={profileUser} />,
+        component: <UserSocialContainer user={profile} />,
         background: 'white',
       },
     ];
 
-    if (user) {
+    if (user && !excludes.includes('setting')) {
       items.push({
         id: 'setting',
         title: i18n.t('Profile.Tab.Wallet_Address'),
-        component: <UserSettingsContainer user={profileUser} />,
+        component: <UserSettingsContainer user={profile} />,
         background: 'white',
       });
     }
 
-    return items.filter(item => !excludes.includes(item.id));
-  }, [profileUser, user, experiences, friends, posts]);
+    return items;
+  }, [profile, user]);
 
   return tabs;
 };
