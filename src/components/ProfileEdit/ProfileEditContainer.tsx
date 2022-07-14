@@ -57,8 +57,6 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
   };
 
   const onSave = async (newUser: Partial<User>) => {
-    newUser.profilePictureURL = '';
-
     try {
       if (profilePic instanceof File) {
         const newUrlProfilePic = await updateProfilePicture(profilePic);
