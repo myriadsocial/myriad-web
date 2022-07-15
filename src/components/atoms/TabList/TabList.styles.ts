@@ -60,7 +60,7 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
       marginLeft: 4,
       width: '50%',
       height: props => (props.size === 'small' ? 4 : 6),
-      display: 'block',
+      display: props => (props.mark === 'underline' ? 'block' : 'none'),
       background: '#FFC857',
     },
     indicatorColor: {

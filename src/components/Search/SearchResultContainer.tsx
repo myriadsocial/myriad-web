@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useMemo} from 'react';
+import {shallowEqual, useSelector} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
@@ -15,7 +16,9 @@ import {useTimelineFilter} from 'components/PostList/hooks/use-timeline-filter.h
 import {NavbarComponent} from 'src/components/Mobile/Navbar/Navbar';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
 import {useSearchHook} from 'src/hooks/use-search.hooks';
+import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
+import {RootState} from 'src/reducers';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -42,6 +45,7 @@ export const SearchResultContainer: React.FC = () => {
   const {searchUsers, clearUsers} = useSearchHook();
   const {clear: clearPosts} = useTimelineFilter();
 
+  const user = useSelector<RootState, User>(state => state.userState.user, shallowEqual);
   const [selectedTab, setSelectedTab] = useState('posts-tab');
   const searchKeyword = router.query.q as string;
 
@@ -70,7 +74,7 @@ export const SearchResultContainer: React.FC = () => {
       {
         id: 'posts-tab',
         title: i18n.t('Search_Result.Post_Tab'),
-        component: <PostsListContainer query={router.query} />,
+        component: <PostsListContainer query={router.query} user={user} />,
       },
       {
         id: 'users-tab',

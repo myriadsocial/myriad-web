@@ -168,89 +168,91 @@ export const PostHeader: React.FC<PostHeaderProps> = props => {
         }
       />
 
-      <Menu
-        id="post-setting"
-        anchorEl={anchorEl}
-        style={{width: 170}}
-        classes={{paper: style.menu}}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClosePostSetting}>
-        <BaseMenuItem onClick={handleOpenTipHistory}>
-          {i18n.t('Post_Detail.Post_Options.Tip_History')}
-        </BaseMenuItem>
-
-        <ShowIf condition={!owned}>
-          <BaseMenuItem className={style.link}>
-            <Link href={`post/${post.id}`} passHref prefetch={false}>
-              {i18n.t('Post_Detail.Post_Options.View_Post')}
-            </Link>
+      {anchorEl && (
+        <Menu
+          id="post-setting"
+          anchorEl={anchorEl}
+          style={{width: 170}}
+          classes={{paper: style.menu}}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleClosePostSetting}>
+          <BaseMenuItem onClick={handleOpenTipHistory}>
+            {i18n.t('Post_Detail.Post_Options.Tip_History')}
           </BaseMenuItem>
-        </ShowIf>
 
-        <ShowIf condition={!owned && post.platform !== 'myriad'}>
-          <BaseMenuItem>
-            <ExternalLink href={post.url} target="_blank" color="inherit" underline="none">
-              {i18n.t('Post_Detail.Post_Options.View_Source_Post')}
-            </ExternalLink>
-          </BaseMenuItem>
-          <BaseMenuItem className={style.link}>
-            <Link href={`profile/${post.user.id}`} passHref prefetch={false}>
-              {i18n.t('Post_Detail.Post_Options.Visit_Myriad_Profile')}
-            </Link>
-          </BaseMenuItem>
-          <BaseMenuItem>
-            <ExternalLink
-              href={getPlatformProfileUrl()}
-              target="_blank"
-              color="inherit"
-              underline="none">
-              {i18n.t('Post_Detail.Post_Options.Visit_Post_Platform', {
-                postPlatform: capitalize(post.platform),
-              })}
-            </ExternalLink>
-          </BaseMenuItem>
-        </ShowIf>
+          <ShowIf condition={!owned}>
+            <BaseMenuItem className={style.link}>
+              <Link href={`post/${post.id}`} passHref prefetch={false}>
+                {i18n.t('Post_Detail.Post_Options.View_Post')}
+              </Link>
+            </BaseMenuItem>
+          </ShowIf>
 
-        <ShowIf condition={!owned && post.platform === 'myriad'}>
-          <BaseMenuItem className={style.link}>
-            <Link href={`profile/${post.user.id}`} passHref prefetch={false}>
-              {i18n.t('Post_Detail.Post_Options.Visit_Profile')}
-            </Link>
-          </BaseMenuItem>
-        </ShowIf>
+          <ShowIf condition={!owned && post.platform !== 'myriad'}>
+            <BaseMenuItem>
+              <ExternalLink href={post.url} target="_blank" color="inherit" underline="none">
+                {i18n.t('Post_Detail.Post_Options.View_Source_Post')}
+              </ExternalLink>
+            </BaseMenuItem>
+            <BaseMenuItem className={style.link}>
+              <Link href={`profile/${post.user.id}`} passHref prefetch={false}>
+                {i18n.t('Post_Detail.Post_Options.Visit_Myriad_Profile')}
+              </Link>
+            </BaseMenuItem>
+            <BaseMenuItem>
+              <ExternalLink
+                href={getPlatformProfileUrl()}
+                target="_blank"
+                color="inherit"
+                underline="none">
+                {i18n.t('Post_Detail.Post_Options.Visit_Post_Platform', {
+                  postPlatform: capitalize(post.platform),
+                })}
+              </ExternalLink>
+            </BaseMenuItem>
+          </ShowIf>
 
-        <ShowIf condition={owned && !post.deletedAt}>
-          <MenuItem onClick={handlePostVisibility} fallback={handleClosePostSetting}>
-            {i18n.t('Post_Detail.Post_Options.Post_Visibility')}
-          </MenuItem>
-        </ShowIf>
+          <ShowIf condition={!owned && post.platform === 'myriad'}>
+            <BaseMenuItem className={style.link}>
+              <Link href={`profile/${post.user.id}`} passHref prefetch={false}>
+                {i18n.t('Post_Detail.Post_Options.Visit_Profile')}
+              </Link>
+            </BaseMenuItem>
+          </ShowIf>
 
-        <ShowIf condition={!!user}>
-          <MenuItem onClick={handleOpenAddPostToExperience} fallback={handleClosePostSetting}>
-            {i18n.t('Post_Detail.Post_Options.Add_Post_To_Experience')}
-          </MenuItem>
-        </ShowIf>
+          <ShowIf condition={owned && !post.deletedAt}>
+            <MenuItem onClick={handlePostVisibility} fallback={handleClosePostSetting}>
+              {i18n.t('Post_Detail.Post_Options.Post_Visibility')}
+            </MenuItem>
+          </ShowIf>
 
-        <ShowIf condition={!owned && !!user}>
-          <MenuItem
-            onClick={handleReport}
-            fallback={handleClosePostSetting}
-            className={style.danger}>
-            {i18n.t('Post_Detail.Post_Options.Report')}
-          </MenuItem>
-        </ShowIf>
+          <ShowIf condition={!!user}>
+            <MenuItem onClick={handleOpenAddPostToExperience} fallback={handleClosePostSetting}>
+              {i18n.t('Post_Detail.Post_Options.Add_Post_To_Experience')}
+            </MenuItem>
+          </ShowIf>
 
-        <ShowIf condition={owned && !post.deletedAt}>
-          <MenuItem
-            onClick={handleDelete}
-            fallback={handleClosePostSetting}
-            className={style.danger}
-            color="danger">
-            {i18n.t('Post_Detail.Post_Options.Delete_Post')}
-          </MenuItem>
-        </ShowIf>
-      </Menu>
+          <ShowIf condition={!owned && !!user}>
+            <MenuItem
+              onClick={handleReport}
+              fallback={handleClosePostSetting}
+              className={style.danger}>
+              {i18n.t('Post_Detail.Post_Options.Report')}
+            </MenuItem>
+          </ShowIf>
+
+          <ShowIf condition={owned && !post.deletedAt}>
+            <MenuItem
+              onClick={handleDelete}
+              fallback={handleClosePostSetting}
+              className={style.danger}
+              color="danger">
+              {i18n.t('Post_Detail.Post_Options.Delete_Post')}
+            </MenuItem>
+          </ShowIf>
+        </Menu>
+      )}
     </>
   );
 };

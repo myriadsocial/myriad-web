@@ -5,9 +5,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       minWidth: 644,
       background: 'transparent',
-      '& .MuiTabs-scroller': {
-        height: 36,
-      },
       '& .MuiTab-root': {
         height: 36,
       },
