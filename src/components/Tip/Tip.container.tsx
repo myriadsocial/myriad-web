@@ -147,11 +147,10 @@ export const TipContainer: React.FC = () => {
   const handleVerifyReference = async (networkId: string, currentBalance: string | number) => {
     if (!user?.id) return;
 
-    setVerifyingRef(true);
-
     try {
       switch (networkId) {
         case NetworkIdEnum.NEAR: {
+          setVerifyingRef(true);
           const serverId = await getServerId(currentWallet?.networkId);
           const tipsBalanceInfo = {
             server_id: serverId,
@@ -210,26 +209,41 @@ export const TipContainer: React.FC = () => {
 
     if (!account) return;
 
-    setVerifyingRef(false);
     //TODO: myr-2286
+    setVerifyingRef(true);
     const data = await getClaimFeeReferenceMyria(trxFee);
 
-    console.log('data >>>', data);
-
-    //  WalletAPI.claimReference({txFee, tippingContractId})
-    // verified &&
-    //   account &&
-    //   enqueueSnackbar({
-    //     message: i18n.t('Wallet.Manage.Alert.Connect'),
-    //     variant: 'success',
-    //   });
-
-    // !verified &&
-    //   account &&
-    //   enqueueSnackbar({
-    //     message: i18n.t('Wallet.Manage.Alert.Error'),
-    //     variant: 'error',
-    //   });
+    if (data) {
+      let success = true;
+      WalletAPI.claimReference({txFee: trxFee})
+        .then(() => {
+          setVerifyingRef(false);
+          enqueueSnackbar({
+            // TODO: Register Translation
+            message: 'Verifying Success',
+            variant: 'success',
+          });
+        })
+        .catch(e => {
+          setVerifyingRef(false);
+          success = false;
+          enqueueSnackbar({
+            // TODO: Register Translation
+            message: e.message,
+            variant: 'error',
+          });
+        })
+        .finally(() => {
+          setVerifyingRef(false);
+          setClaimingSucces(success);
+          setVerifyingRef(false);
+        });
+    } else {
+      enqueueSnackbar({
+        message: i18n.t('Wallet.Manage.Alert.Error'),
+        variant: 'error',
+      });
+    }
 
     return;
   };

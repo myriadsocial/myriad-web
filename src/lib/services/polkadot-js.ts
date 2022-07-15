@@ -595,19 +595,32 @@ export const claimFeeReferenceMyria = async (
 
     const injector = await web3FromSource(account.meta.source);
     const api = await connectToBlockchain(selectedCurrency.network.rpcURL);
-
+    let txHash: string | null = null;
     const extrinsic = await api.tx.tipping.sendTip(walletDetail, Number(trxFee));
 
-    const data = await extrinsic.signAsync(from, {
+    const txInfo = await extrinsic.signAsync(from, {
       signer: injector.signer,
       // make sure nonce does not stuck
       nonce: -1,
     });
 
-    return {
-      api,
-      data,
-    };
+    const data = await new Promise((resolve, reject) => {
+      txInfo.send(result => {
+        if (result.status.isInBlock) {
+          console.log(`\tBlock hash    : ${txHash}`);
+        } else if (result.status.isFinalized) {
+          txHash = result.status.asFinalized.toHex();
+          console.log(`\tFinalized     : ${txHash}`);
+          api.disconnect();
+          resolve(txHash);
+        } else if (result.isError) {
+          console.log(`\tFinalized     : null`);
+          api.disconnect();
+          reject('FailedToClaim');
+        }
+      });
+    });
+    return data;
   } catch (err) {
     if (err === 'FailedToClaim') {
       throw new Error(err);
