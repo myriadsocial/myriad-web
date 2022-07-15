@@ -16,18 +16,16 @@ import {User} from 'src/interfaces/user';
 import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
 import {AccountRegisteredError} from 'src/lib/api/errors/account-registered.error';
 import * as AuthAPI from 'src/lib/api/ext-auth';
-import * as NetworkAPI from 'src/lib/api/network';
 import * as UserAPI from 'src/lib/api/user';
 import * as WalletAPI from 'src/lib/api/wallet';
 import {toHexPublicKey} from 'src/lib/crypto';
 import {firebaseCloudMessaging} from 'src/lib/firebase';
 import {clearNearAccount} from 'src/lib/services/near-api-js';
 import {createNearSignature} from 'src/lib/services/near-api-js';
-import {connect, signWithExtension} from 'src/lib/services/polkadot-js';
+import {signWithExtension} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
 import {fetchBalances, getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchUserWallets, fetchUser} from 'src/reducers/user/actions';
-import * as constants from 'src/reducers/user/constants';
 import {UserState} from 'src/reducers/user/reducer';
 import {uniqueNamesGenerator, adjectives, colors} from 'unique-names-generator';
 
@@ -48,7 +46,6 @@ export const useAuthHook = () => {
   const {getPolkadotAccounts} = usePolkadotExtension();
   const {publicRuntimeConfig} = getConfig();
   const [loading, setLoading] = useState(false);
-  const [isSignerLoading, setSignerLoading] = useState(false);
 
   const fetchUserNonce = async (address: string): Promise<UserNonceProps> => {
     try {
@@ -250,79 +247,6 @@ export const useAuthHook = () => {
     return false;
   };
 
-  const connectAccount = async (
-    account: InjectedAccountWithMeta,
-    signature: string,
-  ): Promise<boolean> => {
-    if (!user) return false;
-
-    try {
-      const response = await fetch('/api/access-token');
-      const {accessToken} = await response.json();
-
-      if (!accessToken) throw new Error('Access Token Not Found');
-
-      const {nonce} = await WalletAPI.getUserNonceByUserId(user?.id);
-
-      if (!nonce) throw new Error('Nonce Not Found');
-
-      const {rpcURL} = await NetworkAPI.getNetwork(NetworkIdEnum.MYRIAD);
-      const serverId = await WalletAPI.getServerId();
-
-      const userCredential = {nonce, signature: signature.replace('0x', ''), userId: user.id};
-      const ftIdentifier = 'native';
-
-      const api = await connect(
-        account as InjectedAccountWithMeta,
-        rpcURL,
-        serverId,
-        accessToken,
-        userCredential,
-        ftIdentifier,
-        ({signerOpened}) => {
-          if (signerOpened) {
-            setSignerLoading(true);
-          }
-        },
-      );
-
-      if (!api) throw new Error('Cancel transaction');
-
-      await new Promise(resolve => {
-        api.query.system.events(events => {
-          events.forEach(({event}) => {
-            event.data.forEach(record => {
-              if (record.toString() === 'Success') resolve(true);
-              if (record.toString() === 'Failed') resolve(false);
-            });
-          });
-        });
-      });
-
-      await api.disconnect();
-
-      const currentTotal = user.wallets.length;
-      const {data: wallets, meta} = await WalletAPI.getUserWallets(user.id);
-      const updatedTotal = wallets.length;
-
-      if (updatedTotal > currentTotal) {
-        dispatch({
-          type: constants.FETCH_USER_WALLETS,
-          payload: wallets,
-          meta,
-        });
-
-        return true;
-      }
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setSignerLoading(false);
-    }
-
-    return false;
-  };
-
   const switchNetwork = async (
     blockchainPlatform: BlockchainPlatform,
     networkId: NetworkIdEnum,
@@ -417,8 +341,6 @@ export const useAuthHook = () => {
     signInWithExternalAuth,
     signUpWithExternalAuth,
     connectNetwork,
-    connectAccount,
     switchNetwork,
-    isSignerLoading,
   };
 };

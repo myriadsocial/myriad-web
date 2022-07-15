@@ -185,7 +185,7 @@ export const useNearApi = () => {
 
   const payTransactionFee = async (
     tipsBalanceInfo: TipBalanceInfo,
-    txFee: string,
+    trxFee: string,
     currentBalance: string | number,
   ): Promise<void> => {
     const attachedGas = new BN('300000000000000');
@@ -200,11 +200,11 @@ export const useNearApi = () => {
         'send_tip',
         Buffer.from(data),
         new BN(attachedGas),
-        new BN(txFee),
+        new BN(trxFee),
       ),
     ];
     const appAuthURL = publicRuntimeConfig.appAuthURL;
-    const url = `${appAuthURL}/wallet?type=tip&txFee=${txFee}&balance=${currentBalance}&networkId=near`;
+    const url = `${appAuthURL}/wallet?type=tip&txFee=${trxFee}&balance=${currentBalance}&networkId=near`;
     //TODO: fix error protected class for multiple sign and send transactions
     // @ts-ignore: protected class
     await account.signAndSendTransaction({

@@ -40,7 +40,7 @@ export const TipClaimReference: React.FC<TipClaimReference> = ({
           {i18n.t('Wallet.Tip.Reference.Title')}
         </Typography>
         <Typography variant="body1" className={style.desc} color="textPrimary" component="p">
-          {i18n.t('Wallet.Tip.Reference.Desc', {txFee, token})}
+          {i18n.t('Wallet.Tip.Reference.Desc', {txFee: Number(txFee).toFixed(3), token})}
         </Typography>
         <Button onClick={onVerifyReference} size="small" color="primary" variant="contained">
           {i18n.t('Wallet.Tip.Reference.Button')}

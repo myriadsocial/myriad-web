@@ -1,46 +1,56 @@
-import {Balance} from '@open-web3/orml-types/interfaces';
 import * as Sentry from '@sentry/nextjs';
-import {AnyObject} from '@udecode/plate';
 
-import {ApiPromise, WsProvider} from '@polkadot/api';
+import {WsProvider, ApiPromise} from '@polkadot/api';
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {Keyring} from '@polkadot/keyring';
-import {u128, u32, UInt} from '@polkadot/types';
-import {BN, BN_TEN, numberToHex} from '@polkadot/util';
+import {StorageKey, u128, u32, UInt} from '@polkadot/types';
+import {AssetBalance} from '@polkadot/types/interfaces';
+import {Balance} from '@polkadot/types/interfaces';
+import {AnyTuple, Codec} from '@polkadot/types/types';
+import {numberToHex} from '@polkadot/util';
+import {BN, BN_TEN} from '@polkadot/util';
 
+import {Server} from '../api/wallet';
 import {NoAccountException} from './errors/NoAccountException';
 import {SignRawException} from './errors/SignRawException';
 
 import {BalanceDetail} from 'src/interfaces/balance';
 import {Currency, CurrencyId} from 'src/interfaces/currency';
-import {TipBalanceInfo, TipResult} from 'src/interfaces/network';
+import {TipBalanceInfo, TipsBalanceInfo} from 'src/interfaces/network';
 import {WalletDetail, WalletReferenceType} from 'src/interfaces/wallet';
 
 interface signAndSendExtrinsicProps {
   from: string;
   to?: string;
   value: BN;
-  currencyId: string;
   wsAddress: string;
   native: boolean;
   decimal: number;
   walletDetail: WalletDetail;
+  referenceId?: string;
 }
 
 interface SignTransactionCallbackProps {
   apiConnected?: boolean;
   signerOpened?: boolean;
+  transactionSucceed?: boolean;
+  transactionFailed?: boolean;
+  message?: string;
 }
 
 interface EstimateFeeResponseProps {
   partialFee: BN | null;
-  api: ApiPromise | null;
 }
 
 type CheckBalanceResult = {
   free: u128 | UInt;
   nonce?: u32;
 };
+
+interface References {
+  referenceType: string;
+  referenceIds: string[];
+}
 
 export const connectToBlockchain = async (wsProvider: string): Promise<ApiPromise> => {
   const provider = new WsProvider(wsProvider);
@@ -98,79 +108,44 @@ export const estimateFee = async (
   selectedCurrency: BalanceDetail,
 ): Promise<EstimateFeeResponseProps | null> => {
   try {
-    const {enableExtension} = await import('src/helpers/extension');
-
-    const allAccounts = await enableExtension();
-
-    const keyring = new Keyring();
-
-    const baseAddress = keyring.encodeAddress(from);
-
     let finalPartialFee = new BN(0);
 
-    let api: ApiPromise | null = null;
+    const api: ApiPromise = await connectToBlockchain(selectedCurrency.network.rpcURL);
+    const RAND_AMOUNT = 123;
+    const {referenceType, referenceId: to} = walletDetail;
 
-    if (allAccounts) {
-      // We select the first account matching baseAddress
-      // `account` is of type InjectedAccountWithMeta
-      const account = allAccounts.find(account => {
-        // address from session must match address on polkadot extension
-        return account.address === baseAddress;
-      });
+    if (referenceType === WalletReferenceType.WALLET_ADDRESS) {
+      const {partialFee} = selectedCurrency.native
+        ? await api.tx.balances.transfer(to, RAND_AMOUNT).paymentInfo(from)
+        : await api.tx.currencies
+            .transfer(to, {TOKEN: selectedCurrency.symbol}, RAND_AMOUNT)
+            .paymentInfo(from);
 
-      // if account has not yet been imported to Polkadot.js extension
-      if (!account) {
-        throw {
-          Error: 'Please import your account first!',
-        };
-      }
+      if (selectedCurrency.id === CurrencyId.AUSD) {
+        const tokenPerAca = await convertAcaBasedTxFee(api, selectedCurrency);
 
-      // otherwise if account found
-      if (account) {
-        api = await connectToBlockchain(selectedCurrency.network.rpcURL);
-
-        if (api) {
-          const RAND_AMOUNT = 123;
-          const {referenceType, referenceId: to} = walletDetail;
-
-          if (referenceType === WalletReferenceType.WALLET_ADDRESS) {
-            const {partialFee} = selectedCurrency.native
-              ? await api.tx.balances.transfer(to, RAND_AMOUNT).paymentInfo(from)
-              : await api.tx.currencies
-                  .transfer(to, {TOKEN: selectedCurrency.symbol}, RAND_AMOUNT)
-                  .paymentInfo(from);
-
-            if (selectedCurrency.id === CurrencyId.AUSD) {
-              const tokenPerAca = await convertAcaBasedTxFee(api, selectedCurrency);
-
-              if (tokenPerAca) {
-                finalPartialFee = partialFee.div(BN_TEN.pow(new BN(13))).mul(new BN(tokenPerAca));
-              }
-            } else {
-              finalPartialFee = partialFee.toBn();
-            }
-          } else {
-            if (selectedCurrency.native) walletDetail.ftIdentifier = 'native';
-            else walletDetail.ftIdentifier = selectedCurrency.referenceId;
-            const {partialFee} = await api.tx.tipping
-              .sendTip(walletDetail, RAND_AMOUNT)
-              .paymentInfo(from);
-
-            finalPartialFee = partialFee.toBn();
-          }
-
-          api.disconnect();
+        if (tokenPerAca) {
+          finalPartialFee = partialFee.div(BN_TEN.pow(new BN(13))).mul(new BN(tokenPerAca));
         }
+      } else {
+        finalPartialFee = partialFee.toBn();
       }
+    } else {
+      if (selectedCurrency.native) walletDetail.ftIdentifier = 'native';
+      else walletDetail.ftIdentifier = selectedCurrency.referenceId;
+      const {partialFee} = await api.tx.tipping
+        .sendTip(walletDetail, RAND_AMOUNT)
+        .paymentInfo(from);
+
+      finalPartialFee = partialFee.toBn();
     }
-    return {
-      partialFee: finalPartialFee,
-      api,
-    };
+
+    await api.disconnect();
+
+    return {partialFee: finalPartialFee};
   } catch (error) {
     console.log({error});
     Sentry.captureException(error);
-    return null;
   }
 };
 
@@ -202,9 +177,11 @@ export const signWithExtension = async (
 };
 
 export const signAndSendExtrinsic = async (
-  {from, value, currencyId, wsAddress, native, walletDetail}: signAndSendExtrinsicProps,
+  {from, value, referenceId, wsAddress, native, walletDetail}: signAndSendExtrinsicProps,
   callback?: (param: SignTransactionCallbackProps) => void,
 ): Promise<string | null> => {
+  let api: ApiPromise = null;
+
   try {
     const {enableExtension} = await import('src/helpers/extension');
     const {web3FromSource} = await import('@polkadot/extension-dapp');
@@ -232,7 +209,7 @@ export const signAndSendExtrinsic = async (
     }
 
     // otherwise if account found
-    const api = await connectToBlockchain(wsAddress);
+    api = await connectToBlockchain(wsAddress);
 
     callback && callback({apiConnected: true});
 
@@ -247,14 +224,18 @@ export const signAndSendExtrinsic = async (
       });
 
     // here we use the api to create a balance transfer to some account of a value of 12345678
-    const transferExtrinsic =
-      walletDetail.referenceType === WalletReferenceType.WALLET_ADDRESS
-        ? native
-          ? api.tx.balances.transfer(walletDetail.referenceId, value)
-          : api.tx.currencies.transfer(walletDetail.referenceId, {TOKEN: currencyId}, value)
-        : api.tx.tipping.sendTip(walletDetail, value);
+    const isWalletAddress = walletDetail.referenceType === WalletReferenceType.WALLET_ADDRESS;
+    const currencyId = parseInt(referenceId);
 
-    let txHash: string | null = null;
+    if (!isWalletAddress && typeof currencyId === 'number' && !isNaN(currencyId)) {
+      throw new Error('FailedToTip');
+    }
+
+    const transferExtrinsic = isWalletAddress
+      ? native
+        ? api.tx.balances.transfer(walletDetail.referenceId, value)
+        : api.tx.octopusAssets.transfer(currencyId, walletDetail.referenceId, value)
+      : api.tx.tipping.sendTip(walletDetail, value);
 
     // passing the injected account address as the first argument of signAndSend
     // will allow the api to retrieve the signer and the user will see the extension
@@ -265,21 +246,28 @@ export const signAndSendExtrinsic = async (
       nonce: -1,
     });
 
-    await new Promise((resolve, reject) => {
-      txInfo.send(result => {
-        if (result.status.isInBlock) {
-          console.log(`\tBlock hash    : ${txHash}`);
-        } else if (result.status.isFinalized) {
-          txHash = result.status.asFinalized.toHex();
-          console.log(`\tFinalized     : ${txHash}`);
-          api.disconnect();
-          resolve(txHash);
-        } else if (result.isError) {
-          console.log(`\tFinalized     : null`);
-          api.disconnect();
-          reject();
-        }
-      });
+    const txHash: string = await new Promise((resolve, reject) => {
+      txInfo
+        .send(({status, isError, events}) => {
+          if (status.isInBlock) {
+            console.log(`\tBlock hash    : ${status.asInBlock.toHex()}`);
+          } else if (status.isFinalized) {
+            console.log(`\tFinalized     : ${status.asFinalized.toHex()}`);
+            resolve(status.asFinalized.toHex());
+          } else if (isError) {
+            console.log(`\tFinalized     : null`);
+            reject('FailedToSendTip');
+          }
+
+          events.forEach(data => {
+            if (data.event.method.toString() === 'ExtrinsicFailed') {
+              reject(new Error(data.event.method.toString()));
+            }
+          });
+        })
+        .catch(err => {
+          reject(err);
+        });
     });
 
     return txHash;
@@ -310,9 +298,12 @@ export const checkAccountBalance = async (
 
     listenToSystemBalanceChange(api, account, free as u128, callback);
   } else {
-    const result = await api.query.octopusAssets.account(currency.referenceId, account);
+    const result = await api.query.octopusAssets.account<AssetBalance>(
+      currency.referenceId,
+      account,
+    );
 
-    free = (result.toHuman() as any).balance;
+    free = result.balance;
 
     listenToTokenBalanceChange(api, account, currency, free, callback);
   }
@@ -350,11 +341,9 @@ const listenToTokenBalanceChange = async (
   previousFree: Balance,
   callback: (change: BN) => void,
 ) => {
-  api.query.octopusAssets.account(currency.referenceId, account, ({balance}) => {
-    if (balance.toHuman() == 0) return;
-
+  api.query.octopusAssets.account(currency.referenceId, account, ({balance}: AssetBalance) => {
     // Calculate the delta
-    const change = balance.sub(previousFree);
+    const change = balance.toBn().sub(previousFree.toBn());
 
     // Only display positive value changes (Since we are pulling `previous` above already,
     // the initial balance change will also be zero)
@@ -367,25 +356,24 @@ const listenToTokenBalanceChange = async (
 };
 
 export const getClaimTip = async (
-  {serverId, referenceType, referenceId, ftIdentifier}: TipBalanceInfo,
-  rpcURL: string,
-): Promise<TipResult | null> => {
+  api: ApiPromise,
+  serverId: string,
+  referenceType: string,
+  referenceId: string,
+  pageSize = 10,
+): Promise<[StorageKey<AnyTuple>, Codec][] | null> => {
   try {
-    const api = await connectToBlockchain(rpcURL);
-    const result = await api.query.tipping.tipsBalanceByReference(
-      serverId,
-      referenceType,
-      referenceId,
-      ftIdentifier,
-    );
+    const result = await api.query.tipping.tipsBalanceByReference.entriesPaged({
+      args: [serverId, referenceType, referenceId],
+      pageSize,
+    });
 
-    if (result.toJSON() == null) return null;
-
-    return result.toHuman() as AnyObject as TipResult;
-  } catch (error) {
-    console.log({error});
-    return null;
+    return result;
+  } catch {
+    // ignore
   }
+
+  return null;
 };
 
 export const claimMyria = async (
@@ -393,11 +381,11 @@ export const claimMyria = async (
   rpcURL: string,
   walletId: string,
 ): Promise<void> => {
-  const {enableExtension} = await import('src/helpers/extension');
-  const {web3FromSource} = await import('@polkadot/extension-dapp');
-
   try {
+    const {enableExtension} = await import('src/helpers/extension');
+    const {web3FromSource} = await import('@polkadot/extension-dapp');
     const allAccounts = await enableExtension();
+
     if (!allAccounts || allAccounts.length === 0)
       throw new NoAccountException('Please import your account first!');
 
@@ -407,11 +395,9 @@ export const claimMyria = async (
 
     if (!account) throw new NoAccountException('Account not registered on Polkadot.js extension');
 
-    const injector = await web3FromSource(account.meta.source);
     const api = await connectToBlockchain(rpcURL);
+    const injector = await web3FromSource(account.meta.source);
     const extrinsic = api.tx.tipping.claimTip(payload);
-
-    let txHash: string | null = null;
 
     const txInfo = await extrinsic.signAsync(walletId, {
       signer: injector.signer,
@@ -420,81 +406,43 @@ export const claimMyria = async (
     });
 
     await new Promise((resolve, reject) => {
-      txInfo.send(result => {
-        if (result.status.isInBlock) {
-          console.log(`\tBlock hash    : ${txHash}`);
-        } else if (result.status.isFinalized) {
-          txHash = result.status.asFinalized.toHex();
-          console.log(`\tFinalized     : ${txHash}`);
-          api.disconnect();
-          resolve(txHash);
-        } else if (result.isError) {
-          console.log(`\tFinalized     : null`);
-          api.disconnect();
-          reject('FailedToClaim');
-        }
-      });
+      txInfo
+        .send(({status, isError, events}) => {
+          if (status.isInBlock) {
+            console.log(`\tBlock hash    : ${status.asInBlock.toHex()}`);
+          } else if (status.isFinalized) {
+            console.log(`\tFinalized     : ${status.asFinalized.toHex()}`);
+            resolve(status.asFinalized.toHex());
+          } else if (isError) {
+            console.log(`\tFinalized     : null`);
+            reject('FailedToClaimTip');
+          }
+
+          events.forEach(data => {
+            if (data.event.method.toString() === 'ExtrinsicFailed') {
+              reject(new Error(data.event.method.toString()));
+            }
+          });
+        })
+        .catch(err => {
+          reject(err);
+        });
     });
   } catch (err) {
-    if (err === 'FailedToClaim') {
-      throw new Error(err);
-    } else {
-      throw new Error('CancelTransactions');
-    }
+    throw err;
   }
 };
 
-export const verify = async (
+export const sendTip = async (
   account: InjectedAccountWithMeta,
   rpcURL: string,
-  serverId: string,
-  accessToken: string,
-  socialMediaCredential: object,
-  ftIdentifier: string,
+  tipsBalanceInfo: TipsBalanceInfo,
+  amount: string,
   callback?: (param: SignTransactionCallbackProps) => void,
-): Promise<ApiPromise> => {
-  const {web3FromSource} = await import('@polkadot/extension-dapp');
-  const api: ApiPromise = await connectToBlockchain(rpcURL);
-
-  callback && callback({apiConnected: true});
-
-  const injector = await web3FromSource(account.meta.source);
-
-  callback &&
-    callback({
-      apiConnected: true,
-      signerOpened: true,
-    });
-
-  const extrinsic = api.tx.tipping.verifySocialMedia(
-    serverId,
-    accessToken,
-    socialMediaCredential,
-    ftIdentifier,
-  );
-
-  await extrinsic.signAndSend(account.address, {
-    signer: injector.signer,
-    nonce: -1,
-  });
-
-  return api;
-};
-
-export const connect = async (
-  account: InjectedAccountWithMeta,
-  rpcURL: string,
-  serverId: string,
-  accessToken: string,
-  userCredential: object,
-  ftIdentifier: string,
-  callback?: (param: SignTransactionCallbackProps) => void,
-) => {
-  const {web3FromSource} = await import('@polkadot/extension-dapp');
-
-  let api: ApiPromise | null;
+): Promise<string> => {
   try {
-    api = await connectToBlockchain(rpcURL);
+    const {web3FromSource} = await import('@polkadot/extension-dapp');
+    const api = await connectToBlockchain(rpcURL);
 
     callback && callback({apiConnected: true});
 
@@ -506,126 +454,60 @@ export const connect = async (
         signerOpened: true,
       });
 
-    const extrinsic = api.tx.tipping.connectAccount(
-      serverId,
-      accessToken,
-      userCredential,
-      ftIdentifier,
-    );
-
-    await extrinsic.signAndSend(account.address, {
+    const extrinsic = api.tx.tipping.sendTip(tipsBalanceInfo, new BN(amount));
+    const txInfo = await extrinsic.signAsync(account.address, {
       signer: injector.signer,
       nonce: -1,
     });
+
+    return new Promise((resolve, reject) => {
+      txInfo
+        .send(({status, isError, events}) => {
+          if (status.isInBlock) {
+            console.log(`\tBlock hash    : ${status.asInBlock.toHex()}`);
+          } else if (status.isFinalized) {
+            console.log(`\tFinalized     : ${status.asFinalized.toHex()}`);
+            resolve(status.asFinalized.toHex());
+          } else if (isError) {
+            console.log(`\tFinalized     : null`);
+            reject('FailedToSendTip');
+          }
+
+          events.forEach(data => {
+            if (data.event.method.toString() === 'ExtrinsicFailed') {
+              reject(new Error(data.event.method.toString()));
+            }
+          });
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
   } catch (err) {
-    return null;
-  }
-
-  return api;
-};
-
-export const estimateFeeReference = async (
-  from: string,
-  walletDetail: WalletDetail,
-  selectedCurrency: BalanceDetail,
-  accountIdMyriad: string,
-): Promise<EstimateFeeResponseProps | null> => {
-  try {
-    const {enableExtension} = await import('src/helpers/extension');
-
-    const allAccounts = await enableExtension();
-
-    const keyring = new Keyring();
-
-    const baseAddress = keyring.encodeAddress(from);
-
-    let finalPartialFee = new BN(0);
-
-    let api: ApiPromise | null = null;
-
-    if (allAccounts) {
-      const account = allAccounts.find(account => {
-        return account.address === baseAddress;
-      });
-
-      if (!account) {
-        throw {
-          Error: 'Please import your account first!',
-        };
-      }
-
-      api = await connectToBlockchain(selectedCurrency.network.rpcURL);
-
-      const {partialFee} = await api.tx.tipping
-        .claimReference(walletDetail, walletDetail.referenceType, walletDetail.referenceId, from, 0)
-        .paymentInfo(accountIdMyriad);
-
-      finalPartialFee = partialFee.toBn();
-    }
-    return {
-      partialFee: finalPartialFee,
-      api,
-    };
-  } catch (error) {
-    console.log({error});
-    Sentry.captureException(error);
-    return null;
+    throw err;
   }
 };
 
-export const claimFeeReferenceMyria = async (
-  from: string,
-  walletDetail: WalletDetail,
-  selectedCurrency: BalanceDetail,
-  trxFee: string,
-) => {
-  const {enableExtension} = await import('src/helpers/extension');
-  const {web3FromSource} = await import('@polkadot/extension-dapp');
+export const batchClaimReferenceFee = async (
+  api: ApiPromise,
+  references: References,
+  mainReferences: References,
+  currencyIds: string[],
+  accountId: string,
+  server?: Server,
+): Promise<BN> => {
+  if (!server) return new BN(0);
+  if (server && !server?.accountId?.myriad) return new BN(0);
 
   try {
-    const allAccounts = await enableExtension();
-    if (!allAccounts || allAccounts.length === 0)
-      throw new NoAccountException('Please import your account first!');
+    const {partialFee} = await api.tx.tipping
+      .batchClaimReference(server.id, references, mainReferences, currencyIds, accountId, 1)
+      .paymentInfo(server.accountId.myriad);
 
-    const keyring = new Keyring();
-    const baseAddress = keyring.encodeAddress(from);
-    const account = allAccounts.find(account => account.address === baseAddress);
-
-    if (!account) throw new NoAccountException('Account not registered on Polkadot.js extension');
-
-    const injector = await web3FromSource(account.meta.source);
-    const api = await connectToBlockchain(selectedCurrency.network.rpcURL);
-    let txHash: string | null = null;
-    const extrinsic = await api.tx.tipping.sendTip(walletDetail, Number(trxFee));
-
-    const txInfo = await extrinsic.signAsync(from, {
-      signer: injector.signer,
-      // make sure nonce does not stuck
-      nonce: -1,
-    });
-
-    const data = await new Promise((resolve, reject) => {
-      txInfo.send(result => {
-        if (result.status.isInBlock) {
-          console.log(`\tBlock hash    : ${txHash}`);
-        } else if (result.status.isFinalized) {
-          txHash = result.status.asFinalized.toHex();
-          console.log(`\tFinalized     : ${txHash}`);
-          api.disconnect();
-          resolve(txHash);
-        } else if (result.isError) {
-          console.log(`\tFinalized     : null`);
-          api.disconnect();
-          reject('FailedToClaim');
-        }
-      });
-    });
-    return data;
-  } catch (err) {
-    if (err === 'FailedToClaim') {
-      throw new Error(err);
-    } else {
-      console.log('err', err);
-    }
+    return partialFee.toBn();
+  } catch {
+    //
   }
+
+  return new BN(0);
 };
