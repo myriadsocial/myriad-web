@@ -48,6 +48,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
 
   const [amount, setAmount] = useState<BN>(INITIAL_AMOUNT);
   const [transactionFee, setTransactionFee] = useState<BN>(INITIAL_AMOUNT);
+
   const [currency, setCurrency] = useState<BalanceDetail>(defaultCurrency);
   const [agreementChecked, setAgreementChecked] = useState(false);
   const [loadingFee, setLoadingFee] = useState(true);

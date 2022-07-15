@@ -30,8 +30,8 @@ const TipContainer = dynamic(() => import('../Tip/Tip.container'), {
 
 export const MyWallet: React.FC<MyWalletProps> = () => {
   const style = useStyles();
-  const {query} = useQueryParams();
 
+  const {query} = useQueryParams();
   const [tabTexts] = useState([
     {
       id: 'balance',

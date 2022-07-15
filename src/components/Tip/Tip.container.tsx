@@ -16,15 +16,17 @@ import {Tip} from './Tip';
 
 import {PolkadotAccountList} from 'components/PolkadotAccountList';
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import {utils} from 'near-api-js';
 import {Empty} from 'src/components/atoms/Empty';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useClaimTip} from 'src/hooks/use-claim-tip.hook';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
+import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {Network, NetworkIdEnum, TipResult} from 'src/interfaces/network';
 import {updateTransaction} from 'src/lib/api/transaction';
-import {getServerId} from 'src/lib/api/wallet';
 import * as WalletAPI from 'src/lib/api/wallet';
+import {getServerId} from 'src/lib/api/wallet';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
@@ -37,7 +39,9 @@ export const TipContainer: React.FC = () => {
 
   const {currentWallet, user} = useSelector<RootState, UserState>(state => state.userState);
   const {payTransactionFee} = useNearApi();
-  const {loading, claiming, claimingAll, tipsEachNetwork, claim, claimAll, trxFee} = useClaimTip();
+  const {getClaimFeeReferenceMyria} = usePolkadotApi();
+  const {loading, claiming, claimingAll, tipsEachNetwork, claim, claimAll, trxFee, txFeeForMyria} =
+    useClaimTip();
   const {enablePolkadotExtension} = usePolkadotExtension();
   const {getRegisteredAccounts} = useAuthHook();
   const [verifyingRef, setVerifyingRef] = useState(false);
@@ -144,11 +148,10 @@ export const TipContainer: React.FC = () => {
   const handleVerifyReference = async (networkId: string, currentBalance: string | number) => {
     if (!user?.id) return;
 
-    setVerifyingRef(true);
-
     try {
       switch (networkId) {
         case NetworkIdEnum.NEAR: {
+          setVerifyingRef(true);
           const serverId = await getServerId(currentWallet?.networkId);
           const tipsBalanceInfo = {
             server_id: serverId,
@@ -157,7 +160,9 @@ export const TipContainer: React.FC = () => {
             ft_identifier: 'native',
           };
 
-          await payTransactionFee(tipsBalanceInfo, currentBalance);
+          const amountInYocto = utils.format.parseNearAmount(trxFee);
+
+          await payTransactionFee(tipsBalanceInfo, amountInYocto, currentBalance);
           break;
         }
 
@@ -205,11 +210,40 @@ export const TipContainer: React.FC = () => {
 
     if (!account) return;
 
-    setVerifyingRef(false);
-    enqueueSnackbar({
-      message: 'Reference verification for MYRIA network is underway',
-      variant: 'warning',
-    });
+    setVerifyingRef(true);
+    const data = await getClaimFeeReferenceMyria(trxFee);
+
+    if (data) {
+      let success = true;
+      WalletAPI.claimReference({txFee: txFeeForMyria})
+        .then(() => {
+          setVerifyingRef(false);
+          enqueueSnackbar({
+            // TODO: Register Translation
+            message: 'Verifying Success',
+            variant: 'success',
+          });
+        })
+        .catch(e => {
+          setVerifyingRef(false);
+          success = false;
+          enqueueSnackbar({
+            // TODO: Register Translation
+            message: e.message,
+            variant: 'error',
+          });
+        })
+        .finally(() => {
+          setVerifyingRef(false);
+          setClaimingSucces(success);
+          setVerifyingRef(false);
+        });
+    } else {
+      enqueueSnackbar({
+        message: i18n.t('Wallet.Manage.Alert.Error'),
+        variant: 'error',
+      });
+    }
 
     return;
   };

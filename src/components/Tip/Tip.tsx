@@ -72,6 +72,7 @@ export const Tip: React.FC<TipProps> = props => {
     balance,
     txFee,
   } = props;
+
   const style = useStyles();
 
   const icons = React.useMemo(
@@ -101,7 +102,15 @@ export const Tip: React.FC<TipProps> = props => {
   };
 
   const getAmount = (tip: TipResult) => {
-    if (onSuccess && balance && tip.tipsBalanceInfo.ftIdentifier === 'native') return balance;
+    if (
+      onSuccess &&
+      balance &&
+      tip.tipsBalanceInfo.ftIdentifier === 'native' &&
+      tip.symbol === 'NEAR'
+    ) {
+      return balance;
+    }
+
     return tip.amount;
   };
 

@@ -185,6 +185,7 @@ export const useNearApi = () => {
 
   const payTransactionFee = async (
     tipsBalanceInfo: TipBalanceInfo,
+    txFee: string,
     currentBalance: string | number,
   ): Promise<void> => {
     const attachedGas = new BN('300000000000000');
@@ -193,7 +194,6 @@ export const useNearApi = () => {
 
     //inisialisasi near wallet
     const {wallet} = await nearInitialize();
-    const txFee = await defaultTxFee();
     const account = wallet.account();
     const actions = [
       nearAPI.transactions.functionCall(

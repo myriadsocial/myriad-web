@@ -38,7 +38,7 @@ export interface Server {
   description: string;
   metric: ServerMetric;
   categories: string[];
-  accountId?: object;
+  accountId?: any;
 }
 
 export const getUserNonce = async (id: string): Promise<UserNonceProps> => {
@@ -196,6 +196,15 @@ export const getServerId = async (networkId?: string): Promise<string> => {
     default:
       return data.id;
   }
+};
+
+export const getAccountIdMyria = async (networkId?: string): Promise<string> => {
+  const {data} = await MyriadAPI().request<Server>({
+    url: `/server`,
+    method: 'GET',
+  });
+
+  return data.accountId.myriad;
 };
 
 export const claimReference = async ({

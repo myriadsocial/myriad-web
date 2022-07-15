@@ -6,8 +6,7 @@ import {ApiPromise, WsProvider} from '@polkadot/api';
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {Keyring} from '@polkadot/keyring';
 import {u128, u32, UInt} from '@polkadot/types';
-import {numberToHex} from '@polkadot/util';
-import {BN, BN_TEN} from '@polkadot/util';
+import {BN, BN_TEN, numberToHex} from '@polkadot/util';
 
 import {NoAccountException} from './errors/NoAccountException';
 import {SignRawException} from './errors/SignRawException';
@@ -523,4 +522,110 @@ export const connect = async (
   }
 
   return api;
+};
+
+export const estimateFeeReference = async (
+  from: string,
+  walletDetail: WalletDetail,
+  selectedCurrency: BalanceDetail,
+  accountIdMyriad: string,
+): Promise<EstimateFeeResponseProps | null> => {
+  try {
+    const {enableExtension} = await import('src/helpers/extension');
+
+    const allAccounts = await enableExtension();
+
+    const keyring = new Keyring();
+
+    const baseAddress = keyring.encodeAddress(from);
+
+    let finalPartialFee = new BN(0);
+
+    let api: ApiPromise | null = null;
+
+    if (allAccounts) {
+      const account = allAccounts.find(account => {
+        return account.address === baseAddress;
+      });
+
+      if (!account) {
+        throw {
+          Error: 'Please import your account first!',
+        };
+      }
+
+      api = await connectToBlockchain(selectedCurrency.network.rpcURL);
+
+      const {partialFee} = await api.tx.tipping
+        .claimReference(walletDetail, walletDetail.referenceType, walletDetail.referenceId, from, 0)
+        .paymentInfo(accountIdMyriad);
+
+      finalPartialFee = partialFee.toBn();
+    }
+    return {
+      partialFee: finalPartialFee,
+      api,
+    };
+  } catch (error) {
+    console.log({error});
+    Sentry.captureException(error);
+    return null;
+  }
+};
+
+export const claimFeeReferenceMyria = async (
+  from: string,
+  walletDetail: WalletDetail,
+  selectedCurrency: BalanceDetail,
+  trxFee: string,
+) => {
+  const {enableExtension} = await import('src/helpers/extension');
+  const {web3FromSource} = await import('@polkadot/extension-dapp');
+
+  try {
+    const allAccounts = await enableExtension();
+    if (!allAccounts || allAccounts.length === 0)
+      throw new NoAccountException('Please import your account first!');
+
+    const keyring = new Keyring();
+    const baseAddress = keyring.encodeAddress(from);
+    const account = allAccounts.find(account => account.address === baseAddress);
+
+    if (!account) throw new NoAccountException('Account not registered on Polkadot.js extension');
+
+    const injector = await web3FromSource(account.meta.source);
+    const api = await connectToBlockchain(selectedCurrency.network.rpcURL);
+    let txHash: string | null = null;
+    const extrinsic = await api.tx.tipping.sendTip(walletDetail, Number(trxFee));
+
+    const txInfo = await extrinsic.signAsync(from, {
+      signer: injector.signer,
+      // make sure nonce does not stuck
+      nonce: -1,
+    });
+
+    const data = await new Promise((resolve, reject) => {
+      txInfo.send(result => {
+        if (result.status.isInBlock) {
+          console.log(`\tBlock hash    : ${txHash}`);
+        } else if (result.status.isFinalized) {
+          txHash = result.status.asFinalized.toHex();
+          console.log(`\tFinalized     : ${txHash}`);
+          api.disconnect();
+          resolve(txHash);
+        } else if (result.isError) {
+          console.log(`\tFinalized     : null`);
+          api.disconnect();
+          reject('FailedToClaim');
+        }
+      });
+    });
+    return data;
+  } catch (err) {
+    if (err === 'FailedToClaim') {
+      throw new Error(err);
+    } else {
+      console.log('err', err);
+    }
+  }
 };

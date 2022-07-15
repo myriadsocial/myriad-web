@@ -1,15 +1,21 @@
-import {useState, useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 
+import {BN, BN_ZERO} from '@polkadot/util';
+
 import {useNearApi} from './use-near-api.hook';
+import {usePolkadotApi} from './use-polkadot-api.hook';
 
 import {remove} from 'lodash';
+import {formatBalance} from 'src/helpers/balance';
 import {Network, NetworkIdEnum, TipResult} from 'src/interfaces/network';
+import {WalletReferenceType} from 'src/interfaces/wallet';
 import {updateTransaction} from 'src/lib/api/transaction';
 import * as WalletAPI from 'src/lib/api/wallet';
 import {getClaimTipNear} from 'src/lib/services/near-api-js';
-import {getClaimTip, claimMyria} from 'src/lib/services/polkadot-js';
+import {claimMyria, getClaimTip} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
+import {BalanceState} from 'src/reducers/balance/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 
 const sortNetwork = (networks: Network[], selectedNetwork?: string) => {
@@ -24,13 +30,16 @@ const sortNetwork = (networks: Network[], selectedNetwork?: string) => {
 
 export const useClaimTip = () => {
   const {user, networks, socials} = useSelector<RootState, UserState>(state => state.userState);
+  const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
   const {claimTip, claimAllTip, defaultTxFee} = useNearApi();
+  const {getEstimatedFeeReference} = usePolkadotApi();
   const [loading, setLoading] = useState(true);
   const [claiming, setClaiming] = useState(false);
   const [claimingAll, setClaimingAll] = useState(false);
   const [error, setError] = useState(null);
   const [tipsEachNetwork, setTipsEachNetwork] = useState<Network[]>([]);
-  const [trxFee, setTxFee] = useState(null);
+  const [trxFee, setTxFee] = useState<string>(null);
+  const [txFeeForMyria, setTxFeeForMyria] = useState<string>(null);
 
   useEffect(() => {
     const sortedNetwork = sortNetwork(networks, user.wallets[0].networkId);
@@ -44,7 +53,7 @@ export const useClaimTip = () => {
 
     try {
       let exists = true;
-      let networkId = user.wallets[0].networkId;
+      const networkId = user.wallets[0].networkId;
       let nativeDecimal = 0;
 
       const networkCallback = async (network: Network) => {
@@ -130,7 +139,38 @@ export const useClaimTip = () => {
                 setTxFee(formatted.toFixed(2));
                 break;
               }
+              case NetworkIdEnum.MYRIAD: {
+                const serverId = await WalletAPI.getServerId(user.wallets[0].networkId);
+                const accountIdMyriad = await WalletAPI.getAccountIdMyria(
+                  user.wallets[0].networkId,
+                );
 
+                const tipBalanceInfo = {
+                  ftIdentifier: 'native',
+                  referenceId: user.id as string,
+                  referenceType: WalletReferenceType.PEOPLE,
+                  serverId: serverId as string,
+                };
+                let fee: BN = BN_ZERO;
+
+                const gasPrice = await getEstimatedFeeReference(
+                  user?.wallets[0].id,
+                  tipBalanceInfo,
+                  balanceDetails[0],
+                  accountIdMyriad,
+                );
+
+                if (gasPrice) {
+                  fee = gasPrice;
+                }
+                setTxFeeForMyria(fee.toString());
+                const amount = formatBalance(fee, balanceDetails[0].decimal, 10);
+                const displayAmount = fee.gt(BN_ZERO) ? (amount > 0 ? amount : '< 0.00000001') : 0;
+
+                setTxFee(displayAmount.toString());
+
+                break;
+              }
               default:
                 setTxFee('0.00');
             }
@@ -142,7 +182,6 @@ export const useClaimTip = () => {
 
       setTipsEachNetwork(networksWithTip);
     } catch (error) {
-      console.log(error);
       setError(error as any);
     } finally {
       setLoading(false);
@@ -314,5 +353,6 @@ export const useClaimTip = () => {
     claim,
     claimAll,
     trxFee,
+    txFeeForMyria,
   };
 };
