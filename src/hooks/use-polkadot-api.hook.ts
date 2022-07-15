@@ -275,6 +275,7 @@ export const usePolkadotApi = () => {
       const tipsBalance = rawTipBalance.toHuman() as unknown as TipResult;
       const ftIdentifier = tipsBalance.tipsBalanceInfo.ftIdentifier;
       const amount = new BN(tipsBalance.amount.replace(/,/gi, ''));
+      const accountId = tipsBalance.accountId;
 
       if (data[ftIdentifier] === undefined) {
         data[ftIdentifier] = {
@@ -286,6 +287,7 @@ export const usePolkadotApi = () => {
 
       const dataAmount = data[ftIdentifier].amount;
       data[ftIdentifier].amount = dataAmount.add(amount);
+      if (!accountId) data[ftIdentifier].accountId = null;
     }
 
     return {
