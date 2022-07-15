@@ -39,6 +39,7 @@ export const useClaimTip = () => {
   const [error, setError] = useState(null);
   const [tipsEachNetwork, setTipsEachNetwork] = useState<Network[]>([]);
   const [trxFee, setTxFee] = useState<string>(null);
+  const [txFeeForMyria, setTxFeeForMyria] = useState<string>(null);
 
   useEffect(() => {
     const sortedNetwork = sortNetwork(networks, user.wallets[0].networkId);
@@ -162,7 +163,9 @@ export const useClaimTip = () => {
                 if (gasPrice) {
                   fee = gasPrice;
                 }
+                setTxFeeForMyria(fee.toString());
                 const amount = formatBalance(fee, balanceDetails[0].decimal, 10);
+                console.log('amount', fee);
                 const displayAmount = fee.gt(BN_ZERO) ? (amount > 0 ? amount : '< 0.00000001') : 0;
 
                 setTxFee(displayAmount.toString());
@@ -351,5 +354,6 @@ export const useClaimTip = () => {
     claim,
     claimAll,
     trxFee,
+    txFeeForMyria,
   };
 };

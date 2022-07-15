@@ -625,7 +625,7 @@ export const claimFeeReferenceMyria = async (
     if (err === 'FailedToClaim') {
       throw new Error(err);
     } else {
-      throw new Error('CancelTransactions');
+      console.log('err', err);
     }
   }
 };

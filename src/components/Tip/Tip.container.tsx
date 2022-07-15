@@ -40,7 +40,8 @@ export const TipContainer: React.FC = () => {
   const {currentWallet, user} = useSelector<RootState, UserState>(state => state.userState);
   const {payTransactionFee} = useNearApi();
   const {getClaimFeeReferenceMyria} = usePolkadotApi();
-  const {loading, claiming, claimingAll, tipsEachNetwork, claim, claimAll, trxFee} = useClaimTip();
+  const {loading, claiming, claimingAll, tipsEachNetwork, claim, claimAll, trxFee, txFeeForMyria} =
+    useClaimTip();
   const {enablePolkadotExtension} = usePolkadotExtension();
   const {getRegisteredAccounts} = useAuthHook();
   const [verifyingRef, setVerifyingRef] = useState(false);
@@ -215,7 +216,7 @@ export const TipContainer: React.FC = () => {
 
     if (data) {
       let success = true;
-      WalletAPI.claimReference({txFee: trxFee})
+      WalletAPI.claimReference({txFee: txFeeForMyria})
         .then(() => {
           setVerifyingRef(false);
           enqueueSnackbar({
