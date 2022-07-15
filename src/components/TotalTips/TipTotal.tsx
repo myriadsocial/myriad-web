@@ -38,14 +38,22 @@ export const TipTotal: React.FC<TipTotalNearProps> = props => {
   const [exchangeRates, setExchangeRates] = useState<ExchangeRate[]>([]);
 
   useEffect(() => {
-    setLoading(true);
-    TokenAPI.getExchangeRate()
-      .then(data => {
-        setExchangeRates(data);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    let isMounted = true;
+
+    if (isMounted) {
+      setLoading(true);
+      TokenAPI.getExchangeRate()
+        .then(data => {
+          setExchangeRates(data);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+
+    return () => {
+      isMounted = false;
+    };
   }, [totalTipsData]);
 
   const getDetailExchangeRate = (symbol: string) => {

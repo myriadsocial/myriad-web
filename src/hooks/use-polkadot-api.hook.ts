@@ -3,29 +3,44 @@ import * as Sentry from '@sentry/nextjs';
 import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {ApiPromise} from '@polkadot/api';
+import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {BN, BN_ONE, BN_TWO, BN_TEN} from '@polkadot/util';
 
 import {SimpleSendTipProps} from '../interfaces/transaction';
-import {claimFeeReferenceMyria, estimateFeeReference} from './../lib/services/polkadot-js';
 
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import isEmpty from 'lodash/isEmpty';
+import {VariantType} from 'notistack';
 import {formatBalance} from 'src/helpers/balance';
 import {BalanceDetail} from 'src/interfaces/balance';
+import {TipResult, TipsBalance, TipsBalanceData, TipsBalanceInfo} from 'src/interfaces/network';
+import {SocialMedia} from 'src/interfaces/social';
 import {BlockchainPlatform, WalletDetail, WalletReferenceType} from 'src/interfaces/wallet';
 import {storeTransaction} from 'src/lib/api/transaction';
 import * as WalletAPI from 'src/lib/api/wallet';
-import {estimateFee, signAndSendExtrinsic} from 'src/lib/services/polkadot-js';
+import {
+  batchClaimReferenceFee,
+  estimateFee,
+  getClaimTip,
+  sendTip,
+  signAndSendExtrinsic,
+} from 'src/lib/services/polkadot-js';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {fetchBalances} from 'src/reducers/balance/actions';
 import {BalanceState} from 'src/reducers/balance/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 
+interface TipsBalanceResult {
+  tipsBalance: TipsBalance[];
+  peopleIds: string[];
+}
+
 export const usePolkadotApi = () => {
   const dispatch = useDispatch();
 
-  const {anonymous, currencies, currentWallet, user} = useSelector<RootState, UserState>(
+  const {anonymous, currencies, currentWallet} = useSelector<RootState, UserState>(
     state => state.userState,
   );
   const {balanceDetails, loading: loadingBalance} = useSelector<RootState, BalanceState>(
@@ -74,60 +89,6 @@ export const usePolkadotApi = () => {
     }
   };
 
-  const getEstimatedFeeReference = async (
-    from: string,
-    walletDetail: WalletDetail,
-    selectedCurrency: BalanceDetail,
-    accountIdMyriad: string,
-  ): Promise<BN | null> => {
-    setIsFetchingFee(true);
-
-    try {
-      let {partialFee: estimatedFee} = await estimateFeeReference(
-        from,
-        walletDetail,
-        selectedCurrency,
-        accountIdMyriad,
-      );
-
-      if (!estimatedFee) {
-        // equal 0.01
-        estimatedFee = BN_ONE.mul(BN_TEN.pow(new BN(selectedCurrency.decimal))).div(
-          BN_TEN.pow(BN_TWO),
-        );
-      }
-
-      return estimatedFee;
-    } catch (error) {
-      Sentry.captureException(error);
-      return null;
-    } finally {
-      setIsFetchingFee(false);
-    }
-  };
-
-  const getClaimFeeReferenceMyria = async (trxFee: string) => {
-    try {
-      const serverId = await WalletAPI.getServerId(user.wallets[0].networkId);
-      const tipBalanceInfo = {
-        ftIdentifier: 'native',
-        referenceId: user.id as string,
-        referenceType: WalletReferenceType.PEOPLE,
-        serverId: serverId as string,
-      };
-
-      const data = claimFeeReferenceMyria(
-        user?.wallets[0].id,
-        tipBalanceInfo,
-        balanceDetails[0],
-        trxFee,
-      );
-      return data;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const simplerSendTip = async (
     {from, amount, currency, type, referenceId, walletDetail, to: toId}: SimpleSendTipProps,
     callback?: (hash: string) => void,
@@ -140,7 +101,7 @@ export const usePolkadotApi = () => {
         {
           from,
           value: amount,
-          currencyId: currency.id,
+          referenceId: currency.referenceId,
           wsAddress: currency.network.rpcURL,
           native: currency.native,
           decimal: currency.decimal,
@@ -199,6 +160,140 @@ export const usePolkadotApi = () => {
     }
   };
 
+  const payTransactionFee = async (
+    account: InjectedAccountWithMeta,
+    rpcURL: string,
+    tipsBalanceInfo: TipsBalanceInfo,
+    amount: string,
+    callback?: (hasSuccess?: boolean, hash?: string) => void,
+  ) => {
+    let message = 'Claiming Reference Success';
+    let variant: VariantType = 'success';
+    let success = true;
+    let hash = '';
+
+    try {
+      hash = await sendTip(account, rpcURL, tipsBalanceInfo, amount, ({signerOpened}) => {
+        if (signerOpened) {
+          setSignerLoading(true);
+        }
+      });
+
+      await WalletAPI.claimReference({txFee: amount});
+    } catch (err) {
+      success = false;
+      variant = err.message === 'Cancelled' ? 'warning' : 'error';
+      message = err.message;
+    } finally {
+      setSignerLoading(false);
+      enqueueSnackbar({variant, message});
+      callback && callback(success, hash);
+    }
+  };
+
+  const getClaimReferenceEstimatedFee = (
+    api: ApiPromise,
+    referenceId: string,
+    referenceIds: string[],
+    currencyIds: string[],
+    accountId: string,
+    server: WalletAPI.Server,
+  ) => {
+    return batchClaimReferenceFee(
+      api,
+      {referenceType: 'people', referenceIds},
+      {referenceType: 'user', referenceIds: [referenceId]},
+      currencyIds,
+      accountId,
+      server,
+    );
+  };
+
+  const getClaimTipMyriad = async (
+    api: ApiPromise,
+    serverId: string,
+    referenceId: string,
+    accountId: string,
+    socials: SocialMedia[],
+  ): Promise<TipsBalanceResult> => {
+    if (!api) return;
+
+    const peopleIds: string[] = [];
+    const data: TipsBalanceData = {
+      native: {
+        tipsBalanceInfo: {
+          serverId,
+          referenceType: 'user',
+          referenceId,
+          ftIdentifier: 'native',
+        },
+        amount: new BN(0),
+        accountId,
+      },
+    };
+
+    const socialTipsPromise = Promise.all(
+      socials.map(social => {
+        peopleIds.push(social.peopleId);
+        return getClaimTip(api, serverId, 'people', social.peopleId);
+      }),
+    );
+
+    const [socialTips, userTips] = await Promise.all([
+      socialTipsPromise,
+      getClaimTip(api, serverId, 'user', referenceId),
+    ]);
+
+    for (const socialTip of socialTips) {
+      if (socialTip.length === 0) continue;
+      for (const [_, rawTipBalance] of socialTip) {
+        const tipsBalance = rawTipBalance.toHuman() as unknown as TipResult;
+        const ftIdentifier = tipsBalance.tipsBalanceInfo.ftIdentifier;
+        const amount = new BN(tipsBalance.amount.replace(/,/gi, ''));
+
+        if (amount.isZero()) continue;
+        if (data[ftIdentifier] === undefined) {
+          data[ftIdentifier] = {
+            tipsBalanceInfo: {
+              serverId,
+              referenceType: 'user',
+              referenceId: referenceId,
+              ftIdentifier,
+            },
+            amount: new BN(0),
+            accountId: null,
+          };
+        }
+
+        const dataAmount = data[ftIdentifier].amount;
+        data[ftIdentifier].amount = dataAmount.add(amount);
+        data[ftIdentifier].accountId = null;
+      }
+    }
+
+    for (const [_, rawTipBalance] of userTips) {
+      const tipsBalance = rawTipBalance.toHuman() as unknown as TipResult;
+      const ftIdentifier = tipsBalance.tipsBalanceInfo.ftIdentifier;
+      const amount = new BN(tipsBalance.amount.replace(/,/gi, ''));
+
+      if (data[ftIdentifier] === undefined) {
+        data[ftIdentifier] = {
+          tipsBalanceInfo: tipsBalance.tipsBalanceInfo,
+          amount: new BN(0),
+          accountId: tipsBalance.accountId,
+        };
+      }
+
+      const dataAmount = data[ftIdentifier].amount;
+      data[ftIdentifier].amount = dataAmount.add(amount);
+    }
+
+    return {
+      tipsBalance: Object.values(data),
+      peopleIds,
+    };
+  };
+
   return {
     loadingBalance,
     loading,
@@ -208,7 +303,8 @@ export const usePolkadotApi = () => {
     error,
     simplerSendTip,
     getEstimatedFee,
-    getEstimatedFeeReference,
-    getClaimFeeReferenceMyria,
+    payTransactionFee,
+    getClaimReferenceEstimatedFee,
+    getClaimTipMyriad,
   };
 };

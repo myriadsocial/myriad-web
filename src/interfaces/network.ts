@@ -1,3 +1,5 @@
+import {BN} from '@polkadot/util';
+
 import {BaseModel} from './base.interface';
 import {Currency} from './currency';
 import {BlockchainPlatform} from './wallet';
@@ -49,6 +51,13 @@ export interface TipsBalanceInfo {
   referenceType: string;
   serverId: string;
 }
+
+export interface TipsBalance {
+  tipsBalanceInfo: TipsBalanceInfo;
+  amount: BN;
+  accountId: string;
+}
+
 export interface TotalTipsDataInterface {
   accountId: string | null;
   amount: string | number;
@@ -57,4 +66,8 @@ export interface TotalTipsDataInterface {
   tipsBalanceInfo: TipsBalanceInfo;
   image?: string;
   id?: string;
+}
+
+export interface TipsBalanceData {
+  [any: string]: TipsBalance;
 }

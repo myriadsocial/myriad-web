@@ -45,7 +45,7 @@ export const formatBalance = (value: BN, decimal: number, length = 10): number =
 
   if (isDecimalValue) {
     const div = balance.replace(/\.\d*$/, '');
-    const mod = balance.replace(/^\d+\./, '').substr(0, length - div.length);
+    const mod = balance.replace(/^\d+\./, '').substring(0, length - div.length);
 
     if (parseInt(div) === 0) {
       return parseFloat(`0.${mod}`);
