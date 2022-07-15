@@ -165,7 +165,6 @@ export const useClaimTip = () => {
                 }
                 setTxFeeForMyria(fee.toString());
                 const amount = formatBalance(fee, balanceDetails[0].decimal, 10);
-                console.log('amount', fee);
                 const displayAmount = fee.gt(BN_ZERO) ? (amount > 0 ? amount : '< 0.00000001') : 0;
 
                 setTxFee(displayAmount.toString());

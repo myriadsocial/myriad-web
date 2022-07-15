@@ -210,7 +210,6 @@ export const TipContainer: React.FC = () => {
 
     if (!account) return;
 
-    //TODO: myr-2286
     setVerifyingRef(true);
     const data = await getClaimFeeReferenceMyria(trxFee);
 
