@@ -43,8 +43,9 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
 
   const isPostCreator = post.createdBy === user?.id;
   const isInternalPost = post.platform === 'myriad';
+  const isExternalPost = post.platform !== 'myriad';
   const isOriginOwner = user?.people?.find(person => person.id === post.peopleId) ? true : false;
-  const showTipButton = isInternalPost || (!isInternalPost && !isOriginOwner);
+  const showTipButton = (isInternalPost && !isPostCreator) || (isExternalPost && !isOriginOwner);
   const isPostOwner = isInternalPost ? isPostCreator : isOriginOwner;
 
   const handleHashtagClicked = useCallback((hashtag: string) => {
@@ -71,7 +72,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
 
   return (
     <>
-      <PostHeader user={user} owned={isPostOwner} post={post} {...restProps} />
+      <PostHeader user={user} owned={isPostCreator} post={post} {...restProps} />
 
       <div className={styles.content}>
         <ShowIf condition={hiddenContent}>
