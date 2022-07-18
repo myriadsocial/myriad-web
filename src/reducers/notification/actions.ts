@@ -118,14 +118,13 @@ export const readAllNotifications: ThunkActionCreator<Actions, RootState> =
     try {
       const {
         userState: {user},
-        notificationState: {notifications},
       } = getState();
 
       if (!user) {
         throw new Error('User not found');
       }
 
-      await NotificationAPI.markItemsAsRead(notifications.map(notification => notification.id));
+      await NotificationAPI.markItemsAsRead();
 
       dispatch({
         type: constants.MARK_ALL_READ,
