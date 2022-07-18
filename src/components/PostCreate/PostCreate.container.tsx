@@ -44,8 +44,6 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
 
   const handleSearchPeople = useCallback(
     (query: string) => {
-      console.log('handleSearchPeople', query);
-
       if (user) {
         dispatch(searchUsers(query));
       }

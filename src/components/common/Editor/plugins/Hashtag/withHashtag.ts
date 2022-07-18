@@ -120,7 +120,6 @@ export const withHashtag = <V extends Value = Value, E extends PlateEditor<V> = 
         insertText(' ');
 
         if (arrRemaining.length > 0) {
-          console.log('HERE?');
           insertText(arrRemaining.join(' '));
           insertText(' ');
         }

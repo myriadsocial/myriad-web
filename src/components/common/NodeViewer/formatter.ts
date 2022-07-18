@@ -71,13 +71,13 @@ export const format = (text: string) => {
   return origin;
 };
 
-export const minimize = (text: string, length?: number): EditorValue => {
+export const minimize = (text: string, reportType?: ReportType, length?: number): EditorValue => {
   const origin = format(text);
 
   const nodes: EditorValue = [];
 
   const caption = origin
-    .map(element => formatToString(element))
+    .map(element => formatToString(element, reportType))
     .join('. ')
     .trim();
   const hasMedia = mediaElementExist(origin);

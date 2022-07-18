@@ -100,7 +100,6 @@ const plateUI = createPlateUI({
   }),
   [ELEMENT_MENTION]: withProps(MentionElement, {
     renderLabel: (mentionable: TMentionElement): string => {
-      console.log('mentionable', mentionable);
       return '@' + mentionable.username;
     },
     styles: {

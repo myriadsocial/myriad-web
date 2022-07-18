@@ -2,7 +2,7 @@ import {usePlateEditorRef} from '@udecode/plate-core';
 import {insertMediaEmbed} from '@udecode/plate-media-embed';
 import {ToolbarButton, ToolbarButtonProps} from '@udecode/plate-ui-toolbar';
 
-import React, {useRef} from 'react';
+import React, {useState} from 'react';
 
 import {Upload} from 'components/Upload';
 import {Modal} from 'components/atoms/Modal';
@@ -17,7 +17,7 @@ export interface MediaEmbedToolbarButtonProps extends ToolbarButtonProps {
 export const MediaEmbedToolbarButton = ({id, userId, ...props}: MediaEmbedToolbarButtonProps) => {
   const editor = usePlateEditorRef(id)!;
 
-  const progress = useRef(0);
+  const [progress, setProgress] = useState(0);
   const [open, toggleUploadDialog] = useToggle(false);
 
   const handleFileSelected = async (files: File[]) => {
@@ -27,14 +27,16 @@ export const MediaEmbedToolbarButton = ({id, userId, ...props}: MediaEmbedToolba
       const {files: uploadedFiles} = await UploadAPI.video(userId, files[0], {
         onUploadProgress: (event: ProgressEvent) => {
           const total = Math.round((100 * event.loaded) / event.total);
-          console.log('PROGRESS', total);
-          progress.current = total;
+
+          setProgress(total);
         },
       });
 
       if (uploadedFiles.length > 0) {
         insertMediaEmbed(editor, {url: uploadedFiles[0].url});
       }
+
+      setProgress(0);
     } catch (error) {
       console.error('ERROR', error);
     }
@@ -62,8 +64,8 @@ export const MediaEmbedToolbarButton = ({id, userId, ...props}: MediaEmbedToolba
         onClose={toggleUploadDialog}>
         <Upload
           type="video"
-          progress={progress.current}
-          loading={false}
+          progress={progress}
+          loading={progress > 0}
           onFileSelected={handleFileSelected}
           accept={['video/mp4', 'video/x-m4v', 'video/*']}
           maxSize={100}

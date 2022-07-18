@@ -110,10 +110,6 @@ export const BasicEditor: React.FC<BasicEditorProps> = props => {
     placeholder,
   };
 
-  const handleChange = (value: EditorValue) => {
-    console.log('VALUE', value);
-  };
-
   const renderComboboxItem = useCallback(({item}) => {
     return <ListItemComponent title={item.data.name} avatar={item.data.avatar} />;
   }, []);
@@ -133,7 +129,7 @@ export const BasicEditor: React.FC<BasicEditorProps> = props => {
   return (
     <div className={styles.root}>
       <div ref={containerRef}>
-        <Plate id={id} editableProps={editableProps} plugins={plugins} onChange={handleChange}>
+        <Plate id={id} editableProps={editableProps} plugins={plugins}>
           <MentionCombobox<MentionDetail>
             onRenderItem={renderComboboxItem}
             onSearch={onSearchMention}

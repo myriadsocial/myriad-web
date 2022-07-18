@@ -49,7 +49,7 @@ export const LinkToolbarButton = withPlateEventProvider(
             event.preventDefault();
 
             const currentLink = getPrevLink(editor);
-            console.log('currentLink', currentLink);
+
             openDialog(currentLink);
           }}
           {...props}

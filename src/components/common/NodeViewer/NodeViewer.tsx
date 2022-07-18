@@ -51,6 +51,8 @@ import {createEditorPlugins} from '../Editor/util';
 import {useStyles} from './NodeViewer.style';
 import {format, minimize} from './formatter';
 
+import {ReportType} from 'src/interfaces/comment';
+
 export const editableProps: TEditableProps<EditorValue> = {
   spellCheck: false,
   autoFocus: true,
@@ -111,13 +113,14 @@ const corePlugins = createEditorPlugins([
 export type NodeViewerProps = {
   id: string;
   text: string;
+  reportType?: ReportType;
 };
 
-export const NodeViewer: React.FC<NodeViewerProps> = ({id, text}) => {
+export const NodeViewer: React.FC<NodeViewerProps> = ({id, text, reportType}) => {
   const styles = useStyles();
   const containerRef = useRef(null);
 
-  const [elements, setElements] = useState(minimize(text, 250));
+  const [elements, setElements] = useState(minimize(text, reportType, 250));
 
   const toggleShowMore = () => {
     setElements(format(text));
