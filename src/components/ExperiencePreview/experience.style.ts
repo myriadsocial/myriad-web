@@ -181,5 +181,13 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontSize: 14,
       marginTop: 9,
     },
+    action: {
+      display: 'flex',
+      justifyContent: 'center',
+      marginTop: 51,
+      [theme.breakpoints.down('xs')]: {
+        marginTop: 32,
+      },
+    },
   }),
 );
