@@ -5,7 +5,6 @@ import {useRouter} from 'next/router';
 
 import Paper from '@material-ui/core/Paper';
 
-import {PostRender} from '../PostEditor/PostRender';
 import {NSFW} from '../atoms/NSFW/NSFW.component';
 import {Video} from '../atoms/Video';
 import {useStyles} from './PostDetailExperience.styles';
@@ -74,7 +73,7 @@ export const PostDetailExperience: React.FC<PostDetailProps> = props => {
 
         <ShowIf condition={viewContent}>
           <ShowIf condition={['myriad'].includes(post.platform)}>
-            <PostRender post={post} max={maxLength} onShowAll={showAll} />
+            {/* <PostRender post={post} max={maxLength} onShowAll={showAll} /> */}
           </ShowIf>
 
           <ShowIf condition={['twitter'].includes(post.platform)}>

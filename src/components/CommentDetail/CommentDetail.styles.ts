@@ -14,7 +14,7 @@ export const useStyles = makeStyles<Theme, CommentDetailProps>(theme =>
       },
 
       '& .MuiCardActions-root': {
-        padding: theme.spacing(1, 0),
+        padding: '0 0 8px 0',
       },
     },
     content: {

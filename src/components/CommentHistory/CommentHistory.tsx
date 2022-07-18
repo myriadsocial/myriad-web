@@ -5,7 +5,6 @@ import Link from 'next/link';
 import {Card, CardContent, CardHeader, Grid, Typography} from '@material-ui/core';
 
 import {CommentRender} from '../CommentDetail/CommentRender';
-import {deserialize, formatToString} from '../PostEditor';
 import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {TimeAgo} from '../common/TimeAgo.component';
 import ShowIf from '../common/show-if.component';
@@ -35,8 +34,7 @@ export const CommentHistory: React.FC<CommentHistoryProps> = props => {
       setPostUser(comment.post.user);
 
       if (comment.post.platform === 'myriad') {
-        const nodes = deserialize(comment.post);
-        const text = nodes.map(formatToString).join('');
+        const text = comment.post.text;
 
         setText(text.slice(0, 30));
       } else {

@@ -32,7 +32,7 @@ export const Upload: React.FC<UploadProps> = props => {
     usage = '',
   } = props;
   const styles = useStyles();
-
+  console.log('Upload progress', progress);
   const [files, setFiles] = useState<File[]>([]);
   const handleFileSelected = (files: File[]) => {
     setFiles(files);

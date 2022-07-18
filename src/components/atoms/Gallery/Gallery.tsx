@@ -101,7 +101,7 @@ export const Gallery: React.FC<GalleryProps> = props => {
               {images.length > 4 && i === 2 && (
                 <ImageListItemBar
                   title={`+ ${list.images.length - 4} more`}
-                  titlePosition="top"
+                  position="top"
                   actionPosition="left"
                   className={style.tileTitle}
                 />
@@ -148,7 +148,7 @@ export const Gallery: React.FC<GalleryProps> = props => {
                   {images.length > 3 && i === 1 && (
                     <ImageListItemBar
                       title={`+ ${list.images.length - 3} more`}
-                      titlePosition="top"
+                      position="top"
                       actionPosition="left"
                       className={style.tileTitleVertical}
                     />

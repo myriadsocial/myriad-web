@@ -10,11 +10,12 @@ import i18n from 'src/locale';
 
 type EmbedURLProps = {
   prefix?: string;
+  defaultValue?: string;
   onConfirm: (result: string | null) => void;
 };
 
 export const EmbedURL: React.FC<EmbedURLProps> = props => {
-  const {prefix = '', onConfirm} = props;
+  const {prefix = '', defaultValue, onConfirm} = props;
   const styles = useStyles();
 
   const [url, setUrl] = useState<string | null>(null);
@@ -41,7 +42,12 @@ export const EmbedURL: React.FC<EmbedURLProps> = props => {
         <InputLabel htmlFor="link-to-file">
           {i18n.t('Post_Create.Upload.Embed.Placeholder', {prefix: prefix})}
         </InputLabel>
-        <Input id="link-to-file" onChange={handleUrlChanged} error={error} />
+        <Input
+          id="link-to-file"
+          onChange={handleUrlChanged}
+          error={error}
+          defaultValue={defaultValue}
+        />
       </FormControl>
       <Button
         className={styles.confirm}

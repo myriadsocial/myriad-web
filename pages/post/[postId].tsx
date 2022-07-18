@@ -10,8 +10,8 @@ import Head from 'next/head';
 import {useRouter} from 'next/router';
 
 import axios from 'axios';
+import {stringify} from 'components/PostCreate/formatter';
 import {PostDetailContainer} from 'components/PostDetail/PostDetail.container';
-import {deserialize, formatToString} from 'src/components/PostEditor';
 import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {TippingSuccess} from 'src/components/common/Tipping/render/Tipping.success';
 import ShowIf from 'src/components/common/show-if.component';
@@ -199,10 +199,8 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       : null
     : null;
 
-  if (post && post.platform === 'myriad') {
-    const nodes = deserialize(post);
-
-    description = nodes.map(formatToString).join('');
+  if (post.platform === 'myriad') {
+    description = stringify(post);
   }
 
   if (post?.deletedAt || post?.isNSFW || post?.NSFWTag) {

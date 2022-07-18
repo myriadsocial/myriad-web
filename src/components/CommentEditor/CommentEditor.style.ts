@@ -6,6 +6,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(2),
     },
     editor: {
+      position: 'relative',
       width: 'calc(100% - 52px)',
       backgroundColor: theme.palette.background.paper,
       borderRadius: theme.spacing(1),
@@ -13,7 +14,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginLeft: 12,
       border: '1px solid #E5E5E5',
       display: 'flex',
-      flexDirection: 'column-reverse',
+      flexDirection: 'column',
 
       '& .slate-p': {
         wordBreak: 'break-word',

@@ -1,11 +1,13 @@
 import * as React from 'react';
 import ReactMarkdown from 'react-markdown';
 
+import {Typography} from '@material-ui/core';
+
 import remarkGFM from 'remark-gfm';
 import remarkHTML from 'remark-html';
-import {ShowMore} from 'src/components/PostEditor/Render/ShowMore';
 import LinkifyComponent from 'src/components/common/Linkify.component';
 import ShowIf from 'src/components/common/show-if.component';
+import i18n from 'src/locale';
 
 type RenderRedditProps = {
   title?: string;
@@ -34,7 +36,16 @@ export const RenderReddit: React.FC<RenderRedditProps> = props => {
       </ReactMarkdown>
 
       <ShowIf condition={!!maxLength && text.length > maxLength}>
-        <ShowMore onClick={() => onShowMore && onShowMore()} />
+        <Typography
+          component="span"
+          color="textPrimary"
+          style={{
+            cursor: 'pointer',
+            color: '#7342CC',
+          }}
+          onClick={() => onShowMore && onShowMore()}>
+          {i18n.t('General.See_More')}
+        </Typography>
       </ShowIf>
     </div>
   );
