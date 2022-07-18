@@ -92,16 +92,30 @@ export const minimize = (text: string, reportType?: ReportType, length?: number)
 
       // build gallery if consecutive image element found
       if (current.type === ELEMENT_IMAGE) {
-        if ((next && next.type === ELEMENT_IMAGE) || (prev && prev.type === ELEMENT_IMAGE)) {
+        if (
+          imageUrls.length === 0 ||
+          (next && next.type === ELEMENT_IMAGE) ||
+          (prev && prev.type === ELEMENT_IMAGE)
+        ) {
           imageUrls.push(current.url as string);
         }
 
         if (!next || next.type !== ELEMENT_IMAGE) {
-          nodes.push({
-            type: ELEMENT_IMAGE_LIST,
-            children: [{text: ''}],
-            urls: [...imageUrls],
-          });
+          if (imageUrls.length > 1) {
+            nodes.push({
+              type: ELEMENT_IMAGE_LIST,
+              children: [{text: ''}],
+              urls: [...imageUrls],
+            });
+          }
+
+          if (imageUrls.length === 1) {
+            nodes.push({
+              type: ELEMENT_IMAGE,
+              children: [{text: ''}],
+              url: imageUrls[0],
+            });
+          }
 
           imageUrls.length = 0;
         }

@@ -18,8 +18,8 @@ import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {useStyles} from './CommentEditor.style';
 import {serialize} from './formatter';
 
-import {BasicEditor} from 'components/common/Editor';
-import {getEditorSelectors, getEditorActions} from 'components/common/Editor/store';
+import {BasicEditor, initial} from 'components/common/Editor';
+import {getEditorSelectors, usePlateEditorRef} from 'components/common/Editor/store';
 import {CommentProps} from 'src/interfaces/comment';
 import {ReferenceType, SectionType} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
@@ -53,6 +53,7 @@ const CommentEditor = (props: CommentEditorProps, ref: React.ForwardedRef<HTMLDi
 
   // each comment section get a different editor
   const editorId = `${referenceId}-${section}`;
+  const editorRef = usePlateEditorRef(editorId);
 
   const isEmpty = (): boolean => {
     const editor = getEditorSelectors(editorId);
@@ -62,7 +63,6 @@ const CommentEditor = (props: CommentEditorProps, ref: React.ForwardedRef<HTMLDi
 
   const submitComment = () => {
     const editor = getEditorSelectors(editorId);
-    const action = getEditorActions(editorId);
 
     const attributes = serialize(editor.value());
 
@@ -72,7 +72,7 @@ const CommentEditor = (props: CommentEditorProps, ref: React.ForwardedRef<HTMLDi
       type,
     });
 
-    action.resetEditor();
+    editorRef.children = initial;
   };
 
   return (

@@ -4,6 +4,7 @@ import {
   createPluginFactory as baseCreatePluginFactory,
   createPlugins,
   createTEditor,
+  ELEMENT_PARAGRAPH,
   NoInfer,
   PlatePlugin,
   PlatePluginComponent,
@@ -28,3 +29,10 @@ export const createEditorPlugins = (
     overrideByKey?: MyOverrideByKey;
   },
 ) => createPlugins<EditorValue, Editor>(plugins, options);
+
+export const initial: EditorValue = [
+  {
+    type: ELEMENT_PARAGRAPH,
+    children: [{text: ''}],
+  },
+];

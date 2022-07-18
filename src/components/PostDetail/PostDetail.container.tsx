@@ -21,7 +21,7 @@ import i18n from 'src/locale';
 import {deletePost, editPost} from 'src/reducers/timeline/actions';
 
 export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => {
-  const {post, type, expandComment = false, user} = props;
+  const {post, type, expand = false, user} = props;
 
   const styles = useStyles();
   const dispatch = useDispatch();
@@ -29,12 +29,12 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
   const report = useReport();
   const ref = useRef<HTMLDivElement>(null);
 
-  const {selected, setSelected, tabs} = useCommentTabs(post, ref, user, expandComment);
+  const {selected, setSelected, tabs} = useCommentTabs(post, ref, user, expand);
   const {upvotePost, toggleDownvotePost, removePostVote} = usePostInteractionHook();
 
   const [showImporterList, toggleImporterList] = useToggle(false);
   const [showVisibility, toggleVisibility] = useToggle(false);
-  const [showComment, toggleComments] = useToggle(expandComment);
+  const [showComment, toggleComments] = useToggle(expand);
 
   const handleToggleDownvotePost = useCallback(() => {
     toggleDownvotePost(post);

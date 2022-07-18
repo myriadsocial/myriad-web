@@ -56,12 +56,14 @@ import {
   resetBlockTypePlugin,
   softBreakPlugin,
 } from './config';
-import {createCharLimitPlugin} from './plugins/CharLimit';
-import {createEmojiPlugin} from './plugins/EmojiPicker';
-import {createHashtagPlugin, ELEMENT_HASHTAG} from './plugins/Hashtag';
-import {createImageListPlugin} from './plugins/ImageList';
-import {MediaEmbedElement} from './render/Element/MediaEmbed';
-import {MentionCombobox} from './render/Element/Mention/MentionCombobox';
+import {
+  createCharLimitPlugin,
+  createEmojiPlugin,
+  createHashtagPlugin,
+  createImageListPlugin,
+  ELEMENT_HASHTAG,
+} from './plugins';
+import {MediaEmbedElement, MentionCombobox} from './render/Element';
 import {
   Toolbar,
   ToolbarAlignButtons,
@@ -75,8 +77,8 @@ import {
   LinkToolbarButton,
   MediaEmbedToolbarButton,
 } from './render/Toolbar/Button';
-import {getEditorActions} from './store';
-import {createEditorPlugins} from './util';
+import {usePlateEditorRef} from './store';
+import {createEditorPlugins, initial} from './util';
 import {dataURItoBlob} from './utils/image';
 
 import {ListItemComponent} from 'src/components/atoms/ListItem';
@@ -196,7 +198,7 @@ export const Editor: React.FC<EditorProps> = props => {
 
   const styles = useStyles();
   const containerRef = useRef(null);
-  const {resetEditor} = getEditorActions();
+  const editorRef = usePlateEditorRef(userId);
 
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -257,7 +259,7 @@ export const Editor: React.FC<EditorProps> = props => {
 
   useEffect(() => {
     return (): void => {
-      resetEditor();
+      editorRef.children = initial;
     };
   }, []);
 

@@ -3,7 +3,6 @@ import {
   createBlockquotePlugin,
   createBoldPlugin,
   createCodeBlockPlugin,
-  createExitBreakPlugin,
   createHeadingPlugin,
   createImagePlugin,
   createItalicPlugin,
@@ -14,35 +13,20 @@ import {
   createMentionPlugin,
   createParagraphPlugin,
   createPlateUI,
-  createResetNodePlugin,
-  createSelectOnBackspacePlugin,
-  createSoftBreakPlugin,
   createStrikethroughPlugin,
   createTodoListPlugin,
-  createTrailingBlockPlugin,
   createUnderlinePlugin,
-  ELEMENT_IMAGE,
-  ELEMENT_MEDIA_EMBED,
   ELEMENT_MENTION,
-  ELEMENT_PARAGRAPH,
   ImageElement,
   MentionElement,
   Plate,
   withProps,
 } from '@udecode/plate';
-import {TEditableProps} from '@udecode/plate';
 
 import React, {useMemo, useRef, useState} from 'react';
 
-import {EditorValue} from '../Editor/Editor.interface';
-import {
-  alignmentPlugin,
-  baseUIElements,
-  exitBreakPlugin,
-  resetBlockTypePlugin,
-  softBreakPlugin,
-} from '../Editor/config';
-import {createHashtagPlugin, ELEMENT_HASHTAG} from '../Editor/plugins/Hashtag';
+import {alignmentPlugin, baseUIElements} from '../Editor/config';
+import {createHashtagPlugin} from '../Editor/plugins/Hashtag';
 import {createImageListPlugin} from '../Editor/plugins/ImageList';
 import {createShowMorePlugin, ELEMENT_SHOW_MORE} from '../Editor/plugins/ShowMore';
 import {MediaEmbedElement} from '../Editor/render/Element/MediaEmbed';
@@ -53,28 +37,16 @@ import {format, minimize} from './formatter';
 
 import {ReportType} from 'src/interfaces/comment';
 
-export const editableProps: TEditableProps<EditorValue> = {
-  spellCheck: false,
-  autoFocus: true,
-  readOnly: true,
-  placeholder: 'Type…',
-};
-
 const corePlugins = createEditorPlugins([
   createParagraphPlugin(),
   createBlockquotePlugin(),
   createCodeBlockPlugin(),
   createHeadingPlugin(),
-
   createBoldPlugin(),
   createItalicPlugin(),
   createUnderlinePlugin(),
   createStrikethroughPlugin(),
   createKbdPlugin(),
-
-  createResetNodePlugin(resetBlockTypePlugin),
-  createSoftBreakPlugin(softBreakPlugin),
-  createExitBreakPlugin(exitBreakPlugin),
   createAlignPlugin(alignmentPlugin),
   createListPlugin(),
   createTodoListPlugin(),
@@ -87,16 +59,6 @@ const corePlugins = createEditorPlugins([
     options: {
       trigger: '@',
       insertSpaceAfterMention: true,
-    },
-  }),
-  createTrailingBlockPlugin({
-    type: ELEMENT_PARAGRAPH,
-  }),
-  createSelectOnBackspacePlugin({
-    options: {
-      query: {
-        allow: [ELEMENT_MEDIA_EMBED, ELEMENT_IMAGE, ELEMENT_MENTION, ELEMENT_HASHTAG],
-      },
     },
   }),
   createHashtagPlugin(),
@@ -114,16 +76,20 @@ export type NodeViewerProps = {
   id: string;
   text: string;
   reportType?: ReportType;
+  expand?: boolean;
 };
 
-export const NodeViewer: React.FC<NodeViewerProps> = ({id, text, reportType}) => {
+export const NodeViewer: React.FC<NodeViewerProps> = props => {
+  const {id, text, reportType, expand} = props;
   const styles = useStyles();
   const containerRef = useRef(null);
 
-  const [elements, setElements] = useState(minimize(text, reportType, 250));
+  const [elements, setElements] = useState(minimize(text, reportType, expand ? null : 250));
 
   const toggleShowMore = () => {
-    setElements(format(text));
+    const value = format(text);
+
+    setElements(value);
   };
 
   const plugins = useMemo(() => {
@@ -154,7 +120,7 @@ export const NodeViewer: React.FC<NodeViewerProps> = ({id, text, reportType}) =>
       <div ref={containerRef}>
         <Plate
           id={`${id}-${elements.length}`}
-          editableProps={editableProps}
+          editableProps={{readOnly: true}}
           plugins={plugins}
           value={elements}
         />

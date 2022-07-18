@@ -24,7 +24,7 @@ const Gallery = dynamic(() => import('src/components/atoms/Gallery/Gallery'), {s
 const Video = dynamic(() => import('src/components/atoms/Video/Video'), {ssr: false});
 
 export const PostDetail: React.FC<PostDetailProps> = props => {
-  const {user, post, type, ...restProps} = props;
+  const {user, post, type, expand, ...restProps} = props;
   const {onRemoveVote, onToggleDownvote, onUpvote, onToggleShowComment} = restProps;
 
   const router = useRouter();
@@ -81,7 +81,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
 
         <ShowIf condition={!hiddenContent}>
           <ShowIf condition={['myriad'].includes(post.platform)}>
-            <NodeViewer id={post.id} text={post.text} />
+            <NodeViewer id={post.id} text={post.text} expand={expand} />
           </ShowIf>
 
           <ShowIf condition={['twitter'].includes(post.platform)}>
