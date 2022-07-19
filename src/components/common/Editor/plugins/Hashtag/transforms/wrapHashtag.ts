@@ -14,7 +14,7 @@ export const wrapHashtag = <V extends Value>(
     {
       type: getPluginType(editor, ELEMENT_HASHTAG),
       hashtag: hashtag.replace('#', ''),
-      children: [{text: ' '}],
+      children: [{text: ''}],
     },
     {at, split: true},
   );

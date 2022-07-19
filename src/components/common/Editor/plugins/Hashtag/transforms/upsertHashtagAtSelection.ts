@@ -35,7 +35,7 @@ export const upsertHashtagAtSelection = <V extends Value>(
     return insertNodes<THashtagElement>(editor, {
       type,
       hashtag: hashtag.replace('#', ''),
-      children: [{text: ' '}],
+      children: [{text: ''}],
     });
   }
 

@@ -38,7 +38,7 @@ import {
 } from '@udecode/plate';
 import {createComboboxPlugin} from '@udecode/plate-combobox';
 
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
 
 import {Grid, LinearProgress, Snackbar, Typography} from '@material-ui/core';
 import EmojiEmotionsIcon from '@material-ui/icons/EmojiEmotions';
@@ -61,6 +61,7 @@ import {
   createEmojiPlugin,
   createHashtagPlugin,
   createImageListPlugin,
+  ELEMENT_EMOJI,
   ELEMENT_HASHTAG,
 } from './plugins';
 import {MediaEmbedElement, MentionCombobox} from './render/Element';
@@ -77,8 +78,7 @@ import {
   LinkToolbarButton,
   MediaEmbedToolbarButton,
 } from './render/Toolbar/Button';
-import {usePlateEditorRef} from './store';
-import {createEditorPlugins, initial} from './util';
+import {createEditorPlugins} from './util';
 import {dataURItoBlob} from './utils/image';
 
 import {ListItemComponent} from 'src/components/atoms/ListItem';
@@ -181,7 +181,7 @@ const corePlugins = createEditorPlugins([
   createSelectOnBackspacePlugin({
     options: {
       query: {
-        allow: [ELEMENT_MEDIA_EMBED, ELEMENT_IMAGE, ELEMENT_MENTION, ELEMENT_HASHTAG],
+        allow: [ELEMENT_MEDIA_EMBED, ELEMENT_IMAGE, ELEMENT_HASHTAG, ELEMENT_EMOJI],
       },
     },
   }),
@@ -194,11 +194,10 @@ export type EditorProps = {
 };
 
 export const Editor: React.FC<EditorProps> = props => {
-  const {userId, onSearchMention} = props;
+  const {userId, mobile, onSearchMention} = props;
 
-  const styles = useStyles();
+  const styles = useStyles({mobile});
   const containerRef = useRef(null);
-  const editorRef = usePlateEditorRef(userId);
 
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -257,12 +256,6 @@ export const Editor: React.FC<EditorProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [corePlugins, plateUI]);
 
-  useEffect(() => {
-    return (): void => {
-      editorRef.children = initial;
-    };
-  }, []);
-
   const handleChange = (value: EditorValue) => {
     setValue(value);
   };
@@ -286,14 +279,14 @@ export const Editor: React.FC<EditorProps> = props => {
   return (
     <div className={`${styles.root} ${styles.large}`}>
       <Toolbar className={styles.toolbar}>
-        <ToolbarBasicButtons />
+        {!mobile && <ToolbarBasicButtons />}
         <ToolbarMarksButtons />
-        <ToolbarAlignButtons />
+        {!mobile && <ToolbarAlignButtons />}
         <ToolbarListButtons />
         <LinkToolbarButton icon={<LinkIcon />} />
         <ImageToolbarButton userId={userId} icon={<ImageIcon />} />
         <MediaEmbedToolbarButton userId={userId} icon={<OndemandVideoIcon />} />
-        <EmojiPickerToolbarButton icon={<EmojiEmotionsIcon />} />
+        {!mobile && <EmojiPickerToolbarButton icon={<EmojiEmotionsIcon />} />}
       </Toolbar>
 
       <div ref={containerRef} className={styles.editor}>

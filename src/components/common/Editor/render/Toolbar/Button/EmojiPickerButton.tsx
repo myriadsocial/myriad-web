@@ -41,7 +41,7 @@ export const EmojiPickerToolbarButton = ({id, ...props}: EmojiToolbarButtonProps
       />
 
       <Dialog open={open} onClose={handleClose}>
-        <Picker onEmojiClick={handleEmojiSelect} />
+        <Picker onEmojiClick={handleEmojiSelect} native={true} />
       </Dialog>
     </>
   );

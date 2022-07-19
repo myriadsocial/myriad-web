@@ -26,7 +26,7 @@ import {useStyles} from './Editor.style';
 import {exitBreakPlugin} from './config/exitBreak';
 import {resetBlockTypePlugin} from './config/resetBlockType';
 import {softBreakPlugin} from './config/softBreak';
-import {createHashtagPlugin} from './plugins';
+import {createHashtagPlugin, ELEMENT_EMOJI, ELEMENT_HASHTAG} from './plugins';
 import {createCharLimitPlugin} from './plugins/CharLimit';
 import {MentionCombobox} from './render/Element/Mention';
 import {createEditorPlugins} from './util';
@@ -86,7 +86,7 @@ const plugins = createEditorPlugins([
   createSelectOnBackspacePlugin({
     options: {
       query: {
-        allow: [ELEMENT_MEDIA_EMBED, ELEMENT_IMAGE],
+        allow: [ELEMENT_MEDIA_EMBED, ELEMENT_IMAGE, ELEMENT_HASHTAG, ELEMENT_EMOJI],
       },
     },
   }),
@@ -101,7 +101,7 @@ export type BasicEditorProps = {
 export const BasicEditor: React.FC<BasicEditorProps> = props => {
   const {id, placeholder = 'Write a Reply ...', onSearchMention} = props;
 
-  const styles = useStyles();
+  const styles = useStyles({mobile: false});
   const containerRef = useRef(null);
   const editableProps: TEditableProps<EditorValue> = {
     spellCheck: false,

@@ -15,6 +15,7 @@ import {
   removeNodes,
   getLeafNode,
   insertNodes,
+  isSelectionAtBlockEnd,
 } from '@udecode/plate-core';
 import {withRemoveEmptyNodes} from '@udecode/plate-normalizers';
 
@@ -91,15 +92,19 @@ export const withHashtag = <V extends Value = Value, E extends PlateEditor<V> = 
       }
     }
 
-    if (text === '#') {
+    if (text === '#' && !isSelectionAtBlockEnd(editor)) {
       const selection = editor.selection as Range;
 
       const before = getRangeFromBlockStart(editor, {at: selection});
       const beforeText = getEditorString(editor, before);
-      const [currentLeaf] = getLeafNode(editor, editor.selection);
+      const [currentLeaf] = getLeafNode(editor, selection);
+      let remainingText = currentLeaf.text.slice();
 
-      const remaining = currentLeaf.text.replace(beforeText, '');
-      const arrRemaining = remaining.split(' ').filter(item => item.length > 0);
+      for (const word of beforeText.replace(/ +(?= )/g, '').split(' ')) {
+        remainingText = remainingText.slice().replace(word, '');
+      }
+
+      const arrRemaining = remainingText.split(' ').filter(item => item.length > 0);
 
       if (arrRemaining.length > 0) {
         const hashtag = arrRemaining.shift();
@@ -118,7 +123,7 @@ export const withHashtag = <V extends Value = Value, E extends PlateEditor<V> = 
         });
         moveSelection(editor, {unit: 'offset'});
         insertText(' ');
-
+        moveSelection(editor, {unit: 'offset'});
         if (arrRemaining.length > 0) {
           insertText(arrRemaining.join(' '));
           insertText(' ');

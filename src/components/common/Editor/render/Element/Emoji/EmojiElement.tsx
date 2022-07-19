@@ -15,7 +15,9 @@ export const EmojiElement = <V extends Value>(props: StyledElementProps<V, TEmoj
       {...attributes}
       {...rootProps}
       {...nodeProps}
-      style={{color: '#' + element.activeSkinTone}}>
+      data-slate-value={element.emoji}
+      contentEditable={false}
+      style={{color: '#' + element.activeSkinTone, userSelect: 'none'}}>
       {element.emoji}
       {children}
     </span>

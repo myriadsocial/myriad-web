@@ -1,27 +1,34 @@
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-export const useStyles = makeStyles((theme: Theme) =>
+type EditorStyleProps = {
+  mobile?: boolean;
+};
+
+export const useStyles = makeStyles<Theme, EditorStyleProps>(theme =>
   createStyles({
     '@global': {
       ' .slate-Combobox': {
         zIndex: 2000,
+      },
+
+      '.slate-a': {
+        color: theme.palette.primary.main,
       },
     },
     root: {
       background: '#FFF',
       border: '1px solid #F6F6F6',
       borderRadius: 10,
-      padding: 16,
 
       '& .MuiSvgIcon-root': {
         fill: 'currentColor',
       },
     },
     large: {
-      width: 820,
+      width: props => (props.mobile ? '100%' : 820),
     },
     toolbar: {
-      padding: '12px 24px!important',
+      padding: '12px 12px!important',
       background: '#F6F6F6',
       marginLeft: '0!important',
       marginRight: '0!important',
@@ -30,6 +37,8 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     editor: {
       position: 'relative',
+      padding: 16,
+      paddingBottom: 36,
     },
     progress: {
       width: 300,
@@ -41,7 +50,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     limit: {
       position: 'absolute',
       right: 8,
-      bottom: -20,
+      bottom: 8,
     },
   }),
 );
