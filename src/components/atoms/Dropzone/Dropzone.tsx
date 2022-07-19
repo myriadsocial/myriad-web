@@ -67,7 +67,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
         setPreview(prevPreview => [...prevPreview, ...acceptedFiles.map(URL.createObjectURL)]);
       } else {
         setFiles(acceptedFiles);
-        setPreview(files.map(URL.createObjectURL));
+        setPreview(acceptedFiles.map(URL.createObjectURL));
       }
 
       onImageSelected(newFiles);
