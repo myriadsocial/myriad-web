@@ -57,9 +57,9 @@ export const Summary: React.FC<SummaryProps> = props => {
           </div>
           <Typography className={styles.textWarning}>
             The tip will be stored in Myriad Escrow because the user hasn’t connected the
-            {` ${currency.symbol} `}
-            Wallet yet. Once they connect their {` ${currency.symbol} `} Wallet, they will be able
-            to claim their tip.
+            {` ${currency.network.id.toUpperCase()} `}
+            Wallet yet. Once they connect their {` ${currency.network.id.toUpperCase()} `} Wallet,
+            they will be able to claim their tip.
           </Typography>
         </div>
       )}
