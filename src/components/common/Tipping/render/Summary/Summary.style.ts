@@ -5,10 +5,10 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {},
     summary: {
+      width: '100%',
       display: 'flex',
       marginTop: 12,
       alignItems: 'center',
-      justifyContent: 'center',
       '& > p': {
         marginLeft: theme.spacing(1.5),
       },
@@ -42,6 +42,22 @@ export const useStyles = makeStyles((theme: Theme) =>
     clickableText: {
       color: theme.palette.primary.main,
       textDecoration: 'none',
+    },
+    warningNoNear: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      background: '#FFC85726',
+      padding: 12,
+      borderRadius: 8,
+      marginTop: 26,
+    },
+    wrapperIcon: {
+      marginRight: 12,
+    },
+    textWarning: {
+      fontSize: 12,
+      fontWeight: 400,
+      textAlign: 'justify',
     },
   }),
 );
