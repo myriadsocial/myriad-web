@@ -2,6 +2,8 @@ import React from 'react';
 
 import {Button} from '@material-ui/core';
 
+import {useStyles} from './experience.style';
+
 import {PromptComponent as PromptMobile} from 'src/components/Mobile/PromptDrawer/Prompt';
 import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
 import {useAuthHook} from 'src/hooks/auth.hook';
@@ -13,6 +15,7 @@ export type ExperienceSignInProps = {
 
 export const ExperienceSignIn: React.FC<ExperienceSignInProps> = props => {
   const {open, onClose} = props;
+  const style = useStyles();
 
   const {logout} = useAuthHook();
 
@@ -34,11 +37,7 @@ export const ExperienceSignIn: React.FC<ExperienceSignInProps> = props => {
         open={open}
         icon="warning"
         onCancel={onClose}>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-          }}>
+        <div className={style.action}>
           <Button
             size="small"
             variant="outlined"
