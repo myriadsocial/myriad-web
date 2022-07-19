@@ -2,6 +2,7 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 type EditorStyleProps = {
   mobile?: boolean;
+  counter?: boolean;
 };
 
 export const useStyles = makeStyles<Theme, EditorStyleProps>(theme =>
@@ -17,7 +18,6 @@ export const useStyles = makeStyles<Theme, EditorStyleProps>(theme =>
     },
     root: {
       background: '#FFF',
-      border: '1px solid #F6F6F6',
       borderRadius: 10,
 
       '& .MuiSvgIcon-root': {
@@ -37,8 +37,8 @@ export const useStyles = makeStyles<Theme, EditorStyleProps>(theme =>
     },
     editor: {
       position: 'relative',
-      padding: 16,
-      paddingBottom: 36,
+      padding: props => (props.mobile ? 16 : 8),
+      paddingBottom: props => (props.counter ? 36 : 16),
     },
     progress: {
       width: 300,

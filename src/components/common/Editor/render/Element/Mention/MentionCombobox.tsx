@@ -3,7 +3,7 @@ import {getPluginOptions, usePlateEditorRef} from '@udecode/plate-core';
 import {ELEMENT_MENTION, getMentionOnSelectItem, MentionPlugin} from '@udecode/plate-mention';
 import {Combobox, ComboboxProps} from '@udecode/plate-ui-combobox';
 
-import {useEffect, useMemo, useState} from 'react';
+import {useMemo} from 'react';
 import {shallowEqual, useSelector} from 'react-redux';
 
 import {User} from 'src/interfaces/user';
@@ -30,20 +30,13 @@ export const MentionCombobox = <TData extends Data = NoData>({
     state => state.searchState.searchedUsers,
     shallowEqual,
   );
-  const [search, setSearch] = useState<string>('');
 
   const mentionables: TComboboxItem<TData>[] = useMemo(() => {
     return people.map(person => formatLabel(person));
   }, [people]);
 
-  useEffect(() => {
-    onSearch(search);
-  }, [search]);
-
   const handleFilter = (query: string) => {
-    if (search !== query) {
-      setSearch(query);
-    }
+    onSearch(query);
 
     return (item: TComboboxItem<TData>) => {
       return true;

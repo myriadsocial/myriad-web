@@ -24,17 +24,16 @@ import {
   ELEMENT_IMAGE,
   ELEMENT_MEDIA_EMBED,
   ELEMENT_MENTION,
-  ELEMENT_MENTION_INPUT,
   ELEMENT_PARAGRAPH,
   ImageElement,
   MentionElement,
-  MentionInputElement,
   Plate,
   TEditableProps,
   TMentionElement,
   TComboboxItem,
   withProps,
   TNodeProps,
+  ELEMENT_MENTION_INPUT,
 } from '@udecode/plate';
 import {createComboboxPlugin} from '@udecode/plate-combobox';
 
@@ -61,10 +60,10 @@ import {
   createEmojiPlugin,
   createHashtagPlugin,
   createImageListPlugin,
-  ELEMENT_EMOJI,
-  ELEMENT_HASHTAG,
 } from './plugins';
+import {Counter} from './render/Counter';
 import {MediaEmbedElement, MentionCombobox} from './render/Element';
+import {MentionInputElement} from './render/Element/Mention/MentionInput';
 import {
   Toolbar,
   ToolbarAlignButtons,
@@ -78,7 +77,7 @@ import {
   LinkToolbarButton,
   MediaEmbedToolbarButton,
 } from './render/Toolbar/Button';
-import {createEditorPlugins} from './util';
+import {createEditorPlugins, initial} from './util';
 import {dataURItoBlob} from './utils/image';
 
 import {ListItemComponent} from 'src/components/atoms/ListItem';
@@ -97,6 +96,11 @@ const editableProps: TEditableProps<EditorValue> = {
 
 const plateUI = createPlateUI({
   ...baseUIElements,
+  [ELEMENT_IMAGE]: withProps(ImageElement, {
+    caption: {
+      disabled: true,
+    },
+  }),
   [ELEMENT_MENTION_INPUT]: withProps(MentionInputElement, {
     prefix: '@',
   }),
@@ -109,6 +113,7 @@ const plateUI = createPlateUI({
         backgroundColor: 'transparent',
         color: '#7342CC',
         fontWeight: 600,
+        fontSize: 'inherit',
       },
     },
   }),
@@ -138,20 +143,10 @@ const corePlugins = createEditorPlugins([
   }),
   createComboboxPlugin(),
   createMentionPlugin({
-    component: withProps(MentionElement, {
-      renderLabel: (mentionable: TMentionElement) => '@' + mentionable.username,
-      styles: {
-        root: {
-          backgroundColor: 'transparent',
-          color: '#7342CC',
-          fontWeight: 600,
-        },
-      },
-    }),
     options: {
       trigger: '@',
-      inputCreation: {key: 'creationId', value: 'main'},
       insertSpaceAfterMention: true,
+      inputCreation: {key: 'creationId', value: 'main'},
       createMentionNode: (item: Mentionable) => {
         const element: TNodeProps<TMentionElement> = {
           value: item.key,
@@ -181,7 +176,7 @@ const corePlugins = createEditorPlugins([
   createSelectOnBackspacePlugin({
     options: {
       query: {
-        allow: [ELEMENT_MEDIA_EMBED, ELEMENT_IMAGE, ELEMENT_HASHTAG, ELEMENT_EMOJI],
+        allow: [ELEMENT_MEDIA_EMBED, ELEMENT_IMAGE],
       },
     },
   }),
@@ -196,18 +191,12 @@ export type EditorProps = {
 export const Editor: React.FC<EditorProps> = props => {
   const {userId, mobile, onSearchMention} = props;
 
-  const styles = useStyles({mobile});
-  const containerRef = useRef(null);
+  const styles = useStyles({mobile, counter: true});
+  const ref = useRef(null);
 
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [value, setValue] = useState<EditorValue>();
-  const charCount = value
-    ? value
-        .map(element => formatToString(element))
-        .join('')
-        .trim().length
-    : 0;
+  const [count, setCount] = useState(0);
 
   const plugins = useMemo(() => {
     const handleFileUpload = async (dataURI: string | ArrayBuffer): Promise<string> => {
@@ -239,11 +228,6 @@ export const Editor: React.FC<EditorProps> = props => {
       [
         ...corePlugins,
         createImagePlugin({
-          component: withProps(ImageElement, {
-            caption: {
-              disabled: true,
-            },
-          }),
           options: {
             uploadImage: handleFileUpload,
           },
@@ -257,7 +241,9 @@ export const Editor: React.FC<EditorProps> = props => {
   }, [corePlugins, plateUI]);
 
   const handleChange = (value: EditorValue) => {
-    setValue(value);
+    const string = value.map(element => formatToString(element)).join(' ');
+
+    setCount(string.length);
   };
 
   const renderComboboxItem = useCallback(({item}) => {
@@ -289,8 +275,13 @@ export const Editor: React.FC<EditorProps> = props => {
         {!mobile && <EmojiPickerToolbarButton icon={<EmojiEmotionsIcon />} />}
       </Toolbar>
 
-      <div ref={containerRef} className={styles.editor}>
-        <Plate id={userId} editableProps={editableProps} plugins={plugins} onChange={handleChange}>
+      <div ref={ref} className={styles.editor}>
+        <Plate
+          id={userId}
+          editableProps={editableProps}
+          plugins={plugins}
+          onChange={handleChange}
+          initialValue={initial}>
           <MentionCombobox<MentionDetail>
             onRenderItem={renderComboboxItem}
             onSearch={onSearchMention}
@@ -304,9 +295,7 @@ export const Editor: React.FC<EditorProps> = props => {
           />
         </Plate>
 
-        <Typography variant="body1" component="div" className={styles.limit}>
-          {charCount}/{MAX_CHARACTER_LIMIT}
-        </Typography>
+        <Counter className={styles.limit} current={count} limit={MAX_CHARACTER_LIMIT} />
       </div>
 
       <Snackbar

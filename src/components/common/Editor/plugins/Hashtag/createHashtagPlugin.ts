@@ -24,9 +24,4 @@ export const createHashtagPlugin = createPluginFactory<HashtagPlugin>({
       afterMatch: false,
     },
   },
-  then: (editor, {key}) => ({
-    options: {
-      id: key,
-    },
-  }),
 });

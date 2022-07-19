@@ -5,6 +5,7 @@ import {CommentDetailProps} from './CommentDetail.interface';
 export const useStyles = makeStyles<Theme, CommentDetailProps>(theme =>
   createStyles({
     comment: {
+      padding: theme.spacing(0, 1),
       marginBottom: theme.spacing(1),
       boxShadow: 'none',
       backgroundColor: 'rgba(246, 246, 246, 0.5)',

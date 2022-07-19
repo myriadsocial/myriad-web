@@ -37,8 +37,9 @@ export type CommentEditorProps = {
 };
 
 const CommentEditor = (props: CommentEditorProps, ref: React.ForwardedRef<HTMLDivElement>) => {
-  const styles = useStyles();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
+
+  const styles = useStyles({mobile: isMobile});
 
   const {
     referenceId,
@@ -72,7 +73,9 @@ const CommentEditor = (props: CommentEditorProps, ref: React.ForwardedRef<HTMLDi
       type,
     });
 
-    editorRef.children = initial;
+    if (editorRef?.children) {
+      editorRef.children = initial;
+    }
   };
 
   return (

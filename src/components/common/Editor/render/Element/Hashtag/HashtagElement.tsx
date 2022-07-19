@@ -10,7 +10,6 @@ import {useFocused, useSelected} from 'slate-react';
 
 export const HashtagElement = <V extends Value>(props: StyledElementProps<V, THashtagElement>) => {
   const {attributes, nodeProps, children, element, prefix = '#'} = props;
-
   const rootProps = getRootProps(props);
   const selected = useSelected();
   const focused = useFocused();
@@ -22,11 +21,10 @@ export const HashtagElement = <V extends Value>(props: StyledElementProps<V, THa
       {...attributes}
       {...rootProps}
       {...nodeProps}
-      className={styles.root}
       data-slate-value={element.hashtag}
+      className={styles.root}
       contentEditable={false}>
-      {prefix}
-      {element.hashtag}
+      {prefix + '' + element.hashtag}
       {children}
     </span>
   );

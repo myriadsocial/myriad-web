@@ -1,15 +1,15 @@
-import {ELEMENT_MENTION} from '@udecode/plate';
+import {ELEMENT_MENTION, getNodeString} from '@udecode/plate';
 
 import {EditorValue, RootBlock} from 'components/common/Editor/Editor.interface';
 import {ELEMENT_HASHTAG} from 'components/common/Editor/plugins';
-import {format, formatToString} from 'components/common/NodeViewer/formatter';
+import {deserialize, formatToString} from 'components/common/NodeViewer/formatter';
 import {Post} from 'src/interfaces/post';
 
 export const serialize = (nodes: EditorValue): Partial<Post> => {
   const post: Partial<Post> = {
     text: JSON.stringify(nodes),
     rawText: nodes
-      .map(element => formatToString(element))
+      .map(element => getNodeString(element))
       .join(' ')
       .trim(),
     tags: [],
@@ -71,7 +71,7 @@ export const serialize = (nodes: EditorValue): Partial<Post> => {
 };
 
 export const stringify = (post: Post): string => {
-  const node = format(post.text);
+  const node = deserialize(post.text);
 
   return node
     .map(element => formatToString(element))

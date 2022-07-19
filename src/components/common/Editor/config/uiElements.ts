@@ -4,6 +4,8 @@ import {
   ELEMENT_H3,
   ELEMENT_H4,
   ELEMENT_H5,
+  ELEMENT_LINK,
+  LinkElement,
   StyledElement,
   withProps,
 } from '@udecode/plate';
@@ -46,6 +48,13 @@ export const baseUIElements = {
       root: {
         fontSize: 16,
         fontWeight: '500',
+      },
+    },
+  }),
+  [ELEMENT_LINK]: withProps(LinkElement, {
+    styles: {
+      root: {
+        color: '#7342CC!important',
       },
     },
   }),

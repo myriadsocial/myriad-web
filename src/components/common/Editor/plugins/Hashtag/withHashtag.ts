@@ -13,9 +13,9 @@ import {
   getBlockAbove,
   TElement,
   removeNodes,
-  getLeafNode,
   insertNodes,
   isSelectionAtBlockEnd,
+  getNodeEntry,
 } from '@udecode/plate-core';
 import {withRemoveEmptyNodes} from '@udecode/plate-normalizers';
 
@@ -48,14 +48,16 @@ const isHashTag = (string: string): boolean => {
 };
 
 const upsertHashtagIfValid = <V extends Value>(editor: PlateEditor<V>) => {
+  const selection = editor.selection;
   const rangeFromBlockStart = getRangeFromBlockStart(editor);
   const textFromBlockStart = getEditorString(editor, rangeFromBlockStart);
 
   if (rangeFromBlockStart && isHashTag(textFromBlockStart)) {
     upsertHashtag(editor, {
       hashtag: textFromBlockStart,
-      at: rangeFromBlockStart,
+      at: selection,
     });
+
     return true;
   }
 };
@@ -64,7 +66,7 @@ export const withHashtag = <V extends Value = Value, E extends PlateEditor<V> = 
   editor: E,
   {type, options: {rangeBeforeOptions}}: WithPlatePlugin<HashtagPlugin, V, E>,
 ) => {
-  const {insertData, insertText, deleteBackward} = editor;
+  const {insertData, insertText} = editor;
 
   editor.insertText = text => {
     if (text === BLANK_SPACE && isCollapsed(editor.selection)) {
@@ -72,65 +74,53 @@ export const withHashtag = <V extends Value = Value, E extends PlateEditor<V> = 
 
       // handle hashtag if # exist in block start
       if (upsertHashtagIfValid(editor)) {
-        moveSelection(editor, {unit: 'offset'});
+        moveSelection(editor);
         return insertText(text);
       }
 
       // whitespace but previous char not a hashtag
       const beforeWordRange = getRangeBefore(editor, selection, rangeBeforeOptions);
-
       if (beforeWordRange) {
         const beforeWordText = getEditorString(editor, beforeWordRange);
-
         if (beforeWordText && isHashTag(beforeWordText)) {
           upsertHashtag(editor, {
             hashtag: beforeWordText,
             at: beforeWordRange,
           });
-          moveSelection(editor, {unit: 'offset'});
+          moveSelection(editor);
+          return insertText(text);
         }
       }
     }
 
     if (text === '#' && !isSelectionAtBlockEnd(editor)) {
       const selection = editor.selection as Range;
+      const [current] = getNodeEntry(editor, selection);
 
-      const before = getRangeFromBlockStart(editor, {at: selection});
-      const beforeText = getEditorString(editor, before);
-      const [currentLeaf] = getLeafNode(editor, selection);
-      let remainingText = currentLeaf.text.slice();
+      const currentText = current.text as string;
 
-      for (const word of beforeText.replace(/ +(?= )/g, '').split(' ')) {
-        remainingText = remainingText.slice().replace(word, '');
-      }
+      if (text) {
+        const remaining = currentText.substring(selection.anchor.offset);
+        const arrRemaining = remaining.split(' ').filter(item => item.length > 0);
 
-      const arrRemaining = remainingText.split(' ').filter(item => item.length > 0);
-
-      if (arrRemaining.length > 0) {
-        const hashtag = arrRemaining.shift();
-
-        const range: Range = {
-          anchor: selection.anchor,
-          focus: {
-            offset: beforeText.length + 1,
-            path: selection.focus.path,
-          },
-        };
-
-        upsertHashtag(editor, {
-          hashtag: hashtag,
-          at: range,
-        });
-        moveSelection(editor, {unit: 'offset'});
-        insertText(' ');
-        moveSelection(editor, {unit: 'offset'});
         if (arrRemaining.length > 0) {
-          insertText(arrRemaining.join(' '));
-          insertText(' ');
-        }
+          const hashtag = arrRemaining.shift();
 
-        // inserted text will be ignored if selection hashtag
-        return;
+          upsertHashtag(editor, {
+            hashtag: hashtag,
+            at: selection,
+          });
+
+          moveSelection(editor);
+
+          if (arrRemaining.length > 0) {
+            insertText(' ');
+            insertText(arrRemaining.join(' '));
+          }
+
+          // inserted text will be ignored if selection hashtag
+          return;
+        }
       }
     }
 
@@ -155,7 +145,7 @@ export const withHashtag = <V extends Value = Value, E extends PlateEditor<V> = 
           if (slice.match(hashtagRule)) {
             return {
               type: getPluginType(editor, ELEMENT_HASHTAG),
-              children: [{text: ' '}],
+              children: [{text: ''}],
               hashtag: slice.replace('#', ''),
             };
           } else {
@@ -189,10 +179,6 @@ export const withHashtag = <V extends Value = Value, E extends PlateEditor<V> = 
     }
 
     insertData(data);
-  };
-
-  editor.deleteBackward = text => {
-    deleteBackward(text);
   };
 
   editor = withRemoveEmptyNodes<V, E>(

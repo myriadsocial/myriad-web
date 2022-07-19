@@ -4,11 +4,14 @@ import {
   createLinkPlugin,
   createMentionPlugin,
   createParagraphPlugin,
+  createPlateUI,
   createResetNodePlugin,
   createSelectOnBackspacePlugin,
   createSoftBreakPlugin,
   ELEMENT_IMAGE,
   ELEMENT_MEDIA_EMBED,
+  ELEMENT_MENTION,
+  ELEMENT_MENTION_INPUT,
   MentionElement,
   Plate,
   TComboboxItem,
@@ -29,6 +32,7 @@ import {softBreakPlugin} from './config/softBreak';
 import {createHashtagPlugin, ELEMENT_EMOJI, ELEMENT_HASHTAG} from './plugins';
 import {createCharLimitPlugin} from './plugins/CharLimit';
 import {MentionCombobox} from './render/Element/Mention';
+import {MentionInputElement} from './render/Element/Mention/MentionInput';
 import {createEditorPlugins} from './util';
 
 import {ListItemComponent} from 'components/atoms/ListItem';
@@ -37,60 +41,68 @@ import {User} from 'src/interfaces/user';
 const MAX_CHARACTER_LIMIT = 5000;
 const MAX_HASHTAG_CHAR_LENGTH = 160;
 
-const plugins = createEditorPlugins([
-  createParagraphPlugin(),
-  createBlockquotePlugin(),
-  createResetNodePlugin(resetBlockTypePlugin),
-  createSoftBreakPlugin(softBreakPlugin),
-  createExitBreakPlugin(exitBreakPlugin),
-  createLinkPlugin(),
-  createComboboxPlugin(),
-  createMentionPlugin({
-    component: withProps(MentionElement, {
-      renderLabel: (mentionable: TMentionElement): string => {
-        return '@' + mentionable.username;
+const plugins = createEditorPlugins(
+  [
+    createParagraphPlugin(),
+    createBlockquotePlugin(),
+    createResetNodePlugin(resetBlockTypePlugin),
+    createSoftBreakPlugin(softBreakPlugin),
+    createExitBreakPlugin(exitBreakPlugin),
+    createLinkPlugin(),
+    createComboboxPlugin(),
+    createMentionPlugin({
+      options: {
+        trigger: '@',
+        insertSpaceAfterMention: true,
+        createMentionNode: (item: Mentionable) => {
+          const element: TNodeProps<TMentionElement> = {
+            value: item.key,
+            name: item.data.name,
+            username: item.data.username,
+          };
+          return element;
+        },
       },
-      styles: {
-        root: {
-          backgroundColor: 'transparent',
-          color: '#7342CC',
-          fontWeight: 600,
+      isInline: true,
+    }),
+    createHashtagPlugin({
+      options: {
+        maxLength: MAX_HASHTAG_CHAR_LENGTH,
+      },
+    }),
+    createCharLimitPlugin({
+      options: {
+        max: MAX_CHARACTER_LIMIT,
+      },
+    }),
+    createSelectOnBackspacePlugin({
+      options: {
+        query: {
+          allow: [ELEMENT_MEDIA_EMBED, ELEMENT_IMAGE, ELEMENT_HASHTAG, ELEMENT_EMOJI],
         },
       },
     }),
-    options: {
-      trigger: '@',
-      inputCreation: {key: 'creationId', value: 'main'},
-      insertSpaceAfterMention: true,
-      createMentionNode: (item: Mentionable) => {
-        const element: TNodeProps<TMentionElement> = {
-          value: item.key,
-          name: item.data.name,
-          username: item.data.username,
-        };
-        return element;
-      },
-    },
-    isInline: true,
-  }),
-  createHashtagPlugin({
-    options: {
-      maxLength: MAX_HASHTAG_CHAR_LENGTH,
-    },
-  }),
-  createCharLimitPlugin({
-    options: {
-      max: MAX_CHARACTER_LIMIT,
-    },
-  }),
-  createSelectOnBackspacePlugin({
-    options: {
-      query: {
-        allow: [ELEMENT_MEDIA_EMBED, ELEMENT_IMAGE, ELEMENT_HASHTAG, ELEMENT_EMOJI],
-      },
-    },
-  }),
-]);
+  ],
+  {
+    components: createPlateUI({
+      [ELEMENT_MENTION_INPUT]: withProps(MentionInputElement, {
+        prefix: '@',
+      }),
+      [ELEMENT_MENTION]: withProps(MentionElement, {
+        renderLabel: (mentionable: TMentionElement): string => {
+          return '@' + mentionable.username;
+        },
+        styles: {
+          root: {
+            backgroundColor: 'transparent',
+            color: '#7342CC',
+            fontWeight: 600,
+          },
+        },
+      }),
+    }),
+  },
+);
 
 export type BasicEditorProps = {
   id: string;
@@ -105,7 +117,7 @@ export const BasicEditor: React.FC<BasicEditorProps> = props => {
   const containerRef = useRef(null);
   const editableProps: TEditableProps<EditorValue> = {
     spellCheck: false,
-    autoFocus: true,
+    autoFocus: false,
     readOnly: false,
     placeholder,
   };
@@ -128,7 +140,7 @@ export const BasicEditor: React.FC<BasicEditorProps> = props => {
 
   return (
     <div className={styles.root}>
-      <div ref={containerRef}>
+      <div ref={containerRef} className={styles.editor}>
         <Plate id={id} editableProps={editableProps} plugins={plugins}>
           <MentionCombobox<MentionDetail>
             onRenderItem={renderComboboxItem}

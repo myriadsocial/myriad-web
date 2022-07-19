@@ -1,4 +1,4 @@
-import {ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED, ELEMENT_PARAGRAPH} from '@udecode/plate';
+import {ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED, ELEMENT_PARAGRAPH, getNodeString} from '@udecode/plate';
 
 import {EditorValue, RootBlock} from '../Editor/Editor.interface';
 import {ELEMENT_EMOJI} from '../Editor/plugins/EmojiPicker';
@@ -59,21 +59,31 @@ export const formatToString = (element: RootBlock, reportType?: ReportType): str
         return children.hashtag;
       }
 
-      return formatToString(children);
+      return getNodeString(children);
     })
     .join(' ')
     .trim();
 };
 
-export const format = (text: string) => {
-  const origin = JSON.parse(text) as EditorValue;
+export const deserialize = (text: string) => {
+  let origin: EditorValue;
+
+  try {
+    origin = JSON.parse(text) as EditorValue;
+  } catch (error) {
+    origin = [
+      {
+        type: ELEMENT_PARAGRAPH,
+        children: [{text}],
+      },
+    ];
+  }
 
   return origin;
 };
 
 export const minimize = (text: string, reportType?: ReportType, length?: number): EditorValue => {
-  const origin = format(text);
-
+  const origin = deserialize(text);
   const nodes: EditorValue = [];
 
   const caption = origin
@@ -101,21 +111,11 @@ export const minimize = (text: string, reportType?: ReportType, length?: number)
         }
 
         if (!next || next.type !== ELEMENT_IMAGE) {
-          if (imageUrls.length > 1) {
-            nodes.push({
-              type: ELEMENT_IMAGE_LIST,
-              children: [{text: ''}],
-              urls: [...imageUrls],
-            });
-          }
-
-          if (imageUrls.length === 1) {
-            nodes.push({
-              type: ELEMENT_IMAGE,
-              children: [{text: ''}],
-              url: imageUrls[0],
-            });
-          }
+          nodes.push({
+            type: ELEMENT_IMAGE_LIST,
+            children: [{text: ''}],
+            urls: [...imageUrls],
+          });
 
           imageUrls.length = 0;
         }

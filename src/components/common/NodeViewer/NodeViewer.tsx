@@ -33,7 +33,7 @@ import {MediaEmbedElement} from '../Editor/render/Element/MediaEmbed';
 import {ShowMoreElement} from '../Editor/render/Element/ShowMore';
 import {createEditorPlugins} from '../Editor/util';
 import {useStyles} from './NodeViewer.style';
-import {format, minimize} from './formatter';
+import {deserialize, minimize} from './formatter';
 
 import {ReportType} from 'src/interfaces/comment';
 
@@ -87,7 +87,7 @@ export const NodeViewer: React.FC<NodeViewerProps> = props => {
   const [elements, setElements] = useState(minimize(text, reportType, expand ? null : 250));
 
   const toggleShowMore = () => {
-    const value = format(text);
+    const value = deserialize(text);
 
     setElements(value);
   };

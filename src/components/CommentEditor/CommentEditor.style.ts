@@ -1,6 +1,10 @@
 import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 
-export const useStyles = makeStyles((theme: Theme) =>
+type CommentEditorProps = {
+  mobile: boolean;
+};
+
+export const useStyles = makeStyles<Theme, CommentEditorProps>(theme =>
   createStyles({
     root: {
       padding: theme.spacing(2),
@@ -15,7 +19,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       border: '1px solid #E5E5E5',
       display: 'flex',
       flexDirection: 'column',
-
+      [theme.breakpoints.down('xs')]: {
+        width: 'calc(100% - 36px)',
+      },
       '& .slate-p': {
         wordBreak: 'break-word',
       },
