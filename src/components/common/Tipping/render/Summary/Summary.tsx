@@ -31,8 +31,6 @@ type SummaryProps = {
 export const Summary: React.FC<SummaryProps> = props => {
   const {amount, transactionFee, receiver, currency, loadingFee} = props;
 
-  console.log('currency', currency);
-
   const styles = useStyles();
 
   const total = amount.gt(BN_ZERO) ? amount.add(transactionFee) : BN_ZERO;
