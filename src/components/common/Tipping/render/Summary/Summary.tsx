@@ -30,7 +30,6 @@ type SummaryProps = {
 
 export const Summary: React.FC<SummaryProps> = props => {
   const {amount, transactionFee, receiver, currency, loadingFee} = props;
-  console.log('currency', currency);
 
   const styles = useStyles();
 
