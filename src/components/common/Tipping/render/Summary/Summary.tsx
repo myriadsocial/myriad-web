@@ -30,6 +30,7 @@ type SummaryProps = {
 
 export const Summary: React.FC<SummaryProps> = props => {
   const {amount, transactionFee, receiver, currency, loadingFee} = props;
+  console.log('currency', currency);
 
   const styles = useStyles();
 
@@ -57,9 +58,10 @@ export const Summary: React.FC<SummaryProps> = props => {
           </div>
           <Typography className={styles.textWarning}>
             The tip will be stored in Myriad Escrow because the user hasn’t connected the
-            {` ${currency.network.id.toUpperCase()} `}
-            Wallet yet. Once they connect their {` ${currency.network.id.toUpperCase()} `} Wallet,
-            they will be able to claim their tip.
+            {` ${currency.network.id === 'near' ? 'NEAR Wallet' : 'polkadot{.js}'} `}
+            yet. Once they connect their{' '}
+            {` ${currency.network.id === 'near' ? 'NEAR Wallet' : 'polkadot{.js}'}`}, they will be
+            able to claim their tip.
           </Typography>
         </div>
       )}
