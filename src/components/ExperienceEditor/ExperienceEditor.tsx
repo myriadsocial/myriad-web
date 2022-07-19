@@ -344,260 +344,288 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
 
   return (
     <div className={styles.root} ref={ref}>
-      <Typography className={styles.title}>{i18n.t(`Experience.Editor.Title.${type}`)}</Typography>
-
-      <FormControl fullWidth variant="outlined" error={errors.name}>
-        <InputLabel htmlFor="experience-name">{i18n.t('Experience.Editor.Subtitle_1')}</InputLabel>
-        <OutlinedInput
-          id="experience-name"
-          placeholder={i18n.t('Experience.Editor.Subtitle_1')}
-          value={newExperience?.name || ''}
-          onChange={handleChange('name')}
-          labelWidth={110}
-          inputProps={{maxLength: 50}}
-        />
-        <FormHelperText id="experience-name-error">
-          {i18n.t('Experience.Editor.Helper.Name')}
-        </FormHelperText>
-        <Typography variant="subtitle1" className={styles.counter}>
-          {newExperience?.name.length ?? 0}/50
-        </Typography>
-      </FormControl>
-
-      <FormControl fullWidth variant="outlined" style={{position: 'relative'}}>
-        <InputLabel htmlFor="experience-description">
-          {i18n.t('Experience.Editor.Subtitle_2')}
-        </InputLabel>
-        <OutlinedInput
-          id="experience-description"
-          placeholder={i18n.t('Experience.Editor.Subtitle_2')}
-          value={newExperience?.description || ''}
-          onChange={handleChange('description')}
-          labelWidth={70}
-          inputProps={{maxLength: 280}}
-          multiline
-        />
-        <FormHelperText id="experience-name-error">&nbsp;</FormHelperText>
-        <Typography variant="subtitle1" className={styles.counter}>
-          {newExperience?.description?.length ?? 0}/280
-        </Typography>
-      </FormControl>
-
-      <FormControl
-        fullWidth
-        variant="outlined"
-        style={{position: 'relative', zIndex: 100}}
-        error={errors.picture}>
-        <InputLabel htmlFor="experience-picture" shrink={true} className={styles.label}>
-          {i18n.t('Experience.Editor.Subtitle_3')}
-        </InputLabel>
-        <Dropzone
-          error={errors.picture}
-          onImageSelected={handleImageUpload}
-          value={image}
-          border="solid"
-          maxSize={3}
-          width={80}
-          height={80}
-        />
-        <ShowIf condition={isLoading}>
-          <div className={styles.loading}>
-            <CircularProgress size={32} color="primary" />
-          </div>
-        </ShowIf>
-        <FormHelperText error={errors.picture} id="experience-picture-error">
-          {i18n.t('Experience.Editor.Helper.Image')}
-        </FormHelperText>
-      </FormControl>
-
-      <Autocomplete<string, true, true, true>
-        id="experience-tags-include"
-        freeSolo
-        multiple
-        value={newExperience.allowedTags ?? []}
-        options={tags.map(tag => tag.id).filter(tag => !newExperience.allowedTags.includes(tag))}
-        disableClearable
-        onChange={(event, value, reason) => {
-          handleTagsChange(event, value, reason, TagsProps.ALLOWED);
-        }}
-        onInputChange={(event, value) => {
-          handleTagsInputChange(event, value, TagsProps.ALLOWED);
-        }}
-        getOptionLabel={option => `#${option}`}
-        renderInput={params => (
-          <TextField
-            {...params}
-            error={errors.tags}
-            label={i18n.t('Experience.Editor.Label_1')}
-            variant="outlined"
-            placeholder={
-              newExperience.allowedTags.length === 0
-                ? i18n.t('Experience.Editor.Placeholder_1')
-                : undefined
-            }
-            onChange={handleSearchTags}
-            helperText={i18n.t('Experience.Editor.Helper.Tag')}
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: <React.Fragment>{params.InputProps.endAdornment}</React.Fragment>,
-            }}
-          />
-        )}
-      />
-
-      <Autocomplete
-        id="experience-tags-exclude"
-        freeSolo
-        multiple
-        value={newExperience?.prohibitedTags ?? []}
-        options={tags
-          .map(tag => tag.id)
-          .filter(tag => !newExperience.prohibitedTags?.includes(tag))}
-        disableClearable
-        onChange={(event, value, reason) => {
-          handleTagsChange(event, value, reason, TagsProps.PROHIBITED);
-        }}
-        onInputChange={(event, value) => {
-          handleTagsInputChange(event, value, TagsProps.PROHIBITED);
-        }}
-        getOptionLabel={option => `#${option}`}
-        renderInput={params => (
-          <TextField
-            {...params}
-            label={i18n.t('Experience.Editor.Label_2')}
-            variant="outlined"
-            placeholder={
-              newExperience.prohibitedTags?.length === 0
-                ? i18n.t('Experience.Editor.Placeholder_2')
-                : undefined
-            }
-            onChange={handleSearchTags}
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: <React.Fragment>{params.InputProps.endAdornment}</React.Fragment>,
-            }}
-          />
-        )}
-      />
-
-      <Autocomplete
-        id="experience-people"
-        className={styles.people}
-        value={(newExperience?.people as People[]) ?? []}
-        multiple
-        options={people}
-        getOptionSelected={(option, value) => option.id === value.id}
-        filterSelectedOptions={true}
-        getOptionLabel={option => `${option.username} ${option.name}`}
-        disableClearable
-        autoHighlight={false}
-        popupIcon={<SvgIcon component={SearchIcon} viewBox={'0 0 20 20'} />}
-        onChange={handlePeopleChange}
-        renderTags={() => null}
-        renderInput={params => (
-          <TextField
-            {...params}
-            error={errors.people}
-            label={i18n.t('Experience.Editor.Label_3')}
-            placeholder={i18n.t('Experience.Editor.Placeholder_3')}
-            variant="outlined"
-            onChange={handleSearchPeople}
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: <React.Fragment>{params.InputProps.endAdornment}</React.Fragment>,
-            }}
-            helperText={i18n.t('Experience.Editor.Helper.People')}
-          />
-        )}
-        renderOption={(option, state: AutocompleteRenderOptionState) => {
-          if (option.id === '') return null;
-          return (
-            <div className={styles.option}>
-              <ListItemPeopleComponent
-                id="selectable-experience-list-item"
-                title={option.name}
-                subtitle={<Typography variant="caption">@{option.username}</Typography>}
-                avatar={option.profilePictureURL}
-                platform={option.platform}
-                action={
-                  <IconButton className={styles.removePeople}>
-                    {state.selected ? (
-                      <SvgIcon component={XCircleIcon} color="error" viewBox={'0 0 20 20'} />
-                    ) : (
-                      <SvgIcon component={PlusCircleIcon} viewBox={'0 0 20 20'} />
-                    )}
-                  </IconButton>
-                }
-              />
-            </div>
-          );
-        }}
-      />
-
-      <div className={styles.preview}>
-        {newExperience.people
-          .filter(people => !isEmpty(people.id))
-          .map(people => (
-            <ListItemPeopleComponent
-              id="selected-experience-list-item"
-              key={people.id}
-              title={people.name}
-              subtitle={<Typography variant="caption">@{people.username}</Typography>}
-              avatar={people.profilePictureURL}
-              platform={people.platform}
-              action={
-                <IconButton onClick={removeSelectedPeople(people)}>
-                  <SvgIcon component={XCircleIcon} color="error" viewBox={'0 0 20 20'} />
-                </IconButton>
-              }
-            />
-          ))}
+      <div className={styles.header}>
+        <div>
+          <Typography variant="h4">Set up your customizable timeline</Typography>
+          <Typography variant="body1" color="textSecondary">
+            Fill the experience detail to create experience.
+          </Typography>
+        </div>
+        <FormControl classes={{root: styles.formControl}}>
+          <Button
+            color="primary"
+            variant="contained"
+            style={{width: 'auto'}}
+            onClick={saveExperience}>
+            {i18n.t(`Experience.Editor.Btn.${type}`)}
+          </Button>
+        </FormControl>
       </div>
+      <div className={styles.content}>
+        <div className={styles.row1}>
+          <FormControl
+            fullWidth
+            variant="outlined"
+            style={{position: 'relative', zIndex: 100}}
+            error={errors.picture}>
+            <Dropzone
+              error={errors.picture}
+              onImageSelected={handleImageUpload}
+              value={image}
+              border="solid"
+              maxSize={3}
+              width={100}
+              height={100}
+              usage="experience"
+              label={i18n.t('Dropzone.Btn.Exp_Add')}
+            />
+            <ShowIf condition={isLoading}>
+              <div className={styles.loading}>
+                <CircularProgress size={32} color="primary" />
+              </div>
+            </ShowIf>
+          </FormControl>
+        </div>
+        <div className={styles.row2}>
+          <FormControl fullWidth variant="outlined" error={errors.name}>
+            <InputLabel htmlFor="experience-name">
+              {i18n.t('Experience.Editor.Subtitle_1')}
+            </InputLabel>
+            <OutlinedInput
+              id="experience-name"
+              placeholder={i18n.t('Experience.Editor.Subtitle_1')}
+              value={newExperience?.name || ''}
+              onChange={handleChange('name')}
+              labelWidth={110}
+              inputProps={{maxLength: 50}}
+            />
+            <FormHelperText id="experience-name-error">
+              {i18n.t('Experience.Editor.Helper.Name')}
+            </FormHelperText>
+            <Typography variant="subtitle1" className={styles.counter}>
+              {newExperience?.name.length ?? 0}/50
+            </Typography>
+          </FormControl>
 
-      <InfiniteScroll
-        scrollableTarget="scrollable-searched-posts"
-        dataLength={experiencePosts.length}
-        hasMore={hasMore}
-        next={handleNextPagePosts}
-        loader={<Loading />}>
-        {experiencePosts.length === 0 ? (
-          <div className={styles.postTextContainer}>
-            <Typography className={styles.textPost}>
-              {i18n.t('Experience.Editor.Post.Title')}
+          <FormControl fullWidth variant="outlined" style={{position: 'relative'}}>
+            <InputLabel htmlFor="experience-description">
+              {i18n.t('Experience.Editor.Subtitle_2')}
+            </InputLabel>
+            <OutlinedInput
+              id="experience-description"
+              placeholder={i18n.t('Experience.Editor.Subtitle_2')}
+              value={newExperience?.description || ''}
+              onChange={handleChange('description')}
+              labelWidth={70}
+              inputProps={{maxLength: 280}}
+              multiline
+            />
+            <FormHelperText id="experience-name-error">&nbsp;</FormHelperText>
+            <Typography variant="subtitle1" className={styles.counter}>
+              {newExperience?.description?.length ?? 0}/280
             </Typography>
-            <Typography className={styles.textPostDetail}>
-              {i18n.t('Experience.Editor.Post.Desc')}
-            </Typography>
-          </div>
-        ) : (
-          <>
-            <Typography className={styles.textPost}>
-              {i18n.t('Experience.Editor.Post.Title')}
-            </Typography>
-            {experiencePosts.map(post => (
-              <PostDetailExperience
-                user={user}
-                key={`post-${post.id}`}
-                post={post}
-                anonymous={anonymous}
-                onImporters={() => null}
-                type={'default'}
-                onRemoveFromExperience={() => handleRemoveFromExperience(post)}
+          </FormControl>
+
+          <Autocomplete<string, true, true, true>
+            className={styles.fill}
+            id="experience-tags-include"
+            freeSolo
+            multiple
+            value={newExperience.allowedTags ?? []}
+            options={tags
+              .map(tag => tag.id)
+              .filter(tag => !newExperience.allowedTags.includes(tag))}
+            disableClearable
+            onChange={(event, value, reason) => {
+              handleTagsChange(event, value, reason, TagsProps.ALLOWED);
+            }}
+            onInputChange={(event, value) => {
+              handleTagsInputChange(event, value, TagsProps.ALLOWED);
+            }}
+            getOptionLabel={option => `#${option}`}
+            renderInput={params => (
+              <TextField
+                {...params}
+                error={errors.tags}
+                label={i18n.t('Experience.Editor.Label_1')}
+                variant="outlined"
+                placeholder={
+                  newExperience.allowedTags.length === 0
+                    ? i18n.t('Experience.Editor.Placeholder_1')
+                    : undefined
+                }
+                onChange={handleSearchTags}
+                helperText={i18n.t('Experience.Editor.Helper.Tag')}
+                InputProps={{
+                  ...params.InputProps,
+                  endAdornment: <React.Fragment>{params.InputProps.endAdornment}</React.Fragment>,
+                }}
               />
-            ))}
-          </>
-        )}
-      </InfiniteScroll>
-      <FormControl fullWidth variant="outlined">
-        <Button
-          variant="contained"
-          color="primary"
-          disableElevation
-          fullWidth
-          onClick={saveExperience}>
-          {i18n.t(`Experience.Editor.Btn.${type}`)}
-        </Button>
-      </FormControl>
+            )}
+          />
+
+          <Autocomplete
+            className={styles.fill}
+            id="experience-tags-exclude"
+            freeSolo
+            multiple
+            value={newExperience?.prohibitedTags ?? []}
+            options={tags
+              .map(tag => tag.id)
+              .filter(tag => !newExperience.prohibitedTags?.includes(tag))}
+            disableClearable
+            onChange={(event, value, reason) => {
+              handleTagsChange(event, value, reason, TagsProps.PROHIBITED);
+            }}
+            onInputChange={(event, value) => {
+              handleTagsInputChange(event, value, TagsProps.PROHIBITED);
+            }}
+            getOptionLabel={option => `#${option}`}
+            renderInput={params => (
+              <TextField
+                {...params}
+                label={i18n.t('Experience.Editor.Label_2')}
+                variant="outlined"
+                placeholder={
+                  newExperience.prohibitedTags?.length === 0
+                    ? i18n.t('Experience.Editor.Placeholder_2')
+                    : undefined
+                }
+                onChange={handleSearchTags}
+                InputProps={{
+                  ...params.InputProps,
+                  endAdornment: <React.Fragment>{params.InputProps.endAdornment}</React.Fragment>,
+                }}
+              />
+            )}
+          />
+
+          <Autocomplete
+            id="experience-people"
+            className={styles.people}
+            value={(newExperience?.people as People[]) ?? []}
+            multiple
+            options={people}
+            getOptionSelected={(option, value) => option.id === value.id}
+            filterSelectedOptions={true}
+            getOptionLabel={option => `${option.username} ${option.name}`}
+            disableClearable
+            autoHighlight={false}
+            popupIcon={
+              <SvgIcon classes={{root: styles.fill}} component={SearchIcon} viewBox={'0 0 20 20'} />
+            }
+            onChange={handlePeopleChange}
+            renderTags={() => null}
+            renderInput={params => (
+              <TextField
+                {...params}
+                error={errors.people}
+                label={i18n.t('Experience.Editor.Label_3')}
+                placeholder={i18n.t('Experience.Editor.Placeholder_3')}
+                variant="outlined"
+                onChange={handleSearchPeople}
+                InputProps={{
+                  ...params.InputProps,
+                  endAdornment: <React.Fragment>{params.InputProps.endAdornment}</React.Fragment>,
+                }}
+                helperText={i18n.t('Experience.Editor.Helper.People')}
+              />
+            )}
+            renderOption={(option, state: AutocompleteRenderOptionState) => {
+              if (option.id === '') return null;
+              return (
+                <div className={styles.option}>
+                  <ListItemPeopleComponent
+                    id="selectable-experience-list-item"
+                    title={option.name}
+                    subtitle={<Typography variant="caption">@{option.username}</Typography>}
+                    avatar={option.profilePictureURL}
+                    platform={option.platform}
+                    action={
+                      <IconButton className={styles.removePeople}>
+                        {state.selected ? (
+                          <SvgIcon
+                            classes={{root: styles.fill}}
+                            component={XCircleIcon}
+                            color="error"
+                            viewBox={'0 0 20 20'}
+                          />
+                        ) : (
+                          <SvgIcon
+                            classes={{root: styles.fill}}
+                            component={PlusCircleIcon}
+                            viewBox={'0 0 20 20'}
+                          />
+                        )}
+                      </IconButton>
+                    }
+                  />
+                </div>
+              );
+            }}
+          />
+
+          <div className={styles.preview}>
+            {newExperience.people
+              .filter(people => !isEmpty(people.id))
+              .map(people => (
+                <ListItemPeopleComponent
+                  id="selected-experience-list-item"
+                  key={people.id}
+                  title={people.name}
+                  subtitle={<Typography variant="caption">@{people.username}</Typography>}
+                  avatar={people.profilePictureURL}
+                  platform={people.platform}
+                  action={
+                    <IconButton onClick={removeSelectedPeople(people)}>
+                      <SvgIcon
+                        classes={{root: styles.fill}}
+                        component={XCircleIcon}
+                        color="error"
+                        viewBox={'0 0 20 20'}
+                      />
+                    </IconButton>
+                  }
+                />
+              ))}
+          </div>
+
+          <InfiniteScroll
+            scrollableTarget="scrollable-searched-posts"
+            dataLength={experiencePosts.length}
+            hasMore={hasMore}
+            next={handleNextPagePosts}
+            loader={<Loading />}>
+            {experiencePosts.length === 0 ? (
+              <div className={styles.postTextContainer}>
+                <Typography className={styles.textPost}>
+                  {i18n.t('Experience.Editor.Post.Title')}
+                </Typography>
+                <Typography className={styles.textPostDetail}>
+                  {i18n.t('Experience.Editor.Post.Desc')}
+                </Typography>
+              </div>
+            ) : (
+              <>
+                <Typography className={styles.textPost}>
+                  {i18n.t('Experience.Editor.Post.Title')}
+                </Typography>
+                {experiencePosts.map(post => (
+                  <PostDetailExperience
+                    user={user}
+                    key={`post-${post.id}`}
+                    post={post}
+                    anonymous={anonymous}
+                    onImporters={() => null}
+                    type={'default'}
+                    onRemoveFromExperience={() => handleRemoveFromExperience(post)}
+                  />
+                ))}
+              </>
+            )}
+          </InfiniteScroll>
+        </div>
+      </div>
     </div>
   );
 };

@@ -26,17 +26,46 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: 30,
       background: '#FFF',
       borderRadius: 10,
+      marginBottom: 24,
 
       '& .MuiAutocomplete-popupIndicatorOpen': {
         transform: 'none',
       },
 
-      '& .MuiSvgIcon-root': {
-        fill: 'currentColor',
-      },
       [theme.breakpoints.down('xs')]: {
         padding: '20px',
       },
+    },
+    header: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: theme.spacing(2),
+    },
+    content: {
+      display: 'flex',
+      flexDirection: 'row',
+      gap: theme.spacing(3),
+    },
+    row1: {
+      minWidth: 100,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      paddingTop: 8,
+      gap: 8,
+    },
+    boxImage: {
+      width: 100,
+      height: 100,
+      borderRadius: 10,
+      border: '2px dashed #C2C2C2',
+      backgroundColor: '#F5F5F5',
+    },
+    row2: {
+      width: '100%',
+      overflow: 'hidden',
+      paddingTop: 8,
     },
     title: {
       marginBottom: 30,
@@ -124,6 +153,15 @@ export const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.down('xs')]: {
         padding: '0px 20px 20px 20px',
       },
+    },
+    fill: {
+      fill: 'currentColor',
+      '& .MuiSvgIcon-root': {
+        fill: 'currentColor',
+      },
+    },
+    formControl: {
+      marginBottom: 0,
     },
   }),
 );

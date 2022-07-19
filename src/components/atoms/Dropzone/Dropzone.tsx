@@ -1,7 +1,9 @@
+import CameraIcon from '@heroicons/react/outline/CameraIcon';
+
 import React, {useState} from 'react';
 import {ErrorCode, FileError, useDropzone} from 'react-dropzone';
 
-import {Button, capitalize, Typography} from '@material-ui/core';
+import {Button, capitalize, Typography, SvgIcon} from '@material-ui/core';
 
 import {UploadIcon} from '../Icons';
 import {useStyles} from './Dropzone.styles';
@@ -46,7 +48,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
     height,
   } = props;
 
-  const styles = useStyles(props);
+  const styles = useStyles({...props, usage});
   const enqueueSnackbar = useEnqueueSnackbar();
 
   const [files, setFiles] = useState<File[]>([]);
@@ -67,7 +69,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
         setPreview(prevPreview => [...prevPreview, ...acceptedFiles.map(URL.createObjectURL)]);
       } else {
         setFiles(acceptedFiles);
-        setPreview(files.map(URL.createObjectURL));
+        setPreview(acceptedFiles.map(URL.createObjectURL));
       }
 
       onImageSelected(newFiles);
@@ -102,9 +104,12 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
         return i18n.t('Dropzone.Btn_Upload_Video', {type: capitalize(type)});
       } else return i18n.t('Dropzone.Btn_Add_Image');
     }
+
     if (!multiple && preview.length === 1) {
+      if (usage === 'experience') return i18n.t('Dropzone.Btn.Exp_Change');
       return i18n.t('Dropzone.Btn_Reupload');
     }
+
     return label;
   };
 
@@ -134,19 +139,39 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
         </ShowIf>
 
         <ShowIf condition={preview.length === 0}>
-          <UploadIcon />
-          <Typography className={styles.placeholder}>{placeholder}</Typography>
+          <ShowIf condition={usage === 'experience'}>
+            <div className={styles.boxImage}>
+              <SvgIcon component={CameraIcon} viewBox="0 0 24 24" />
+            </div>
+          </ShowIf>
+          <ShowIf condition={usage !== 'experience'}>
+            <UploadIcon />
+            <Typography className={styles.placeholder}>{placeholder}</Typography>
+          </ShowIf>
         </ShowIf>
 
         {!loading && (
-          <Button
-            className={styles.button}
-            size="small"
-            variant={preview.length ? 'outlined' : 'contained'}
-            color={value ? 'secondary' : 'primary'}
-            onClick={handleReuploadImage}>
-            {formatButtonLable()}
-          </Button>
+          <>
+            <ShowIf condition={usage !== 'experience'}>
+              <Button
+                className={styles.button}
+                size="small"
+                variant={preview.length ? 'outlined' : 'contained'}
+                color={value ? 'secondary' : 'primary'}
+                onClick={handleReuploadImage}>
+                {formatButtonLable()}
+              </Button>
+            </ShowIf>
+            <ShowIf condition={usage === 'experience'}>
+              <Typography
+                style={{cursor: 'pointer', marginTop: 8}}
+                color="primary"
+                variant="body1"
+                onClick={handleReuploadImage}>
+                {formatButtonLable()}
+              </Typography>
+            </ShowIf>
+          </>
         )}
       </div>
     </div>

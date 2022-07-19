@@ -1071,6 +1071,10 @@
     "Btn_Upload_Video": "Фото {{type}}",
     "Btn_Replace_Video": "Заменить {{type}}",
     "Error_File_Large": "Файл превышает размер в {{maxSize}}Mb",
+    "Btn": {
+      "Exp_Add": "Add picture",
+      "Exp_Change": "Change picture"
+    },
     "Video": {
       "Not_Preview": "Предварительный просотр этого видео будет доступен после вашего подтверждения",
       "Not_Support": "Кодирование видео невозможно"
