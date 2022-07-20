@@ -47,10 +47,10 @@
     "start:storybook": "start-storybook -p 6006"
   },
   "dependencies": {
-    "@emotion/cache": "latest",
-    "@emotion/react": "latest",
-    "@emotion/server": "latest",
-    "@emotion/styled": "latest",
+    "@emotion/cache": "^11.9.3",
+    "@emotion/react": "^11.9.3",
+    "@emotion/server": "^11.4.0",
+    "@emotion/styled": "^11.9.3",
     "@fontsource/mulish": "^4.5.7",
     "@heroicons/react": "^1.0.6",
     "@material-ui/core": "^4.12.3",
