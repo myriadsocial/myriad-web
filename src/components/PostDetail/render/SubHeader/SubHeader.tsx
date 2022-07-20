@@ -9,7 +9,7 @@ import {PostSubHeaderProps} from './SubHeader.interface';
 import {useStyles} from './SubHeader.style';
 
 import ShowIf from 'src/components/common/show-if.component';
-import {timeAgo} from 'src/helpers/date';
+import {useDate} from 'src/hooks/use-date.hooks';
 import i18n from 'src/locale';
 
 export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
@@ -24,6 +24,7 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
   experiences,
 }) => {
   const style = useStyles();
+  const {date: formatDate} = useDate(date);
 
   return (
     <>
@@ -32,7 +33,7 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
 
         <Link href={`/post/[postId]`} as={`/post/${postId}`} shallow>
           <a href={`/post/${postId}`} className={style.linkGrey}>
-            {timeAgo(date)}&nbsp;
+            {formatDate}&nbsp;
           </a>
         </Link>
 
