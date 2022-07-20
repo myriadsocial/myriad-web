@@ -96,7 +96,6 @@ export const CurrencyOptionComponent: React.FC<CurrencyOptionProps> = props => {
         {balanceDetails &&
           balanceDetails.map(item => (
             <MenuItem
-              disabled={item.referenceId === '1'} // disabled DBIO for Tipping
               classes={{root: style.hover}}
               key={item.id}
               onClick={() => handleSelect(item)}>
