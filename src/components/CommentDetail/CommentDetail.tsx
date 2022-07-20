@@ -1,6 +1,6 @@
 import {DotsVerticalIcon} from '@heroicons/react/outline';
 
-import React, {useEffect, useRef, forwardRef} from 'react';
+import React, {useEffect, forwardRef} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import Link from 'next/link';
@@ -14,7 +14,6 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
 
-import {CommentEditor} from '../CommentEditor';
 import {CommentList} from '../CommentList';
 import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {VotingComponent} from '../atoms/Voting';
@@ -23,8 +22,9 @@ import {SendTipButton} from '../common/SendTipButton/SendTipButton';
 import {TimeAgo} from '../common/TimeAgo.component';
 import {CommentDetailProps} from './CommentDetail.interface';
 import {useStyles} from './CommentDetail.styles';
-import {CommentRender} from './CommentRender';
 
+import CommentEditor from 'components/CommentEditor/CommentEditor.container';
+import {NodeViewer} from 'components/common/NodeViewer';
 import ShowIf from 'src/components/common/show-if.component';
 import {useRepliesHook} from 'src/hooks/use-replies.hook';
 import {Comment} from 'src/interfaces/comment';
@@ -82,12 +82,9 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
     state => state.timelineState.interaction.downvoting,
   );
 
-  const editorRef = useRef<HTMLDivElement>(null);
-
   const [menuAnchorElement, setMenuAnchorElement] = React.useState<null | HTMLElement>(null);
   const [isReplying, setIsReplying] = React.useState(false);
   const [isBlocked, setIsBlocked] = React.useState(blockedUserIds.includes(comment.userId));
-  const [maxLength, setMaxLength] = React.useState<number | undefined>(180);
   const banned = Boolean(user?.deletedAt);
   const totalVote = comment.metric.upvotes - comment.metric.downvotes;
   const isOwnComment = comment.userId === user?.id;
@@ -220,10 +217,6 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
     });
   };
 
-  const handleExpandText = () => {
-    setMaxLength(undefined);
-  };
-
   return (
     <>
       <div className={style.flex} ref={ref} id={`comment-${comment.id}-deep-${deep}`}>
@@ -295,7 +288,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                 }
               />
               <CardContent className={style.content}>
-                <CommentRender comment={comment} max={maxLength} onShowAll={handleExpandText} />
+                <NodeViewer id={comment.id} text={comment.text} />
               </CardContent>
               <CardActions disableSpacing>
                 <VotingComponent
@@ -393,17 +386,10 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
       <div id={`replies-${deep}`} style={{marginLeft: deep < 2 ? 64 : 0}}>
         {user && !banned && isReplying && (
           <CommentEditor
-            ref={editorRef}
             referenceId={comment.id}
+            section={comment.section}
             type={ReferenceType.COMMENT}
             user={user}
-            mentionables={mentionables.map(item => ({
-              value: item.id,
-              name: item.name,
-              username: item.username ?? item.name.replace(' ', ''),
-              avatar: item.profilePictureURL,
-            }))}
-            onSearchMention={onSearchPeople}
             onSubmit={handleSubmitComment}
           />
         )}

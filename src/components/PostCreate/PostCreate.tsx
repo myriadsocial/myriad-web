@@ -1,38 +1,35 @@
-import {TNode} from '@udecode/plate';
-
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useState} from 'react';
 
 import {Button} from '@material-ui/core';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 
 import {NSFWTags} from '../NSFWTags';
-import {PostEditor, serialize, formatToString, hasMedia, deserialize} from '../PostEditor';
 import {PostImport} from '../PostImport';
 import {DropdownMenu} from '../atoms/DropdownMenu';
 import {Modal} from '../atoms/Modal';
 import {TabPanel} from '../atoms/TabPanel';
 import {useStyles} from './PostCreate.styles';
 import {menuOptions} from './default';
+import {serialize} from './formatter';
 
+import {Editor} from 'components/common/Editor';
+import {getEditorSelectors} from 'components/common/Editor/store';
 import ShowIf from 'src/components/common/show-if.component';
 import {Post, PostVisibility} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
 
 type PostCreateProps = {
-  url?: string;
+  user: User;
   open: boolean;
-  people: User[];
-  uploadProgress: number;
   isMobile?: boolean;
   onClose: () => void;
+  onSearchPeople: (query: string) => void;
   onSubmit: (
     post: Partial<Post> | string,
     attributes?: Pick<Post, 'NSFWTag' | 'visibility'>,
   ) => void;
-  onSearchPeople: (query: string) => void;
-  onUploadFile: (file: File, type: 'image' | 'video') => Promise<string | null>;
 };
 
 type PostCreateType = 'create' | 'import';
@@ -43,29 +40,12 @@ const initialPost = {
 };
 
 export const PostCreate: React.FC<PostCreateProps> = props => {
-  const {open, people, uploadProgress, isMobile, onClose, onSubmit, onSearchPeople, onUploadFile} =
-    props;
+  const {open, user, isMobile, onClose, onSubmit, onSearchPeople} = props;
   const styles = useStyles();
 
   const [activeTab, setActiveTab] = useState<PostCreateType>('create');
   const [post, setPost] = useState<Partial<Post>>(initialPost);
   const [importUrl, setImport] = useState<string | undefined>();
-  const [validPost, setValidPost] = useState(false);
-
-  const mentionables = useMemo(() => {
-    return people.map(item => ({
-      value: item.id,
-      name: item.name,
-      username: item.username ?? item.name.replace(' ', ''),
-      avatar: item.profilePictureURL,
-    }));
-  }, [people]);
-
-  useEffect(() => {
-    return () => {
-      setPost(initialPost);
-    };
-  }, []);
 
   const header: Record<PostCreateType, {title: string; subtitle: string}> = {
     create: {
@@ -82,27 +62,8 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
     setActiveTab(tab);
   };
 
-  const handlePostTextChange = (value: TNode[]) => {
-    const attributes = serialize(value);
-
-    if (hasMedia(value)) {
-      setValidPost(true);
-    } else {
-      const string = value.map(formatToString).join('');
-      setValidPost(string.length > 0);
-    }
-
-    setPost(prevPost => ({...prevPost, ...attributes}));
-  };
-
   const handlePostUrlChange = (url: string | null) => {
-    if (url) {
-      setImport(url);
-
-      setValidPost(Boolean(url));
-    } else {
-      setValidPost(false);
-    }
+    setImport(url);
   };
 
   const handleConfirmNSFWTags = (tags: string[]) => {
@@ -119,27 +80,28 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
         NSFWTag: post.NSFWTag,
         visibility: post.visibility ?? PostVisibility.PUBLIC,
       });
+
+      setImport(undefined);
     }
 
     if (activeTab === 'create') {
+      const store = getEditorSelectors(user.id);
+      const value = store.value();
+
+      const post = serialize(value);
+
       onSubmit(post);
     }
-
-    setPost(initialPost);
-    setImport(undefined);
-    setValidPost(false);
   };
 
   const handleClose = () => {
     setPost(initialPost);
     setImport(undefined);
-    setValidPost(false);
 
     onClose();
   };
 
   const handleErrorImport = () => {
-    setValidPost(false);
     setImport(undefined);
   };
 
@@ -162,15 +124,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
       </Tabs>
 
       <TabPanel value={activeTab} index="create">
-        <PostEditor
-          value={post.text ? deserialize(post as Post) : undefined}
-          mentionable={mentionables}
-          uploadProgress={uploadProgress}
-          onChange={handlePostTextChange}
-          onSearchMention={onSearchPeople}
-          onFileUploaded={onUploadFile}
-          isMobile={isMobile}
-        />
+        <Editor userId={user.id} mobile={isMobile} onSearchMention={onSearchPeople} />
       </TabPanel>
 
       <TabPanel value={activeTab} index="import">
@@ -200,7 +154,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
         </div>
 
         <Button
-          disabled={!validPost}
+          disabled={false}
           variant="contained"
           color="primary"
           size="small"

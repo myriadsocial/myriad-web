@@ -44,6 +44,29 @@ export const image = async (
   return data;
 };
 
+export const imageAsBuffer = async (
+  userId: string,
+  file: Blob,
+  options: UploadOptions,
+): Promise<ResponseFileUpload> => {
+  const kind = Kind.IMAGE;
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const {data} = await MyriadAPI().request<ResponseFileUpload>({
+    url: `/buckets/${userId}/${kind}`,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    data: formData,
+    onUploadProgress: options.onUploadProgress,
+  });
+
+  return data;
+};
+
 export const video = async (
   userId: string,
   file: File,

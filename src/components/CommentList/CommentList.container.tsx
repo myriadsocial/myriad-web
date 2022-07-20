@@ -27,6 +27,7 @@ const CommentEditor = dynamic(() => import('../CommentEditor/CommentEditor.conta
 type CommentListContainerProps = {
   user?: User;
   referenceId: string;
+  type: ReferenceType;
   placeholder?: string;
   section: SectionType;
   focus?: boolean;
@@ -35,7 +36,7 @@ type CommentListContainerProps = {
 };
 
 export const CommentListContainer: React.FC<CommentListContainerProps> = props => {
-  const {placeholder, referenceId, section, focus, expand, user, scrollToPost} = props;
+  const {placeholder, referenceId, type, section, focus, expand, user, scrollToPost} = props;
 
   const dispatch = useDispatch();
   const confirm = useConfirm();
@@ -157,7 +158,8 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
       <ShowIf condition={!anonymous && !banned}>
         <CommentEditor
           referenceId={referenceId}
-          placeholder={placeholder}
+          section={section}
+          type={type}
           user={user}
           expand={expand}
           onSubmit={handleSubmitComment}

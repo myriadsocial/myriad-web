@@ -4,13 +4,12 @@ import Link from 'next/link';
 
 import {Card, CardContent, CardHeader, Grid, Typography} from '@material-ui/core';
 
-import {CommentRender} from '../CommentDetail/CommentRender';
-import {deserialize, formatToString} from '../PostEditor';
 import {Avatar, AvatarSize} from '../atoms/Avatar';
 import {TimeAgo} from '../common/TimeAgo.component';
 import ShowIf from '../common/show-if.component';
 import {useStyles} from './CommentHistory.style';
 
+import {NodeViewer} from 'components/common/NodeViewer';
 import {Comment} from 'src/interfaces/comment';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
@@ -26,7 +25,6 @@ export const CommentHistory: React.FC<CommentHistoryProps> = props => {
 
   const styles = useStyles();
 
-  const [maxLength, setMaxLength] = React.useState<number | undefined>(180);
   const [text, setText] = React.useState<string>('');
   const [postUser, setPostUser] = React.useState<User>();
 
@@ -35,8 +33,7 @@ export const CommentHistory: React.FC<CommentHistoryProps> = props => {
       setPostUser(comment.post.user);
 
       if (comment.post.platform === 'myriad') {
-        const nodes = deserialize(comment.post);
-        const text = nodes.map(formatToString).join('');
+        const text = comment.post.text;
 
         setText(text.slice(0, 30));
       } else {
@@ -98,11 +95,7 @@ export const CommentHistory: React.FC<CommentHistoryProps> = props => {
             }
           />
           <CardContent classes={{root: styles.content}}>
-            <CommentRender
-              comment={comment}
-              max={maxLength}
-              onShowAll={() => setMaxLength(undefined)}
-            />
+            <NodeViewer id={comment.id} text={comment.text} />
           </CardContent>
         </Card>
       </Grid>

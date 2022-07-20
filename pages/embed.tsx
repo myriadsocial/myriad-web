@@ -5,8 +5,8 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 
+import {stringify} from 'components/PostCreate/formatter';
 import {PostDetailContainer} from 'components/PostDetail/PostDetail.container';
-import {formatToString} from 'src/components/PostEditor';
 import {generateAnonymousUser} from 'src/helpers/auth';
 import {Post, PostVisibility} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
@@ -102,7 +102,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       props: {
         type,
         title: post?.title ?? `${post.user.name} on ${publicRuntimeConfig.appName}`,
-        description: post.platform === 'myriad' ? formatToString(post) : post.text,
+        description: post.platform === 'myriad' ? stringify(post) : post.text,
         image: null,
       },
     };

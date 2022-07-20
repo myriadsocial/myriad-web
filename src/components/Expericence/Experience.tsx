@@ -202,69 +202,73 @@ export const Experience: React.FC<ExperienceProps> = props => {
         </CardActionArea>
       </Card>
 
-      <Menu
-        classes={{
-          paper: styles.menu,
-        }}
-        anchorEl={menuAnchorElement}
-        getContentAnchorEl={null}
-        anchorOrigin={{vertical: 'top', horizontal: 'center'}}
-        transformOrigin={{vertical: 'bottom', horizontal: 'center'}}
-        open={Boolean(menuAnchorElement)}
-        onClose={handleCloseSettings}>
-        <Link href={`/experience/[experienceId]`} as={`/experience/${experienceId}`} passHref>
-          <BaseMenuItem onClick={handleCloseSettings}>
-            {i18n.t('Experience.List.Menu.View')}
-          </BaseMenuItem>
-        </Link>
-
-        <ShowIf condition={isOwnExperience}>
-          <Link
-            href={`/experience/[experienceId]/edit`}
-            as={`/experience/${experienceId}/edit`}
-            passHref>
-            <MenuItem onClick={handleCloseSettings}>{i18n.t('Experience.List.Menu.Edit')}</MenuItem>
+      {menuAnchorElement && (
+        <Menu
+          classes={{
+            paper: styles.menu,
+          }}
+          anchorEl={menuAnchorElement}
+          getContentAnchorEl={null}
+          anchorOrigin={{vertical: 'top', horizontal: 'center'}}
+          transformOrigin={{vertical: 'bottom', horizontal: 'center'}}
+          open={Boolean(menuAnchorElement)}
+          onClose={handleCloseSettings}>
+          <Link href={`/experience/[experienceId]`} as={`/experience/${experienceId}`} passHref>
+            <BaseMenuItem onClick={handleCloseSettings}>
+              {i18n.t('Experience.List.Menu.View')}
+            </BaseMenuItem>
           </Link>
-        </ShowIf>
 
-        <ShowIf condition={!isOwnExperience && !isHidden()}>
-          <MenuItem
-            onClick={handleCloneExperience}
-            fallback={handleCloseSettings}
-            disabled={anonymous}>
-            {i18n.t('Experience.List.Menu.Clone')}
-          </MenuItem>
-        </ShowIf>
+          <ShowIf condition={isOwnExperience}>
+            <Link
+              href={`/experience/[experienceId]/edit`}
+              as={`/experience/${experienceId}/edit`}
+              passHref>
+              <MenuItem onClick={handleCloseSettings}>
+                {i18n.t('Experience.List.Menu.Edit')}
+              </MenuItem>
+            </Link>
+          </ShowIf>
 
-        <ShowIf condition={!userExperience.subscribed && !isOwnExperience && !isHidden()}>
-          <MenuItem
-            onClick={handleSubscribeExperience}
-            fallback={handleCloseSettings}
-            disabled={anonymous}>
-            {i18n.t('Experience.List.Menu.Subscribe')}
-          </MenuItem>
-        </ShowIf>
+          <ShowIf condition={!isOwnExperience && !isHidden()}>
+            <MenuItem
+              onClick={handleCloneExperience}
+              fallback={handleCloseSettings}
+              disabled={anonymous}>
+              {i18n.t('Experience.List.Menu.Clone')}
+            </MenuItem>
+          </ShowIf>
 
-        <ShowIf condition={Boolean(userExperience.subscribed) && !isOwnExperience}>
-          <MenuItem
-            onClick={confirmUnsubscribe}
-            fallback={handleCloseSettings}
-            className={styles.delete}>
-            {i18n.t('Experience.List.Menu.Unsubscribe')}
-          </MenuItem>
-        </ShowIf>
-        <ShowIf condition={isOwnExperience}>
-          <MenuItem
-            onClick={confirmDeleteExperience}
-            fallback={handleCloseSettings}
-            className={styles.delete}>
-            {i18n.t('Experience.List.Menu.Delete')}
-          </MenuItem>
-        </ShowIf>
-        <BaseMenuItem onClick={openShareExperience}>
-          {i18n.t('Experience.List.Menu.Share')}
-        </BaseMenuItem>
-      </Menu>
+          <ShowIf condition={!userExperience.subscribed && !isOwnExperience && !isHidden()}>
+            <MenuItem
+              onClick={handleSubscribeExperience}
+              fallback={handleCloseSettings}
+              disabled={anonymous}>
+              {i18n.t('Experience.List.Menu.Subscribe')}
+            </MenuItem>
+          </ShowIf>
+
+          <ShowIf condition={Boolean(userExperience.subscribed) && !isOwnExperience}>
+            <MenuItem
+              onClick={confirmUnsubscribe}
+              fallback={handleCloseSettings}
+              className={styles.delete}>
+              {i18n.t('Experience.List.Menu.Unsubscribe')}
+            </MenuItem>
+          </ShowIf>
+          <ShowIf condition={isOwnExperience}>
+            <MenuItem
+              onClick={confirmDeleteExperience}
+              fallback={handleCloseSettings}
+              className={styles.delete}>
+              {i18n.t('Experience.List.Menu.Delete')}
+            </MenuItem>
+          </ShowIf>
+          <BaseMenuItem onClick={openShareExperience}>
+            {i18n.t('Experience.List.Menu.Share')}
+          </BaseMenuItem>
+        </Menu>
+      )}
 
       <Modal
         title={i18n.t('Experience.List.Modal.Title')}

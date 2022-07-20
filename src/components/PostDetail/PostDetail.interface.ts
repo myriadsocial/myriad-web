@@ -15,7 +15,7 @@ export type PostDetailProps = PostDetailActionProps & {
   post: Post;
   // trigger variable for rerender post detail
   type?: 'share' | 'default';
-  expandComment?: boolean;
+  expand?: boolean;
 };
 
 export type PostDetailContainerProps = {
@@ -24,5 +24,5 @@ export type PostDetailContainerProps = {
   // trigger variable for rerender post detail
   type?: 'share' | 'default';
   metric: PostMetric;
-  expandComment?: boolean;
+  expand?: boolean;
 };

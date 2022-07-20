@@ -10,8 +10,8 @@ import {useStyles} from './PostDetail.styles';
 import {PostFooter} from './render/Footer';
 import {PostHeader} from './render/Header';
 
+import {NodeViewer} from 'components/common/NodeViewer';
 import ShowIf from 'components/common/show-if.component';
-import {PostRender} from 'src/components/PostEditor/PostRender';
 import {LinkPreview} from 'src/components/atoms/LinkPreview';
 import {NSFW} from 'src/components/atoms/NSFW/NSFW.component';
 import {SendTipButton} from 'src/components/common/SendTipButton/SendTipButton';
@@ -24,7 +24,7 @@ const Gallery = dynamic(() => import('src/components/atoms/Gallery/Gallery'), {s
 const Video = dynamic(() => import('src/components/atoms/Video/Video'), {ssr: false});
 
 export const PostDetail: React.FC<PostDetailProps> = props => {
-  const {user, post, type, ...restProps} = props;
+  const {user, post, type, expand, ...restProps} = props;
   const {onRemoveVote, onToggleDownvote, onUpvote, onToggleShowComment} = restProps;
 
   const router = useRouter();
@@ -81,7 +81,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
 
         <ShowIf condition={!hiddenContent}>
           <ShowIf condition={['myriad'].includes(post.platform)}>
-            <PostRender post={post} />
+            <NodeViewer id={post.id} text={post.text} expand={expand} />
           </ShowIf>
 
           <ShowIf condition={['twitter'].includes(post.platform)}>

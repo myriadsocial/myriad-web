@@ -10,6 +10,15 @@ type CommentMetric = {
   comments: number;
 };
 
+export type ReportType =
+  | 'abusive_violent'
+  | 'unauthorize_copyright'
+  | 'child_exploitation'
+  | 'pornography'
+  | 'private_information'
+  | 'spam'
+  | 'unauthorize_trademark';
+
 export interface CommentProps {
   text: string;
   type: ReferenceType;
@@ -18,7 +27,7 @@ export interface CommentProps {
   section: SectionType;
   userId: string;
   mentions: MentionUserProps[];
-  reportType?: string;
+  reportType?: ReportType;
 }
 
 export interface Comment extends CommentProps, BaseModel {

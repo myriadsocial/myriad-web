@@ -23,7 +23,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(1.5),
     },
     action: {
-      marginTop: 10,
       padding: '0 20px 20px',
       display: 'flex',
       justifyContent: 'space-between',
