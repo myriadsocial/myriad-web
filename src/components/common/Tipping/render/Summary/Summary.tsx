@@ -14,7 +14,7 @@ import {useStyles} from './Summary.style';
 
 import {Avatar, AvatarSize} from 'src/components/atoms/Avatar';
 import ShowIf from 'src/components/common/show-if.component';
-import InfoIconYellow from 'src/images/icons/InfoIconYellow.svg';
+import InfoIconYellow from 'src/images/Icons/InfoIconYellow.svg';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {People} from 'src/interfaces/people';
 import {User} from 'src/interfaces/user';
