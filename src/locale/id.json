@@ -98,9 +98,9 @@
         "Desc": "Pos yang ditambahkan akan muncul di sini. Anda dapat menambahkan postingan ke pengalaman dengan memilih 'tambahkan postingan ke pengalaman' pada opsi lainnya."
       },
       "Btn": {
-        "Clone": "Klon Pengalaman",
-        "Create": "Buat Pengalaman",
-        "Edit": "Simpan Pengalaman"
+        "Clone": "Klon",
+        "Create": "Buat",
+        "Edit": "Simpan"
       },
       "Menu_Post": {
         "Remove": "Hapus dari pengalaman"
@@ -1066,10 +1066,14 @@
   "Dropzone": {
     "Placeholder": "File harus .jpeg atau .png",
     "Btn_Upload": "Unggah Gambar",
-    "Btn_Reupload": "Unggah ulang Gambar",
+    "Btn_Reupload": "Unggah Ulang Gambar",
     "Btn_Add_Image": "Tambahkan Gambar",
     "Btn_Upload_Video": "Tambahkan {{type}}",
     "Btn_Replace_Video": "Ganti {{type}}",
+    "Btn": {
+      "Exp_Add": "Tambah Gambar",
+      "Exp_Change": "Ganti Gambar"
+    },
     "Error_File_Large": "File lebih besar dari {{maxSize}}Mb",
     "Video": {
       "Not_Preview": "Kami tidak dapat melihat pratinjau video Anda, pratinjau video dapat dilakukan setelah Anda mengonfirmasinya.",

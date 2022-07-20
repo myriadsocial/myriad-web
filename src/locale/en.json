@@ -98,9 +98,9 @@
         "Desc": "Added posts will appear here. You can add a post to experience by select 'add post to experience' on more option."
       },
       "Btn": {
-        "Clone": "Clone Experience",
-        "Create": "Create Experience",
-        "Edit": "Save Changes"
+        "Clone": "Clone",
+        "Create": "Create",
+        "Edit": "Save"
       },
       "Menu_Post": {
         "Remove": "Remove from experience"
@@ -1070,6 +1070,10 @@
     "Btn_Add_Image": "Add Image",
     "Btn_Upload_Video": "Add {{type}}",
     "Btn_Replace_Video": "Replace {{type}}",
+    "Btn": {
+      "Exp_Add": "Add picture",
+      "Exp_Change": "Change picture"
+    },
     "Error_File_Large": "File is larger than {{maxSize}}Mb",
     "Video": {
       "Not_Preview": "We cannot preview your video, preview video can be done after you confirm it.",
