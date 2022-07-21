@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
+import {useSelector} from 'react-redux';
 
 import {
   Button,
@@ -18,10 +19,10 @@ import {Modal, ModalProps} from '../atoms/Modal';
 import {useStyles} from './totalTips.style';
 
 import {formatUsd} from 'src/helpers/balance';
-import {ExchangeRate} from 'src/interfaces/exchange';
 import {TotalTipsDataInterface} from 'src/interfaces/network';
-import * as TokenAPI from 'src/lib/api/exchange';
 import i18n from 'src/locale';
+import {RootState} from 'src/reducers';
+import {ExchangeRateState} from 'src/reducers/exchange-rate/reducer';
 
 type TipTotalNearProps = Pick<ModalProps, 'onClose' | 'open'> & {
   totalTipsData: Array<TotalTipsDataInterface>;
@@ -30,31 +31,12 @@ type TipTotalNearProps = Pick<ModalProps, 'onClose' | 'open'> & {
 
 export const TipTotal: React.FC<TipTotalNearProps> = props => {
   const {open, onClose, totalTipsData, handleVerifyReference} = props;
+  const {exchangeRates} = useSelector<RootState, ExchangeRateState>(
+    state => state.exchangeRateState,
+  );
   const styles = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
-
-  const [loading, setLoading] = useState(false);
-  const [exchangeRates, setExchangeRates] = useState<ExchangeRate[]>([]);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    if (isMounted) {
-      setLoading(true);
-      TokenAPI.getExchangeRate()
-        .then(data => {
-          setExchangeRates(data);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
-
-    return () => {
-      isMounted = false;
-    };
-  }, [totalTipsData]);
 
   const getDetailExchangeRate = (symbol: string) => {
     return exchangeRates?.find(exchangeRate => exchangeRate.id === symbol)?.price ?? 0;
@@ -95,14 +77,10 @@ export const TipTotal: React.FC<TipTotalNearProps> = props => {
                           {Number(balanceDetail.amount).toFixed(4)}
                         </Typography>
                         <Typography variant="caption" color="textSecondary">
-                          {`~${
-                            loading
-                              ? ''
-                              : formatUsd(
-                                  balanceDetail.amount as number,
-                                  getDetailExchangeRate(balanceDetail.symbol),
-                                )
-                          } USD`}
+                          {`~${formatUsd(
+                            balanceDetail.amount as number,
+                            getDetailExchangeRate(balanceDetail.symbol),
+                          )} USD`}
                         </Typography>
                       </div>
                     </TableCell>

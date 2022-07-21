@@ -20,5 +20,4 @@ export interface People extends PeopleProps {
   walletAddress?: string;
   //TODO: remove later, experience related attribute
   hide?: boolean;
-  walletDetail?: WalletDetail;
 }
