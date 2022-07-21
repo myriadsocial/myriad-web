@@ -19,7 +19,11 @@ export const withCharLimit = <V extends Value = Value, E extends PlateEditor<V> 
       .trim();
 
     if (currentRawString.length < options.max) {
-      insertText(text.trim());
+      if (text.includes('@')) {
+        insertText(text.trim());
+      } else {
+        insertText(text);
+      }
     }
   };
 
