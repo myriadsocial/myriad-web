@@ -122,6 +122,7 @@ export const searchExperiences = async (query: string, page = 1): Promise<Experi
 export const getUserExperiences = async (
   userId: string,
   type?: ExperienceType,
+  page = 1,
 ): Promise<UserExperienceList> => {
   const where: Record<string, any> = {
     userId,
@@ -142,6 +143,7 @@ export const getUserExperiences = async (
     url: `/user-experiences`,
     method: 'GET',
     params: {
+      pageNumber: page,
       pageLimit: PAGINATION_LIMIT,
       filter: {
         where,

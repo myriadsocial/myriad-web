@@ -26,7 +26,7 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
   const {experienceType = 'user'} = props;
   const router = useRouter();
   const styles = useStyles();
-  const {userExperiences, userExperiencesMeta} = useExperienceHook();
+  const {userExperiences, userExperiencesMeta, loadNextUserExperience} = useExperienceHook();
 
   const user = useSelector<RootState, User | undefined>(
     state => state.userState.user,
@@ -45,6 +45,10 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
     } else {
       router.push('/experience/create');
     }
+  };
+
+  const handleLoadNextPage = () => {
+    loadNextUserExperience();
   };
 
   return (
@@ -71,6 +75,8 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
         filterTimeline
         enableClone={experienceType === 'trending'}
         enableSubscribe={experienceType === 'trending'}
+        hasMore={userExperiencesMeta.currentPage < userExperiencesMeta.totalPageCount}
+        loadNextPage={handleLoadNextPage}
       />
 
       <ShowIf condition={userExperiences.length === 0 && experienceType === 'user'}>

@@ -227,6 +227,11 @@ export const useExperienceHook = () => {
     );
   };
 
+  const loadNextUserExperience = () => {
+    const page = userExperiencesMeta.currentPage + 1;
+    dispatch(fetchUserExperience(page));
+  };
+
   const clear = () => {
     dispatch(clearExperiences());
   };
@@ -251,6 +256,7 @@ export const useExperienceHook = () => {
     addPostsToExperience,
     loadPostExperience,
     loadNextPostExperience,
+    loadNextUserExperience,
     nextPage,
     searchExperience: findExperience,
     searchPeople: findPeople,
