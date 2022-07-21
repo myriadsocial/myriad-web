@@ -21,3 +21,7 @@ export interface People extends PeopleProps {
   //TODO: remove later, experience related attribute
   hide?: boolean;
 }
+
+export interface PeopleWithSocialMedaia extends People {
+  userSocialMedia?: UserSocialMedia;
+}
