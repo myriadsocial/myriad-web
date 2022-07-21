@@ -36,6 +36,8 @@ export const withCharLimit = <V extends Value = Value, E extends PlateEditor<V> 
 
         return insertText(newText);
       }
+
+      return insertText(text);
     }
   };
 
