@@ -26,6 +26,7 @@ import {
 import React, {useMemo, useRef, useState} from 'react';
 
 import {alignmentPlugin, baseUIElements} from '../Editor/config';
+import {createEmojiPlugin} from '../Editor/plugins';
 import {createHashtagPlugin} from '../Editor/plugins/Hashtag';
 import {createImageListPlugin} from '../Editor/plugins/ImageList';
 import {createShowMorePlugin, ELEMENT_SHOW_MORE} from '../Editor/plugins/ShowMore';
@@ -70,6 +71,7 @@ const corePlugins = createEditorPlugins([
     }),
   }),
   createImageListPlugin(),
+  createEmojiPlugin(),
 ]);
 
 export type NodeViewerProps = {

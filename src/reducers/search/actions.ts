@@ -34,7 +34,11 @@ export interface SearchUsers extends Action {
 
 export interface SetIsSearching extends Action {
   type: constants.SET_IS_SEARCHING;
-  isSearching: boolean;
+  query?: string;
+}
+
+export interface SetFinishSearching extends Action {
+  type: constants.SET_FINISH_SEARCHING;
 }
 
 export interface AbortSearch extends Action {
@@ -58,6 +62,7 @@ export type Actions =
   | LoadUsers
   | SearchUsers
   | SetIsSearching
+  | SetFinishSearching
   | AbortSearch
   | UsersLoading
   | ClearUsers
@@ -68,9 +73,13 @@ export type Actions =
  * Actions
  */
 
-export const setIsSearching = (isSearching: boolean): SetIsSearching => ({
+export const setIsSearching = (query?: string): SetIsSearching => ({
   type: constants.SET_IS_SEARCHING,
-  isSearching,
+  query,
+});
+
+export const setFinishSearching = (): SetFinishSearching => ({
+  type: constants.SET_FINISH_SEARCHING,
 });
 
 export const setUsersLoading = (loading: boolean): UsersLoading => ({
@@ -111,8 +120,20 @@ export const loadUsers: ThunkActionCreator<Actions, RootState> =
 export const searchUsers: ThunkActionCreator<Actions, RootState> =
   (query: string, page = 1) =>
   async (dispatch, getState) => {
+    const {
+      searchState: {
+        query: storedQuery,
+        meta: {currentPage},
+      },
+    } = getState();
+
+    if (!query || !query.length) return;
+
+    // skip if searching the same thing
+    if (query === storedQuery && currentPage === page) return;
+
     dispatch(setUsersLoading(true));
-    dispatch(setIsSearching(true));
+    dispatch(setIsSearching(query));
 
     try {
       const {meta, data: users} = await UserAPI.searchUsers(page, query);
@@ -128,6 +149,6 @@ export const searchUsers: ThunkActionCreator<Actions, RootState> =
       dispatch(setError(error));
     } finally {
       dispatch(setUsersLoading(false));
-      dispatch(setIsSearching(false));
+      dispatch(setFinishSearching());
     }
   };

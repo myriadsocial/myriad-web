@@ -11,6 +11,7 @@ import * as Redux from 'redux';
 export interface SearchState extends BasePaginationState {
   isSearching: boolean;
   searchedUsers: User[];
+  query: string;
   hasMore: boolean;
 }
 
@@ -18,6 +19,7 @@ const initialState: SearchState = {
   loading: false,
   isSearching: false,
   searchedUsers: [],
+  query: '',
   hasMore: false,
   meta: {
     currentPage: 1,
@@ -84,7 +86,14 @@ export const SearchReducer: Redux.Reducer<SearchState, Actions> = (
 
     case constants.SET_IS_SEARCHING: {
       return update(state, {
-        isSearching: {$set: action.isSearching},
+        isSearching: {$set: true},
+        query: {$set: action.query},
+      });
+    }
+
+    case constants.SET_FINISH_SEARCHING: {
+      return update(state, {
+        isSearching: {$set: false},
       });
     }
 

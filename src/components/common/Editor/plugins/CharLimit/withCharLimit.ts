@@ -19,7 +19,7 @@ export const withCharLimit = <V extends Value = Value, E extends PlateEditor<V> 
       .trim();
 
     if (currentRawString.length < options.max) {
-      insertText(text);
+      insertText(text.trim());
     }
   };
 
