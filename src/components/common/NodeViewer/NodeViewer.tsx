@@ -16,6 +16,7 @@ import {
   createStrikethroughPlugin,
   createTodoListPlugin,
   createUnderlinePlugin,
+  ELEMENT_MEDIA_EMBED,
   ELEMENT_MENTION,
   ImageElement,
   MentionElement,
@@ -52,9 +53,7 @@ const corePlugins = createEditorPlugins([
   createListPlugin(),
   createTodoListPlugin(),
   createLinkPlugin(),
-  createMediaEmbedPlugin({
-    component: MediaEmbedElement,
-  }),
+  createMediaEmbedPlugin(),
   createMentionPlugin({
     isInline: true,
     options: {
@@ -98,6 +97,9 @@ export const NodeViewer: React.FC<NodeViewerProps> = props => {
     return createEditorPlugins([...corePlugins, createShowMorePlugin()], {
       components: createPlateUI({
         ...baseUIElements,
+        [ELEMENT_MEDIA_EMBED]: withProps(MediaEmbedElement, {
+          width: 550,
+        }),
         [ELEMENT_MENTION]: withProps(MentionElement, {
           renderLabel: mentionable => '@' + mentionable.username,
           styles: {

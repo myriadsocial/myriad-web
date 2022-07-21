@@ -37,6 +37,7 @@ export const MediaEmbedToolbarButton = ({id, userId, ...props}: MediaEmbedToolba
       }
 
       setProgress(0);
+      toggleUploadDialog();
     } catch (error) {
       console.error('ERROR', error);
     }

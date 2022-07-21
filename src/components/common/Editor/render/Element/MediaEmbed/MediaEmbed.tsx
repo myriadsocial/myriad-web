@@ -7,8 +7,10 @@ import {MediaEmbedElementProps} from './MediaEmbed.type';
 
 import ReactPlayer from 'react-player/lazy';
 
-export const MediaEmbedElement = <V extends Value>(props: MediaEmbedElementProps<V>) => {
-  const {attributes, children, element} = props;
+export const MediaEmbedElement = <V extends Value>(
+  props: MediaEmbedElementProps<V> & {width?: number},
+) => {
+  const {attributes, children, element, width = 640} = props;
 
   const rootProps = getRootProps(props);
 
@@ -16,7 +18,7 @@ export const MediaEmbedElement = <V extends Value>(props: MediaEmbedElementProps
 
   return (
     <div {...attributes} {...rootProps}>
-      <ReactPlayer light url={url} controls={true} playing={false} stopOnUnmount={true} />
+      <ReactPlayer url={url} controls={true} playing={false} stopOnUnmount={true} width={width} />
       {children}
     </div>
   );

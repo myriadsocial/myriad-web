@@ -101,6 +101,7 @@ const plateUI = createPlateUI({
       disabled: true,
     },
   }),
+  [ELEMENT_MEDIA_EMBED]: withProps(MediaEmbedElement, {}),
   [ELEMENT_MENTION_INPUT]: withProps(MentionInputElement, {
     prefix: '@',
   }),
@@ -138,9 +139,7 @@ const corePlugins = createEditorPlugins([
   createListPlugin(),
   createTodoListPlugin(),
   createLinkPlugin(),
-  createMediaEmbedPlugin({
-    component: MediaEmbedElement,
-  }),
+  createMediaEmbedPlugin(),
   createComboboxPlugin(),
   createMentionPlugin({
     options: {
