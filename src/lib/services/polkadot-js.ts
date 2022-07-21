@@ -16,7 +16,7 @@ import {SignRawException} from './errors/SignRawException';
 
 import {BalanceDetail} from 'src/interfaces/balance';
 import {Currency, CurrencyId} from 'src/interfaces/currency';
-import {TipBalanceInfo, TipsBalanceInfo} from 'src/interfaces/network';
+import {TipsBalanceInfo} from 'src/interfaces/network';
 import {WalletDetail, WalletReferenceType} from 'src/interfaces/wallet';
 
 interface signAndSendExtrinsicProps {
@@ -224,17 +224,13 @@ export const signAndSendExtrinsic = async (
       });
 
     // here we use the api to create a balance transfer to some account of a value of 12345678
-    const isWalletAddress = walletDetail.referenceType === WalletReferenceType.WALLET_ADDRESS;
-    const currencyId = parseInt(referenceId);
-
-    if (!isWalletAddress && typeof currencyId === 'number' && !isNaN(currencyId)) {
-      throw new Error('FailedToTip');
-    }
-
+    const {referenceId: accountId, referenceType} = walletDetail;
+    const isWalletAddress = referenceType === WalletReferenceType.WALLET_ADDRESS;
+    const assetId = parseInt(referenceId);
     const transferExtrinsic = isWalletAddress
       ? native
-        ? api.tx.balances.transfer(walletDetail.referenceId, value)
-        : api.tx.octopusAssets.transfer(currencyId, walletDetail.referenceId, value)
+        ? api.tx.balances.transfer(accountId, value)
+        : api.tx.octopusAssets.transfer(assetId, accountId, value)
       : api.tx.tipping.sendTip(walletDetail, value);
 
     // passing the injected account address as the first argument of signAndSend
@@ -376,10 +372,12 @@ export const getClaimTip = async (
   return null;
 };
 
-export const claimMyria = async (
-  payload: TipBalanceInfo,
+export const claimTip = async (
+  accountId: string,
   rpcURL: string,
-  walletId: string,
+  serverId: string,
+  referenceId: string,
+  ftIdentifiers: string[],
 ): Promise<void> => {
   try {
     const {enableExtension} = await import('src/helpers/extension');
@@ -390,16 +388,16 @@ export const claimMyria = async (
       throw new NoAccountException('Please import your account first!');
 
     const keyring = new Keyring();
-    const baseAddress = keyring.encodeAddress(walletId);
+    const baseAddress = keyring.encodeAddress(accountId);
     const account = allAccounts.find(account => account.address === baseAddress);
 
     if (!account) throw new NoAccountException('Account not registered on Polkadot.js extension');
 
     const api = await connectToBlockchain(rpcURL);
     const injector = await web3FromSource(account.meta.source);
-    const extrinsic = api.tx.tipping.claimTip(payload);
+    const extrinsic = api.tx.tipping.claimTip(serverId, 'user', referenceId, ftIdentifiers);
 
-    const txInfo = await extrinsic.signAsync(walletId, {
+    const txInfo = await extrinsic.signAsync(accountId, {
       signer: injector.signer,
       // make sure nonce does not stuck
       nonce: -1,
@@ -488,7 +486,7 @@ export const sendTip = async (
   }
 };
 
-export const batchClaimReferenceFee = async (
+export const claimReferenceFee = async (
   api: ApiPromise,
   references: References,
   mainReferences: References,
@@ -501,7 +499,7 @@ export const batchClaimReferenceFee = async (
 
   try {
     const {partialFee} = await api.tx.tipping
-      .batchClaimReference(server.id, references, mainReferences, currencyIds, accountId, 1)
+      .claimReference(server.id, references, mainReferences, currencyIds, accountId, 1)
       .paymentInfo(server.accountId.myriad);
 
     return partialFee.toBn();

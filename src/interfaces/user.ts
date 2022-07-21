@@ -67,7 +67,6 @@ export interface User extends UserProps, BaseModel {
   people?: People[];
   metric?: UserMetric;
   deletedAt?: string;
-  walletDetail?: WalletDetail;
 }
 
 export interface UserTransactionDetail {

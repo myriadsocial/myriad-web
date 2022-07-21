@@ -146,6 +146,10 @@ export const TipContainer: React.FC = () => {
     setVerifyingRef(true);
 
     try {
+      if (parseInt(feeInfo.trxFee) <= 0) {
+        throw new Error('Insufficient Gas Fee');
+      }
+
       const server = await WalletAPI.getServer();
       const serverId = getServerId(server, currentWallet?.networkId);
 
@@ -177,6 +181,7 @@ export const TipContainer: React.FC = () => {
           return;
       }
     } catch (error) {
+      setVerifyingRef(false);
       // TODO: Register Translation
       enqueueSnackbar({
         message: error.message,
@@ -300,7 +305,7 @@ export const TipContainer: React.FC = () => {
         onClose={closeAccountList}
       />
 
-      <Backdrop className={styles.backdrop} open={isSignerLoading}>
+      <Backdrop className={styles.backdrop} open={claimingAll || isSignerLoading}>
         <CircularProgress color="primary" />
       </Backdrop>
     </NoSsr>

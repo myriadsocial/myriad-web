@@ -20,7 +20,7 @@ import {BlockchainPlatform, WalletDetail, WalletReferenceType} from 'src/interfa
 import {storeTransaction} from 'src/lib/api/transaction';
 import * as WalletAPI from 'src/lib/api/wallet';
 import {
-  batchClaimReferenceFee,
+  claimReferenceFee,
   estimateFee,
   getClaimTip,
   sendTip,
@@ -199,7 +199,7 @@ export const usePolkadotApi = () => {
     accountId: string,
     server: WalletAPI.Server,
   ) => {
-    return batchClaimReferenceFee(
+    return claimReferenceFee(
       api,
       {referenceType: 'people', referenceIds},
       {referenceType: 'user', referenceIds: [referenceId]},

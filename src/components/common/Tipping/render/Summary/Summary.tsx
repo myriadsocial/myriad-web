@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {BN, BN_ZERO} from '@polkadot/util';
 
+import {PeopleWithWalletDetail, UserWithWalletDetail} from '../../Tipping.interface';
 import {FormatCurrency} from '../FormatCurrency';
 import {useStyles} from './Summary.style';
 
@@ -16,14 +17,12 @@ import {Avatar, AvatarSize} from 'src/components/atoms/Avatar';
 import ShowIf from 'src/components/common/show-if.component';
 import InfoIconYellow from 'src/images/Icons/InfoIconYellow.svg';
 import {BalanceDetail} from 'src/interfaces/balance';
-import {People} from 'src/interfaces/people';
-import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
 
 type SummaryProps = {
   amount: BN;
   transactionFee: BN;
-  receiver: User | People;
+  receiver: UserWithWalletDetail | PeopleWithWalletDetail;
   currency: BalanceDetail;
   loadingFee: boolean;
 };

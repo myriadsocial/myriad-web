@@ -56,3 +56,24 @@ export const formatBalance = (value: BN, decimal: number, length = 10): number =
 
   return +balance.slice(0, length);
 };
+
+export const formatBalanceV2 = (value: string, decimal: number, length = 10): string => {
+  if (value === '0') return '0';
+
+  let balance = '0';
+  if (value.length < decimal + 1) {
+    const correctedDecimal = decimal + 1 - value.length;
+    const fractional = '0'.repeat(correctedDecimal - 1) + value;
+    balance = '0.' + fractional.substring(0, length);
+  } else {
+    const correctedDecimal = value.length - decimal;
+    const hasDecimal = value.substring(correctedDecimal).replace(/0+/gi, '');
+    const correctedBalance = hasDecimal
+      ? '.' + value.substring(correctedDecimal, correctedDecimal + length)
+      : '.' + '0'.repeat(length);
+
+    balance = value.substring(0, correctedDecimal) + correctedBalance;
+  }
+
+  return balance;
+};

@@ -9,11 +9,11 @@ import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 import {WalletDetail, WalletTypeEnum} from 'src/interfaces/wallet';
 
-interface UserWithWalletDetail extends User {
+export interface UserWithWalletDetail extends User {
   walletDetail?: WalletDetail;
 }
 
-interface PeopleWithWalletDetail extends People {
+export interface PeopleWithWalletDetail extends People {
   walletDetail?: WalletDetail;
 }
 
