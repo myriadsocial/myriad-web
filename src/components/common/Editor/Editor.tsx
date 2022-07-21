@@ -11,7 +11,6 @@ import {
   createLinkPlugin,
   createListPlugin,
   createMediaEmbedPlugin,
-  createMentionPlugin,
   createParagraphPlugin,
   createPlateUI,
   createResetNodePlugin,
@@ -59,6 +58,7 @@ import {
   createEmojiPlugin,
   createHashtagPlugin,
   createImageListPlugin,
+  createMentionPlugin,
 } from './plugins';
 import {Counter} from './render/Counter';
 import {MediaEmbedElement, MentionCombobox} from './render/Element';

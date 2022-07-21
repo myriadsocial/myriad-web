@@ -97,9 +97,7 @@ export const NodeViewer: React.FC<NodeViewerProps> = props => {
     return createEditorPlugins([...corePlugins, createShowMorePlugin()], {
       components: createPlateUI({
         ...baseUIElements,
-        [ELEMENT_MEDIA_EMBED]: withProps(MediaEmbedElement, {
-          width: 550,
-        }),
+        [ELEMENT_MEDIA_EMBED]: withProps(MediaEmbedElement, {}),
         [ELEMENT_MENTION]: withProps(MentionElement, {
           renderLabel: mentionable => '@' + mentionable.username,
           styles: {
@@ -123,7 +121,7 @@ export const NodeViewer: React.FC<NodeViewerProps> = props => {
     <div className={styles.root}>
       <div ref={containerRef}>
         <Plate
-          id={`${id}-${elements.length}`}
+          id={`${id}-${elements[0].children.length}`}
           editableProps={{readOnly: true}}
           plugins={plugins}
           value={elements}

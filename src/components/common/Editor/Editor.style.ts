@@ -38,7 +38,7 @@ export const useStyles = makeStyles<Theme, EditorStyleProps>(theme =>
     editor: {
       position: 'relative',
       padding: props => (props.mobile ? 16 : 8),
-      paddingBottom: props => (props.counter ? 36 : 16),
+      paddingBottom: props => (props.counter ? 36 : 8),
     },
     progress: {
       width: 300,
