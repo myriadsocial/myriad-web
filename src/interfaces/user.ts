@@ -4,6 +4,7 @@ import {FriendStatus} from './friend';
 import {NetworkIdEnum, Network, NetworkProps} from './network';
 import {People} from './people';
 import {TransactionDetail} from './transaction';
+import {WalletDetail} from './wallet';
 
 export interface UserSocialMedia {
   id: string;
@@ -66,6 +67,7 @@ export interface User extends UserProps, BaseModel {
   people?: People[];
   metric?: UserMetric;
   deletedAt?: string;
+  walletDetail?: WalletDetail;
 }
 
 export interface UserTransactionDetail {

@@ -14,6 +14,7 @@ import {useStyles} from './Summary.style';
 
 import {Avatar, AvatarSize} from 'src/components/atoms/Avatar';
 import ShowIf from 'src/components/common/show-if.component';
+import InfoIconYellow from 'src/images/Icons/InfoIconYellow.svg';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {People} from 'src/interfaces/people';
 import {User} from 'src/interfaces/user';
@@ -49,6 +50,20 @@ export const Summary: React.FC<SummaryProps> = props => {
           />
         </Typography>
       </div>
+      {receiver.walletDetail.referenceType !== 'wallet_address' && (
+        <div className={styles.warningNoNear}>
+          <div className={styles.wrapperIcon}>
+            <InfoIconYellow />
+          </div>
+          <Typography className={styles.textWarning}>
+            The tip will be stored in Myriad Escrow because the user hasn’t connected the
+            {` ${currency.network.id === 'near' ? 'NEAR Wallet' : 'polkadot{.js}'} `}
+            yet. Once they connect their{' '}
+            {` ${currency.network.id === 'near' ? 'NEAR Wallet' : 'polkadot{.js}'}`}, they will be
+            able to claim their tip.
+          </Typography>
+        </div>
+      )}
       <div className={styles.detail}>
         <Typography className={styles.bold} gutterBottom>
           {i18n.t('Tipping.Modal_Main.Tip_Summary')}

@@ -1,5 +1,6 @@
 import {SocialsEnum} from './social';
 import {UserSocialMedia} from './user';
+import {WalletDetail} from './wallet';
 
 export interface PeopleProps {
   id: string;
@@ -19,4 +20,5 @@ export interface People extends PeopleProps {
   walletAddress?: string;
   //TODO: remove later, experience related attribute
   hide?: boolean;
+  walletDetail?: WalletDetail;
 }
