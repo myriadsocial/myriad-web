@@ -1,4 +1,10 @@
-import {ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED, ELEMENT_PARAGRAPH, getNodeString} from '@udecode/plate';
+import {
+  ELEMENT_IMAGE,
+  ELEMENT_MEDIA_EMBED,
+  ELEMENT_MENTION,
+  ELEMENT_PARAGRAPH,
+  getNodeString,
+} from '@udecode/plate';
 
 import {EditorValue, RootBlock} from '../Editor/Editor.interface';
 import {ELEMENT_EMOJI} from '../Editor/plugins/EmojiPicker';
@@ -56,6 +62,10 @@ export const formatToString = (element: RootBlock, reportType?: ReportType): str
       }
 
       if (children.type.includes(ELEMENT_HASHTAG)) {
+        return children.text;
+      }
+
+      if (children.type.includes(ELEMENT_MENTION)) {
         return children.hashtag;
       }
 
@@ -139,6 +149,7 @@ export const minimize = (text: string, reportType?: ReportType, length?: number)
     const text = origin
       .map(element => formatToString(element))
       .join('. ')
+      .slice(0, length)
       .trim();
 
     // join all text as caption
@@ -157,7 +168,7 @@ export const minimize = (text: string, reportType?: ReportType, length?: number)
     const urls: string[] = [];
 
     for (const element of origin) {
-      if ([ELEMENT_MEDIA_EMBED, ELEMENT_IMAGE].includes(element.type)) {
+      if ([ELEMENT_IMAGE].includes(element.type)) {
         urls.push(element.url as string);
       }
     }
