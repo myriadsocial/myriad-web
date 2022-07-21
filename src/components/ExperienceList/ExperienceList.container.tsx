@@ -50,9 +50,14 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
     shallowEqual,
   );
 
-  const {loadExperience, removeExperience, unsubscribeExperience, subscribeExperience} =
-    useExperienceHook();
-  const {list: experiences, limitExceeded} = useExperienceList(owner);
+  const {
+    loadExperience,
+    removeExperience,
+    unsubscribeExperience,
+    subscribeExperience,
+    userExperiencesMeta,
+  } = useExperienceHook();
+  const {list: experiences} = useExperienceList(owner);
 
   const handleViewPostList = (type: TimelineType, userExperience: WrappedExperience) => {
     if (filterTimeline) {
@@ -73,7 +78,8 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
   const handleCloneExperience = (experienceId: string) => {
     if (!enableClone) return;
 
-    if (limitExceeded) {
+    const totalOwnedExperience = userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
+    if (totalOwnedExperience >= 10) {
       enqueueSnackbar({
         message: i18n.t('Experience.List.Alert'),
         variant: 'warning',
@@ -86,16 +92,9 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
   const handleSubscribeExperience = (experienceId: string) => {
     if (!enableSubscribe) return;
 
-    if (limitExceeded) {
-      enqueueSnackbar({
-        message: i18n.t('Experience.List.Alert'),
-        variant: 'warning',
-      });
-    } else {
-      subscribeExperience(experienceId, () => {
-        refreshExperience && refreshExperience();
-      });
-    }
+    subscribeExperience(experienceId, () => {
+      refreshExperience && refreshExperience();
+    });
   };
 
   const handleUnsubscribeExperience = (userExperienceId: string) => {

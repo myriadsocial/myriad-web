@@ -5,6 +5,7 @@ import {RootState} from '../reducers';
 
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import pick from 'lodash/pick';
+import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 import {
   searchExperiences,
   searchPeople,
@@ -56,10 +57,10 @@ export const useExperienceHook = () => {
     state => state.profileState.experience.data,
     shallowEqual,
   );
-  const userExperiences = useSelector<RootState, WrappedExperience[]>(
-    state => state.userState.experiences,
-    shallowEqual,
-  );
+  const {data: userExperiences, meta: userExperiencesMeta} = useSelector<
+    RootState,
+    {data: WrappedExperience[]; meta: ListMeta}
+  >(state => state.userState.experiences, shallowEqual);
 
   const loadExperience = () => {
     dispatch(loadExperiences());
@@ -238,6 +239,7 @@ export const useExperienceHook = () => {
     experiencePosts,
     trendingExperiences,
     userExperiences,
+    userExperiencesMeta,
     profileExperiences,
     experience,
     selectedExperience,

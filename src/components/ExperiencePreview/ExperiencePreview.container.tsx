@@ -14,6 +14,7 @@ export const ExperiencePreviewContainer: React.FC = () => {
   const {
     experience,
     userExperiences,
+    userExperiencesMeta,
     getExperienceDetail,
     subscribeExperience,
     unsubscribeExperience,
@@ -28,14 +29,7 @@ export const ExperiencePreviewContainer: React.FC = () => {
   }, [experienceId]);
 
   const handleSubscribeExperience = (experienceId: string) => {
-    if (userExperiences.length === 10) {
-      enqueueSnackbar({
-        message: i18n.t('Experience.Alert.Max_Exp'),
-        variant: 'warning',
-      });
-    } else {
-      subscribeExperience(experienceId);
-    }
+    subscribeExperience(experienceId);
   };
 
   const handleUnsubscribeExperience = (userExperienceId: string) => {
@@ -43,7 +37,8 @@ export const ExperiencePreviewContainer: React.FC = () => {
   };
 
   const handleCloneExperience = (experienceId: string) => {
-    if (userExperiences.length === 10) {
+    const totalOwnedExperience = userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
+    if (totalOwnedExperience >= 10) {
       enqueueSnackbar({
         message: i18n.t('Experience.Alert.Max_Exp'),
         variant: 'warning',

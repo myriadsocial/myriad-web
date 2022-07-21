@@ -6,6 +6,9 @@ export interface ListMeta {
   totalItemCount: number;
   totalPageCount: number;
   nextPage?: number;
+  additionalData?: {
+    totalOwnedExperience: number;
+  };
 }
 
 export interface BaseList<T> extends SuccessResponse<T[]> {
