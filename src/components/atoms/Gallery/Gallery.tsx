@@ -14,9 +14,10 @@ import {Skeleton} from './Image.skeleton';
 import {buildList} from './util';
 
 import ShowIf from 'src/components/common/show-if.component';
+import {Sizes} from 'src/interfaces/assets';
 
 type GalleryProps = {
-  images: string[];
+  images: string[] | Sizes[];
   variant?: GalleryType;
 };
 
