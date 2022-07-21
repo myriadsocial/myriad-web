@@ -2,18 +2,25 @@ import React from 'react';
 
 import {Typography} from '@material-ui/core';
 
+import {useEditorState} from '../store';
+
+import {formatToString} from 'components/common/NodeViewer/formatter';
+
 type CounterProps = {
-  current: number;
   limit: number;
   className: string;
 };
 
 export const Counter: React.FC<CounterProps> = props => {
-  const {current, limit, className} = props;
+  const {limit, className} = props;
+
+  const editor = useEditorState();
+
+  const length = editor.children.map(element => formatToString(element)).join(' ').length;
 
   return (
     <Typography variant="body1" component="div" className={className}>
-      {current}/{limit}
+      {length}/{limit}
     </Typography>
   );
 };

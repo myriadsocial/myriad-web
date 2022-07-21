@@ -45,7 +45,6 @@ import ImageIcon from '@material-ui/icons/Image';
 import LinkIcon from '@material-ui/icons/Link';
 import OndemandVideoIcon from '@material-ui/icons/OndemandVideo';
 
-import {formatToString} from '../NodeViewer/formatter';
 import {EditorValue, Mentionable, MentionDetail} from './Editor.interface';
 import {useStyles} from './Editor.style';
 import {
@@ -80,6 +79,7 @@ import {
 import {createEditorPlugins, initial} from './util';
 import {dataURItoBlob} from './utils/image';
 
+import {debounce} from 'lodash';
 import {ListItemComponent} from 'src/components/atoms/ListItem';
 import {User} from 'src/interfaces/user';
 import * as UploadAPI from 'src/lib/api/upload';
@@ -196,7 +196,6 @@ export const Editor: React.FC<EditorProps> = props => {
 
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [count, setCount] = useState(0);
 
   const plugins = useMemo(() => {
     const handleFileUpload = async (dataURI: string | ArrayBuffer): Promise<string> => {
@@ -240,11 +239,12 @@ export const Editor: React.FC<EditorProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [corePlugins, plateUI]);
 
-  const handleChange = (value: EditorValue) => {
-    const string = value.map(element => formatToString(element)).join(' ');
-
-    setCount(string.length);
-  };
+  const handleSearchMention = useCallback(
+    debounce((query: string) => {
+      onSearchMention(query);
+    }, 300),
+    [],
+  );
 
   const renderComboboxItem = useCallback(({item}) => {
     return <ListItemComponent title={item.data.name} avatar={item.data.avatar} />;
@@ -276,15 +276,10 @@ export const Editor: React.FC<EditorProps> = props => {
       </Toolbar>
 
       <div ref={ref} className={styles.editor}>
-        <Plate
-          id={userId}
-          editableProps={editableProps}
-          plugins={plugins}
-          onChange={handleChange}
-          initialValue={initial}>
+        <Plate id={userId} editableProps={editableProps} plugins={plugins} initialValue={initial}>
           <MentionCombobox<MentionDetail>
             onRenderItem={renderComboboxItem}
-            onSearch={onSearchMention}
+            onSearch={handleSearchMention}
             formatLabel={formatLabel}
             maxSuggestions={6}
             styles={{
@@ -293,9 +288,9 @@ export const Editor: React.FC<EditorProps> = props => {
               },
             }}
           />
-        </Plate>
 
-        <Counter className={styles.limit} current={count} limit={MAX_CHARACTER_LIMIT} />
+          <Counter className={styles.limit} limit={MAX_CHARACTER_LIMIT} />
+        </Plate>
       </div>
 
       <Snackbar

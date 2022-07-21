@@ -10,6 +10,9 @@ export type SEARCH_USERS = typeof SEARCH_USERS;
 export const SET_IS_SEARCHING = 'SET_IS_SEARCHING';
 export type SET_IS_SEARCHING = typeof SET_IS_SEARCHING;
 
+export const SET_FINISH_SEARCHING = 'SET_FINISH_SEARCHING';
+export type SET_FINISH_SEARCHING = typeof SET_FINISH_SEARCHING;
+
 export const ABORT_SEARCH = 'ABORT_SEARCH';
 export type ABORT_SEARCH = typeof ABORT_SEARCH;
 

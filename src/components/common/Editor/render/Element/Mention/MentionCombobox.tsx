@@ -3,11 +3,12 @@ import {getPluginOptions, usePlateEditorRef} from '@udecode/plate-core';
 import {ELEMENT_MENTION, getMentionOnSelectItem, MentionPlugin} from '@udecode/plate-mention';
 import {Combobox, ComboboxProps} from '@udecode/plate-ui-combobox';
 
-import {useMemo} from 'react';
-import {shallowEqual, useSelector} from 'react-redux';
+import {useCallback} from 'react';
+import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 
 import {User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
+import {searchUsers} from 'src/reducers/search/actions';
 
 export interface MentionComboboxProps<TData extends Data = NoData>
   extends Partial<ComboboxProps<TData>> {
@@ -21,27 +22,28 @@ export const MentionCombobox = <TData extends Data = NoData>({
   id = pluginKey,
   ...props
 }: MentionComboboxProps<TData>) => {
-  const {formatLabel, onSearch} = props;
+  const {formatLabel} = props;
+  const dispatch = useDispatch();
 
   const editor = usePlateEditorRef()!;
   const {trigger} = getPluginOptions<MentionPlugin>(editor, pluginKey);
 
-  const people = useSelector<RootState, User[]>(
-    state => state.searchState.searchedUsers,
+  const mentionables = useSelector<RootState, TComboboxItem<TData>[]>(
+    state => state.searchState.searchedUsers.map(person => formatLabel(person)),
     shallowEqual,
   );
 
-  const mentionables: TComboboxItem<TData>[] = useMemo(() => {
-    return people.map(person => formatLabel(person));
-  }, [people]);
-
-  const handleFilter = (query: string) => {
-    onSearch(query);
+  const handleFilter = useCallback((query: string) => {
+    setTimeout(() => {
+      if (query && query.length > 0) {
+        dispatch(searchUsers(query));
+      }
+    }, 300);
 
     return (item: TComboboxItem<TData>) => {
       return true;
     };
-  };
+  }, []);
 
   return (
     <Combobox

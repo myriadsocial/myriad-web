@@ -1,5 +1,6 @@
 import {
   createBlockquotePlugin,
+  createComboboxPlugin,
   createExitBreakPlugin,
   createLinkPlugin,
   createMentionPlugin,
@@ -15,27 +16,24 @@ import {
   MentionElement,
   Plate,
   TComboboxItem,
+  TEditableProps,
   TMentionElement,
   TNodeProps,
   withProps,
 } from '@udecode/plate';
-import {TEditableProps} from '@udecode/plate';
-import {createComboboxPlugin} from '@udecode/plate-combobox';
 
 import React, {useCallback, useRef} from 'react';
 
 import {EditorValue, Mentionable, MentionDetail} from './Editor.interface';
 import {useStyles} from './Editor.style';
-import {exitBreakPlugin} from './config/exitBreak';
-import {resetBlockTypePlugin} from './config/resetBlockType';
-import {softBreakPlugin} from './config/softBreak';
-import {createHashtagPlugin, ELEMENT_EMOJI, ELEMENT_HASHTAG} from './plugins';
+import {exitBreakPlugin, resetBlockTypePlugin, softBreakPlugin} from './config';
+import {createHashtagPlugin} from './plugins';
 import {createCharLimitPlugin} from './plugins/CharLimit';
-import {MentionCombobox} from './render/Element/Mention';
-import {MentionInputElement} from './render/Element/Mention/MentionInput';
+import {MentionCombobox, MentionInputElement} from './render/Element/Mention';
 import {createEditorPlugins} from './util';
 
 import {ListItemComponent} from 'components/atoms/ListItem';
+import debounce from 'lodash/debounce';
 import {User} from 'src/interfaces/user';
 
 const MAX_CHARACTER_LIMIT = 5000;
@@ -70,16 +68,16 @@ const plugins = createEditorPlugins(
         maxLength: MAX_HASHTAG_CHAR_LENGTH,
       },
     }),
-    createCharLimitPlugin({
-      options: {
-        max: MAX_CHARACTER_LIMIT,
-      },
-    }),
     createSelectOnBackspacePlugin({
       options: {
         query: {
-          allow: [ELEMENT_MEDIA_EMBED, ELEMENT_IMAGE, ELEMENT_HASHTAG, ELEMENT_EMOJI],
+          allow: [ELEMENT_MEDIA_EMBED, ELEMENT_IMAGE],
         },
+      },
+    }),
+    createCharLimitPlugin({
+      options: {
+        max: MAX_CHARACTER_LIMIT,
       },
     }),
   ],
@@ -122,6 +120,10 @@ export const BasicEditor: React.FC<BasicEditorProps> = props => {
     placeholder,
   };
 
+  const handleSearchMention = debounce(query => {
+    onSearchMention(query);
+  }, 300);
+
   const renderComboboxItem = useCallback(({item}) => {
     return <ListItemComponent title={item.data.name} avatar={item.data.avatar} />;
   }, []);
@@ -144,7 +146,7 @@ export const BasicEditor: React.FC<BasicEditorProps> = props => {
         <Plate id={id} editableProps={editableProps} plugins={plugins}>
           <MentionCombobox<MentionDetail>
             onRenderItem={renderComboboxItem}
-            onSearch={onSearchMention}
+            onSearch={handleSearchMention}
             formatLabel={formatLabel}
             maxSuggestions={6}
             styles={{
