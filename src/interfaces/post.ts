@@ -1,7 +1,7 @@
 import {BaseModel} from './base.interface';
 import {Comment} from './comment';
 import {Vote} from './interaction';
-import {People} from './people';
+import {PeopleWithSocialMedaia} from './people';
 import {PostOrigin} from './timeline';
 import {User} from './user';
 
@@ -102,9 +102,10 @@ export type PostEmbedProps = {
   image?: EmbedMediaProps;
   video?: EmbedMediaProps;
 };
+
 export interface Post extends PostProps, PostCustomProps, BaseModel {
   user: User;
-  people?: People;
+  people?: PeopleWithSocialMedaia;
   comments?: Comment[];
   //TODO: change this on migrating new schema of transaction
   transactions?: any[];

@@ -22,3 +22,7 @@ export interface People extends PeopleProps {
   hide?: boolean;
   walletDetail?: WalletDetail;
 }
+
+export interface PeopleWithSocialMedaia extends People {
+  userSocialMedia?: UserSocialMedia;
+}

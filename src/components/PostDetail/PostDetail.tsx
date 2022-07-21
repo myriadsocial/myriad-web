@@ -44,7 +44,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   const isPostCreator = post.createdBy === user?.id;
   const isInternalPost = post.platform === 'myriad';
   const isExternalPost = post.platform !== 'myriad';
-  const isOriginOwner = user?.people?.find(person => person.id === post.peopleId) ? true : false;
+  const isOriginOwner = post?.people?.userSocialMedia?.userId === user?.id;
   const showTipButton = (isInternalPost && !isPostCreator) || (isExternalPost && !isOriginOwner);
   const isPostOwner = isInternalPost ? isPostCreator : isOriginOwner;
 
