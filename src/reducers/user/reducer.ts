@@ -10,12 +10,16 @@ import {WrappedExperience} from 'src/interfaces/experience';
 import {Network} from 'src/interfaces/network';
 import {SocialMedia} from 'src/interfaces/social';
 import {User, UserTransactionDetail, UserWallet} from 'src/interfaces/user';
+import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 
 export interface UserState extends BaseState {
   user?: User;
   socials: SocialMedia[];
   currencies: Currency[];
-  experiences: WrappedExperience[];
+  experiences: {
+    data: WrappedExperience[];
+    meta: ListMeta;
+  };
   transactionDetail: UserTransactionDetail;
   anonymous: boolean;
   alias: string;
@@ -31,7 +35,18 @@ const initalState: UserState = {
   anonymous: false,
   currencies: [],
   socials: [],
-  experiences: [],
+  experiences: {
+    data: [],
+    meta: {
+      currentPage: 1,
+      itemsPerPage: 10,
+      totalItemCount: 0,
+      totalPageCount: 1,
+      additionalData: {
+        totalOwnedExperience: 0,
+      },
+    },
+  },
   wallets: [],
   networks: [],
   userWalletAddress: null,
@@ -104,7 +119,10 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (state = initalSta
     case constants.FETCH_USER_EXPERIENCE: {
       return {
         ...state,
-        experiences: action.experiences,
+        experiences: {
+          data: [...state.experiences.data, ...action.experiences],
+          meta: action.meta,
+        },
       };
     }
 

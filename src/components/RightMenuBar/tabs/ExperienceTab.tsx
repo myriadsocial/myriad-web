@@ -13,8 +13,7 @@ import {useStyles} from './Tab.style';
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {ExperienceListContainer, EmptyExperience} from 'src/components/ExperienceList';
 import ShowIf from 'src/components/common/show-if.component';
-import {ExperienceOwner} from 'src/hooks/use-experience-hook';
-import {WrappedExperience} from 'src/interfaces/experience';
+import {ExperienceOwner, useExperienceHook} from 'src/hooks/use-experience-hook';
 import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
@@ -27,20 +26,18 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
   const {experienceType = 'user'} = props;
   const router = useRouter();
   const styles = useStyles();
+  const {userExperiences, userExperiencesMeta, loadNextUserExperience} = useExperienceHook();
 
   const user = useSelector<RootState, User | undefined>(
     state => state.userState.user,
-    shallowEqual,
-  );
-  const experiences = useSelector<RootState, WrappedExperience[]>(
-    state => state.userState.experiences,
     shallowEqual,
   );
 
   const enqueueSnackbar = useEnqueueSnackbar();
 
   const handleCreateExperience = () => {
-    if (experiences.length === 10) {
+    const totalOwnedExperience = userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
+    if (totalOwnedExperience >= 10) {
       enqueueSnackbar({
         message: i18n.t('Experience.Alert.Max_Exp'),
         variant: 'warning',
@@ -48,6 +45,10 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
     } else {
       router.push('/experience/create');
     }
+  };
+
+  const handleLoadNextPage = () => {
+    loadNextUserExperience();
   };
 
   return (
@@ -74,9 +75,11 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
         filterTimeline
         enableClone={experienceType === 'trending'}
         enableSubscribe={experienceType === 'trending'}
+        hasMore={userExperiencesMeta.currentPage < userExperiencesMeta.totalPageCount}
+        loadNextPage={handleLoadNextPage}
       />
 
-      <ShowIf condition={experiences.length === 0 && experienceType === 'user'}>
+      <ShowIf condition={userExperiences.length === 0 && experienceType === 'user'}>
         <EmptyExperience />
       </ShowIf>
     </div>

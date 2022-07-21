@@ -4,6 +4,8 @@ import {shallowEqual, useSelector} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+
 import {ExperienceList} from './ExperienceList';
 import {useExperienceList} from './hooks/use-experience-list.hook';
 
@@ -27,6 +29,16 @@ type ExperienceListContainerProps = {
   refreshExperience?: () => void;
 };
 
+export const useStyles = makeStyles<Theme, ExperienceListContainerProps>(theme =>
+  createStyles({
+    root: {
+      maxHeight: '512px',
+      overflowX: props => (props.selectable ? 'scroll' : 'unset'),
+      whiteSpace: 'nowrap',
+    },
+  }),
+);
+
 export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = props => {
   const {
     owner = ExperienceOwner.ALL,
@@ -38,6 +50,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
     refreshExperience,
   } = props;
 
+  const style = useStyles(props);
   const router = useRouter();
   const enqueueSnackbar = useEnqueueSnackbar();
 
@@ -50,9 +63,14 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
     shallowEqual,
   );
 
-  const {loadExperience, removeExperience, unsubscribeExperience, subscribeExperience} =
-    useExperienceHook();
-  const {list: experiences, limitExceeded} = useExperienceList(owner);
+  const {
+    loadExperience,
+    removeExperience,
+    unsubscribeExperience,
+    subscribeExperience,
+    userExperiencesMeta,
+  } = useExperienceHook();
+  const {list: experiences} = useExperienceList(owner);
 
   const handleViewPostList = (type: TimelineType, userExperience: WrappedExperience) => {
     if (filterTimeline) {
@@ -73,7 +91,8 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
   const handleCloneExperience = (experienceId: string) => {
     if (!enableClone) return;
 
-    if (limitExceeded) {
+    const totalOwnedExperience = userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
+    if (totalOwnedExperience >= 10) {
       enqueueSnackbar({
         message: i18n.t('Experience.List.Alert'),
         variant: 'warning',
@@ -86,16 +105,9 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
   const handleSubscribeExperience = (experienceId: string) => {
     if (!enableSubscribe) return;
 
-    if (limitExceeded) {
-      enqueueSnackbar({
-        message: i18n.t('Experience.List.Alert'),
-        variant: 'warning',
-      });
-    } else {
-      subscribeExperience(experienceId, () => {
-        refreshExperience && refreshExperience();
-      });
-    }
+    subscribeExperience(experienceId, () => {
+      refreshExperience && refreshExperience();
+    });
   };
 
   const handleUnsubscribeExperience = (userExperienceId: string) => {
@@ -109,23 +121,25 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
   };
 
   return (
-    <InfiniteScroll
-      scrollableTarget="scrollable-searched-experiences"
-      dataLength={experiences.length}
-      hasMore={hasMore}
-      next={handleLoadNextPage}
-      loader={<Skeleton />}>
-      <ExperienceList
-        onDelete={handleRemoveExperience}
-        onUnsubscribe={handleUnsubscribeExperience}
-        onSubscribe={handleSubscribeExperience}
-        onClone={handleCloneExperience}
-        viewPostList={handleViewPostList}
-        experiences={experiences}
-        user={user}
-        anonymous={anonymous}
-        {...props}
-      />
-    </InfiniteScroll>
+    <div className={style.root}>
+      <InfiniteScroll
+        scrollableTarget="scrollable-searched-experiences"
+        dataLength={experiences.length}
+        hasMore={hasMore}
+        next={handleLoadNextPage}
+        loader={<Skeleton />}>
+        <ExperienceList
+          onDelete={handleRemoveExperience}
+          onUnsubscribe={handleUnsubscribeExperience}
+          onSubscribe={handleSubscribeExperience}
+          onClone={handleCloneExperience}
+          viewPostList={handleViewPostList}
+          experiences={experiences}
+          user={user}
+          anonymous={anonymous}
+          {...props}
+        />
+      </InfiniteScroll>
+    </div>
   );
 };

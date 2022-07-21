@@ -218,7 +218,8 @@ export const fetchConnectedSocials: ThunkActionCreator<Actions, RootState> =
   };
 
 export const fetchUserExperience: ThunkActionCreator<Actions, RootState> =
-  () => async (dispatch, getState) => {
+  (page = 1) =>
+  async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     const {
@@ -239,7 +240,11 @@ export const fetchUserExperience: ThunkActionCreator<Actions, RootState> =
       }
 
       if (user) {
-        const {meta, data: experiences} = await ExperienceAPI.getUserExperiences(user.id);
+        const {meta, data: experiences} = await ExperienceAPI.getUserExperiences(
+          user.id,
+          undefined,
+          page,
+        );
 
         dispatch({
           type: constants.FETCH_USER_EXPERIENCE,

@@ -32,7 +32,7 @@ export const TimelineFilterContainer: React.FC<TimelineFilterContainerProps> = p
     shallowEqual,
   );
   const experiences = useSelector<RootState, WrappedExperience[]>(
-    state => state.userState.experiences,
+    state => state.userState.experiences.data,
     shallowEqual,
   );
   const [timelineType, setTimelineType] = useState<TimelineType>(TimelineType.ALL);
