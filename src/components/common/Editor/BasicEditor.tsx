@@ -24,6 +24,8 @@ import {
 
 import React, {useCallback, useRef} from 'react';
 
+import {alpha} from '@material-ui/core';
+
 import {EditorValue, Mentionable, MentionDetail} from './Editor.interface';
 import {useStyles} from './Editor.style';
 import {exitBreakPlugin, resetBlockTypePlugin, softBreakPlugin} from './config';
@@ -106,10 +108,11 @@ export type BasicEditorProps = {
   id: string;
   placeholder?: string;
   onSearchMention: (query: string) => void;
+  children?: React.ReactNode;
 };
 
 export const BasicEditor: React.FC<BasicEditorProps> = props => {
-  const {id, placeholder = 'Write a Reply ...', onSearchMention} = props;
+  const {id, placeholder = 'Write a Reply ...', children, onSearchMention} = props;
 
   const styles = useStyles({mobile: false});
   const containerRef = useRef(null);
@@ -153,8 +156,12 @@ export const BasicEditor: React.FC<BasicEditorProps> = props => {
               root: {
                 zIndex: 1301,
               },
+              highlightedItem: {
+                backgroundColor: alpha('#FFC857', 0.15),
+              },
             }}
           />
+          {children}
         </Plate>
       </div>
     </div>

@@ -1,20 +1,9 @@
-import {PhotographIcon} from '@heroicons/react/outline';
-import {FilmIcon} from '@heroicons/react/outline';
-import {PaperAirplaneIcon} from '@heroicons/react/outline';
-
 import React, {forwardRef} from 'react';
 
-import {
-  ButtonGroup,
-  CardActions,
-  Grid,
-  IconButton,
-  SvgIcon,
-  Tooltip,
-  useMediaQuery,
-} from '@material-ui/core';
+import {Grid, useMediaQuery} from '@material-ui/core';
 
 import {Avatar, AvatarSize} from '../atoms/Avatar';
+import {CommentAction} from './CommentAction';
 import {useStyles} from './CommentEditor.style';
 import {serialize} from './formatter';
 
@@ -56,12 +45,6 @@ const CommentEditor = (props: CommentEditorProps, ref: React.ForwardedRef<HTMLDi
   const editorId = `${referenceId}-${section}`;
   const editorRef = usePlateEditorRef(editorId);
 
-  const isEmpty = (): boolean => {
-    const editor = getEditorSelectors(editorId);
-
-    return editor.value().length === 0;
-  };
-
   const submitComment = () => {
     const editor = getEditorSelectors(editorId);
 
@@ -87,31 +70,9 @@ const CommentEditor = (props: CommentEditorProps, ref: React.ForwardedRef<HTMLDi
       />
 
       <div className={styles.editor} ref={ref}>
-        <BasicEditor id={editorId} placeholder={placeholder} onSearchMention={onSearchMention} />
-
-        {(expand || !isEmpty()) && (
-          <CardActions disableSpacing className={styles.action}>
-            <ButtonGroup color="primary">
-              <Tooltip title="Coming soon" arrow>
-                <IconButton aria-label="photo">
-                  <SvgIcon component={PhotographIcon} color="primary" viewBox="0 0 24 24" />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Coming soon" arrow>
-                <IconButton aria-label="video">
-                  <SvgIcon color="primary" component={FilmIcon} viewBox="0 0 24 24" />
-                </IconButton>
-              </Tooltip>
-            </ButtonGroup>
-            <IconButton aria-label="reply" onClick={submitComment} disabled={isEmpty()}>
-              <SvgIcon
-                className={isEmpty() ? styles.disabled : styles.replyIcon}
-                component={PaperAirplaneIcon}
-                viewBox="0 0 24 24"
-              />
-            </IconButton>
-          </CardActions>
-        )}
+        <BasicEditor id={editorId} placeholder={placeholder} onSearchMention={onSearchMention}>
+          <CommentAction expand={expand} onSubmit={submitComment} />
+        </BasicEditor>
       </div>
     </Grid>
   );

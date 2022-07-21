@@ -58,7 +58,7 @@ const PostEmbed: React.FC<PostEmbedProps> = props => {
         <meta name="twitter:card" content="summary" />
       </Head>
 
-      <PostDetailContainer type="share" user={user} post={post} metric={post.metric} />
+      <PostDetailContainer type="share" user={user} post={post} metric={post.metric} preview />
     </>
   );
 };

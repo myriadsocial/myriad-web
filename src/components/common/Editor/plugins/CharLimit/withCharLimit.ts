@@ -19,10 +19,22 @@ export const withCharLimit = <V extends Value = Value, E extends PlateEditor<V> 
       .trim();
 
     if (currentRawString.length < options.max) {
-      if (text.includes('@')) {
-        insertText(text.trim());
-      } else {
-        insertText(text);
+      // empty space before mention trigger
+      if (
+        text.includes('@') &&
+        (text.charCodeAt(0) === 64 || text.charCodeAt(1) === 64) &&
+        text.length === 2
+      ) {
+        const newText = text.trim();
+
+        return insertText(newText);
+      }
+
+      // elipsis character before mention trigger
+      if (text.includes('@') && text.charCodeAt(0) === 8230) {
+        const newText = text.replace(String.fromCharCode(8230), '').trim();
+
+        return insertText(newText);
       }
     }
   };

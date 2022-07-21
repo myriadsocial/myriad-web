@@ -90,7 +90,11 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
 
       const post = serialize(value);
 
-      onSubmit(post);
+      onSubmit({
+        ...post,
+        NSFWTag: post.NSFWTag,
+        visibility: post.visibility ?? PostVisibility.PUBLIC,
+      });
     }
   };
 

@@ -27,7 +27,8 @@ export const useStyles = makeStyles<Theme, CommentEditorProps>(theme =>
       },
     },
     action: {
-      paddingTop: 0,
+      paddingTop: 8,
+      padding: 0,
       justifyContent: 'space-between',
 
       '& .MuiButtonGroup-grouped': {
@@ -36,6 +37,9 @@ export const useStyles = makeStyles<Theme, CommentEditorProps>(theme =>
       '& .MuiIconButton-root': {
         padding: 2,
         marginRight: 8,
+      },
+      '& .MuiSvgIcon-root': {
+        fill: 'none',
       },
     },
     replyIcon: {
