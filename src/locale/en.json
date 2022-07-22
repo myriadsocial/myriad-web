@@ -79,6 +79,8 @@
       "Title": "Create Experience"
     },
     "Editor": {
+      "Header": "Set up your customizable timeline",
+      "Sub_Header": "Fill the experience detail to create experience.",
       "Title": {
         "Clone": "Clone Experience",
         "Create": "Create Experience",

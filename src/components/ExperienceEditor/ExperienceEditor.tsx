@@ -346,9 +346,9 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     <div className={styles.root} ref={ref}>
       <div className={styles.header}>
         <div>
-          <Typography variant="h4">Set up your customizable timeline</Typography>
+          <Typography variant="h4">{i18n.t(`Experience.Editor.Header`)}</Typography>
           <Typography variant="body1" color="textSecondary">
-            Fill the experience detail to create experience.
+            {i18n.t(`Experience.Editor.Sub_Header`)}
           </Typography>
         </div>
         <FormControl classes={{root: styles.formControl}}>

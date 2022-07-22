@@ -79,6 +79,8 @@
       "Title": "Buat Pengalaman"
     },
     "Editor": {
+      "Header": "Atur dan sesuaikan timeline mu",
+      "Sub_Header": "Isi detail pengalaman untuk membuat pengalaman.",
       "Title": {
         "Clone": "Klon Pengalaman",
         "Create": "Buat Pengalaman",
