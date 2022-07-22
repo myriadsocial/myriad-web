@@ -37,7 +37,8 @@ export const withCharLimit = <V extends Value = Value, E extends PlateEditor<V> 
         return insertText(newText);
       }
 
-      return insertText(text);
+      // replace zero width space
+      return insertText(text.replace(/[\u200B-\u200D\uFEFF]/g, ''));
     }
   };
 
