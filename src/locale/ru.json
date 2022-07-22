@@ -79,6 +79,8 @@
       "Title": "Создание опыта"
     },
     "Editor": {
+      "Header": "Настройте вашу ленту по вашему вкусу ",
+      "Sub_Header": "Для создания Опыта заполните все поля Опыта.",
       "Title": {
         "Clone": "Клонировать опыт",
         "Create": "Создание опыта",
@@ -476,11 +478,11 @@
       "Text_Placeholder": "Ваш голос будет учтен после публикации комментария к записи"
     },
     "Experience": {
-      "Added": "added to",
-      "And": "and",
-      "Other_Exp": "{{number}} other experiences",
-      "Modal_Title": "Post in Experience",
-      "Modal_Sub": "This post is already added to this experience"
+      "Added": "Добавлено в",
+      "And": "И",
+      "Other_Exp": "Ещё {{number}} столько Опытов",
+      "Modal_Title": "Переместить в Опыт",
+      "Modal_Sub": "Этот пост ранее был уже добавлен в ваш Опыт"
     }
   },
   "Post_Create": {
@@ -1065,8 +1067,8 @@
   },
   "Dropzone": {
     "Placeholder": "Файл должен быть .jpeg or .png",
-    "Btn_Upload": "Загрузка {{type}}",
-    "Btn_Reupload": "Повторите {{type}}",
+    "Btn_Upload": "Загрузка фото",
+    "Btn_Reupload": "Повторная загрузка",
     "Btn_Add_Image": "Добавить фото",
     "Btn_Upload_Video": "Фото {{type}}",
     "Btn_Replace_Video": "Заменить {{type}}",
