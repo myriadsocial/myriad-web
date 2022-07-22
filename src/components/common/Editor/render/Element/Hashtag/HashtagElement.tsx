@@ -3,6 +3,8 @@ import {getRootProps, StyledElementProps} from '@udecode/plate-styled-components
 
 import React from 'react';
 
+import {useRouter} from 'next/router';
+
 import {useStyles} from './HashtagElement.style';
 
 import {THashtagElement} from 'components/common/Editor/plugins/Hashtag';
@@ -13,14 +15,20 @@ export const HashtagElement = <V extends Value>(props: StyledElementProps<V, THa
   const rootProps = getRootProps(props);
   const selected = useSelected();
   const focused = useFocused();
+  const router = useRouter();
 
   const styles = useStyles({selected, focused});
+
+  const handleClick = () => {
+    router.push('topic/hashtag?tag=' + element.hashtag);
+  };
 
   return (
     <span
       {...attributes}
       {...rootProps}
       {...nodeProps}
+      onClick={handleClick}
       data-slate-value={element.hashtag}
       className={styles.root}
       contentEditable={false}>

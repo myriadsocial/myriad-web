@@ -291,10 +291,11 @@ export const createPost: ThunkActionCreator<Actions, RootState> =
       if (!user) {
         throw new Error('User not found');
       }
-      console.log('CREATING IMAGE');
+
       const data = await PostAPI.createPost({
         ...post,
         createdBy: user.id,
+        isNSFW: Boolean(post.NSFWTag),
         tags: post.tags || [],
       });
 

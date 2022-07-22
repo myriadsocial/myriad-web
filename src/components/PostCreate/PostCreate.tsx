@@ -88,10 +88,10 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
       const store = getEditorSelectors(user.id);
       const value = store.value();
 
-      const post = serialize(value);
+      const attributes = serialize(value);
 
       onSubmit({
-        ...post,
+        ...attributes,
         NSFWTag: post.NSFWTag,
         visibility: post.visibility ?? PostVisibility.PUBLIC,
       });

@@ -26,6 +26,8 @@ import {
 
 import React, {useMemo, useRef, useState} from 'react';
 
+import {useRouter} from 'next/router';
+
 import {alignmentPlugin, baseUIElements} from '../Editor/config';
 import {createEmojiPlugin} from '../Editor/plugins';
 import {createHashtagPlugin} from '../Editor/plugins/Hashtag';
@@ -83,6 +85,7 @@ export type NodeViewerProps = {
 export const NodeViewer: React.FC<NodeViewerProps> = props => {
   const {id, text, reportType, expand} = props;
   const styles = useStyles();
+  const router = useRouter();
   const containerRef = useRef(null);
 
   const [elements, setElements] = useState(minimize(text, reportType, expand ? null : 250));
@@ -93,6 +96,14 @@ export const NodeViewer: React.FC<NodeViewerProps> = props => {
     setElements(value);
   };
 
+  const handleViewMention = (event: any): void => {
+    const mention = event.target?.attributes['data-slate-value']?.value;
+
+    if (mention) {
+      router.push(`/people/${mention}`);
+    }
+  };
+
   const plugins = useMemo(() => {
     return createEditorPlugins([...corePlugins, createShowMorePlugin()], {
       components: createPlateUI({
@@ -100,12 +111,14 @@ export const NodeViewer: React.FC<NodeViewerProps> = props => {
         [ELEMENT_MEDIA_EMBED]: withProps(MediaEmbedElement, {}),
         [ELEMENT_MENTION]: withProps(MentionElement, {
           renderLabel: mentionable => '@' + mentionable.username,
+          onClick: handleViewMention,
           styles: {
             root: {
               backgroundColor: 'transparent',
               color: '#7342CC',
               fontSize: 14,
               fontWeight: 600,
+              cursor: 'pointer',
             },
           },
         }),

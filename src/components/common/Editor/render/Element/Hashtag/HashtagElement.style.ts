@@ -13,6 +13,7 @@ export const useStyles = makeStyles<Theme, HashtagStyleProps>(theme =>
       paddingRight: 1,
       background: props => (props.selected ? alpha(theme.palette.secondary.main, 0.3) : 'none'),
       userSelect: 'auto',
+      cursor: 'pointer',
     },
   }),
 );
