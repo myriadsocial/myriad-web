@@ -289,7 +289,7 @@
       },
       "Metric": {
         "Post": "Пост",
-        "Kudos": "Избранное",
+        "Kudos": "Тренд",
         "Friends": "Друзья",
         "Experience": "Опыт"
       }
@@ -1074,8 +1074,8 @@
     "Btn_Replace_Video": "Заменить {{type}}",
     "Error_File_Large": "Файл превышает размер в {{maxSize}}Mb",
     "Btn": {
-      "Exp_Add": "Add picture",
-      "Exp_Change": "Change picture"
+      "Exp_Add": "Добавить фото",
+      "Exp_Change": "сменить картинку"
     },
     "Video": {
       "Not_Preview": "Предварительный просотр этого видео будет доступен после вашего подтверждения",
