@@ -121,9 +121,9 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
   };
 
   return (
-    <div className={style.root}>
+    <div className={style.root} id="scrollable-list-experiences">
       <InfiniteScroll
-        scrollableTarget="scrollable-searched-experiences"
+        scrollableTarget="scrollable-list-experiences"
         dataLength={experiences.length}
         hasMore={hasMore}
         next={handleLoadNextPage}
