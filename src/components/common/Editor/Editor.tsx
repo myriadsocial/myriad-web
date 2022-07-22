@@ -32,12 +32,11 @@ import {
   TComboboxItem,
   withProps,
   TNodeProps,
-  useComboboxControls,
   ELEMENT_MENTION_INPUT,
 } from '@udecode/plate';
 import {createComboboxPlugin} from '@udecode/plate-combobox';
 
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
 
 import {Grid, LinearProgress, Snackbar, Typography} from '@material-ui/core';
 import EmojiEmotionsIcon from '@material-ui/icons/EmojiEmotions';
@@ -196,13 +195,6 @@ export const Editor: React.FC<EditorProps> = props => {
 
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
-  const combobox = useComboboxControls();
-
-  useEffect(() => {
-    return () => {
-      combobox.closeMenu();
-    };
-  });
 
   const plugins = useMemo(() => {
     const handleFileUpload = async (dataURI: string | ArrayBuffer): Promise<string> => {
