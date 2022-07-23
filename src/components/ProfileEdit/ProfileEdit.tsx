@@ -49,8 +49,6 @@ export const ProfileEditComponent: React.FC<Props> = props => {
     isAvailable,
   } = props;
 
-  console.log('imageProfile', imageProfile);
-
   const style = useStyles();
   const confirm = useConfirm();
 
