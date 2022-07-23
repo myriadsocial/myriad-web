@@ -54,7 +54,9 @@ export const WalletBalances: React.FC<WalletProps> = ({balances}) => {
           title={balance.symbol}
           avatar={balance.image}
           action={
-            <Typography variant="h5">{parseFloat(balance.freeBalance.toFixed(4))}</Typography>
+            <Typography variant="h5">
+              {!balance.error ? parseFloat(balance.freeBalance.toFixed(4)) : balance.errorMessage}
+            </Typography>
           }
         />
       ))}

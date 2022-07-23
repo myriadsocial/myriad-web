@@ -25,14 +25,19 @@ type SummaryProps = {
   receiver: UserWithWalletDetail | PeopleWithWalletDetail;
   currency: BalanceDetail;
   loadingFee: boolean;
+  nativeSymbol: string;
 };
 
 export const Summary: React.FC<SummaryProps> = props => {
-  const {amount, transactionFee, receiver, currency, loadingFee} = props;
+  const {amount, transactionFee, receiver, currency, loadingFee, nativeSymbol} = props;
 
   const styles = useStyles();
 
-  const total = amount.gt(BN_ZERO) ? amount.add(transactionFee) : BN_ZERO;
+  const total = amount.gt(BN_ZERO)
+    ? currency.native
+      ? amount.add(transactionFee)
+      : amount
+    : BN_ZERO;
 
   return (
     <>
@@ -46,6 +51,7 @@ export const Summary: React.FC<SummaryProps> = props => {
             value={amount}
             currency={currency}
             className={styles.bold}
+            nativeSymbol={nativeSymbol}
           />
         </Typography>
       </div>
@@ -82,6 +88,7 @@ export const Summary: React.FC<SummaryProps> = props => {
                     color="textSecondary"
                     value={amount}
                     currency={currency}
+                    nativeSymbol={nativeSymbol}
                   />
                 </TableCell>
               </TableRow>
@@ -98,6 +105,8 @@ export const Summary: React.FC<SummaryProps> = props => {
                       color="textSecondary"
                       value={transactionFee}
                       currency={currency}
+                      nativeSymbol={nativeSymbol}
+                      trxFee={true}
                     />
                   </ShowIf>
                   <ShowIf condition={loadingFee}>
@@ -121,6 +130,7 @@ export const Summary: React.FC<SummaryProps> = props => {
                       color="textPrimary"
                       value={total}
                       currency={currency}
+                      nativeSymbol={nativeSymbol}
                     />
                   </ShowIf>
                   <ShowIf condition={loadingFee}>

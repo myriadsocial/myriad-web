@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
+import {useSelector} from 'react-redux';
 
 import {Backdrop, CircularProgress} from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
@@ -27,6 +28,8 @@ import {BalanceDetail} from 'src/interfaces/balance';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
 const INITIAL_AMOUNT = new BN(-1);
 
@@ -46,6 +49,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
   const {isSignerLoading, simplerSendTip, getEstimatedFee} = usePolkadotApi();
   const {getEstimatedFee: getEstimatedFeeNear, sendAmount} = useNearApi();
 
+  const {currentWallet, currencies} = useSelector<RootState, UserState>(state => state.userState);
   const [amount, setAmount] = useState<BN>(INITIAL_AMOUNT);
   const [transactionFee, setTransactionFee] = useState<BN>(INITIAL_AMOUNT);
 
@@ -57,6 +61,12 @@ export const Tipping: React.FC<SendTipProps> = props => {
   useEffect(() => {
     calculateTransactionFee(defaultCurrency);
   }, []);
+
+  const nativeSymbol = useMemo(() => {
+    const nativeCurrency = currencies.find(e => e.native);
+
+    return nativeCurrency?.symbol ?? currency.symbol;
+  }, [currentWallet]);
 
   const getAddressByUser = (user: User) => {
     if (!user.wallets.length) {
@@ -206,6 +216,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
             receiver={receiver}
             currency={currency}
             loadingFee={loadingFee}
+            nativeSymbol={nativeSymbol}
           />
 
           <div className={classes.formControls}>
