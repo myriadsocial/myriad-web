@@ -114,12 +114,6 @@ export const usePolkadotApi = () => {
         },
       );
 
-      if (isEmpty(txHash)) {
-        throw {
-          message: 'Cancelled',
-        };
-      }
-
       if (txHash) {
         const finalAmount = formatBalance(amount, currency.decimal);
         const to =
@@ -142,18 +136,10 @@ export const usePolkadotApi = () => {
         callback && callback(txHash);
       }
     } catch (error) {
-      console.error(error);
-      if (error.message === 'Cancelled') {
-        enqueueSnackbar({
-          variant: 'warning',
-          message: i18n.t('Tipping.Toaster.Cancelled'),
-        });
-      } else {
-        enqueueSnackbar({
-          variant: 'warning',
-          message: error.message,
-        });
-      }
+      const variant = error.message === 'Cancelled' ? 'warning' : 'error';
+      const message = variant === 'warning' ? i18n.t('Tipping.Toaster.Cancelled') : error.message;
+
+      enqueueSnackbar({variant, message});
     } finally {
       setLoading(false);
       setSignerLoading(false);

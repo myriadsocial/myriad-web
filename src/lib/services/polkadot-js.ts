@@ -244,7 +244,7 @@ export const signAndSendExtrinsic = async (
 
     const txHash: string = await new Promise((resolve, reject) => {
       txInfo
-        .send(({status, isError, events}) => {
+        .send(({status, isError, dispatchError}) => {
           if (status.isInBlock) {
             console.log(`\tBlock hash    : ${status.asInBlock.toHex()}`);
           } else if (status.isFinalized) {
@@ -255,11 +255,20 @@ export const signAndSendExtrinsic = async (
             reject('FailedToSendTip');
           }
 
-          events.forEach(data => {
-            if (data.event.method.toString() === 'ExtrinsicFailed') {
-              reject(new Error(data.event.method.toString()));
+          if (dispatchError) {
+            if (dispatchError.isModule) {
+              const {name} = api.registry.findMetaError(dispatchError.asModule);
+
+              reject(new Error(name));
+            } else {
+              const dispatchErrorType = dispatchError.toString();
+              const parseDispatch = JSON.parse(dispatchErrorType);
+
+              const values: string[] = Object.values(parseDispatch);
+
+              reject(new Error(values[0] ?? 'ExtrinsicFailed'));
             }
-          });
+          }
         })
         .catch(err => {
           reject(err);
@@ -405,7 +414,7 @@ export const claimTip = async (
 
     await new Promise((resolve, reject) => {
       txInfo
-        .send(({status, isError, events}) => {
+        .send(({status, isError, dispatchError}) => {
           if (status.isInBlock) {
             console.log(`\tBlock hash    : ${status.asInBlock.toHex()}`);
           } else if (status.isFinalized) {
@@ -416,11 +425,20 @@ export const claimTip = async (
             reject('FailedToClaimTip');
           }
 
-          events.forEach(data => {
-            if (data.event.method.toString() === 'ExtrinsicFailed') {
-              reject(new Error(data.event.method.toString()));
+          if (dispatchError) {
+            if (dispatchError.isModule) {
+              const {name} = api.registry.findMetaError(dispatchError.asModule);
+
+              reject(new Error(name));
+            } else {
+              const dispatchErrorType = dispatchError.toString();
+              const parseDispatch = JSON.parse(dispatchErrorType);
+
+              const values: string[] = Object.values(parseDispatch);
+
+              reject(new Error(values[0] ?? 'ExtrinsicFailed'));
             }
-          });
+          }
         })
         .catch(err => {
           reject(err);
@@ -460,7 +478,7 @@ export const sendTip = async (
 
     return new Promise((resolve, reject) => {
       txInfo
-        .send(({status, isError, events}) => {
+        .send(({status, isError, dispatchError}) => {
           if (status.isInBlock) {
             console.log(`\tBlock hash    : ${status.asInBlock.toHex()}`);
           } else if (status.isFinalized) {
@@ -471,11 +489,20 @@ export const sendTip = async (
             reject('FailedToSendTip');
           }
 
-          events.forEach(data => {
-            if (data.event.method.toString() === 'ExtrinsicFailed') {
-              reject(new Error(data.event.method.toString()));
+          if (dispatchError) {
+            if (dispatchError.isModule) {
+              const {name} = api.registry.findMetaError(dispatchError.asModule);
+
+              reject(new Error(name));
+            } else {
+              const dispatchErrorType = dispatchError.toString();
+              const parseDispatch = JSON.parse(dispatchErrorType);
+
+              const values: string[] = Object.values(parseDispatch);
+
+              reject(new Error(values[0] ?? 'ExtrinsicFailed'));
             }
-          });
+          }
         })
         .catch(err => {
           reject(err);
