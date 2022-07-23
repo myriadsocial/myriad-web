@@ -49,6 +49,8 @@ export const ProfileEditComponent: React.FC<Props> = props => {
     isAvailable,
   } = props;
 
+  console.log('imageProfile', imageProfile);
+
   const style = useStyles();
   const confirm = useConfirm();
 
@@ -73,7 +75,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
         newUser?.websiteURL !== '' &&
         newUser?.websiteURL !== undefined) ||
       (user?.websiteURL !== undefined && user?.websiteURL !== newUser?.websiteURL) ||
-      imageProfile instanceof File ||
+      imageProfile === undefined ||
       imageBanner instanceof File
     ) {
       setIsUpdateProfile(true);
