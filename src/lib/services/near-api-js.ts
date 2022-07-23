@@ -9,7 +9,7 @@ import * as nearAPI from 'near-api-js';
 import type {ConnectConfig} from 'near-api-js';
 import type {Signature} from 'near-api-js/lib/utils/key_pair';
 import {formatBalance} from 'src/helpers/balance';
-import {NetworkIdEnum} from 'src/interfaces/network';
+import {Network, NetworkIdEnum} from 'src/interfaces/network';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
 import * as NetworkAPI from 'src/lib/api/network';
 import * as WalletAPI from 'src/lib/api/wallet';
@@ -100,6 +100,33 @@ export type ContractProps = {
   storage_balance_of: (props: ContractBalanceProps) => null | ContractStorageBalanceProps;
   storage_deposit: (props: ContractBalanceProps) => void;
   get_tips_balances: (props: ContractTipsBalanceInfoProps) => TipResultWithPagination;
+};
+
+export const connectNear = async (network: Network): Promise<NearInitializeProps> => {
+  try {
+    const {keyStores, connect, WalletConnection} = nearAPI;
+    // creates keyStore using private key in local storage
+    // *** REQUIRES SignIn using walletConnection.requestSignIn() ***
+
+    const keyStore = new keyStores.BrowserLocalStorageKeyStore();
+
+    // set config for near network
+    const config: ConnectConfig = {
+      networkId: network.chainId ?? 'testnet',
+      keyStore,
+      nodeUrl: network.rpcURL,
+      walletUrl: network.walletURL,
+      helperUrl: network.helperURL,
+      headers: {},
+    };
+
+    const near = await connect(assign({deps: {keyStore}}, config));
+    const wallet = new WalletConnection(near, 'myriad-social');
+    return {near, wallet};
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
 };
 
 export const nearInitialize = async (): Promise<NearInitializeProps> => {

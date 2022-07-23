@@ -7,4 +7,6 @@ export type BalanceDetail = Omit<Currency, 'createdAt' | 'updatedAt'> & {
   decimal: number;
   image: string;
   native: boolean;
+  error?: boolean;
+  errorMessage?: string;
 };

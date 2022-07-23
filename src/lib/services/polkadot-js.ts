@@ -53,10 +53,20 @@ interface References {
 }
 
 export const connectToBlockchain = async (wsProvider: string): Promise<ApiPromise> => {
-  const provider = new WsProvider(wsProvider);
-  const api: ApiPromise = new ApiPromise({provider});
-  await api.isReadyOrError;
-  return api;
+  let provider: WsProvider = null;
+  let api: ApiPromise = null;
+
+  try {
+    provider = new WsProvider(wsProvider);
+    api = new ApiPromise({provider});
+    await api.isReadyOrError;
+    return api;
+  } catch {
+    if (provider) await provider.disconnect();
+    if (api) await api.disconnect();
+
+    throw new Error('Failed Connection');
+  }
 };
 
 export const getMetadata = async (rpcUrl: string): Promise<number | null> => {
@@ -74,7 +84,7 @@ export const getMetadata = async (rpcUrl: string): Promise<number | null> => {
     }
   } catch (error) {
     console.log({error});
-    return null;
+    return 42;
   }
 };
 
@@ -287,34 +297,28 @@ export const signAndSendExtrinsic = async (
 };
 
 export const checkAccountBalance = async (
+  api: ApiPromise,
   account: string,
   currency: Currency,
   callback: (change: BN) => void,
 ): Promise<CheckBalanceResult> => {
-  let free: u128 | UInt;
-  let nonce: u32 | undefined;
-  const api = await connectToBlockchain(currency.network.rpcURL);
-
-  if (currency.native) {
-    const result = await api.query.system.account(account);
-
-    free = result.data.free;
-    nonce = result.nonce;
-
-    listenToSystemBalanceChange(api, account, free as u128, callback);
-  } else {
-    const result = await api.query.octopusAssets.account<AssetBalance>(
+  if (!currency.native) {
+    const {balance: free} = await api.query.octopusAssets.account<AssetBalance>(
       currency.referenceId,
       account,
     );
 
-    free = result.balance;
-
     listenToTokenBalanceChange(api, account, currency, free, callback);
+
+    return {free};
   }
 
+  const {data, nonce} = await api.query.system.account(account);
+
+  listenToSystemBalanceChange(api, account, data.free, callback);
+
   return {
-    free,
+    free: data.free,
     nonce,
   };
 };

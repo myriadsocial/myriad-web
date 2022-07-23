@@ -1,5 +1,3 @@
-import {User} from '@sentry/types';
-
 import {signOut} from 'next-auth/react';
 import getConfig from 'next/config';
 
@@ -11,9 +9,10 @@ import {Action} from 'redux';
 import {formatNumber} from 'src/helpers/balance';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {Currency, CurrencyId} from 'src/interfaces/currency';
+import {User} from 'src/interfaces/user';
 import * as TokenAPI from 'src/lib/api/token';
-import {nearInitialize, getNearBalance} from 'src/lib/services/near-api-js';
-import {checkAccountBalance} from 'src/lib/services/polkadot-js';
+import {getNearBalance, connectNear} from 'src/lib/services/near-api-js';
+import {checkAccountBalance, connectToBlockchain} from 'src/lib/services/polkadot-js';
 import {ThunkActionCreator} from 'src/types/thunk';
 
 /**
@@ -88,6 +87,8 @@ export type RetrieveBalanceProps = {
   originBalance: number;
   freeBalance: number;
   previousNonce: number;
+  error?: boolean;
+  errorMessage?: string;
 };
 
 export const fetchBalances: ThunkActionCreator<Actions, RootState> =
@@ -115,21 +116,18 @@ export const fetchBalancesPolkadot: ThunkActionCreator<Actions, RootState> =
     } = getState();
 
     // Only parse address to fetch balance when wallets are successfully fetched
-    if (!('wallets' in user) || user.wallets?.length === 0) {
-      return;
-    }
+    if (!('wallets' in user) || user.wallets?.length === 0) return;
+    if (!user.wallets[0]?.network?.rpcURL) return;
 
     const address = user.wallets[0].id;
-    const tokenBalances: BalanceDetail[] = [];
+    const rpcURL = user.wallets[0].network.rpcURL;
 
     dispatch(setBalanceLoading(true));
 
     try {
+      const api = await connectToBlockchain(rpcURL);
       const retrieveBalance = async (currency: Currency): Promise<RetrieveBalanceProps> => {
-        let originBalance = 0;
-        let freeBalance = 0;
-        let previousNonce = 0;
-        const {free, nonce} = await checkAccountBalance(address, currency, change => {
+        const {free, nonce} = await checkAccountBalance(api, address, currency, change => {
           const amount = formatNumber(+change.toString(), currency.decimal);
           if (amount > 0) {
             dispatch(increaseBalance(currency.symbol, amount));
@@ -138,40 +136,43 @@ export const fetchBalancesPolkadot: ThunkActionCreator<Actions, RootState> =
           }
         });
 
-        originBalance = formatNumber(+free.toString(), currency.decimal);
-        freeBalance = formatNumber(+free.toString(), currency.decimal);
-        previousNonce = nonce ? +nonce.toString() : 0;
-
-        return {originBalance, freeBalance, previousNonce};
+        return {
+          originBalance: formatNumber(+free.toString(), currency.decimal),
+          freeBalance: formatNumber(+free.toString(), currency.decimal),
+          previousNonce: nonce ? +nonce.toString() : 0,
+        };
       };
 
-      for (const currency of currencies) {
-        const {originBalance, freeBalance, previousNonce} = await retrieveBalance(currency);
-
-        const currencyWallet = {
-          ...currency,
-          originBalance: originBalance,
-          freeBalance: freeBalance,
-          previousNonce: previousNonce,
-        };
-
-        tokenBalances.push({
-          ...currencyWallet,
-        });
-      }
+      const balanceDetails: BalanceDetail[] = await Promise.all(
+        currencies.map(async currency => {
+          const {originBalance, freeBalance, previousNonce} = await retrieveBalance(currency);
+          return {
+            ...currency,
+            originBalance,
+            freeBalance,
+            previousNonce,
+          };
+        }),
+      );
 
       dispatch({
         type: constants.FETCH_BALANCES,
-        balanceDetails: tokenBalances,
+        balanceDetails,
       });
-    } catch (error) {
-      console.error('[action][fetch-balances][polkadot]', error);
-      dispatch(
-        setError({
-          title: 'something is wrong',
-          message: 'There are some issues when connecting to RPC',
+    } catch {
+      dispatch({
+        type: constants.FETCH_BALANCES,
+        balanceDetails: currencies.map(currency => {
+          return {
+            ...currency,
+            error: true,
+            errorMessage: 'error',
+            originBalance: 0,
+            freeBalance: 0,
+            previousNonce: 0,
+          };
         }),
-      );
+      });
     } finally {
       dispatch(setBalanceLoading(false));
     }
@@ -183,63 +184,80 @@ export const fetchBalancesNear: ThunkActionCreator<Actions, RootState> =
       userState: {currencies},
     } = getState();
     const {publicRuntimeConfig} = getConfig();
-    const tokenBalances: BalanceDetail[] = [];
-    const {near, wallet} = await nearInitialize();
-
-    // if wallet changed on other browser session, force logout
-    if (!wallet.isSignedIn()) {
-      await signOut({
-        callbackUrl: publicRuntimeConfig.appAuthURL,
-        redirect: true,
-      });
-    }
-
+    // Only parse address to fetch balance when wallets are successfully fetched
+    if (!('wallets' in user) || user.wallets?.length === 0) return;
+    if (!user.wallets[0]?.network) return;
     dispatch(setBalanceLoading(true));
-
     try {
+      const network = user.wallets[0].network;
+      const {near, wallet} = await connectNear(network);
+      // if wallet changed on other browser session, force logout
+      if (!wallet.isSignedIn()) {
+        await signOut({
+          callbackUrl: publicRuntimeConfig.appAuthURL,
+          redirect: true,
+        });
+      }
       const retrieveBalance = async (currency: Currency): Promise<RetrieveBalanceProps> => {
-        let originBalance = 0;
-        let freeBalance = 0;
-        const previousNonce = 0;
-
         const {balance} = await getNearBalance(
           near,
           wallet.getAccountId(),
           currency.referenceId,
           currency.decimal,
         );
-        freeBalance = parseFloat(balance.replace(/,/g, ''));
-        originBalance = parseFloat(balance.replace(/,/g, ''));
-        return {originBalance, freeBalance, previousNonce};
+        return {
+          originBalance: parseFloat(balance.replace(/,/g, '')),
+          freeBalance: parseFloat(balance.replace(/,/g, '')),
+          previousNonce: 0,
+        };
       };
 
-      for (const currency of currencies) {
-        const {originBalance, freeBalance, previousNonce} = await retrieveBalance(currency);
+      const balanceDetails: BalanceDetail[] = await Promise.all(
+        currencies.map(async currency => {
+          const {originBalance, freeBalance, previousNonce, error, errorMessage} =
+            await retrieveBalance(currency).catch(() => {
+              const defaultBalance = {
+                originBalance: 0,
+                freeBalance: 0,
+                previousNonce: 0,
+                error: true,
+                errorMessage: 'error',
+              };
+              if (!currency.native) {
+                defaultBalance.errorMessage = 'not available';
+              }
+              return defaultBalance;
+            });
 
-        const currencyWallet = {
-          ...currency,
-          originBalance: originBalance,
-          freeBalance: freeBalance,
-          previousNonce: previousNonce,
-        };
-
-        tokenBalances.push({
-          ...currencyWallet,
-        });
-      }
+          return {
+            ...currency,
+            originBalance: originBalance,
+            freeBalance: freeBalance,
+            previousNonce: previousNonce,
+            error,
+            errorMessage,
+          };
+        }),
+      );
 
       dispatch({
         type: constants.FETCH_BALANCES,
-        balanceDetails: tokenBalances,
+        balanceDetails,
       });
-    } catch (error) {
-      console.error('[action][fetch-balances][near]', error);
-      dispatch(
-        setError({
-          title: 'something is wrong',
-          message: 'There are some issues when connecting to RPC',
+    } catch {
+      dispatch({
+        type: constants.FETCH_BALANCES,
+        balanceDetails: currencies.map(currency => {
+          return {
+            ...currency,
+            error: true,
+            errorMessage: 'error',
+            originBalance: 0,
+            freeBalance: 0,
+            previousNonce: 0,
+          };
         }),
-      );
+      });
     } finally {
       dispatch(setBalanceLoading(false));
     }
