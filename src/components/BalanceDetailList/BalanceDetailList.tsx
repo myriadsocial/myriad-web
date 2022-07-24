@@ -186,17 +186,11 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
       <ShowIf condition={isLoading}>
         <ShimerComponent />
       </ShowIf>
-      <ShowIf condition={!defaultBalanceDetails.length && !isLoading && isSearch}>
+
+      <ShowIf condition={!defaultBalanceDetails.length && !isLoading}>
         <Empty
           title={i18n.t('Wallet.Balance.Search_Empty.Title')}
           subtitle={i18n.t('Wallet.Balance.Search_Empty.Subtitle')}
-        />
-      </ShowIf>
-
-      <ShowIf condition={!defaultBalanceDetails.length && !isLoading && !isSearch}>
-        <Empty
-          title={i18n.t('Wallet.Balance.Empty.Title')}
-          subtitle={i18n.t('Wallet.Balance.Empty.Subtitle')}
         />
       </ShowIf>
 

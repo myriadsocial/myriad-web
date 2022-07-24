@@ -16,9 +16,7 @@ export const PrimaryCoinMenuContainer: React.FC<PrimaryCoinMenuContainer> = prop
 
   const {togglePrimaryCoinMenu} = props;
 
-  const {balanceDetails, currenciesId} = useSelector<RootState, BalanceState>(
-    state => state.balanceState,
-  );
+  const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
 
   if (!user) return null;
 
@@ -27,7 +25,6 @@ export const PrimaryCoinMenuContainer: React.FC<PrimaryCoinMenuContainer> = prop
       togglePrimaryCoinMenu={togglePrimaryCoinMenu}
       balanceDetails={balanceDetails}
       user={user}
-      currenciesId={currenciesId}
       networkId={currentWallet.networkId}
     />
   );
