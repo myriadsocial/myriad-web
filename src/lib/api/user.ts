@@ -2,7 +2,7 @@ import MyriadAPI from './base';
 import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
 
-import {User, ActivityLog, BlockedProps, ActivityLogType} from 'src/interfaces/user';
+import {User, ActivityLog, BlockedProps} from 'src/interfaces/user';
 import {WalletDetail} from 'src/interfaces/wallet';
 
 type UserList = BaseList<User>;
@@ -23,24 +23,6 @@ export const getUserDetail = async (id: string, userId?: string): Promise<User &
                 relation: 'network',
               },
             ],
-          },
-        },
-        {
-          relation: 'activityLogs',
-          scope: {
-            where: {
-              type: {
-                inq: [ActivityLogType.SKIP, ActivityLogType.USERNAME],
-              },
-            },
-          },
-        },
-        {
-          relation: 'wallets',
-          scope: {
-            where: {
-              primary: true,
-            },
           },
         },
       ],

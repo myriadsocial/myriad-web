@@ -8,7 +8,8 @@ import * as constants from './constants';
 
 import axios from 'axios';
 import {Action} from 'redux';
-import {Currency, CurrencyId} from 'src/interfaces/currency';
+import {BalanceDetail} from 'src/interfaces/balance';
+import {Currency} from 'src/interfaces/currency';
 import {WrappedExperience} from 'src/interfaces/experience';
 import {SocialsEnum} from 'src/interfaces/index';
 import {NetworkIdEnum, Network} from 'src/interfaces/network';
@@ -387,7 +388,7 @@ export const setUserAsAnonymous: ThunkActionCreator<Actions, RootState> =
   };
 
 export const setDefaultCurrency: ThunkActionCreator<Actions, RootState> =
-  (currencyId: CurrencyId) => async (dispatch, getState) => {
+  (balanceDetails: BalanceDetail[]) => async (dispatch, getState) => {
     dispatch(setLoading(true));
     const {
       userState: {user},
@@ -395,15 +396,7 @@ export const setDefaultCurrency: ThunkActionCreator<Actions, RootState> =
 
     if (!user) return;
 
-    dispatch({
-      type: constants.SET_DEFAULT_CURRENCY,
-      user: {
-        ...user,
-        defaultCurrency: currencyId,
-      },
-    });
-
-    dispatch(sortBalances(currencyId));
+    dispatch(sortBalances(balanceDetails));
     dispatch(setLoading(false));
   };
 
