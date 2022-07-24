@@ -1,12 +1,9 @@
-import {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-
 import getConfig from 'next/config';
 
 import BN from 'bn.js';
 import * as nearAPI from 'near-api-js';
 import {NetworkIdEnum} from 'src/interfaces/network';
-import {BlockchainPlatform, WalletDetail, WalletReferenceType} from 'src/interfaces/wallet';
+import {WalletDetail, WalletReferenceType} from 'src/interfaces/wallet';
 import * as NetworkAPI from 'src/lib/api/network';
 import {
   nearInitialize,
@@ -14,10 +11,6 @@ import {
   NearConnectResponseProps,
   contractInitialize,
 } from 'src/lib/services/near-api-js';
-import {RootState} from 'src/reducers';
-import {fetchBalances} from 'src/reducers/balance/actions';
-import {BalanceState} from 'src/reducers/balance/reducer';
-import {UserState} from 'src/reducers/user/reducer';
 
 const {publicRuntimeConfig} = getConfig();
 
@@ -29,24 +22,6 @@ export interface TipBalanceInfo {
 }
 
 export const useNearApi = () => {
-  const dispatch = useDispatch();
-
-  const {anonymous, currencies, currentWallet} = useSelector<RootState, UserState>(
-    state => state.userState,
-  );
-  const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
-
-  useEffect(() => {
-    if (
-      !anonymous &&
-      currencies.length > 0 &&
-      balanceDetails.length === 0 &&
-      currentWallet?.network?.blockchainPlatform === BlockchainPlatform.NEAR
-    ) {
-      dispatch(fetchBalances());
-    }
-  }, [anonymous, currencies, balanceDetails, currentWallet]);
-
   const connectToNear = async (
     callbackUrl?: string,
     failedCallbackUrl?: string,
@@ -286,7 +261,6 @@ export const useNearApi = () => {
     connectToNear,
     getEstimatedFee,
     sendAmount,
-    balanceDetails,
     payTransactionFee,
     claimTip,
     claimAllTip,

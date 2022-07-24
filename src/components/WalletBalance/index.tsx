@@ -10,10 +10,12 @@ import {BalanceDetail} from '../../interfaces/balance';
 import {BoxComponent} from '../atoms/Box';
 import {ListItemComponent} from '../atoms/ListItem';
 
+import ShowIf from 'components/common/show-if.component';
 import i18n from 'src/locale';
 
 type WalletProps = {
   balances: Array<BalanceDetail>;
+  loading: boolean;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -28,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export const WalletBalances: React.FC<WalletProps> = ({balances}) => {
+export const WalletBalances: React.FC<WalletProps> = ({balances, loading}) => {
   const styles = useStyles();
 
   const router = useRouter();
@@ -43,23 +45,28 @@ export const WalletBalances: React.FC<WalletProps> = ({balances}) => {
       onClick={changeToWalletPage}
       className={styles.root}>
       {/**handle loading when fetching balance**/}
-      {balances.length === 0 && (
+      <ShowIf condition={loading}>
         <div className={styles.loading}>
           <CircularProgress />
         </div>
-      )}
-      {balances.map(balance => (
-        <ListItemComponent
-          key={balance.id}
-          title={balance.symbol}
-          avatar={balance.image}
-          action={
-            <Typography variant="h5">
-              {!balance.error ? parseFloat(balance.freeBalance.toFixed(4)) : balance.errorMessage}
-            </Typography>
-          }
-        />
-      ))}
+      </ShowIf>
+
+      <ShowIf condition={!loading}>
+        {balances.map(balance => (
+          <ListItemComponent
+            key={balance.id}
+            title={balance.symbol}
+            avatar={balance.image}
+            action={
+              <Typography variant="h5">
+                {typeof balance.freeBalance === 'number'
+                  ? parseFloat(balance?.freeBalance.toFixed(4))
+                  : NaN}
+              </Typography>
+            }
+          />
+        ))}
+      </ShowIf>
     </BoxComponent>
   );
 };

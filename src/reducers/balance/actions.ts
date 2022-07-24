@@ -11,7 +11,7 @@ import {BalanceDetail} from 'src/interfaces/balance';
 import {Currency, CurrencyId} from 'src/interfaces/currency';
 import {User} from 'src/interfaces/user';
 import * as TokenAPI from 'src/lib/api/token';
-import {getNearBalance, connectNear} from 'src/lib/services/near-api-js';
+import {getNearBalanceV2} from 'src/lib/services/near-api-js';
 import {checkAccountBalance, connectToBlockchain} from 'src/lib/services/polkadot-js';
 import {ThunkActionCreator} from 'src/types/thunk';
 
@@ -87,12 +87,11 @@ export type RetrieveBalanceProps = {
   originBalance: number;
   freeBalance: number;
   previousNonce: number;
-  error?: boolean;
-  errorMessage?: string;
 };
 
 export const fetchBalances: ThunkActionCreator<Actions, RootState> =
-  (force: false) => async (dispatch, getState) => {
+  (force = false) =>
+  async (dispatch, getState) => {
     const {
       userState: {user, anonymous, currentWallet},
       balanceState: {initialized},
@@ -114,7 +113,6 @@ export const fetchBalancesPolkadot: ThunkActionCreator<Actions, RootState> =
     const {
       userState: {currencies},
     } = getState();
-
     // Only parse address to fetch balance when wallets are successfully fetched
     if (!('wallets' in user) || user.wallets?.length === 0) return;
     if (!user.wallets[0]?.network?.rpcURL) return;
@@ -165,10 +163,8 @@ export const fetchBalancesPolkadot: ThunkActionCreator<Actions, RootState> =
         balanceDetails: currencies.map(currency => {
           return {
             ...currency,
-            error: true,
-            errorMessage: 'error',
-            originBalance: 0,
-            freeBalance: 0,
+            originBalance: NaN,
+            freeBalance: NaN,
             previousNonce: 0,
           };
         }),
@@ -183,28 +179,24 @@ export const fetchBalancesNear: ThunkActionCreator<Actions, RootState> =
     const {
       userState: {currencies},
     } = getState();
-    const {publicRuntimeConfig} = getConfig();
+
     // Only parse address to fetch balance when wallets are successfully fetched
     if (!('wallets' in user) || user.wallets?.length === 0) return;
     if (!user.wallets[0]?.network) return;
+
     dispatch(setBalanceLoading(true));
+
+    const currentWallet = user.wallets[0];
+
     try {
-      const network = user.wallets[0].network;
-      const {near, wallet} = await connectNear(network);
-      // if wallet changed on other browser session, force logout
-      if (!wallet.isSignedIn()) {
-        await signOut({
-          callbackUrl: publicRuntimeConfig.appAuthURL,
-          redirect: true,
-        });
-      }
       const retrieveBalance = async (currency: Currency): Promise<RetrieveBalanceProps> => {
-        const {balance} = await getNearBalance(
-          near,
-          wallet.getAccountId(),
+        const {balance} = await getNearBalanceV2(
+          currentWallet.network.rpcURL,
+          currentWallet.id,
           currency.referenceId,
           currency.decimal,
         );
+
         return {
           originBalance: parseFloat(balance.replace(/,/g, '')),
           freeBalance: parseFloat(balance.replace(/,/g, '')),
@@ -214,28 +206,21 @@ export const fetchBalancesNear: ThunkActionCreator<Actions, RootState> =
 
       const balanceDetails: BalanceDetail[] = await Promise.all(
         currencies.map(async currency => {
-          const {originBalance, freeBalance, previousNonce, error, errorMessage} =
-            await retrieveBalance(currency).catch(() => {
-              const defaultBalance = {
-                originBalance: 0,
-                freeBalance: 0,
+          const {originBalance, freeBalance, previousNonce} = await retrieveBalance(currency).catch(
+            () => {
+              return {
+                originBalance: NaN,
+                freeBalance: NaN,
                 previousNonce: 0,
-                error: true,
-                errorMessage: 'error',
               };
-              if (!currency.native) {
-                defaultBalance.errorMessage = 'not available';
-              }
-              return defaultBalance;
-            });
+            },
+          );
 
           return {
             ...currency,
             originBalance: originBalance,
             freeBalance: freeBalance,
             previousNonce: previousNonce,
-            error,
-            errorMessage,
           };
         }),
       );
@@ -250,10 +235,8 @@ export const fetchBalancesNear: ThunkActionCreator<Actions, RootState> =
         balanceDetails: currencies.map(currency => {
           return {
             ...currency,
-            error: true,
-            errorMessage: 'error',
-            originBalance: 0,
-            freeBalance: 0,
+            originBalance: NaN,
+            freeBalance: NaN,
             previousNonce: 0,
           };
         }),
@@ -290,16 +273,9 @@ export const getUserCurrencies: ThunkActionCreator<Actions, RootState> =
   };
 
 export const sortBalances: ThunkActionCreator<Actions, RootState> =
-  (selectedCurrency: CurrencyId) => async (dispatch, getState) => {
-    const {
-      balanceState: {balanceDetails},
-    } = getState();
-
-    const defaultCurrencies = balanceDetails.filter(balance => balance.id === selectedCurrency);
-    const otherCurrencies = balanceDetails.filter(balance => balance.id !== selectedCurrency);
-
+  (balanceDetails: BalanceDetail[]) => async dispatch => {
     dispatch({
       type: constants.FETCH_BALANCES,
-      balanceDetails: defaultCurrencies.concat(otherCurrencies),
+      balanceDetails: balanceDetails,
     });
   };

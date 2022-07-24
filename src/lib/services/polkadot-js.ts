@@ -1,6 +1,7 @@
 import * as Sentry from '@sentry/nextjs';
 
 import {WsProvider, ApiPromise} from '@polkadot/api';
+import {SubmittableExtrinsicFunction} from '@polkadot/api/types';
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {Keyring} from '@polkadot/keyring';
 import {StorageKey, u128, u32, UInt} from '@polkadot/types';
@@ -8,14 +9,14 @@ import {AssetBalance} from '@polkadot/types/interfaces';
 import {Balance} from '@polkadot/types/interfaces';
 import {AnyTuple, Codec} from '@polkadot/types/types';
 import {numberToHex} from '@polkadot/util';
-import {BN, BN_TEN} from '@polkadot/util';
+import {BN} from '@polkadot/util';
 
 import {Server} from '../api/wallet';
 import {NoAccountException} from './errors/NoAccountException';
 import {SignRawException} from './errors/SignRawException';
 
 import {BalanceDetail} from 'src/interfaces/balance';
-import {Currency, CurrencyId} from 'src/interfaces/currency';
+import {Currency} from 'src/interfaces/currency';
 import {TipsBalanceInfo} from 'src/interfaces/network';
 import {WalletDetail, WalletReferenceType} from 'src/interfaces/wallet';
 
@@ -24,10 +25,8 @@ interface signAndSendExtrinsicProps {
   to?: string;
   value: BN;
   wsAddress: string;
-  native: boolean;
-  decimal: number;
+  currency: BalanceDetail;
   walletDetail: WalletDetail;
-  referenceId?: string;
 }
 
 interface SignTransactionCallbackProps {
@@ -115,44 +114,22 @@ export const convertAcaBasedTxFee = async (
 export const estimateFee = async (
   from: string,
   walletDetail: WalletDetail,
-  selectedCurrency: BalanceDetail,
+  rpcURL: string,
 ): Promise<EstimateFeeResponseProps | null> => {
   try {
-    let finalPartialFee = new BN(0);
-
-    const api: ApiPromise = await connectToBlockchain(selectedCurrency.network.rpcURL);
+    const api: ApiPromise = await connectToBlockchain(rpcURL);
     const RAND_AMOUNT = 123;
     const {referenceType, referenceId: to} = walletDetail;
-
-    if (referenceType === WalletReferenceType.WALLET_ADDRESS) {
-      const {partialFee} = selectedCurrency.native
-        ? await api.tx.balances.transfer(to, RAND_AMOUNT).paymentInfo(from)
-        : await api.tx.currencies
-            .transfer(to, {TOKEN: selectedCurrency.symbol}, RAND_AMOUNT)
-            .paymentInfo(from);
-
-      if (selectedCurrency.id === CurrencyId.AUSD) {
-        const tokenPerAca = await convertAcaBasedTxFee(api, selectedCurrency);
-
-        if (tokenPerAca) {
-          finalPartialFee = partialFee.div(BN_TEN.pow(new BN(13))).mul(new BN(tokenPerAca));
-        }
-      } else {
-        finalPartialFee = partialFee.toBn();
-      }
-    } else {
-      if (selectedCurrency.native) walletDetail.ftIdentifier = 'native';
-      else walletDetail.ftIdentifier = selectedCurrency.referenceId;
-      const {partialFee} = await api.tx.tipping
-        .sendTip(walletDetail, RAND_AMOUNT)
-        .paymentInfo(from);
-
-      finalPartialFee = partialFee.toBn();
-    }
+    const isWalletAddress = referenceType === WalletReferenceType.WALLET_ADDRESS;
+    const extrinsicType = isWalletAddress ? 'balances' : 'tipping';
+    const method = isWalletAddress ? 'transfer' : 'sendTip';
+    const dest = isWalletAddress ? to : walletDetail;
+    const extrinsic = api.tx[extrinsicType][method] as SubmittableExtrinsicFunction<'promise'>;
+    const {partialFee} = await extrinsic(dest, RAND_AMOUNT).paymentInfo(from);
 
     await api.disconnect();
 
-    return {partialFee: finalPartialFee};
+    return {partialFee: partialFee.toBn()};
   } catch (error) {
     console.log({error});
     Sentry.captureException(error);
@@ -162,11 +139,15 @@ export const estimateFee = async (
 export const signWithExtension = async (
   account: InjectedAccountWithMeta,
   nonce: number,
+  callback?: (param: SignTransactionCallbackProps) => void,
 ): Promise<string | null> => {
   try {
     const {web3FromSource} = await import('@polkadot/extension-dapp');
 
+    callback && callback({signerOpened: true});
+
     const injector = await web3FromSource(account.meta.source);
+
     const signRaw = injector?.signer?.signRaw;
 
     if (signRaw) {
@@ -181,18 +162,18 @@ export const signWithExtension = async (
       throw SignRawException;
     }
   } catch (error) {
-    console.log({error});
     return null;
   }
 };
 
 export const signAndSendExtrinsic = async (
-  {from, value, referenceId, wsAddress, native, walletDetail}: signAndSendExtrinsicProps,
+  {from, value, currency, wsAddress, walletDetail}: signAndSendExtrinsicProps,
   callback?: (param: SignTransactionCallbackProps) => void,
 ): Promise<string | null> => {
   let api: ApiPromise = null;
 
   try {
+    const {referenceId, native} = currency;
     const {enableExtension} = await import('src/helpers/extension');
     const {web3FromSource} = await import('@polkadot/extension-dapp');
 
