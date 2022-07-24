@@ -275,9 +275,11 @@ export const TipContainer: React.FC = () => {
         loading={claiming}
         tips={tipBalances}
         networkId={network.id}
+        blockchainPlatform={network.blockchainPlatform}
         currentWallet={currentWallet}
         onClaim={handleClaimTip}
         onClaimAll={handleClaimTipAll}
+        onSwitchNetwork={console.log}
         onHandleVerifyRef={handleVerifyReference}
         onSuccess={claimingSuccess}
         balance={amount}

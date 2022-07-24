@@ -170,7 +170,6 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({
     try {
       await switchNetwork(blockchainPlatform, networkId, account, () => {
         setNetworkId(null);
-        closeAccountList();
       });
     } catch (error) {
       if (error instanceof AccountRegisteredError) {
@@ -220,6 +219,7 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({
 
   const handleSelectPolkadotAccount = (account: InjectedAccountWithMeta) => {
     if (networkId) {
+      closeAccountList();
       handleSwitch(BlockchainPlatform.SUBSTRATE, networkId, account);
     }
   };

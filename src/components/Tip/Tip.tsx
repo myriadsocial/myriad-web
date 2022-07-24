@@ -23,11 +23,13 @@ import {
 import ShowIf from 'src/components/common/show-if.component';
 import {NetworkIdEnum, TipResult} from 'src/interfaces/network';
 import {UserWallet} from 'src/interfaces/user';
+import {BlockchainPlatform} from 'src/interfaces/wallet';
 import i18n from 'src/locale';
 
 type TipProps = {
   tips: TipResult[];
   networkId: NetworkIdEnum;
+  blockchainPlatform: BlockchainPlatform;
   loading: boolean;
   nativeToken: string;
   currentWallet?: UserWallet;
@@ -37,6 +39,7 @@ type TipProps = {
   onClaim: (networkId: string, ftIdentifier: string) => void;
   onClaimAll: (networkId: string) => void;
   onHandleVerifyRef: (networkId: string, currentBalance: string | number) => void;
+  onSwitchNetwork: (blockchainPlatform: string, networkId: string) => void;
 };
 
 const networkOptions: MenuOptions<string>[] = [
@@ -62,9 +65,11 @@ export const Tip: React.FC<TipProps> = props => {
   const {
     tips,
     networkId,
+    blockchainPlatform,
     onClaim,
     onClaimAll,
     onHandleVerifyRef,
+    onSwitchNetwork,
     nativeToken,
     currentWallet,
     loading,
@@ -91,12 +96,15 @@ export const Tip: React.FC<TipProps> = props => {
   };
 
   const handleClaimAll = () => {
-    // const claimableTip = tips.filter(tip => tip.accountId);
     onClaimAll(networkId);
   };
 
+  const handleSwitchNetwork = () => {
+    onSwitchNetwork(blockchainPlatform, networkId);
+  };
+
   const formatNetworkName = () => {
-    const selected = networkOptions.find(network => network.id == networkId);
+    const selected = networkOptions.find(e => e.id == networkId);
 
     return selected?.title;
   };
@@ -185,7 +193,15 @@ export const Tip: React.FC<TipProps> = props => {
         </ListItemText>
         <div className={style.secondaryAction}>
           <ShowIf condition={!!currentWallet && currentWallet.networkId !== networkId}>
-            <Typography>{i18n.t('Wallet.Tip.Switch')}</Typography>
+            <Button
+              disabled={false}
+              className={style.button}
+              size="small"
+              color="primary"
+              variant="text"
+              onClick={handleSwitchNetwork}>
+              {i18n.t('Wallet.Tip.Switch')}
+            </Button>
           </ShowIf>
           <ShowIf condition={!!currentWallet && currentWallet.networkId == networkId}>
             <Button

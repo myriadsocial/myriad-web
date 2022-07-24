@@ -117,7 +117,7 @@ export const useClaimTip = () => {
 
               return {
                 accountId: e.accountId,
-                amount: formatBalanceV2(e.amount.toString(), currency.decimal, 3),
+                amount: formatBalanceV2(e.amount.toString(), currency?.decimal, 3),
                 tipsBalanceInfo: e.tipsBalanceInfo,
                 symbol: currency?.symbol ?? 'UNKNOWN',
                 imageURL: currency?.image ?? '',
