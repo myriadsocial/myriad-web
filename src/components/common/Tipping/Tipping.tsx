@@ -90,14 +90,19 @@ export const Tipping: React.FC<SendTipProps> = props => {
     setLoadingFee(true);
     let fee: BN = BN_ZERO;
     //TODO: move to switch case
-    if (currency.network.blockchainPlatform === 'substrate') {
-      const gasPrice = await getEstimatedFee(senderAddress, receiver.walletDetail, selected);
+    if (currentWallet?.network?.blockchainPlatform === 'substrate') {
+      const gasPrice = await getEstimatedFee(
+        senderAddress,
+        receiver.walletDetail,
+        selected,
+        currentWallet?.network?.rpcURL ?? '',
+      );
       if (gasPrice) {
         fee = gasPrice;
       }
     }
 
-    if (currency.network.blockchainPlatform === 'near') {
+    if (currentWallet?.network?.blockchainPlatform === 'near') {
       const {gasPrice} = await getEstimatedFeeNear();
       if (gasPrice) {
         fee = toBigNumber(gasPrice, currency.decimal);
@@ -142,7 +147,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
       from: senderAddress,
       to: receiver.id,
       amount,
-      currency,
+      currency: {...currency, network: currentWallet.network},
       walletDetail: receiver.walletDetail,
     };
 
@@ -162,16 +167,16 @@ export const Tipping: React.FC<SendTipProps> = props => {
       amount: formatBalance(amount, currency.decimal),
     };
     await localforage.setItem(TIPPING_STORAGE_KEY, storageAttribute);
-    if (currency.network.blockchainPlatform === 'substrate') {
+    if (currentWallet?.network?.blockchainPlatform === 'substrate') {
       simplerSendTip(attributes, hash => {
-        onSuccess(currency, hash, attributes.amount);
+        onSuccess(currency, currentWallet?.network?.explorerURL, hash, attributes.amount);
 
         setAmount(INITIAL_AMOUNT);
         setTransactionFee(INITIAL_AMOUNT);
       });
     }
 
-    if (currency.network.blockchainPlatform === 'near') {
+    if (currentWallet?.network?.blockchainPlatform === 'near') {
       sendAmount(receiver.walletDetail, amount, currency.referenceId);
     }
   };
@@ -193,7 +198,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
         <ListItemComponent
           avatar={currency.image}
           title={currency.symbol}
-          subtitle={currency.freeBalance === 0 ? '0' : parseFloat(currency.freeBalance.toFixed(4))}
+          subtitle={+currency.freeBalance === 0 ? '0' : parseFloat(currency.freeBalance.toFixed(4))}
           action={
             <CurrencyOptionComponent onSelect={handleChangeCurrency} balanceDetails={balances} />
           }
@@ -204,7 +209,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
             placeholder={i18n.t('Tipping.Modal_Main.Tip_Amount')}
             decimal={currency.decimal}
             fee={transactionFee}
-            maxValue={currency.freeBalance}
+            maxValue={+currency.freeBalance}
             length={10}
             currencyId={currency.symbol}
             onChange={handleAmountChange}
