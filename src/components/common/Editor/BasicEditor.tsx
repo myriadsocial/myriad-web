@@ -29,7 +29,7 @@ import {alpha} from '@material-ui/core';
 import {EditorValue, Mentionable, MentionDetail} from './Editor.interface';
 import {useStyles} from './Editor.style';
 import {exitBreakPlugin, resetBlockTypePlugin, softBreakPlugin} from './config';
-import {createHashtagPlugin} from './plugins';
+import {createEmojiPlugin, createHashtagPlugin} from './plugins';
 import {createCharLimitPlugin} from './plugins/CharLimit';
 import {MentionCombobox, MentionInputElement} from './render/Element/Mention';
 import {createEditorPlugins} from './util';
@@ -77,6 +77,7 @@ const plugins = createEditorPlugins(
         },
       },
     }),
+    createEmojiPlugin(),
     createCharLimitPlugin({
       options: {
         max: MAX_CHARACTER_LIMIT,
