@@ -10,6 +10,7 @@ import {Video} from '../atoms/Video';
 import {useStyles} from './PostDetailExperience.styles';
 import {HeaderComponentExperience} from './PostDetailExperienceHeader';
 
+import {NodeViewer} from 'components/common/NodeViewer';
 import {LinkPreview} from 'src/components/atoms/LinkPreview';
 import ShowIf from 'src/components/common/show-if.component';
 import {Post} from 'src/interfaces/post';
@@ -30,7 +31,7 @@ type PostDetailProps = {
 };
 
 export const PostDetailExperience: React.FC<PostDetailProps> = props => {
-  const {post, onImporters, onRemoveFromExperience, type = 'default'} = props;
+  const {post, onImporters, onRemoveFromExperience, type = 'default', expanded} = props;
 
   const styles = useStyles();
   const router = useRouter();
@@ -73,7 +74,7 @@ export const PostDetailExperience: React.FC<PostDetailProps> = props => {
 
         <ShowIf condition={viewContent}>
           <ShowIf condition={['myriad'].includes(post.platform)}>
-            {/* <PostRender post={post} max={maxLength} onShowAll={showAll} /> */}
+            <NodeViewer id={`${post.id}-${type}`} text={post.text} expand={expanded} />
           </ShowIf>
 
           <ShowIf condition={['twitter'].includes(post.platform)}>
