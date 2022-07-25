@@ -309,6 +309,10 @@ export const useAuthHook = () => {
 
       callback && callback();
     } catch (error) {
+      if (networkId === NetworkIdEnum.NEAR) {
+        await dispatch(fetchBalances(true));
+      }
+
       if (error instanceof AccountRegisteredError) {
         throw error;
       } else {

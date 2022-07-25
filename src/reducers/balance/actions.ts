@@ -90,12 +90,16 @@ export type RetrieveBalanceProps = {
 };
 
 export const fetchBalances: ThunkActionCreator<Actions, RootState> =
-  (force = false) =>
+  (force = false, status = 'finalized') =>
   async (dispatch, getState) => {
     const {
       userState: {user, anonymous, currentWallet},
       balanceState: {initialized},
     } = getState();
+
+    if (status === 'onProgress') {
+      return dispatch(setBalanceLoading(true));
+    }
 
     if (anonymous || !user || (initialized && !force)) return;
 

@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {useRouter} from 'next/router';
+
 import {Typography} from '@material-ui/core';
 
 import {WalletBalances as WalletBalancesComponent} from '.';
@@ -15,17 +17,19 @@ import {UserState} from 'src/reducers/user/reducer';
 
 export const WalletBalancesContainer: React.FC = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const {anonymous} = useSelector<RootState, UserState>(state => state.userState);
   const {balanceDetails, loading} = useSelector<RootState, BalanceState>(
     state => state.balanceState,
   );
 
+  const status = router.query.status as string;
   const [balances, setBalances] = useState<BalanceDetail[]>([]);
 
   useEffect(() => {
     if (balanceDetails.length === 0) {
-      dispatch(fetchBalances());
+      dispatch(fetchBalances(true, status));
     } else {
       setBalances(balanceDetails);
     }

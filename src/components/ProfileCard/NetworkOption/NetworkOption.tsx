@@ -131,6 +131,7 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({
           callbackUrl.search = '';
 
           callbackUrl.searchParams.set('action', 'switch');
+          callbackUrl.searchParams.set('status', 'onProgress');
 
           if (router.query?.q && !Array.isArray(router.query?.q)) {
             callbackUrl.searchParams.set('q', router.query.q);
