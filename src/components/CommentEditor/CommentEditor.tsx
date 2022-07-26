@@ -71,7 +71,7 @@ const CommentEditor = (props: CommentEditorProps, ref: React.ForwardedRef<HTMLDi
 
       <div className={styles.editor} ref={ref}>
         <BasicEditor id={editorId} placeholder={placeholder} onSearchMention={onSearchMention}>
-          <CommentAction expand={expand} onSubmit={submitComment} />
+          <CommentAction expand={expand} mobile={isMobile} onSubmit={submitComment} />
         </BasicEditor>
       </div>
     </Grid>

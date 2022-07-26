@@ -10,6 +10,7 @@ import ShowIf from '../common/show-if.component';
 import {useStyles} from './CommentHistory.style';
 
 import {NodeViewer} from 'components/common/NodeViewer';
+import {deserialize, formatToString} from 'components/common/NodeViewer/formatter';
 import {Comment} from 'src/interfaces/comment';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
@@ -33,7 +34,11 @@ export const CommentHistory: React.FC<CommentHistoryProps> = props => {
       setPostUser(comment.post.user);
 
       if (comment.post.platform === 'myriad') {
-        const text = comment.post.text;
+        const value = deserialize(comment.post.text);
+        const text = value
+          .map(element => formatToString(element))
+          .join('. ')
+          .trim();
 
         setText(text.slice(0, 30));
       } else {
