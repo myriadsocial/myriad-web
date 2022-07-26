@@ -105,6 +105,10 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
     });
   }, [redirectToProfile, user]);
 
+  const getImageBannerString = () => {
+    return bannerPic instanceof File ? URL.createObjectURL(bannerPic) : user.bannerImageURL;
+  };
+
   if (!user) return null;
 
   return (
@@ -112,7 +116,7 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
       <ProfileEditComponent
         user={user}
         imageProfile={profilePic}
-        imageBanner={bannerPic}
+        imageBanner={getImageBannerString()}
         onSave={onSave}
         updatingProfile={loadingUpdate}
         uploadingAvatar={uploadingAvatar}
