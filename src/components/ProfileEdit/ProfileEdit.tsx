@@ -72,6 +72,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
       (user?.websiteURL === undefined &&
         newUser?.websiteURL !== '' &&
         newUser?.websiteURL !== undefined) ||
+      imageProfile instanceof File ||
       (user?.websiteURL !== undefined && user?.websiteURL !== newUser?.websiteURL) ||
       imageProfile === undefined ||
       imageBanner
