@@ -195,12 +195,16 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     : 'We cannot find what you are looking for';
   let image = post
     ? post.asset?.images && post.asset.images.length > 0
-      ? post.asset.images[0]
+      ? typeof post.asset.images[0] === 'string'
+        ? post.asset.images[0]
+        : post.asset.images[0].large
       : null
     : null;
 
   if (post.platform === 'myriad') {
-    description = stringify(post);
+    const {text, image: imageData} = stringify(post);
+    description = text;
+    image = imageData;
   }
 
   if (post?.deletedAt || post?.isNSFW || post?.NSFWTag) {
