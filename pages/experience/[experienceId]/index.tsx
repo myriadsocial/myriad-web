@@ -50,7 +50,10 @@ const PreviewExperience: React.FC<ExperiencePageProps> = props => {
         <meta property="og:url" content={publicRuntimeConfig.appAuthURL + router.asPath} />
         <meta property="og:description" content={description ?? ''} />
         <meta property="og:title" content={title} />
-        <meta property="og:image" content={image ?? ''} />
+        {image && <meta property="og:image" content={image} />}
+        <meta property="og:image:width" content="2024" />
+        <meta property="og:image:height" content="1012" />
+        <meta property="og:image:secure_url" content={image} />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description ?? ''} />
         <meta name="twitter:image" content={image ?? ''} />
