@@ -833,6 +833,7 @@
     "Timeline": "Linimasa",
     "NFT": "NFT",
     "Social_Token": "Token sosial",
+    "Myriad_Town": "Myriad.Town",
     "Trends": "Tren",
     "Trends_Desc": "10 tagar trending teratas",
     "Topic": "Topik"
@@ -1062,7 +1063,8 @@
       "Experience_Clone": "Klon Pengalaman",
       "Experience_Edit": "Ubah Pengalaman",
       "NFT": "Sedang berjalan",
-      "Social_Token": "Sedang berjalan"
+      "Social_Token": "Sedang berjalan",
+      "Myriad_Town": "Myriad.Town berdiri di persimpangan kehidupan nyata dan interaksi digital."
     }
   },
   "Dropzone": {
@@ -1112,5 +1114,11 @@
   "Tooltip": {
     "Chat": "Fitur obrolan, segera hadir",
     "Trending_Exp": "Tampilkan 10 pengalaman teratas berdasarkan total pelanggan dan kloning dalam 24 jam."
+  },
+  "Myriad_Town": {
+    "Title_Head": "{{appname}} - Myriad.Town",
+    "Visit": "Kunjungi Myriad.Town",
+    "Fullscreen": "Mainkan pada layar penuh",
+    "Toaster_Esc": "Tekan Esc untuk keluar dari layar penuh"
   }
 }

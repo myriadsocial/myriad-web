@@ -11,6 +11,7 @@ export enum SectionTitle {
   NOTIFICATION = 'Notification',
   TIMELINE = 'Timeline',
   NFT = 'NFT',
+  MYRIAD_TOWN = 'Myriad.Town',
   SOCIAL_TOKEN = 'Social Token',
   TRENDS = 'Trends',
 }

@@ -833,6 +833,7 @@
     "Timeline": "Лента",
     "NFT": "NFT",
     "Social_Token": "Социальный токен",
+    "Myriad_Town": "Myriad.городок",
     "Trends": "Популярное",
     "Trends_Desc": "Топ 10 - трендовых хэштегов",
     "Topic": "Тема"
@@ -1062,7 +1063,8 @@
       "Experience_Clone": "Клонировать Опыт",
       "Experience_Edit": "Изменить Опыт",
       "NFT": "В разработке",
-      "Social_Token": "В разработке"
+      "Social_Token": "В разработке",
+      "Myriad_Town": "Myriad.Town stand at the crossroads of real life and digital interactions."
     }
   },
   "Dropzone": {
@@ -1112,5 +1114,11 @@
   "Tooltip": {
     "Chat": "Функция чата, скоро появится",
     "Trending_Exp": "10 наилучших опытов, с максимумом подписчиков и клонированые в течении 24 часов"
+  },
+  "Myriad_Town": {
+    "Title_Head": "{{appname}} - Myriad.Town",
+    "Visit": "Visit Myriad.Town",
+    "Fullscreen": "Play in fullscreen",
+    "Toaster_Esc": "Press Esc to exit from fullscreen"
   }
 }
