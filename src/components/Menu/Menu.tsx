@@ -47,6 +47,7 @@ export const Menu: React.FC<MenuProps> = props => {
               active={item.active}
               onClick={openMenu(item)}
               url={item.url}
+              isAnimated={item.isAnimated}
             />
           ))}
       </BoxComponent>

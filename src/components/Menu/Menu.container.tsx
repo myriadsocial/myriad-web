@@ -22,6 +22,9 @@ export const MenuContainer: React.FC = () => {
       case '/socialtoken':
         setSelected('token');
         break;
+      case '/town':
+        setSelected('town');
+        break;
       case '/nft':
         setSelected('nft');
         break;

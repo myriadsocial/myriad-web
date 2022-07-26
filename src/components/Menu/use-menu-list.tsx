@@ -1,6 +1,7 @@
 import {
   HomeIcon,
   CurrencyDollarIcon,
+  SparklesIcon,
   CogIcon,
   UsersIcon,
   PhotographIcon,
@@ -19,6 +20,7 @@ export type MenuId =
   | 'home'
   | 'friends'
   | 'token'
+  | 'town'
   | 'nft'
   | 'settings'
   | 'experience-trend'
@@ -34,6 +36,7 @@ export type MenuDetail = {
   icon: React.ReactNode;
   url: string;
   isDesktop: boolean;
+  isAnimated: boolean;
 };
 
 export const useMenuList = (selected: MenuId): MenuDetail[] => {
@@ -46,6 +49,7 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         icon: HomeIcon,
         url: '/home',
         isDesktop: true,
+        isAnimated: false,
       },
       {
         id: 'friends',
@@ -54,6 +58,7 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         icon: UsersIcon,
         url: '/friends',
         isDesktop: true,
+        isAnimated: false,
       },
       {
         id: 'token',
@@ -62,6 +67,16 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         icon: CurrencyDollarIcon,
         url: '/socialtoken',
         isDesktop: true,
+        isAnimated: false,
+      },
+      {
+        id: 'town',
+        title: i18n.t('Section.Myriad_Town'),
+        active: selected === 'town',
+        icon: SparklesIcon,
+        url: '/town',
+        isDesktop: true,
+        isAnimated: true,
       },
       {
         id: 'nft',
@@ -70,6 +85,7 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         icon: PhotographIcon,
         url: '/nft',
         isDesktop: true,
+        isAnimated: false,
       },
       {
         id: 'socials',
@@ -78,6 +94,7 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         icon: ViewGridIcon,
         url: '/socials',
         isDesktop: true,
+        isAnimated: false,
       },
       {
         id: 'wallet',
@@ -86,6 +103,7 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         icon: CreditCardIcon,
         url: '/wallet',
         isDesktop: true,
+        isAnimated: false,
       },
       {
         id: 'experience-trend',
@@ -94,6 +112,7 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         icon: TrendingUpIcon,
         url: '/experience/trending',
         isDesktop: false,
+        isAnimated: false,
       },
       {
         id: 'experience',
@@ -102,6 +121,7 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         icon: VariableIcon,
         url: '/experience',
         isDesktop: false,
+        isAnimated: false,
       },
       {
         id: 'trends',
@@ -110,6 +130,7 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         icon: HashtagIcon,
         url: '/topic',
         isDesktop: false,
+        isAnimated: false,
       },
       {
         id: 'settings',
@@ -118,6 +139,7 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         icon: CogIcon,
         url: '/settings',
         isDesktop: true,
+        isAnimated: false,
       },
     ],
     [selected],
