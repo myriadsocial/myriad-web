@@ -32,7 +32,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
   const enqueueSnackbar = useEnqueueSnackbar();
 
-  const user = useSelector<RootState, User>(state => state.userState.user, shallowEqual);
+  const user = useSelector<RootState, User | null>(state => state.userState.user, shallowEqual);
   const [dialogFailedImport, setDialogFailedImport] = useState({
     open: false,
     message: '',
@@ -88,6 +88,8 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
     },
     [],
   );
+
+  if (!user) return null;
 
   return (
     <>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {shallowEqual, useSelector} from 'react-redux';
 
 import {Grid} from '@material-ui/core';
@@ -21,6 +21,10 @@ export const Timeline: React.FC<TimelineContainerProps> = props => {
   const styles = useStyles();
 
   const user = useSelector<RootState, User>(state => state.userState.user, shallowEqual);
+
+  useEffect(() => {
+    window.history.scrollRestoration = 'manual';
+  }, []);
 
   return (
     <div className={styles.box}>

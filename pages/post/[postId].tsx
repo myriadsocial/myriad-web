@@ -83,11 +83,14 @@ const PostPage: React.FC<PostPageProps> = props => {
         <meta property="og:description" content={description} />
         <meta property="og:title" content={title} />
         {image && <meta property="og:image" content={image} />}
+        <meta property="og:image:width" content="2024" />
+        <meta property="og:image:height" content="1012" />
+        <meta property="og:image:secure_url" content={image} />
         {/* Twitter Card tags */}
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
         {image && <meta name="twitter:image" content={image} />}
-        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
       <ShowIf condition={!removed}>
@@ -195,12 +198,16 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     : 'We cannot find what you are looking for';
   let image = post
     ? post.asset?.images && post.asset.images.length > 0
-      ? post.asset.images[0]
+      ? typeof post.asset.images[0] === 'string'
+        ? post.asset.images[0]
+        : post.asset.images[0].large
       : null
     : null;
 
   if (post.platform === 'myriad') {
-    description = stringify(post);
+    const {text, image: imageData} = stringify(post);
+    description = text;
+    image = imageData;
   }
 
   if (post?.deletedAt || post?.isNSFW || post?.NSFWTag) {

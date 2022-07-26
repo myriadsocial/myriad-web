@@ -49,6 +49,7 @@ export const useStyles = makeStyles<Theme, ExperienceStyleProps>(theme =>
       borderRadius: 5,
     },
     cardContent: {
+      width: 140,
       padding: '0px 0px 0px 20px',
       flexGrow: 1,
 
@@ -58,11 +59,17 @@ export const useStyles = makeStyles<Theme, ExperienceStyleProps>(theme =>
     },
     title: {
       wordBreak: 'break-word',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
       [theme.breakpoints.down('xs')]: {
         fontSize: '14px',
       },
     },
     subtitle: {
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
       [theme.breakpoints.down('xs')]: {
         fontSize: '12px',
         fontWeight: 500,

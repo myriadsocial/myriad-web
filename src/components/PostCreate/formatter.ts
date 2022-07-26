@@ -5,6 +5,11 @@ import {ELEMENT_HASHTAG} from 'components/common/Editor/plugins';
 import {deserialize, formatToString} from 'components/common/NodeViewer/formatter';
 import {Post} from 'src/interfaces/post';
 
+export type StringifyData = {
+  text: string;
+  image: string;
+};
+
 export const serialize = (nodes: EditorValue): Partial<Post> => {
   const post: Partial<Post> = {
     text: JSON.stringify(nodes),
@@ -70,11 +75,18 @@ export const serialize = (nodes: EditorValue): Partial<Post> => {
   return post;
 };
 
-export const stringify = (post: Post): string => {
+export const stringify = (post: Post): StringifyData => {
   const node = deserialize(post.text);
-
-  return node
+  const text = node
     .map(element => formatToString(element))
     .join(' ')
     .trim();
+
+  const image = node.find(element => element.type === 'img');
+  const imageURL = (image?.url as string) ?? null;
+
+  return {
+    text,
+    image: imageURL,
+  };
 };

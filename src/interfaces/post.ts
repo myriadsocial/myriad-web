@@ -1,3 +1,4 @@
+import {Sizes} from './assets';
 import {BaseModel} from './base.interface';
 import {Comment} from './comment';
 import {Vote} from './interaction';
@@ -24,7 +25,7 @@ export interface TipsReceived {
 }
 
 export type PostAsset = {
-  images: string[];
+  images: string[] | Sizes[];
   videos: string[];
 };
 

@@ -261,6 +261,7 @@ export const useNotificationList = (
           };
 
         case NotificationType.USER_TIPS:
+        case NotificationType.USER_TIPS_UNCLAIMED:
           return {
             id: notification.id,
             type: NotificationType.USER_TIPS,
@@ -282,10 +283,14 @@ export const useNotificationList = (
               </div>
             ),
             createdAt: notification.createdAt,
-            href: `/wallet?type=history`,
+            href:
+              notification.type === NotificationType.USER_TIPS
+                ? `/wallet?type=history`
+                : `/wallet?type=tip`,
           };
 
         case NotificationType.POST_TIPS:
+        case NotificationType.POST_TIPS_UNCLAIMED:
           return {
             id: notification.id,
             type: NotificationType.POST_TIPS,
@@ -308,13 +313,16 @@ export const useNotificationList = (
             ),
             createdAt: notification.createdAt,
             href: `${
-              notification.additionalReferenceId
+              notification.type === NotificationType.POST_TIPS_UNCLAIMED
+                ? '/wallet?type=tip'
+                : notification.additionalReferenceId
                 ? '/post/' + notification?.additionalReferenceId?.post?.id
                 : '/wallet?type=history'
             }`,
           };
 
         case NotificationType.COMMENT_TIPS:
+        case NotificationType.COMMENT_TIPS_UNCLAIMED:
           return {
             id: notification.id,
             type: NotificationType.COMMENT_TIPS,
@@ -336,11 +344,12 @@ export const useNotificationList = (
               </div>
             ),
             createdAt: notification.createdAt,
-            href: `${
-              notification.additionalReferenceId
+            href:
+              notification.type === NotificationType.COMMENT_TIPS_UNCLAIMED
+                ? '/wallet?type=tip'
+                : notification.additionalReferenceId
                 ? '/post/' + notification?.additionalReferenceId?.comment?.postId
-                : '/wallet?type=history'
-            }`,
+                : '/wallet?type=history',
           };
 
         case NotificationType.USER_CLAIM_TIPS:

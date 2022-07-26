@@ -20,7 +20,7 @@ import i18n from 'src/locale';
 export type Props = {
   user: User;
   imageProfile: File | string | undefined;
-  imageBanner: File | string | undefined;
+  imageBanner: string | undefined;
   onSave: (user: Partial<User>) => void;
   onCancel: () => void;
   uploadingAvatar: boolean;
@@ -75,7 +75,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
       imageProfile instanceof File ||
       (user?.websiteURL !== undefined && user?.websiteURL !== newUser?.websiteURL) ||
       imageProfile === undefined ||
-      imageBanner instanceof File
+      imageBanner
     ) {
       setIsUpdateProfile(true);
     } else {
@@ -199,17 +199,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
           {i18n.t('Profile.Edit.Subtitle_2')}
         </InputLabel>
         <div className={style.bgBox}>
-          <CardMedia
-            className={style.media}
-            image={
-              imageBanner
-                ? imageBanner instanceof File
-                  ? URL.createObjectURL(imageBanner)
-                  : user.bannerImageURL
-                : ''
-            }
-            title={user.name}
-          />
+          <CardMedia className={style.media} image={imageBanner} title={user.name} />
           <IconButtonUpload
             title="Edit Banner Image"
             onImageSelected={hanleUpdateBannerImage}
