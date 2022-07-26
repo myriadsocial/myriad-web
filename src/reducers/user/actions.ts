@@ -503,32 +503,34 @@ export const addUserCurrency: ThunkActionCreator<Actions, RootState> =
     }
   };
 
-export const fetchNetwork: ThunkActionCreator<Actions, RootState> =
-  () => async (dispatch, getState) => {
-    dispatch(setLoading(true));
+export const fetchNetwork: ThunkActionCreator<Actions, RootState> = () => async dispatch => {
+  dispatch(setLoading(true));
 
-    try {
-      const {data: networks, meta} = await WalletAPI.getNetworks();
+  try {
+    const {data: networks, meta} = await WalletAPI.getNetworks();
+    const filterNetwork: Network[] = [];
 
-      let filterNetwork: Network[] = [];
-      const myriadNetwork = networks.find(option => option.id === NetworkIdEnum.MYRIAD);
+    for (const network of networks) {
+      const networkWithTips = {
+        ...network,
+        tips: [],
+      };
 
-      if (myriadNetwork) {
-        const otherNetworks = networks.filter(network => network.id !== NetworkIdEnum.MYRIAD);
-        filterNetwork = [myriadNetwork, ...otherNetworks];
+      if (network.id === NetworkIdEnum.MYRIAD) {
+        filterNetwork.unshift(networkWithTips);
+      } else {
+        filterNetwork.push(networkWithTips);
       }
-
-      dispatch({
-        type: constants.FETCH_NETWORK,
-        payload: (filterNetwork.length ? filterNetwork : networks).map(network => {
-          network.tips = [];
-          return network;
-        }),
-        meta,
-      });
-    } catch (error) {
-      dispatch(setError(error.message));
-    } finally {
-      dispatch(setLoading(false));
     }
-  };
+
+    dispatch({
+      type: constants.FETCH_NETWORK,
+      payload: filterNetwork,
+      meta,
+    });
+  } catch (error) {
+    dispatch(setError(error.message));
+  } finally {
+    dispatch(setLoading(false));
+  }
+};

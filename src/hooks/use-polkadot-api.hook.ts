@@ -12,7 +12,7 @@ import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.
 import {VariantType} from 'notistack';
 import {formatBalance} from 'src/helpers/balance';
 import {BalanceDetail} from 'src/interfaces/balance';
-import {TipResult, TipsBalance, TipsBalanceData, TipsBalanceInfo} from 'src/interfaces/network';
+import {TipResult, TipsBalanceData, TipsBalanceInfo} from 'src/interfaces/network';
 import {SocialMedia} from 'src/interfaces/social';
 import {WalletDetail, WalletReferenceType} from 'src/interfaces/wallet';
 import {storeTransaction} from 'src/lib/api/transaction';
@@ -27,7 +27,7 @@ import {
 import i18n from 'src/locale';
 
 interface TipsBalanceResult {
-  tipsBalance: TipsBalance[];
+  tipsBalances: TipsBalanceData;
   peopleIds: string[];
 }
 
@@ -250,7 +250,7 @@ export const usePolkadotApi = () => {
     }
 
     return {
-      tipsBalance: Object.values(data),
+      tipsBalances: data,
       peopleIds,
     };
   };
