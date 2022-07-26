@@ -57,16 +57,16 @@ export const formatToString = (element: RootBlock, reportType?: ReportType): str
         return children.text;
       }
 
-      if (children.type.includes(ELEMENT_EMOJI)) {
+      if (children.type === ELEMENT_EMOJI) {
         return children.emoji;
       }
 
-      if (children.type.includes(ELEMENT_HASHTAG)) {
-        return children.text;
+      if (children.type === ELEMENT_HASHTAG) {
+        return children.hashtag;
       }
 
-      if (children.type.includes(ELEMENT_MENTION)) {
-        return children.hashtag;
+      if (children.type === ELEMENT_MENTION) {
+        return children.username;
       }
 
       return getNodeString(children);
