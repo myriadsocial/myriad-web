@@ -100,7 +100,7 @@ export const NodeViewer: React.FC<NodeViewerProps> = props => {
     const mention = event.target?.attributes['data-slate-value']?.value;
 
     if (mention) {
-      router.push(`/people/${mention}`);
+      router.push(`/profile/${mention}`);
     }
   };
 
