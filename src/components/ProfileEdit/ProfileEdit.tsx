@@ -74,8 +74,8 @@ export const ProfileEditComponent: React.FC<Props> = props => {
         newUser?.websiteURL !== undefined) ||
       imageProfile instanceof File ||
       (user?.websiteURL !== undefined && user?.websiteURL !== newUser?.websiteURL) ||
-      imageProfile === undefined ||
-      imageBanner
+      imageProfile !== user?.profilePictureURL ||
+      imageBanner !== user?.bannerImageURL
     ) {
       setIsUpdateProfile(true);
     } else {

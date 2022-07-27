@@ -64,6 +64,8 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
           newUser.profilePictureURL = newUrlProfilePic;
           setProfilePic(newUrlProfilePic);
         }
+      } else if (user.profilePictureURL && profilePic === undefined) {
+        newUser.profilePictureURL = '';
       }
 
       if (bannerPic instanceof File) {
