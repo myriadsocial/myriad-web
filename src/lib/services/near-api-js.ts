@@ -6,10 +6,10 @@ import {u8aToHex} from '@polkadot/util/u8a';
 
 import assign from 'lodash/assign';
 import * as nearAPI from 'near-api-js';
-import type {ConnectConfig} from 'near-api-js';
+import {ConnectConfig, providers} from 'near-api-js';
 import type {Signature} from 'near-api-js/lib/utils/key_pair';
 import {formatBalance} from 'src/helpers/balance';
-import {NetworkIdEnum} from 'src/interfaces/network';
+import {Network, NetworkIdEnum} from 'src/interfaces/network';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
 import * as NetworkAPI from 'src/lib/api/network';
 import * as WalletAPI from 'src/lib/api/wallet';
@@ -100,6 +100,32 @@ export type ContractProps = {
   storage_balance_of: (props: ContractBalanceProps) => null | ContractStorageBalanceProps;
   storage_deposit: (props: ContractBalanceProps) => void;
   get_tips_balances: (props: ContractTipsBalanceInfoProps) => TipResultWithPagination;
+};
+
+export const connectNear = async (network: Network): Promise<NearInitializeProps> => {
+  try {
+    const {keyStores, connect, WalletConnection} = nearAPI;
+    // creates keyStore using private key in local storage
+    // *** REQUIRES SignIn using walletConnection.requestSignIn() ***
+    const keyStore = new keyStores.BrowserLocalStorageKeyStore();
+
+    // set config for near network
+    const config: ConnectConfig = {
+      networkId: network.chainId ?? 'testnet',
+      keyStore,
+      nodeUrl: network.rpcURL,
+      walletUrl: network.walletURL,
+      helperUrl: network.helperURL,
+      headers: {},
+    };
+
+    const near = await connect(assign({deps: {keyStore}}, config));
+    const wallet = new WalletConnection(near, 'myriad-social');
+    return {near, wallet};
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
 };
 
 export const nearInitialize = async (): Promise<NearInitializeProps> => {
@@ -238,6 +264,50 @@ export const getNearBalance = async (
   } catch (error) {
     console.log({error});
     throw error;
+  }
+};
+
+export const getNearBalanceV2 = async (
+  rpcURL: string,
+  accountId: string,
+  contractId?: string,
+  decimal?: number,
+): Promise<NearBalanceProps> => {
+  const provider = new providers.JsonRpcProvider({url: rpcURL});
+  try {
+    if (contractId && decimal) {
+      const data = JSON.stringify({account_id: accountId});
+      const buff = Buffer.from(data);
+      const base64data = buff.toString('base64');
+      const result = await provider.query({
+        request_type: 'call_function',
+        account_id: contractId,
+        method_name: 'ft_balance_of',
+        args_base64: base64data,
+        finality: 'final',
+      });
+
+      const balance: string = JSON.parse(Buffer.from((result as any).result).toString());
+
+      return {balance: formatBalance(new BN(balance), decimal).toString()};
+    }
+
+    const nearAccount = await provider.query({
+      request_type: 'view_account',
+      account_id: accountId,
+      finality: 'final',
+    });
+
+    const amount = (nearAccount as any).amount as string;
+    const storage = nearAPI.utils.format.parseNearAmount('0.01854');
+    const trxFee = nearAPI.utils.format.parseNearAmount('0.05');
+    const result = new BN(amount).sub(new BN(storage)).sub(new BN(trxFee));
+    const finalBalance = result.lte(new BN(storage)) ? '0' : result.toString();
+
+    return {balance: nearAPI.utils.format.formatNearAmount(finalBalance)};
+  } catch (err) {
+    console.log(err);
+    throw err;
   }
 };
 

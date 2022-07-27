@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 
 import getConfig from 'next/config';
@@ -107,7 +107,7 @@ export const TipContainer: React.FC = () => {
     router.replace(url, undefined, {shallow: true});
   }, [errorCode, transactionHashes, errorMessage, txFee, amount]);
 
-  const handleClaimTip = (networkId: string, ftIdentifier: string) => {
+  const handleClaimTip = useCallback((networkId: string, ftIdentifier: string) => {
     claim(networkId, ftIdentifier, ({claimSuccess, errorMessage}) => {
       if (networkId === NetworkIdEnum.MYRIAD) {
         // TODO: Register translation
@@ -117,9 +117,9 @@ export const TipContainer: React.FC = () => {
         enqueueSnackbar({message, variant});
       }
     });
-  };
+  }, []);
 
-  const handleClaimTipAll = (networkId: string) => {
+  const handleClaimTipAll = useCallback((networkId: string) => {
     claimAll(networkId, ({claimSuccess, errorMessage}) => {
       if (networkId === NetworkIdEnum.MYRIAD) {
         // TODO: Register translation
@@ -129,7 +129,7 @@ export const TipContainer: React.FC = () => {
         enqueueSnackbar({message, variant});
       }
     });
-  };
+  }, []);
 
   const tipWithBalances = (network: Network) => {
     return network?.tips.filter(tip => Math.ceil(Number(tip.amount)) > 0) ?? [];
@@ -140,55 +140,57 @@ export const TipContainer: React.FC = () => {
     return false;
   };
 
-  const handleVerifyReference = async (networkId: string, currentBalance: string | number) => {
-    if (!user?.id) return;
+  const handleVerifyReference = useCallback(
+    async (networkId: string, currentBalance: string | number) => {
+      if (!user?.id) return;
 
-    setVerifyingRef(true);
-
-    try {
-      if (parseInt(feeInfo.trxFee) <= 0) {
-        throw new Error('Insufficient Gas Fee');
-      }
-
-      const server = await WalletAPI.getServer();
-      const serverId = getServerId(server, currentWallet?.networkId);
-
-      switch (networkId) {
-        case NetworkIdEnum.NEAR: {
-          const tipsBalanceInfo = {
-            server_id: serverId,
-            reference_type: 'user',
-            reference_id: user.id,
-            ft_identifier: 'native',
-          };
-
-          await payNearTransactionFee(tipsBalanceInfo, feeInfo.trxFee, currentBalance);
-          break;
+      setVerifyingRef(true);
+      try {
+        if (parseInt(feeInfo.trxFee) <= 0) {
+          throw new Error('Insufficient Gas Fee');
         }
 
-        case NetworkIdEnum.MYRIAD: {
-          checkExtensionInstalled();
-          setTipsBalanceInfo({
-            serverId,
-            referenceType: 'user',
-            referenceId: user.id,
-            ftIdentifier: 'native',
-          });
-          break;
-        }
+        const server = await WalletAPI.getServer();
+        const serverId = getServerId(server, currentWallet?.networkId);
 
-        default:
-          return;
+        switch (networkId) {
+          case NetworkIdEnum.NEAR: {
+            const tipsBalanceInfo = {
+              server_id: serverId,
+              reference_type: 'user',
+              reference_id: user.id,
+              ft_identifier: 'native',
+            };
+
+            await payNearTransactionFee(tipsBalanceInfo, feeInfo.trxFee, currentBalance);
+            break;
+          }
+
+          case NetworkIdEnum.MYRIAD: {
+            checkExtensionInstalled();
+            setTipsBalanceInfo({
+              serverId,
+              referenceType: 'user',
+              referenceId: user.id,
+              ftIdentifier: 'native',
+            });
+            break;
+          }
+
+          default:
+            return;
+        }
+      } catch (error) {
+        setVerifyingRef(false);
+        // TODO: Register Translation
+        enqueueSnackbar({
+          message: error.message,
+          variant: 'error',
+        });
       }
-    } catch (error) {
-      setVerifyingRef(false);
-      // TODO: Register Translation
-      enqueueSnackbar({
-        message: error.message,
-        variant: 'error',
-      });
-    }
-  };
+    },
+    [feeInfo],
+  );
 
   const closeAccountList = (verifying?: boolean) => {
     setShowAccountList(false);
@@ -211,27 +213,30 @@ export const TipContainer: React.FC = () => {
     setAccounts(accounts);
   };
 
-  const handleConnect = async (account?: InjectedAccountWithMeta) => {
-    closeAccountList(true);
+  const handleConnect = useCallback(
+    async (account?: InjectedAccountWithMeta) => {
+      closeAccountList(true);
 
-    if (!account) return;
+      if (!account) return;
 
-    setVerifyingRef(true);
-    try {
-      await payMyriaTransactionFee(
-        account,
-        currentWallet?.network?.rpcURL ?? '',
-        tipsBalanceInfo,
-        feeInfo.trxFee,
-        success => {
-          setClaimingSucces(success);
-        },
-      );
-    } finally {
-      setVerifyingRef(false);
-      setTipsBalanceInfo(null);
-    }
-  };
+      setVerifyingRef(true);
+      try {
+        await payMyriaTransactionFee(
+          account,
+          currentWallet?.network?.rpcURL ?? '',
+          tipsBalanceInfo,
+          feeInfo.trxFee,
+          success => {
+            setClaimingSucces(success);
+          },
+        );
+      } finally {
+        setVerifyingRef(false);
+        setTipsBalanceInfo(null);
+      }
+    },
+    [tipsBalanceInfo],
+  );
 
   const getNativeToken = (tips: TipResult[]) => {
     const native = tips.find(tip => tip?.tipsBalanceInfo?.ftIdentifier === 'native');
@@ -275,9 +280,11 @@ export const TipContainer: React.FC = () => {
         loading={claiming}
         tips={tipBalances}
         networkId={network.id}
+        blockchainPlatform={network.blockchainPlatform}
         currentWallet={currentWallet}
         onClaim={handleClaimTip}
         onClaimAll={handleClaimTipAll}
+        onSwitchNetwork={console.log}
         onHandleVerifyRef={handleVerifyReference}
         onSuccess={claimingSuccess}
         balance={amount}

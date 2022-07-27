@@ -1,4 +1,5 @@
 import React from 'react';
+import {useSelector} from 'react-redux';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -18,6 +19,8 @@ import ShowIf from 'src/components/common/show-if.component';
 import InfoIconYellow from 'src/images/Icons/InfoIconYellow.svg';
 import {BalanceDetail} from 'src/interfaces/balance';
 import i18n from 'src/locale';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
 type SummaryProps = {
   amount: BN;
@@ -25,14 +28,20 @@ type SummaryProps = {
   receiver: UserWithWalletDetail | PeopleWithWalletDetail;
   currency: BalanceDetail;
   loadingFee: boolean;
+  nativeSymbol: string;
 };
 
 export const Summary: React.FC<SummaryProps> = props => {
-  const {amount, transactionFee, receiver, currency, loadingFee} = props;
+  const {amount, transactionFee, receiver, currency, loadingFee, nativeSymbol} = props;
+  const {currentWallet} = useSelector<RootState, UserState>(state => state.userState);
 
   const styles = useStyles();
 
-  const total = amount.gt(BN_ZERO) ? amount.add(transactionFee) : BN_ZERO;
+  const total = amount.gt(BN_ZERO)
+    ? currency.native
+      ? amount.add(transactionFee)
+      : amount
+    : BN_ZERO;
 
   return (
     <>
@@ -46,6 +55,7 @@ export const Summary: React.FC<SummaryProps> = props => {
             value={amount}
             currency={currency}
             className={styles.bold}
+            nativeSymbol={nativeSymbol}
           />
         </Typography>
       </div>
@@ -56,10 +66,10 @@ export const Summary: React.FC<SummaryProps> = props => {
           </div>
           <Typography className={styles.textWarning}>
             The tip will be stored in Myriad Escrow because the user hasn’t connected the
-            {` ${currency.network.id === 'near' ? 'NEAR Wallet' : 'polkadot{.js}'} `}
+            {` ${currentWallet.networkId === 'near' ? 'NEAR Wallet' : 'polkadot{.js}'} `}
             yet. Once they connect their{' '}
-            {` ${currency.network.id === 'near' ? 'NEAR Wallet' : 'polkadot{.js}'}`}, they will be
-            able to claim their tip.
+            {` ${currentWallet.networkId === 'near' ? 'NEAR Wallet' : 'polkadot{.js}'}`}, they will
+            be able to claim their tip.
           </Typography>
         </div>
       )}
@@ -82,6 +92,7 @@ export const Summary: React.FC<SummaryProps> = props => {
                     color="textSecondary"
                     value={amount}
                     currency={currency}
+                    nativeSymbol={nativeSymbol}
                   />
                 </TableCell>
               </TableRow>
@@ -98,6 +109,8 @@ export const Summary: React.FC<SummaryProps> = props => {
                       color="textSecondary"
                       value={transactionFee}
                       currency={currency}
+                      nativeSymbol={nativeSymbol}
+                      trxFee={true}
                     />
                   </ShowIf>
                   <ShowIf condition={loadingFee}>
@@ -121,6 +134,7 @@ export const Summary: React.FC<SummaryProps> = props => {
                       color="textPrimary"
                       value={total}
                       currency={currency}
+                      nativeSymbol={nativeSymbol}
                     />
                   </ShowIf>
                   <ShowIf condition={loadingFee}>

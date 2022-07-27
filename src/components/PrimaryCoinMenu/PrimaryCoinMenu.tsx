@@ -12,57 +12,27 @@ import {Button, ButtonVariant, ButtonColor} from '../atoms/Button';
 import {DraggableBalanceCard} from './DraggableBalanceCard';
 
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import remove from 'lodash/remove';
 import {useCurrency} from 'src/hooks/use-currency.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
-import {CurrencyId} from 'src/interfaces/currency';
 import i18n from 'src/locale';
 
 type PrimaryCoinMenuProps = {
   balanceDetails: BalanceDetail[];
   togglePrimaryCoinMenu: () => void;
   user: User;
-  currenciesId: string[];
   networkId: string;
 };
 
 export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
-  const {togglePrimaryCoinMenu, balanceDetails, user, currenciesId, networkId} = props;
+  const {togglePrimaryCoinMenu, balanceDetails, user, networkId} = props;
   const classes = useStyles();
 
   const enqueueSnackbar = useEnqueueSnackbar();
   const {updateCurrencySet} = useCurrency();
 
-  const initialCoinState = () => {
-    const data: BalanceDetail[] = [];
-
-    if (currenciesId.length) {
-      balanceDetails.forEach(coin => {
-        data[currenciesId.indexOf(coin.id)] = coin;
-      });
-    } else {
-      // TODO: check default wallet
-      // return putDefaultFirst(balanceDetails, currentWallet.id);
-    }
-
-    return data;
-  };
-
-  const putDefaultFirst = (balanceDetails: BalanceDetail[], defaultCurrencyId: CurrencyId) => {
-    const newDefaultCoins = [...balanceDetails];
-
-    const defaultCoin = remove(newDefaultCoins, function (n) {
-      return n.id === defaultCurrencyId;
-    });
-
-    const resultDefaultCoins = [...defaultCoin, ...newDefaultCoins];
-
-    return resultDefaultCoins;
-  };
-
-  const [coins, updateCoins] = useState(initialCoinState());
+  const [coins, updateCoins] = useState(balanceDetails);
 
   const handleOnDragEnd = ({source, destination}: DropResult) => {
     // Handle if dragging out of bounds
@@ -86,17 +56,13 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
   };
 
   const handleSetDefaultCurrency = () => {
-    const currencyId = coins[0].id as CurrencyId;
-    const coinsId = coins.map(coin => coin.id);
-
-    updateCurrencySet(user.id, coinsId, networkId, () => {
+    updateCurrencySet(user.id, coins, networkId, () => {
       enqueueSnackbar({
         message: i18n.t('Wallet.Primary_Coin.Alert.Msg'),
         variant: 'success',
       });
     });
 
-    updateCoins(putDefaultFirst(balanceDetails, currencyId));
     togglePrimaryCoinMenu();
   };
 

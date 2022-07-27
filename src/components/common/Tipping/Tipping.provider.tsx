@@ -61,10 +61,8 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
   }, [options]);
 
   const handleSuccessTipping = useCallback(
-    (currency: BalanceDetail, transactionHash: string, tipAmount: BN) => {
-      if (currency?.network.explorerURL) {
-        setTransactionUrl(`${currency.network.explorerURL}/${transactionHash}`);
-      }
+    (currency: BalanceDetail, explorerURL: string, transactionHash: string, tipAmount: BN) => {
+      setTransactionUrl(`${explorerURL}/${transactionHash}`);
       setAmount(tipAmount);
       setTippingCurrency(currency);
       handleCloseTipForm();

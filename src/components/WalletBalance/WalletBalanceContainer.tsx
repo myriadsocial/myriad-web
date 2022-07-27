@@ -1,60 +1,39 @@
 import React, {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+
+import {useRouter} from 'next/router';
 
 import {Typography} from '@material-ui/core';
 
 import {WalletBalances as WalletBalancesComponent} from '.';
 import {BoxComponent} from '../atoms/Box';
 
-import {useNearApi} from 'src/hooks/use-near-api.hook';
-import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {BalanceDetail} from 'src/interfaces/balance';
-import {BlockchainPlatform} from 'src/interfaces/wallet';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
+import {fetchBalances} from 'src/reducers/balance/actions';
 import {BalanceState} from 'src/reducers/balance/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const WalletBalancesContainer: React.FC = () => {
-  const {balanceDetails: polkadotBalance} = usePolkadotApi();
-  const {balanceDetails: nearBalance} = useNearApi();
+  const dispatch = useDispatch();
+  const router = useRouter();
 
-  const {anonymous, currentWallet} = useSelector<RootState, UserState>(state => state.userState);
-  const {currenciesId} = useSelector<RootState, BalanceState>(state => state.balanceState);
+  const {anonymous} = useSelector<RootState, UserState>(state => state.userState);
+  const {balanceDetails, loading} = useSelector<RootState, BalanceState>(
+    state => state.balanceState,
+  );
 
-  const [filteredBalances, setFilteredBalanced] = useState<BalanceDetail[]>([]);
+  const status = router.query.status as string;
+  const [balances, setBalances] = useState<BalanceDetail[]>([]);
 
   useEffect(() => {
-    handleFilterCurrencies();
-  }, [polkadotBalance, nearBalance, currenciesId]);
-
-  const handleFilterCurrencies = (): void => {
-    if (currenciesId.length) {
-      if (currentWallet?.network?.blockchainPlatform === BlockchainPlatform.SUBSTRATE) {
-        const data: BalanceDetail[] = [];
-
-        polkadotBalance.forEach(coin => {
-          data[currenciesId.indexOf(coin.id)] = coin;
-        });
-
-        setFilteredBalanced(data);
-      } else if (currentWallet?.network?.blockchainPlatform === BlockchainPlatform.NEAR) {
-        //TODO need to filtered by currenciesId from backend
-        const data: BalanceDetail[] = [];
-
-        nearBalance.forEach(coin => {
-          data[currenciesId.indexOf(coin.id)] = coin;
-        });
-        setFilteredBalanced(data);
-      }
+    if (balanceDetails.length === 0) {
+      dispatch(fetchBalances(true, status));
     } else {
-      if (currentWallet?.network?.blockchainPlatform === BlockchainPlatform.SUBSTRATE) {
-        setFilteredBalanced(polkadotBalance);
-      } else if (currentWallet?.network?.blockchainPlatform === BlockchainPlatform.NEAR) {
-        setFilteredBalanced(nearBalance);
-      }
+      setBalances(balanceDetails);
     }
-  };
+  }, [balanceDetails, status]);
 
   if (anonymous)
     return (
@@ -63,7 +42,7 @@ export const WalletBalancesContainer: React.FC = () => {
       </BoxComponent>
     );
 
-  return <WalletBalancesComponent balances={filteredBalances} />;
+  return <WalletBalancesComponent balances={balances} loading={loading} />;
 };
 
 export default WalletBalancesContainer;

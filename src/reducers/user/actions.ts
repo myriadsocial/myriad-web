@@ -8,7 +8,8 @@ import * as constants from './constants';
 
 import axios from 'axios';
 import {Action} from 'redux';
-import {Currency, CurrencyId} from 'src/interfaces/currency';
+import {BalanceDetail} from 'src/interfaces/balance';
+import {Currency} from 'src/interfaces/currency';
 import {WrappedExperience} from 'src/interfaces/experience';
 import {SocialsEnum} from 'src/interfaces/index';
 import {NetworkIdEnum, Network} from 'src/interfaces/network';
@@ -387,7 +388,7 @@ export const setUserAsAnonymous: ThunkActionCreator<Actions, RootState> =
   };
 
 export const setDefaultCurrency: ThunkActionCreator<Actions, RootState> =
-  (currencyId: CurrencyId) => async (dispatch, getState) => {
+  (balanceDetails: BalanceDetail[]) => async (dispatch, getState) => {
     dispatch(setLoading(true));
     const {
       userState: {user},
@@ -395,15 +396,7 @@ export const setDefaultCurrency: ThunkActionCreator<Actions, RootState> =
 
     if (!user) return;
 
-    dispatch({
-      type: constants.SET_DEFAULT_CURRENCY,
-      user: {
-        ...user,
-        defaultCurrency: currencyId,
-      },
-    });
-
-    dispatch(sortBalances(currencyId));
+    dispatch(sortBalances(balanceDetails));
     dispatch(setLoading(false));
   };
 
@@ -510,32 +503,34 @@ export const addUserCurrency: ThunkActionCreator<Actions, RootState> =
     }
   };
 
-export const fetchNetwork: ThunkActionCreator<Actions, RootState> =
-  () => async (dispatch, getState) => {
-    dispatch(setLoading(true));
+export const fetchNetwork: ThunkActionCreator<Actions, RootState> = () => async dispatch => {
+  dispatch(setLoading(true));
 
-    try {
-      const {data: networks, meta} = await WalletAPI.getNetworks();
+  try {
+    const {data: networks, meta} = await WalletAPI.getNetworks();
+    const filterNetwork: Network[] = [];
 
-      let filterNetwork: Network[] = [];
-      const myriadNetwork = networks.find(option => option.id === NetworkIdEnum.MYRIAD);
+    for (const network of networks) {
+      const networkWithTips = {
+        ...network,
+        tips: [],
+      };
 
-      if (myriadNetwork) {
-        const otherNetworks = networks.filter(network => network.id !== NetworkIdEnum.MYRIAD);
-        filterNetwork = [myriadNetwork, ...otherNetworks];
+      if (network.id === NetworkIdEnum.MYRIAD) {
+        filterNetwork.unshift(networkWithTips);
+      } else {
+        filterNetwork.push(networkWithTips);
       }
-
-      dispatch({
-        type: constants.FETCH_NETWORK,
-        payload: (filterNetwork.length ? filterNetwork : networks).map(network => {
-          network.tips = [];
-          return network;
-        }),
-        meta,
-      });
-    } catch (error) {
-      dispatch(setError(error.message));
-    } finally {
-      dispatch(setLoading(false));
     }
-  };
+
+    dispatch({
+      type: constants.FETCH_NETWORK,
+      payload: filterNetwork,
+      meta,
+    });
+  } catch (error) {
+    dispatch(setError(error.message));
+  } finally {
+    dispatch(setLoading(false));
+  }
+};

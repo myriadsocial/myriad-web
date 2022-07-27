@@ -1,6 +1,6 @@
 import {useDispatch} from 'react-redux';
 
-import {CurrencyId} from 'src/interfaces/currency';
+import {BalanceDetail} from 'src/interfaces/balance';
 import * as TokenAPI from 'src/lib/api/token';
 import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {setDefaultCurrency} from 'src/reducers/user/actions';
@@ -14,17 +14,16 @@ export const useCurrency = () => {
 
   const updateCurrencySet = async (
     userId: string,
-    currenciesId: string[],
+    balanceDetails: BalanceDetail[],
     networkId: string,
     callback?: () => void,
   ) => {
     try {
-      const primaryCoinId = currenciesId[0] as CurrencyId;
+      dispatch(setDefaultCurrency(balanceDetails));
 
-      await TokenAPI.updateCurrencySet(userId, currenciesId, networkId);
+      const currencyIds = balanceDetails.map(e => e.id);
 
-      dispatch(setDefaultCurrency(primaryCoinId));
-      fetchUserCurrencies();
+      await TokenAPI.updateCurrencySet(userId, currencyIds, networkId);
 
       callback && callback();
     } catch (error) {

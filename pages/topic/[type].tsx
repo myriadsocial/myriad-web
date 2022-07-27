@@ -18,7 +18,6 @@ import {initialize} from 'src/lib/api/base';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
-import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
 import {fetchFriend} from 'src/reducers/friend/actions';
@@ -110,7 +109,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       dispatch(fetchAvailableToken()),
       dispatch(countNewNotification()),
       dispatch(fetchPopularTopic()),
-      dispatch(getUserCurrencies()),
       dispatch(fetchFriend()),
       dispatch(fetchUserWallets()),
       dispatch(fetchNetwork()),

@@ -11,19 +11,22 @@ type FormatCurrencyProps = TypographyProps & {
   value: BN;
   length?: number;
   currency: BalanceDetail;
+  nativeSymbol: string;
+  trxFee?: boolean;
 };
 
 export const FormatCurrency: React.FC<FormatCurrencyProps> = props => {
-  const {value, length = 10, currency, ...restProps} = props;
+  const {value, length = 10, currency, nativeSymbol, trxFee = false, ...restProps} = props;
 
   const amount = formatBalance(value, currency.decimal, length);
   const displayAmount = value.gt(BN_ZERO) ? (amount > 0 ? amount : '< 0.00000001') : 0;
+  const symbol = trxFee ? nativeSymbol : currency.symbol;
 
   return (
     <Typography component="span" {...restProps}>
       {displayAmount}
       &nbsp;
-      {currency.symbol}
+      {symbol}
     </Typography>
   );
 };

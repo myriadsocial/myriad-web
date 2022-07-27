@@ -17,7 +17,6 @@ import {initialize} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
 import i18n from 'src/locale';
-import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchAccountPrivacySetting} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
@@ -114,7 +113,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       dispatch(fetchAvailableToken()),
       dispatch(countNewNotification()),
       dispatch(fetchAccountPrivacySetting(profileId)),
-      dispatch(getUserCurrencies()),
       dispatch(fetchFriend()),
       dispatch(fetchUserWallets()),
     ]);

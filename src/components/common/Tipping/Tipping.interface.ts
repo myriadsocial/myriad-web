@@ -39,5 +39,10 @@ export type SendTipProps = {
   defaultCurrency: BalanceDetail;
   balances: BalanceDetail[];
   currentNetwork: NetworkIdEnum;
-  onSuccess: (currency: BalanceDetail, transactionHash: string, amount: BN) => Promise<void> | void;
+  onSuccess: (
+    currency: BalanceDetail,
+    explorerURL: string,
+    transactionHash: string,
+    amount: BN,
+  ) => Promise<void> | void;
 };

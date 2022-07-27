@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
+import {useSelector} from 'react-redux';
 
 import {Backdrop, CircularProgress} from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
@@ -27,6 +28,8 @@ import {BalanceDetail} from 'src/interfaces/balance';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
+import {RootState} from 'src/reducers';
+import {UserState} from 'src/reducers/user/reducer';
 
 const INITIAL_AMOUNT = new BN(-1);
 
@@ -46,6 +49,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
   const {isSignerLoading, simplerSendTip, getEstimatedFee} = usePolkadotApi();
   const {getEstimatedFee: getEstimatedFeeNear, sendAmount} = useNearApi();
 
+  const {currentWallet, currencies} = useSelector<RootState, UserState>(state => state.userState);
   const [amount, setAmount] = useState<BN>(INITIAL_AMOUNT);
   const [transactionFee, setTransactionFee] = useState<BN>(INITIAL_AMOUNT);
 
@@ -57,6 +61,12 @@ export const Tipping: React.FC<SendTipProps> = props => {
   useEffect(() => {
     calculateTransactionFee(defaultCurrency);
   }, []);
+
+  const nativeSymbol = useMemo(() => {
+    const nativeCurrency = currencies.find(e => e.native);
+
+    return nativeCurrency?.symbol ?? currency.symbol;
+  }, [currentWallet]);
 
   const getAddressByUser = (user: User) => {
     if (!user.wallets.length) {
@@ -80,14 +90,19 @@ export const Tipping: React.FC<SendTipProps> = props => {
     setLoadingFee(true);
     let fee: BN = BN_ZERO;
     //TODO: move to switch case
-    if (currency.network.blockchainPlatform === 'substrate') {
-      const gasPrice = await getEstimatedFee(senderAddress, receiver.walletDetail, selected);
+    if (currentWallet?.network?.blockchainPlatform === 'substrate') {
+      const gasPrice = await getEstimatedFee(
+        senderAddress,
+        receiver.walletDetail,
+        selected,
+        currentWallet?.network?.rpcURL ?? '',
+      );
       if (gasPrice) {
         fee = gasPrice;
       }
     }
 
-    if (currency.network.blockchainPlatform === 'near') {
+    if (currentWallet?.network?.blockchainPlatform === 'near') {
       const {gasPrice} = await getEstimatedFeeNear();
       if (gasPrice) {
         fee = toBigNumber(gasPrice, currency.decimal);
@@ -132,7 +147,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
       from: senderAddress,
       to: receiver.id,
       amount,
-      currency,
+      currency: {...currency, network: currentWallet.network},
       walletDetail: receiver.walletDetail,
     };
 
@@ -152,16 +167,16 @@ export const Tipping: React.FC<SendTipProps> = props => {
       amount: formatBalance(amount, currency.decimal),
     };
     await localforage.setItem(TIPPING_STORAGE_KEY, storageAttribute);
-    if (currency.network.blockchainPlatform === 'substrate') {
+    if (currentWallet?.network?.blockchainPlatform === 'substrate') {
       simplerSendTip(attributes, hash => {
-        onSuccess(currency, hash, attributes.amount);
+        onSuccess(currency, currentWallet?.network?.explorerURL, hash, attributes.amount);
 
         setAmount(INITIAL_AMOUNT);
         setTransactionFee(INITIAL_AMOUNT);
       });
     }
 
-    if (currency.network.blockchainPlatform === 'near') {
+    if (currentWallet?.network?.blockchainPlatform === 'near') {
       sendAmount(receiver.walletDetail, amount, currency.referenceId);
     }
   };
@@ -183,7 +198,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
         <ListItemComponent
           avatar={currency.image}
           title={currency.symbol}
-          subtitle={currency.freeBalance === 0 ? '0' : parseFloat(currency.freeBalance.toFixed(4))}
+          subtitle={+currency.freeBalance === 0 ? '0' : parseFloat(currency.freeBalance.toFixed(4))}
           action={
             <CurrencyOptionComponent onSelect={handleChangeCurrency} balanceDetails={balances} />
           }
@@ -194,7 +209,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
             placeholder={i18n.t('Tipping.Modal_Main.Tip_Amount')}
             decimal={currency.decimal}
             fee={transactionFee}
-            maxValue={currency.freeBalance}
+            maxValue={+currency.freeBalance}
             length={10}
             currencyId={currency.symbol}
             onChange={handleAmountChange}
@@ -206,6 +221,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
             receiver={receiver}
             currency={currency}
             loadingFee={loadingFee}
+            nativeSymbol={nativeSymbol}
           />
 
           <div className={classes.formControls}>

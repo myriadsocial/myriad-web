@@ -13,7 +13,6 @@ import {initialize} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
-import {getUserCurrencies} from 'src/reducers/balance/actions';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
 import {fetchFriend} from 'src/reducers/friend/actions';
@@ -97,7 +96,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       dispatch(fetchConnectedSocials()),
       dispatch(fetchAvailableToken()),
       dispatch(countNewNotification()),
-      dispatch(getUserCurrencies()),
       dispatch(fetchFriend()),
       dispatch(fetchUserWallets()),
     ]);

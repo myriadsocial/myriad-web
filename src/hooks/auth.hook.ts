@@ -24,7 +24,7 @@ import {clearNearAccount} from 'src/lib/services/near-api-js';
 import {createNearSignature} from 'src/lib/services/near-api-js';
 import {signWithExtension} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
-import {fetchBalances, getUserCurrencies} from 'src/reducers/balance/actions';
+import {fetchBalances} from 'src/reducers/balance/actions';
 import {fetchUserWallets, fetchUser} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 import {uniqueNamesGenerator, adjectives, colors} from 'unique-names-generator';
@@ -266,7 +266,9 @@ export const useAuthHook = () => {
       switch (blockchainPlatform) {
         case BlockchainPlatform.SUBSTRATE: {
           const polkadotAccount = account as InjectedAccountWithMeta;
-          const signature = await signWithExtension(polkadotAccount, nonce);
+          const signature = await signWithExtension(polkadotAccount, nonce, ({signerOpened}) => {
+            if (signerOpened) setLoading(true);
+          });
 
           if (!signature) return;
 
@@ -303,12 +305,14 @@ export const useAuthHook = () => {
       await WalletAPI.switchNetwork(payload, user.id);
       //TODO: better if joined in one API call
       await dispatch(fetchUser(currentAddress));
-      await Promise.all([dispatch(getUserCurrencies()), dispatch(fetchUserWallets())]);
-
-      await dispatch(fetchBalances(true));
+      await Promise.all([dispatch(fetchBalances(true)), dispatch(fetchUserWallets())]);
 
       callback && callback();
     } catch (error) {
+      if (networkId === NetworkIdEnum.NEAR) {
+        await dispatch(fetchBalances(true));
+      }
+
       if (error instanceof AccountRegisteredError) {
         throw error;
       } else {

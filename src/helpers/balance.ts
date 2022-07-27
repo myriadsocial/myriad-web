@@ -58,6 +58,7 @@ export const formatBalance = (value: BN, decimal: number, length = 10): number =
 };
 
 export const formatBalanceV2 = (value: string, decimal: number, length = 10): string => {
+  if (!decimal) return '0';
   if (value === '0') return '0';
 
   let balance = '0';

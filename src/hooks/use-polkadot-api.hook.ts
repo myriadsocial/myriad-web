@@ -1,7 +1,6 @@
 import * as Sentry from '@sentry/nextjs';
 
-import {useState, useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useState} from 'react';
 
 import {ApiPromise} from '@polkadot/api';
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
@@ -10,13 +9,12 @@ import {BN, BN_ONE, BN_TWO, BN_TEN} from '@polkadot/util';
 import {SimpleSendTipProps} from '../interfaces/transaction';
 
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import isEmpty from 'lodash/isEmpty';
 import {VariantType} from 'notistack';
 import {formatBalance} from 'src/helpers/balance';
 import {BalanceDetail} from 'src/interfaces/balance';
-import {TipResult, TipsBalance, TipsBalanceData, TipsBalanceInfo} from 'src/interfaces/network';
+import {TipResult, TipsBalanceData, TipsBalanceInfo} from 'src/interfaces/network';
 import {SocialMedia} from 'src/interfaces/social';
-import {BlockchainPlatform, WalletDetail, WalletReferenceType} from 'src/interfaces/wallet';
+import {WalletDetail, WalletReferenceType} from 'src/interfaces/wallet';
 import {storeTransaction} from 'src/lib/api/transaction';
 import * as WalletAPI from 'src/lib/api/wallet';
 import {
@@ -27,26 +25,13 @@ import {
   signAndSendExtrinsic,
 } from 'src/lib/services/polkadot-js';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {fetchBalances} from 'src/reducers/balance/actions';
-import {BalanceState} from 'src/reducers/balance/reducer';
-import {UserState} from 'src/reducers/user/reducer';
 
 interface TipsBalanceResult {
-  tipsBalance: TipsBalance[];
+  tipsBalances: TipsBalanceData;
   peopleIds: string[];
 }
 
 export const usePolkadotApi = () => {
-  const dispatch = useDispatch();
-
-  const {anonymous, currencies, currentWallet} = useSelector<RootState, UserState>(
-    state => state.userState,
-  );
-  const {balanceDetails, loading: loadingBalance} = useSelector<RootState, BalanceState>(
-    state => state.balanceState,
-  );
-
   const enqueueSnackbar = useEnqueueSnackbar();
 
   const [loading, setLoading] = useState(false);
@@ -54,26 +39,16 @@ export const usePolkadotApi = () => {
   const [isSignerLoading, setSignerLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    if (
-      !anonymous &&
-      currencies.length > 0 &&
-      balanceDetails.length === 0 &&
-      currentWallet?.network?.blockchainPlatform === BlockchainPlatform.SUBSTRATE
-    ) {
-      dispatch(fetchBalances());
-    }
-  }, [anonymous, currencies, balanceDetails, currentWallet]);
-
   const getEstimatedFee = async (
     from: string,
     walletDetail: WalletDetail,
     currency: BalanceDetail,
+    rpcURL: string,
   ): Promise<BN | null> => {
     setIsFetchingFee(true);
 
     try {
-      let {partialFee: estimatedFee} = await estimateFee(from, walletDetail, currency);
+      let {partialFee: estimatedFee} = await estimateFee(from, walletDetail, rpcURL);
 
       if (!estimatedFee) {
         // equal 0.01
@@ -101,10 +76,8 @@ export const usePolkadotApi = () => {
         {
           from,
           value: amount,
-          referenceId: currency.referenceId,
+          currency,
           wsAddress: currency.network.rpcURL,
-          native: currency.native,
-          decimal: currency.decimal,
           walletDetail,
         },
         params => {
@@ -113,12 +86,6 @@ export const usePolkadotApi = () => {
           }
         },
       );
-
-      if (isEmpty(txHash)) {
-        throw {
-          message: 'Cancelled',
-        };
-      }
 
       if (txHash) {
         const finalAmount = formatBalance(amount, currency.decimal);
@@ -142,18 +109,10 @@ export const usePolkadotApi = () => {
         callback && callback(txHash);
       }
     } catch (error) {
-      console.error(error);
-      if (error.message === 'Cancelled') {
-        enqueueSnackbar({
-          variant: 'warning',
-          message: i18n.t('Tipping.Toaster.Cancelled'),
-        });
-      } else {
-        enqueueSnackbar({
-          variant: 'warning',
-          message: error.message,
-        });
-      }
+      const variant = error.message === 'Cancelled' ? 'warning' : 'error';
+      const message = variant === 'warning' ? i18n.t('Tipping.Toaster.Cancelled') : error.message;
+
+      enqueueSnackbar({variant, message});
     } finally {
       setLoading(false);
       setSignerLoading(false);
@@ -291,15 +250,13 @@ export const usePolkadotApi = () => {
     }
 
     return {
-      tipsBalance: Object.values(data),
+      tipsBalances: data,
       peopleIds,
     };
   };
 
   return {
-    loadingBalance,
     loading,
-    balanceDetails,
     isSignerLoading,
     isFetchingFee,
     error,
