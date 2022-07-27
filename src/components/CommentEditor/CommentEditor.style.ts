@@ -39,7 +39,7 @@ export const useStyles = makeStyles<Theme, CommentEditorProps>(theme =>
         marginRight: 8,
       },
       '& .MuiSvgIcon-root': {
-        fill: 'none',
+        fill: 'none!important',
       },
     },
     replyIcon: {
