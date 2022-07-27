@@ -833,6 +833,7 @@
     "Timeline": "Timeline",
     "NFT": "NFT",
     "Social_Token": "Social Token",
+    "Myriad_Town": "Myriad.Town",
     "Trends": "Trends",
     "Trends_Desc": "Top 10 trending hashtags",
     "Topic": "Topic"
@@ -1062,7 +1063,8 @@
       "Experience_Clone": "Clone Experience",
       "Experience_Edit": "Edit Experience",
       "NFT": "Underway",
-      "Social_Token": "Underway"
+      "Social_Token": "Underway",
+      "Myriad_Town": "Myriad.Town stand at the crossroads of real life and digital interactions."
     }
   },
   "Dropzone": {
@@ -1112,5 +1114,11 @@
   "Tooltip": {
     "Chat": "Chat feature, coming soon",
     "Trending_Exp": "Show the top 10 experiences based on total subscribers and clone in 24 hours."
+  },
+  "Myriad_Town": {
+    "Title_Head": "{{appname}} - Myriad.Town",
+    "Visit": "Visit Myriad.Town",
+    "Fullscreen": "Play in fullscreen",
+    "Toaster_Esc": "Press Esc to exit from fullscreen"
   }
 }

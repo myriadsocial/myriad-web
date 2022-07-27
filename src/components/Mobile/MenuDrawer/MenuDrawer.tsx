@@ -77,6 +77,9 @@ export const MenuDrawerComponent: React.FC = () => {
       case '/socialtoken':
         setSelected('token');
         break;
+      case '/town':
+        setSelected('town');
+        break;
       case '/nft':
         setSelected('nft');
         break;
@@ -196,6 +199,7 @@ export const MenuDrawerComponent: React.FC = () => {
                   active={item.active}
                   onClick={openMenu(item)}
                   url={item.url}
+                  isAnimated={item.isAnimated}
                 />
               ))}
             </div>

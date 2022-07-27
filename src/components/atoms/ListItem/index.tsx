@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Image from 'next/image';
+
 import {Typography} from '@material-ui/core';
 import {AvatarProps} from '@material-ui/core/Avatar';
 import ListItem, {ListItemProps} from '@material-ui/core/ListItem';
@@ -11,6 +13,8 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import {Avatar, AvatarSize} from '../Avatar';
+
+import ShowIf from 'components/common/show-if.component';
 
 type ListItemComponentProps = ListItemProps & {
   icon?: any;
@@ -24,6 +28,7 @@ type ListItemComponentProps = ListItemProps & {
   url?: string;
   id?: string;
   isBanned?: boolean;
+  isAnimated?: boolean;
 };
 
 const useStyles = makeStyles<Theme, ListItemComponentProps>((theme: Theme) =>
@@ -84,6 +89,7 @@ export const ListItemComponent: React.FC<ListItemComponentProps> = props => {
     active,
     onClick,
     isBanned = false,
+    isAnimated = false,
   } = props;
   const styles = useStyles({...props});
 
@@ -139,6 +145,10 @@ export const ListItemComponent: React.FC<ListItemComponentProps> = props => {
           ) : undefined
         }
       />
+
+      <ShowIf condition={isAnimated}>
+        <Image src="/images/animated_new.gif" alt={'new'} width={40} height={20} quality={100} />
+      </ShowIf>
 
       {action && (
         <ListItemSecondaryAction className={styles.action}>{action}</ListItemSecondaryAction>
