@@ -2,7 +2,16 @@ import {ChevronRightIcon} from '@heroicons/react/outline';
 
 import React from 'react';
 
-import {List, ListItem, ListItemText, Paper, SvgIcon, Typography} from '@material-ui/core';
+import {
+  List,
+  ListItem,
+  ListItemText,
+  Paper,
+  SvgIcon,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@material-ui/core';
 
 import ShowIf from '../common/show-if.component';
 import {useStyles} from './Settings.styles';
@@ -20,7 +29,8 @@ type SettingsProps = {
 
 export const Settings: React.FC<SettingsProps> = props => {
   const {selectedType, value, onChange} = props;
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
   const styles = useStyles();
   const settings = useSettingList();
 
@@ -54,17 +64,14 @@ export const Settings: React.FC<SettingsProps> = props => {
                     <Typography variant="body1" color="textSecondary" className={styles.secondary}>
                       {item.subtitle}
                     </Typography>
+                    {isMobile && (
+                      <div className={styles.valueVersion}>
+                        <Typography>{value.version}</Typography>
+                      </div>
+                    )}
                   </ListItemText>
-                  {item.id === 'version' && (
-                    <div
-                      style={{
-                        display: 'flex',
-                        paddingRight: 31,
-                        fontWeight: 300,
-                        fontStyle: 'italic',
-                        fontSize: 14,
-                        color: '#988E8E',
-                      }}>
+                  {item.id === 'version' && !isMobile && (
+                    <div className={styles.valueVersion}>
                       <Typography>{value.version}</Typography>
                     </div>
                   )}
