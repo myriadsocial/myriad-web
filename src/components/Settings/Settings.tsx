@@ -64,7 +64,7 @@ export const Settings: React.FC<SettingsProps> = props => {
                     <Typography variant="body1" color="textSecondary" className={styles.secondary}>
                       {item.subtitle}
                     </Typography>
-                    {isMobile && (
+                    {item.id === 'version' && isMobile && (
                       <div className={styles.valueVersion}>
                         <Typography>{value.version}</Typography>
                       </div>
