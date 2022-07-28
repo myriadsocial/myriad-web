@@ -57,6 +57,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
   const [agreementChecked, setAgreementChecked] = useState(false);
   const [loadingFee, setLoadingFee] = useState(true);
   const [tippingAmountValid, setTippingAmountValid] = useState(false);
+  const [assetMinBalance, setAssetMinBalance] = useState<BN>(BN_ZERO);
 
   useEffect(() => {
     calculateTransactionFee(defaultCurrency);
@@ -91,15 +92,17 @@ export const Tipping: React.FC<SendTipProps> = props => {
     let fee: BN = BN_ZERO;
     //TODO: move to switch case
     if (currentWallet?.network?.blockchainPlatform === 'substrate') {
-      const gasPrice = await getEstimatedFee(
+      const {estimatedFee, minBalance} = await getEstimatedFee(
         senderAddress,
         receiver.walletDetail,
         selected,
         currentWallet?.network?.rpcURL ?? '',
       );
-      if (gasPrice) {
-        fee = gasPrice;
+      if (estimatedFee) {
+        fee = estimatedFee;
       }
+
+      if (minBalance) setAssetMinBalance(minBalance);
     }
 
     if (currentWallet?.network?.blockchainPlatform === 'near') {
@@ -120,6 +123,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
     setCurrency(selected);
     setAmount(INITIAL_AMOUNT);
     setTransactionFee(INITIAL_AMOUNT);
+    setAssetMinBalance(BN_ZERO);
 
     calculateTransactionFee(selected);
   };
@@ -209,6 +213,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
             placeholder={i18n.t('Tipping.Modal_Main.Tip_Amount')}
             decimal={currency.decimal}
             fee={transactionFee}
+            minBalance={assetMinBalance}
             maxValue={+currency.freeBalance}
             length={10}
             currencyId={currency.symbol}

@@ -44,18 +44,23 @@ export const usePolkadotApi = () => {
     walletDetail: WalletDetail,
     currency: BalanceDetail,
     rpcURL: string,
-  ): Promise<BN | null> => {
+  ): Promise<{estimatedFee: BN | null; minBalance?: BN | null}> => {
     setIsFetchingFee(true);
 
     try {
-      let {partialFee: estimatedFee} = await estimateFee(from, walletDetail, rpcURL);
+      let {partialFee: estimatedFee, minBalance} = await estimateFee(
+        from,
+        walletDetail,
+        rpcURL,
+        currency,
+      );
 
       if (!estimatedFee) {
         // equal 0.01
         estimatedFee = BN_ONE.mul(BN_TEN.pow(new BN(currency.decimal))).div(BN_TEN.pow(BN_TWO));
       }
 
-      return estimatedFee;
+      return {estimatedFee, minBalance};
     } catch (error) {
       Sentry.captureException(error);
       return null;
