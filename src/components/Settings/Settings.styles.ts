@@ -80,5 +80,13 @@ export const useStyles = makeStyles((theme: Theme) =>
         padding: '0px 20px',
       },
     },
+    valueVersion: {
+      display: 'flex',
+      paddingRight: 31,
+      fontWeight: 300,
+      fontStyle: 'italic',
+      fontSize: 14,
+      color: '#988E8E',
+    },
   }),
 );
