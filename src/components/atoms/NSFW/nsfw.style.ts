@@ -11,6 +11,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       color: '#FFF',
       padding: '20px',
       marginTop: 10,
+      marginBottom: 10,
     },
     title: {
       marginBottom: '8px',

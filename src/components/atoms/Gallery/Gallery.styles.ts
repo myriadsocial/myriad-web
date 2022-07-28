@@ -9,6 +9,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       overflow: 'hidden',
       maxWidth: 600,
       backgroundColor: theme.palette.background.paper,
+      marginBottom: 10,
     },
     gridList: {},
     transparentHeader: {
