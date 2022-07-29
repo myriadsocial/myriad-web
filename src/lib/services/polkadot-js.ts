@@ -6,7 +6,6 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {Keyring} from '@polkadot/keyring';
 import {StorageKey, u128, u32, UInt} from '@polkadot/types';
 import {AssetBalance, AssetDetails} from '@polkadot/types/interfaces';
-import {Balance} from '@polkadot/types/interfaces';
 import {AnyTuple, Codec} from '@polkadot/types/types';
 import {numberToHex} from '@polkadot/util';
 import {BN, BN_ZERO} from '@polkadot/util';
@@ -300,14 +299,21 @@ export const checkAccountBalance = async (
   callback: (change: BN) => void,
 ): Promise<CheckBalanceResult> => {
   if (!currency.native) {
-    const {balance: free} = await api.query.octopusAssets.account<AssetBalance>(
+    const rawAssetBalance = await api.query.octopusAssets.account<AssetBalance>(
       currency.referenceId,
       account,
     );
 
-    listenToTokenBalanceChange(api, account, currency, free, callback);
+    let free = '0';
 
-    return {free};
+    if (rawAssetBalance.toHuman()) {
+      const accountAssetBalance: AssetBalance = JSON.parse(rawAssetBalance.toString());
+      free = parseInt(accountAssetBalance.balance.toString()).toString();
+    }
+
+    listenToTokenBalanceChange(api, account, currency, new BN(free), callback);
+
+    return {free: parseInt(free) as unknown as u128};
   }
 
   const {data, nonce} = await api.query.system.account(account);
@@ -344,12 +350,18 @@ const listenToTokenBalanceChange = async (
   api: ApiPromise,
   account: string,
   currency: Currency,
-  previousFree: Balance,
+  previousFree: BN,
   callback: (change: BN) => void,
 ) => {
-  api.query.octopusAssets.account(currency.referenceId, account, ({balance}: AssetBalance) => {
+  api.query.octopusAssets.account(currency.referenceId, account, (assetBalance: AssetBalance) => {
+    if (!assetBalance.toHuman()) return;
+
+    const accountAssetBalance: AssetBalance = JSON.parse(assetBalance.toString());
+    const balance = new BN(parseInt(accountAssetBalance.balance.toString()).toString());
+    console.log(balance.toString());
     // Calculate the delta
-    const change = balance.toBn().sub(previousFree.toBn());
+    const change = balance.sub(previousFree);
+    // Calculate the delta
 
     // Only display positive value changes (Since we are pulling `previous` above already,
     // the initial balance change will also be zero)
