@@ -41,6 +41,31 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     containerFooter: {
       display: 'flex',
+      marginTop: 16,
+    },
+    disclaimer: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      background: '#FFC85726',
+      padding: 10,
+      borderRadius: 8,
+      marginTop: 16,
+    },
+    wrapperIcon: {
+      marginRight: 12,
+    },
+    textWarning: {
+      fontSize: 12,
+      fontWeight: 400,
+      textAlign: 'justify',
+      display: 'inline-block',
+    },
+    textUrl: {
+      fontSize: 12,
+      fontWeight: 400,
+      textAlign: 'justify',
+      display: 'inline-block',
+      cursor: 'pointer',
     },
     btnVisit: {
       marginRight: theme.spacing(1),

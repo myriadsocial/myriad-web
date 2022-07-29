@@ -1064,7 +1064,7 @@
       "Experience_Edit": "Edit Experience",
       "NFT": "Underway",
       "Social_Token": "Underway",
-      "Myriad_Town": "Myriad.Town stand at the crossroads of real life and digital interactions."
+      "Myriad_Town": "Myriad lies at the crossroads of real life and digital interaction"
     }
   },
   "Dropzone": {
@@ -1119,6 +1119,7 @@
     "Title_Head": "{{appname}} - Myriad.Town",
     "Visit": "Visit Myriad.Town",
     "Fullscreen": "Play in fullscreen",
-    "Toaster_Esc": "Press Esc to exit from fullscreen"
+    "Toaster_Esc": "Press Esc to exit from fullscreen",
+    "Disclaimer": "The Myriad Metaverse integration is an early beta feature. If you encounter problems, or if you want the best experience on the Myriad Metaverse, go to"
   }
 }
