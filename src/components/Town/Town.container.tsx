@@ -38,10 +38,6 @@ const TownContainer: React.FC = () => {
     }
   };
 
-  const handleVisitLink = () => {
-    window.open('https://myriad.town', '_blank');
-  };
-
   return (
     <div className={style.root}>
       <div className={style.container}>
@@ -55,7 +51,11 @@ const TownContainer: React.FC = () => {
           </div>
           <Typography className={style.textWarning} display="inline">
             {i18n.t('Myriad_Town.Disclaimer')}{' '}
-            <Typography className={style.textUrl} color="primary" onClick={handleVisitLink}>
+            <Typography
+              className={style.textWarning}
+              component="a"
+              target={'_blank'}
+              href="https://myriad.town">
               https://myriad.town
             </Typography>
             .
