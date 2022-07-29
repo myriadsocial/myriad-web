@@ -1064,7 +1064,7 @@
       "Experience_Edit": "Ubah Pengalaman",
       "NFT": "Sedang berjalan",
       "Social_Token": "Sedang berjalan",
-      "Myriad_Town": "Myriad.Town berdiri di persimpangan kehidupan nyata dan interaksi digital."
+      "Myriad_Town": "Myriad terletak di persimpangan kehidupan nyata dan interaksi digital"
     }
   },
   "Dropzone": {
@@ -1119,6 +1119,7 @@
     "Title_Head": "{{appname}} - Myriad.Town",
     "Visit": "Kunjungi Myriad.Town",
     "Fullscreen": "Mainkan pada layar penuh",
-    "Toaster_Esc": "Tekan Esc untuk keluar dari layar penuh"
+    "Toaster_Esc": "Tekan Esc untuk keluar dari layar penuh",
+    "Disclaimer": "Integrasi Myriad Metaverse masih dalam tahap beta. Jika Anda mengalami masalah, atau jika Anda menginginkan pengalaman terbaik di Myriad Metaverse, kunjungi"
   }
 }
