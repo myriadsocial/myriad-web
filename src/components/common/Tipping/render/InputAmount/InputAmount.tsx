@@ -17,13 +17,23 @@ type InputAmountProps = Omit<InputProps, 'onChange'> & {
   maxValue: BN | number;
   length?: number;
   fee?: BN;
+  minBalance?: BN;
   decimal: number;
   currencyId: CurrencyId;
   onChange?: (value: BN, valid: boolean) => void;
 };
 
 export const InputAmount: React.FC<InputAmountProps> = props => {
-  const {defaultValue, maxValue, fee = BN_ZERO, decimal, length, currencyId, onChange} = props;
+  const {
+    defaultValue,
+    maxValue,
+    fee = BN_ZERO,
+    decimal,
+    minBalance,
+    length,
+    currencyId,
+    onChange,
+  } = props;
 
   const styles = useStyles();
 
@@ -82,7 +92,7 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
   const validateInput = (amount: string): [BN, boolean, string?] => {
     const value = toBigNumber(amount, decimal);
     const balance = isBn(maxValue) ? maxValue : toBigNumber(maxValue.toString(), decimal);
-    const maxTip = balance.sub(fee);
+    const maxTip = balance.sub(minBalance.gt(BN_ZERO) ? BN_ZERO : fee).sub(minBalance);
 
     if (length && amount.length > length) {
       return [value, false, i18n.t('Tipping.Modal_Main.Error_Amount_Max', {length: length})];

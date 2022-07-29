@@ -5,11 +5,11 @@ import {SubmittableExtrinsicFunction} from '@polkadot/api/types';
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {Keyring} from '@polkadot/keyring';
 import {StorageKey, u128, u32, UInt} from '@polkadot/types';
-import {AssetBalance} from '@polkadot/types/interfaces';
+import {AssetBalance, AssetDetails} from '@polkadot/types/interfaces';
 import {Balance} from '@polkadot/types/interfaces';
 import {AnyTuple, Codec} from '@polkadot/types/types';
 import {numberToHex} from '@polkadot/util';
-import {BN} from '@polkadot/util';
+import {BN, BN_ZERO} from '@polkadot/util';
 
 import {Server} from '../api/wallet';
 import {NoAccountException} from './errors/NoAccountException';
@@ -39,6 +39,7 @@ interface SignTransactionCallbackProps {
 
 interface EstimateFeeResponseProps {
   partialFee: BN | null;
+  minBalance?: BN | null;
 }
 
 type CheckBalanceResult = {
@@ -115,6 +116,7 @@ export const estimateFee = async (
   from: string,
   walletDetail: WalletDetail,
   rpcURL: string,
+  currency: BalanceDetail,
 ): Promise<EstimateFeeResponseProps | null> => {
   try {
     const api: ApiPromise = await connectToBlockchain(rpcURL);
@@ -125,11 +127,25 @@ export const estimateFee = async (
     const method = isWalletAddress ? 'transfer' : 'sendTip';
     const dest = isWalletAddress ? to : walletDetail;
     const extrinsic = api.tx[extrinsicType][method] as SubmittableExtrinsicFunction<'promise'>;
+
+    let minBalance = BN_ZERO;
+
+    const assetId = parseInt(currency.referenceId);
+    if (currency.referenceId && !currency.native && !isNaN(assetId)) {
+      const rawAssetDetail = await api.query.octopusAssets.asset<AssetDetails>(assetId);
+
+      if (rawAssetDetail) {
+        const assetDetails = JSON.parse(rawAssetDetail.toString()) as AssetDetails;
+
+        minBalance = new BN(parseInt(assetDetails.minBalance.toString()).toString());
+      }
+    }
+
     const {partialFee} = await extrinsic(dest, RAND_AMOUNT).paymentInfo(from);
 
     await api.disconnect();
 
-    return {partialFee: partialFee.toBn()};
+    return {partialFee: partialFee.toBn(), minBalance: new BN(minBalance)};
   } catch (error) {
     console.log({error});
     Sentry.captureException(error);
