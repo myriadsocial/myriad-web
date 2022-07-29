@@ -19,7 +19,7 @@ export const MediaEmbedElement = <V extends Value>(
   const rootProps = getRootProps(props);
 
   const {url} = element;
-  const width = mobile ? '100%' : 520;
+  const width = mobile ? '100%' : 550;
 
   return (
     <div {...attributes} {...rootProps}>
