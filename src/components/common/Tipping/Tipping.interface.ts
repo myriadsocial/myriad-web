@@ -25,10 +25,8 @@ export type TippingOptions = {
 export interface TippingProviderProps {
   anonymous: boolean;
   sender?: User;
-  balances: BalanceDetail[];
   currentWallet?: WalletTypeEnum;
   currentNetwork?: NetworkIdEnum;
-  loading: boolean;
 }
 
 export type SendTipProps = {
