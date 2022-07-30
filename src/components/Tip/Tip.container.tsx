@@ -20,9 +20,8 @@ import {Empty} from 'src/components/atoms/Empty';
 import {getServerId} from 'src/helpers/wallet';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useClaimTip} from 'src/hooks/use-claim-tip.hook';
-import {useNearApi} from 'src/hooks/use-near-api.hook';
-import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
+import {useWallet} from 'src/hooks/use-wallet-hook';
 import {Network, NetworkIdEnum, TipResult, TipsBalanceInfo} from 'src/interfaces/network';
 import {updateTransaction} from 'src/lib/api/transaction';
 import * as WalletAPI from 'src/lib/api/wallet';
@@ -38,10 +37,9 @@ export const TipContainer: React.FC = () => {
   const styles = useStyles();
 
   const {currentWallet, user} = useSelector<RootState, UserState>(state => state.userState);
-  const {payTransactionFee: payNearTransactionFee} = useNearApi();
   const {loading, claiming, claimingAll, tipsEachNetwork, claim, claimAll, feeInfo} = useClaimTip();
   const {enablePolkadotExtension} = usePolkadotExtension();
-  const {payTransactionFee: payMyriaTransactionFee, isSignerLoading} = usePolkadotApi();
+  const {payTransactionFee, isSignerLoading} = useWallet();
   const {getRegisteredAccounts} = useAuthHook();
   const [verifyingRef, setVerifyingRef] = useState<boolean>(false);
   const [claimingSuccess, setClaimingSucces] = useState<boolean>(false);
@@ -155,13 +153,13 @@ export const TipContainer: React.FC = () => {
       switch (networkId) {
         case NetworkIdEnum.NEAR: {
           const tipsBalanceInfo = {
-            server_id: serverId,
-            reference_type: 'user',
-            reference_id: user.id,
-            ft_identifier: 'native',
+            serverId: serverId,
+            referenceType: 'user',
+            referenceId: user.id,
+            ftIdentifier: 'native',
           };
 
-          await payNearTransactionFee(tipsBalanceInfo, feeInfo.trxFee, currentBalance);
+          await payTransactionFee(tipsBalanceInfo, feeInfo.trxFee, undefined, currentBalance);
           break;
         }
 
@@ -217,15 +215,9 @@ export const TipContainer: React.FC = () => {
 
     setVerifyingRef(true);
     try {
-      await payMyriaTransactionFee(
-        account,
-        currentWallet?.network?.rpcURL ?? '',
-        tipsBalanceInfo,
-        feeInfo.trxFee,
-        success => {
-          setClaimingSucces(success);
-        },
-      );
+      await payTransactionFee(tipsBalanceInfo, feeInfo.trxFee, account, undefined, success => {
+        setClaimingSucces(success);
+      });
     } finally {
       setVerifyingRef(false);
       setTipsBalanceInfo(null);

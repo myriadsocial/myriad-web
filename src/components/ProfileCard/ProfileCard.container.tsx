@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React from 'react';
+import {useSelector} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
@@ -8,7 +8,6 @@ import {ProfileCard} from './ProfileCard';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {RootState} from 'src/reducers';
-import {fetchUserWalletAddress, fetchCurrentUserWallets} from 'src/reducers/user/actions';
 
 type Props = {
   toggleNotification: () => void;
@@ -18,19 +17,10 @@ export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
   const total = useSelector<RootState, number>(state => state.notificationState.total);
 
   const router = useRouter();
-  const dispatch = useDispatch();
 
   const {user, anonymous, alias, currentWallet, wallets, networks, userWalletAddress} =
     useUserHook();
   const {logout} = useAuthHook();
-
-  useEffect(() => {
-    if (currentWallet) {
-      dispatch(fetchUserWalletAddress());
-    } else {
-      dispatch(fetchCurrentUserWallets());
-    }
-  }, [currentWallet]);
 
   const handleViewProfile = () => {
     if (user && !anonymous) {
@@ -39,7 +29,7 @@ export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
   };
 
   const handleSignOut = async () => {
-    logout(currentWallet);
+    logout();
   };
 
   const handleShowNotificationList = () => {

@@ -61,7 +61,7 @@ export const WalletBalances: React.FC<WalletProps> = ({balances, loading}) => {
               <Typography variant="h5">
                 {typeof balance.freeBalance === 'number'
                   ? parseFloat(balance?.freeBalance.toFixed(4))
-                  : NaN}
+                  : 'NaN'}
               </Typography>
             }
           />

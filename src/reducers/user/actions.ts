@@ -15,13 +15,12 @@ import {SocialsEnum} from 'src/interfaces/index';
 import {NetworkIdEnum, Network} from 'src/interfaces/network';
 import {SocialMedia} from 'src/interfaces/social';
 import {User, UserTransactionDetail, UserWallet} from 'src/interfaces/user';
-import {BlockchainPlatform} from 'src/interfaces/wallet';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import * as SocialAPI from 'src/lib/api/social';
 import * as TokenAPI from 'src/lib/api/token';
 import * as UserAPI from 'src/lib/api/user';
 import * as WalletAPI from 'src/lib/api/wallet';
-import {getMetadata} from 'src/lib/services/polkadot-js';
+import {IProvider} from 'src/lib/services/blockchain-interface';
 import {ThunkActionCreator} from 'src/types/thunk';
 
 /**
@@ -261,50 +260,21 @@ export const fetchUserExperience: ThunkActionCreator<Actions, RootState> =
   };
 
 export const fetchUserWalletAddress: ThunkActionCreator<Actions, RootState> =
-  () => async (dispatch, getState) => {
+  (provider: IProvider, address: string) => async dispatch => {
     dispatch(setLoading(true));
+    let convertedAddress = address;
 
-    const {
-      userState: {currentWallet},
-    } = getState();
-
-    if (currentWallet === undefined) return;
-
-    if (currentWallet.network === undefined) return;
-
-    switch (currentWallet?.network?.blockchainPlatform) {
-      case BlockchainPlatform.SUBSTRATE:
-        try {
-          const data = await getMetadata(currentWallet.network.rpcURL);
-
-          let walletAddress = '';
-
-          if (data !== null) {
-            walletAddress = encodeAddress(hexToU8a(currentWallet.id), data);
-
-            dispatch({
-              type: constants.FETCH_USER_WALLET_ADDRESS,
-              payload: walletAddress,
-            });
-          }
-        } catch (error) {
-          dispatch(setError(error.message));
-        } finally {
-          dispatch(setLoading(false));
-        }
-        break;
-
-      case BlockchainPlatform.NEAR:
-        dispatch({
-          type: constants.FETCH_USER_WALLET_ADDRESS,
-          payload: currentWallet.id,
-        });
-        break;
-
-      //TODO: handle another wallet type
-      default:
-        break;
+    if (provider) {
+      const data = await provider.getMetadata();
+      convertedAddress = data !== null ? encodeAddress(hexToU8a(address), data) : address;
     }
+
+    dispatch({
+      type: constants.FETCH_USER_WALLET_ADDRESS,
+      payload: convertedAddress,
+    });
+
+    dispatch(setLoading(false));
   };
 
 export const fetchCurrentUserWallets: ThunkActionCreator<Actions, RootState> =
@@ -349,6 +319,19 @@ export const fetchUserWallets: ThunkActionCreator<Actions, RootState> =
         payload: wallets,
         meta,
       });
+
+      const primaryWallet = wallets.find(wallet => wallet.primary === true);
+
+      if (primaryWallet) {
+        const wallet = {
+          ...primaryWallet,
+          user,
+        };
+        dispatch({
+          type: constants.FETCH_CURRENT_USER_WALLETS,
+          payload: wallet,
+        });
+      }
     } catch (error) {
       dispatch(setError(error.message));
     } finally {
