@@ -25,23 +25,39 @@ export const formatAddress = (currentWallet: UserWallet, address: null | string)
   return address;
 };
 
-export const formatNetworkTitle = (network?: Network) => {
-  switch (network?.id) {
+export const formatNetworkTitle = (network?: Network, networkId?: NetworkIdEnum) => {
+  const id = network?.id ?? networkId;
+  switch (id) {
     case NetworkIdEnum.NEAR:
-      return network.id.toUpperCase();
+      return id.toUpperCase();
     default:
-      return capitalize(network?.id ?? 'unknown');
+      return capitalize(id ?? 'unknown');
   }
 };
 
-export const formatWalletTitle = (network?: Network) => {
-  switch (network?.blockchainPlatform) {
-    case BlockchainPlatform.SUBSTRATE:
-      return 'Polkadot{.js}';
-    case BlockchainPlatform.NEAR:
-      return 'NEAR Wallet';
-    default:
-      return network?.blockchainPlatform;
+export const formatWalletTitle = (network?: Network, networkId?: NetworkIdEnum) => {
+  if (network) {
+    switch (network?.blockchainPlatform) {
+      case BlockchainPlatform.SUBSTRATE:
+        return 'Polkadot{.js}';
+      case BlockchainPlatform.NEAR:
+        return 'NEAR Wallet';
+      default:
+        return 'Unknown Wallet';
+    }
+  }
+
+  if (networkId) {
+    switch (networkId) {
+      case NetworkIdEnum.MYRIAD:
+      case NetworkIdEnum.KUSAMA:
+      case NetworkIdEnum.POLKADOT:
+        return 'Polkadot{.js}';
+      case NetworkIdEnum.NEAR:
+        return 'NEAR Wallet';
+      default:
+        return 'Unknown Wallet';
+    }
   }
 };
 

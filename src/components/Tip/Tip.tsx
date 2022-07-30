@@ -194,7 +194,7 @@ export const Tip: React.FC<TipProps> = props => {
         <div className={style.secondaryAction}>
           <ShowIf condition={!!currentWallet && currentWallet.networkId !== networkId}>
             <Button
-              disabled={true}
+              disabled
               className={style.button}
               size="small"
               color="primary"

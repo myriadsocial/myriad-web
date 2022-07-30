@@ -50,7 +50,7 @@ export const DraggableBalanceCard: React.FC<DraggableBalanceCardProps> = props =
               src={balanceDetail.image}
             />
             <Typography variant="body1" style={{fontWeight: 'bold'}}>
-              {balanceDetail.name.toUpperCase()}
+              {balanceDetail.symbol.toUpperCase()}
             </Typography>
           </div>
 

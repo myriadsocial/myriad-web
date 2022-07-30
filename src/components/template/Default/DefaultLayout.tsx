@@ -1,13 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import {useCookies} from 'react-cookie';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 import dynamic from 'next/dynamic';
+import {useRouter} from 'next/router';
 
 import {Container} from '@material-ui/core';
 
 import useStyles from './DefaultLayout.styles';
 
+import {BlockchainProvider as BlockchainProviderComponent} from 'components/common/Blockchain/Blockchain.provider';
 import {withError, WithErrorProps} from 'src/components/Error';
 import {MenuContainer} from 'src/components/Menu';
 import {NotificationsContainer} from 'src/components/Notifications';
@@ -19,9 +21,11 @@ import {useUserHook} from 'src/hooks/use-user.hook';
 import {NotificationProps} from 'src/interfaces/notification';
 import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
 import {firebaseApp, firebaseAnalytics, firebaseCloudMessaging} from 'src/lib/firebase';
-import {RootState} from 'src/reducers';
-import {BalanceState} from 'src/reducers/balance/reducer';
+import {IProvider} from 'src/lib/services/blockchain-interface';
+import {BlockchainProvider} from 'src/lib/services/blockchain-provider';
+import {clearBalances, loadBalances} from 'src/reducers/balance/actions';
 import {countNewNotification, processNotification} from 'src/reducers/notification/actions';
+import {fetchUserWalletAddress} from 'src/reducers/user/actions';
 
 const WalletBalancesContainer = dynamic(
   () => import('../../WalletBalance/WalletBalanceContainer'),
@@ -54,19 +58,38 @@ const Default: React.FC<DefaultLayoutProps> = props => {
 
   const classes = useStyles();
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const [cookies] = useCookies([COOKIE_CONSENT_NAME]);
   const {user, anonymous, currentWallet, updateUserFcmToken} = useUserHook();
 
-  const {balanceDetails, loading} = useSelector<RootState, BalanceState>(
-    state => state.balanceState,
-  );
+  const [showNotification, setShowNotification] = useState<boolean>(false);
+  const [provider, setProvider] = useState<IProvider>(null);
+  const [initialize, setInitialize] = useState<boolean>(true);
 
-  const [showNotification, setShowNotification] = useState(false);
+  const loading = router.query.loading as string | null;
+
+  useEffect(() => {
+    if (loading) dispatch(clearBalances());
+    if (currentWallet?.network && initialize && !provider && !loading && !anonymous) {
+      BlockchainProvider.connect(currentWallet.network).then(blockchain => {
+        initializeBlockchain(blockchain?.provider, currentWallet.id);
+      });
+    }
+  }, [currentWallet, initialize, provider, loading]);
 
   useEffect(() => {
     initializeFirebase();
   }, []);
+
+  const initializeBlockchain = (provider: IProvider, walletId: string) => {
+    if (provider) provider.accountId = walletId;
+
+    setInitialize(false);
+    setProvider(provider);
+    dispatch(loadBalances(provider, true));
+    dispatch(fetchUserWalletAddress(provider, walletId));
+  };
 
   const initializeFirebase = async () => {
     await firebaseApp.init();
@@ -118,6 +141,11 @@ const Default: React.FC<DefaultLayoutProps> = props => {
     setShowNotification(!showNotification);
   };
 
+  const reinitializeBlockchain = async () => {
+    setInitialize(true);
+    setProvider(null);
+  };
+
   const getWallet = (blockchainPlatform?: BlockchainPlatform) => {
     switch (blockchainPlatform) {
       case BlockchainPlatform.SUBSTRATE:
@@ -132,51 +160,54 @@ const Default: React.FC<DefaultLayoutProps> = props => {
   };
 
   return (
-    <TippingProvider
-      loading={loading}
-      anonymous={anonymous}
-      balances={balanceDetails}
-      sender={user}
-      currentWallet={getWallet(currentWallet?.network?.blockchainPlatform)}
-      currentNetwork={currentWallet?.networkId}>
-      <Container maxWidth="lg" disableGutters>
-        <div className={classes.root}>
-          <div className={classes.firstCol}>
-            <div className={classes.innerFirstColWrapper}>
-              <div>
-                <MenuContainer />
+    <BlockchainProviderComponent
+      provider={provider}
+      currentWallet={currentWallet}
+      onChangeProvider={reinitializeBlockchain}>
+      <TippingProvider
+        anonymous={anonymous}
+        sender={user}
+        currentWallet={getWallet(currentWallet?.network?.blockchainPlatform)}
+        currentNetwork={currentWallet?.networkId}>
+        <Container maxWidth="lg" disableGutters>
+          <div className={classes.root}>
+            <div className={classes.firstCol}>
+              <div className={classes.innerFirstColWrapper}>
+                <div>
+                  <MenuContainer />
+                </div>
+                <div>
+                  <SocialMediaListContainer />
+                </div>
+                <div>
+                  <WalletBalancesContainer />
+                </div>
               </div>
-              <div>
-                <SocialMediaListContainer />
-              </div>
-              <div>
-                <WalletBalancesContainer />
+            </div>
+
+            <div className={classes.secondCol}>
+              <div className={classes.innerSecondColWrapper}>{children}</div>
+            </div>
+
+            <div className={classes.thirdCol}>
+              <div className={classes.innerThirdColWrapper}>
+                <ProfileCardContainer toggleNotification={handleToggleNotification} />
+
+                <ShowIf condition={!showNotification}>
+                  <RightMenuBar />
+                </ShowIf>
+
+                <ShowIf condition={showNotification}>
+                  <NotificationsContainer infinite={false} size="small" />
+                </ShowIf>
               </div>
             </div>
           </div>
+        </Container>
 
-          <div className={classes.secondCol}>
-            <div className={classes.innerSecondColWrapper}>{children}</div>
-          </div>
-
-          <div className={classes.thirdCol}>
-            <div className={classes.innerThirdColWrapper}>
-              <ProfileCardContainer toggleNotification={handleToggleNotification} />
-
-              <ShowIf condition={!showNotification}>
-                <RightMenuBar />
-              </ShowIf>
-
-              <ShowIf condition={showNotification}>
-                <NotificationsContainer infinite={false} size="small" />
-              </ShowIf>
-            </div>
-          </div>
-        </div>
-      </Container>
-
-      <CookieConsent />
-    </TippingProvider>
+        <CookieConsent />
+      </TippingProvider>
+    </BlockchainProviderComponent>
   );
 };
 

@@ -17,10 +17,11 @@ import {useAuthHook} from 'src/hooks/auth.hook';
 import {NetworkIdEnum} from 'src/interfaces/network';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
 import {toHexPublicKey} from 'src/lib/crypto';
-import {nearInitialize} from 'src/lib/services/near-api-js';
+import {BlockchainProvider} from 'src/lib/services/blockchain-provider';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {ConfigState} from 'src/reducers/config/reducer';
+import {UserState} from 'src/reducers/user/reducer';
 
 type ProfileProps = {
   checkUsernameAvailability: (username: string, callback: (available: boolean) => void) => void;
@@ -45,6 +46,7 @@ const USERNAME_HELPER_TEXT = i18n.t('Login.Profile.Helper_Text_Username', {
 export const Profile: React.FC<ProfileProps> = props => {
   const {walletType, checkUsernameAvailability, account, publicAddress, networkId, isMobileSignIn} =
     props;
+  const {networks} = useSelector<RootState, UserState>(state => state.userState);
   const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
 
   const styles = useStyles();
@@ -227,12 +229,19 @@ export const Profile: React.FC<ProfileProps> = props => {
 
   const handleChangeWallet = async () => {
     if (walletType === WalletTypeEnum.NEAR) {
-      const {wallet} = await nearInitialize();
-      if (wallet.isSignedIn()) {
-        wallet.signOut();
-        router.replace(router.route, undefined, {shallow: true});
-      } else {
-        console.log('no signed in NEAR wallet found!');
+      const network = networks.find(network => network.id === NetworkIdEnum.NEAR);
+
+      if (network) {
+        const blockchain = await BlockchainProvider.connect(network);
+        const provider = blockchain.Near;
+        const {wallet} = provider.provider;
+
+        if (wallet.isSignedIn()) {
+          wallet.signOut();
+          router.replace(router.route, undefined, {shallow: true});
+        } else {
+          console.log('no signed in NEAR wallet found!');
+        }
       }
     }
     navigate('/wallet');
