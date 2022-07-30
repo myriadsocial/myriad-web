@@ -1,14 +1,13 @@
 import {useCallback} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector, useDispatch, shallowEqual} from 'react-redux';
 
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {SocialsEnum} from 'src/interfaces';
 import {Network} from 'src/interfaces/network';
+import {SocialMedia} from 'src/interfaces/social';
 import {User, UserWallet} from 'src/interfaces/user';
-import {firebaseCloudMessaging} from 'src/lib/firebase';
-import {RootState} from 'src/reducers';
+import type {RootState} from 'src/reducers';
 import {updateUser, deleteSocial} from 'src/reducers/user/actions';
-import {UserState} from 'src/reducers/user/reducer';
 
 type UserHookProps = {
   user: User;
@@ -18,21 +17,48 @@ type UserHookProps = {
   currentWallet?: UserWallet;
   wallets: UserWallet[];
   disconnectSocial: (social: SocialsEnum) => void;
-  updateUserFcmToken: () => void;
+  updateUserFcmToken: (token: string) => void;
   updateUser: (values: Partial<User>) => void;
   userWalletAddress: null | string;
 };
 
 export const useUserHook = (): UserHookProps => {
   const dispatch = useDispatch();
-
   const enqueueSnackbar = useEnqueueSnackbar();
 
-  const {user, anonymous, alias, socials} = useSelector<RootState, UserState>(
-    state => state.userState,
+  const {anonymous, alias, user, socials} = useSelector<
+    RootState,
+    {
+      anonymous: boolean;
+      alias: string;
+      user?: User;
+      socials: SocialMedia[];
+    }
+  >(
+    ({userState}) => ({
+      anonymous: userState.anonymous,
+      alias: userState.alias,
+      user: userState.user,
+      socials: userState.socials,
+    }),
+    shallowEqual,
   );
-  const {networks, currentWallet, wallets, userWalletAddress} = useSelector<RootState, UserState>(
-    state => state.userState,
+  const {networks, currentWallet, wallets, userWalletAddress} = useSelector<
+    RootState,
+    {
+      networks: Network[];
+      currentWallet?: UserWallet;
+      wallets: UserWallet[];
+      userWalletAddress: string;
+    }
+  >(
+    state => ({
+      networks: state.userState.networks,
+      currentWallet: state.userState.currentWallet,
+      wallets: state.userState.wallets,
+      userWalletAddress: state.userState.userWalletAddress,
+    }),
+    shallowEqual,
   );
 
   const disconnectSocial = async (social: SocialsEnum): Promise<void> => {
@@ -63,14 +89,16 @@ export const useUserHook = (): UserHookProps => {
     [user],
   );
 
-  const updateUserFcmToken = useCallback(async () => {
-    const token = await firebaseCloudMessaging.getToken();
-    const disableUpdateAlert = true;
+  const updateUserFcmToken = useCallback(
+    async (token: string) => {
+      const disableUpdateAlert = true;
 
-    if (token && user && user.fcmTokens && !user.fcmTokens.includes(token)) {
-      updateUserDetail({fcmTokens: [token as string]}, disableUpdateAlert);
-    }
-  }, [user]);
+      if (token && user && user.fcmTokens && !user.fcmTokens.includes(token)) {
+        updateUserDetail({fcmTokens: [token]}, disableUpdateAlert);
+      }
+    },
+    [user],
+  );
 
   return {
     user,

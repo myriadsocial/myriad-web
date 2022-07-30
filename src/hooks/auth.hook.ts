@@ -19,7 +19,7 @@ import * as AuthAPI from 'src/lib/api/ext-auth';
 import * as UserAPI from 'src/lib/api/user';
 import * as WalletAPI from 'src/lib/api/wallet';
 import {toHexPublicKey} from 'src/lib/crypto';
-import {firebaseCloudMessaging} from 'src/lib/firebase';
+import * as FirebaseMessaging from 'src/lib/firebase/messaging';
 import {clearNearAccount} from 'src/lib/services/near-api-js';
 import {createNearSignature} from 'src/lib/services/near-api-js';
 import {signWithExtension} from 'src/lib/services/polkadot-js';
@@ -328,7 +328,7 @@ export const useAuthHook = () => {
       await clearNearAccount();
     }
 
-    await firebaseCloudMessaging.removeToken();
+    await FirebaseMessaging.unregister();
     await signOut({
       callbackUrl: publicRuntimeConfig.appAuthURL,
       redirect: true,
