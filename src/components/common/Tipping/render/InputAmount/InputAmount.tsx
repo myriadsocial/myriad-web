@@ -28,8 +28,8 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
     defaultValue,
     maxValue,
     fee = BN_ZERO,
+    minBalance = BN_ZERO,
     decimal,
-    minBalance,
     length,
     currencyId,
     onChange,
@@ -92,7 +92,7 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
   const validateInput = (amount: string): [BN, boolean, string?] => {
     const value = toBigNumber(amount, decimal);
     const balance = isBn(maxValue) ? maxValue : toBigNumber(maxValue.toString(), decimal);
-    const maxTip = balance.sub(minBalance.gt(BN_ZERO) ? BN_ZERO : fee).sub(minBalance);
+    const maxTip = balance.sub(minBalance.gt(BN_ZERO) ? minBalance : fee);
 
     if (length && amount.length > length) {
       return [value, false, i18n.t('Tipping.Modal_Main.Error_Amount_Max', {length: length})];
