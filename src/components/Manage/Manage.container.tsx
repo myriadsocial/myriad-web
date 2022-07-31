@@ -14,10 +14,11 @@ import {Manage} from './Manage';
 
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {useAuthHook} from 'src/hooks/auth.hook';
-import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
+import {NetworkIdEnum} from 'src/interfaces/network';
 import {BlockchainPlatform} from 'src/interfaces/wallet';
-import {clearNearAccount} from 'src/lib/services/near-api-js';
+import {BlockchainProvider} from 'src/lib/services/blockchain-provider';
+import {Near} from 'src/lib/services/near-api-js';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
@@ -27,12 +28,13 @@ export const ManageCointainer: React.FC = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
   const {enablePolkadotExtension} = usePolkadotExtension();
   const {getRegisteredAccounts, connectNetwork} = useAuthHook();
-  const {connectToNear} = useNearApi();
   const router = useRouter();
   const {publicRuntimeConfig} = getConfig();
   const enqueueSnackbar = useEnqueueSnackbar();
 
-  const {currentWallet, wallets} = useSelector<RootState, UserState>(state => state.userState);
+  const {user, currentWallet, wallets, networks} = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
   const [showAccountList, setShowAccountList] = React.useState(false);
   const [extensionInstalled, setExtensionInstalled] = React.useState(false);
   const [accounts, setAccounts] = React.useState<InjectedAccountWithMeta[]>([]);
@@ -75,7 +77,7 @@ export const ManageCointainer: React.FC = () => {
         ? connectNetwork(BlockchainPlatform.SUBSTRATE, account)
         : connectNearAccount());
     } catch {
-      clearNearAccount();
+      //
     }
 
     verified &&
@@ -100,7 +102,19 @@ export const ManageCointainer: React.FC = () => {
       publicRuntimeConfig.appAuthURL + router.route + '?type=manage&action=connect';
 
     try {
-      const data = await connectToNear(callbackUrl, callbackUrl);
+      const network = networks.find(network => network.id === NetworkIdEnum.NEAR);
+
+      if (!network) return false;
+
+      const blockchain = await BlockchainProvider.connect(network);
+      const provider = blockchain.Near;
+
+      const data = await Near.signWithWallet(
+        provider?.provider?.wallet,
+        user?.id,
+        callbackUrl,
+        callbackUrl,
+      );
 
       if (data) {
         const payload = {
@@ -110,12 +124,14 @@ export const ManageCointainer: React.FC = () => {
           signature: data.signature,
         };
 
-        verified = await connectNetwork(BlockchainPlatform.NEAR, payload);
+        verified = await connectNetwork(BlockchainPlatform.NEAR, payload, async error => {
+          if (error) await provider.disconnect();
+        });
       } else {
         console.log('redirection to near auth page');
       }
     } catch {
-      clearNearAccount();
+      //
     } finally {
       router.replace(router.route, undefined, {shallow: true});
     }

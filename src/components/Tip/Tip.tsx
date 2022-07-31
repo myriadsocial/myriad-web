@@ -21,15 +21,14 @@ import {
   KusamaNetworkIcon,
 } from 'src/components/atoms/Icons';
 import ShowIf from 'src/components/common/show-if.component';
-import {NetworkIdEnum, TipResult} from 'src/interfaces/network';
+import {TipsResult} from 'src/interfaces/blockchain-interface';
+import {Network} from 'src/interfaces/network';
 import {UserWallet} from 'src/interfaces/user';
-import {BlockchainPlatform} from 'src/interfaces/wallet';
 import i18n from 'src/locale';
 
 type TipProps = {
-  tips: TipResult[];
-  networkId: NetworkIdEnum;
-  blockchainPlatform: BlockchainPlatform;
+  tips: TipsResult[];
+  network: Network;
   loading: boolean;
   nativeToken: string;
   currentWallet?: UserWallet;
@@ -39,7 +38,7 @@ type TipProps = {
   onClaim: (networkId: string, ftIdentifier: string) => void;
   onClaimAll: (networkId: string) => void;
   onHandleVerifyRef: (networkId: string, currentBalance: string | number) => void;
-  onSwitchNetwork: (blockchainPlatform: string, networkId: string) => void;
+  onSwitchNetwork: (network: Network) => void;
 };
 
 const networkOptions: MenuOptions<string>[] = [
@@ -64,8 +63,7 @@ const networkOptions: MenuOptions<string>[] = [
 export const Tip: React.FC<TipProps> = props => {
   const {
     tips,
-    networkId,
-    blockchainPlatform,
+    network,
     onClaim,
     onClaimAll,
     onHandleVerifyRef,
@@ -96,20 +94,20 @@ export const Tip: React.FC<TipProps> = props => {
   };
 
   const handleClaimAll = () => {
-    onClaimAll(networkId);
+    onClaimAll(network.id);
   };
 
   const handleSwitchNetwork = () => {
-    onSwitchNetwork(blockchainPlatform, networkId);
+    onSwitchNetwork(network);
   };
 
   const formatNetworkName = () => {
-    const selected = networkOptions.find(e => e.id == networkId);
+    const selected = networkOptions.find(e => e.id == network.id);
 
     return selected?.title;
   };
 
-  const getAmount = (tip: TipResult) => {
+  const getAmount = (tip: TipsResult) => {
     if (
       onSuccess &&
       balance &&
@@ -129,11 +127,11 @@ export const Tip: React.FC<TipProps> = props => {
   };
 
   const showTokens = () => {
-    if (isShowVerifyReference() && !onSuccess && networkId === currentWallet.networkId) {
+    if (isShowVerifyReference() && !onSuccess && network.id === currentWallet.networkId) {
       return (
         <TipClaimReference
-          networkId={networkId}
-          totalTipsData={tips}
+          networkId={network.id}
+          tipsResults={tips}
           onHandleVerifyRef={onHandleVerifyRef}
           token={nativeToken}
           txFee={txFee}
@@ -155,11 +153,11 @@ export const Tip: React.FC<TipProps> = props => {
                 </div>
                 <Button
                   disabled={
-                    (currentWallet && currentWallet.networkId !== networkId) ||
+                    (currentWallet && currentWallet.networkId !== network.id) ||
                     (!tip.accountId && !onSuccess) ||
                     loading
                   }
-                  onClick={() => handleClaim(networkId, tip.tipsBalanceInfo.ftIdentifier)}
+                  onClick={() => handleClaim(network.id, tip.tipsBalanceInfo.ftIdentifier)}
                   size="small"
                   className={style.buttonClaim}
                   color="primary"
@@ -185,16 +183,16 @@ export const Tip: React.FC<TipProps> = props => {
   return (
     <>
       <ListItem alignItems="center" className={style.listItem}>
-        <ListItemAvatar>{icons[networkId as keyof typeof icons]}</ListItemAvatar>
+        <ListItemAvatar>{icons[network.id as keyof typeof icons]}</ListItemAvatar>
         <ListItemText>
           <Typography variant="h6" component="span" color="textPrimary">
             {formatNetworkName()}
           </Typography>
         </ListItemText>
         <div className={style.secondaryAction}>
-          <ShowIf condition={!!currentWallet && currentWallet.networkId !== networkId}>
+          <ShowIf condition={!!currentWallet && currentWallet.networkId !== network.id}>
             <Button
-              disabled={true}
+              disabled
               className={style.button}
               size="small"
               color="primary"
@@ -203,7 +201,7 @@ export const Tip: React.FC<TipProps> = props => {
               {i18n.t('Wallet.Tip.Switch')}
             </Button>
           </ShowIf>
-          <ShowIf condition={!!currentWallet && currentWallet.networkId == networkId}>
+          <ShowIf condition={!!currentWallet && currentWallet.networkId == network.id}>
             <Button
               disabled={isShowVerifyReference() && !onSuccess}
               className={style.button}

@@ -5,20 +5,20 @@ import {Typography, Button} from '@material-ui/core';
 import {TipTotal} from '../TotalTips/TipTotal';
 import {useStyles} from './tip.style';
 
-import {TipResult} from 'src/interfaces/network';
+import {TipsResult} from 'src/interfaces/blockchain-interface';
 import i18n from 'src/locale';
 
-type TipClaimReference = {
+type TipClaimReferenceProps = {
   networkId: string;
   token?: string;
   txFee?: string;
-  totalTipsData: TipResult[];
+  tipsResults: TipsResult[];
   onHandleVerifyRef: (networkId: string, currentBalance: string | number) => void;
 };
 
-export const TipClaimReference: React.FC<TipClaimReference> = ({
+export const TipClaimReference: React.FC<TipClaimReferenceProps> = ({
   networkId,
-  totalTipsData,
+  tipsResults,
   onHandleVerifyRef,
   txFee = '0.00',
   token = '',
@@ -27,7 +27,7 @@ export const TipClaimReference: React.FC<TipClaimReference> = ({
   const [isShowModalTotalTips, setIsShowModalTotalTips] = useState<boolean>(false);
 
   const onVerifyReference = () => {
-    const tip = totalTipsData.find(item => item.tipsBalanceInfo.ftIdentifier === 'native');
+    const tip = tipsResults.find(item => item.tipsBalanceInfo.ftIdentifier === 'native');
     const currentBalance = tip ? tip.amount : '0.000';
 
     onHandleVerifyRef(networkId, currentBalance);
@@ -57,7 +57,7 @@ export const TipClaimReference: React.FC<TipClaimReference> = ({
       </div>
       <TipTotal
         handleVerifyReference={onVerifyReference}
-        totalTipsData={totalTipsData}
+        tipsResults={tipsResults}
         open={isShowModalTotalTips}
         onClose={() => setIsShowModalTotalTips(false)}
       />

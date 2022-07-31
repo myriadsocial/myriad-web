@@ -14,18 +14,19 @@ import {Tip} from './Tip';
 import {useStyles} from './tip.style';
 
 import {PolkadotAccountList} from 'components/PolkadotAccountList';
+import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {VariantType} from 'notistack';
 import {Empty} from 'src/components/atoms/Empty';
 import {getServerId} from 'src/helpers/wallet';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useClaimTip} from 'src/hooks/use-claim-tip.hook';
-import {useNearApi} from 'src/hooks/use-near-api.hook';
-import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
-import {Network, NetworkIdEnum, TipResult, TipsBalanceInfo} from 'src/interfaces/network';
+import {useWallet} from 'src/hooks/use-wallet-hook';
+import {TipsBalanceInfo, TipsResult} from 'src/interfaces/blockchain-interface';
+import {Network, NetworkIdEnum} from 'src/interfaces/network';
 import * as ServerAPI from 'src/lib/api/server';
-import {updateTransaction} from 'src/lib/api/transaction';
+import * as TransactionAPI from 'src/lib/api/transaction';
 import * as WalletAPI from 'src/lib/api/wallet';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
@@ -38,12 +39,13 @@ export const TipContainer: React.FC = () => {
   const enqueueSnackbar = useEnqueueSnackbar();
   const styles = useStyles();
 
-  const {currentWallet, user} = useSelector<RootState, UserState>(state => state.userState);
-  const {payTransactionFee: payNearTransactionFee} = useNearApi();
   const {loading, claiming, claimingAll, tipsEachNetwork, claim, claimAll, feeInfo} = useClaimTip();
+  const {loadingSwitch, switchNetwork} = useBlockchain();
+  const {currentWallet, user} = useSelector<RootState, UserState>(state => state.userState);
   const {enablePolkadotExtension} = usePolkadotExtension();
-  const {payTransactionFee: payMyriaTransactionFee, isSignerLoading} = usePolkadotApi();
+  const {payTransactionFee, isSignerLoading} = useWallet();
   const {getRegisteredAccounts} = useAuthHook();
+
   const [verifyingRef, setVerifyingRef] = useState<boolean>(false);
   const [claimingSuccess, setClaimingSucces] = useState<boolean>(false);
   const [showAccountList, setShowAccountList] = useState<boolean>(false);
@@ -75,7 +77,7 @@ export const TipContainer: React.FC = () => {
     }
 
     if (txInfo && !errorCode && !errorMessage) {
-      updateTransaction(JSON.parse(txInfo)).catch(() => console.log);
+      TransactionAPI.updateTransaction(JSON.parse(txInfo)).catch(() => console.log);
     }
 
     if (txFee && !errorCode && !errorMessage) {
@@ -156,13 +158,13 @@ export const TipContainer: React.FC = () => {
       switch (networkId) {
         case NetworkIdEnum.NEAR: {
           const tipsBalanceInfo = {
-            server_id: serverId,
-            reference_type: 'user',
-            reference_id: user.id,
-            ft_identifier: 'native',
+            serverId: serverId,
+            referenceType: 'user',
+            referenceId: user.id,
+            ftIdentifier: 'native',
           };
 
-          await payNearTransactionFee(tipsBalanceInfo, feeInfo.trxFee, currentBalance);
+          await payTransactionFee(tipsBalanceInfo, feeInfo.trxFee, undefined, currentBalance);
           break;
         }
 
@@ -218,32 +220,26 @@ export const TipContainer: React.FC = () => {
 
     setVerifyingRef(true);
     try {
-      await payMyriaTransactionFee(
-        account,
-        currentWallet?.network?.rpcURL ?? '',
-        tipsBalanceInfo,
-        feeInfo.trxFee,
-        success => {
-          setClaimingSucces(success);
-        },
-      );
+      await payTransactionFee(tipsBalanceInfo, feeInfo.trxFee, account, undefined, success => {
+        setClaimingSucces(success);
+      });
     } finally {
       setVerifyingRef(false);
       setTipsBalanceInfo(null);
     }
   };
 
-  const getNativeToken = (tips: TipResult[]) => {
+  const getNativeToken = (tips: TipsResult[]) => {
     const native = tips.find(tip => tip?.tipsBalanceInfo?.ftIdentifier === 'native');
     if (native) return native.symbol;
     return '';
   };
 
   const showNetwork = (network: Network) => {
-    const tipBalances = tipWithBalances(network);
+    const tipsBalances = tipWithBalances(network);
     const nativeToken = getNativeToken(network?.tips ?? []);
 
-    if (!tipBalances.length) {
+    if (!tipsBalances.length) {
       if (!isShow(network)) return;
       switch (network.id) {
         case NetworkIdEnum.MYRIAD:
@@ -263,23 +259,22 @@ export const TipContainer: React.FC = () => {
 
     return (
       <BoxComponent isWithChevronRightIcon={false} marginTop={'20px'} key={network.id}>
-        {showTip(network, tipBalances, nativeToken)}
+        {showTip(network, tipsBalances, nativeToken)}
       </BoxComponent>
     );
   };
 
-  const showTip = (network: Network, tipBalances: TipResult[], token: string) => {
+  const showTip = (network: Network, tipsBalances: TipsResult[], token: string) => {
     if ((claimingAll || verifyingRef) && isShow(network)) return <ShimerComponent />;
     return (
       <Tip
         loading={claiming}
-        tips={tipBalances}
-        networkId={network.id}
-        blockchainPlatform={network.blockchainPlatform}
+        tips={tipsBalances}
+        network={network}
         currentWallet={currentWallet}
         onClaim={handleClaimTip}
         onClaimAll={handleClaimTipAll}
-        onSwitchNetwork={console.log}
+        onSwitchNetwork={switchNetwork}
         onHandleVerifyRef={handleVerifyReference}
         onSuccess={claimingSuccess}
         balance={amount}
@@ -291,7 +286,7 @@ export const TipContainer: React.FC = () => {
 
   return (
     <NoSsr>
-      {loading ? (
+      {loading || loadingSwitch ? (
         <BoxComponent isWithChevronRightIcon={false} marginTop={'20px'}>
           <ShimerComponent />
         </BoxComponent>

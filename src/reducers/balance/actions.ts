@@ -1,6 +1,3 @@
-import {signOut} from 'next-auth/react';
-import getConfig from 'next/config';
-
 import {Actions as BaseAction, setError} from '../base/actions';
 import {RootState} from '../index';
 import * as constants from './constants';
@@ -8,11 +5,9 @@ import * as constants from './constants';
 import {Action} from 'redux';
 import {formatNumber} from 'src/helpers/balance';
 import {BalanceDetail} from 'src/interfaces/balance';
+import {IProvider} from 'src/interfaces/blockchain-interface';
 import {Currency, CurrencyId} from 'src/interfaces/currency';
-import {User} from 'src/interfaces/user';
 import * as TokenAPI from 'src/lib/api/token';
-import {getNearBalanceV2} from 'src/lib/services/near-api-js';
-import {checkAccountBalance, connectToBlockchain} from 'src/lib/services/polkadot-js';
 import {ThunkActionCreator} from 'src/types/thunk';
 
 /**
@@ -89,65 +84,57 @@ export type RetrieveBalanceProps = {
   previousNonce: number;
 };
 
-export const fetchBalances: ThunkActionCreator<Actions, RootState> =
-  (force = false, status = 'finalized') =>
+export const loadBalances: ThunkActionCreator<Actions, RootState> =
+  (provider: IProvider, force = false) =>
   async (dispatch, getState) => {
     const {
-      userState: {user, anonymous, currentWallet},
+      userState: {user, currencies, anonymous},
       balanceState: {initialized},
     } = getState();
 
-    if (status === 'onProgress') {
-      return dispatch(setBalanceLoading(true));
-    }
+    dispatch(setBalanceLoading(true));
 
     if (anonymous || !user || (initialized && !force)) return;
 
-    if (currentWallet?.network?.blockchainPlatform === 'substrate') {
-      dispatch(fetchBalancesPolkadot(user));
-    }
-
-    if (currentWallet?.network?.blockchainPlatform === 'near') {
-      dispatch(fetchBalancesNear(user));
-    }
-  };
-
-export const fetchBalancesPolkadot: ThunkActionCreator<Actions, RootState> =
-  (user: User) => async (dispatch, getState) => {
-    const {
-      userState: {currencies},
-    } = getState();
     // Only parse address to fetch balance when wallets are successfully fetched
     if (!('wallets' in user) || user.wallets?.length === 0) return;
-    if (!user.wallets[0]?.network?.rpcURL) return;
-
-    const address = user.wallets[0].id;
-    const rpcURL = user.wallets[0].network.rpcURL;
-
-    dispatch(setBalanceLoading(true));
+    if (!user.wallets[0]?.network) return;
 
     try {
-      const api = await connectToBlockchain(rpcURL);
+      if (!provider) throw new Error('NotConnected');
+
       const retrieveBalance = async (currency: Currency): Promise<RetrieveBalanceProps> => {
-        const {free, nonce} = await checkAccountBalance(api, address, currency, change => {
-          const amount = formatNumber(+change.toString(), currency.decimal);
-          if (amount > 0) {
-            dispatch(increaseBalance(currency.symbol, amount));
-          } else {
-            dispatch(decreaseBalance(currency.symbol, Math.abs(amount)));
-          }
-        });
+        const {balance, nonce} = await provider.balances(
+          currency.decimal,
+          currency.referenceId,
+          change => {
+            const amount = formatNumber(+change.toString(), currency.decimal);
+            if (amount > 0) {
+              dispatch(increaseBalance(currency.symbol, amount));
+            } else {
+              dispatch(decreaseBalance(currency.symbol, Math.abs(amount)));
+            }
+          },
+        );
 
         return {
-          originBalance: formatNumber(+free.toString(), currency.decimal),
-          freeBalance: formatNumber(+free.toString(), currency.decimal),
+          originBalance: parseFloat(balance.replace(/,/g, '')),
+          freeBalance: parseFloat(balance.replace(/,/g, '')),
           previousNonce: nonce ? +nonce.toString() : 0,
         };
       };
 
       const balanceDetails: BalanceDetail[] = await Promise.all(
         currencies.map(async currency => {
-          const {originBalance, freeBalance, previousNonce} = await retrieveBalance(currency);
+          const {originBalance, freeBalance, previousNonce} = await retrieveBalance(currency).catch(
+            () => {
+              return {
+                originBalance: null,
+                freeBalance: null,
+                previousNonce: 0,
+              };
+            },
+          );
           return {
             ...currency,
             originBalance,
@@ -161,14 +148,15 @@ export const fetchBalancesPolkadot: ThunkActionCreator<Actions, RootState> =
         type: constants.FETCH_BALANCES,
         balanceDetails,
       });
-    } catch {
+    } catch (err) {
+      console.log(err);
       dispatch({
         type: constants.FETCH_BALANCES,
         balanceDetails: currencies.map(currency => {
           return {
             ...currency,
-            originBalance: NaN,
-            freeBalance: NaN,
+            originBalance: null,
+            freeBalance: null,
             previousNonce: 0,
           };
         }),
@@ -178,77 +166,13 @@ export const fetchBalancesPolkadot: ThunkActionCreator<Actions, RootState> =
     }
   };
 
-export const fetchBalancesNear: ThunkActionCreator<Actions, RootState> =
-  (user: User) => async (dispatch, getState) => {
-    const {
-      userState: {currencies},
-    } = getState();
-
-    // Only parse address to fetch balance when wallets are successfully fetched
-    if (!('wallets' in user) || user.wallets?.length === 0) return;
-    if (!user.wallets[0]?.network) return;
-
-    dispatch(setBalanceLoading(true));
-
-    const currentWallet = user.wallets[0];
-
-    try {
-      const retrieveBalance = async (currency: Currency): Promise<RetrieveBalanceProps> => {
-        const {balance} = await getNearBalanceV2(
-          currentWallet.network.rpcURL,
-          currentWallet.id,
-          currency.referenceId,
-          currency.decimal,
-        );
-
-        return {
-          originBalance: parseFloat(balance.replace(/,/g, '')),
-          freeBalance: parseFloat(balance.replace(/,/g, '')),
-          previousNonce: 0,
-        };
-      };
-
-      const balanceDetails: BalanceDetail[] = await Promise.all(
-        currencies.map(async currency => {
-          const {originBalance, freeBalance, previousNonce} = await retrieveBalance(currency).catch(
-            () => {
-              return {
-                originBalance: NaN,
-                freeBalance: NaN,
-                previousNonce: 0,
-              };
-            },
-          );
-
-          return {
-            ...currency,
-            originBalance: originBalance,
-            freeBalance: freeBalance,
-            previousNonce: previousNonce,
-          };
-        }),
-      );
-
-      dispatch({
-        type: constants.FETCH_BALANCES,
-        balanceDetails,
-      });
-    } catch {
-      dispatch({
-        type: constants.FETCH_BALANCES,
-        balanceDetails: currencies.map(currency => {
-          return {
-            ...currency,
-            originBalance: NaN,
-            freeBalance: NaN,
-            previousNonce: 0,
-          };
-        }),
-      });
-    } finally {
-      dispatch(setBalanceLoading(false));
-    }
-  };
+export const clearBalances: ThunkActionCreator<Actions, RootState> = () => async dispatch => {
+  dispatch(setBalanceLoading(true));
+  dispatch({
+    type: constants.FETCH_BALANCES,
+    balanceDetails: [],
+  });
+};
 
 export const getUserCurrencies: ThunkActionCreator<Actions, RootState> =
   () => async (dispatch, getState) => {

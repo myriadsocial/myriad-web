@@ -1,22 +1,8 @@
-import {BN} from '@polkadot/util';
-
 import {BaseModel} from './base.interface';
 import {Currency} from './currency';
 import {BlockchainPlatform} from './wallet';
 
-export interface TipBalanceInfo {
-  serverId: string;
-  referenceType: string;
-  referenceId: string;
-  ftIdentifier: string;
-}
-export interface TipResult {
-  tipsBalanceInfo: TipBalanceInfo;
-  accountId: string;
-  amount: string;
-  symbol: string;
-  imageURL: string;
-}
+import {TipsResult} from 'src/interfaces/blockchain-interface';
 
 export enum NetworkIdEnum {
   ETHEREUM = 'ethereum',
@@ -42,32 +28,5 @@ export type Network = NetworkProps &
   BaseModel & {
     id: NetworkIdEnum;
     currencies: Currency[];
-    tips: TipResult[];
+    tips: TipsResult[];
   };
-
-export interface TipsBalanceInfo {
-  ftIdentifier: string;
-  referenceId: string;
-  referenceType: string;
-  serverId: string;
-}
-
-export interface TipsBalance {
-  tipsBalanceInfo: TipsBalanceInfo;
-  amount: BN;
-  accountId: string;
-}
-
-export interface TotalTipsDataInterface {
-  accountId: string | null;
-  amount: string | number;
-  imageURL: string;
-  symbol: string;
-  tipsBalanceInfo: TipsBalanceInfo;
-  image?: string;
-  id?: string;
-}
-
-export interface TipsBalanceData {
-  [any: string]: TipsBalance;
-}

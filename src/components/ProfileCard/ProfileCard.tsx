@@ -4,12 +4,14 @@ import dynamic from 'next/dynamic';
 
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import Skeleton from '@material-ui/lab/Skeleton';
 
-import {Skeleton} from './Network.skeleton';
+import {Skeleton as NetworkSkeleton} from './Network.skeleton';
 import {ProfileCardProps} from './ProfileCard.interfaces';
 import {useStyles} from './ProfileCard.style';
 import {ProfileContent} from './index';
 
+import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import {formatAddress} from 'src/helpers/wallet';
 
@@ -31,6 +33,8 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
     networks,
     userWalletAddress,
   } = props;
+
+  const {loadingBlockchain: loading} = useBlockchain();
   const classes = useStyles();
 
   return (
@@ -57,13 +61,19 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
           <ShowIf condition={!anonymous}>
             <ShowIf condition={Boolean(currentWallet)}>
               <NetworkOption currentWallet={currentWallet} wallets={wallets} networks={networks} />
-
               <Typography component="div" className={classes.address}>
-                {formatAddress(currentWallet, userWalletAddress)}
+                <ShowIf condition={loading}>
+                  <Skeleton variant="text" height={20} />
+                </ShowIf>
+                <ShowIf condition={!loading}>
+                  {formatAddress(currentWallet, userWalletAddress)}
+                </ShowIf>
+
+                {/* {formatAddress(currentWallet, userWalletAddress)} */}
               </Typography>
             </ShowIf>
             <ShowIf condition={!currentWallet}>
-              <Skeleton />
+              <NetworkSkeleton />
             </ShowIf>
           </ShowIf>
         </div>

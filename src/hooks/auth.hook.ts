@@ -9,9 +9,9 @@ import getConfig from 'next/config';
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {isHex} from '@polkadot/util';
 
+import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {NetworkIdEnum} from 'src/interfaces/network';
-import {UserWallet} from 'src/interfaces/user';
 import {User} from 'src/interfaces/user';
 import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
 import {AccountRegisteredError} from 'src/lib/api/errors/account-registered.error';
@@ -20,11 +20,10 @@ import * as UserAPI from 'src/lib/api/user';
 import * as WalletAPI from 'src/lib/api/wallet';
 import {toHexPublicKey} from 'src/lib/crypto';
 import * as FirebaseMessaging from 'src/lib/firebase/messaging';
-import {clearNearAccount} from 'src/lib/services/near-api-js';
-import {createNearSignature} from 'src/lib/services/near-api-js';
-import {signWithExtension} from 'src/lib/services/polkadot-js';
+import {BlockchainProvider} from 'src/lib/services/blockchain-provider';
+import {Near} from 'src/lib/services/near-api-js';
+import {PolkadotJs} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
-import {fetchBalances} from 'src/reducers/balance/actions';
 import {fetchUserWallets, fetchUser} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 import {uniqueNamesGenerator, adjectives, colors} from 'unique-names-generator';
@@ -42,9 +41,11 @@ export interface NearPayload {
 
 export const useAuthHook = () => {
   const dispatch = useDispatch();
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const {user, networks} = useSelector<RootState, UserState>(state => state.userState);
   const {getPolkadotAccounts} = usePolkadotExtension();
   const {publicRuntimeConfig} = getConfig();
+  const {provider} = useBlockchain();
+
   const [loading, setLoading] = useState(false);
 
   const fetchUserNonce = async (address: string): Promise<UserNonceProps> => {
@@ -90,7 +91,7 @@ export const useAuthHook = () => {
     nearAddress?: string,
   ) => {
     if (account) {
-      const signature = await signWithExtension(account, nonce);
+      const signature = await PolkadotJs.signWithWallet(account, nonce);
 
       if (!signature) return false;
 
@@ -111,7 +112,13 @@ export const useAuthHook = () => {
 
     if (nearAddress && nearAddress.length > 0) {
       const nearAccount = nearAddress.split('/')[1];
-      const data = await createNearSignature(nearAccount, nonce);
+      const network = networks.find(network => network.id === NetworkIdEnum.NEAR);
+
+      if (!network) return false;
+
+      const blockchain = await BlockchainProvider.connect(network);
+      const nearProvider = blockchain.Near;
+      const data = await Near.signWithWallet(nearProvider?.provider?.wallet);
 
       if (data && !data.signature) return false;
 
@@ -174,20 +181,22 @@ export const useAuthHook = () => {
   const connectNetwork = async (
     blockchainPlatform: BlockchainPlatform,
     account?: InjectedAccountWithMeta | NearPayload,
+    callback?: (error: boolean) => void,
   ): Promise<boolean> => {
     if (!user) return false;
     if (!account) return false;
-    const {nonce} = await WalletAPI.getUserNonceByUserId(user?.id);
-
-    if (!nonce) return false;
 
     try {
       let payload = null;
 
       switch (blockchainPlatform) {
         case BlockchainPlatform.SUBSTRATE:
+          const {nonce} = await WalletAPI.getUserNonceByUserId(user?.id);
+
+          if (!nonce) return false;
+
           const polkadotAccount = account as InjectedAccountWithMeta;
-          const polkadotSignature = await signWithExtension(polkadotAccount, nonce);
+          const polkadotSignature = await PolkadotJs.signWithWallet(polkadotAccount, nonce);
 
           if (!polkadotSignature) return false;
 
@@ -208,17 +217,12 @@ export const useAuthHook = () => {
 
         case BlockchainPlatform.NEAR:
           const nearAccount = account as NearPayload;
-          const result = await createNearSignature(nearAccount.nearAddress, nonce);
-
-          if (!result) return false;
-
-          const nearSignature = result.signature;
           const {pubKey, nearAddress} = nearAccount;
 
           payload = {
             publicAddress: pubKey,
             nonce,
-            signature: nearSignature,
+            signature: nearAccount.signature,
             networkType: NetworkIdEnum.NEAR,
             walletType: WalletTypeEnum.NEAR,
             data: {
@@ -237,6 +241,8 @@ export const useAuthHook = () => {
 
       return true;
     } catch (err) {
+      callback && callback(true);
+
       if (err instanceof AccountRegisteredError) {
         throw err;
       } else {
@@ -266,9 +272,13 @@ export const useAuthHook = () => {
       switch (blockchainPlatform) {
         case BlockchainPlatform.SUBSTRATE: {
           const polkadotAccount = account as InjectedAccountWithMeta;
-          const signature = await signWithExtension(polkadotAccount, nonce, ({signerOpened}) => {
-            if (signerOpened) setLoading(true);
-          });
+          const signature = await PolkadotJs.signWithWallet(
+            polkadotAccount,
+            nonce,
+            ({signerOpened}) => {
+              if (signerOpened) setLoading(true);
+            },
+          );
 
           if (!signature) return;
 
@@ -305,14 +315,10 @@ export const useAuthHook = () => {
       await WalletAPI.switchNetwork(payload, user.id);
       //TODO: better if joined in one API call
       await dispatch(fetchUser(currentAddress));
-      await Promise.all([dispatch(fetchBalances(true)), dispatch(fetchUserWallets())]);
+      await dispatch(fetchUserWallets());
 
       callback && callback();
     } catch (error) {
-      if (networkId === NetworkIdEnum.NEAR) {
-        await dispatch(fetchBalances(true));
-      }
-
       if (error instanceof AccountRegisteredError) {
         throw error;
       } else {
@@ -323,16 +329,15 @@ export const useAuthHook = () => {
     }
   };
 
-  const logout = async (currentWallet?: UserWallet) => {
-    if (currentWallet?.networkId === NetworkIdEnum.NEAR) {
-      await clearNearAccount();
-    }
-
-    await FirebaseMessaging.unregister();
-    await signOut({
-      callbackUrl: publicRuntimeConfig.appAuthURL,
-      redirect: true,
-    });
+  const logout = async () => {
+    await Promise.all([
+      provider?.disconnect(),
+      FirebaseMessaging.unregister(),
+      signOut({
+        callbackUrl: publicRuntimeConfig.appAuthURL,
+        redirect: true,
+      }),
+    ]);
   };
 
   return {
