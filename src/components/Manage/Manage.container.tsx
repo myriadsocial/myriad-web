@@ -2,13 +2,13 @@ import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 
 import getConfig from 'next/config';
+import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 
 import {useTheme, useMediaQuery} from '@material-ui/core';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
-import {PolkadotAccountList} from '../PolkadotAccountList';
 import {BoxComponent} from '../atoms/Box';
 import {Manage} from './Manage';
 
@@ -22,6 +22,13 @@ import {Near} from 'src/lib/services/near-api-js';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
+
+const PolkadotAccountList = dynamic(
+  () => import('components/PolkadotAccountList/PolkadotAccountList'),
+  {
+    ssr: false,
+  },
+);
 
 export const ManageCointainer: React.FC = () => {
   const theme = useTheme();

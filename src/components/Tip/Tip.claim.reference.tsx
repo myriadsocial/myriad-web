@@ -1,12 +1,17 @@
 import React, {useState} from 'react';
 
+import dynamic from 'next/dynamic';
+
 import {Typography, Button} from '@material-ui/core';
 
-import {TipTotal} from '../TotalTips/TipTotal';
 import {useStyles} from './tip.style';
 
 import {TipsResult} from 'src/interfaces/blockchain-interface';
 import i18n from 'src/locale';
+
+const TipTotal = dynamic(() => import('../TotalTips/TipTotal'), {
+  ssr: false,
+});
 
 type TipClaimReferenceProps = {
   networkId: string;

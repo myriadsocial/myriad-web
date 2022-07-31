@@ -2,9 +2,8 @@ import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import getConfig from 'next/config';
+import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
-
-import {NoSsr} from '@material-ui/core';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
@@ -12,7 +11,7 @@ import useConfirm from '../Confirm/use-confirm.hook';
 import {useEnqueueSnackbar} from '../Snackbar/useEnqueueSnackbar.hook';
 import BlockchainContext from './Blockchain.context';
 
-import {PolkadotAccountList} from 'components/PolkadotAccountList';
+// import {PolkadotAccountList} from 'components/PolkadotAccountList';
 import {formatNetworkTitle, formatWalletTitle} from 'src/helpers/wallet';
 import {NearPayload, useAuthHook} from 'src/hooks/auth.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
@@ -27,6 +26,13 @@ import {Near} from 'src/lib/services/near-api-js';
 import {RootState} from 'src/reducers';
 import {clearBalances} from 'src/reducers/balance/actions';
 import {UserState} from 'src/reducers/user/reducer';
+
+const PolkadotAccountList = dynamic(
+  () => import('components/PolkadotAccountList/PolkadotAccountList'),
+  {
+    ssr: false,
+  },
+);
 
 interface BlockchainProviderProps {
   provider: IProvider;
@@ -224,16 +230,14 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
         value={{provider, switchNetwork: shiftNetwork, loadingBlockchain, loadingSwitch}}>
         {children}
       </BlockchainContext.Provider>
-      <NoSsr>
-        <PolkadotAccountList
-          align="left"
-          title="Select account"
-          isOpen={showAccountList && extensionInstalled}
-          accounts={accounts}
-          onSelect={handleSelectedSubstrateAccount}
-          onClose={closeAccountList}
-        />
-      </NoSsr>
+      <PolkadotAccountList
+        align="left"
+        title="Select account"
+        isOpen={showAccountList && extensionInstalled}
+        accounts={accounts}
+        onSelect={handleSelectedSubstrateAccount}
+        onClose={closeAccountList}
+      />
     </>
   );
 };

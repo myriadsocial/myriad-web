@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 
 import getConfig from 'next/config';
+import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 
 import {Backdrop, CircularProgress, NoSsr} from '@material-ui/core';
@@ -13,7 +14,6 @@ import {ShimerComponent} from './Shimer';
 import {Tip} from './Tip';
 import {useStyles} from './tip.style';
 
-import {PolkadotAccountList} from 'components/PolkadotAccountList';
 import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {VariantType} from 'notistack';
@@ -31,6 +31,13 @@ import * as WalletAPI from 'src/lib/api/wallet';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
+
+const PolkadotAccountList = dynamic(
+  () => import('components/PolkadotAccountList/PolkadotAccountList'),
+  {
+    ssr: false,
+  },
+);
 
 const {publicRuntimeConfig} = getConfig();
 

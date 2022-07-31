@@ -26,7 +26,7 @@ type PolkadotAccountListProps = {
   align?: AllignTitle;
 };
 
-export const PolkadotAccountList: React.FC<PolkadotAccountListProps> = ({
+const PolkadotAccountList: React.FC<PolkadotAccountListProps> = ({
   isOpen,
   accounts,
   onSelect,
@@ -88,3 +88,5 @@ export const PolkadotAccountList: React.FC<PolkadotAccountListProps> = ({
     </Modal>
   );
 };
+
+export default PolkadotAccountList;
