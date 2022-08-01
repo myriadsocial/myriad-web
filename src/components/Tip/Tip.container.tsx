@@ -24,6 +24,7 @@ import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {Network, NetworkIdEnum, TipResult, TipsBalanceInfo} from 'src/interfaces/network';
+import * as ServerAPI from 'src/lib/api/server';
 import {updateTransaction} from 'src/lib/api/transaction';
 import * as WalletAPI from 'src/lib/api/wallet';
 import i18n from 'src/locale';
@@ -149,7 +150,7 @@ export const TipContainer: React.FC = () => {
         throw new Error('Insufficient Gas Fee');
       }
 
-      const server = await WalletAPI.getServer();
+      const server = await ServerAPI.getServer();
       const serverId = getServerId(server, currentWallet?.networkId);
 
       switch (networkId) {

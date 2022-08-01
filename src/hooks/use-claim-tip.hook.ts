@@ -11,8 +11,8 @@ import {utils} from 'near-api-js';
 import {formatBalanceV2} from 'src/helpers/balance';
 import {getServerId} from 'src/helpers/wallet';
 import {Network, NetworkIdEnum} from 'src/interfaces/network';
+import * as ServerAPI from 'src/lib/api/server';
 import {updateTransaction} from 'src/lib/api/transaction';
-import * as WalletAPI from 'src/lib/api/wallet';
 import {getClaimTipNear} from 'src/lib/services/near-api-js';
 import {claimTip as claimTipMyriadNetwork, connectToBlockchain} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
@@ -62,7 +62,7 @@ export const useClaimTip = () => {
       let referenceIds: string[] = [];
 
       const networkCallback = async (network: Network) => {
-        const server = await WalletAPI.getServer();
+        const server = await ServerAPI.getServer();
         const serverId = getServerId(server, network.id);
         const tipBalanceInfo = {
           serverId: serverId,
@@ -239,7 +239,7 @@ export const useClaimTip = () => {
     setClaiming(true);
 
     try {
-      const server = await WalletAPI.getServer();
+      const server = await ServerAPI.getServer();
       const serverId = getServerId(server, selectedNetwork.id);
 
       if (!serverId) throw new Error('ServerNotExists');
@@ -318,7 +318,7 @@ export const useClaimTip = () => {
     setClaimingAll(true);
 
     const walletId = currentWallet.id;
-    const server = await WalletAPI.getServer();
+    const server = await ServerAPI.getServer();
     const serverId = getServerId(server, networkId as NetworkIdEnum);
     const selectedNetwork = networks.find(network => network.id == networkId);
     const userId = user.id;
