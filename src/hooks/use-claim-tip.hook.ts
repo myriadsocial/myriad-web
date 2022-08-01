@@ -8,7 +8,6 @@ import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
 import {getServerId} from 'src/helpers/wallet';
 import {FeeInfo} from 'src/interfaces/blockchain-interface';
 import {Network, NetworkIdEnum} from 'src/interfaces/network';
-import * as ServerAPI from 'src/lib/api/server';
 import * as TransactionAPI from 'src/lib/api/transaction';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
@@ -17,13 +16,12 @@ export const useClaimTip = () => {
   const {user, networks, socials} = useSelector<RootState, UserState>(state => state.userState);
   const {getClaimTipNear} = useNearApi();
   const {getClaimTipMyriad} = usePolkadotApi();
-  const {provider} = useBlockchain();
+  const {server, provider} = useBlockchain();
 
   const [loading, setLoading] = useState(true);
   const [claiming, setClaiming] = useState(false);
   const [claimingAll, setClaimingAll] = useState(false);
-  const [tipsEachNetwork, setTipsEachNetwork] = useState<Network[]>([]);
-  const [server, setServer] = useState<ServerAPI.Server>(null);
+  const [tipsEachNetwork, setTipsEachNetwork] = useState<Network[]>(networks);
   const [feeInfo, setFeeInfo] = useState<FeeInfo>({
     formattedTrxFee: '0.00',
     trxFee: '0',
@@ -38,16 +36,12 @@ export const useClaimTip = () => {
   const getTip = async () => {
     setLoading(true);
 
-    if (!user) return setLoading(false);
+    if (!user || !server) return setLoading(false);
 
     const currentNetworkId = currentWallet.networkId;
     const sortedNetworkPromise = [];
 
     try {
-      const server = await ServerAPI.getServer();
-
-      setServer(server);
-
       const networkCallback = async (network: Network) => {
         const serverId = getServerId(server, network.id);
         const tipBalanceInfo = {
@@ -113,7 +107,7 @@ export const useClaimTip = () => {
         }
       }
 
-      const networksWithTip = await Promise.all(sortedNetworkPromise);
+      const networksWithTip = await Promise.all<Network[]>(sortedNetworkPromise);
 
       setTipsEachNetwork(networksWithTip);
     } catch {

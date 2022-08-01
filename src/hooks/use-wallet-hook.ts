@@ -23,8 +23,7 @@ export const useWallet = () => {
   const [isSignerLoading, setSignerLoading] = useState<boolean>(false);
   const [isFetchingFee, setIsFetchingFee] = useState(false);
 
-  const blockchain = useBlockchain();
-  const provider = blockchain.provider;
+  const {server, provider} = useBlockchain();
 
   const getEstimatedFee = async (
     walletDetail: WalletDetail,
@@ -153,5 +152,6 @@ export const useWallet = () => {
     sendTip,
     getEstimatedFee,
     payTransactionFee,
+    server,
   };
 };

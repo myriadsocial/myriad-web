@@ -27,20 +27,6 @@ export type ConnectNetwork = {
   };
 };
 
-export interface ServerMetric {
-  totalPosts: number;
-  totalUser: number;
-}
-
-export interface Server {
-  id: string;
-  name: string;
-  description: string;
-  metric: ServerMetric;
-  categories: string[];
-  accountId?: any;
-}
-
 export const getUserNonce = async (id: string): Promise<UserNonceProps> => {
   const address = isHex(`0x${id}`) ? `0x${id}` : id;
   const {data} = await MyriadAPI().request({
@@ -176,15 +162,6 @@ export const getNetworks = async (): Promise<Networks> => {
   });
 
   return data;
-};
-
-export const getAccountIdMyria = async (networkId?: string): Promise<string> => {
-  const {data} = await MyriadAPI().request<Server>({
-    url: `/server`,
-    method: 'GET',
-  });
-
-  return data.accountId.myriad;
 };
 
 export const claimReference = async ({

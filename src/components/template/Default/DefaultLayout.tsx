@@ -62,7 +62,7 @@ type DefaultLayoutProps = WithErrorProps & {
 };
 
 const Default: React.FC<DefaultLayoutProps> = props => {
-  const {children, logo} = props;
+  const {children, logo, server} = props;
 
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -154,6 +154,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
 
   return (
     <BlockchainProviderComponent
+      server={server}
       provider={provider}
       nearProvider={nearProvider}
       currentWallet={currentWallet}

@@ -7,7 +7,7 @@ import {TipsResultsProps, TipsBalanceData, TipsResult} from 'src/interfaces/bloc
 import {Network} from 'src/interfaces/network';
 import {SocialMedia} from 'src/interfaces/social';
 import {Wallet} from 'src/interfaces/user';
-import {Server} from 'src/lib/api/wallet';
+import {Server} from 'src/lib/api/server';
 import {PolkadotJs} from 'src/lib/services/polkadot-js';
 
 export const usePolkadotApi = () => {

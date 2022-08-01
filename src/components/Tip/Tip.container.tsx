@@ -25,7 +25,6 @@ import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {useWallet} from 'src/hooks/use-wallet-hook';
 import {TipsBalanceInfo, TipsResult} from 'src/interfaces/blockchain-interface';
 import {Network, NetworkIdEnum} from 'src/interfaces/network';
-import * as ServerAPI from 'src/lib/api/server';
 import * as TransactionAPI from 'src/lib/api/transaction';
 import * as WalletAPI from 'src/lib/api/wallet';
 import i18n from 'src/locale';
@@ -50,7 +49,7 @@ export const TipContainer: React.FC = () => {
   const {loadingSwitch, switchNetwork} = useBlockchain();
   const {currentWallet, user} = useSelector<RootState, UserState>(state => state.userState);
   const {enablePolkadotExtension} = usePolkadotExtension();
-  const {payTransactionFee, isSignerLoading} = useWallet();
+  const {server, payTransactionFee, isSignerLoading} = useWallet();
   const {getRegisteredAccounts} = useAuthHook();
 
   const [verifyingRef, setVerifyingRef] = useState<boolean>(false);
@@ -159,7 +158,7 @@ export const TipContainer: React.FC = () => {
         throw new Error('Insufficient Gas Fee');
       }
 
-      const server = await ServerAPI.getServer();
+      if (!server) throw new Error('Server not exists');
       const serverId = getServerId(server, currentWallet?.networkId);
 
       switch (networkId) {

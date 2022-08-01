@@ -3,13 +3,13 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {u32} from '@polkadot/types';
 import {BN} from '@polkadot/util';
 
-import {Server} from '../lib/api/wallet';
 import {Near} from '../lib/services/near-api-js';
 import {PolkadotJs} from '../lib/services/polkadot-js';
 
 import * as nearAPI from 'near-api-js';
 import {Network} from 'src/interfaces/network';
 import {WalletDetail} from 'src/interfaces/wallet';
+import {Server} from 'src/lib/api/server';
 
 export interface IProvider {
   provider: ProviderProps;
