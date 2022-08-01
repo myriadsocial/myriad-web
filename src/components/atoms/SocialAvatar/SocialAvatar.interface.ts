@@ -1,3 +1,5 @@
+import {AvatarSize} from '../Avatar';
+
 import {PostOrigin} from 'src/interfaces/timeline';
 
 export type SocialAvatarProps = {
@@ -5,4 +7,5 @@ export type SocialAvatarProps = {
   avatar?: string;
   name: string;
   onClick: () => void;
+  size?: AvatarSize;
 };

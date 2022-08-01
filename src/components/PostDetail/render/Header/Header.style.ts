@@ -8,7 +8,8 @@ export const useStyles = makeStyles((theme: Theme) =>
     action: {
       display: 'block',
       position: 'relative',
-      top: 10,
+      top: 12,
+      padding: 0,
 
       '& .MuiSvgIcon-root': {
         fill: 'currentColor',
@@ -16,8 +17,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     header: {
       position: 'relative',
-      background: '#FFF',
-      borderRadius: 10,
 
       '& .MuiCardHeader-title': {
         fontSize: theme.typography.h4.fontSize,

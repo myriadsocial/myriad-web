@@ -21,7 +21,7 @@ export const RenderReddit: React.FC<RenderRedditProps> = props => {
   const {title, text, maxLength, onShowMore, onHashtagClicked} = props;
 
   return (
-    <div style={{paddingTop: 10, paddingBottom: 10}}>
+    <div style={{paddingBottom: 16}}>
       {title && (
         <LinkifyComponent
           text={title}

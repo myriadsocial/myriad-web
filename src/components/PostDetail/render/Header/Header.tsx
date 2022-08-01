@@ -17,6 +17,7 @@ import {PostHeaderProps} from './Header.interface';
 import {useStyles} from './Header.style';
 
 import useTipHistory from 'components/TipHistory/use-tip-history.hook';
+import {AvatarSize} from 'components/atoms/Avatar';
 import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorizeAction';
 import useModalAddToPost from 'src/components/Expericence/ModalAddToPost/useModalAddToPost.hook';
 import {SocialAvatar} from 'src/components/atoms/SocialAvatar';
@@ -135,6 +136,7 @@ export const PostHeader: React.FC<PostHeaderProps> = props => {
                 : post.people?.profilePictureURL
             }
             onClick={openContentProfileUrl}
+            size={AvatarSize.LARGE}
           />
         }
         title={

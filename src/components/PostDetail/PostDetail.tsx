@@ -71,7 +71,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   }, [downvoted, upvoted]);
 
   return (
-    <>
+    <div className={styles.wrapper}>
       <PostHeader user={user} owned={isPostCreator} post={post} {...restProps} />
 
       <div className={styles.content}>
@@ -88,7 +88,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
             />
           </ShowIf>
 
-          <ShowIf condition={['twitter'].includes(post.platform)}>
+          <ShowIf condition={['twitter'].includes(post.platform) && post.text.length > 0}>
             <Twitter text={post.text} onHashtagClicked={handleHashtagClicked} />
           </ShowIf>
 
@@ -136,6 +136,6 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           />
         </ShowIf>
       </div>
-    </>
+    </div>
   );
 };

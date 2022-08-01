@@ -9,9 +9,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       overflow: 'hidden',
       maxWidth: 600,
       backgroundColor: theme.palette.background.paper,
-      marginBottom: 10,
     },
-    gridList: {},
     transparentHeader: {
       '& .MuiDialogTitle-root': {
         background: theme.palette.background.default,

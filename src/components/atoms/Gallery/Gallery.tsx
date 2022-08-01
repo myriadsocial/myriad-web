@@ -127,7 +127,7 @@ export const Gallery: React.FC<GalleryProps> = props => {
           </Grid>
 
           <ShowIf condition={items.length > 1}>
-            <Grid item xs={6} container spacing={1}>
+            <Grid item xs={6} container>
               {items.slice(1, 3).map((image, i) => (
                 <Grid
                   item

@@ -12,12 +12,7 @@ type VideoProps = {
 
 export const Video: React.FC<VideoProps> = props => {
   return (
-    <Grid
-      container
-      wrap="nowrap"
-      justifyContent="space-around"
-      component={Paper}
-      style={{marginBottom: 10}}>
+    <Grid container wrap="nowrap" justifyContent="space-around" component={Paper}>
       <ReactPlayer controls={true} playing={false} stopOnUnmount={true} {...props} />
     </Grid>
   );

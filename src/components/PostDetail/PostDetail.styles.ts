@@ -15,15 +15,19 @@ export const useStyles = makeStyles((theme: Theme) =>
         minWidth: 0,
       },
     },
+    wrapper: {
+      padding: 4,
+    },
     content: {
-      padding: '0 20px',
       wordBreak: 'break-word',
+      padding: '0 16px',
+      marginBottom: 16,
     },
     tags: {
       marginBottom: theme.spacing(1.5),
     },
     action: {
-      padding: '0 20px 20px',
+      padding: '0 16px 16px',
       display: 'flex',
       justifyContent: 'space-between',
     },
