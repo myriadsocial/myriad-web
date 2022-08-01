@@ -20,6 +20,7 @@ import {Network, NetworkIdEnum} from 'src/interfaces/network';
 import {UserWallet} from 'src/interfaces/user';
 import {BlockchainPlatform} from 'src/interfaces/wallet';
 import {AccountRegisteredError} from 'src/lib/api/errors/account-registered.error';
+import {Server} from 'src/lib/api/server';
 import {toHexPublicKey} from 'src/lib/crypto';
 import {BlockchainProvider as Provider} from 'src/lib/services/blockchain-provider';
 import {Near} from 'src/lib/services/near-api-js';
@@ -35,6 +36,7 @@ const PolkadotAccountList = dynamic(
 );
 
 interface BlockchainProviderProps {
+  server: Server;
   provider: IProvider;
   nearProvider: Near;
   currentWallet: UserWallet;
@@ -44,6 +46,7 @@ interface BlockchainProviderProps {
 
 export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = ({
   children,
+  server,
   provider,
   nearProvider,
   currentWallet,
@@ -230,6 +233,7 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
     <>
       <BlockchainContext.Provider
         value={{
+          server,
           provider,
           nearProvider,
           switchNetwork: shiftNetwork,
