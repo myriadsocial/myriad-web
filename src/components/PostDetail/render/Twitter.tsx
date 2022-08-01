@@ -11,7 +11,7 @@ export const RenderTwitter: React.FC<RenderTwitterProps> = props => {
   const {text, onHashtagClicked} = props;
 
   return (
-    <div style={{paddingTop: 10}}>
+    <div style={{paddingBottom: 6}}>
       <LinkifyComponent
         text={text}
         handleClick={onHashtagClicked}

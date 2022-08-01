@@ -5,7 +5,7 @@ export const Badge = withStyles((theme: Theme) =>
   createStyles({
     badge: {
       right: 10,
-      top: 40,
+      top: 38,
       width: 20,
       height: 20,
       border: `1px solid ${theme.palette.background.paper}`,

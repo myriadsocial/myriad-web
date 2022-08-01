@@ -420,12 +420,6 @@ const theme = createTheme({
       },
     },
 
-    MuiCardHeader: {
-      root: {
-        padding: '20px 20px 10px',
-      },
-    },
-
     MuiBadge: {
       badge: {
         fontSize: textXs,

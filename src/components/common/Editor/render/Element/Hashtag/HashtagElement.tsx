@@ -20,7 +20,7 @@ export const HashtagElement = <V extends Value>(props: StyledElementProps<V, THa
   const styles = useStyles({selected, focused});
 
   const handleClick = () => {
-    router.push('topic/hashtag?tag=' + element.hashtag);
+    router.push('/topic/hashtag?tag=' + element.hashtag);
   };
 
   return (
