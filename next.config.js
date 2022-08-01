@@ -19,7 +19,7 @@ const moduleExports = {
     }
   },
   images: {
-    domains: ['storage.googleapis.com'],
+    domains: ['storage.googleapis.com', 'firebasestorage.googleapis.com'],
   },
   serverRuntimeConfig: {
     // Will only be available on the server side

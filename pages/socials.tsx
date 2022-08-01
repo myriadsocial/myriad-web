@@ -1,6 +1,7 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 
+import {Session} from 'next-auth';
 import {getSession} from 'next-auth/react';
 import getConfig from 'next/config';
 import dynamic from 'next/dynamic';
@@ -10,6 +11,7 @@ import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {initialize} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
+import {getServer} from 'src/lib/api/server';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
@@ -33,11 +35,16 @@ const SocialsContainer = dynamic(() => import('src/components/Socials/Socials.co
 
 const {publicRuntimeConfig} = getConfig();
 
-const Socials: React.FC = () => {
+type SocialPageProps = {
+  session: Session;
+  logo: string;
+};
+
+const Socials: React.FC<SocialPageProps> = props => {
   const {socials} = useSelector<RootState, UserState>(state => state.userState);
 
   return (
-    <DefaultLayout isOnProfilePage={false}>
+    <DefaultLayout isOnProfilePage={false} {...props}>
       <Head>
         <title>{i18n.t('SocialMedia.Title', {appname: publicRuntimeConfig.appName})}</title>
       </Head>
@@ -105,9 +112,12 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   await dispatch(fetchExchangeRates());
   await dispatch(fetchUserExperience());
 
+  const data = await getServer();
+
   return {
     props: {
       session,
+      logo: data.images.logo_banner,
     },
   };
 });

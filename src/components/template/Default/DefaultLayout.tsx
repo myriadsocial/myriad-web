@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {useCookies} from 'react-cookie';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {Session} from 'next-auth';
 import dynamic from 'next/dynamic';
 
 import {Container} from '@material-ui/core';
@@ -47,10 +48,12 @@ const SocialMediaListContainer = dynamic(
 type DefaultLayoutProps = WithErrorProps & {
   isOnProfilePage: boolean;
   children: React.ReactNode;
+  logo: string;
+  session: Session;
 };
 
 const Default: React.FC<DefaultLayoutProps> = props => {
-  const {children} = props;
+  const {children, logo} = props;
 
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -144,7 +147,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
           <div className={classes.firstCol}>
             <div className={classes.innerFirstColWrapper}>
               <div>
-                <MenuContainer />
+                <MenuContainer logo={logo} />
               </div>
               <div>
                 <SocialMediaListContainer />

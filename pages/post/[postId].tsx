@@ -3,6 +3,7 @@ import * as Sentry from '@sentry/nextjs';
 import React from 'react';
 import {shallowEqual, useSelector} from 'react-redux';
 
+import {Session} from 'next-auth';
 import {getSession} from 'next-auth/react';
 import getConfig from 'next/config';
 import dynamic from 'next/dynamic';
@@ -21,6 +22,7 @@ import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 import {initialize} from 'src/lib/api/base';
 import * as PostAPI from 'src/lib/api/post';
+import {getServer} from 'src/lib/api/server';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
@@ -50,6 +52,8 @@ type PostPageProps = {
   title: string;
   description: string;
   image: string | null;
+  session: Session;
+  logo: string;
 };
 
 type PostPageParams = {
@@ -74,7 +78,7 @@ const PostPage: React.FC<PostPageProps> = props => {
   );
 
   return (
-    <DefaultLayout isOnProfilePage={false}>
+    <DefaultLayout isOnProfilePage={false} {...props}>
       <Head>
         <title>{title}</title>
         <meta property="og:type" content="article" />
@@ -214,12 +218,15 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     image = null;
   }
 
+  const data = await getServer();
+
   return {
     props: {
       title,
       description,
       image,
       removed: showAsDeleted,
+      logo: data.images.logo_banner,
     },
   };
 });

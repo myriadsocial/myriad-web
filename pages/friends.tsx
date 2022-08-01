@@ -1,6 +1,7 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 
+import {Session} from 'next-auth';
 import {getSession} from 'next-auth/react';
 import getConfig from 'next/config';
 import Head from 'next/head';
@@ -12,6 +13,7 @@ import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {UserMetric} from 'src/interfaces/user';
 import {initialize} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
+import {getServer} from 'src/lib/api/server';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
@@ -31,13 +33,18 @@ import {ThunkDispatchAction} from 'src/types/thunk';
 
 const {publicRuntimeConfig} = getConfig();
 
-const Friends: React.FC = () => {
+type FriendsPageProps = {
+  session: Session;
+  logo: string;
+};
+
+const Friends: React.FC<FriendsPageProps> = props => {
   const metric = useSelector<RootState, UserMetric | undefined>(
     state => state.userState.user?.metric,
   );
 
   return (
-    <DefaultLayout isOnProfilePage={false}>
+    <DefaultLayout isOnProfilePage={false} {...props}>
       <Head>
         <title>{i18n.t('Friends.Title', {appname: publicRuntimeConfig.appName})}</title>
       </Head>
@@ -104,10 +111,12 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   await dispatch(fetchNetwork());
   await dispatch(fetchExchangeRates());
   await dispatch(fetchUserExperience());
+  const data = await getServer();
 
   return {
     props: {
       session,
+      logo: data.images.logo_banner,
     },
   };
 });

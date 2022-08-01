@@ -11,6 +11,7 @@ import {TippingSuccess} from 'src/components/common/Tipping/render/Tipping.succe
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {initialize} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
+import {getServer} from 'src/lib/api/server';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
@@ -33,15 +34,16 @@ const {publicRuntimeConfig} = getConfig();
 
 type SearchProps = {
   session: Session;
+  logo: string;
 };
 
-const Search: React.FC<SearchProps> = () => {
+const Search: React.FC<SearchProps> = props => {
   const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
 
   if (!user && !anonymous) return null;
 
   return (
-    <DefaultLayout isOnProfilePage={false}>
+    <DefaultLayout isOnProfilePage={false} {...props}>
       <Head>
         <title>{i18n.t('Search.Title', {appname: publicRuntimeConfig.appName})}</title>
       </Head>
@@ -104,10 +106,12 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   await dispatch(fetchNetwork());
   await dispatch(fetchExchangeRates());
   await dispatch(fetchUserExperience());
+  const data = await getServer();
 
   return {
     props: {
       session,
+      logo: data.images.logo_banner,
     },
   };
 });

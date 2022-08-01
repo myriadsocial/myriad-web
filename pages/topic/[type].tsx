@@ -1,6 +1,7 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 
+import {Session} from 'next-auth';
 import {getSession} from 'next-auth/react';
 import getConfig from 'next/config';
 import Head from 'next/head';
@@ -16,6 +17,7 @@ import {People} from 'src/interfaces/people';
 import {User} from 'src/interfaces/user';
 import {initialize} from 'src/lib/api/base';
 import * as ExperienceAPI from 'src/lib/api/experience';
+import {getServer} from 'src/lib/api/server';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
@@ -39,6 +41,8 @@ const {publicRuntimeConfig} = getConfig();
 
 type TopicPageProps = {
   experience: Experience | null;
+  session: Session;
+  logo: string;
 };
 
 type TopicsQueryProps = {
@@ -46,7 +50,8 @@ type TopicsQueryProps = {
   type: 'hashtag' | 'experience';
 };
 
-const Topic: React.FC<TopicPageProps> = ({experience}) => {
+const Topic: React.FC<TopicPageProps> = props => {
+  const {experience} = props;
   const {query} = useRouter();
 
   const {type, tag} = query as TopicsQueryProps;
@@ -54,7 +59,7 @@ const Topic: React.FC<TopicPageProps> = ({experience}) => {
   const user = useSelector<RootState, User>(state => state.userState.user);
 
   return (
-    <DefaultLayout isOnProfilePage={false}>
+    <DefaultLayout isOnProfilePage={false} {...props}>
       <Head>
         <title>{i18n.t('Topics.Title', {appname: publicRuntimeConfig.appName})}</title>
       </Head>
@@ -119,6 +124,8 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   await dispatch(fetchExchangeRates());
   await dispatch(fetchUserExperience());
 
+  const data = await getServer();
+
   let experience: Experience | null = null;
 
   if (query.type === 'hashtag' && query.tag) {
@@ -160,6 +167,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     props: {
       session,
       experience,
+      logo: data.images.logo_banner,
     },
   };
 });

@@ -1,5 +1,6 @@
 import React from 'react';
 
+import {Session} from 'next-auth';
 import {getSession} from 'next-auth/react';
 import getConfig from 'next/config';
 import Head from 'next/head';
@@ -10,6 +11,7 @@ import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {initialize} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
+import {getServer} from 'src/lib/api/server';
 import i18n from 'src/locale';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
@@ -27,7 +29,12 @@ import {ThunkDispatchAction} from 'src/types/thunk';
 
 const {publicRuntimeConfig} = getConfig();
 
-const Settings: React.FC = () => {
+type SettingPageProps = {
+  session: Session;
+  logo: string;
+};
+
+const Settings: React.FC<SettingPageProps> = props => {
   const {query} = useRouter();
 
   const settings = useSettingList();
@@ -36,7 +43,7 @@ const Settings: React.FC = () => {
   const selected = settings.find(item => item.id === currentSection);
 
   return (
-    <DefaultLayout isOnProfilePage={false}>
+    <DefaultLayout isOnProfilePage={false} {...props}>
       <Head>
         <title>{i18n.t('Setting.Title', {appname: publicRuntimeConfig.appName})}</title>
       </Head>
@@ -100,10 +107,12 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   await dispatch(fetchNetwork());
   await dispatch(fetchExchangeRates());
   await dispatch(fetchUserExperience());
+  const data = await getServer();
 
   return {
     props: {
       session,
+      logo: data.images.logo_banner,
     },
   };
 });

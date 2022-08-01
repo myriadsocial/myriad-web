@@ -2,6 +2,7 @@ import * as Sentry from '@sentry/nextjs';
 
 import React from 'react';
 
+import {Session} from 'next-auth';
 import {getSession} from 'next-auth/react';
 import getConfig from 'next/config';
 import Head from 'next/head';
@@ -13,6 +14,7 @@ import {generateAnonymousUser} from 'src/helpers/auth';
 import {initialize} from 'src/lib/api/base';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import {healthcheck} from 'src/lib/api/healthcheck';
+import {getServer} from 'src/lib/api/server';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
 import {fetchFriend} from 'src/reducers/friend/actions';
@@ -34,6 +36,8 @@ type ExperiencePageProps = {
   title: string;
   description: string | null;
   image: string | null;
+  session: Session;
+  logo: string;
 };
 
 const PreviewExperience: React.FC<ExperiencePageProps> = props => {
@@ -42,7 +46,7 @@ const PreviewExperience: React.FC<ExperiencePageProps> = props => {
   const router = useRouter();
 
   return (
-    <DefaultLayout isOnProfilePage={false}>
+    <DefaultLayout isOnProfilePage={false} {...props}>
       <Head>
         <title>{title}</title>
         <meta property="og:type" content="article" />
@@ -112,14 +116,14 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   try {
     const experience = await ExperienceAPI.getExperienceDetail(experienceId);
-
-    console.log('experience', experience);
+    const data = await getServer();
 
     return {
       props: {
         title: experience.name,
         description: experience.description,
         image: experience.experienceImageURL,
+        logo: data.images.logo_banner,
       },
     };
   } catch (error) {
