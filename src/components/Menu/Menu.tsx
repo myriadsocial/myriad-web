@@ -1,6 +1,5 @@
 import React from 'react';
 
-import Image from 'next/image';
 import {useRouter} from 'next/router';
 
 import {BoxComponent} from '../atoms/Box';
@@ -34,7 +33,7 @@ export const Menu: React.FC<MenuProps> = props => {
     <div className={styles.root}>
       <BoxComponent paddingLeft={0} paddingRight={0}>
         <div className={styles.head} onClick={gotoHome} aria-hidden="true">
-          <Image src={logo} width={220} height={36} quality={100} />
+          <img src={logo} width={220} height={48} />
         </div>
 
         {menu
