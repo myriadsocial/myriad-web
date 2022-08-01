@@ -15,6 +15,7 @@ import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {generateAnonymousUser} from 'src/helpers/auth';
 import {initialize} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
+import {getServer} from 'src/lib/api/server';
 import * as UserAPI from 'src/lib/api/user';
 import i18n from 'src/locale';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
@@ -40,6 +41,7 @@ type ProfilePageProps = {
   description: string;
   image: string | null;
   isBanned: boolean;
+  logo: string;
 };
 
 const {publicRuntimeConfig} = getConfig();
@@ -50,7 +52,7 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = props => {
   const router = useRouter();
 
   return (
-    <DefaultLayout isOnProfilePage={true}>
+    <DefaultLayout isOnProfilePage={true} {...props}>
       <Head>
         <title>{title}</title>
         <meta property="og:type" content="profile" />
@@ -125,13 +127,13 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   try {
     const detail = await UserAPI.getUserDetail(profileId, userId);
 
-    console.log('detail', detail);
-
     await dispatch(setProfile(detail));
 
     if (!anonymous && userId) {
       await dispatch(checkFriendedStatus());
     }
+
+    const data = await getServer();
     return {
       props: {
         session,
@@ -139,6 +141,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
         description: detail?.bio ?? null,
         image: detail?.profilePictureURL ?? null,
         isBanned: Boolean(detail?.deletedAt),
+        logo: data.images.logo_banner,
       },
     };
   } catch (error) {

@@ -1,5 +1,6 @@
 import React from 'react';
 
+import {Session} from 'next-auth';
 import {getSession} from 'next-auth/react';
 import getConfig from 'next/config';
 import Head from 'next/head';
@@ -7,6 +8,7 @@ import Head from 'next/head';
 import {ExperienceTab} from 'src/components/RightMenuBar/tabs/ExperienceTab';
 import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
+import {getServer} from 'src/lib/api/server';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
 import {
@@ -22,9 +24,14 @@ import {ThunkDispatchAction} from 'src/types/thunk';
 
 const {publicRuntimeConfig} = getConfig();
 
-const ExperiencePageComponent: React.FC = () => {
+type ExperiencePageProps = {
+  session: Session;
+  logo: string;
+};
+
+const ExperiencePageComponent: React.FC<ExperiencePageProps> = props => {
   return (
-    <DefaultLayout isOnProfilePage={false}>
+    <DefaultLayout isOnProfilePage={false} {...props}>
       <Head>
         <title>{publicRuntimeConfig.appName} - Experience</title>
       </Head>
@@ -73,10 +80,12 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   await dispatch(fetchNetwork());
   await dispatch(fetchUserExperience());
+  const data = await getServer();
 
   return {
     props: {
       session,
+      logo: data.images.logo_banner,
     },
   };
 });

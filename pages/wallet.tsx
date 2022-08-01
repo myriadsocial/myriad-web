@@ -1,6 +1,7 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 
+import {Session} from 'next-auth';
 import {getSession} from 'next-auth/react';
 import getConfig from 'next/config';
 import dynamic from 'next/dynamic';
@@ -10,6 +11,7 @@ import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {initialize} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
+import {getServer} from 'src/lib/api/server';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
@@ -36,13 +38,18 @@ const MyWalletContainerWithoutSSR = dynamic(
   },
 );
 
-const Home: React.FC = () => {
+type WalletPageProps = {
+  session: Session;
+  logo: string;
+};
+
+const Wallet: React.FC<WalletPageProps> = props => {
   const {user} = useSelector<RootState, UserState>(state => state.userState);
 
   if (!user) return null;
 
   return (
-    <DefaultLayout isOnProfilePage={false}>
+    <DefaultLayout isOnProfilePage={false} {...props}>
       <Head>
         <title>{i18n.t('Wallet.Title', {appname: publicRuntimeConfig.appName})}</title>
       </Head>
@@ -107,11 +114,14 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   await dispatch(fetchNetwork());
   await dispatch(fetchExchangeRates());
 
+  const data = await getServer();
+
   return {
     props: {
       session,
+      logo: data.images.logo_banner,
     },
   };
 });
 
-export default Home;
+export default Wallet;
