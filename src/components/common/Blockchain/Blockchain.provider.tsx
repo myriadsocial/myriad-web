@@ -36,6 +36,7 @@ const PolkadotAccountList = dynamic(
 
 interface BlockchainProviderProps {
   provider: IProvider;
+  nearProvider: Near;
   currentWallet: UserWallet;
   loadingBlockchain: boolean;
   onChangeProvider: () => void;
@@ -44,6 +45,7 @@ interface BlockchainProviderProps {
 export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = ({
   children,
   provider,
+  nearProvider,
   currentWallet,
   onChangeProvider,
   loadingBlockchain,
@@ -227,7 +229,13 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
   return (
     <>
       <BlockchainContext.Provider
-        value={{provider, switchNetwork: shiftNetwork, loadingBlockchain, loadingSwitch}}>
+        value={{
+          provider,
+          nearProvider,
+          switchNetwork: shiftNetwork,
+          loadingBlockchain,
+          loadingSwitch,
+        }}>
         {children}
       </BlockchainContext.Provider>
       <PolkadotAccountList

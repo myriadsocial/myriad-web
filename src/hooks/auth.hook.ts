@@ -41,10 +41,11 @@ export interface NearPayload {
 
 export const useAuthHook = () => {
   const dispatch = useDispatch();
+
   const {user, networks} = useSelector<RootState, UserState>(state => state.userState);
   const {getPolkadotAccounts} = usePolkadotExtension();
   const {publicRuntimeConfig} = getConfig();
-  const {provider} = useBlockchain();
+  const {provider, nearProvider} = useBlockchain();
 
   const [loading, setLoading] = useState(false);
 
@@ -333,6 +334,7 @@ export const useAuthHook = () => {
     await Promise.all([
       provider?.disconnect(),
       FirebaseMessaging.unregister(),
+      nearProvider?.disconnect(),
       signOut({
         callbackUrl: publicRuntimeConfig.appAuthURL,
         redirect: true,
