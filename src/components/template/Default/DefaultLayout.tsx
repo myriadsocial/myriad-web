@@ -19,9 +19,10 @@ import ShowIf from 'src/components/common/show-if.component';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {NotificationProps} from 'src/interfaces/notification';
 import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
-import {firebaseApp, firebaseAnalytics, firebaseCloudMessaging} from 'src/lib/firebase';
-import {RootState} from 'src/reducers';
-import {BalanceState} from 'src/reducers/balance/reducer';
+import * as FirebaseAnalytic from 'src/lib/firebase/analytic';
+import * as FirebaseMessaging from 'src/lib/firebase/messaging';
+import type {RootState} from 'src/reducers';
+import type {BalanceState} from 'src/reducers/balance/reducer';
 import {countNewNotification, processNotification} from 'src/reducers/notification/actions';
 
 const WalletBalancesContainer = dynamic(
@@ -68,53 +69,29 @@ const Default: React.FC<DefaultLayoutProps> = props => {
   const [showNotification, setShowNotification] = useState(false);
 
   useEffect(() => {
-    initializeFirebase();
-  }, []);
+    if (user) {
+      initializeFirebase();
+    }
+  }, [user]);
 
-  const initializeFirebase = async () => {
-    await firebaseApp.init();
+  const processMessages = (payload?: NotificationProps) => {
+    dispatch(countNewNotification());
 
-    await initializeMessaging();
-
-    if (cookies[COOKIE_CONSENT_NAME]) {
-      await firebaseAnalytics.init();
+    if (payload) {
+      dispatch(processNotification(payload));
     }
   };
 
-  const initializeMessaging = async () => {
-    await firebaseCloudMessaging.init();
+  const initializeFirebase = async () => {
+    const token = await FirebaseMessaging.init(processMessages);
 
     if (!user?.deletedAt) {
-      await updateUserFcmToken();
+      await updateUserFcmToken(token);
     }
 
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.addEventListener('message', payload => {
-        if (payload?.data?.body) {
-          try {
-            const notification: NotificationProps = JSON.parse(payload.data.body);
-
-            dispatch(processNotification(notification));
-            // eslint-disable-next-line no-empty
-          } catch (error) {}
-        }
-
-        dispatch(countNewNotification());
-      });
+    if (cookies[COOKIE_CONSENT_NAME]) {
+      await FirebaseAnalytic.init();
     }
-
-    firebaseCloudMessaging.onMessageListener(payload => {
-      if (payload?.data?.body) {
-        try {
-          const notification: NotificationProps = JSON.parse(payload.data.body);
-
-          dispatch(processNotification(notification));
-          // eslint-disable-next-line no-empty
-        } catch (error) {}
-      }
-
-      dispatch(countNewNotification());
-    });
   };
 
   const handleToggleNotification = () => {
