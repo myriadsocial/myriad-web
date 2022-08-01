@@ -178,15 +178,6 @@ export const getNetworks = async (): Promise<Networks> => {
   return data;
 };
 
-export const getServer = async (): Promise<Server> => {
-  const {data} = await MyriadAPI().request<Server>({
-    url: `/server`,
-    method: 'GET',
-  });
-
-  return data;
-};
-
 export const getAccountIdMyria = async (networkId?: string): Promise<string> => {
   const {data} = await MyriadAPI().request<Server>({
     url: `/server`,
