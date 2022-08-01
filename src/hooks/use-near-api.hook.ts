@@ -60,7 +60,7 @@ export const useNearApi = () => {
 
       if (!accountId && wallet.networkId === network.id) {
         if (currency.native) nativeDecimal = currency.decimal;
-        if (new BN(tips_balance.amount).gt(BN_ZERO)) accountIdExist = false;
+        if (new BN(formatted_amount).gt(BN_ZERO)) accountIdExist = false;
       }
 
       return {
