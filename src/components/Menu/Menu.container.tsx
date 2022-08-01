@@ -5,7 +5,11 @@ import {useRouter} from 'next/router';
 import {Menu} from './Menu';
 import {MenuId} from './use-menu-list';
 
-export const MenuContainer: React.FC = () => {
+type MenuProps = {
+  logo: string;
+};
+
+export const MenuContainer: React.FC<MenuProps> = props => {
   const router = useRouter();
 
   const [selected, setSelected] = useState<MenuId>('home');
@@ -40,5 +44,5 @@ export const MenuContainer: React.FC = () => {
     router.push(path);
   };
 
-  return <Menu selected={selected} onChange={handleChangeMenu} />;
+  return <Menu selected={selected} onChange={handleChangeMenu} {...props} />;
 };
