@@ -68,8 +68,6 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
                 <ShowIf condition={!loading}>
                   {formatAddress(currentWallet, userWalletAddress)}
                 </ShowIf>
-
-                {/* {formatAddress(currentWallet, userWalletAddress)} */}
               </Typography>
             </ShowIf>
             <ShowIf condition={!currentWallet}>

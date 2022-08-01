@@ -44,7 +44,7 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
 
   const icons = React.useMemo(
     () => ({
-      'polkadot{.js}': <PolkadotNetworkIcon />,
+      polkadot: <PolkadotNetworkIcon />,
       kusama: <KusamaNetworkIcon />,
       near: <NearNetworkIcon24 />,
       myriad: <MyriadCircleIcon />,
@@ -70,7 +70,7 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
           return icons[WalletTypeEnum.NEAR];
 
         default:
-          return icons[WalletTypeEnum.POLKADOT];
+          return icons[NetworkIdEnum.POLKADOT];
       }
     }
 
