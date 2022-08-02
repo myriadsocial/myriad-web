@@ -53,21 +53,29 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
 
   return (
     <div className={styles.box}>
-      <Typography variant={'h4'} className={styles.title}>
-        Experience
-      </Typography>
-
-      <ShowIf condition={Boolean(user) && experienceType === 'user'}>
-        <Typography
-          variant={'caption'}
-          color={'primary'}
-          component="div"
-          className={styles.action}
-          onClick={handleCreateExperience}>
-          <SvgIcon component={PlusIcon} viewBox="0 0 24 24" style={{fontSize: 14}} />
-          {i18n.t('Experience.Create.Title')}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: 12,
+        }}>
+        <Typography variant={'h4'} className={styles.title}>
+          Experience
         </Typography>
-      </ShowIf>
+
+        <ShowIf condition={Boolean(user) && experienceType === 'user'}>
+          <Typography
+            variant={'caption'}
+            color={'primary'}
+            component="div"
+            className={styles.action}
+            onClick={handleCreateExperience}>
+            <SvgIcon component={PlusIcon} viewBox="0 0 24 24" style={{fontSize: 14}} />
+            {i18n.t('Experience.Create.Title')}
+          </Typography>
+        </ShowIf>
+      </div>
 
       <ExperienceListContainer
         selectable
@@ -75,7 +83,11 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
         filterTimeline
         enableClone={experienceType === 'trending'}
         enableSubscribe={experienceType === 'trending'}
-        hasMore={userExperiencesMeta.currentPage < userExperiencesMeta.totalPageCount}
+        hasMore={
+          Boolean(user)
+            ? userExperiencesMeta.currentPage < userExperiencesMeta.totalPageCount
+            : false
+        }
         loadNextPage={handleLoadNextPage}
       />
 

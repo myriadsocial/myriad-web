@@ -11,6 +11,7 @@ import i18n from 'src/locale';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     empty: {
+      padding: theme.spacing(2),
       marginTop: 30,
       background: '#FFF',
       height: 335,

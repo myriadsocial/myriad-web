@@ -15,8 +15,8 @@ export const Skeleton = () => {
           container
           direction="column"
           style={{marginLeft: 20, width: 'calc(100% - 88px)'}}>
-          <BaseSekeleton variant="text" width={240} height={24} />
-          <BaseSekeleton variant="text" width={100} height={16} />
+          <BaseSekeleton variant="text" width={'100%'} height={24} />
+          <BaseSekeleton variant="text" width={'50%'} height={16} />
         </Grid>
       </Grid>
     </Card>
