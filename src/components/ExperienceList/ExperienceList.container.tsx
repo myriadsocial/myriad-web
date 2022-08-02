@@ -33,7 +33,7 @@ export const useStyles = makeStyles<Theme, ExperienceListContainerProps>(theme =
   createStyles({
     root: {
       maxHeight: '512px',
-      overflowX: props => (props.selectable ? 'scroll' : 'unset'),
+      overflowX: props => (props.selectable ? 'auto' : 'unset'),
       whiteSpace: 'nowrap',
     },
   }),
