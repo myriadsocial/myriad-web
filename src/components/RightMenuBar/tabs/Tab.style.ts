@@ -54,9 +54,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     flex: {
       display: 'flex',
-      gap: '8px',
       alignItems: 'center',
       marginBottom: theme.spacing(1.5),
+      justifyContent: 'space-between',
     },
     info: {
       padding: 0,
