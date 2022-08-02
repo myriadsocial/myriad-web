@@ -11,7 +11,6 @@ import {
   IProvider,
   NearInitializeProps,
   SignatureProps,
-  SignTransaction,
   TipsBalanceInfo,
   TipsNearResult,
   TipsNearResultWithPagination,
@@ -249,7 +248,7 @@ export class Near implements IProvider {
       : JSON.stringify({
           tips_balance_info: {
             server_id: serverId,
-            referenceType: 'user',
+            reference_type: 'user',
             reference_id: referenceId,
             ft_identifier: ftIdentifiers[0],
           },
@@ -273,14 +272,18 @@ export class Near implements IProvider {
     });
   }
 
-  async payTransactionFee(
-    tipsBalanceInfo: TipsBalanceInfo,
-    trxFee: string,
-    ...args: [nearAPI.ConnectedWalletAccount, number, SignTransaction]
-  ): Promise<string> {
-    const currentBalance = args[1];
+  async payTransactionFee(tipsBalanceInfo: TipsBalanceInfo, trxFee: string): Promise<string> {
+    const {serverId, referenceType, referenceId, ftIdentifier} = tipsBalanceInfo;
+
     const tippingContractId = publicRuntimeConfig.nearTippingContractId;
-    const data = JSON.stringify({tips_balance_info: tipsBalanceInfo});
+    const data = JSON.stringify({
+      tips_balance_info: {
+        server_id: serverId,
+        reference_type: referenceType,
+        reference_id: referenceId,
+        ft_identifier: ftIdentifier,
+      },
+    });
 
     //inisialisasi near wallet
     const signer = await this.signer();
@@ -293,7 +296,7 @@ export class Near implements IProvider {
       ),
     ];
     const appAuthURL = publicRuntimeConfig.appAuthURL;
-    const url = `${appAuthURL}/wallet?type=tip&txFee=${trxFee}&balance=${currentBalance}&networkId=near`;
+    const url = `${appAuthURL}/wallet?type=tip&txFee=${trxFee}`;
     //TODO: fix error protected class for multiple sign and send transactions
     // @ts-ignore: protected class
     await signer.signAndSendTransaction({

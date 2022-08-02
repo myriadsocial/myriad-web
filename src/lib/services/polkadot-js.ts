@@ -357,10 +357,9 @@ export class PolkadotJs implements IProvider {
   async payTransactionFee(
     tipsBalanceInfo: TipsBalanceInfo,
     trxFee: string,
-    ...args: [InjectedAccountWithMeta, number, SignTransaction]
+    ...args: [InjectedAccountWithMeta, SignTransaction]
   ): Promise<string> {
-    const account = args[0];
-    const callback = args[2];
+    const [account, callback] = args;
     const walletDetail = {...tipsBalanceInfo, referenceType: WalletReferenceType.USER};
     return this.signTippingTransaction(walletDetail, new BN(trxFee), 'native', account, callback);
   }
