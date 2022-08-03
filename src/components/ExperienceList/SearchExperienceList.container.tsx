@@ -38,6 +38,7 @@ export const SearchExperienceListContainer: React.FC<SearchExperienceListContain
         selectable={false}
         enableClone
         enableSubscribe
+        buttonLoad
       />
     );
   };
