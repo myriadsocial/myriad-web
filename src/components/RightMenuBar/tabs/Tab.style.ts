@@ -23,7 +23,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     action: {
       fontWeight: 500,
-      margin: '20px 0',
       cursor: 'pointer',
       '&:hover': {
         textDecoration: 'underline',
@@ -36,7 +35,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
     },
     title: {
-      marginBottom: 12,
       [theme.breakpoints.down('xs')]: {
         display: 'none',
       },
