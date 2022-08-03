@@ -114,7 +114,7 @@ export const useClaimTip = () => {
         getTip();
       }
     }
-  }, [currentWallet, txFee, errorMessage, errorCode]);
+  }, [currentWallet]);
 
   const getTip = async (verifyNearTips = false, nativeBalance = '0.00') => {
     setLoading(true);
