@@ -27,7 +27,7 @@ export const useFriendRequest = () => {
     await dispatch(checkFriendedStatus());
   };
 
-  const removeFriendRequest = async (request: Friend) => {
+  const removeFriendRequest = async (request: Friend, callback?: () => void) => {
     await dispatch(deleteFriendRequest(request));
 
     await loadUsersFriends();
@@ -35,6 +35,7 @@ export const useFriendRequest = () => {
     await dispatch(checkFriendedStatus());
 
     loadNotifications();
+    callback && callback();
   };
 
   const toggleRequest = async (request: Friend, status: FriendStatus) => {
