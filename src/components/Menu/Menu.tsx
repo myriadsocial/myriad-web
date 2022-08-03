@@ -22,10 +22,12 @@ export const Menu: React.FC<MenuProps> = props => {
   const menu = useMenuList(selected);
 
   const gotoHome = () => {
+    if (router.pathname === '/home') return;
     router.push('/home', undefined, {shallow: true});
   };
 
   const openMenu = (item: MenuDetail) => () => {
+    if (selected === item.url.split('/')[1]) return;
     onChange(item.url);
   };
 
