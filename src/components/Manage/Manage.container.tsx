@@ -14,6 +14,7 @@ import {Manage} from './Manage';
 
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {useAuthHook} from 'src/hooks/auth.hook';
+import {useConnect} from 'src/hooks/use-connect.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {NetworkIdEnum} from 'src/interfaces/network';
 import {BlockchainPlatform} from 'src/interfaces/wallet';
@@ -31,17 +32,20 @@ const PolkadotAccountList = dynamic(
 );
 
 export const ManageCointainer: React.FC = () => {
+  const router = useRouter();
+  const enqueueSnackbar = useEnqueueSnackbar();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
+
   const {enablePolkadotExtension} = usePolkadotExtension();
-  const {getRegisteredAccounts, connectNetwork} = useAuthHook();
-  const router = useRouter();
+  const {getRegisteredAccounts} = useAuthHook();
+  const {connectNetwork} = useConnect();
   const {publicRuntimeConfig} = getConfig();
-  const enqueueSnackbar = useEnqueueSnackbar();
 
   const {user, currentWallet, wallets, networks} = useSelector<RootState, UserState>(
     state => state.userState,
   );
+
   const [showAccountList, setShowAccountList] = React.useState(false);
   const [extensionInstalled, setExtensionInstalled] = React.useState(false);
   const [accounts, setAccounts] = React.useState<InjectedAccountWithMeta[]>([]);

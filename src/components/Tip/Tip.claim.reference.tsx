@@ -18,7 +18,7 @@ type TipClaimReferenceProps = {
   token?: string;
   txFee?: string;
   tipsResults: TipsResult[];
-  onHandleVerifyRef: (networkId: string, currentBalance: string | number) => void;
+  onHandleVerifyRef: (networkId: string, nativeBalance: string | number) => void;
 };
 
 export const TipClaimReference: React.FC<TipClaimReferenceProps> = ({
@@ -33,9 +33,9 @@ export const TipClaimReference: React.FC<TipClaimReferenceProps> = ({
 
   const onVerifyReference = () => {
     const tip = tipsResults.find(item => item.tipsBalanceInfo.ftIdentifier === 'native');
-    const currentBalance = tip ? tip.amount : '0.000';
+    const nativeBalance = tip ? tip.amount : '0.000';
 
-    onHandleVerifyRef(networkId, currentBalance);
+    onHandleVerifyRef(networkId, nativeBalance);
   };
 
   return (

@@ -13,7 +13,8 @@ import BlockchainContext from './Blockchain.context';
 
 // import {PolkadotAccountList} from 'components/PolkadotAccountList';
 import {formatNetworkTitle, formatWalletTitle} from 'src/helpers/wallet';
-import {NearPayload, useAuthHook} from 'src/hooks/auth.hook';
+import {useAuthHook} from 'src/hooks/auth.hook';
+import {NearPayload, useConnect} from 'src/hooks/use-connect.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {IProvider} from 'src/interfaces/blockchain-interface';
 import {Network, NetworkIdEnum} from 'src/interfaces/network';
@@ -58,7 +59,8 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
 
   const {wallets, networks} = useSelector<RootState, UserState>(state => state.userState);
   const {enablePolkadotExtension} = usePolkadotExtension();
-  const {switchNetwork, getRegisteredAccounts, loading: loadingSwitch} = useAuthHook();
+  const {getRegisteredAccounts} = useAuthHook();
+  const {switchNetwork, loading: loadingSwitch} = useConnect();
   const {publicRuntimeConfig} = getConfig();
 
   const enqueueSnackbar = useEnqueueSnackbar();

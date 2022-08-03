@@ -1,6 +1,6 @@
 import {useSelector} from 'react-redux';
 
-import {BN, BN_ZERO} from '@polkadot/util';
+import {BN, BN_ZERO, BN_TEN} from '@polkadot/util';
 
 import {formatBalanceV2} from 'src/helpers/balance';
 import {SignatureProps, TipsResultsProps} from 'src/interfaces/blockchain-interface';
@@ -39,6 +39,8 @@ export const useNearApi = () => {
     referenceIds: string[],
     wallet: Wallet,
     network: Network,
+    verifyNearTips = false,
+    nearBalance = '0.00',
   ): Promise<TipsResultsProps> => {
     const data = await Near.claimTipBalances(network.rpcURL, serverId, referenceId, referenceIds);
 
@@ -53,14 +55,25 @@ export const useNearApi = () => {
         return false;
       });
 
-      const {formatted_amount, tips_balance, symbol, unclaimed_reference_ids} = e;
+      const {tips_balance, symbol, unclaimed_reference_ids} = e;
       const {account_id, tips_balance_info} = tips_balance;
       const {server_id, reference_type, reference_id, ft_identifier} = tips_balance_info;
-      const accountId = unclaimed_reference_ids.length === 0 ? account_id : null;
+
+      let {formatted_amount} = e;
+      let accountId = unclaimed_reference_ids.length === 0 ? account_id : null;
+
+      if (verifyNearTips) {
+        if (currency.native) formatted_amount = nearBalance;
+        accountId = wallet.id;
+      }
 
       if (!accountId && wallet.networkId === network.id) {
         if (currency.native) nativeDecimal = currency.decimal;
-        if (new BN(formatted_amount).gt(BN_ZERO)) accountIdExist = false;
+        if (parseFloat(formatted_amount) > 0) {
+          const decimal = new BN(BN_TEN).pow(new BN(currency.decimal.toString()));
+          const amount = new BN(formatted_amount).mul(decimal);
+          if (amount.gt(BN_ZERO)) accountIdExist = false;
+        }
       }
 
       return {

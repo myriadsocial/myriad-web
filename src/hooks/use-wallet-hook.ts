@@ -2,18 +2,14 @@ import * as Sentry from '@sentry/nextjs';
 
 import {useState} from 'react';
 
-import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {BN, BN_ONE, BN_TWO, BN_TEN, BN_ZERO} from '@polkadot/util';
 
 import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {VariantType} from 'notistack';
 import {formatBalance} from 'src/helpers/balance';
 import {BalanceDetail} from 'src/interfaces/balance';
-import {TipsBalanceInfo} from 'src/interfaces/blockchain-interface';
 import {WalletDetail} from 'src/interfaces/wallet';
 import {storeTransaction} from 'src/lib/api/transaction';
-import * as WalletAPI from 'src/lib/api/wallet';
 import i18n from 'src/locale';
 
 export const useWallet = () => {
@@ -108,50 +104,12 @@ export const useWallet = () => {
     }
   };
 
-  const payTransactionFee = async (
-    tipsBalanceInfo: TipsBalanceInfo,
-    amount: string,
-    account?: InjectedAccountWithMeta,
-    currentBalance?: string | number,
-    callback?: (hasSuccess?: boolean, hash?: string) => void,
-  ) => {
-    let message = 'Claiming Reference Success';
-    let variant: VariantType = 'success';
-    let success = true;
-    let hash = '';
-
-    try {
-      hash = await provider.payTransactionFee(
-        tipsBalanceInfo,
-        amount,
-        account,
-        currentBalance,
-        ({signerOpened}) => {
-          if (signerOpened) {
-            setSignerLoading(true);
-          }
-        },
-      );
-
-      await WalletAPI.claimReference({txFee: amount});
-    } catch (err) {
-      success = false;
-      variant = err.message === 'Cancelled' ? 'warning' : 'error';
-      message = err.message;
-    } finally {
-      setSignerLoading(false);
-      enqueueSnackbar({variant, message});
-      callback && callback(success, hash);
-    }
-  };
-
   return {
     loading,
     isSignerLoading,
     isFetchingFee,
     sendTip,
     getEstimatedFee,
-    payTransactionFee,
     server,
   };
 };

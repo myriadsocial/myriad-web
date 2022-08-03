@@ -42,6 +42,7 @@ export interface IProvider {
   payTransactionFee: (
     tipsBalanceInfo: TipsBalanceInfo,
     trxFee: string,
+    nativeBalance?: string,
     ...args: [SignerProps, SignTransaction]
   ) => Promise<string>;
 

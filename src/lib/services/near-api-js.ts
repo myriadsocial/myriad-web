@@ -272,7 +272,11 @@ export class Near implements IProvider {
     });
   }
 
-  async payTransactionFee(tipsBalanceInfo: TipsBalanceInfo, trxFee: string): Promise<string> {
+  async payTransactionFee(
+    tipsBalanceInfo: TipsBalanceInfo,
+    trxFee: string,
+    nativeBalance?: string,
+  ): Promise<string> {
     const {serverId, referenceType, referenceId, ftIdentifier} = tipsBalanceInfo;
 
     const tippingContractId = publicRuntimeConfig.nearTippingContractId;
@@ -296,7 +300,7 @@ export class Near implements IProvider {
       ),
     ];
     const appAuthURL = publicRuntimeConfig.appAuthURL;
-    const url = `${appAuthURL}/wallet?type=tip&txFee=${trxFee}`;
+    const url = `${appAuthURL}/wallet?type=tip&txFee=${trxFee}&balance=${nativeBalance}`;
     //TODO: fix error protected class for multiple sign and send transactions
     // @ts-ignore: protected class
     await signer.signAndSendTransaction({

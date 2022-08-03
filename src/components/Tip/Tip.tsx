@@ -33,11 +33,9 @@ type TipProps = {
   nativeToken: string;
   currentWallet?: UserWallet;
   txFee?: string;
-  onSuccess?: boolean;
-  balance?: string;
   onClaim: (networkId: string, ftIdentifier: string) => void;
   onClaimAll: (networkId: string) => void;
-  onHandleVerifyRef: (networkId: string, currentBalance: string | number) => void;
+  onHandleVerifyRef: (networkId: string, nativeBalance: string | number) => void;
   onSwitchNetwork: (network: Network) => void;
 };
 
@@ -71,8 +69,6 @@ export const Tip: React.FC<TipProps> = props => {
     nativeToken,
     currentWallet,
     loading,
-    onSuccess = false,
-    balance,
     txFee,
   } = props;
 
@@ -107,19 +103,6 @@ export const Tip: React.FC<TipProps> = props => {
     return selected?.title;
   };
 
-  const getAmount = (tip: TipsResult) => {
-    if (
-      onSuccess &&
-      balance &&
-      tip.tipsBalanceInfo.ftIdentifier === 'native' &&
-      tip.symbol === 'NEAR'
-    ) {
-      return balance;
-    }
-
-    return tip.amount;
-  };
-
   const isShowVerifyReference = () => {
     const tip = tips.find(e => e.accountId === null);
     if (tip) return true;
@@ -127,7 +110,7 @@ export const Tip: React.FC<TipProps> = props => {
   };
 
   const showTokens = () => {
-    if (isShowVerifyReference() && !onSuccess && network.id === currentWallet.networkId) {
+    if (isShowVerifyReference() && network.id === currentWallet.networkId) {
       return (
         <TipClaimReference
           networkId={network.id}
@@ -154,7 +137,7 @@ export const Tip: React.FC<TipProps> = props => {
                 <Button
                   disabled={
                     (currentWallet && currentWallet.networkId !== network.id) ||
-                    (!tip.accountId && !onSuccess) ||
+                    !tip.accountId ||
                     loading
                   }
                   onClick={() => handleClaim(network.id, tip.tipsBalanceInfo.ftIdentifier)}
@@ -167,7 +150,7 @@ export const Tip: React.FC<TipProps> = props => {
               </div>
               <div className={style.text}>
                 <Typography variant="h5" component="p" color="textPrimary">
-                  {getAmount(tip)}
+                  {tip.amount}
                 </Typography>
                 <Typography variant="subtitle2" component="p" color="textSecondary">
                   USD {'~'}
@@ -203,7 +186,7 @@ export const Tip: React.FC<TipProps> = props => {
           </ShowIf>
           <ShowIf condition={!!currentWallet && currentWallet.networkId == network.id}>
             <Button
-              disabled={isShowVerifyReference() && !onSuccess}
+              disabled={isShowVerifyReference()}
               className={style.button}
               size="small"
               color="primary"
