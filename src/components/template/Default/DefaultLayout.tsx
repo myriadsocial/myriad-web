@@ -120,7 +120,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
   const initializeFirebase = async () => {
     const token = await FirebaseMessaging.init(processMessages);
 
-    if (!user?.deletedAt) {
+    if (token && !user?.deletedAt) {
       await updateUserFcmToken(token);
     }
 
