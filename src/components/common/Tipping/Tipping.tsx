@@ -21,9 +21,7 @@ import {Button, ButtonVariant} from 'src/components/atoms/Button';
 import {CurrencyOptionComponent} from 'src/components/atoms/CurrencyOption';
 import {ListItemComponent} from 'src/components/atoms/ListItem';
 import {formatBalance} from 'src/helpers/balance';
-import {toBigNumber} from 'src/helpers/string';
-import {useNearApi} from 'src/hooks/use-near-api.hook';
-import {usePolkadotApi} from 'src/hooks/use-polkadot-api.hook';
+import {useWallet} from 'src/hooks/use-wallet-hook';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
@@ -46,18 +44,17 @@ export const Tipping: React.FC<SendTipProps> = props => {
   } = props;
 
   const classes = useStyles();
-  const {isSignerLoading, simplerSendTip, getEstimatedFee} = usePolkadotApi();
-  const {getEstimatedFee: getEstimatedFeeNear, sendAmount} = useNearApi();
+  const {isSignerLoading, sendTip, getEstimatedFee} = useWallet();
 
   const {currentWallet, currencies} = useSelector<RootState, UserState>(state => state.userState);
   const [amount, setAmount] = useState<BN>(INITIAL_AMOUNT);
   const [transactionFee, setTransactionFee] = useState<BN>(INITIAL_AMOUNT);
+  const [assetMinBalance, setAssetMinBalance] = useState<BN>(BN_ZERO);
 
   const [currency, setCurrency] = useState<BalanceDetail>(defaultCurrency);
   const [agreementChecked, setAgreementChecked] = useState(false);
   const [loadingFee, setLoadingFee] = useState(true);
   const [tippingAmountValid, setTippingAmountValid] = useState(false);
-  const [assetMinBalance, setAssetMinBalance] = useState<BN>(BN_ZERO);
 
   useEffect(() => {
     calculateTransactionFee(defaultCurrency);
@@ -89,31 +86,12 @@ export const Tipping: React.FC<SendTipProps> = props => {
     if (!receiver.walletDetail || !senderAddress) return;
 
     setLoadingFee(true);
-    let fee: BN = BN_ZERO;
-    //TODO: move to switch case
-    if (currentWallet?.network?.blockchainPlatform === 'substrate') {
-      const {estimatedFee, minBalance} = await getEstimatedFee(
-        senderAddress,
-        receiver.walletDetail,
-        selected,
-        currentWallet?.network?.rpcURL ?? '',
-      );
-      if (estimatedFee) {
-        fee = estimatedFee;
-      }
 
-      if (minBalance) setAssetMinBalance(minBalance);
-    }
-
-    if (currentWallet?.network?.blockchainPlatform === 'near') {
-      const {gasPrice} = await getEstimatedFeeNear();
-      if (gasPrice) {
-        fee = toBigNumber(gasPrice, currency.decimal);
-      }
-    }
+    const {estimatedFee, minBalance} = await getEstimatedFee(receiver.walletDetail, selected);
 
     setLoadingFee(false);
-    setTransactionFee(fee);
+    setTransactionFee(estimatedFee);
+    setAssetMinBalance(minBalance);
   };
 
   const handleChangeCurrency = async (selected: BalanceDetail) => {
@@ -153,6 +131,8 @@ export const Tipping: React.FC<SendTipProps> = props => {
       amount,
       currency: {...currency, network: currentWallet.network},
       walletDetail: receiver.walletDetail,
+      type: null,
+      referenceId: null,
     };
 
     // not direct tipping
@@ -170,19 +150,22 @@ export const Tipping: React.FC<SendTipProps> = props => {
       referenceType,
       amount: formatBalance(amount, currency.decimal),
     };
+
     await localforage.setItem(TIPPING_STORAGE_KEY, storageAttribute);
-    if (currentWallet?.network?.blockchainPlatform === 'substrate') {
-      simplerSendTip(attributes, hash => {
+
+    sendTip(
+      receiver.walletDetail,
+      amount,
+      currency,
+      attributes.type,
+      attributes.referenceId,
+      hash => {
         onSuccess(currency, currentWallet?.network?.explorerURL, hash, attributes.amount);
 
         setAmount(INITIAL_AMOUNT);
         setTransactionFee(INITIAL_AMOUNT);
-      });
-    }
-
-    if (currentWallet?.network?.blockchainPlatform === 'near') {
-      sendAmount(receiver.walletDetail, amount, currency.referenceId);
-    }
+      },
+    );
   };
 
   return (

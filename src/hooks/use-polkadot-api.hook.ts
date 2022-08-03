@@ -1,187 +1,25 @@
-import * as Sentry from '@sentry/nextjs';
+import {StorageKey} from '@polkadot/types';
+import {AnyTuple, Codec} from '@polkadot/types/types';
+import {BN, BN_ZERO} from '@polkadot/util';
 
-import {useState} from 'react';
-
-import {ApiPromise} from '@polkadot/api';
-import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
-import {BN, BN_ONE, BN_TWO, BN_TEN} from '@polkadot/util';
-
-import {SimpleSendTipProps} from '../interfaces/transaction';
-
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {VariantType} from 'notistack';
-import {formatBalance} from 'src/helpers/balance';
-import {BalanceDetail} from 'src/interfaces/balance';
-import {TipResult, TipsBalanceData, TipsBalanceInfo} from 'src/interfaces/network';
+import {formatBalanceV2} from 'src/helpers/balance';
+import {TipsResultsProps, TipsBalanceData, TipsResult} from 'src/interfaces/blockchain-interface';
+import {Network} from 'src/interfaces/network';
 import {SocialMedia} from 'src/interfaces/social';
-import {WalletDetail, WalletReferenceType} from 'src/interfaces/wallet';
-import {storeTransaction} from 'src/lib/api/transaction';
-import * as WalletAPI from 'src/lib/api/wallet';
-import {
-  claimReferenceFee,
-  estimateFee,
-  getClaimTip,
-  sendTip,
-  signAndSendExtrinsic,
-} from 'src/lib/services/polkadot-js';
-import i18n from 'src/locale';
-
-interface TipsBalanceResult {
-  tipsBalances: TipsBalanceData;
-  peopleIds: string[];
-}
+import {Wallet} from 'src/interfaces/user';
+import {Server} from 'src/lib/api/server';
+import {PolkadotJs} from 'src/lib/services/polkadot-js';
 
 export const usePolkadotApi = () => {
-  const enqueueSnackbar = useEnqueueSnackbar();
-
-  const [loading, setLoading] = useState(false);
-  const [isFetchingFee, setIsFetchingFee] = useState(false);
-  const [isSignerLoading, setSignerLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const getEstimatedFee = async (
-    from: string,
-    walletDetail: WalletDetail,
-    currency: BalanceDetail,
-    rpcURL: string,
-  ): Promise<{estimatedFee: BN | null; minBalance?: BN | null}> => {
-    setIsFetchingFee(true);
-
-    try {
-      let {partialFee: estimatedFee, minBalance} = await estimateFee(
-        from,
-        walletDetail,
-        rpcURL,
-        currency,
-      );
-
-      if (!estimatedFee) {
-        // equal 0.01
-        estimatedFee = BN_ONE.mul(BN_TEN.pow(new BN(currency.decimal))).div(BN_TEN.pow(BN_TWO));
-      }
-
-      return {estimatedFee, minBalance};
-    } catch (error) {
-      Sentry.captureException(error);
-      return null;
-    } finally {
-      setIsFetchingFee(false);
-    }
-  };
-
-  const simplerSendTip = async (
-    {from, amount, currency, type, referenceId, walletDetail, to: toId}: SimpleSendTipProps,
-    callback?: (hash: string) => void,
-  ) => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const txHash = await signAndSendExtrinsic(
-        {
-          from,
-          value: amount,
-          currency,
-          wsAddress: currency.network.rpcURL,
-          walletDetail,
-        },
-        params => {
-          if (params.signerOpened) {
-            setSignerLoading(true);
-          }
-        },
-      );
-
-      if (txHash) {
-        const finalAmount = formatBalance(amount, currency.decimal);
-        const to =
-          walletDetail.referenceType === WalletReferenceType.WALLET_ADDRESS
-            ? walletDetail.referenceId
-            : toId;
-
-        // Record the transaction
-        await storeTransaction({
-          // TODO: should add the extrinsicURL: explorerURL + txHash
-          hash: txHash,
-          amount: finalAmount,
-          from,
-          to,
-          currencyId: currency.id,
-          type,
-          referenceId,
-        });
-
-        callback && callback(txHash);
-      }
-    } catch (error) {
-      const variant = error.message === 'Cancelled' ? 'warning' : 'error';
-      const message = variant === 'warning' ? i18n.t('Tipping.Toaster.Cancelled') : error.message;
-
-      enqueueSnackbar({variant, message});
-    } finally {
-      setLoading(false);
-      setSignerLoading(false);
-    }
-  };
-
-  const payTransactionFee = async (
-    account: InjectedAccountWithMeta,
-    rpcURL: string,
-    tipsBalanceInfo: TipsBalanceInfo,
-    amount: string,
-    callback?: (hasSuccess?: boolean, hash?: string) => void,
-  ) => {
-    let message = 'Claiming Reference Success';
-    let variant: VariantType = 'success';
-    let success = true;
-    let hash = '';
-
-    try {
-      hash = await sendTip(account, rpcURL, tipsBalanceInfo, amount, ({signerOpened}) => {
-        if (signerOpened) {
-          setSignerLoading(true);
-        }
-      });
-
-      await WalletAPI.claimReference({txFee: amount});
-    } catch (err) {
-      success = false;
-      variant = err.message === 'Cancelled' ? 'warning' : 'error';
-      message = err.message;
-    } finally {
-      setSignerLoading(false);
-      enqueueSnackbar({variant, message});
-      callback && callback(success, hash);
-    }
-  };
-
-  const getClaimReferenceEstimatedFee = (
-    api: ApiPromise,
-    referenceId: string,
-    referenceIds: string[],
-    currencyIds: string[],
-    accountId: string,
-    server: WalletAPI.Server,
-  ) => {
-    return claimReferenceFee(
-      api,
-      {referenceType: 'people', referenceIds},
-      {referenceType: 'user', referenceIds: [referenceId]},
-      currencyIds,
-      accountId,
-      server,
-    );
-  };
-
   const getClaimTipMyriad = async (
-    api: ApiPromise,
-    serverId: string,
+    server: Server,
     referenceId: string,
-    accountId: string,
+    wallet: Wallet,
     socials: SocialMedia[],
-  ): Promise<TipsBalanceResult> => {
-    if (!api) return;
-
+    network: Network,
+  ): Promise<TipsResultsProps> => {
+    const serverId = server.id;
+    const accountId = wallet.id;
     const peopleIds: string[] = [];
     const data: TipsBalanceData = {
       native: {
@@ -196,22 +34,26 @@ export const usePolkadotApi = () => {
       },
     };
 
+    const provider = await PolkadotJs.connect(network);
+
     const socialTipsPromise = Promise.all(
       socials.map(social => {
         peopleIds.push(social.peopleId);
-        return getClaimTip(api, serverId, 'people', social.peopleId);
+        return PolkadotJs.claimTipBalances(provider.provider, serverId, 'people', [
+          social.peopleId,
+        ]);
       }),
     );
 
     const [socialTips, userTips] = await Promise.all([
       socialTipsPromise,
-      getClaimTip(api, serverId, 'user', referenceId),
+      PolkadotJs.claimTipBalances(provider.provider, serverId, 'user', [referenceId]),
     ]);
 
     for (const socialTip of socialTips) {
       if (socialTip.length === 0) continue;
-      for (const [_, rawTipBalance] of socialTip) {
-        const tipsBalance = rawTipBalance.toHuman() as unknown as TipResult;
+      for (const [_, rawTipBalance] of socialTip as [StorageKey<AnyTuple>, Codec][]) {
+        const tipsBalance = rawTipBalance.toHuman() as unknown as TipsResult;
         const ftIdentifier = tipsBalance.tipsBalanceInfo.ftIdentifier;
         const amount = new BN(tipsBalance.amount.replace(/,/gi, ''));
 
@@ -235,8 +77,8 @@ export const usePolkadotApi = () => {
       }
     }
 
-    for (const [_, rawTipBalance] of userTips) {
-      const tipsBalance = rawTipBalance.toHuman() as unknown as TipResult;
+    for (const [_, rawTipBalance] of userTips as [StorageKey<AnyTuple>, Codec][]) {
+      const tipsBalance = rawTipBalance.toHuman() as unknown as TipsResult;
       const ftIdentifier = tipsBalance.tipsBalanceInfo.ftIdentifier;
       const amount = new BN(tipsBalance.amount.replace(/,/gi, ''));
       const accountId = tipsBalance.accountId;
@@ -254,21 +96,61 @@ export const usePolkadotApi = () => {
       if (!accountId) data[ftIdentifier].accountId = null;
     }
 
+    let nativeDecimal = 0;
+    let accountIdExist = true;
+
+    const currencyIds = ['native'];
+    const tipsResults = network.currencies.map(currency => {
+      const {native, referenceId, decimal, symbol, image} = currency;
+      const ftIdentifier = native && !referenceId ? 'native' : referenceId;
+      const tipsBalance = data[ftIdentifier] ?? {
+        tipsBalanceInfo: {serverId, referenceType: 'user', referenceId, ftIdentifier},
+        accountId,
+        amount: new BN(0),
+      };
+
+      if (referenceId) currencyIds.push(referenceId);
+      if (!tipsBalance.accountId && wallet.networkId === network.id) {
+        if (native) nativeDecimal = currency.decimal;
+        if (tipsBalance.amount.gt(BN_ZERO)) accountIdExist = false;
+      }
+
+      return {
+        accountId: tipsBalance.accountId,
+        amount: formatBalanceV2(tipsBalance.amount.toString(), decimal, 3),
+        tipsBalanceInfo: tipsBalance.tipsBalanceInfo,
+        symbol: symbol ?? 'UNKNOWN',
+        imageURL: image ?? '',
+      };
+    });
+
+    let feeInfo = null;
+
+    if (network.id === wallet.networkId && !accountIdExist) {
+      const fee = await PolkadotJs.claimReferenceFee(provider.provider, wallet.id, {
+        references: {referenceType: 'people', referenceIds: peopleIds},
+        mainReferences: {referenceType: 'user', referenceIds: [referenceId]},
+        currencyIds,
+        server,
+      });
+
+      const finalTxFee = formatBalanceV2(fee.toString(), nativeDecimal, 4);
+
+      feeInfo = {
+        formattedTrxFee: finalTxFee,
+        trxFee: fee.toString(),
+      };
+    }
+
+    await provider.disconnect();
+
     return {
-      tipsBalances: data,
-      peopleIds,
+      tipsResults: tipsResults,
+      feeInfo,
     };
   };
 
   return {
-    loading,
-    isSignerLoading,
-    isFetchingFee,
-    error,
-    simplerSendTip,
-    getEstimatedFee,
-    payTransactionFee,
-    getClaimReferenceEstimatedFee,
     getClaimTipMyriad,
   };
 };

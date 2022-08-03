@@ -311,12 +311,12 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                             <div>
                               {tx.toWallet?.userId === userId && (
                                 <Typography variant="h5" className={classes.textAmountReceived}>
-                                  {parseScientificNotatedNumber(+tx.amount)} {tx.currency.name}
+                                  {parseScientificNotatedNumber(+tx.amount)} {tx.currency.symbol}
                                 </Typography>
                               )}
                               {tx.fromWallet?.userId === userId && (
                                 <Typography variant="h5" className={classes.textAmountSent}>
-                                  {parseScientificNotatedNumber(+tx.amount)} {tx.currency.name}
+                                  {parseScientificNotatedNumber(+tx.amount)} {tx.currency.symbol}
                                 </Typography>
                               )}
                               <Typography variant="caption" color="textSecondary">

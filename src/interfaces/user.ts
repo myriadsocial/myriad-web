@@ -4,7 +4,6 @@ import {FriendStatus} from './friend';
 import {NetworkIdEnum, Network, NetworkProps} from './network';
 import {People} from './people';
 import {TransactionDetail} from './transaction';
-import {WalletDetail} from './wallet';
 
 export interface UserSocialMedia {
   id: string;

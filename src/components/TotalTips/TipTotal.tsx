@@ -19,18 +19,18 @@ import {Modal, ModalProps} from '../atoms/Modal';
 import {useStyles} from './totalTips.style';
 
 import {formatUsd} from 'src/helpers/balance';
-import {TotalTipsDataInterface} from 'src/interfaces/network';
+import {TipsResult} from 'src/interfaces/blockchain-interface';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {ExchangeRateState} from 'src/reducers/exchange-rate/reducer';
 
 type TipTotalNearProps = Pick<ModalProps, 'onClose' | 'open'> & {
-  totalTipsData: Array<TotalTipsDataInterface>;
+  tipsResults: TipsResult[];
   handleVerifyReference: () => void;
 };
 
-export const TipTotal: React.FC<TipTotalNearProps> = props => {
-  const {open, onClose, totalTipsData, handleVerifyReference} = props;
+const TipTotal: React.FC<TipTotalNearProps> = props => {
+  const {open, onClose, tipsResults, handleVerifyReference} = props;
   const {exchangeRates} = useSelector<RootState, ExchangeRateState>(
     state => state.exchangeRateState,
   );
@@ -58,8 +58,8 @@ export const TipTotal: React.FC<TipTotalNearProps> = props => {
         <TableContainer component={List}>
           <Table className={styles.root} aria-label="Balance Detail Table">
             <TableBody>
-              {totalTipsData.length > 0 &&
-                totalTipsData.map((balanceDetail, index) => (
+              {tipsResults.length > 0 &&
+                tipsResults.map((balanceDetail, index) => (
                   <TableRow key={index} className={styles.tableRow}>
                     <TableCell component="th" scope="row" className={styles.tableCell}>
                       <Avatar
@@ -78,7 +78,7 @@ export const TipTotal: React.FC<TipTotalNearProps> = props => {
                         </Typography>
                         <Typography variant="caption" color="textSecondary">
                           {`~${formatUsd(
-                            balanceDetail.amount as number,
+                            parseFloat(balanceDetail.amount),
                             getDetailExchangeRate(balanceDetail.symbol),
                           )} USD`}
                         </Typography>
@@ -98,3 +98,5 @@ export const TipTotal: React.FC<TipTotalNearProps> = props => {
     </Modal>
   );
 };
+
+export default TipTotal;

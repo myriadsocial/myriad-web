@@ -187,14 +187,14 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
         <ShimerComponent />
       </ShowIf>
 
-      <ShowIf condition={!defaultBalanceDetails.length && !isLoading}>
+      <ShowIf condition={!defaultBalanceDetails.length && !isLoading && isSearch}>
         <Empty
           title={i18n.t('Wallet.Balance.Search_Empty.Title')}
           subtitle={i18n.t('Wallet.Balance.Search_Empty.Subtitle')}
         />
       </ShowIf>
 
-      <ShowIf condition={!!defaultBalanceDetails.length && !isLoading}>
+      <ShowIf condition={!!defaultBalanceDetails.length && !isLoading && !isSearch}>
         <TableContainer component={List}>
           <Table className={classes.root} aria-label="Balance Detail Table">
             <TableBody>

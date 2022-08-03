@@ -11,7 +11,7 @@ import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {initialize} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
-import {getServer} from 'src/lib/api/server';
+import {getServer, Server} from 'src/lib/api/server';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
@@ -41,6 +41,7 @@ const MyWalletContainerWithoutSSR = dynamic(
 type WalletPageProps = {
   session: Session;
   logo: string;
+  server?: Server;
 };
 
 const Wallet: React.FC<WalletPageProps> = props => {
@@ -120,6 +121,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     props: {
       session,
       logo: data.images.logo_banner,
+      server: data,
     },
   };
 });

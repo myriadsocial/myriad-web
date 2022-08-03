@@ -1,4 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
+import {useSelector} from 'react-redux';
 
 import dynamic from 'next/dynamic';
 
@@ -14,6 +15,8 @@ import {Modal} from 'src/components/atoms/Modal';
 import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
 import {BalanceDetail} from 'src/interfaces/balance';
 import i18n from 'src/locale';
+import {RootState} from 'src/reducers';
+import {BalanceState} from 'src/reducers/balance/reducer';
 
 const Tipping = dynamic(() => import('./Tipping'), {
   ssr: false,
@@ -25,10 +28,8 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
   children,
   anonymous,
   sender,
-  balances,
   currentWallet,
   currentNetwork,
-  loading,
 }) => {
   const [tipFormOpened, setOpenTipForm] = useState(false);
   const [options, setOptions] = useState<TippingOptions>();
@@ -37,6 +38,10 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
   const [currencyTipped, setTippingCurrency] = useState<BalanceDetail>();
   const [transactionUrl, setTransactionUrl] = useState<string>();
   const [amount, setAmount] = useState<BN>(INITIAL_AMOUNT);
+
+  const {balanceDetails: balances, loading} = useSelector<RootState, BalanceState>(
+    state => state.balanceState,
+  );
 
   useEffect(() => {
     setTippingEnabled(balances.length > 0 || anonymous);

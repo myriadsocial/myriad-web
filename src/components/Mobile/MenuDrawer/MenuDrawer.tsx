@@ -102,9 +102,7 @@ export const MenuDrawerComponent: React.FC = () => {
   };
 
   const handleSignOut = async () => {
-    if (session && currentWallet) {
-      logout(currentWallet);
-    } else if (session && anonymous) {
+    if (session) {
       logout();
     } else {
       dispatch(clearUser());
