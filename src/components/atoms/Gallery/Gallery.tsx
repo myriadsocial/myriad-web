@@ -118,16 +118,31 @@ export const Gallery: React.FC<GalleryProps> = props => {
             item
             xs={items.length > 1 ? 6 : 12}
             onClick={handleImageClick(0)}
-            style={{maxHeight: 340}}>
+            style={{maxHeight: isMobile ? 270 : 340}}>
             <img
               className={style.imageGrid}
-              style={{objectFit: 'cover', maxHeight: '100%'}}
-              src={items[0].rows === 2 ? items[0].sizes.medium : items[0].sizes.small}
+              style={{objectFit: 'cover', height: '100%', width: '100%'}}
+              src={items[0].sizes.medium}
               alt={items[0].src}
             />
           </Grid>
 
-          <ShowIf condition={items.length > 1}>
+          <ShowIf condition={items.length === 2}>
+            <Grid
+              item
+              xs={items.length > 1 ? 6 : 12}
+              onClick={handleImageClick(1)}
+              style={{maxHeight: isMobile ? 270 : 340}}>
+              <img
+                className={style.imageGrid}
+                style={{objectFit: 'cover', height: '100%', width: '100%'}}
+                src={items[1]?.sizes?.medium}
+                alt={items[1]?.src ?? 'BLABLA'}
+              />
+            </Grid>
+          </ShowIf>
+
+          <ShowIf condition={items.length > 2}>
             <Grid
               item
               xs={6}
@@ -142,12 +157,12 @@ export const Gallery: React.FC<GalleryProps> = props => {
                   item
                   xs={12}
                   key={i}
-                  style={{position: 'relative', maxHeight: 170}}
+                  style={{position: 'relative', maxHeight: isMobile ? 135 : 170}}
                   onClick={handleImageClick(i + 1)}>
                   <img
                     className={style.imageGrid}
                     style={{
-                      maxHeight: '100%',
+                      height: '100%',
                       width: '100%',
                       objectFit: 'cover',
                     }}

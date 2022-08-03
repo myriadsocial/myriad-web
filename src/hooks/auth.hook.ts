@@ -27,7 +27,9 @@ type UserNonceProps = {
 };
 
 export const useAuthHook = () => {
-  const {networks} = useSelector<RootState, UserState>(state => state.userState);
+  const {anonymous: anonymousUser, networks} = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
   const {getPolkadotAccounts} = usePolkadotExtension();
   const {publicRuntimeConfig} = getConfig();
   const {provider, nearProvider} = useBlockchain();
@@ -163,11 +165,14 @@ export const useAuthHook = () => {
   };
 
   const logout = async () => {
+    if (!anonymousUser) {
+      await FirebaseMessaging.unregister();
+    }
+
     await Promise.all([
       provider?.disconnect(),
-      FirebaseMessaging.unregister(),
       nearProvider?.disconnect(),
-      signOut({
+      await signOut({
         callbackUrl: publicRuntimeConfig.appAuthURL,
         redirect: true,
       }),
