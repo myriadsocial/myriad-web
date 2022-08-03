@@ -113,32 +113,41 @@ export const Gallery: React.FC<GalleryProps> = props => {
       </ShowIf>
 
       <ShowIf condition={variant === 'vertical'}>
-        <Grid container spacing={1}>
-          <Grid item xs={items.length > 1 ? 6 : 12} onClick={handleImageClick(0)}>
+        <Grid container spacing={1} wrap="wrap">
+          <Grid
+            item
+            xs={items.length > 1 ? 6 : 12}
+            onClick={handleImageClick(0)}
+            style={{maxHeight: 340}}>
             <img
               className={style.imageGrid}
-              style={{
-                height: list.cols * list.cellHeight + 14,
-                objectFit: 'cover',
-              }}
+              style={{objectFit: 'cover', maxHeight: '100%'}}
               src={items[0].rows === 2 ? items[0].sizes.medium : items[0].sizes.small}
               alt={items[0].src}
             />
           </Grid>
 
           <ShowIf condition={items.length > 1}>
-            <Grid item xs={6} container>
+            <Grid
+              item
+              xs={6}
+              container
+              spacing={1}
+              direction="column"
+              alignContent="center"
+              justifyContent="center"
+              wrap="nowrap">
               {items.slice(1, 3).map((image, i) => (
                 <Grid
                   item
                   xs={12}
                   key={i}
-                  style={{position: 'relative'}}
+                  style={{position: 'relative', maxHeight: 170}}
                   onClick={handleImageClick(i + 1)}>
                   <img
                     className={style.imageGrid}
                     style={{
-                      height: items.length > 2 ? list.cellHeight : list.cols * list.cellHeight + 14,
+                      maxHeight: '100%',
                       width: '100%',
                       objectFit: 'cover',
                     }}
