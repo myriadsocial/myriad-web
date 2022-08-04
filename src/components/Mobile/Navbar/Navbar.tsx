@@ -9,7 +9,6 @@ import {useRouter} from 'next/router';
 import {SvgIcon, Grid} from '@material-ui/core';
 
 import {useStyles} from 'src/components/Mobile/Navbar/navbar.style';
-import {MyriadFullIcon} from 'src/components/atoms/Icons';
 import {SearchBoxContainer} from 'src/components/atoms/Search/SearchBoxContainer';
 import ShowIf from 'src/components/common/show-if.component';
 
@@ -21,9 +20,11 @@ type SearchBoxContainerProps = {
   iconPosition?: 'start' | 'end';
   outlined?: boolean;
   searched?: boolean;
+  logo: string;
 };
 
-export const NavbarComponent: React.FC<SearchBoxContainerProps> = ({searched = false}) => {
+export const NavbarComponent: React.FC<SearchBoxContainerProps> = props => {
+  const {searched = false, logo} = props;
   const style = useStyles();
   const router = useRouter();
   const [isSearch, setIsSearch] = React.useState(searched);
@@ -62,7 +63,7 @@ export const NavbarComponent: React.FC<SearchBoxContainerProps> = ({searched = f
       className={style.root}>
       <ShowIf condition={!isSearch}>
         <MenuDrawerComponent />
-        <MyriadFullIcon width={105} height={25} />
+        <img src={logo} width={105} height={25} />
         <SvgIcon
           classes={{root: style.fill}}
           component={SearchIcon}

@@ -36,7 +36,11 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export const SearchResultContainer: React.FC = () => {
+type SearchResultContainerProps = {
+  logo: string;
+};
+
+export const SearchResultContainer: React.FC<SearchResultContainerProps> = props => {
   const style = useStyles();
 
   const router = useRouter();
@@ -112,7 +116,7 @@ export const SearchResultContainer: React.FC = () => {
 
   return (
     <>
-      <NavbarComponent searched={true} />
+      <NavbarComponent searched={true} {...props} />
       <SearchBoxContainer onSubmitSearch={onSubmitSearch} hidden={true} />
       <div className={style.box}>
         <Typography className={style.text}>

@@ -45,7 +45,7 @@ const Home: React.FC<HomePageProps> = props => {
         <title>{i18n.t('Home.Title', {appname: publicRuntimeConfig.appName})}</title>
       </Head>
 
-      <NavbarComponent />
+      <NavbarComponent {...props} />
 
       <SearchBoxContainer hidden={true} />
 
