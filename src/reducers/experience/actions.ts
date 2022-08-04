@@ -216,13 +216,21 @@ export const searchExperiences: ThunkActionCreator<Actions, RootState> =
     dispatch(setExperienceLoading(true));
 
     try {
-      const {data: experiences, meta} = await ExperienceAPI.searchExperiences(query, page);
-
-      dispatch({
-        type: constants.SEARCH_EXPERIENCE,
-        experiences,
-        meta,
-      });
+      if (!query) {
+        const {data: experiences, meta} = await ExperienceAPI.getExperiences({page}, true);
+        dispatch({
+          type: constants.SEARCH_EXPERIENCE,
+          experiences,
+          meta,
+        });
+      } else {
+        const {data: experiences, meta} = await ExperienceAPI.searchExperiences(query, page);
+        dispatch({
+          type: constants.SEARCH_EXPERIENCE,
+          experiences,
+          meta,
+        });
+      }
     } catch (error) {
       dispatch(setError(error));
     } finally {

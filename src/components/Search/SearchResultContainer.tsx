@@ -50,8 +50,9 @@ export const SearchResultContainer: React.FC<SearchResultContainerProps> = props
   const {clear: clearPosts} = useTimelineFilter();
 
   const user = useSelector<RootState, User>(state => state.userState.user, shallowEqual);
-  const [selectedTab, setSelectedTab] = useState('posts-tab');
+  const type = router.query.type as string;
   const searchKeyword = router.query.q as string;
+  const [selectedTab, setSelectedTab] = useState(type ? 'experience-tab' : 'posts-tab');
 
   useEffect(() => {
     if (searchKeyword.length) {
@@ -70,6 +71,8 @@ export const SearchResultContainer: React.FC<SearchResultContainerProps> = props
           break;
         }
       }
+    } else if (selectedTab === 'experience-tab') {
+      searchExperience('');
     }
   }, [searchKeyword, selectedTab]);
 

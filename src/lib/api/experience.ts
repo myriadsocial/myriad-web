@@ -49,6 +49,7 @@ export const getExperiences = async (
     };
   } else {
     paramGetExperience = {
+      pageNumber: params.page,
       pageLimit: params.limit ?? PAGINATION_LIMIT,
       filter: {
         order,

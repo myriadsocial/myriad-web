@@ -11,6 +11,7 @@ import {useExperienceList} from './hooks/use-experience-list.hook';
 
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {Skeleton} from 'src/components/Expericence';
+import {LoadMoreComponent} from 'src/components/atoms/LoadMore/LoadMore';
 import {ExperienceOwner, useExperienceHook} from 'src/hooks/use-experience-hook';
 import {WrappedExperience} from 'src/interfaces/experience';
 import {TimelineType} from 'src/interfaces/timeline';
@@ -25,6 +26,7 @@ type ExperienceListContainerProps = {
   enableSubscribe?: boolean;
   hasMore?: boolean;
   filterTimeline?: boolean;
+  buttonLoad?: boolean;
   loadNextPage?: () => void;
   refreshExperience?: () => void;
 };
@@ -33,7 +35,7 @@ export const useStyles = makeStyles<Theme, ExperienceListContainerProps>(theme =
   createStyles({
     root: {
       maxHeight: '512px',
-      overflowX: props => (props.selectable ? 'scroll' : 'unset'),
+      overflowX: props => (props.selectable ? 'auto' : 'unset'),
       whiteSpace: 'nowrap',
     },
   }),
@@ -46,6 +48,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
     enableSubscribe,
     hasMore = false,
     filterTimeline = false,
+    buttonLoad,
     loadNextPage,
     refreshExperience,
   } = props;
@@ -127,7 +130,8 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
         dataLength={experiences.length}
         hasMore={hasMore}
         next={handleLoadNextPage}
-        loader={<Skeleton />}>
+        // TODO: fixed load more with scroll
+        loader={buttonLoad ? <LoadMoreComponent loadmore={handleLoadNextPage} /> : <Skeleton />}>
         <ExperienceList
           onDelete={handleRemoveExperience}
           onUnsubscribe={handleUnsubscribeExperience}

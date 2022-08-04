@@ -96,6 +96,14 @@ export const ExperienceReducer: Redux.Reducer<ExperienceState, Actions> = (
     }
 
     case constants.SEARCH_EXPERIENCE: {
+      if (!action.meta.currentPage || action.meta.currentPage === 1) {
+        return {
+          ...state,
+          experiences: action.experiences,
+          meta: action.meta,
+          hasMore: action.meta.currentPage < action.meta.totalPageCount,
+        };
+      }
       return {
         ...state,
         experiences: [...state.experiences, ...action.experiences],
