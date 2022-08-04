@@ -4,7 +4,6 @@ import {shallowEqual, useSelector} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
-import {Link} from '@material-ui/core';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import {ExperienceList} from './ExperienceList';
@@ -12,6 +11,7 @@ import {useExperienceList} from './hooks/use-experience-list.hook';
 
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {Skeleton} from 'src/components/Expericence';
+import {LoadMoreComponent} from 'src/components/atoms/LoadMore/LoadMore';
 import {ExperienceOwner, useExperienceHook} from 'src/hooks/use-experience-hook';
 import {WrappedExperience} from 'src/interfaces/experience';
 import {TimelineType} from 'src/interfaces/timeline';
@@ -123,21 +123,6 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
     loadNextPage && loadNextPage();
   };
 
-  const renderLoadMoreButton = () => {
-    return (
-      <div style={{paddingBottom: 30}}>
-        <div style={{textAlign: 'center'}}>
-          <Link
-            component="button"
-            style={{color: '#7342CC', textDecoration: 'none', fontWeight: 600}}
-            onClick={handleLoadNextPage}>
-            {i18n.t('Loading.Load_More')}
-          </Link>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div className={style.root} id="scrollable-list-experiences">
       <InfiniteScroll
@@ -146,7 +131,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
         hasMore={hasMore}
         next={handleLoadNextPage}
         // TODO: fixed load more with scroll
-        loader={buttonLoad ? renderLoadMoreButton() : <Skeleton />}>
+        loader={buttonLoad ? <LoadMoreComponent loadmore={handleLoadNextPage} /> : <Skeleton />}>
         <ExperienceList
           onDelete={handleRemoveExperience}
           onUnsubscribe={handleUnsubscribeExperience}

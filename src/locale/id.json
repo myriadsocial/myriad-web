@@ -624,7 +624,8 @@
       "Btn_Confirm": "Konfirmasi",
       "Error_Login": "Silahkan masuk untuk melanjutkan pembuatan laporan",
       "Toaster_Success": "Laporan postingan telah terkirim"
-    }
+    },
+    "Load_More": "Lihat balasan lainnya"
   },
   "Tipping": {
     "Modal_Main": {

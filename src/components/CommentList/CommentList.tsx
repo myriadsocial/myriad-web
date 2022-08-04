@@ -1,15 +1,15 @@
 import React, {createRef, useEffect} from 'react';
 
-import Typography from '@material-ui/core/Typography';
-
 import {CommentDeleted} from '../CommentDeleted';
 import {CommentDetail, CommentDetailProps} from '../CommentDetail';
 import {useStyles} from './CommentList.style';
 
 import useTipHistoryHook from 'components/TipHistory/use-tip-history.hook';
+import {LoadMoreComponent} from 'src/components/atoms/LoadMore/LoadMore';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {Comment} from 'src/interfaces/comment';
 import {User} from 'src/interfaces/user';
+import i18n from 'src/locale';
 
 type CommentListProps = Omit<CommentDetailProps, 'comment' | 'deep' | 'onOpenTipHistory'> & {
   comments: Comment[];
@@ -89,13 +89,7 @@ export const CommentList: React.FC<CommentListProps> = props => {
       })}
 
       {comments.length > 0 && hasMoreComment && (
-        <Typography
-          color="primary"
-          component="button"
-          className={styles.more}
-          onClick={onLoadMoreComments}>
-          View more replies
-        </Typography>
+        <LoadMoreComponent loadmore={onLoadMoreComments} text={i18n.t('Post_Comment.Load_More')} />
       )}
     </div>
   );

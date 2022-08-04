@@ -624,7 +624,8 @@
       "Btn_Confirm": "Confirm",
       "Error_Login": "Please login to continue your report",
       "Toaster_Success": "Post report has been submitted"
-    }
+    },
+    "Load_More": "View more replies"
   },
   "Tipping": {
     "Modal_Main": {
