@@ -48,7 +48,7 @@ const Search: React.FC<SearchProps> = props => {
         <title>{i18n.t('Search.Title', {appname: publicRuntimeConfig.appName})}</title>
       </Head>
 
-      <SearchResultContainer />
+      <SearchResultContainer {...props} />
 
       <TippingSuccess />
     </DefaultLayout>
