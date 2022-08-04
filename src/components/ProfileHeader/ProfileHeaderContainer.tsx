@@ -101,11 +101,13 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
 
   const handleRemoveFriend = () => {
     if (friendStatus) {
-      removeFriendRequest(friendStatus);
-
-      enqueueSnackbar({
-        message: i18n.t('Profile.Header.Alert.Unfriend', {name: profile?.name}),
-        variant: 'success',
+      removeFriendRequest(friendStatus, () => {
+        if (friendStatus.status === 'approved') {
+          enqueueSnackbar({
+            message: i18n.t('Profile.Header.Alert.Unfriend', {name: profile?.name}),
+            variant: 'success',
+          });
+        }
       });
     }
   };

@@ -1,4 +1,4 @@
-import {ChevronDownIcon, UserAddIcon, UserIcon} from '@heroicons/react/outline';
+import {ChevronDownIcon, UserAddIcon, UserIcon, CheckIcon} from '@heroicons/react/outline';
 import {DotsVerticalIcon} from '@heroicons/react/solid';
 
 import React from 'react';
@@ -95,6 +95,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
       e.stopPropagation();
       setAnchorElFriend(e.currentTarget);
     }
+    if (isRequesting) onRemoveFriend();
   };
 
   const handleOpenEdit = () => {
@@ -299,7 +300,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                     startIcon={
                       <SvgIcon
                         classes={{root: style.fill}}
-                        component={isFriend ? UserIcon : UserAddIcon}
+                        component={isFriend ? UserIcon : isRequesting ? CheckIcon : UserAddIcon}
                         viewBox="0 0 22 22"
                       />
                     }
