@@ -78,18 +78,13 @@ export const useWallet = () => {
 
       if (txHash) {
         const finalAmount = formatBalance(amount, currency.decimal);
+        const txData = {hash: txHash, amount: finalAmount, from, to, currencyId: currency.id};
+
+        if (type) Object.assign(txData, {type});
+        if (referenceId) Object.assign(txData, {referenceId});
 
         // Record the transaction
-        await storeTransaction({
-          // TODO: should add the extrinsicURL: explorerURL + txHash
-          hash: txHash,
-          amount: finalAmount,
-          from,
-          to,
-          currencyId: currency.id,
-          type,
-          referenceId,
-        });
+        await storeTransaction(txData);
 
         callback && callback(txHash);
       }

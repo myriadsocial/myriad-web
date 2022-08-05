@@ -83,6 +83,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
     if (loadingNear) dispatch(clearBalances());
 
     if (currentWallet?.network && initialize && !provider && !loadingNear) {
+      dispatch(clearBalances());
       if (nearProvider && currentWallet.networkId === NetworkIdEnum.NEAR) {
         initializeBlockchain(nearProvider, currentWallet.id);
       } else {
