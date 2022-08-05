@@ -116,13 +116,14 @@ export const ManageCointainer: React.FC = () => {
       const network = networks.find(network => network.id === NetworkIdEnum.NEAR);
 
       if (!network) return false;
+      if (!user) return false;
 
       const blockchain = await BlockchainProvider.connect(network);
       const provider = blockchain.Near;
 
       const data = await Near.signWithWallet(
         provider?.provider?.wallet,
-        user?.id,
+        user.id,
         callbackUrl,
         callbackUrl,
       );
@@ -133,6 +134,7 @@ export const ManageCointainer: React.FC = () => {
           nearAddress: data.publicAddress.split('/')[1],
           pubKey: data.publicAddress.split('/')[0],
           signature: data.signature,
+          nonce: data.nonce,
         };
 
         verified = await connectNetwork(BlockchainPlatform.NEAR, payload, async error => {
