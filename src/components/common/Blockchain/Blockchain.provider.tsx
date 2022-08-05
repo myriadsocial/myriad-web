@@ -161,6 +161,7 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
             nearAddress: data.publicAddress.split('/')[1],
             pubKey: data.publicAddress.split('/')[0],
             signature: data.signature,
+            nonce: data.nonce,
           };
 
           await handleSwitchNetwork(BlockchainPlatform.NEAR, networkId, payload, async err => {

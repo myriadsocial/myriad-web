@@ -21,6 +21,7 @@ export interface NearPayload {
   nearAddress: string;
   pubKey: string;
   signature: string;
+  nonce: number;
 }
 
 export const useConnect = () => {
@@ -69,11 +70,11 @@ export const useConnect = () => {
 
         case BlockchainPlatform.NEAR:
           const nearAccount = account as NearPayload;
-          const {pubKey, nearAddress} = nearAccount;
+          const {pubKey, nearAddress, nonce: nearNonce} = nearAccount;
 
           payload = {
             publicAddress: pubKey,
-            nonce,
+            nonce: nearNonce,
             signature: nearAccount.signature,
             networkType: NetworkIdEnum.NEAR,
             walletType: WalletTypeEnum.NEAR,
@@ -116,13 +117,13 @@ export const useConnect = () => {
     setLoading(true);
 
     try {
-      const {nonce} = await WalletAPI.getUserNonceByUserId(user?.id);
-
       let payload: WalletAPI.ConnectNetwork;
       let currentAddress: string;
 
       switch (blockchainPlatform) {
         case BlockchainPlatform.SUBSTRATE: {
+          const {nonce} = await WalletAPI.getUserNonceByUserId(user?.id);
+
           const polkadotAccount = account as InjectedAccountWithMeta;
           const signature = await PolkadotJs.signWithWallet(
             polkadotAccount,
@@ -151,7 +152,7 @@ export const useConnect = () => {
           currentAddress = nearAccount.nearAddress;
           payload = {
             publicAddress: nearAccount.publicAddress,
-            nonce,
+            nonce: nearAccount.nonce,
             signature: nearAccount.signature,
             networkType: networkId,
             walletType: WalletTypeEnum.NEAR,

@@ -301,6 +301,8 @@ export const useClaimTip = () => {
     const tippingContractId = publicRuntimeConfig.nearTippingContractId;
 
     try {
+      if (parseInt(txFee) === 0) throw new Error('Insufficient Gas Fee');
+
       await WalletAPI.claimReference({txFee, tippingContractId});
 
       if (currentWallet.networkId !== NetworkIdEnum.NEAR) {

@@ -27,7 +27,7 @@ export const Menu: React.FC<MenuProps> = props => {
   };
 
   const openMenu = (item: MenuDetail) => () => {
-    if (selected === item.url.split('/')[1]) return;
+    if (router.pathname === `/${selected}`) return;
     onChange(item.url);
   };
 
