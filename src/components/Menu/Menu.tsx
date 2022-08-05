@@ -32,7 +32,7 @@ export const Menu: React.FC<MenuProps> = props => {
   };
 
   return (
-    <div className={styles.root}>
+    <div className={styles.root} data-testid={'menu-test'}>
       <BoxComponent paddingLeft={0} paddingRight={0}>
         <div className={styles.head} onClick={gotoHome} aria-hidden="true">
           <img src={logo} width={220} height={48} />

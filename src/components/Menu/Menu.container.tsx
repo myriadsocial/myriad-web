@@ -44,5 +44,9 @@ export const MenuContainer: React.FC<MenuProps> = props => {
     router.push(path);
   };
 
-  return <Menu selected={selected} onChange={handleChangeMenu} {...props} />;
+  return (
+    <div data-testid={'menu-container-test'}>
+      <Menu selected={selected} onChange={handleChangeMenu} {...props} />
+    </div>
+  );
 };

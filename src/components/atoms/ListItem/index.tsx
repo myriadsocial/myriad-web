@@ -106,13 +106,14 @@ export const ListItemComponent: React.FC<ListItemComponentProps> = props => {
 
   return (
     <ListItem
+      data-testid={`list-item-${title}`}
       component="div"
       className={styles.root}
       ContainerComponent="div"
       onClick={onClick}
       {...listProps}>
       {icon ? (
-        <ListItemIcon classes={{root: iconSyles.join(' ')}}>
+        <ListItemIcon data-testid={`list-item-icon-${title}`} classes={{root: iconSyles.join(' ')}}>
           <SvgIcon component={icon} />
         </ListItemIcon>
       ) : (
