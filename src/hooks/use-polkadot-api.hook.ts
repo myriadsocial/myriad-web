@@ -110,9 +110,9 @@ export const usePolkadotApi = () => {
       };
 
       if (referenceId) currencyIds.push(referenceId);
-      if (!tipsBalance.accountId && wallet.networkId === network.id) {
+      if (wallet.networkId === network.id) {
         if (native) nativeDecimal = currency.decimal;
-        if (tipsBalance.amount.gt(BN_ZERO)) accountIdExist = false;
+        if (!tipsBalance.accountId && tipsBalance.amount.gt(BN_ZERO)) accountIdExist = false;
       }
 
       return {
