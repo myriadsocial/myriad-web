@@ -1028,7 +1028,12 @@
       "Reference":{
         "Title": "Verifikasi referensi",
         "Desc": "Verifikasi referensi Anda dan mulailah mengklaim tip Anda. Untuk diproses, Anda perlu membayar biaya gas maksimum {{txFee}} {{token}}.",
-        "Button": "Verifikasi referensi"
+        "Button": "Verifikasi referensi",
+        "Button_View": "Lihat Jumlah Tip"
+      },
+      "Total_Tip": {
+        "Title": "Jumlah Tip",
+        "Subtitle": "Anda dapat mengklaim semua tips ini setelah memverifikasi referensi Anda."
       }
     },
     "Manage": {

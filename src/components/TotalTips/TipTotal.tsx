@@ -49,8 +49,8 @@ const TipTotal: React.FC<TipTotalNearProps> = props => {
   return (
     <Modal
       fullScreen={isMobile}
-      title={'Total Tips'}
-      subtitle={'You can claim all this tips after verified your reference.'}
+      title={i18n.t('Wallet.Tip.Total_Tip.Title')}
+      subtitle={i18n.t('Wallet.Tip.Total_Tip.Subtitle')}
       onClose={handleClose}
       open={open}
       className={styles.root}>

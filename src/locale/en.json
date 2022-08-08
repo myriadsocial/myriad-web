@@ -1028,7 +1028,12 @@
       "Reference":{
         "Title": "Reference verification",
         "Desc": "Verify your reference and start claiming your tips. To be processed, you need to pay a maximum gas fee of {{txFee}} {{token}}.",
-        "Button": "Verify reference"
+        "Button": "Verify reference",
+        "Button_View": "View total Tips"
+      },
+      "Total_Tip": {
+        "Title": "Total Tips",
+        "Subtitle": "You can claim all this tips after verified your reference."
       }
     },
     "Manage": {

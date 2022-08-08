@@ -1028,7 +1028,12 @@
       "Reference":{
         "Title": "Контрольная проверка",
         "Desc": "Подтвердите свою ссылку и начните требовать свои чаевые. Для обработки вам необходимо заплатить максимальную плату за газ в размере {{txFee}} {{token}}.",
-        "Button": "Проверить ссылку"
+        "Button": "Проверить ссылку",
+        "Button_View": "View total Tips"
+      },
+      "Total_Tip": {
+        "Title": "Total Tips",
+        "Subtitle": "You can claim all this tips after verified your reference."
       }
     },
     "Manage": {
