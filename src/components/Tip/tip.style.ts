@@ -60,7 +60,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginTop: 22,
       background: '#F6F7FC',
       padding: 20,
-      height: 237,
       justifyContent: 'center',
       alignItems: 'center',
       display: 'flex',
@@ -74,8 +73,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     desc: {
       textAlign: 'center',
       marginBottom: 24,
-      marginLeft: 30,
-      marginRight: 30,
+      maxWidth: 300,
     },
   }),
 );
