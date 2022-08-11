@@ -1029,11 +1029,11 @@
         "Title": "Контрольная проверка",
         "Desc": "Подтвердите свою ссылку и начните требовать свои чаевые. Для обработки вам необходимо заплатить максимальную плату за газ в размере {{txFee}} {{token}}.",
         "Button": "Проверить ссылку",
-        "Button_View": "View total Tips"
+        "Button_View": "Просмотр всех чаевых"
       },
       "Total_Tip": {
-        "Title": "Total Tips",
-        "Subtitle": "You can claim all this tips after verified your reference."
+        "Title": "Чаевых всего",
+        "Subtitle": "Вы сможете обладать всей суммой чаевых после проверки ссылки"
       }
     },
     "Manage": {
@@ -1070,7 +1070,7 @@
       "Experience_Edit": "Изменить Опыт",
       "NFT": "В разработке",
       "Social_Token": "В разработке",
-      "Myriad_Town": "Myriad.Town stand at the crossroads of real life and digital interactions."
+      "Myriad_Town": "Myriad.Town стоит на перекрестке реальной жизни и цифровых взаимодействий"
     }
   },
   "Dropzone": {
@@ -1123,9 +1123,9 @@
   },
   "Myriad_Town": {
     "Title_Head": "{{appname}} - Myriad.Town",
-    "Visit": "Visit Myriad.Town",
-    "Fullscreen": "Play in fullscreen",
-    "Toaster_Esc": "Press Esc to exit from fullscreen",
+    "Visit": "Посетить Myriad.Town",
+    "Fullscreen": "На большой экран",
+    "Toaster_Esc": "Нажмите Esc для отмены большого экрана",
     "Disclaimer": "The Myriad Metaverse integration is an early beta feature. If you encounter problems, or if you want the best experience on the Myriad Metaverse, go to"
   }
 }
