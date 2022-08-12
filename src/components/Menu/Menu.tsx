@@ -42,6 +42,7 @@ export const Menu: React.FC<MenuProps> = props => {
           .filter(ar => ar.isDesktop === true)
           .map(item => (
             <ListItemComponent
+              data-testid={`list-item-${item.id}`}
               id={item.id}
               key={item.id}
               title={item.title}

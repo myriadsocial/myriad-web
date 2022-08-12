@@ -1,8 +1,12 @@
-import {render, screen} from '@testing-library/react';
+import {fireEvent, render, screen} from '@testing-library/react';
 import {renderHook} from '@testing-library/react-hooks';
+
+import singletonRouter from 'next/router';
 
 import {Menu} from './Menu';
 import {useMenuList, MenuId} from './use-menu-list';
+
+jest.mock('next/router', () => require('next-router-mock'));
 
 describe('Menu Component', () => {
   const selected: MenuId = 'home';
@@ -39,5 +43,16 @@ describe('Menu Component', () => {
     expect(renderComponentSelected.getAttribute('class')).toMatch(/active/);
   });
 
-  it.todo('render list with change menu onclick');
+  it('render list with change menu onclick', () => {
+    const mockFunction = jest.fn(() => singletonRouter.push('/friends'));
+    render(<Menu selected={selected} onChange={mockFunction} logo={logo} />);
+    const renderComponentSelected = screen.getByTestId(
+      `list-item-${resultMenu.current.filter(ar => ar.id === selected)[0].title}`,
+    );
+    fireEvent.click(renderComponentSelected);
+    expect(mockFunction).toHaveBeenCalledTimes(1);
+    expect(singletonRouter).toMatchObject({
+      pathname: '/friends',
+    });
+  });
 });
