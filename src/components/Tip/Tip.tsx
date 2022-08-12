@@ -125,7 +125,7 @@ export const Tip: React.FC<TipProps> = props => {
     return (
       <Grid container direction="row" justifyContent="flex-start" alignItems="center" spacing={2}>
         {tips.map((tip, i) => (
-          <Grid item xs={6} key={i}>
+          <Grid item xs={12} md={6} key={i}>
             <div className={style.content}>
               <div className={style.flex}>
                 <div>
