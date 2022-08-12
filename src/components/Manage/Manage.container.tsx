@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useSelector} from 'react-redux';
 
 import getConfig from 'next/config';
@@ -50,14 +50,15 @@ export const ManageCointainer: React.FC = () => {
   const [extensionInstalled, setExtensionInstalled] = React.useState(false);
   const [accounts, setAccounts] = React.useState<InjectedAccountWithMeta[]>([]);
 
-  const action = router.query.action as string | string[] | null;
-  const accountId = router.query.account_id as string | string[] | null;
+  //TODO: will active when issue on near auth is resolved
+  // const action = router.query.action as string | string[] | null;
+  // const accountId = router.query.account_id as string | string[] | null;
 
-  useEffect(() => {
-    if (!Array.isArray(action) && action === 'connect' && accountId) {
-      connectNearAccount();
-    }
-  }, [action, accountId]);
+  // useEffect(() => {
+  //   if (!Array.isArray(action) && action === 'connect' && accountId) {
+  //     connectNearAccount();
+  //   }
+  // }, [action, accountId]);
 
   const closeAccountList = () => {
     setShowAccountList(false);

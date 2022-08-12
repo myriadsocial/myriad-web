@@ -15,7 +15,7 @@ import {Profile} from './render/Profile';
 
 import last from 'lodash/last';
 import {useAuthHook} from 'src/hooks/auth.hook';
-import {useNearApi} from 'src/hooks/use-near-api.hook';
+// import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {useProfileHook} from 'src/hooks/use-profile.hook';
 import {NetworkIdEnum} from 'src/interfaces/network';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
@@ -37,7 +37,7 @@ export const Login: React.FC<LoginProps> = props => {
 
   const {anonymous, fetchUserNonce, signInWithExternalAuth} = useAuthHook();
   const {checkUsernameAvailable} = useProfileHook();
-  const {connectToNear} = useNearApi();
+  // const {connectToNear} = useNearApi();
 
   const [walletType, setWalletType] = useState<WalletTypeEnum | null>(redirectAuth);
   const [networkId, setNetworkId] = useState<NetworkIdEnum | null>(null);
@@ -47,38 +47,37 @@ export const Login: React.FC<LoginProps> = props => {
   const [signatureCancelled, setSignatureCancelled] = useState(false);
   const [loading, setLoading] = useState(false);
   const [walletLoading, setWalletLoading] = useState(Boolean(redirectAuth));
-  const [initialEntries, setInitialEntries] = useState<string[]>(
-    redirectAuth || isMobileSignIn ? ['/wallet'] : ['/'],
-  );
+  const [initialEntries] = useState<string[]>(redirectAuth || isMobileSignIn ? ['/wallet'] : ['/']);
 
-  useEffect(() => {
-    if (redirectAuth === WalletTypeEnum.NEAR) {
-      checkWalletRegistered();
-    }
-  }, [redirectAuth]);
+  //TODO: will active when near issue is resolved
+  // useEffect(() => {
+  //   if (redirectAuth === WalletTypeEnum.NEAR) {
+  //     checkWalletRegistered();
+  //   }
+  // }, [redirectAuth]);
 
   useEffect(() => {
     i18n.changeLanguage(settings.language);
   }, [settings.language]);
 
-  const checkWalletRegistered = useCallback(async () => {
-    const data = await connectToNear();
+  // const checkWalletRegistered = useCallback(async () => {
+  //   const data = await connectToNear();
 
-    if (!data) return;
+  //   if (!data) return;
 
-    setNearWallet(data.publicAddress);
+  //   setNearWallet(data.publicAddress);
 
-    checkAccountRegistered(
-      () => {
-        setInitialEntries(['/profile']);
-        setNetworkId(NetworkIdEnum.NEAR);
-        setWalletLoading(false);
-      },
-      undefined,
-      data.publicAddress,
-      WalletTypeEnum.NEAR,
-    );
-  }, []);
+  //   checkAccountRegistered(
+  //     () => {
+  //       setInitialEntries(['/profile']);
+  //       setNetworkId(NetworkIdEnum.NEAR);
+  //       setWalletLoading(false);
+  //     },
+  //     undefined,
+  //     data.publicAddress,
+  //     WalletTypeEnum.NEAR,
+  //   );
+  // }, []);
 
   const handleOnconnect = (accounts: InjectedAccountWithMeta[], networkId: NetworkIdEnum) => {
     setNetworkId(networkId);
