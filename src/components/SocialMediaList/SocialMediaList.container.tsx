@@ -73,7 +73,6 @@ export const SocialMediaListContainer: React.FC = () => {
 
   const handleOpenSocialLink = (social: SocialDetail) => {
     const url = getPlatformUrl(social);
-
     if (url.length) {
       window.open(url, '_blank');
     }
@@ -82,7 +81,7 @@ export const SocialMediaListContainer: React.FC = () => {
   if (!user) return null;
 
   return (
-    <>
+    <div data-testid={'social-media-list'}>
       <SocialMediaListComponent
         connected={socials}
         addSocial={handleAddSocialMedia}
@@ -105,7 +104,7 @@ export const SocialMediaListContainer: React.FC = () => {
           </>
         )}
       </NoSsr>
-    </>
+    </div>
   );
 };
 
