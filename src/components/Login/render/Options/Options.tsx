@@ -208,19 +208,37 @@ export const Options: React.FC<OptionProps> = props => {
               justifyContent="flex-start"
               alignContent="center"
               classes={{root: styles.list}}>
-              {networks.map(network => (
-                <Grid item xs={3} key={network.id}>
-                  <ListItem
-                    disableGutters
-                    selected={networkId === network.id}
-                    onClick={setSelectedNetwork(network.id as NetworkIdEnum)}>
+              {networks
+                .filter(network => network.id !== 'near')
+                .map(network => (
+                  <Grid item xs={3} key={network.id}>
+                    <ListItem
+                      disableGutters
+                      selected={networkId === network.id}
+                      onClick={setSelectedNetwork(network.id as NetworkIdEnum)}>
+                      <div className={styles.card}>
+                        {icons[network.id as keyof typeof icons]}
+                        <Typography>{formatNetworkTitle(network)}</Typography>
+                      </div>
+                    </ListItem>
+                  </Grid>
+                ))}
+              <Grid item xs={3}>
+                <Tooltip
+                  title={
+                    <Typography component="span">
+                      {i18n.t('Login.Options.Tooltip_Wallet')}
+                    </Typography>
+                  }
+                  arrow>
+                  <ListItem disableGutters disabled>
                     <div className={styles.card}>
-                      {icons[network.id as keyof typeof icons]}
-                      <Typography>{formatNetworkTitle(network)}</Typography>
+                      <NearNetworkIcon className={styles.icon} />
+                      <Typography>Near</Typography>
                     </div>
                   </ListItem>
-                </Grid>
-              ))}
+                </Tooltip>
+              </Grid>
               <Grid item xs={3}>
                 <Tooltip
                   title={
@@ -466,31 +484,35 @@ export const Options: React.FC<OptionProps> = props => {
                 justifyContent="flex-start"
                 direction="column"
                 classes={{root: styles.list}}>
-                {networksOnMobile.map(network => (
-                  <Grid item xs={12} key={network.id}>
-                    {network.id === NetworkIdEnum.POLKADOT ? (
-                      <>
-                        <ListItem disableGutters disabled>
+                {networksOnMobile
+                  .filter(network => network.id !== 'near')
+                  .map(network => (
+                    <Grid item xs={12} key={network.id}>
+                      {network.id === NetworkIdEnum.POLKADOT ? (
+                        <>
+                          <ListItem disableGutters disabled>
+                            <div className={styles.rowCard}>
+                              {icons['polkadot']}
+                              <Typography>{formatNetworkTitle(network)}</Typography>
+                            </div>
+                          </ListItem>
+                          <Typography color="primary">
+                            * {i18n.t('Mobile.Polkadot_Alert')}
+                          </Typography>
+                        </>
+                      ) : (
+                        <ListItem
+                          disableGutters
+                          selected={networkId === network.id}
+                          onClick={setSelectedNetwork(network.id)}>
                           <div className={styles.rowCard}>
-                            {icons['polkadot']}
+                            {icons[network.id as keyof typeof icons]}
                             <Typography>{formatNetworkTitle(network)}</Typography>
                           </div>
                         </ListItem>
-                        <Typography color="primary">* {i18n.t('Mobile.Polkadot_Alert')}</Typography>
-                      </>
-                    ) : (
-                      <ListItem
-                        disableGutters
-                        selected={networkId === network.id}
-                        onClick={setSelectedNetwork(network.id)}>
-                        <div className={styles.rowCard}>
-                          {icons[network.id as keyof typeof icons]}
-                          <Typography>{formatNetworkTitle(network)}</Typography>
-                        </div>
-                      </ListItem>
-                    )}
-                  </Grid>
-                ))}
+                      )}
+                    </Grid>
+                  ))}
               </Grid>
             </div>
 
