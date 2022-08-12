@@ -57,6 +57,7 @@ export const TipClaimReference: React.FC<TipClaimReferenceProps> = ({
             color="primary"
             variant="text">
             View total Tips
+            {i18n.t('Wallet.Tip.Reference.Button_View')}
           </Button>
         </div>
       </div>

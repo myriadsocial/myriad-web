@@ -311,9 +311,13 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                     variant="contained"
                     color={isFriend ? 'primary' : 'default'}
                     size="small">
-                    <ShowIf condition={isFriend}>Friends</ShowIf>
-                    <ShowIf condition={isRequested}>Respond</ShowIf>
-                    <ShowIf condition={isRequesting}>Requested</ShowIf>
+                    <ShowIf condition={isFriend}>{i18n.t('Profile.Header.Status.Friends')}</ShowIf>
+                    <ShowIf condition={isRequested}>
+                      {i18n.t('Profile.Header.Status.Respond')}
+                    </ShowIf>
+                    <ShowIf condition={isRequesting}>
+                      {i18n.t('Profile.Header.Status.Requested')}
+                    </ShowIf>
                   </Button>
                   <Menu
                     classes={{paper: style.menu}}
