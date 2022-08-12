@@ -84,6 +84,12 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
     case constants.ADD_POST_TO_TIMELINE: {
       return update(state, {
         posts: {$unshift: [action.post]},
+        meta: {
+          $set: {
+            ...state.meta,
+            totalItemCount: state.meta.totalItemCount + 1,
+          },
+        },
       });
     }
 
