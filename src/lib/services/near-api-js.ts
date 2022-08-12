@@ -198,15 +198,17 @@ export class Near implements IProvider {
   }
 
   async balances(decimal: number, referenceId?: string): Promise<BalanceProps> {
-    if (!this.accountId) return {balance: '0'};
+    const accountId = isHex(this.accountId) ? this.accountId.substring(2) : this.accountId;
+
+    if (!accountId) return {balance: '0'};
     if (referenceId && decimal) {
       const contract = await this.contractInitialize(referenceId, 'ft_balance_of');
-      const contractBalance = await contract.ft_balance_of({account_id: this.accountId});
+      const contractBalance = await contract.ft_balance_of({account_id: accountId});
       return {balance: formatBalance(new BN(contractBalance), decimal).toString()};
     }
 
     const {near} = this.provider;
-    const account = await near.account(this.accountId);
+    const account = await near.account(accountId);
     const balance = await account.getAccountBalance();
     const reservedForTransaction = nearAPI.utils.format.parseNearAmount('0.05');
     const finalBalance =
