@@ -1,5 +1,6 @@
 import getConfig from 'next/config';
 
+import {isHex} from '@polkadot/util';
 import {BN, BN_ZERO} from '@polkadot/util/bn';
 import {numberToHex} from '@polkadot/util/number';
 import {u8aToHex} from '@polkadot/util/u8a';
@@ -362,20 +363,21 @@ export class Near implements IProvider {
     amount: BN,
     tokenContractId?: string,
   ): Promise<string> {
+    const receiverId = isHex(receiver) ? receiver.substring(2) : receiver;
     const signer = await this.signer();
 
     if (!tokenContractId) {
-      await signer.sendMoney(receiver, amount);
+      await signer.sendMoney(receiverId, amount);
       return;
     }
 
     const contract = await this.contractInitialize(tokenContractId, 'storage_balance_of');
-    const isDeposit = await contract.storage_balance_of({account_id: receiver});
+    const isDeposit = await contract.storage_balance_of({account_id: receiverId});
     const actions: nearAPI.transactions.Action[] = !isDeposit
       ? [
           nearAPI.transactions.functionCall(
             'storage_deposit',
-            Buffer.from(JSON.stringify({account_id: receiver})),
+            Buffer.from(JSON.stringify({account_id: receiverId})),
             this.ATTACHED_GAS,
             this.ATTACHED_AMOUNT,
           ),
@@ -385,7 +387,7 @@ export class Near implements IProvider {
     actions.push(
       nearAPI.transactions.functionCall(
         'ft_transfer',
-        Buffer.from(JSON.stringify({receiver_id: receiver, amount: amount.toString()})),
+        Buffer.from(JSON.stringify({receiver_id: receiverId, amount: amount.toString()})),
         this.MAX_GAS.sub(this.ATTACHED_GAS),
         this.ONE_YOCTO,
       ),
