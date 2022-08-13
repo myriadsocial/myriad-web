@@ -178,6 +178,7 @@ export class Near implements IProvider {
   ): Promise<null> {
     if (wallet.isSignedIn()) wallet.signOut();
 
+    const keyStore = new nearAPI.keyStores.BrowserLocalStorageKeyStore();
     const signInOptions = {
       contractId: publicRuntimeConfig.nearTippingContractId,
       methodNames: ['claim_tip', 'batch_claim_tips'],
@@ -185,7 +186,7 @@ export class Near implements IProvider {
       failureUrl: failureUrl ?? `${publicRuntimeConfig.appAuthURL}`,
     };
 
-    await wallet.requestSignIn(signInOptions);
+    await Promise.all([keyStore.clear(), wallet.requestSignIn(signInOptions)]);
 
     return null;
   }

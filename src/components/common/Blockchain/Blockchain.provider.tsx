@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import getConfig from 'next/config';
@@ -54,7 +54,7 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const {wallets} = useSelector<RootState, UserState>(state => state.userState);
+  const {wallets, networks} = useSelector<RootState, UserState>(state => state.userState);
   const {enablePolkadotExtension} = usePolkadotExtension();
   const {getRegisteredAccounts} = useAuthHook();
   const {connectToNear} = useNearApi();
@@ -69,18 +69,17 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
   const [accounts, setAccounts] = React.useState<InjectedAccountWithMeta[]>([]);
   const [networkId, setNetworkId] = React.useState<NetworkIdEnum | null>(null);
 
-  // const accountId = router.query.account_id as string | null;
-  // const action = router.query.action as string | string[] | null;
+  const accountId = router.query.account_id as string | null;
+  const action = router.query.action as string | string[] | null;
 
   const currentNetworkId = currentWallet?.networkId;
 
-  //TODO: will active when issue on near auth is resolved
-  // useEffect(() => {
-  //   if (!Array.isArray(action) && action === 'switch' && accountId) {
-  //     const network = networks.find(network => network.id === NetworkIdEnum.NEAR);
-  //     if (network) shiftNetwork(network);
-  //   }
-  // }, [accountId, action]);
+  useEffect(() => {
+    if (!Array.isArray(action) && action === 'switch' && accountId) {
+      const network = networks.find(network => network.id === NetworkIdEnum.NEAR);
+      if (network) shiftNetwork(network);
+    }
+  }, [accountId, action]);
 
   const handleOpenPrompt = (select: NetworkIdEnum) => {
     showConfirmDialog(select);

@@ -60,11 +60,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
           </ShowIf>
           <ShowIf condition={!anonymous}>
             <ShowIf condition={Boolean(currentWallet)}>
-              <NetworkOption
-                currentWallet={currentWallet}
-                wallets={wallets}
-                networks={networks.filter(ar => ar.id !== 'near')}
-              />
+              <NetworkOption currentWallet={currentWallet} wallets={wallets} networks={networks} />
               <Typography component="div" className={classes.address}>
                 <ShowIf condition={loading}>
                   <Skeleton variant="text" height={20} />
