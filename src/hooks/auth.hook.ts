@@ -32,7 +32,7 @@ export const useAuthHook = () => {
   );
   const {getPolkadotAccounts} = usePolkadotExtension();
   const {publicRuntimeConfig} = getConfig();
-  const {provider, nearProvider} = useBlockchain();
+  const {provider} = useBlockchain();
 
   const fetchUserNonce = async (address: string): Promise<UserNonceProps> => {
     try {
@@ -169,14 +169,20 @@ export const useAuthHook = () => {
       await FirebaseMessaging.unregister();
     }
 
-    await Promise.all([
-      provider?.disconnect(),
-      nearProvider?.disconnect(),
-      await signOut({
-        callbackUrl: publicRuntimeConfig.appAuthURL,
-        redirect: true,
-      }),
-    ]);
+    if (provider.constructor.name !== 'Near') {
+      const nearNetwork = networks.find(network => network.id === NetworkIdEnum.NEAR);
+
+      if (nearNetwork) {
+        const near = await Near.connect(nearNetwork);
+        await near.disconnect();
+      }
+    }
+
+    await provider?.disconnect();
+    await signOut({
+      callbackUrl: publicRuntimeConfig.appAuthURL,
+      redirect: true,
+    });
   };
 
   return {

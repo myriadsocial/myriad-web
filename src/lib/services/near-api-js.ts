@@ -88,8 +88,6 @@ export class Near implements IProvider {
   static async signWithWallet(
     wallet: nearAPI.WalletConnection,
     userId?: string,
-    callbackUrl?: string,
-    failedCallbackUrl?: string,
   ): Promise<SignatureProps | null> {
     try {
       if (!wallet) return null;
@@ -99,38 +97,23 @@ export class Near implements IProvider {
 
       const keyStore = new keyStores.BrowserLocalStorageKeyStore();
 
-      if (!wallet.isSignedIn()) {
-        await wallet.requestSignIn({
-          successUrl:
-            callbackUrl ?? `${publicRuntimeConfig.appAuthURL}/?auth=${WalletTypeEnum.NEAR}`,
-          failureUrl: failedCallbackUrl,
-        });
+      const address = wallet.getAccountId();
+      const keyPair = await keyStore.getKey(wallet._networkId, address);
 
-        return null;
-      } else {
-        const address = wallet.getAccountId();
-        const signer = new nearAPI.InMemorySigner(wallet._keyStore);
-        const hasPublicKey = await signer.getPublicKey(address, wallet._networkId);
+      const {nonce} = await (userId
+        ? WalletAPI.getUserNonceByUserId(userId)
+        : WalletAPI.getUserNonce(address));
 
-        if (!hasPublicKey) await signer.createKey(address, wallet._networkId);
-        const keyPair = await keyStore.getKey(wallet._networkId, address);
+      const userSignature: Signature = keyPair.sign(Buffer.from(numberToHex(nonce)));
+      const publicKey = u8aToHex(userSignature.publicKey.data);
+      const userSignatureHex = u8aToHex(userSignature.signature);
 
-        const {nonce} = await (userId
-          ? WalletAPI.getUserNonceByUserId(userId)
-          : WalletAPI.getUserNonce(address));
-        const userSignature: Signature = keyPair.sign(Buffer.from(numberToHex(nonce)));
-        const publicKey = u8aToHex(userSignature.publicKey.data);
-        const userSignatureHex = u8aToHex(userSignature.signature);
+      const publicAddress = `${publicKey}/${address}`;
+      const signature = userSignatureHex;
 
-        const publicAddress = `${publicKey}/${address}`;
-        const signature = userSignatureHex;
-
-        return {nonce, publicAddress, signature};
-      }
+      return {nonce, publicAddress, signature};
     } catch (error) {
-      console.log({error});
-
-      throw error;
+      return null;
     }
   }
 
@@ -186,6 +169,30 @@ export class Near implements IProvider {
     } catch {
       return new BN(0);
     }
+  }
+
+  static async requestSignIn(
+    wallet: nearAPI.WalletConnection,
+    successUrl?: string,
+    failureUrl?: string,
+  ): Promise<null> {
+    if (wallet.isSignedIn()) wallet.signOut();
+
+    const signInOptions = {
+      contractId: publicRuntimeConfig.nearTippingContractId,
+      methodNames: ['claim_tip', 'batch_claim_tips'],
+      successUrl: successUrl ?? `${publicRuntimeConfig.appAuthURL}/?auth=${WalletTypeEnum.NEAR}`,
+      failureUrl: failureUrl ?? `${publicRuntimeConfig.appAuthURL}`,
+    };
+
+    await wallet.requestSignIn(signInOptions);
+
+    return null;
+  }
+
+  static async clearLocalStorage(): Promise<void> {
+    const keyStore = new nearAPI.keyStores.BrowserLocalStorageKeyStore();
+    await keyStore.clear();
   }
 
   async signer(): Promise<nearAPI.ConnectedWalletAccount> {
@@ -328,9 +335,8 @@ export class Near implements IProvider {
 
   async disconnect(): Promise<void> {
     const {wallet} = this.provider;
-    const keyStore = new nearAPI.keyStores.BrowserLocalStorageKeyStore();
 
-    keyStore.clear();
+    await Near.clearLocalStorage();
 
     if (wallet.isSignedIn()) {
       wallet.signOut();

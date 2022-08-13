@@ -15,10 +15,9 @@ import {Manage} from './Manage';
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useConnect} from 'src/hooks/use-connect.hook';
+import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
-import {NetworkIdEnum} from 'src/interfaces/network';
 import {BlockchainPlatform} from 'src/interfaces/wallet';
-import {BlockchainProvider} from 'src/lib/services/blockchain-provider';
 import {Near} from 'src/lib/services/near-api-js';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
@@ -39,10 +38,11 @@ export const ManageCointainer: React.FC = () => {
 
   const {enablePolkadotExtension} = usePolkadotExtension();
   const {getRegisteredAccounts} = useAuthHook();
+  const {connectToNear} = useNearApi();
   const {connectNetwork} = useConnect();
   const {publicRuntimeConfig} = getConfig();
 
-  const {user, currentWallet, wallets, networks} = useSelector<RootState, UserState>(
+  const {user, currentWallet, wallets} = useSelector<RootState, UserState>(
     state => state.userState,
   );
 
@@ -114,36 +114,23 @@ export const ManageCointainer: React.FC = () => {
       publicRuntimeConfig.appAuthURL + router.route + '?type=manage&action=connect';
 
     try {
-      const network = networks.find(network => network.id === NetworkIdEnum.NEAR);
-
-      if (!network) return false;
       if (!user) return false;
 
-      const blockchain = await BlockchainProvider.connect(network);
-      const provider = blockchain.Near;
+      const signatureData = await connectToNear(callbackUrl, callbackUrl);
 
-      const data = await Near.signWithWallet(
-        provider?.provider?.wallet,
-        user.id,
-        callbackUrl,
-        callbackUrl,
-      );
+      if (!signatureData) return false;
 
-      if (data) {
-        const payload = {
-          publicAddress: data.publicAddress,
-          nearAddress: data.publicAddress.split('/')[1],
-          pubKey: data.publicAddress.split('/')[0],
-          signature: data.signature,
-          nonce: data.nonce,
-        };
+      const payload = {
+        publicAddress: signatureData.publicAddress,
+        nearAddress: signatureData.publicAddress.split('/')[1],
+        pubKey: signatureData.publicAddress.split('/')[0],
+        signature: signatureData.signature,
+        nonce: signatureData.nonce,
+      };
 
-        verified = await connectNetwork(BlockchainPlatform.NEAR, payload, async error => {
-          if (error) await provider.disconnect();
-        });
-      } else {
-        console.log('redirection to near auth page');
-      }
+      verified = await connectNetwork(BlockchainPlatform.NEAR, payload, async error => {
+        if (error) await Near.clearLocalStorage();
+      });
     } catch {
       //
     } finally {

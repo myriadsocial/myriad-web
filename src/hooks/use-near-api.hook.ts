@@ -17,20 +17,24 @@ export const useNearApi = () => {
   const connectToNear = async (
     callbackUrl?: string,
     failedCallbackUrl?: string,
+    network?: Network,
   ): Promise<SignatureProps | null> => {
-    const network = networks.find(network => network.id === NetworkIdEnum.NEAR);
+    if (!network) {
+      network = networks.find(network => network.id === NetworkIdEnum.NEAR);
+    }
 
     if (!network) return;
 
     const blockchain = await BlockchainProvider.connect(network);
     const nearProvider = blockchain.Near;
+    const wallet = nearProvider?.provider?.wallet;
 
-    return Near.signWithWallet(
-      nearProvider?.provider?.wallet,
-      undefined,
-      callbackUrl,
-      failedCallbackUrl,
-    );
+    if (wallet.isSignedIn()) {
+      const signatureData = await Near.signWithWallet(wallet);
+      if (signatureData) return signatureData;
+    }
+
+    return Near.requestSignIn(wallet, callbackUrl, failedCallbackUrl);
   };
 
   const getClaimTipNear = async (

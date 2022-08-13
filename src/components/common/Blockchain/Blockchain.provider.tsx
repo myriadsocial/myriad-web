@@ -11,10 +11,10 @@ import useConfirm from '../Confirm/use-confirm.hook';
 import {useEnqueueSnackbar} from '../Snackbar/useEnqueueSnackbar.hook';
 import BlockchainContext from './Blockchain.context';
 
-// import {PolkadotAccountList} from 'components/PolkadotAccountList';
 import {formatNetworkTitle, formatWalletTitle} from 'src/helpers/wallet';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {NearPayload, useConnect} from 'src/hooks/use-connect.hook';
+import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {IProvider} from 'src/interfaces/blockchain-interface';
 import {Network, NetworkIdEnum} from 'src/interfaces/network';
@@ -23,7 +23,6 @@ import {BlockchainPlatform} from 'src/interfaces/wallet';
 import {AccountRegisteredError} from 'src/lib/api/errors/account-registered.error';
 import {Server} from 'src/lib/api/server';
 import {toHexPublicKey} from 'src/lib/crypto';
-import {BlockchainProvider as Provider} from 'src/lib/services/blockchain-provider';
 import {Near} from 'src/lib/services/near-api-js';
 import {RootState} from 'src/reducers';
 import {clearBalances} from 'src/reducers/balance/actions';
@@ -39,7 +38,6 @@ const PolkadotAccountList = dynamic(
 interface BlockchainProviderProps {
   server: Server;
   provider: IProvider;
-  nearProvider: Near;
   currentWallet: UserWallet;
   loadingBlockchain: boolean;
   onChangeProvider: () => void;
@@ -49,7 +47,6 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
   children,
   server,
   provider,
-  nearProvider,
   currentWallet,
   onChangeProvider,
   loadingBlockchain,
@@ -60,6 +57,7 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
   const {wallets} = useSelector<RootState, UserState>(state => state.userState);
   const {enablePolkadotExtension} = usePolkadotExtension();
   const {getRegisteredAccounts} = useAuthHook();
+  const {connectToNear} = useNearApi();
   const {switchNetwork, loading: loadingSwitch} = useConnect();
   const {publicRuntimeConfig} = getConfig();
 
@@ -148,31 +146,27 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
           redirectUrl.searchParams.set('q', router.query.q);
         }
 
-        const blockchain = await Provider.connect(network);
-        const near = blockchain.Near;
-        const data = await Near.signWithWallet(
-          near?.provider?.wallet,
-          undefined,
+        const signatureData = await connectToNear(
           callbackUrl.toString(),
+          redirectUrl.toString(),
+          network,
         );
 
-        if (data) {
-          const payload: NearPayload = {
-            publicAddress: data.publicAddress,
-            nearAddress: data.publicAddress.split('/')[1],
-            pubKey: data.publicAddress.split('/')[0],
-            signature: data.signature,
-            nonce: data.nonce,
-          };
+        if (!signatureData) return;
 
-          await handleSwitchNetwork(BlockchainPlatform.NEAR, networkId, payload, async err => {
-            if (err) await near.disconnect();
-          });
+        const payload: NearPayload = {
+          publicAddress: signatureData.publicAddress,
+          nearAddress: signatureData.publicAddress.split('/')[1],
+          pubKey: signatureData.publicAddress.split('/')[0],
+          signature: signatureData.signature,
+          nonce: signatureData.nonce,
+        };
 
-          router.replace(redirectUrl, undefined, {shallow: true});
-        } else {
-          console.log('redirection to near auth page');
-        }
+        await handleSwitchNetwork(BlockchainPlatform.NEAR, networkId, payload, async err => {
+          if (err) await Near.clearLocalStorage();
+        });
+
+        router.replace(redirectUrl, undefined, {shallow: true});
 
         break;
       }
@@ -239,7 +233,6 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
         value={{
           server,
           provider,
-          nearProvider,
           switchNetwork: shiftNetwork,
           loadingBlockchain,
           loadingSwitch,
