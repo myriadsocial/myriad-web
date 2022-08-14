@@ -102,9 +102,9 @@ export const useAuthHook = () => {
 
       if (!network) return false;
 
-      const blockchain = await BlockchainProvider.connect(network);
-      const nearProvider = blockchain.Near;
-      const data = await Near.signWithWallet(nearProvider?.provider?.wallet);
+      const near = await Near.connect(network);
+      const wallet = near.provider.wallet;
+      const data = await Near.signWithWallet(wallet);
 
       if (data && !data.signature) return false;
 

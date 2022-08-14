@@ -69,17 +69,16 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
   const [accounts, setAccounts] = React.useState<InjectedAccountWithMeta[]>([]);
   const [networkId, setNetworkId] = React.useState<NetworkIdEnum | null>(null);
 
-  const accountId = router.query.account_id as string | null;
   const action = router.query.action as string | string[] | null;
 
   const currentNetworkId = currentWallet?.networkId;
 
   useEffect(() => {
-    if (!Array.isArray(action) && action === 'switch' && accountId) {
+    if (!Array.isArray(action) && action === 'switch') {
       const network = networks.find(network => network.id === NetworkIdEnum.NEAR);
       if (network) shiftNetwork(network);
     }
-  }, [accountId, action]);
+  }, [action]);
 
   const handleOpenPrompt = (select: NetworkIdEnum) => {
     showConfirmDialog(select);

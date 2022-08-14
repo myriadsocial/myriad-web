@@ -115,7 +115,7 @@ export const ManageCointainer: React.FC = () => {
     try {
       if (!user) return false;
 
-      const signatureData = await connectToNear(callbackUrl, callbackUrl);
+      const signatureData = await connectToNear(callbackUrl, callbackUrl, undefined, user.id);
 
       if (!signatureData) return false;
 

@@ -88,15 +88,13 @@ export class Near implements IProvider {
   static async signWithWallet(
     wallet: nearAPI.WalletConnection,
     userId?: string,
+    successUrl?: string,
+    failureUrl?: string,
   ): Promise<SignatureProps | null> {
+    const keyStore = new nearAPI.keyStores.BrowserLocalStorageKeyStore();
+
     try {
-      if (!wallet) return null;
-      const {keyStores} = nearAPI;
-      // creates keyStore using private key in local storage
-      // *** REQUIRES SignIn using walletConnection.requestSignIn() ***
-
-      const keyStore = new keyStores.BrowserLocalStorageKeyStore();
-
+      if (!wallet.isSignedIn()) throw 'RequestSignIn';
       const address = wallet.getAccountId();
       const keyPair = await keyStore.getKey(wallet._networkId, address);
 
@@ -112,7 +110,17 @@ export class Near implements IProvider {
       const signature = userSignatureHex;
 
       return {nonce, publicAddress, signature};
-    } catch (error) {
+    } catch {
+      if (wallet.isSignedIn()) wallet.signOut();
+
+      const signInOptions = {
+        contractId: publicRuntimeConfig.nearTippingContractId,
+        methodNames: ['claim_tip', 'batch_claim_tips'],
+        successUrl: successUrl ?? `${publicRuntimeConfig.appAuthURL}/?auth=${WalletTypeEnum.NEAR}`,
+        failureUrl: failureUrl ?? `${publicRuntimeConfig.appAuthURL}`,
+      };
+
+      await Promise.all([keyStore.clear(), wallet.requestSignIn(signInOptions)]);
       return null;
     }
   }
@@ -169,26 +177,6 @@ export class Near implements IProvider {
     } catch {
       return new BN(0);
     }
-  }
-
-  static async requestSignIn(
-    wallet: nearAPI.WalletConnection,
-    successUrl?: string,
-    failureUrl?: string,
-  ): Promise<null> {
-    if (wallet.isSignedIn()) wallet.signOut();
-
-    const keyStore = new nearAPI.keyStores.BrowserLocalStorageKeyStore();
-    const signInOptions = {
-      contractId: publicRuntimeConfig.nearTippingContractId,
-      methodNames: ['claim_tip', 'batch_claim_tips'],
-      successUrl: successUrl ?? `${publicRuntimeConfig.appAuthURL}/?auth=${WalletTypeEnum.NEAR}`,
-      failureUrl: failureUrl ?? `${publicRuntimeConfig.appAuthURL}`,
-    };
-
-    await Promise.all([keyStore.clear(), wallet.requestSignIn(signInOptions)]);
-
-    return null;
   }
 
   static async clearLocalStorage(): Promise<void> {
