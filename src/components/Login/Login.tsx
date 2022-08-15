@@ -35,7 +35,7 @@ export const Login: React.FC<LoginProps> = props => {
 
   const styles = useStyles();
 
-  const {anonymous, fetchUserNonce, signInWithExternalAuth} = useAuthHook();
+  const {anonymous, fetchUserNonce, signInWithExternalAuth, clearNearCache} = useAuthHook();
   const {checkUsernameAvailable} = useProfileHook();
   const {connectToNear} = useNearApi();
 
@@ -54,6 +54,8 @@ export const Login: React.FC<LoginProps> = props => {
   useEffect(() => {
     if (redirectAuth === WalletTypeEnum.NEAR) {
       checkWalletRegistered();
+    } else {
+      clearNearCache();
     }
   }, [redirectAuth]);
 
