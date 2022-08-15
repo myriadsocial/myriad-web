@@ -6,7 +6,6 @@ import {formatBalanceV2} from 'src/helpers/balance';
 import {SignatureProps, TipsResultsProps} from 'src/interfaces/blockchain-interface';
 import {Network, NetworkIdEnum} from 'src/interfaces/network';
 import {Wallet} from 'src/interfaces/user';
-import {BlockchainProvider} from 'src/lib/services/blockchain-provider';
 import {Near} from 'src/lib/services/near-api-js';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
@@ -17,20 +16,19 @@ export const useNearApi = () => {
   const connectToNear = async (
     callbackUrl?: string,
     failedCallbackUrl?: string,
+    network?: Network,
+    userId?: string,
   ): Promise<SignatureProps | null> => {
-    const network = networks.find(network => network.id === NetworkIdEnum.NEAR);
+    if (!network) {
+      network = networks.find(network => network.id === NetworkIdEnum.NEAR);
+    }
 
     if (!network) return;
 
-    const blockchain = await BlockchainProvider.connect(network);
-    const nearProvider = blockchain.Near;
+    const near = await Near.connect(network);
+    const wallet = near?.provider?.wallet;
 
-    return Near.signWithWallet(
-      nearProvider?.provider?.wallet,
-      undefined,
-      callbackUrl,
-      failedCallbackUrl,
-    );
+    return Near.signWithWallet(wallet, userId, callbackUrl, failedCallbackUrl);
   };
 
   const getClaimTipNear = async (

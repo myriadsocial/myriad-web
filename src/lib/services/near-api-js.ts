@@ -88,49 +88,40 @@ export class Near implements IProvider {
   static async signWithWallet(
     wallet: nearAPI.WalletConnection,
     userId?: string,
-    callbackUrl?: string,
-    failedCallbackUrl?: string,
+    successUrl?: string,
+    failureUrl?: string,
   ): Promise<SignatureProps | null> {
+    const keyStore = new nearAPI.keyStores.BrowserLocalStorageKeyStore();
+
     try {
-      if (!wallet) return null;
-      const {keyStores} = nearAPI;
-      // creates keyStore using private key in local storage
-      // *** REQUIRES SignIn using walletConnection.requestSignIn() ***
+      if (!wallet.isSignedIn()) throw 'RequestSignIn';
+      const address = wallet.getAccountId();
+      const keyPair = await keyStore.getKey(wallet._networkId, address);
 
-      const keyStore = new keyStores.BrowserLocalStorageKeyStore();
+      const {nonce} = await (userId
+        ? WalletAPI.getUserNonceByUserId(userId)
+        : WalletAPI.getUserNonce(address));
 
-      if (!wallet.isSignedIn()) {
-        await wallet.requestSignIn({
-          successUrl:
-            callbackUrl ?? `${publicRuntimeConfig.appAuthURL}/?auth=${WalletTypeEnum.NEAR}`,
-          failureUrl: failedCallbackUrl,
-        });
+      const userSignature: Signature = keyPair.sign(Buffer.from(numberToHex(nonce)));
+      const publicKey = u8aToHex(userSignature.publicKey.data);
+      const userSignatureHex = u8aToHex(userSignature.signature);
 
-        return null;
-      } else {
-        const address = wallet.getAccountId();
-        const signer = new nearAPI.InMemorySigner(wallet._keyStore);
-        const hasPublicKey = await signer.getPublicKey(address, wallet._networkId);
+      const publicAddress = `${publicKey}/${address}`;
+      const signature = userSignatureHex;
 
-        if (!hasPublicKey) await signer.createKey(address, wallet._networkId);
-        const keyPair = await keyStore.getKey(wallet._networkId, address);
+      return {nonce, publicAddress, signature};
+    } catch {
+      if (wallet.isSignedIn()) wallet.signOut();
 
-        const {nonce} = await (userId
-          ? WalletAPI.getUserNonceByUserId(userId)
-          : WalletAPI.getUserNonce(address));
-        const userSignature: Signature = keyPair.sign(Buffer.from(numberToHex(nonce)));
-        const publicKey = u8aToHex(userSignature.publicKey.data);
-        const userSignatureHex = u8aToHex(userSignature.signature);
+      const signInOptions = {
+        contractId: publicRuntimeConfig.nearTippingContractId,
+        methodNames: ['claim_tip', 'batch_claim_tips'],
+        successUrl: successUrl ?? `${publicRuntimeConfig.appAuthURL}/?auth=${WalletTypeEnum.NEAR}`,
+        failureUrl: failureUrl ?? `${publicRuntimeConfig.appAuthURL}`,
+      };
 
-        const publicAddress = `${publicKey}/${address}`;
-        const signature = userSignatureHex;
-
-        return {nonce, publicAddress, signature};
-      }
-    } catch (error) {
-      console.log({error});
-
-      throw error;
+      await Promise.all([keyStore.clear(), wallet.requestSignIn(signInOptions)]);
+      return null;
     }
   }
 
@@ -186,6 +177,11 @@ export class Near implements IProvider {
     } catch {
       return new BN(0);
     }
+  }
+
+  static async clearLocalStorage(): Promise<void> {
+    const keyStore = new nearAPI.keyStores.BrowserLocalStorageKeyStore();
+    await keyStore.clear();
   }
 
   async signer(): Promise<nearAPI.ConnectedWalletAccount> {
@@ -328,9 +324,8 @@ export class Near implements IProvider {
 
   async disconnect(): Promise<void> {
     const {wallet} = this.provider;
-    const keyStore = new nearAPI.keyStores.BrowserLocalStorageKeyStore();
 
-    keyStore.clear();
+    await Near.clearLocalStorage();
 
     if (wallet.isSignedIn()) {
       wallet.signOut();

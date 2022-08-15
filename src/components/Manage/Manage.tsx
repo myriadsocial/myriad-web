@@ -85,7 +85,7 @@ export const Manage: React.FC<ManageProps> = ({wallets, onConnect}) => {
                   variant="outlined"
                   size="small"
                   color="secondary"
-                  disabled={isMobile || option.id === 'near'}
+                  disabled={isMobile}
                   className={style.btnConnect}
                   onClick={() => handleConnectWallet(option.id)}>
                   {i18n.t('Wallet.Manage.Btn_Connect')}

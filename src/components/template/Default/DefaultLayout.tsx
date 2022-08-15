@@ -20,14 +20,12 @@ import {TippingProvider} from 'src/components/common/Tipping/Tipping.provider';
 import ShowIf from 'src/components/common/show-if.component';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {IProvider} from 'src/interfaces/blockchain-interface';
-import {NetworkIdEnum} from 'src/interfaces/network';
 import {NotificationProps} from 'src/interfaces/notification';
 import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
 import {Server} from 'src/lib/api/server';
 import * as FirebaseAnalytic from 'src/lib/firebase/analytic';
 import * as FirebaseMessaging from 'src/lib/firebase/messaging';
 import {BlockchainProvider} from 'src/lib/services/blockchain-provider';
-import {Near} from 'src/lib/services/near-api-js';
 import {clearBalances, loadBalances} from 'src/reducers/balance/actions';
 import {countNewNotification, processNotification} from 'src/reducers/notification/actions';
 import {fetchUserWalletAddress} from 'src/reducers/user/actions';
@@ -73,7 +71,6 @@ const Default: React.FC<DefaultLayoutProps> = props => {
 
   const [showNotification, setShowNotification] = useState<boolean>(false);
   const [provider, setProvider] = useState<IProvider>(null);
-  const [nearProvider, setNearProvider] = useState<Near>(null);
   const [initialize, setInitialize] = useState<boolean>(true);
 
   const loadingNear = router.query.loading as string | null;
@@ -84,14 +81,9 @@ const Default: React.FC<DefaultLayoutProps> = props => {
 
     if (currentWallet?.network && initialize && !provider && !loadingNear) {
       dispatch(clearBalances());
-      if (nearProvider && currentWallet.networkId === NetworkIdEnum.NEAR) {
-        initializeBlockchain(nearProvider, currentWallet.id);
-      } else {
-        BlockchainProvider.connect(currentWallet.network).then(blockchain => {
-          if (blockchain?.provider?.constructor.name === 'Near') setNearProvider(blockchain.Near);
-          initializeBlockchain(blockchain?.provider, currentWallet.id);
-        });
-      }
+      BlockchainProvider.connect(currentWallet.network).then(blockchain => {
+        initializeBlockchain(blockchain?.provider, currentWallet.id);
+      });
     }
   }, [currentWallet, initialize, provider, loadingNear]);
 
@@ -157,7 +149,6 @@ const Default: React.FC<DefaultLayoutProps> = props => {
     <BlockchainProviderComponent
       server={server}
       provider={provider}
-      nearProvider={nearProvider}
       currentWallet={currentWallet}
       onChangeProvider={reinitializeBlockchain}
       loadingBlockchain={initialize}>
