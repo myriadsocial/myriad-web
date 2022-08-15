@@ -165,24 +165,27 @@ export const useAuthHook = () => {
   };
 
   const logout = async () => {
+    const promises: Promise<void | undefined>[] = [
+      signOut({
+        callbackUrl: publicRuntimeConfig.appAuthURL,
+        redirect: true,
+      }),
+    ];
+
     if (!anonymousUser) {
-      await FirebaseMessaging.unregister();
-    }
+      if (provider.constructor.name !== 'Near') {
+        const nearNetwork = networks.find(network => network.id === NetworkIdEnum.NEAR);
 
-    if (provider.constructor.name !== 'Near') {
-      const nearNetwork = networks.find(network => network.id === NetworkIdEnum.NEAR);
-
-      if (nearNetwork) {
-        const near = await Near.connect(nearNetwork);
-        await near.disconnect();
+        if (nearNetwork) {
+          const near = await Near.connect(nearNetwork);
+          promises.unshift(near?.disconnect());
+        }
       }
+
+      promises.unshift(FirebaseMessaging.unregister(), provider?.disconnect());
     }
 
-    await provider?.disconnect();
-    await signOut({
-      callbackUrl: publicRuntimeConfig.appAuthURL,
-      redirect: true,
-    });
+    await Promise.all(promises);
   };
 
   return {
