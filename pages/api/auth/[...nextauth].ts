@@ -55,10 +55,14 @@ export default NextAuth({
 
           if (!data?.accessToken) throw Error('Failed to authorize user!');
 
-          const payload = encryptMessage(data.accessToken, credentials.address);
-
-          // Any object returned will be saved in `user` property of the JWT
-          return credentialToSession(credentials as unknown as SignInCredential, payload);
+          try {
+            // Any object returned will be saved in `user` property of the JWT
+            const payload = encryptMessage(data.accessToken, credentials.address);
+            return credentialToSession(credentials as unknown as SignInCredential, payload);
+          } catch (error) {
+            console.log('[api][Auth]', error);
+            return null;
+          }
         }
       },
     }),

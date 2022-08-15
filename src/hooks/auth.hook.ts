@@ -15,7 +15,6 @@ import * as UserAPI from 'src/lib/api/user';
 import * as WalletAPI from 'src/lib/api/wallet';
 import {toHexPublicKey} from 'src/lib/crypto';
 import * as FirebaseMessaging from 'src/lib/firebase/messaging';
-import {BlockchainProvider} from 'src/lib/services/blockchain-provider';
 import {Near} from 'src/lib/services/near-api-js';
 import {PolkadotJs} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
@@ -164,6 +163,15 @@ export const useAuthHook = () => {
     });
   };
 
+  const clearNearCache = async (): Promise<void> => {
+    const nearNetwork = networks.find(network => network.id === NetworkIdEnum.NEAR);
+
+    if (nearNetwork) {
+      const near = await Near.connect(nearNetwork);
+      return near?.disconnect();
+    }
+  };
+
   const logout = async () => {
     const promises: Promise<void | undefined>[] = [
       signOut({
@@ -173,14 +181,7 @@ export const useAuthHook = () => {
     ];
 
     if (!anonymousUser) {
-      if (provider.constructor.name !== 'Near') {
-        const nearNetwork = networks.find(network => network.id === NetworkIdEnum.NEAR);
-
-        if (nearNetwork) {
-          const near = await Near.connect(nearNetwork);
-          promises.unshift(near?.disconnect());
-        }
-      }
+      promises.push(clearNearCache());
 
       promises.unshift(FirebaseMessaging.unregister(), provider?.disconnect());
     }
@@ -191,6 +192,7 @@ export const useAuthHook = () => {
   return {
     anonymous,
     logout,
+    clearNearCache,
     getUserByAccounts,
     getRegisteredAccounts,
     fetchUserNonce,
