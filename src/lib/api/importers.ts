@@ -16,7 +16,7 @@ export const getImporters = async (
     url: `/posts/${originPostId}/importers/${platform}`,
     method: 'GET',
     params: {
-      pageNumber: 1,
+      pageNumber: page,
       pageLimit: PAGINATION_LIMIT,
       userId: userId,
     },

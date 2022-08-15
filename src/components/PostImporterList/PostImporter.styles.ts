@@ -5,7 +5,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       width: 460,
 
-      [theme.breakpoints.down('md')]: {
+      [theme.breakpoints.down('xs')]: {
         width: '100%',
       },
     },
