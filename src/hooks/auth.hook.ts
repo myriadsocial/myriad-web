@@ -7,6 +7,7 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
+import {MYRIAD_WALLET_KEY} from 'src/interfaces/blockchain-interface';
 import {NetworkIdEnum} from 'src/interfaces/network';
 import {User} from 'src/interfaces/user';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
@@ -74,6 +75,7 @@ export const useAuthHook = () => {
     nonce: number,
     account?: InjectedAccountWithMeta,
     nearAddress?: string,
+    walletType?: WalletTypeEnum,
   ) => {
     if (account) {
       const signature = await PolkadotJs.signWithWallet(account, nonce);
@@ -85,12 +87,14 @@ export const useAuthHook = () => {
         address: toHexPublicKey(account),
         publicAddress: toHexPublicKey(account),
         signature,
-        walletType: WalletTypeEnum.POLKADOT,
+        walletType,
         networkId: networkId,
         nonce,
         anonymous: false,
         callbackUrl: publicRuntimeConfig.appAuthURL,
       });
+
+      window.localStorage.setItem(MYRIAD_WALLET_KEY, walletType);
 
       return true;
     }
@@ -101,9 +105,9 @@ export const useAuthHook = () => {
 
       if (!network) return false;
 
-      const near = await Near.connect(network);
+      const near = await Near.connect(network, walletType);
       const wallet = near.provider.wallet;
-      const data = await Near.signWithWallet(wallet);
+      const data = await Near.signWithWallet(wallet, undefined, {nonce});
 
       if (data && !data.signature) return false;
 
@@ -112,12 +116,14 @@ export const useAuthHook = () => {
           address: nearAccount,
           publicAddress: data.publicAddress,
           signature: data.signature,
-          walletType: WalletTypeEnum.NEAR,
+          walletType,
           networkId: NetworkIdEnum.NEAR,
           nonce,
           anonymous: false,
           callbackUrl: publicRuntimeConfig.appAuthURL,
         });
+
+        window.localStorage.setItem(MYRIAD_WALLET_KEY, walletType);
 
         return true;
       }
@@ -132,6 +138,7 @@ export const useAuthHook = () => {
     username: string,
     networkId: NetworkIdEnum,
     account?: InjectedAccountWithMeta,
+    walletType?: WalletTypeEnum,
   ): Promise<boolean> => {
     let nonce = null;
 
@@ -145,7 +152,7 @@ export const useAuthHook = () => {
 
     if (data) nonce = data.nonce;
     if (!nonce) return false;
-    return signInWithExternalAuth(networkId, nonce, account, id);
+    return signInWithExternalAuth(networkId, nonce, account, id, walletType);
   };
 
   const anonymous = async (): Promise<void> => {
@@ -173,6 +180,8 @@ export const useAuthHook = () => {
   };
 
   const logout = async () => {
+    window.localStorage.removeItem(MYRIAD_WALLET_KEY);
+
     const promises: Promise<void | undefined>[] = [
       signOut({
         callbackUrl: publicRuntimeConfig.appAuthURL,
@@ -181,9 +190,7 @@ export const useAuthHook = () => {
     ];
 
     if (!anonymousUser) {
-      promises.push(clearNearCache());
-
-      promises.unshift(FirebaseMessaging.unregister(), provider?.disconnect());
+      promises.unshift(FirebaseMessaging.unregister(), clearNearCache(), provider?.disconnect());
     }
 
     await Promise.all(promises);

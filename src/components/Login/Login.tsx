@@ -52,8 +52,8 @@ export const Login: React.FC<LoginProps> = props => {
   );
 
   useEffect(() => {
-    if (redirectAuth === WalletTypeEnum.NEAR) {
-      checkWalletRegistered();
+    if (redirectAuth === WalletTypeEnum.NEAR || redirectAuth === WalletTypeEnum.MYNEAR) {
+      checkWalletRegistered(redirectAuth);
     } else {
       clearNearCache();
     }
@@ -63,8 +63,8 @@ export const Login: React.FC<LoginProps> = props => {
     i18n.changeLanguage(settings.language);
   }, [settings.language]);
 
-  const checkWalletRegistered = useCallback(async () => {
-    const data = await connectToNear();
+  const checkWalletRegistered = useCallback(async (wallet: WalletTypeEnum) => {
+    const data = await connectToNear(undefined, undefined, wallet);
 
     if (!data) return;
 
@@ -78,7 +78,7 @@ export const Login: React.FC<LoginProps> = props => {
       },
       undefined,
       data.publicAddress,
-      WalletTypeEnum.NEAR,
+      wallet,
     );
   }, []);
 
@@ -88,12 +88,17 @@ export const Login: React.FC<LoginProps> = props => {
     setWalletType(WalletTypeEnum.POLKADOT);
   };
 
-  const handleOnConnectNear = (nearId: string, callback: () => void, networkId: NetworkIdEnum) => {
+  const handleOnConnectNear = (
+    nearId: string,
+    callback: () => void,
+    networkId: NetworkIdEnum,
+    walletType: WalletTypeEnum,
+  ) => {
     setNetworkId(networkId);
     setNearWallet(nearId);
-    setWalletType(WalletTypeEnum.NEAR);
+    setWalletType(walletType);
 
-    checkAccountRegistered(callback, undefined, nearId, WalletTypeEnum.NEAR);
+    checkAccountRegistered(callback, undefined, nearId, walletType);
   };
 
   const handleSelectedAccount = (account: InjectedAccountWithMeta) => {
@@ -126,7 +131,13 @@ export const Login: React.FC<LoginProps> = props => {
               const {nonce} = await fetchUserNonce(address);
 
               if (nonce > 0) {
-                const success = await signInWithExternalAuth(networkId, nonce, currentAccount);
+                const success = await signInWithExternalAuth(
+                  networkId,
+                  nonce,
+                  currentAccount,
+                  undefined,
+                  walletType,
+                );
 
                 if (!success) {
                   setSignatureCancelled(true);
@@ -141,6 +152,7 @@ export const Login: React.FC<LoginProps> = props => {
           }
           break;
 
+        case WalletTypeEnum.MYNEAR:
         case WalletTypeEnum.NEAR: {
           if (nearId) {
             const address = last(nearId.split('/'));
@@ -156,7 +168,13 @@ export const Login: React.FC<LoginProps> = props => {
 
             if (nonce > 0) {
               setWalletLoading(false);
-              const success = await signInWithExternalAuth(networkId, nonce, undefined, nearId);
+              const success = await signInWithExternalAuth(
+                networkId,
+                nonce,
+                undefined,
+                nearId,
+                walletType,
+              );
 
               if (!success) {
                 setSignatureCancelled(true);
