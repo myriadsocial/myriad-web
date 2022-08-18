@@ -94,7 +94,7 @@ export const Options: React.FC<OptionProps> = props => {
       polkadot: <PolkadotNetworkIcon className={getMobileIconStyles} />,
       sender: <SenderWalletDisabledIcon className={getMobileIconStyles} />,
       near: <NearNetworkIcon className={getMobileIconStyles} />,
-      mynear: <MyNearWalletIcon className={getMobileIconStyles} />,
+      'my-near': <MyNearWalletIcon className={getMobileIconStyles} />,
     }),
     [],
   );
@@ -527,20 +527,27 @@ export const Options: React.FC<OptionProps> = props => {
                 direction="column"
                 classes={{root: styles.list}}>
                 <ShowIf condition={networkId === null || networkId === NetworkIdEnum.NEAR}>
-                  <Grid item xs={12}>
-                    <ListItem
-                      component={'button'}
-                      disableGutters
-                      disabled={networkId === null || networkId !== NetworkIdEnum.NEAR}
-                      selected={wallet === WalletTypeEnum.NEAR}
-                      onClick={setSelectedWallet(WalletTypeEnum.NEAR)}
-                      className={networkId !== NetworkIdEnum.NEAR ? styles.walletCardDisabled : ''}>
-                      <div className={styles.rowCard}>
-                        {walletIcons['near']}
-                        <Typography>NEAR</Typography>
-                      </div>
-                    </ListItem>
-                  </Grid>
+                  {[WalletTypeEnum.NEAR, WalletTypeEnum.MYNEAR].map(e => {
+                    return (
+                      <Grid item xs={12} key={e}>
+                        <ListItem
+                          disableGutters
+                          disabled={networkId === null || networkId !== NetworkIdEnum.NEAR}
+                          selected={e === wallet}
+                          onClick={setSelectedWallet(e)}
+                          className={
+                            networkId !== NetworkIdEnum.NEAR ? styles.walletCardDisabled : ''
+                          }>
+                          <div className={styles.rowCard}>
+                            {walletIcons[e]}
+                            <Typography>
+                              {e === WalletTypeEnum.NEAR ? 'NEAR Wallet' : 'MyNearWallet'}
+                            </Typography>
+                          </div>
+                        </ListItem>
+                      </Grid>
+                    );
+                  })}
                 </ShowIf>
                 <ShowIf condition={networkId === null || networkId === NetworkIdEnum.NEAR}>
                   <Grid item xs={12}>
