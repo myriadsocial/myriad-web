@@ -3,7 +3,7 @@ import {Near} from './near-api-js';
 import {PolkadotJs} from './polkadot-js';
 
 import {Network} from 'src/interfaces/network';
-import {BlockchainPlatform} from 'src/interfaces/wallet';
+import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
 
 export class BlockchainProvider {
   private readonly _provider: BlockchainProps;
@@ -12,14 +12,14 @@ export class BlockchainProvider {
     this._provider = provider;
   }
 
-  static async connect(network: Network) {
+  static async connect(network: Network, walletType?: WalletTypeEnum) {
     switch (network.blockchainPlatform) {
       case BlockchainPlatform.SUBSTRATE:
         const api = await PolkadotJs.connect(network);
         return new BlockchainProvider(api);
 
       case BlockchainPlatform.NEAR: {
-        const nearWallet = await Near.connect(network);
+        const nearWallet = await Near.connect(network, walletType);
         return new BlockchainProvider(nearWallet);
       }
 
