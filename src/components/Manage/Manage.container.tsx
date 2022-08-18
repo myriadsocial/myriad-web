@@ -17,7 +17,7 @@ import {useAuthHook} from 'src/hooks/auth.hook';
 import {useConnect} from 'src/hooks/use-connect.hook';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
-import {BlockchainPlatform} from 'src/interfaces/wallet';
+import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
 import {Near} from 'src/lib/services/near-api-js';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
@@ -29,6 +29,10 @@ const PolkadotAccountList = dynamic(
     ssr: false,
   },
 );
+
+const NearSelectorList = dynamic(() => import('components/NearSelector/NearSelectorList'), {
+  ssr: false,
+});
 
 export const ManageCointainer: React.FC = () => {
   const router = useRouter();
@@ -47,20 +51,26 @@ export const ManageCointainer: React.FC = () => {
   );
 
   const [showAccountList, setShowAccountList] = React.useState(false);
+  const [showWalletList, setShowWalletList] = React.useState(false);
   const [extensionInstalled, setExtensionInstalled] = React.useState(false);
   const [accounts, setAccounts] = React.useState<InjectedAccountWithMeta[]>([]);
 
   const action = router.query.action as string | string[] | null;
   const accountId = router.query.account_id as string | string[] | null;
+  const wallet = router.query.wallet as string | string[] | null;
 
   useEffect(() => {
     if (!Array.isArray(action) && action === 'connect' && accountId) {
-      connectNearAccount();
+      connectNearAccount(wallet as WalletTypeEnum);
     }
   }, [action, accountId]);
 
   const closeAccountList = () => {
     setShowAccountList(false);
+  };
+
+  const closeWalletList = () => {
+    setShowWalletList(false);
   };
 
   const checkExtensionInstalled = async () => {
@@ -78,7 +88,7 @@ export const ManageCointainer: React.FC = () => {
     setAccounts(accounts);
   };
 
-  const handleConnect = async (account?: InjectedAccountWithMeta) => {
+  const handleConnect = async (account?: InjectedAccountWithMeta, wallet?: WalletTypeEnum) => {
     closeAccountList();
 
     let verified = false;
@@ -86,7 +96,7 @@ export const ManageCointainer: React.FC = () => {
     try {
       verified = await (account
         ? connectNetwork(BlockchainPlatform.SUBSTRATE, account)
-        : connectNearAccount());
+        : connectNearAccount(wallet));
     } catch {
       //
     }
@@ -106,16 +116,22 @@ export const ManageCointainer: React.FC = () => {
       });
   };
 
-  const connectNearAccount = async (): Promise<boolean> => {
+  const connectNearAccount = async (wallet: WalletTypeEnum): Promise<boolean> => {
     let verified = false;
 
     const callbackUrl =
-      publicRuntimeConfig.appAuthURL + router.route + '?type=manage&action=connect';
+      publicRuntimeConfig.appAuthURL +
+      router.route +
+      `?type=manage&action=connect&wallet=${wallet}`;
 
     try {
       if (!user) return false;
 
-      const signatureData = await connectToNear(callbackUrl, callbackUrl, undefined, user.id);
+      const signatureData = await connectToNear(
+        {successCallbackURL: callbackUrl, failedCallbackURL: callbackUrl},
+        {userId: user.id},
+        wallet,
+      );
 
       if (!signatureData) return false;
 
@@ -131,7 +147,10 @@ export const ManageCointainer: React.FC = () => {
         if (error) await Near.clearLocalStorage();
       });
     } catch {
-      //
+      enqueueSnackbar({
+        message: i18n.t('Wallet.Manage.Alert.Error'),
+        variant: 'error',
+      });
     } finally {
       router.replace(router.route, undefined, {shallow: true});
     }
@@ -139,14 +158,17 @@ export const ManageCointainer: React.FC = () => {
     return verified;
   };
 
+  const handleSelectedNearWallet = (wallet: WalletTypeEnum) => {
+    closeWalletList();
+    handleConnect(undefined, wallet);
+  };
+
   const onConnect = (type: string) => {
     switch (type) {
       case 'polkadot':
-        checkExtensionInstalled();
-        break;
+        return checkExtensionInstalled();
       case 'near':
-        handleConnect();
-        break;
+        return setShowWalletList(true);
       default:
         break;
     }
@@ -166,6 +188,13 @@ export const ManageCointainer: React.FC = () => {
         accounts={accounts}
         onSelect={handleConnect}
         onClose={closeAccountList}
+      />
+      <NearSelectorList
+        align="left"
+        title="Select Near Wallet"
+        isOpen={showWalletList}
+        onSelect={handleSelectedNearWallet}
+        onClose={closeWalletList}
       />
     </BoxComponent>
   );
