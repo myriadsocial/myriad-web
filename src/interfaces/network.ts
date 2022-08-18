@@ -21,6 +21,7 @@ export type NetworkProps = {
   explorerURL: string;
   blockchainPlatform: BlockchainPlatform;
   walletURL?: string;
+  additionalWalletURL?: string;
   helperURL?: string;
 };
 

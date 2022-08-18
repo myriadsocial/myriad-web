@@ -9,6 +9,7 @@ export enum WalletTypeEnum {
   METAMASK = 'metamask',
   COINBASE = 'coinbase',
   NEAR = 'near',
+  MYNEAR = 'my-near',
   SENDER = 'sender-wallet',
 }
 

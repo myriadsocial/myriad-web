@@ -3,32 +3,45 @@ import {useSelector} from 'react-redux';
 import {BN, BN_ZERO, BN_TEN} from '@polkadot/util';
 
 import {formatBalanceV2} from 'src/helpers/balance';
-import {SignatureProps, TipsResultsProps} from 'src/interfaces/blockchain-interface';
+import {CallbackURL, SignatureProps, TipsResultsProps} from 'src/interfaces/blockchain-interface';
 import {Network, NetworkIdEnum} from 'src/interfaces/network';
 import {Wallet} from 'src/interfaces/user';
+import {WalletTypeEnum} from 'src/interfaces/wallet';
 import {Near} from 'src/lib/services/near-api-js';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
+
+type UserNetwork = {
+  userId?: string;
+  network?: Network;
+};
 
 export const useNearApi = () => {
   const {networks} = useSelector<RootState, UserState>(state => state.userState);
 
   const connectToNear = async (
-    callbackUrl?: string,
-    failedCallbackUrl?: string,
-    network?: Network,
-    userId?: string,
+    callbackURL?: CallbackURL,
+    userNetwork?: UserNetwork,
+    walletType?: WalletTypeEnum,
   ): Promise<SignatureProps | null> => {
+    let network = userNetwork?.network;
+
     if (!network) {
       network = networks.find(network => network.id === NetworkIdEnum.NEAR);
     }
 
     if (!network) return;
 
-    const near = await Near.connect(network);
+    const successCallbackURL = callbackURL?.successCallbackURL;
+    const failedCallbackURL = callbackURL?.failedCallbackURL;
+    const near = await Near.connect(network, walletType);
     const wallet = near?.provider?.wallet;
 
-    return Near.signWithWallet(wallet, userId, callbackUrl, failedCallbackUrl);
+    return Near.signWithWallet(
+      wallet,
+      {successCallbackURL, failedCallbackURL},
+      {userId: userNetwork?.userId, walletType},
+    );
   };
 
   const getClaimTipNear = async (

@@ -16,10 +16,10 @@ import {useAuthHook} from 'src/hooks/auth.hook';
 import {NearPayload, useConnect} from 'src/hooks/use-connect.hook';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
-import {IProvider} from 'src/interfaces/blockchain-interface';
+import {IProvider, MYRIAD_WALLET_KEY} from 'src/interfaces/blockchain-interface';
 import {Network, NetworkIdEnum} from 'src/interfaces/network';
 import {UserWallet} from 'src/interfaces/user';
-import {BlockchainPlatform} from 'src/interfaces/wallet';
+import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
 import {AccountRegisteredError} from 'src/lib/api/errors/account-registered.error';
 import {Server} from 'src/lib/api/server';
 import {toHexPublicKey} from 'src/lib/crypto';
@@ -34,6 +34,10 @@ const PolkadotAccountList = dynamic(
     ssr: false,
   },
 );
+
+const NearSelectorList = dynamic(() => import('components/NearSelector/NearSelectorList'), {
+  ssr: false,
+});
 
 interface BlockchainProviderProps {
   server: Server;
@@ -65,18 +69,21 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
   const confirm = useConfirm();
 
   const [showAccountList, setShowAccountList] = React.useState(false);
+  const [showWalletList, setShowWalletList] = React.useState(false);
   const [extensionInstalled, setExtensionInstalled] = React.useState(false);
   const [accounts, setAccounts] = React.useState<InjectedAccountWithMeta[]>([]);
+  const [network, setNetwork] = React.useState<Network | null>(null);
   const [networkId, setNetworkId] = React.useState<NetworkIdEnum | null>(null);
 
   const action = router.query.action as string | string[] | null;
+  const wallet = router.query.wallet as string | string[] | null;
 
   const currentNetworkId = currentWallet?.networkId;
 
   useEffect(() => {
     if (!Array.isArray(action) && action === 'switch') {
       const network = networks.find(network => network.id === NetworkIdEnum.NEAR);
-      if (network) shiftNetwork(network);
+      if (network) handleSwitchNearNetwork(network, wallet as WalletTypeEnum);
     }
   }, [action]);
 
@@ -86,6 +93,10 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
 
   const closeAccountList = () => {
     setShowAccountList(false);
+  };
+
+  const closeWalletList = () => {
+    setShowWalletList(false);
   };
 
   const handleSwitchNetwork = async (
@@ -127,51 +138,53 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
     switch (wallet?.network?.blockchainPlatform) {
       case BlockchainPlatform.SUBSTRATE:
         return checkExtensionInstalled(networkId);
-      case BlockchainPlatform.NEAR: {
-        const callbackUrl = new URL(router.asPath, publicRuntimeConfig.appAuthURL);
-        const redirectUrl = new URL(router.asPath, publicRuntimeConfig.appAuthURL);
-        // clear previous query param
-        redirectUrl.hash = '';
-        redirectUrl.search = '';
-        callbackUrl.hash = '';
-        callbackUrl.search = '';
-
-        callbackUrl.searchParams.set('action', 'switch');
-        callbackUrl.searchParams.set('loading', 'true');
-
-        if (router.query?.q && !Array.isArray(router.query?.q)) {
-          callbackUrl.searchParams.set('q', router.query.q);
-          redirectUrl.searchParams.set('q', router.query.q);
-        }
-
-        const signatureData = await connectToNear(
-          callbackUrl.toString(),
-          redirectUrl.toString(),
-          network,
-        );
-
-        if (!signatureData) return;
-
-        const payload: NearPayload = {
-          publicAddress: signatureData.publicAddress,
-          nearAddress: signatureData.publicAddress.split('/')[1],
-          pubKey: signatureData.publicAddress.split('/')[0],
-          signature: signatureData.signature,
-          nonce: signatureData.nonce,
-        };
-
-        await handleSwitchNetwork(BlockchainPlatform.NEAR, networkId, payload, async err => {
-          if (err) await Near.clearLocalStorage();
-        });
-
-        router.replace(redirectUrl, undefined, {shallow: true});
-
-        break;
-      }
-
+      case BlockchainPlatform.NEAR:
+        return checkWalletList(network);
       default:
         handleOpenPrompt(networkId);
     }
+  };
+
+  const handleSwitchNearNetwork = async (network: Network, walletType: WalletTypeEnum) => {
+    const callbackUrl = new URL(router.asPath, publicRuntimeConfig.appAuthURL);
+    const redirectUrl = new URL(router.asPath, publicRuntimeConfig.appAuthURL);
+    // clear previous query param
+    redirectUrl.hash = '';
+    redirectUrl.search = '';
+    callbackUrl.hash = '';
+    callbackUrl.search = '';
+
+    callbackUrl.searchParams.set('action', 'switch');
+    callbackUrl.searchParams.set('loading', 'true');
+    callbackUrl.searchParams.set('wallet', walletType);
+
+    if (router.query?.q && !Array.isArray(router.query?.q)) {
+      callbackUrl.searchParams.set('q', router.query.q);
+      redirectUrl.searchParams.set('q', router.query.q);
+    }
+
+    const signatureData = await connectToNear(
+      {successCallbackURL: callbackUrl.toString(), failedCallbackURL: redirectUrl.toString()},
+      {network},
+      walletType,
+    );
+
+    if (!signatureData) return;
+
+    const payload: NearPayload = {
+      publicAddress: signatureData.publicAddress,
+      nearAddress: signatureData.publicAddress.split('/')[1],
+      pubKey: signatureData.publicAddress.split('/')[0],
+      signature: signatureData.signature,
+      nonce: signatureData.nonce,
+    };
+
+    await handleSwitchNetwork(BlockchainPlatform.NEAR, network.id, payload, async err => {
+      if (err) await Near.clearLocalStorage();
+      else window.localStorage.setItem(MYRIAD_WALLET_KEY, walletType);
+    });
+
+    router.replace(redirectUrl, undefined, {shallow: true});
   };
 
   // POLKADOT
@@ -184,6 +197,11 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
     getAvailableAccounts(networkId);
   };
 
+  const checkWalletList = async (network: Network) => {
+    setShowWalletList(true);
+    setNetwork(network);
+  };
+
   const getAvailableAccounts = async (networkId: NetworkIdEnum) => {
     const wallet = wallets?.find(
       wallet => wallet?.network?.blockchainPlatform === BlockchainPlatform.SUBSTRATE,
@@ -194,6 +212,12 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
 
     setAccounts(account);
     setNetworkId(networkId);
+  };
+
+  const handleSelectedNearWallet = (wallet: WalletTypeEnum) => {
+    closeWalletList();
+    if (!network) return;
+    handleSwitchNearNetwork(network, wallet);
   };
 
   const handleSelectedSubstrateAccount = (account: InjectedAccountWithMeta) => {
@@ -244,6 +268,13 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
         accounts={accounts}
         onSelect={handleSelectedSubstrateAccount}
         onClose={closeAccountList}
+      />
+      <NearSelectorList
+        align="left"
+        title="Select Near Wallet"
+        isOpen={showWalletList}
+        onSelect={handleSelectedNearWallet}
+        onClose={closeWalletList}
       />
     </>
   );

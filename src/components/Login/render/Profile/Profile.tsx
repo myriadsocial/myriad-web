@@ -292,6 +292,7 @@ export const Profile: React.FC<ProfileProps> = props => {
       profile.username.value,
       networkId,
       substrateAccount,
+      walletType,
     );
 
     if (!registered) {

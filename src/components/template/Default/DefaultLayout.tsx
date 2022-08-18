@@ -19,7 +19,7 @@ import {CookieConsent, COOKIE_CONSENT_NAME} from 'src/components/common/CookieCo
 import {TippingProvider} from 'src/components/common/Tipping/Tipping.provider';
 import ShowIf from 'src/components/common/show-if.component';
 import {useUserHook} from 'src/hooks/use-user.hook';
-import {IProvider} from 'src/interfaces/blockchain-interface';
+import {IProvider, MYRIAD_WALLET_KEY} from 'src/interfaces/blockchain-interface';
 import {NotificationProps} from 'src/interfaces/notification';
 import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
 import {Server} from 'src/lib/api/server';
@@ -81,9 +81,12 @@ const Default: React.FC<DefaultLayoutProps> = props => {
 
     if (currentWallet?.network && initialize && !provider && !loadingNear) {
       dispatch(clearBalances());
-      BlockchainProvider.connect(currentWallet.network).then(blockchain => {
-        initializeBlockchain(blockchain?.provider, currentWallet.id);
-      });
+      const walletType = window.localStorage.getItem(MYRIAD_WALLET_KEY);
+      BlockchainProvider.connect(currentWallet.network, walletType as WalletTypeEnum).then(
+        blockchain => {
+          initializeBlockchain(blockchain?.provider, currentWallet.id);
+        },
+      );
     }
   }, [currentWallet, initialize, provider, loadingNear]);
 

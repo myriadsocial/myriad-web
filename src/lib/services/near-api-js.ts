@@ -7,6 +7,7 @@ import {u8aToHex} from '@polkadot/util/u8a';
 
 import {
   BalanceProps,
+  CallbackURL,
   ContractProps,
   EstimateFeeResponseProps,
   IProvider,
@@ -26,6 +27,12 @@ import {WalletDetail, WalletReferenceType, WalletTypeEnum} from 'src/interfaces/
 import * as WalletAPI from 'src/lib/api/wallet';
 
 const {publicRuntimeConfig} = getConfig();
+
+type SignNearData = {
+  userId?: string;
+  nonce?: number;
+  walletType?: WalletTypeEnum;
+};
 
 export class Near implements IProvider {
   private _accountId: string;
@@ -58,20 +65,22 @@ export class Near implements IProvider {
     this._accountId = address;
   }
 
-  static async connect(network?: Network): Promise<Near> {
+  static async connect(network?: Network, walletType = WalletTypeEnum.NEAR): Promise<Near> {
     if (!network) return new Near();
     try {
       const {keyStores, connect, WalletConnection} = nearAPI;
       // creates keyStore using private key in local storage
       // *** REQUIRES SignIn using walletConnection.requestSignIn() ***
       const keyStore = new keyStores.BrowserLocalStorageKeyStore();
+      const walletURL =
+        walletType === WalletTypeEnum.MYNEAR ? network.additionalWalletURL : network.walletURL;
 
       // set config for near network
       const config: nearAPI.ConnectConfig = {
         networkId: network.chainId ?? 'testnet',
         keyStore,
         nodeUrl: network.rpcURL,
-        walletUrl: network.walletURL,
+        walletUrl: walletURL,
         helperUrl: network.helperURL,
         headers: {},
       };
@@ -87,9 +96,8 @@ export class Near implements IProvider {
 
   static async signWithWallet(
     wallet: nearAPI.WalletConnection,
-    userId?: string,
-    successUrl?: string,
-    failureUrl?: string,
+    callbackURL?: CallbackURL,
+    signNearData?: SignNearData,
   ): Promise<SignatureProps | null> {
     const keyStore = new nearAPI.keyStores.BrowserLocalStorageKeyStore();
 
@@ -97,10 +105,15 @@ export class Near implements IProvider {
       if (!wallet.isSignedIn()) throw 'RequestSignIn';
       const address = wallet.getAccountId();
       const keyPair = await keyStore.getKey(wallet._networkId, address);
+      const userId = signNearData?.userId;
 
-      const {nonce} = await (userId
-        ? WalletAPI.getUserNonceByUserId(userId)
-        : WalletAPI.getUserNonce(address));
+      let nonce = signNearData?.nonce;
+
+      if (!nonce) {
+        ({nonce} = await (userId
+          ? WalletAPI.getUserNonceByUserId(userId)
+          : WalletAPI.getUserNonce(address)));
+      }
 
       const userSignature: Signature = keyPair.sign(Buffer.from(numberToHex(nonce)));
       const publicKey = u8aToHex(userSignature.publicKey.data);
@@ -112,11 +125,14 @@ export class Near implements IProvider {
       return {nonce, publicAddress, signature};
     } catch {
       if (wallet.isSignedIn()) wallet.signOut();
+      const successUrl = callbackURL?.successCallbackURL;
+      const failureUrl = callbackURL?.failedCallbackURL;
+      const auth = signNearData?.walletType ?? WalletTypeEnum.NEAR;
 
       const signInOptions = {
         contractId: publicRuntimeConfig.nearTippingContractId,
         methodNames: ['claim_tip', 'batch_claim_tips'],
-        successUrl: successUrl ?? `${publicRuntimeConfig.appAuthURL}/?auth=${WalletTypeEnum.NEAR}`,
+        successUrl: successUrl ?? `${publicRuntimeConfig.appAuthURL}/?auth=${auth}`,
         failureUrl: failureUrl ?? `${publicRuntimeConfig.appAuthURL}`,
       };
 

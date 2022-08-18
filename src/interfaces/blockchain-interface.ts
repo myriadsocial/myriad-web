@@ -53,6 +53,8 @@ export interface IProvider {
   assetMinBalance: (ftIdentifier?: string) => Promise<EstimateFeeResponseProps>;
 }
 
+export const MYRIAD_WALLET_KEY = '@Myriad_Wallet_Key';
+
 export type SignatureProps = {nonce: number; publicAddress: string; signature: string};
 export type SignerProps = InjectedAccountWithMeta | nearAPI.ConnectedWalletAccount;
 export type ProviderProps = ApiPromise | NearInitializeProps;
@@ -69,6 +71,11 @@ export type NearInitializeProps = {
 export type BalanceProps = {
   balance: string;
   nonce?: u32;
+};
+
+export type CallbackURL = {
+  successCallbackURL?: string;
+  failedCallbackURL?: string;
 };
 
 export interface EstimateFeeResponseProps {

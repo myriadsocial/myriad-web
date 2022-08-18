@@ -18,7 +18,7 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import {useStyles} from './Options.style';
 
-import {MyriadFullIcon} from 'src/components/atoms/Icons';
+import {MyNearWalletIcon, MyriadFullIcon} from 'src/components/atoms/Icons';
 import {
   EthereumNetworkIcon,
   PolkadotNetworkIcon,
@@ -46,7 +46,12 @@ import {UserState} from 'src/reducers/user/reducer';
 type OptionProps = {
   network?: string;
   onConnect?: (accounts: InjectedAccountWithMeta[], networkId: NetworkIdEnum) => void;
-  onConnectNear?: (nearId: string, callback: () => void, networkId: NetworkIdEnum) => void;
+  onConnectNear?: (
+    nearId: string,
+    callback: () => void,
+    networkId: NetworkIdEnum,
+    walletType: WalletTypeEnum,
+  ) => void;
   isMobileSignIn?: boolean;
 };
 
@@ -89,6 +94,7 @@ export const Options: React.FC<OptionProps> = props => {
       polkadot: <PolkadotNetworkIcon className={getMobileIconStyles} />,
       sender: <SenderWalletDisabledIcon className={getMobileIconStyles} />,
       near: <NearNetworkIcon className={getMobileIconStyles} />,
+      mynear: <MyNearWalletIcon className={getMobileIconStyles} />,
     }),
     [],
   );
@@ -122,7 +128,10 @@ export const Options: React.FC<OptionProps> = props => {
         checkPolkdostExtensionInstalled();
         break;
 
+      case WalletTypeEnum.MYNEAR:
       case WalletTypeEnum.NEAR:
+        if (!networkId) break;
+
         setWallet(value);
         setExtensionChecked(true);
         setExtensionEnabled(true);
@@ -168,8 +177,9 @@ export const Options: React.FC<OptionProps> = props => {
 
         break;
 
+      case WalletTypeEnum.MYNEAR:
       case WalletTypeEnum.NEAR: {
-        const data = await connectToNear();
+        const data = await connectToNear(undefined, undefined, wallet);
 
         if (data) {
           onConnectNear &&
@@ -179,6 +189,7 @@ export const Options: React.FC<OptionProps> = props => {
                 navigate('/profile');
               },
               networkId,
+              wallet,
             );
         } else {
           console.log('redirection to near auth page');
@@ -291,20 +302,31 @@ export const Options: React.FC<OptionProps> = props => {
                 </Grid>
               </ShowIf>
               <ShowIf condition={networkId === null || networkId === NetworkIdEnum.NEAR}>
-                <Grid item xs={3}>
-                  <ListItem
-                    component={'button'}
-                    disableGutters
-                    disabled={networkId === null || networkId !== NetworkIdEnum.NEAR}
-                    selected={wallet === WalletTypeEnum.NEAR}
-                    onClick={setSelectedWallet(WalletTypeEnum.NEAR)}
-                    className={networkId !== NetworkIdEnum.NEAR ? styles.walletCardDisabled : ''}>
-                    <div className={styles.card}>
-                      <NearNetworkIcon className={styles.icon} />
-                      <Typography>NEAR</Typography>
-                    </div>
-                  </ListItem>
-                </Grid>
+                {[WalletTypeEnum.NEAR, WalletTypeEnum.MYNEAR].map(e => {
+                  return (
+                    <Grid item xs={3} key={e}>
+                      <ListItem
+                        disableGutters
+                        disabled={networkId === null || networkId !== NetworkIdEnum.NEAR}
+                        selected={e === wallet}
+                        onClick={setSelectedWallet(e)}
+                        className={
+                          networkId !== NetworkIdEnum.NEAR ? styles.walletCardDisabled : ''
+                        }>
+                        <div className={styles.card}>
+                          {e === WalletTypeEnum.NEAR ? (
+                            <NearNetworkIcon className={styles.icon} />
+                          ) : (
+                            <MyNearWalletIcon className={styles.icon} />
+                          )}
+                          <Typography>
+                            {e === WalletTypeEnum.NEAR ? 'NEAR Wallet' : 'MyNearWallet'}
+                          </Typography>
+                        </div>
+                      </ListItem>
+                    </Grid>
+                  );
+                })}
               </ShowIf>
               <ShowIf condition={networkId === null || networkId === NetworkIdEnum.NEAR}>
                 <Grid item xs={3}>
