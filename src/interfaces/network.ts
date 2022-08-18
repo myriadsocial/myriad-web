@@ -20,7 +20,8 @@ export type NetworkProps = {
   rpcURL: string;
   explorerURL: string;
   blockchainPlatform: BlockchainPlatform;
-  walletURL?: string;
+  walletURL1?: string;
+  walletURL2?: string;
   helperURL?: string;
 };
 
