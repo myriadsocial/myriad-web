@@ -73,7 +73,7 @@ export class Near implements IProvider {
       // *** REQUIRES SignIn using walletConnection.requestSignIn() ***
       const keyStore = new keyStores.BrowserLocalStorageKeyStore();
       const walletURL =
-        walletType === WalletTypeEnum.MYNEAR ? network.walletURL2 : network.walletURL1;
+        walletType === WalletTypeEnum.MYNEAR ? network.additionalWalletURL : network.walletURL;
 
       // set config for near network
       const config: nearAPI.ConnectConfig = {
