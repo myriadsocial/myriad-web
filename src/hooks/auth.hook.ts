@@ -107,7 +107,12 @@ export const useAuthHook = () => {
 
       const near = await Near.connect(network, walletType);
       const wallet = near.provider.wallet;
-      const data = await Near.signWithWallet(wallet, undefined, {nonce});
+      const data = await Near.signWithWallet(
+        wallet,
+        undefined,
+        {nonce},
+        'sign in with external auth',
+      );
 
       if (data && !data.signature) return false;
 

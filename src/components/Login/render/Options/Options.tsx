@@ -179,7 +179,7 @@ export const Options: React.FC<OptionProps> = props => {
 
       case WalletTypeEnum.MYNEAR:
       case WalletTypeEnum.NEAR: {
-        const data = await connectToNear(undefined, undefined, wallet);
+        const data = await connectToNear(undefined, undefined, wallet, 'login option');
 
         if (data) {
           onConnectNear &&

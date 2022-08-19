@@ -167,6 +167,7 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
       {successCallbackURL: callbackUrl.toString(), failedCallbackURL: redirectUrl.toString()},
       {network},
       walletType,
+      'switch',
     );
 
     if (!signatureData) return;
