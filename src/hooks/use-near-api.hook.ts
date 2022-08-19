@@ -23,6 +23,7 @@ export const useNearApi = () => {
     callbackURL?: CallbackURL,
     userNetwork?: UserNetwork,
     walletType?: WalletTypeEnum,
+    action?: string,
   ): Promise<SignatureProps | null> => {
     let network = userNetwork?.network;
 
@@ -41,6 +42,7 @@ export const useNearApi = () => {
       wallet,
       {successCallbackURL, failedCallbackURL},
       {userId: userNetwork?.userId, walletType},
+      action,
     );
   };
 

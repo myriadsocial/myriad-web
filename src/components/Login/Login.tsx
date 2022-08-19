@@ -64,7 +64,7 @@ export const Login: React.FC<LoginProps> = props => {
   }, [settings.language]);
 
   const checkWalletRegistered = useCallback(async (wallet: WalletTypeEnum) => {
-    const data = await connectToNear(undefined, undefined, wallet);
+    const data = await connectToNear(undefined, undefined, wallet, 'login near');
 
     if (!data) return;
 

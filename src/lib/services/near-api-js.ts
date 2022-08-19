@@ -98,12 +98,17 @@ export class Near implements IProvider {
     wallet: nearAPI.WalletConnection,
     callbackURL?: CallbackURL,
     signNearData?: SignNearData,
+    action?: string,
   ): Promise<SignatureProps | null> {
     const keyStore = new nearAPI.keyStores.BrowserLocalStorageKeyStore();
 
     try {
       if (!wallet.isSignedIn()) throw 'RequestSignIn';
       const address = wallet.getAccountId();
+
+      console.log(`[${action}][keystore][signature]`, JSON.stringify(keyStore));
+      console.log(`[${action}][walletaddress]`, address, wallet._networkId);
+
       const keyPair = await keyStore.getKey(wallet._networkId, address);
       const userId = signNearData?.userId;
 
@@ -117,13 +122,20 @@ export class Near implements IProvider {
 
       const userSignature: Signature = keyPair.sign(Buffer.from(numberToHex(nonce)));
       const publicKey = u8aToHex(userSignature.publicKey.data);
+
+      console.log(`[${action}][publicKey]`, publicKey);
+
       const userSignatureHex = u8aToHex(userSignature.signature);
 
       const publicAddress = `${publicKey}/${address}`;
       const signature = userSignatureHex;
 
+      console.log(`[${action}][signature]`, signature);
+
       return {nonce, publicAddress, signature};
     } catch {
+      console.log(`[${action}][keystore][requestSignIn]`, JSON.stringify(keyStore));
+
       if (wallet.isSignedIn()) wallet.signOut();
       const successUrl = callbackURL?.successCallbackURL;
       const failureUrl = callbackURL?.failedCallbackURL;

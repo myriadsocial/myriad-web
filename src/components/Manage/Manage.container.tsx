@@ -131,6 +131,7 @@ export const ManageCointainer: React.FC = () => {
         {successCallbackURL: callbackUrl, failedCallbackURL: callbackUrl},
         {userId: user.id},
         wallet,
+        'connect',
       );
 
       if (!signatureData) return false;
