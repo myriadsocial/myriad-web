@@ -1111,7 +1111,8 @@
     "Text_2": "Syarat dan ketentuan"
   },
   "Banner": {
-    "Demo": "{{appName}} {{version}} tidak sepenuhnya diaudit, silakan gunakan dengan risiko Anda sendiri.",
+    "Demo1": "Postingan Anda akan dihapus secara berkala dari Myriad Testnet. Kunjungi",
+    "Demo2": "untuk terhubung dengan dunia nyata.",
     "Banned": "Akun Anda telah diblokir sementara karena setelah kami meninjau laporan, Anda melanggar aturan. Oleh karena itu, Anda dilarang mengambil tindakan di Myriad."
   },
   "Authorization": {

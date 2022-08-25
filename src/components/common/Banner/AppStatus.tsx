@@ -5,13 +5,14 @@ import {useCookies} from 'react-cookie';
 
 import getConfig from 'next/config';
 
+import {Link, Typography} from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import useStyles from './Banner.style';
 
 import clsx from 'clsx';
-import {Text} from 'components/atoms/Text';
+import i18n from 'src/locale';
 
 const {publicRuntimeConfig} = getConfig();
 export const APP_BANNER_COOKIE_KEY = 'hide-banner';
@@ -22,8 +23,6 @@ export const AppStatusBanner: React.FC = () => {
 
   const [hidden, setHidden] = useState(false);
   const appEnvironment = publicRuntimeConfig.appEnvironment;
-  const appName = publicRuntimeConfig.appName;
-  const version = publicRuntimeConfig.appVersion;
 
   useEffect(() => {
     setHidden(Boolean(cookies[APP_BANNER_COOKIE_KEY]));
@@ -55,15 +54,16 @@ export const AppStatusBanner: React.FC = () => {
         viewBox="0 0 20 20"
       />
 
-      <Text
-        locale="Banner.Demo"
-        variant="body1"
-        weight="semi-bold"
-        values={{
-          appName,
-          version,
-        }}
-      />
+      <Typography variant="body1">
+        {i18n.t('Banner.Demo1')}&nbsp;
+        <Link
+          href="https://app.myriad.social"
+          target="_blank"
+          style={{color: '#FFD24D', textDecoration: 'none'}}>
+          Myriad Mainnet
+        </Link>
+        &nbsp;{i18n.t('Banner.Demo2')}
+      </Typography>
 
       <SvgIcon
         onClick={hideBanner}
