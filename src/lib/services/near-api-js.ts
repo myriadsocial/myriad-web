@@ -40,9 +40,8 @@ export class Near implements IProvider {
   private readonly _network: Network;
 
   private readonly ONE_YOCTO = new BN('1');
-  private readonly MAX_GAS = new BN('300000000000000');
+  private readonly GAS = new BN('100000000000000');
   private readonly ATTACHED_AMOUNT = new BN('1250000000000000000000');
-  private readonly ATTACHED_GAS = new BN('10000000000000');
 
   constructor(provider?: NearInitializeProps, network?: Network) {
     this._provider = provider;
@@ -285,7 +284,7 @@ export class Near implements IProvider {
       nearAPI.transactions.functionCall(
         all ? 'batch_claim_tips' : 'claim_tip',
         Buffer.from(data),
-        this.MAX_GAS,
+        this.GAS,
         this.ONE_YOCTO,
       ),
     ];
@@ -319,12 +318,7 @@ export class Near implements IProvider {
     //inisialisasi near wallet
     const signer = await this.signer();
     const actions = [
-      nearAPI.transactions.functionCall(
-        'send_tip',
-        Buffer.from(data),
-        this.MAX_GAS,
-        new BN(trxFee),
-      ),
+      nearAPI.transactions.functionCall('send_tip', Buffer.from(data), this.GAS, new BN(trxFee)),
     ];
     const appAuthURL = publicRuntimeConfig.appAuthURL;
     const url = `${appAuthURL}/wallet?type=tip&txFee=${trxFee}&balance=${nativeBalance}`;
@@ -396,27 +390,36 @@ export class Near implements IProvider {
       return;
     }
 
-    const contract = await this.contractInitialize(tokenContractId, 'storage_balance_of');
-    const isDeposit = await contract.storage_balance_of({account_id: receiverId});
-    const actions: nearAPI.transactions.Action[] = !isDeposit
-      ? [
-          nearAPI.transactions.functionCall(
-            'storage_deposit',
-            Buffer.from(JSON.stringify({account_id: receiverId})),
-            this.ATTACHED_GAS,
-            this.ATTACHED_AMOUNT,
-          ),
-        ]
-      : [];
+    const isStorageBalanceAvalaible = await signer.viewFunction(
+      tokenContractId,
+      'storage_balance_of',
+      {
+        account_id: receiverId,
+      },
+    );
+
+    const actions: nearAPI.transactions.Action[] = [];
+
+    if (!isStorageBalanceAvalaible) {
+      actions.push(
+        nearAPI.transactions.functionCall(
+          'storage_deposit',
+          Buffer.from(JSON.stringify({account_id: receiverId})),
+          this.GAS,
+          this.ATTACHED_AMOUNT,
+        ),
+      );
+    }
 
     actions.push(
       nearAPI.transactions.functionCall(
         'ft_transfer',
         Buffer.from(JSON.stringify({receiver_id: receiverId, amount: amount.toString()})),
-        this.MAX_GAS.sub(this.ATTACHED_GAS),
+        this.GAS,
         this.ONE_YOCTO,
       ),
     );
+
     //TODO: fix error protected class for multiple sign and send transactions
     // @ts-ignore: protected class
     await signer.signAndSendTransaction({receiverId: tokenContractId, actions});
@@ -438,7 +441,6 @@ export class Near implements IProvider {
       ft_identifier: walletDetail.ftIdentifier,
     };
 
-    let maxAttachedGas = this.MAX_GAS;
     let receiverId = tippingContractId;
     let method = 'send_tip';
     let data = JSON.stringify({tips_balance_info: tipsBalanceInfo});
@@ -446,23 +448,23 @@ export class Near implements IProvider {
     let initActions: nearAPI.transactions.Action[] = [];
 
     if (tokenContractId) {
-      const contract = await this.contractInitialize(
-        walletDetail.ftIdentifier,
+      const isStorageBalanceAvalaible = await signer.viewFunction(
+        tokenContractId,
         'storage_balance_of',
+        {
+          account_id: tippingContractId,
+        },
       );
-      const isDeposit = await contract.storage_balance_of({account_id: tippingContractId});
 
-      if (!isDeposit) {
+      if (!isStorageBalanceAvalaible) {
         initActions = [
           nearAPI.transactions.functionCall(
             'storage_deposit',
             Buffer.from(JSON.stringify({account_id: tippingContractId})),
-            this.ATTACHED_GAS,
+            this.GAS,
             this.ATTACHED_AMOUNT,
           ),
         ];
-
-        maxAttachedGas = maxAttachedGas.sub(this.ATTACHED_GAS);
       }
 
       receiverId = tokenContractId;
@@ -477,7 +479,7 @@ export class Near implements IProvider {
 
     const actions = [
       ...initActions,
-      nearAPI.transactions.functionCall(method, Buffer.from(data), maxAttachedGas, attachedAmount),
+      nearAPI.transactions.functionCall(method, Buffer.from(data), this.GAS, attachedAmount),
     ];
 
     //TODO: fix error protected class for multiple sign and send transactions
