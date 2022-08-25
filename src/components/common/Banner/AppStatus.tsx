@@ -59,7 +59,7 @@ export const AppStatusBanner: React.FC = () => {
         <Link
           href="https://app.myriad.social"
           target="_blank"
-          style={{color: 'rgb(255, 140, 0)', textDecoration: 'none'}}>
+          style={{color: '#FFD24D', textDecoration: 'none'}}>
           Myriad Mainnet
         </Link>
         &nbsp;{i18n.t('Banner.Demo2')}
