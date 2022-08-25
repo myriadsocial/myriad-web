@@ -1111,7 +1111,8 @@
     "Text_2": "Условия и положения"
   },
   "Banner": {
-    "Demo": "{{appName}} {{version}} не полнисть проверен, ответственность на вашей стороне.",
+    "Demo1": "Your posts will be regularly deleted from Myriad Testnet. Visit",
+    "Demo2": "to connect with the real world.",
     "Banned": "Your account has been temporarily banned because after we review the reports, you are violating the rules. Therefore, you are restricted from taking action in Myriad."
   },
   "Authorization": {
