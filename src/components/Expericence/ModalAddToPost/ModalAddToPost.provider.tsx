@@ -1,6 +1,7 @@
 import {InformationCircleIcon} from '@heroicons/react/outline';
 
 import React, {useCallback, useState} from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import {useSelector} from 'react-redux';
 
 import {
@@ -22,27 +23,92 @@ import {useStyles} from './ModalAddToPost.styles';
 
 import {Empty} from 'components/atoms/Empty';
 import ShowIf from 'components/common/show-if.component';
+import {Skeleton} from 'src/components/Expericence';
 import {Loading} from 'src/components/atoms/Loading';
 import {Modal} from 'src/components/atoms/Modal';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
+import {WrappedExperience} from 'src/interfaces/experience';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
+
+type ExperienceItemProps = {
+  item: WrappedExperience;
+  selectedExperience: string[];
+  handleSelectExperience: (propsSelectedExperience: string) => void;
+};
+
+const ExperienceItem = ({
+  item,
+  selectedExperience,
+  handleSelectExperience,
+}: ExperienceItemProps) => {
+  const styles = useStyles();
+
+  const DEFAULT_IMAGE =
+    'https://pbs.twimg.com/profile_images/1407599051579617281/-jHXi6y5_400x400.jpg';
+
+  return (
+    <div className={styles.experienceCard}>
+      <Checkbox
+        checked={
+          selectedExperience
+            ? selectedExperience.filter(ar => ar === item.experience.id).length > 0
+            : false
+        }
+        onChange={() => {
+          item.experience.id && handleSelectExperience(item.experience.id);
+        }}
+        color="primary"
+        inputProps={{'aria-label': 'controlled'}}
+        classes={{root: styles.fill}}
+      />
+      <CardActionArea
+        onClick={() => {
+          item.experience.id && handleSelectExperience(item.experience.id);
+        }}
+        disableRipple
+        component="div">
+        <Grid container alignItems="center" justifyContent="space-between" wrap="nowrap">
+          <CardMedia
+            component="img"
+            className={styles.image}
+            image={item.experience.experienceImageURL ?? DEFAULT_IMAGE}
+          />
+          <CardContent classes={{root: styles.cardContent}}>
+            <Typography className={styles.title} variant="body1">
+              {item.experience.name}
+            </Typography>
+            <Typography variant="caption" color="primary">
+              {item.experience.user.name}
+            </Typography>
+            <Typography variant="caption" color="textSecondary">
+              {item ? ` ${i18n.t('Experience.Modal_Add_Post.Card_Own')}` : ''}
+            </Typography>
+          </CardContent>
+        </Grid>
+      </CardActionArea>
+    </div>
+  );
+};
 
 export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceProps> = ({
   children,
 }) => {
   const styles = useStyles();
   const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const {userExperiences, loadExperiencePostList, addPostsToExperience, loading} =
-    useExperienceHook();
+  const {
+    userExperiences,
+    userExperiencesMeta,
+    loadNextUserExperience,
+    loadExperiencePostList,
+    addPostsToExperience,
+    loading,
+  } = useExperienceHook();
   const [postId, setPostId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [isSelectAll, setIsSelectAll] = useState(false);
   const [selectedExperience, setSelectedExperience] = useState<string[]>([]);
-
-  const DEFAULT_IMAGE =
-    'https://pbs.twimg.com/profile_images/1407599051579617281/-jHXi6y5_400x400.jpg';
 
   const toolTipText = i18n.t('Experience.Modal_Add_Post.Tooltip_Text');
 
@@ -68,7 +134,7 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
   }, []);
 
   const handleSelectAllExperience = () => {
-    const tmpUserExperience = [...userExperiences].filter(ar => ar.experience.user.id === user?.id);
+    const tmpUserExperience = [...userExperiences].filter(ar => ar.userId === user?.id);
     let tmpSelectedExperience: string[] = [];
     if (!isSelectAll) {
       tmpUserExperience.map(item => {
@@ -90,6 +156,10 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
       tmpSelectedExperience.push(propsSelectedExperience);
     }
     setSelectedExperience(tmpSelectedExperience);
+  };
+
+  const handleLoadNextPage = () => {
+    loadNextUserExperience();
   };
 
   const handleConfirm = () => {
@@ -141,65 +211,36 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
           <div></div>
         </div>
 
-        <div className={styles.experienceList}>
+        <div id="selectable-list-experiences" className={styles.experienceList}>
           {loading ? (
             <Loading />
           ) : (
-            userExperiences
-              .filter(ar => ar.experience.user.id === user?.id)
-              .map(item => {
-                return (
-                  <div className={styles.experienceCard} key={item.experience.id}>
-                    <Checkbox
-                      checked={
-                        selectedExperience
-                          ? selectedExperience.filter(ar => ar === item.experience.id).length > 0
-                          : false
-                      }
-                      onChange={() => {
-                        item.experience.id && handleSelectExperience(item.experience.id);
-                      }}
-                      color="primary"
-                      inputProps={{'aria-label': 'controlled'}}
-                      classes={{root: styles.fill}}
+            <InfiniteScroll
+              scrollableTarget="selectable-list-experiences"
+              dataLength={userExperiences.filter(ar => ar.userId === user?.id).length}
+              hasMore={
+                Boolean(user)
+                  ? userExperiencesMeta.currentPage < userExperiencesMeta.totalPageCount
+                  : false
+              }
+              next={handleLoadNextPage}
+              loader={<Skeleton />}>
+              {userExperiences
+                .filter(ar => ar.userId === user?.id)
+                .map(item => {
+                  return (
+                    <ExperienceItem
+                      key={item.id}
+                      item={item}
+                      selectedExperience={selectedExperience}
+                      handleSelectExperience={handleSelectExperience}
                     />
-                    <CardActionArea
-                      onClick={() => {
-                        item.experience.id && handleSelectExperience(item.experience.id);
-                      }}
-                      disableRipple
-                      component="div">
-                      <Grid
-                        container
-                        alignItems="center"
-                        justifyContent="space-between"
-                        wrap="nowrap">
-                        <CardMedia
-                          component="img"
-                          className={styles.image}
-                          image={item.experience.experienceImageURL ?? DEFAULT_IMAGE}
-                        />
-                        <CardContent classes={{root: styles.cardContent}}>
-                          <Typography className={styles.title} variant="body1">
-                            {item.experience.name}
-                          </Typography>
-                          <Typography variant="caption" color="primary">
-                            {item.experience.user.name}
-                          </Typography>
-                          <Typography variant="caption" color="textSecondary">
-                            {item ? ` ${i18n.t('Experience.Modal_Add_Post.Card_Own')}` : ''}
-                          </Typography>
-                        </CardContent>
-                      </Grid>
-                    </CardActionArea>
-                  </div>
-                );
-              })
+                  );
+                })}
+            </InfiniteScroll>
           )}
-          <ShowIf
-            condition={
-              userExperiences.filter(ar => ar.experience.user.id === user?.id).length === 0
-            }>
+
+          <ShowIf condition={userExperiences.filter(ar => ar.userId === user?.id).length === 0}>
             <div className={styles.containerEmpty}>
               <Empty
                 title={i18n.t('Experience.Modal_Add_Post.Empty_Title')}
@@ -216,9 +257,7 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
           color="primary"
           fullWidth
           onClick={handleConfirm}
-          disabled={
-            loading || userExperiences.filter(ar => ar.experience.user.id === user?.id).length === 0
-          }>
+          disabled={loading || userExperiences.filter(ar => ar.userId === user?.id).length === 0}>
           {i18n.t('Experience.Modal_Add_Post.Btn_Confirm')}
         </Button>
       </Modal>
