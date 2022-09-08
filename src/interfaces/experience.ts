@@ -58,6 +58,7 @@ export interface UserExperience extends BaseModel {
 }
 
 export interface WrappedExperience {
+  userId?: string;
   id?: string;
   subscribed?: boolean;
   experience: Experience;
