@@ -280,3 +280,5 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
     </>
   );
 };
+
+export default BlockchainProvider;

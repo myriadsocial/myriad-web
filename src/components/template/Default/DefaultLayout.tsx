@@ -10,7 +10,6 @@ import {Container} from '@material-ui/core';
 
 import useStyles from './DefaultLayout.styles';
 
-import {BlockchainProvider as BlockchainProviderComponent} from 'components/common/Blockchain/Blockchain.provider';
 import {withError, WithErrorProps} from 'src/components/Error';
 import {MenuContainer} from 'src/components/Menu';
 import {NotificationsContainer} from 'src/components/Notifications';
@@ -46,6 +45,13 @@ const ProfileCardContainer = dynamic(
 
 const SocialMediaListContainer = dynamic(
   () => import('src/components/SocialMediaList/SocialMediaList.container'),
+  {
+    ssr: false,
+  },
+);
+
+const BlockchainProviderComponent = dynamic(
+  () => import('components/common/Blockchain/Blockchain.provider'),
   {
     ssr: false,
   },
