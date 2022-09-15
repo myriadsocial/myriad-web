@@ -18,7 +18,7 @@ export const usePolkadotApi = () => {
     socials: SocialMedia[],
     network: Network,
   ): Promise<TipsResultsProps> => {
-    const serverId = server.id;
+    const serverId = server.accountId[network.id];
     const accountId = wallet.id;
     const peopleIds: string[] = [];
     const data: TipsBalanceData = {
