@@ -127,10 +127,11 @@ export class PolkadotJs implements IProvider {
     if (server && !server?.accountId?.myriad) return new BN(0);
 
     try {
+      const serverId = server.accountId.myriad;
       const {references, mainReferences, currencyIds} = data;
       const {partialFee} = await api.tx.tipping
-        .claimReference(server.id, references, mainReferences, currencyIds, accountId, 1)
-        .paymentInfo(server.accountId.myriad);
+        .claimReference(serverId, references, mainReferences, currencyIds, accountId, 1)
+        .paymentInfo(serverId);
 
       return partialFee.toBn();
     } catch {

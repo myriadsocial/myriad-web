@@ -129,14 +129,7 @@ export const useClaimTip = () => {
 
     try {
       const networkCallback = async (network: Network) => {
-        if (server?.accountId?.[network.id]) return network;
-        const serverId = server.accountId[network.id];
-        const tipBalanceInfo = {
-          serverId: serverId,
-          referenceType: 'user',
-          referenceId: user.id,
-          ftIdentifier: 'native',
-        };
+        if (!server?.accountId?.[network.id]) return network;
 
         switch (network.id) {
           case NetworkIdEnum.MYRIAD: {
@@ -159,11 +152,10 @@ export const useClaimTip = () => {
           }
 
           case NetworkIdEnum.NEAR: {
-            const {serverId, referenceId} = tipBalanceInfo;
             const referenceIds = socials.map(social => social.peopleId);
             const result = await getClaimTipNear(
-              serverId,
-              referenceId,
+              server.accountId[network.id],
+              user.id,
               referenceIds,
               currentWallet,
               network,
@@ -222,7 +214,7 @@ export const useClaimTip = () => {
     setClaiming(true);
 
     try {
-      if (server?.accountId?.[selectedNetwork.id]) {
+      if (!server?.accountId?.[selectedNetwork.id]) {
         throw new Error('ServerNotExists');
       }
 
@@ -254,7 +246,7 @@ export const useClaimTip = () => {
 
   const claimAll = async (networkId: string, callback?: (claimProps: ClaimProps) => void) => {
     if (!user) return;
-    if (server?.accountId?.[networkId]) return;
+    if (!server?.accountId?.[networkId]) return;
 
     let errorMessage = null;
     let claimSuccess = true;
