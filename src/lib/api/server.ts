@@ -1,8 +1,11 @@
 import MyriadAPI from './base';
 
 export interface ServerMetric {
-  totalPosts: number;
-  totalUser: number;
+  [key: string]: number;
+}
+
+export interface AccountId {
+  [key: string]: string;
 }
 
 export interface Server {
@@ -11,17 +14,31 @@ export interface Server {
   description: string;
   metric: ServerMetric;
   categories: string[];
-  accountId?: any;
+  accountId: AccountId;
   images: {
     logo_banner: string;
   };
 }
 
 export const getServer = async (): Promise<Server> => {
-  const {data} = await MyriadAPI().request<Server>({
-    url: `/server`,
-    method: 'GET',
-  });
+  try {
+    const {data} = await MyriadAPI().request<Server>({
+      url: `/server`,
+      method: 'GET',
+    });
 
-  return data;
+    return data;
+  } catch {
+    return {
+      id: '',
+      name: '',
+      description: '',
+      metric: {},
+      categories: [],
+      accountId: {},
+      images: {
+        logo_banner: '',
+      },
+    };
+  }
 };

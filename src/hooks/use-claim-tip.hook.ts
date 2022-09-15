@@ -12,7 +12,6 @@ import {usePolkadotApi} from './use-polkadot-api.hook';
 import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {VariantType} from 'notistack';
-import {getServerId} from 'src/helpers/wallet';
 import {FeeInfo, TipsBalanceInfo} from 'src/interfaces/blockchain-interface';
 import {Network, NetworkIdEnum} from 'src/interfaces/network';
 import * as TransactionAPI from 'src/lib/api/transaction';
@@ -20,6 +19,11 @@ import * as WalletAPI from 'src/lib/api/wallet';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
+
+interface ClaimProps {
+  claimSuccess: boolean;
+  errorMessage: string;
+}
 
 const {publicRuntimeConfig} = getConfig();
 
@@ -120,21 +124,19 @@ export const useClaimTip = () => {
     setLoading(true);
 
     if (!user || !server) return setLoading(false);
-
     const currentNetworkId = currentWallet.networkId;
     const sortedNetworkPromise = [];
 
     try {
       const networkCallback = async (network: Network) => {
-        const serverId = getServerId(server, network.id);
+        if (server?.accountId?.[network.id]) return network;
+        const serverId = server.accountId[network.id];
         const tipBalanceInfo = {
           serverId: serverId,
           referenceType: 'user',
           referenceId: user.id,
           ftIdentifier: 'native',
         };
-
-        if (!serverId) return network;
 
         switch (network.id) {
           case NetworkIdEnum.MYRIAD: {
@@ -205,7 +207,7 @@ export const useClaimTip = () => {
   const claim = async (
     networkId: string,
     ftIdentifier: string,
-    callback?: ({claimSuccess: boolean, errorMessage: string}) => void,
+    callback?: (ClaimProps: ClaimProps) => void,
   ) => {
     if (!user) return;
     if (!user?.wallets[0]) return;
@@ -220,10 +222,11 @@ export const useClaimTip = () => {
     setClaiming(true);
 
     try {
-      const serverId = getServerId(server, selectedNetwork.id);
+      if (server?.accountId?.[selectedNetwork.id]) {
+        throw new Error('ServerNotExists');
+      }
 
-      if (!serverId) throw new Error('ServerNotExists');
-
+      const serverId = server?.accountId?.[selectedNetwork.id];
       const currency = selectedNetwork.currencies?.find(({native, referenceId}) => {
         if (ftIdentifier === 'native' && native) return true;
         return referenceId === ftIdentifier;
@@ -249,11 +252,9 @@ export const useClaimTip = () => {
     }
   };
 
-  const claimAll = async (
-    networkId: string,
-    callback?: ({claimSuccess: boolean, errorMessage: string}) => void,
-  ) => {
+  const claimAll = async (networkId: string, callback?: (claimProps: ClaimProps) => void) => {
     if (!user) return;
+    if (server?.accountId?.[networkId]) return;
 
     let errorMessage = null;
     let claimSuccess = true;
@@ -261,7 +262,7 @@ export const useClaimTip = () => {
     setClaimingAll(true);
 
     const walletId = currentWallet.id;
-    const serverId = getServerId(server, networkId as NetworkIdEnum);
+    const serverId = server?.accountId?.[networkId];
     const selectedNetwork = networks.find(network => network.id == networkId);
     const userId = user.id;
     const currencyIds = [];

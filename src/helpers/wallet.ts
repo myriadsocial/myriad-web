@@ -4,7 +4,6 @@ import capitalize from 'lodash/capitalize';
 import {Network, NetworkIdEnum} from 'src/interfaces/network';
 import {UserWallet} from 'src/interfaces/user';
 import {BlockchainPlatform} from 'src/interfaces/wallet';
-import {Server} from 'src/lib/api/server';
 
 export const formatAddress = (currentWallet: UserWallet, address: null | string) => {
   if (address && address.length > 14) {
@@ -58,20 +57,5 @@ export const formatWalletTitle = (network?: Network, networkId?: NetworkIdEnum) 
       default:
         return 'Unknown Wallet';
     }
-  }
-};
-
-export const getServerId = (server: Server, networkId?: NetworkIdEnum): string => {
-  if (!networkId) return server.id;
-
-  switch (networkId) {
-    case NetworkIdEnum.MYRIAD:
-      return server.id;
-
-    case NetworkIdEnum.NEAR:
-      return server?.accountId?.[networkId];
-
-    default:
-      return server.id;
   }
 };

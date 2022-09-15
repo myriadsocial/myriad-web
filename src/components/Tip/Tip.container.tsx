@@ -16,7 +16,6 @@ import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {VariantType} from 'notistack';
 import {Empty} from 'src/components/atoms/Empty';
-import {getServerId} from 'src/helpers/wallet';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useClaimTip} from 'src/hooks/use-claim-tip.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
@@ -102,9 +101,9 @@ export const TipContainer: React.FC = () => {
         throw new Error('Insufficient Gas Fee');
       }
 
-      if (!server) throw new Error('Server not exists');
+      if (!server?.accountId?.[currentWallet?.networkId]) throw new Error('Server not exists');
 
-      const serverId = getServerId(server, currentWallet?.networkId);
+      const serverId = server.accountId[currentWallet?.networkId];
       const tipsBalanceInfo = {
         serverId: serverId,
         referenceType: 'user',
