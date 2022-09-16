@@ -45,18 +45,6 @@ export const useAuthHook = () => {
     }
   };
 
-  const getUserByAccounts = async (accounts: InjectedAccountWithMeta[]): Promise<User[] | null> => {
-    try {
-      const {data} = await UserAPI.getUserByAddress(accounts.map(toHexPublicKey));
-
-      return data;
-    } catch (error) {
-      console.log('[useAuthHook][getUserByAccounts][error]', error);
-
-      return [];
-    }
-  };
-
   const getRegisteredAccounts = async (): Promise<InjectedAccountWithMeta[]> => {
     const accounts = await getPolkadotAccounts();
 
@@ -205,7 +193,6 @@ export const useAuthHook = () => {
     anonymous,
     logout,
     clearNearCache,
-    getUserByAccounts,
     getRegisteredAccounts,
     fetchUserNonce,
     signInWithExternalAuth,
