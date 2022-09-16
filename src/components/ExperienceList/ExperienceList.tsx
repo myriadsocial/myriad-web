@@ -64,8 +64,6 @@ export const ExperienceList: React.FC<ExperienceListProps> = props => {
     viewPostList(TimelineType.EXPERIENCE, userExperience);
   };
 
-  console.log({experiences});
-
   return (
     <div className={classes.root}>
       {experiences.map(item => (
