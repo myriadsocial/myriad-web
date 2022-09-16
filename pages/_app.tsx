@@ -4,6 +4,7 @@ import {CookiesProvider} from 'react-cookie';
 import {SessionProvider} from 'next-auth/react';
 import {AppProps, NextWebVitalsMetric} from 'next/app';
 import getConfig from 'next/config';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -15,6 +16,11 @@ import {AppContextProvider} from 'src/context/AppContextProvider';
 import i18n from 'src/locale';
 import {wrapper} from 'src/store';
 import theme from 'src/themes/light-theme';
+
+const MyriadInstanceProvider = dynamic(
+  () => import('src/components/common/Blockchain/MyriadInstance.provider'),
+  {ssr: false},
+);
 
 const {publicRuntimeConfig} = getConfig();
 
@@ -30,15 +36,17 @@ const App = (props: AppProps) => {
       </Head>
       <ThemeProvider theme={theme}>
         <SnackbarProvider maxSnack={4}>
-          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-          <CssBaseline />
-          <SessionProvider session={pageProps.session}>
-            <CookiesProvider>
-              <AppContextProvider>
-                <Component {...pageProps} />
-              </AppContextProvider>
-            </CookiesProvider>
-          </SessionProvider>
+          <MyriadInstanceProvider>
+            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+            <CssBaseline />
+            <SessionProvider session={pageProps.session}>
+              <CookiesProvider>
+                <AppContextProvider>
+                  <Component {...pageProps} />
+                </AppContextProvider>
+              </CookiesProvider>
+            </SessionProvider>
+          </MyriadInstanceProvider>
         </SnackbarProvider>
       </ThemeProvider>
     </I18nextProvider>
