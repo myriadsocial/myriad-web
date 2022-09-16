@@ -67,11 +67,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(0.5),
     },
     experienceList: {
-      maxHeight: '329px',
+      maxHeight: 'fit-content',
       gap: '8px',
       marginBottom: theme.spacing(1.5),
       alignItems: 'center',
-      overflow: 'scroll',
+      //overflow: 'scroll',
     },
     experienceCard: {
       display: 'flex',

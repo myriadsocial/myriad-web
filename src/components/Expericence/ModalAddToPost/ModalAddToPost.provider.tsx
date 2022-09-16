@@ -1,6 +1,6 @@
 import {InformationCircleIcon} from '@heroicons/react/outline';
 
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useState, useEffect} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import {useSelector} from 'react-redux';
 
@@ -24,7 +24,6 @@ import {useStyles} from './ModalAddToPost.styles';
 import {Empty} from 'components/atoms/Empty';
 import ShowIf from 'components/common/show-if.component';
 import {Skeleton} from 'src/components/Expericence';
-import {Loading} from 'src/components/atoms/Loading';
 import {Modal} from 'src/components/atoms/Modal';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
 import {WrappedExperience} from 'src/interfaces/experience';
@@ -105,6 +104,12 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
     addPostsToExperience,
     loading,
   } = useExperienceHook();
+
+  useEffect(() => {
+    if (Boolean(user) && userExperiencesMeta.currentPage < userExperiencesMeta.totalPageCount)
+      loadNextUserExperience();
+  }, [user, userExperiencesMeta]);
+
   const [postId, setPostId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [isSelectAll, setIsSelectAll] = useState(false);
@@ -170,8 +175,6 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
     }
   };
 
-  console.log({userExperiences});
-
   return (
     <>
       <ModalAddToPostContext.Provider value={addPostToExperience}>
@@ -213,37 +216,32 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
           <div></div>
         </div>
 
-        <div id="selectable-list-experiences" className={styles.experienceList}>
-          {loading ? (
-            <Loading />
-          ) : (
-            <InfiniteScroll
-              scrollableTarget="selectable-list-experiences"
-              dataLength={
-                userExperiences.filter(ar => ar.userId === user?.id && ar.subscribed === false)
-                  .length
-              }
-              hasMore={
-                Boolean(user)
-                  ? userExperiencesMeta.currentPage < userExperiencesMeta.totalPageCount
-                  : false
-              }
-              next={handleLoadNextPage}
-              loader={<Skeleton />}>
-              {userExperiences
-                .filter(ar => ar.userId === user?.id && ar.subscribed === false)
-                .map(item => {
-                  return (
-                    <ExperienceItem
-                      key={item.id}
-                      item={item}
-                      selectedExperience={selectedExperience}
-                      handleSelectExperience={handleSelectExperience}
-                    />
-                  );
-                })}
-            </InfiniteScroll>
-          )}
+        <div id="selectable-experience-list" className={styles.experienceList}>
+          <InfiniteScroll
+            scrollableTarget="selectable-experience-list"
+            dataLength={
+              userExperiences.filter(ar => ar.userId === user?.id && ar.subscribed === false).length
+            }
+            hasMore={
+              Boolean(user)
+                ? userExperiencesMeta.currentPage < userExperiencesMeta.totalPageCount
+                : false
+            }
+            next={handleLoadNextPage}
+            loader={<Skeleton />}>
+            {userExperiences
+              .filter(ar => ar.userId === user?.id && ar.subscribed === false)
+              .map(item => {
+                return (
+                  <ExperienceItem
+                    key={item.id}
+                    item={item}
+                    selectedExperience={selectedExperience}
+                    handleSelectExperience={handleSelectExperience}
+                  />
+                );
+              })}
+          </InfiniteScroll>
 
           <ShowIf condition={userExperiences.filter(ar => ar.userId === user?.id).length === 0}>
             <div className={styles.containerEmpty}>
