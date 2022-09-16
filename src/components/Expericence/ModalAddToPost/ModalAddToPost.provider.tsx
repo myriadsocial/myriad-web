@@ -170,6 +170,8 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
     }
   };
 
+  console.log({userExperiences});
+
   return (
     <>
       <ModalAddToPostContext.Provider value={addPostToExperience}>
@@ -217,7 +219,10 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
           ) : (
             <InfiniteScroll
               scrollableTarget="selectable-list-experiences"
-              dataLength={userExperiences.filter(ar => ar.userId === user?.id).length}
+              dataLength={
+                userExperiences.filter(ar => ar.userId === user?.id && ar.subscribed === false)
+                  .length
+              }
               hasMore={
                 Boolean(user)
                   ? userExperiencesMeta.currentPage < userExperiencesMeta.totalPageCount
@@ -226,7 +231,7 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
               next={handleLoadNextPage}
               loader={<Skeleton />}>
               {userExperiences
-                .filter(ar => ar.userId === user?.id)
+                .filter(ar => ar.userId === user?.id && ar.subscribed === false)
                 .map(item => {
                   return (
                     <ExperienceItem
