@@ -2,7 +2,6 @@ import {useCallback} from 'react';
 import {useSelector, useDispatch, shallowEqual} from 'react-redux';
 
 import {ParsedUrlQuery} from 'querystring';
-import {People} from 'src/interfaces/people';
 import {Post} from 'src/interfaces/post';
 import {
   TimelineType,
@@ -11,7 +10,6 @@ import {
   TimelineFilterFields,
 } from 'src/interfaces/timeline';
 import {User} from 'src/interfaces/user';
-import * as ExperienceAPI from 'src/lib/api/experience';
 import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
 import {RootState} from 'src/reducers';
 import {loadTimeline, clearTimeline} from 'src/reducers/timeline/actions';
@@ -102,15 +100,9 @@ export const useTimelineFilter = (filters?: TimelineFilterFields) => {
       }
 
       if (query?.type === TimelineType.EXPERIENCE && query?.id) {
-        const experience = await ExperienceAPI.getExperienceDetail(query.id as string);
-
         const expFilterFields: TimelineFilterFields = {
           ...filterFields,
-          tags: experience.allowedTags ? (experience.allowedTags as string[]) : [],
-          people: experience.people
-            .filter((person: People) => !person.hide)
-            .map((person: People) => person.id),
-          experienceId: experience.id,
+          experienceId: query.id as string,
         };
 
         dispatch(
