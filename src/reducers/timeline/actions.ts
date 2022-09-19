@@ -226,10 +226,8 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
   (page = 1, filters?: TimelineFilters, type?: TimelineType) =>
   async (dispatch, getState) => {
     dispatch(setTimelineLoading(true));
-    let asFriend = false;
 
     const {
-      profileState: {friendStatus},
       userState: {user},
       timelineState,
     } = getState();
@@ -238,17 +236,8 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
       const userId = user?.id as string;
       const timelineType = type ?? timelineState.type;
       const timelineFilter = filters ?? timelineState.filters;
-      if (user && (timelineFilter?.fields?.owner || timelineFilter?.fields?.importer)) {
-        asFriend = friendStatus?.status === FriendStatus.APPROVED;
-      }
 
-      const {data: posts, meta} = await PostAPI.getPost(
-        page,
-        userId,
-        timelineType,
-        timelineFilter,
-        asFriend,
-      );
+      const {data: posts, meta} = await PostAPI.getPost(page, userId, timelineType, timelineFilter);
 
       dispatch({
         type: constants.LOAD_TIMELINE,
@@ -652,10 +641,7 @@ export const updatePostMetric: ThunkActionCreator<Actions, RootState> =
 
 export const checkNewTimeline: ThunkActionCreator<Actions, RootState> =
   (callback: (diff: number) => void) => async (_, getState) => {
-    let asFriend = false;
-
     const {
-      profileState: {friendStatus},
       userState: {user},
       timelineState: {filters, type, meta},
     } = getState();
@@ -663,11 +649,7 @@ export const checkNewTimeline: ThunkActionCreator<Actions, RootState> =
     try {
       const userId = user?.id as string;
 
-      if (user && (filters?.fields?.owner || filters?.fields?.importer)) {
-        asFriend = friendStatus?.status === FriendStatus.APPROVED;
-      }
-
-      const {meta: newMeta} = await PostAPI.getPost(1, userId, type, filters, asFriend);
+      const {meta: newMeta} = await PostAPI.getPost(1, userId, type, filters);
 
       const diffItemCount = newMeta.totalItemCount - meta.totalItemCount;
 

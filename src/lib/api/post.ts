@@ -4,18 +4,10 @@ import {PAGINATION_LIMIT} from './constants/pagination';
 import {PostImportError} from './errors/post-import.error';
 import {BaseList} from './interfaces/base-list.interface';
 import {BaseErrorResponse} from './interfaces/error-response.interface';
-import {LoopbackWhere} from './interfaces/loopback-query.interface';
 import {PaginationParams, FilterParams} from './interfaces/pagination-params.interface';
 
 import axios, {AxiosError} from 'axios';
-import {
-  Post,
-  PostProps,
-  ImportPostProps,
-  PostVisibility,
-  PostStatus,
-  PostCustomProps,
-} from 'src/interfaces/post';
+import {Post, PostProps, ImportPostProps, PostStatus, PostCustomProps} from 'src/interfaces/post';
 import {TimelineOrderType, TimelineType} from 'src/interfaces/timeline';
 import {WalletDetail} from 'src/interfaces/wallet';
 
@@ -32,54 +24,8 @@ export const getPost = async (
   userId: string,
   type: TimelineType = TimelineType.TRENDING,
   filters?: TimelineFilters,
-  asFriend = false,
 ): Promise<PostList> => {
   const {sort = 'DESC', order = TimelineOrderType.LATEST, fields, query} = filters;
-  const where: LoopbackWhere<PostProps> = {};
-
-  if (fields && fields.people && fields.people.length) {
-    const condition = {
-      peopleId: {
-        inq: fields.people,
-      },
-    };
-
-    if (where.or) {
-      where.or.push(condition);
-    } else {
-      where.or = [condition];
-    }
-  }
-
-  if (fields && fields.layout === 'photo') {
-    // code
-  }
-
-  if (fields && fields.platform && fields.platform.length) {
-    where.platform = {
-      inq: fields.platform,
-    };
-  }
-
-  if (fields && fields.owner) {
-    where.createdBy = {
-      eq: fields.owner,
-    };
-
-    if (userId !== fields.owner) {
-      // filter only public post if no friend status provided
-      if (asFriend) {
-        where.visibility = {
-          inq: [PostVisibility.PUBLIC, PostVisibility.FRIEND],
-        };
-      } else {
-        where.visibility = {
-          eq: PostVisibility.PUBLIC,
-        };
-      }
-    }
-  }
-
   const filterParams: Record<string, any> = {
     include: [
       {
@@ -115,7 +61,6 @@ export const getPost = async (
   let params: Record<string, any> = {
     sortBy: order,
     order: sort,
-    importers: true,
     pageNumber: page,
     pageLimit: PAGINATION_LIMIT,
   };
@@ -132,9 +77,19 @@ export const getPost = async (
       params.experienceId = fields?.experienceId;
       break;
     default:
-      filterParams.where = where;
+      if (fields && fields.platform && fields.platform.length) {
+        if (fields.platform[0] === 'myriad') {
+          params.platform = 'myriad';
+        } else {
+          params.platform = 'imported';
+        }
+      }
 
-      if (!fields?.importer && !fields?.owner && (!fields?.tags || fields.tags?.length === 0)) {
+      if (fields && fields?.owner) {
+        params.owner = fields.owner;
+      }
+
+      if (!fields?.owner && (!fields?.tags || fields.tags?.length === 0)) {
         params.timelineType = TimelineType.ALL;
       }
 

@@ -42,25 +42,6 @@ export const getUserDetail = async (id: string, userId?: string): Promise<User &
   return data;
 };
 
-export const getUserByAddress = async (address: string[]): Promise<UserList> => {
-  const {data} = await MyriadAPI().request<UserList>({
-    url: '/users',
-    method: 'GET',
-    params: {
-      pageLimit: address.length,
-      filter: {
-        where: {
-          id: {
-            inq: address,
-          },
-        },
-      },
-    },
-  });
-
-  return data;
-};
-
 export const updateUser = async (userId: string, values: Partial<User>): Promise<User> => {
   const {data} = await MyriadAPI().request<User>({
     url: `/users/${userId}`,
@@ -81,13 +62,6 @@ export const searchUsers = async (page = 1, query?: string): Promise<UserList> =
     params.name = query;
     params.sortBy = 'name';
     params.order = 'ASC';
-    params.filter = {
-      where: {
-        deletedAt: {
-          $exists: false,
-        },
-      },
-    };
   }
 
   const {data} = await MyriadAPI().request<UserList>({
