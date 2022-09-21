@@ -1,15 +1,22 @@
-import React, {useCallback, useState} from 'react';
+import React, {useEffect, useCallback, useState, useMemo} from 'react';
 import {useSelector} from 'react-redux';
 import {useNavigate} from 'react-router';
 
 import {useRouter} from 'next/router';
 
-import {Button, Grid, TextField, Typography} from '@material-ui/core';
+import {Button, Box, Grid, TextField, Typography} from '@material-ui/core';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import {useStyles} from './Profile.style';
 
+import {
+  PolkadotNetworkIcon,
+  NearNetworkIcon,
+  SenderWalletDisabledIcon,
+  MyNearWalletIcon,
+  MyriadCircleIcon,
+} from 'src/components/atoms/Icons';
 import {MyriadFullIcon} from 'src/components/atoms/Icons';
 import useConfirm from 'src/components/common/Confirm/use-confirm.hook';
 import ShowIf from 'src/components/common/show-if.component';
@@ -69,7 +76,10 @@ export const Profile: React.FC<ProfileProps> = props => {
     },
   });
 
-  React.useEffect(() => {
+  const TEXT =
+    'Metaverse hunter for all. Join us to get more metaverse hunter lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor';
+
+  useEffect(() => {
     let nameHelper = i18n.t('Login.Profile.Helper_Text_Name', {
       min_length: DISPLAY_NAME_MIN_LENGTH,
     });
@@ -106,6 +116,23 @@ export const Profile: React.FC<ProfileProps> = props => {
       },
     }));
   }, [settings.language]);
+
+  const walletIcons = useMemo(
+    () => ({
+      polkadot: <PolkadotNetworkIcon />,
+      sender: <SenderWalletDisabledIcon />,
+      near: <NearNetworkIcon />,
+      'my-near': <MyNearWalletIcon />,
+    }),
+    [],
+  );
+
+  const icons = useMemo(
+    () => ({
+      myriad: <MyriadCircleIcon />,
+    }),
+    [],
+  );
 
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     const name = event.target.value;
@@ -310,10 +337,89 @@ export const Profile: React.FC<ProfileProps> = props => {
     });
   }, [handleSubmit]);
 
+  const [text] = useState(TEXT);
+
+  const [expanded, setExpanded] = useState(false);
+
+  const handleExpand = () => {
+    setExpanded(!expanded);
+  };
+
   return (
     <>
       <ShowIf condition={!isMobileSignIn}>
         <div className={styles.root}>
+          <div style={{marginBottom: 24, gap: 16, display: 'flex', flexDirection: 'column'}}>
+            <div>
+              <Typography variant="h5" style={{fontWeight: 600}}>
+                {i18n.t('Login.Profile.Wallet')}
+              </Typography>
+              <div
+                id="unselectable-gray-box-wallet"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  paddingLeft: 8,
+                  paddingTop: 8,
+                  paddingBottom: 8,
+                  background: '#F5F5F5',
+                  borderRadius: 4,
+                  gap: 8,
+                }}>
+                {walletIcons['polkadot']}
+                <div>
+                  <Box
+                    fontSize={14}
+                    fontWeight="fontWeightRegular"
+                    style={{color: 'rgba(115, 66, 204, 1)'}}>
+                    {account.meta.name}
+                  </Box>
+                  <Box fontSize={12} fontWeight="fontWeightRegular" style={{color: '#0A0A0A'}}>
+                    {account.address}
+                  </Box>
+                </div>
+              </div>
+            </div>
+            <div>
+              <Typography variant="h5" style={{fontWeight: 600}}>
+                {i18n.t('Login.Profile.Instance')}
+              </Typography>
+              <div
+                id="unselectable-gray-box-instance"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  paddingLeft: 8,
+                  paddingTop: 8,
+                  paddingBottom: 8,
+                  background: '#F5F5F5',
+                  borderRadius: 4,
+                  gap: 8,
+                }}>
+                {icons['myriad']}
+                <div style={{width: '100%', paddingRight: 8}}>
+                  <Box
+                    fontSize={14}
+                    fontWeight="fontWeightRegular"
+                    style={{color: 'rgba(115, 66, 204, 1)'}}>
+                    Myriad
+                  </Box>
+                  <Box fontSize={12} fontWeight="fontWeightRegular" style={{color: '#0A0A0A'}}>
+                    {text.split(' ').length > 10 && !expanded
+                      ? `${text.split(' ').slice(0, 10).join(' ')}...`
+                      : TEXT}
+                  </Box>
+                  <Box
+                    fontSize={10}
+                    fontWeight="fontWeightBold"
+                    style={{color: '#6E3FC3'}}
+                    onClick={handleExpand}>
+                    More
+                  </Box>
+                </div>
+              </div>
+            </div>
+          </div>
           <div style={{marginBottom: 33}}>
             <Typography variant="h5" style={{fontWeight: 600}}>
               {i18n.t('Login.Profile.Title')}

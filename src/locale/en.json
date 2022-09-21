@@ -200,6 +200,8 @@
       "Tooltip_Wallet": "Coming soon"
     },
     "Profile": {
+      "Wallet": "Wallet Used",
+      "Instance": "Selected Instance",
       "Title": "Create new account",
       "Subtitle": "You can only set your username once.",
       "Helper_Text_Name": "You can use {{min_length}} or more characters.",
