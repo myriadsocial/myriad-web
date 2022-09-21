@@ -203,7 +203,7 @@
       "Wallet": "Wallet Used",
       "Instance": "Selected Instance",
       "Title": "Create new account",
-      "Subtitle": "You can only set your username once.",
+      "Subtitle": "You can only set your username once and it will be unique for each instance.",
       "Helper_Text_Name": "You can use {{min_length}} or more characters.",
       "Helper_Text_Username": "You can use {{min_length}} or more characters.",
       "Helper_Validate_Name_Min": "Display name must be provided and contain at least {{min_length}} character",
