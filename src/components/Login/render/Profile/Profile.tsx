@@ -412,7 +412,7 @@ export const Profile: React.FC<ProfileProps> = props => {
                   <Box
                     fontSize={10}
                     fontWeight="fontWeightBold"
-                    style={{color: '#6E3FC3'}}
+                    style={{color: '#6E3FC3', textAlign: 'end'}}
                     onClick={handleExpand}>
                     More
                   </Box>
