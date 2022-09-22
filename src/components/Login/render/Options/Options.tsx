@@ -1,11 +1,16 @@
+import {ChevronDownIcon} from '@heroicons/react/outline';
+
 import React, {useState, useMemo} from 'react';
 import {useSelector} from 'react-redux';
 import {useNavigate} from 'react-router';
 
 import Link from 'next/link';
 
+import {SvgIcon} from '@material-ui/core';
 import {
   Button,
+  ButtonBase,
+  Box,
   Checkbox,
   FormControlLabel,
   Grid,
@@ -37,6 +42,7 @@ import ShowIf from 'src/components/common/show-if.component';
 import {formatNetworkTitle} from 'src/helpers/wallet';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
+import MyriadCircle from 'src/images/Icons/myriad-circle.svg';
 import {NetworkIdEnum} from 'src/interfaces/network';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
 import i18n from 'src/locale';
@@ -411,6 +417,35 @@ export const Options: React.FC<OptionProps> = props => {
               }
             />
           </Grid>
+
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              marginBottom: 8,
+            }}>
+            <Box style={{marginBottom: 8}}>Select instance</Box>
+            <ButtonBase
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                background: '#F6F7FC',
+                padding: `8px 12px`,
+                gap: 8,
+                borderRadius: 40,
+              }}>
+              <SvgIcon component={MyriadCircle} viewBox="0 0 30 30" {...props} />
+              <Box>Myriad</Box>
+              <SvgIcon
+                style={{marginLeft: 'auto'}}
+                component={ChevronDownIcon}
+                fontSize="small"
+                color={'primary'}
+              />
+            </ButtonBase>
+          </div>
 
           <div>
             <Button
