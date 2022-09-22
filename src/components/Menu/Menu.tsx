@@ -7,8 +7,6 @@ import {ListItemComponent} from '../atoms/ListItem';
 import {useStyles} from './Menu.styles';
 import {useMenuList, MenuDetail, MenuId} from './use-menu-list';
 
-import SelectServer from 'src/components/SelectServer';
-
 type MenuProps = {
   selected: MenuId;
   onChange: (path: string) => void;
@@ -40,7 +38,9 @@ export const Menu: React.FC<MenuProps> = props => {
           <img src={logo} width={220} height={48} />
         </div>
 
-        <SelectServer />
+        {
+          //<SelectServer />
+        }
 
         {menu
           .filter(ar => ar.isDesktop === true)
