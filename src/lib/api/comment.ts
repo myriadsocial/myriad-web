@@ -1,7 +1,6 @@
 import MyriadAPI from './base';
 import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
-import {LoopbackWhere} from './interfaces/loopback-query.interface';
 import {FilterParams, PaginationParams} from './interfaces/pagination-params.interface';
 
 import {Comment, CommentProps} from 'src/interfaces/comment';
@@ -21,53 +20,34 @@ export const loadComments = async (
   pagination: PaginationParams,
 ): Promise<CommentList> => {
   const {page = 1, limit = PAGINATION_LIMIT, orderField = 'createdAt', sort = 'DESC'} = pagination;
+  const filterParams: Record<string, any> = {
+    include: [
+      'votes',
+      {
+        relation: 'user',
+        scope: {
+          include: ['post', 'wallets'],
+        },
+      },
+    ],
+    order: [`${orderField} ${sort}`],
+  };
 
-  let where: LoopbackWhere<CommentProps> = {
+  const commentParams: Record<string, any> = {
+    filter: filterParams,
     referenceId: params.referenceId,
+    pageNumber: page,
+    pageLimit: limit,
   };
 
   if (params.section) {
-    where = {
-      ...where,
-      section: {
-        eq: params.section,
-      },
-    };
-  }
-
-  if (params.excludeUser) {
-    where = {
-      ...where,
-      userId: {
-        neq: params.excludeUser,
-      },
-    };
+    commentParams.section = params.section;
   }
 
   const {data} = await MyriadAPI().request<CommentList>({
     url: `/comments`,
     method: 'GET',
-    params: {
-      filter: {
-        where,
-        include: [
-          'votes',
-          {
-            relation: 'user',
-            scope: {
-              include: [
-                {
-                  relation: 'wallets',
-                },
-              ],
-            },
-          },
-        ],
-        order: [`${orderField} ${sort}`],
-      },
-      pageNumber: page,
-      pageLimit: limit,
-    },
+    params: commentParams,
   });
 
   return data;
@@ -92,22 +72,17 @@ export const remove = async (commentId: string): Promise<Comment> => {
   return data;
 };
 
+// Comment in profile
 export const loadUserComments = async (
   userId: string,
   pagination: PaginationParams,
 ): Promise<CommentList> => {
   const {page = 1, limit = PAGINATION_LIMIT, orderField = 'createdAt', sort = 'DESC'} = pagination;
-
-  const where: LoopbackWhere<CommentProps> = {
-    userId,
-  };
-
   const {data} = await MyriadAPI().request<CommentList>({
     url: `/comments`,
     method: 'GET',
     params: {
       filter: {
-        where,
         include: [
           'user',
           {
@@ -125,6 +100,7 @@ export const loadUserComments = async (
       },
       pageNumber: page,
       pageLimit: limit,
+      userId,
     },
   });
 
