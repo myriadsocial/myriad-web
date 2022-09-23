@@ -9,14 +9,14 @@ import {UserSettingsContainer} from 'src/components/UserSettings';
 import {UserSocialContainer} from 'src/components/UserSocials';
 import {TabItems} from 'src/components/atoms/Tabs';
 import {TimelineFilterFields} from 'src/interfaces/timeline';
-import {BlockedProps, User} from 'src/interfaces/user';
+import {FriendStatusProps, User} from 'src/interfaces/user';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 
 export type UserMenuTabs = 'post' | 'comments' | 'experience' | 'social' | 'friend' | 'setting';
 
 export const useUserTabs = (excludes: UserMenuTabs[]): TabItems<UserMenuTabs>[] => {
-  const profile = useSelector<RootState, User & BlockedProps>(
+  const profile = useSelector<RootState, User & FriendStatusProps>(
     state => state.profileState.detail,
     shallowEqual,
   );

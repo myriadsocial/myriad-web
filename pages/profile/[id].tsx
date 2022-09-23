@@ -23,7 +23,7 @@ import {fetchAccountPrivacySetting} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
 import {fetchFriend} from 'src/reducers/friend/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
-import {checkFriendedStatus, setProfile} from 'src/reducers/profile/actions';
+import {setProfile} from 'src/reducers/profile/actions';
 import {
   setAnonymous,
   fetchConnectedSocials,
@@ -129,10 +129,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     const detail = await UserAPI.getUserDetail(profileId, userId);
 
     await dispatch(setProfile(detail));
-
-    if (!anonymous && userId) {
-      await dispatch(checkFriendedStatus());
-    }
 
     const data = await getServer();
     return {

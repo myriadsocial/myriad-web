@@ -5,6 +5,7 @@ export enum FriendStatus {
   PENDING = 'pending',
   APPROVED = 'approved',
   BLOCKED = 'blocked',
+  OWNED = 'owned',
 }
 
 export type FriendProps = {

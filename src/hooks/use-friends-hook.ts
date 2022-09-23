@@ -90,43 +90,16 @@ export const useFriendsHook = (user?: User) => {
     await dispatch(createFriendRequest(destination));
   };
 
-  const checkFriendStatus = async (people: User[]) => {
-    if (!user) return;
-
-    setLoading(true);
-
-    try {
-      const {data: requests} = await FriendAPI.checkFriendStatus(
-        user.id,
-        people.map(user => user.id),
-      );
-
-      setFriended(requests);
-    } catch (error) {
-      if (isErrorWithMessage(error)) {
-        setError(error);
-      } else {
-        setError(new Error('Unknown error'));
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const toggleRequest = async (request: Friend, status: FriendStatus) => {
     dispatch(
-      toggleFriendRequest(request, status, () => {
+      toggleFriendRequest(request.id, status, () => {
         loadBlockedUsers();
-
-        if (user) {
-          checkFriendStatus([user]);
-        }
       }),
     );
   };
 
   const removeFriendRequest = async (request: Friend) => {
-    dispatch(deleteFriendRequest(request));
+    dispatch(deleteFriendRequest(request.id));
   };
 
   const clear = () => {
@@ -147,7 +120,6 @@ export const useFriendsHook = (user?: User) => {
     sendRequest,
     toggleRequest,
     removeFriendRequest,
-    checkFriendStatus,
     clear,
   };
 };

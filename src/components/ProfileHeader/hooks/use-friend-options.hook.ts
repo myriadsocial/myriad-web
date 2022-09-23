@@ -1,5 +1,5 @@
-import {Friend, FriendStatus} from 'src/interfaces/friend';
-import {User} from 'src/interfaces/user';
+import {FriendStatus} from 'src/interfaces/friend';
+import {FriendStatusProps, User} from 'src/interfaces/user';
 
 type FriendOptions = {
   self: boolean;
@@ -11,28 +11,17 @@ type FriendOptions = {
 };
 
 export const useFriendOptions = (
-  person: User,
+  person: User & FriendStatusProps,
   currentUser?: User,
-  friend?: Friend,
 ): FriendOptions => {
-  const self = (): boolean => {
-    return currentUser?.id === person.id;
-  };
-
-  const isFriended = (): boolean => {
-    return Boolean(friend);
-  };
-
-  const isFriend = (): boolean => {
-    return Boolean(friend) && friend?.status === FriendStatus.APPROVED;
-  };
-
+  const self = (): boolean => person?.status === FriendStatus.OWNED;
+  const isFriend = (): boolean => person?.status === FriendStatus.APPROVED;
   const isRequested = (): boolean => {
-    return friend?.status === FriendStatus.PENDING && friend?.requesteeId === currentUser?.id;
+    return person?.status === FriendStatus.PENDING && person?.requestee === currentUser?.id;
   };
 
   const isRequesting = (): boolean => {
-    return friend?.status === FriendStatus.PENDING && friend?.requestorId === currentUser?.id;
+    return person?.status === FriendStatus.PENDING && person?.requester === currentUser?.id;
   };
 
   return {
@@ -40,7 +29,7 @@ export const useFriendOptions = (
     isFriend: isFriend(),
     isRequested: isRequested(),
     isRequesting: isRequesting(),
-    canAddFriend: !self() && !isFriended(),
-    isBlocked: isFriended() && friend?.status === FriendStatus.BLOCKED,
+    canAddFriend: !self() && !Boolean(person?.status),
+    isBlocked: person?.status === FriendStatus.BLOCKED,
   };
 };

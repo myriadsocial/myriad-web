@@ -30,16 +30,16 @@ import {acronym} from 'src/helpers/string';
 import {Friend} from 'src/interfaces/friend';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {ReportProps} from 'src/interfaces/report';
-import {User} from 'src/interfaces/user';
+import {FriendStatusProps, User} from 'src/interfaces/user';
 import i18n from 'src/locale';
 
 export type Props = {
-  person: User;
+  person: User & FriendStatusProps;
   user?: User;
   status?: Friend;
   onSendRequest: () => void;
   onAcceptFriend: () => void;
-  onUnblockFriend: (friend: Friend) => void;
+  onUnblockFriend: (friendId: string) => void;
   onDeclineRequest: () => void;
   onRemoveFriend: () => void;
   onEdit?: () => void;
@@ -55,7 +55,6 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
   const {
     person,
     user,
-    status,
     onEdit,
     onAcceptFriend,
     onSendRequest,
@@ -72,7 +71,6 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
   const {self, canAddFriend, isBlocked, isFriend, isRequested, isRequesting} = useFriendOptions(
     person,
     user,
-    status,
   );
   const enqueueSnackbar = useEnqueueSnackbar();
 
@@ -133,8 +131,9 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
   };
 
   const handleSendRequest = () => {
-    if (status) {
-      onUnblockFriend(status);
+    console.log(person);
+    if (person?.status) {
+      onUnblockFriend(person?.friendId ?? '');
     } else {
       onSendRequest();
     }

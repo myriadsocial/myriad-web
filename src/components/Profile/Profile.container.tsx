@@ -4,8 +4,7 @@ import {shallowEqual, useSelector} from 'react-redux';
 import {Profile} from './Profile';
 
 import {ProfileBanned} from 'components/ProfileBanned';
-import {Friend} from 'src/interfaces/friend';
-import {BlockedProps, User} from 'src/interfaces/user';
+import {FriendStatusProps, User} from 'src/interfaces/user';
 import {RootState} from 'src/reducers';
 
 type ProfileContainerProps = {
@@ -22,9 +21,9 @@ export const ProfileContainer: React.FC<ProfileContainerProps> = props => {
     }),
     shallowEqual,
   );
-  const {person, friendStatus, loading} = useSelector<
+  const {person, loading} = useSelector<
     RootState,
-    {person: User & BlockedProps; friendStatus: Friend; loading: boolean}
+    {person: User & FriendStatusProps; loading: boolean}
   >(
     state => ({
       person: state.profileState.detail,
@@ -36,13 +35,5 @@ export const ProfileContainer: React.FC<ProfileContainerProps> = props => {
 
   if (banned) return <ProfileBanned person={person} />;
 
-  return (
-    <Profile
-      user={user}
-      anonymous={anonymous}
-      person={person}
-      loading={loading}
-      friendStatus={friendStatus}
-    />
-  );
+  return <Profile user={user} anonymous={anonymous} person={person} loading={loading} />;
 };

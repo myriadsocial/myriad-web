@@ -1,5 +1,6 @@
 import {Actions as BaseAction, PaginationAction, setLoading, setError} from '../base/actions';
 import {RootState} from '../index';
+import {FetchProfileDetail, setProfile} from '../profile/actions';
 import * as constants from './constants';
 
 import axios from 'axios';
@@ -43,7 +44,8 @@ export type Actions =
   | FilterFriend
   | UpdateFriendsPagination
   | ClearFriend
-  | BaseAction;
+  | BaseAction
+  | FetchProfileDetail;
 
 /**
  *
@@ -150,6 +152,7 @@ export const blockFromFriend: ThunkActionCreator<Actions, RootState> =
 
     const {
       userState: {user},
+      profileState: {detail},
     } = getState();
 
     try {
@@ -157,9 +160,21 @@ export const blockFromFriend: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      await FriendAPI.blockUser(requesteeId, user.id);
+      const blocked = await FriendAPI.blockUser(requesteeId, user.id);
 
       dispatch(fetchFriend(user));
+
+      if (detail) {
+        dispatch(
+          setProfile({
+            ...detail,
+            friendId: blocked.id,
+            status: blocked.status,
+            requestee: blocked.requesteeId,
+            requester: blocked.requestorId,
+          }),
+        );
+      }
     } catch (error) {
       if (user && axios.isAxiosError(error) && error.response?.status === 401) {
         dispatch(fetchFriend(user));

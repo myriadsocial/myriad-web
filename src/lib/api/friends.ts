@@ -154,64 +154,8 @@ export const searchFriend = async (
   return data;
 };
 
-export const checkFriendStatus = async (
-  userId: string,
-  friendIds: string[],
-): Promise<FriendList> => {
-  const {data} = await MyriadAPI().request<FriendList>({
-    url: `/friends`,
-    method: 'GET',
-    params: {
-      filter: {
-        where: {
-          or: [
-            {
-              requesteeId: {
-                inq: friendIds,
-              },
-              requestorId: {
-                eq: userId,
-              },
-            },
-            {
-              requestorId: {
-                inq: friendIds,
-              },
-              requesteeId: userId,
-            },
-          ],
-        },
-        include: [
-          {
-            relation: 'requestee',
-            scope: {
-              include: [
-                {
-                  relation: 'wallets',
-                },
-              ],
-            },
-          },
-          {
-            relation: 'requestor',
-            scope: {
-              include: [
-                {
-                  relation: 'wallets',
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  });
-
-  return data;
-};
-
-export const sendRequest = async (userId: string, requesteeId: string): Promise<void> => {
-  await MyriadAPI().request<Friend[]>({
+export const sendRequest = async (userId: string, requesteeId: string): Promise<Friend> => {
+  const result = await MyriadAPI().request<Friend>({
     url: `/friends`,
     method: 'POST',
     data: {
@@ -220,6 +164,8 @@ export const sendRequest = async (userId: string, requesteeId: string): Promise<
       requestorId: userId,
     },
   });
+
+  return result.data;
 };
 
 export const toggleRequest = async (requestId: string, status: FriendStatus): Promise<void> => {
@@ -239,8 +185,8 @@ export const deleteRequest = async (requestId: string): Promise<void> => {
   });
 };
 
-export const blockUser = async (requesteeId: string, userId: string): Promise<void> => {
-  await MyriadAPI().request({
+export const blockUser = async (requesteeId: string, userId: string): Promise<Friend> => {
+  const result = await MyriadAPI().request({
     url: '/friends',
     method: 'POST',
     data: {
@@ -249,4 +195,6 @@ export const blockUser = async (requesteeId: string, userId: string): Promise<vo
       requestorId: userId,
     },
   });
+
+  return result.data;
 };
