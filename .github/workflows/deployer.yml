@@ -82,6 +82,7 @@ jobs:
             WEB_APP_SECRET:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEB_APP_SECRET
             WEBSITE_URL:${{ secrets.TESTNET_GCP_PROJECT_ID }}/WEBSITE_URL
             SUPPORT_MAIL:${{ secrets.TESTNET_GCP_PROJECT_ID }}/SUPPORT_MAIL
+            RPC_URL:${{ secrets.TESTNET_GCP_PROJECT_ID }}/RPC_URL
             API_URL:${{ secrets.TESTNET_GCP_PROJECT_ID }}/API_URL
             NEAR_TIPPING_CONTRACT_ADDRESS:${{ secrets.TESTNET_GCP_PROJECT_ID }}/NEAR_TIPPING_CONTRACT_ADDRESS
             FIREBASE_PROJECT_ID:${{ secrets.TESTNET_GCP_PROJECT_ID }}/FIREBASE_PROJECT_ID
@@ -115,6 +116,7 @@ jobs:
               --set-string config.appSecret=${{ steps.secrets.outputs.WEB_APP_SECRET }} \
               --set-string config.websiteURL=${{ steps.secrets.outputs.WEBSITE_URL }} \
               --set-string config.supportMail=${{ steps.secrets.outputs.SUPPORT_MAIL }} \
+              --set-string config.rpcURL=${{ steps.secrets.outputs.RPC_URL }} \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
               --set-string config.near.tippingContractAddress=${{ steps.secrets.outputs.NEAR_TIPPING_CONTRACT_ADDRESS }} \
               --set-string config.firebase.projectId=${{ steps.secrets.outputs.FIREBASE_PROJECT_ID }} \
@@ -194,6 +196,7 @@ jobs:
             WEB_APP_SECRET:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_APP_SECRET
             WEBSITE_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEBSITE_URL
             SUPPORT_MAIL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SUPPORT_MAIL
+            RPC_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/RPC_URL
             API_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/API_URL
             NEAR_TIPPING_CONTRACT_ADDRESS:${{ secrets.MAINNET_GCP_PROJECT_ID }}/NEAR_TIPPING_CONTRACT_ADDRESS
             FIREBASE_PROJECT_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_PROJECT_ID
@@ -227,6 +230,7 @@ jobs:
               --set-string config.appSecret=${{ steps.secrets.outputs.WEB_APP_SECRET }} \
               --set-string config.websiteURL=${{ steps.secrets.outputs.WEBSITE_URL }} \
               --set-string config.supportMail=${{ steps.secrets.outputs.SUPPORT_MAIL }} \
+              --set-string config.rpcURL=${{ steps.secrets.outputs.RPC_URL }} \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
               --set-string config.near.tippingContractAddress=${{ steps.secrets.outputs.NEAR_TIPPING_CONTRACT_ADDRESS }} \
               --set-string config.firebase.projectId=${{ steps.secrets.outputs.FIREBASE_PROJECT_ID }} \
@@ -306,6 +310,7 @@ jobs:
             WEB_APP_SECRET:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEB_APP_SECRET
             WEBSITE_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/WEBSITE_URL
             SUPPORT_MAIL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/SUPPORT_MAIL
+            RPC_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/RPC_URL
             API_URL:${{ secrets.MAINNET_GCP_PROJECT_ID }}/API_URL
             NEAR_TIPPING_CONTRACT_ADDRESS:${{ secrets.MAINNET_GCP_PROJECT_ID }}/NEAR_TIPPING_CONTRACT_ADDRESS
             FIREBASE_PROJECT_ID:${{ secrets.MAINNET_GCP_PROJECT_ID }}/FIREBASE_PROJECT_ID
@@ -339,6 +344,7 @@ jobs:
               --set-string config.appSecret=${{ steps.secrets.outputs.WEB_APP_SECRET }} \
               --set-string config.websiteURL=${{ steps.secrets.outputs.WEBSITE_URL }} \
               --set-string config.supportMail=${{ steps.secrets.outputs.SUPPORT_MAIL }} \
+              --set-string config.rpcURL=${{ steps.secrets.outputs.RPC_URL }} \
               --set-string config.apiURL=${{ steps.secrets.outputs.API_URL }} \
               --set-string config.near.tippingContractAddress=${{ steps.secrets.outputs.NEAR_TIPPING_CONTRACT_ADDRESS }} \
               --set-string config.firebase.projectId=${{ steps.secrets.outputs.FIREBASE_PROJECT_ID }} \
