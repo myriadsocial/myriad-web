@@ -1,36 +1,23 @@
+import {ChevronDownIcon} from '@heroicons/react/outline';
+
 import {useState, useMemo} from 'react';
 
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
-import Typography from '@material-ui/core/Typography';
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import {
+  Box,
+  ButtonBase,
+  SvgIcon,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  List,
+  ListItem,
+} from '@material-ui/core';
+
+import useStyles from './SelectServer.styles';
 
 import useMyriadInstance from 'src/components/common/Blockchain/use-myriad-instance.hooks';
 import {useInstances} from 'src/hooks/use-instances.hooks';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      marginLeft: '20px',
-      gap: '4px',
-    },
-    formControl: {
-      width: '250px',
-      height: '40px',
-    },
-    select: {
-      background: '#F6F7FC',
-      borderRadius: '40px',
-    },
-    selectEmpty: {
-      marginTop: theme.spacing(2),
-    },
-  }),
-);
+import MyriadCircle from 'src/images/Icons/myriad-circle.svg';
 
 const SelectServer = () => {
   const {provider} = useMyriadInstance();
@@ -38,10 +25,14 @@ const SelectServer = () => {
 
   const classes = useStyles();
 
-  const [serverId, setServerId] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
 
-  const handleChange = (event: React.ChangeEvent<{name?: string; value: string}>) => {
-    setServerId(event.target.value);
+  const handleOpen = () => {
+    setOpen(!open);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   useMemo(() => {
@@ -49,29 +40,43 @@ const SelectServer = () => {
   }, [provider]);
 
   return (
-    <div className={classes.root}>
-      <Typography>Switch Instance</Typography>
-      <FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel htmlFor="outlined-age-native-simple">Select Instance</InputLabel>
-        <Select
-          native
-          value={serverId}
-          onChange={handleChange}
-          label="server-name"
-          inputProps={{
-            name: 'server-name',
-            id: 'outlined-server-name',
+    <>
+      <div className={classes.root}>
+        <Box style={{marginBottom: 8}}>Select instance</Box>
+        <ButtonBase
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            background: '#F6F7FC',
+            padding: `8px 12px`,
+            gap: 8,
+            borderRadius: 40,
           }}
-          className={classes.select}>
-          <option aria-label="None" value="" />
-          {servers.map(server => (
-            <option key={server.id} value={server.id}>
-              {server.detail?.name ?? 'Unnamed instance'}
-            </option>
-          ))}
-        </Select>
-      </FormControl>
-    </div>
+          onClick={handleOpen}>
+          <SvgIcon component={MyriadCircle} viewBox="0 0 30 30" />
+          <Box>Myriad</Box>
+          <SvgIcon
+            style={{marginLeft: 'auto'}}
+            component={ChevronDownIcon}
+            fontSize="small"
+            color={'primary'}
+          />
+        </ButtonBase>
+      </div>
+
+      <Dialog open={open} onClose={handleClose} aria-labelledby="list-server-dialog">
+        <DialogTitle id="list-server-dialog-title">Select Instance</DialogTitle>
+        <DialogContent>
+          <List>
+            {servers.map(server => (
+              <ListItem key={server.id}>{server.id}</ListItem>
+            ))}
+          </List>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 

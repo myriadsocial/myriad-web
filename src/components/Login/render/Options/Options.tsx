@@ -1,16 +1,11 @@
-import {ChevronDownIcon} from '@heroicons/react/outline';
-
 import React, {useState, useMemo} from 'react';
 import {useSelector} from 'react-redux';
 import {useNavigate} from 'react-router';
 
 import Link from 'next/link';
 
-import {SvgIcon} from '@material-ui/core';
 import {
   Button,
-  ButtonBase,
-  Box,
   Checkbox,
   FormControlLabel,
   Grid,
@@ -23,6 +18,7 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import {useStyles} from './Options.style';
 
+import SelectServer from 'src/components/SelectServer';
 import {MyNearWalletIcon, MyriadFullIcon} from 'src/components/atoms/Icons';
 import {
   EthereumNetworkIcon,
@@ -42,7 +38,6 @@ import ShowIf from 'src/components/common/show-if.component';
 import {formatNetworkTitle} from 'src/helpers/wallet';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
-import MyriadCircle from 'src/images/Icons/myriad-circle.svg';
 import {NetworkIdEnum} from 'src/interfaces/network';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
 import i18n from 'src/locale';
@@ -272,7 +267,6 @@ export const Options: React.FC<OptionProps> = props => {
               </Grid>
             </Grid>
           </div>
-
           {/* WALLET LIST */}
           <div className={styles.wrapper}>
             <div className={styles.title}>
@@ -393,7 +387,6 @@ export const Options: React.FC<OptionProps> = props => {
               </Grid>
             </Grid>
           </div>
-
           <Grid container direction="column" className={styles.condition}>
             <FormControlLabel
               className={styles.termControl}
@@ -418,35 +411,7 @@ export const Options: React.FC<OptionProps> = props => {
             />
           </Grid>
 
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              marginBottom: 8,
-            }}>
-            <Box style={{marginBottom: 8}}>Select instance</Box>
-            <ButtonBase
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-                background: '#F6F7FC',
-                padding: `8px 12px`,
-                gap: 8,
-                borderRadius: 40,
-              }}>
-              <SvgIcon component={MyriadCircle} viewBox="0 0 30 30" {...props} />
-              <Box>Myriad</Box>
-              <SvgIcon
-                style={{marginLeft: 'auto'}}
-                component={ChevronDownIcon}
-                fontSize="small"
-                color={'primary'}
-              />
-            </ButtonBase>
-          </div>
-
+          <SelectServer />
           <div>
             <Button
               variant="contained"
@@ -457,7 +422,6 @@ export const Options: React.FC<OptionProps> = props => {
               {i18n.t('Login.Options.Connect')}
             </Button>
           </div>
-
           <Prompt
             title={i18n.t('Login.Options.Prompt_Extension.Title')}
             icon="warning"
@@ -478,7 +442,6 @@ export const Options: React.FC<OptionProps> = props => {
               {i18n.t('General.Close')}
             </Button>
           </Prompt>
-
           <Prompt
             title={i18n.t('Login.Options.Prompt_Account.Title')}
             icon="warning"
