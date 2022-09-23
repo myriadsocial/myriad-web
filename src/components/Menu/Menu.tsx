@@ -38,6 +38,10 @@ export const Menu: React.FC<MenuProps> = props => {
           <img src={logo} width={220} height={48} />
         </div>
 
+        {
+          //<SelectServer />
+        }
+
         {menu
           .filter(ar => ar.isDesktop === true)
           .map(item => (
