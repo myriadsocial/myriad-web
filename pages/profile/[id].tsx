@@ -107,6 +107,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     const username = generateAnonymousUser();
 
     await dispatch(setAnonymous(username));
+    await dispatch(fetchAccountPrivacySetting(profileId));
   } else {
     await dispatch(fetchUser(userId));
 
