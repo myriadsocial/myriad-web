@@ -23,10 +23,11 @@ export const loadComments = async (
   const filterParams: Record<string, any> = {
     include: [
       'votes',
+      'post',
       {
         relation: 'user',
         scope: {
-          include: ['post', 'wallets'],
+          include: [{relation: 'wallets'}],
         },
       },
     ],
