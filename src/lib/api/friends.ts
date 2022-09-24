@@ -19,10 +19,8 @@ export const getFriendRequests = async (userId: string, page = 1): Promise<Frien
       mutual: 'true',
       pageNumber: page,
       pageLimit: PAGINATION_LIMIT,
+      status: FriendStatus.PENDING,
       filter: {
-        where: {
-          and: [{requesteeId: userId}, {status: FriendStatus.PENDING}],
-        },
         include: ['requestee', 'requestor'],
       },
     },
@@ -44,14 +42,9 @@ export const getFriends = async (
       mutual: 'true',
       pageNumber: page,
       pageLimit: limit,
+      userId: userId,
+      status: FriendStatus.APPROVED,
       filter: {
-        where: {
-          requestorId: userId,
-          status: FriendStatus.APPROVED,
-          deletedAt: {
-            $exists: false,
-          },
-        },
         order: `${orderField} ${sort}`,
         include: [
           {
@@ -83,13 +76,9 @@ export const getFriends = async (
 
 export const getBlockList = async (userId: string, page = 1): Promise<FriendList> => {
   const params: Record<string, any> = {
-    filter: {
-      where: {
-        or: [{requesteeId: userId}, {requestorId: userId}],
-        status: FriendStatus.BLOCKED,
-      },
-      include: ['requestee', 'requestor'],
-    },
+    filter: {include: ['requestee', 'requestor']},
+    userId: userId,
+    status: FriendStatus.BLOCKED,
   };
 
   // page = 0 means fetch all
@@ -159,7 +148,7 @@ export const sendRequest = async (userId: string, requesteeId: string): Promise<
     url: `/friends`,
     method: 'POST',
     data: {
-      status: 'pending',
+      status: FriendStatus.PENDING,
       requesteeId,
       requestorId: userId,
     },
@@ -190,7 +179,7 @@ export const blockUser = async (requesteeId: string, userId: string): Promise<Fr
     url: '/friends',
     method: 'POST',
     data: {
-      status: 'blocked',
+      status: FriendStatus.BLOCKED,
       requesteeId: requesteeId,
       requestorId: userId,
     },
