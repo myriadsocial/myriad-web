@@ -1,9 +1,9 @@
 import {ChevronDownIcon} from '@heroicons/react/outline';
+import {XIcon} from '@heroicons/react/solid';
 
 import {useState, useMemo} from 'react';
 
 import {
-  Typography,
   Card,
   CardActionArea,
   CardContent,
@@ -21,6 +21,7 @@ import {Skeleton} from '@material-ui/lab';
 import InstanceCard from './InstanceCard';
 import useStyles from './SelectServer.styles';
 
+import clsx from 'clsx';
 import useMyriadInstance from 'src/components/common/Blockchain/use-myriad-instance.hooks';
 import ShowIf from 'src/components/common/show-if.component';
 import {useInstances} from 'src/hooks/use-instances.hooks';
@@ -73,11 +74,34 @@ const SelectServer = () => {
         </ButtonBase>
       </div>
 
-      <Dialog open={open} onClose={handleClose} aria-labelledby="list-server-dialog">
-        <DialogTitle id="list-server-dialog-title">
-          <Typography style={{fontWeight: 600, fontSize: 16, textAlign: 'center'}}>
-            Select Instance
-          </Typography>
+      <Dialog
+        id="server-list-dialog"
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="list-server-dialog">
+        <DialogTitle
+          id="list-server-dialog-title"
+          style={{display: 'flex', flexDirection: 'column'}}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              position: 'relative',
+            }}>
+            <Box style={{fontWeight: 600, fontSize: 16, textAlign: 'center'}}>Select Instance</Box>
+            <SvgIcon
+              onClick={handleClose}
+              classes={{
+                root: clsx({
+                  [classes.icon]: true,
+                  [classes.right]: true,
+                }),
+              }}
+              component={XIcon}
+              viewBox="0 0 20 20"
+            />
+          </div>
         </DialogTitle>
         <DialogContent>
           <List>

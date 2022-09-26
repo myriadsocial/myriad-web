@@ -18,6 +18,14 @@ const useStyles = makeStyles((theme: Theme) =>
     selectEmpty: {
       marginTop: theme.spacing(2),
     },
+    icon: {
+      fill: theme.palette.primary.main,
+    },
+    right: {
+      position: 'absolute',
+      right: 10,
+      cursor: 'pointer',
+    },
   }),
 );
 
