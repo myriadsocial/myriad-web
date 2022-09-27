@@ -8,6 +8,7 @@ import useTipHistoryHook from 'components/TipHistory/use-tip-history.hook';
 import {LoadMoreComponent} from 'src/components/atoms/LoadMore/LoadMore';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {Comment} from 'src/interfaces/comment';
+import {SectionType} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
 
@@ -19,7 +20,7 @@ type CommentListProps = Omit<CommentDetailProps, 'comment' | 'deep' | 'onOpenTip
   focus?: boolean;
   expand?: boolean;
   hasMoreComment: boolean;
-  onLoadMoreComments: () => void;
+  onLoadMoreComments: (section?: SectionType) => void;
   onReportReplies?: (replies: Comment) => void;
 };
 

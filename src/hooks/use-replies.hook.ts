@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import delay from 'lodash/delay';
 import {Comment, CommentProps} from 'src/interfaces/comment';
-import {Vote} from 'src/interfaces/interaction';
+import {SectionType, Vote} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
 import * as CommentAPI from 'src/lib/api/comment';
 import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
@@ -20,8 +20,8 @@ type useCommentHookProps = {
   updateReplyUpvote: (commentId: string, total: number, vote: Vote) => void;
   updateReplyDownvote: (commentId: string, total: number, vote: Vote) => void;
   removeReplyVote: (commentId: string) => void;
-  loadReplies: () => void;
-  loadMoreReplies: () => void;
+  loadReplies: (section?: SectionType) => void;
+  loadMoreReplies: (section?: SectionType) => void;
   removeReply: (comment: Comment) => void;
 };
 
@@ -134,11 +134,12 @@ export const useRepliesHook = (referenceId: string, deep: number): useCommentHoo
     });
   };
 
-  const loadReplies = async () => {
+  const loadReplies = async (section?: SectionType) => {
     setLoading(true);
 
     const filters = {
       referenceId,
+      section,
     };
 
     try {
@@ -162,11 +163,12 @@ export const useRepliesHook = (referenceId: string, deep: number): useCommentHoo
     }
   };
 
-  const loadMoreReplies = async () => {
+  const loadMoreReplies = async (section?: SectionType) => {
     setLoading(true);
 
     const filters = {
       referenceId,
+      section,
     };
 
     try {

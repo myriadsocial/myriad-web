@@ -91,7 +91,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
 
   useEffect(() => {
     if (comment.metric.comments > 0 || comment.metric.deletedComments > 0) {
-      loadReplies();
+      loadReplies(section);
     }
   }, [comment.metric.comments]);
 
@@ -215,6 +215,10 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
         }
       },
     });
+  };
+
+  const handleLoadMoreReplies = (): void => {
+    loadMoreReplies(section);
   };
 
   return (
@@ -402,7 +406,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
           deep={deep + 1}
           comments={replies || []}
           hasMoreComment={hasMoreReplies}
-          onLoadMoreComments={loadMoreReplies}
+          onLoadMoreComments={handleLoadMoreReplies}
           onUpvote={handleRepliesUpvote}
           onRemoveVote={handleRepliesRemoveVote}
           onUpdateDownvote={updateReplyDownvote}

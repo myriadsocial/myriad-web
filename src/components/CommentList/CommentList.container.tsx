@@ -150,7 +150,7 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
   );
 
   const handleLoadMoreComment = (): void => {
-    loadMoreComment();
+    loadMoreComment(section);
   };
 
   return (

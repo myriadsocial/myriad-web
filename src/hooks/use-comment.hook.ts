@@ -16,7 +16,7 @@ type useCommentHookProps = {
   comments: Comment[];
   hasMoreComment: boolean;
   loadInitComment: (section?: SectionType) => void;
-  loadMoreComment: () => void;
+  loadMoreComment: (section?: SectionType) => void;
   reply: (user: User, comment: CommentProps, callback?: () => void) => void;
   updateUpvote: (commentId: string, total: number, vote: Vote) => void;
   updateDownvote: (commentId: string, total: number, vote: Vote) => void;
@@ -72,9 +72,10 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
     }
   };
 
-  const loadMore = async () => {
+  const loadMore = async (section?: SectionType) => {
     const filters = {
       referenceId,
+      section,
     };
 
     try {
