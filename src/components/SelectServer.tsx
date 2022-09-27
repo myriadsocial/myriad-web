@@ -1,7 +1,7 @@
 import {ChevronDownIcon} from '@heroicons/react/outline';
 import {XIcon} from '@heroicons/react/solid';
 
-import {useState, useMemo} from 'react';
+import {useState, useMemo, useEffect} from 'react';
 
 import {
   Card,
@@ -9,6 +9,7 @@ import {
   CardContent,
   Box,
   ButtonBase,
+  Button,
   SvgIcon,
   Dialog,
   DialogTitle,
@@ -33,7 +34,18 @@ const SelectServer = () => {
 
   const classes = useStyles();
 
+  useMemo(() => {
+    getAllInstances(provider);
+  }, [provider]);
+
+  useEffect(() => {
+    if (servers.length > 0) {
+      setSelectedServerId(servers[0].id);
+    }
+  }, [servers]);
+
   const [open, setOpen] = useState(false);
+  const [selectedServerId, setSelectedServerId] = useState<number | null>(null);
 
   const handleOpen = () => {
     setOpen(!open);
@@ -43,35 +55,40 @@ const SelectServer = () => {
     setOpen(false);
   };
 
-  useMemo(() => {
-    getAllInstances(provider);
-  }, [provider]);
-
   return (
     <>
       <div className={classes.root}>
         <Box style={{marginBottom: 8}}>Select instance</Box>
-        <ButtonBase
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-            background: '#F6F7FC',
-            padding: `8px 12px`,
-            gap: 8,
-            borderRadius: 40,
-          }}
-          onClick={handleOpen}>
-          <SvgIcon component={MyriadCircle} viewBox="0 0 30 30" />
-          <Box>Myriad</Box>
-          <SvgIcon
-            style={{marginLeft: 'auto'}}
-            component={ChevronDownIcon}
-            fontSize="small"
-            color={'primary'}
-          />
-        </ButtonBase>
+        {!servers.length ? (
+          <Skeleton>
+            <Button />
+          </Skeleton>
+        ) : (
+          <ButtonBase
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              background: '#F6F7FC',
+              padding: `8px 12px`,
+              gap: 8,
+              borderRadius: 40,
+            }}
+            onClick={handleOpen}>
+            <SvgIcon component={MyriadCircle} viewBox="0 0 30 30" />
+            <Box>
+              {servers.find(server => server.id === selectedServerId)?.detail?.name ??
+                'Common Server'}
+            </Box>
+            <SvgIcon
+              style={{marginLeft: 'auto'}}
+              component={ChevronDownIcon}
+              fontSize="small"
+              color={'primary'}
+            />
+          </ButtonBase>
+        )}
       </div>
 
       <Dialog
