@@ -74,6 +74,8 @@ export const Options: React.FC<OptionProps> = props => {
   const [extensionEnabled, setExtensionEnabled] = useState(false);
   const [connectAttempted, setConnectAttempted] = useState(false);
 
+  const [serverSelected, setServerSelected] = useState(false);
+
   const networksOnMobile = networks.filter(
     network => network.id === NetworkIdEnum.POLKADOT || network.id === NetworkIdEnum.NEAR,
   );
@@ -205,6 +207,10 @@ export const Options: React.FC<OptionProps> = props => {
     }
 
     setConnectAttempted(true);
+  };
+
+  const toggleSelected = () => {
+    setServerSelected(true);
   };
 
   return (
@@ -411,13 +417,13 @@ export const Options: React.FC<OptionProps> = props => {
             />
           </Grid>
 
-          <SelectServer />
+          <SelectServer onServerSelect={() => toggleSelected()} />
           <div>
             <Button
               variant="contained"
               fullWidth
               color="primary"
-              disabled={!termApproved || !extensionChecked || wallet === null}
+              disabled={!termApproved || !extensionChecked || (wallet === null && !serverSelected)}
               onClick={handleConnect}>
               {i18n.t('Login.Options.Connect')}
             </Button>

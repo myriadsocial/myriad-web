@@ -28,7 +28,11 @@ import ShowIf from 'src/components/common/show-if.component';
 import {useInstances} from 'src/hooks/use-instances.hooks';
 import MyriadCircle from 'src/images/Icons/myriad-circle.svg';
 
-const SelectServer = () => {
+type SelectServerProps = {
+  onServerSelect: () => void;
+};
+
+const SelectServer = ({onServerSelect}: SelectServerProps) => {
   const {provider} = useMyriadInstance();
   const {servers, getAllInstances} = useInstances();
 
@@ -58,6 +62,7 @@ const SelectServer = () => {
   const handleSelect = (serverId: number) => {
     setSelectedServerId(serverId);
     setOpen(false);
+    onServerSelect();
   };
 
   return (
