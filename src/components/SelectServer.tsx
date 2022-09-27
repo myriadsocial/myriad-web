@@ -55,6 +55,11 @@ const SelectServer = () => {
     setOpen(false);
   };
 
+  const handleSelect = (serverId: number) => {
+    setSelectedServerId(serverId);
+    setOpen(false);
+  };
+
   return (
     <>
       <div className={classes.root}>
@@ -137,9 +142,12 @@ const SelectServer = () => {
               {servers
                 .filter(server => server.detail)
                 .map(server => (
-                  <ListItem key={server.id}>
-                    <InstanceCard server={server} />
-                  </ListItem>
+                  <InstanceCard
+                    key={server.id}
+                    server={server}
+                    onSelect={() => handleSelect(server.id)}
+                    selected={server.id === selectedServerId}
+                  />
                 ))}
             </ShowIf>
           </List>

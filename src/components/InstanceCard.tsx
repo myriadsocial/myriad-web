@@ -11,6 +11,7 @@ import {
   CardContent,
   ListItem,
 } from '@material-ui/core';
+import {useTheme} from '@material-ui/core/styles';
 import {alpha, createStyles, makeStyles} from '@material-ui/core/styles';
 
 import {ServerListProps} from 'src/interfaces/server-list';
@@ -30,10 +31,14 @@ const useStyles = makeStyles(() =>
 
 type InstanceCardProps = {
   server: ServerListProps;
+  onSelect: (serverId: number) => void;
+  selected: boolean;
 };
 
-const InstanceCard = ({server}: InstanceCardProps) => {
+const InstanceCard = ({server, onSelect, selected}: InstanceCardProps) => {
   const styles = useStyles();
+
+  const theme = useTheme();
 
   const text = server.detail?.description ?? 'Empty description';
 
@@ -43,10 +48,21 @@ const InstanceCard = ({server}: InstanceCardProps) => {
     setExpanded(!expanded);
   };
 
+  const handleSelect = () => {
+    onSelect(server.id);
+  };
+
   return (
     <ListItem key={server.id}>
       <Card className={styles.root}>
-        <CardActionArea style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+        <CardActionArea
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            background: selected ? theme.palette.secondary.main : 'transparent',
+          }}
+          onClick={handleSelect}>
           <CardMedia style={{padding: 16}}>
             {server.detail?.serverImageURL && (
               <Image
