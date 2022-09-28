@@ -27,9 +27,10 @@ import useMyriadInstance from 'src/components/common/Blockchain/use-myriad-insta
 import ShowIf from 'src/components/common/show-if.component';
 import {useInstances} from 'src/hooks/use-instances.hooks';
 import MyriadCircle from 'src/images/Icons/myriad-circle.svg';
+import {ServerListProps} from 'src/interfaces/server-list';
 
 type SelectServerProps = {
-  onServerSelect: () => void;
+  onServerSelect: (server: ServerListProps) => void;
 };
 
 const SelectServer = ({onServerSelect}: SelectServerProps) => {
@@ -62,7 +63,7 @@ const SelectServer = ({onServerSelect}: SelectServerProps) => {
   const handleSelect = (serverId: number) => {
     setSelectedServerId(serverId);
     setOpen(false);
-    onServerSelect();
+    onServerSelect(servers[serverId]);
   };
 
   return (
