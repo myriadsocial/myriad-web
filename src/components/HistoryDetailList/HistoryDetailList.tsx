@@ -232,41 +232,37 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                         <TableCell component="th" scope="row" className={classes.tableCell}>
                           <Avatar
                             size={AvatarSize.MEDIUM}
-                            alt={
-                              tx.toWallet?.userId === userId
-                                ? tx.fromWallet?.userId
-                                : tx.toWallet?.userId
-                            }
+                            alt={tx.toUser?.id === userId ? tx.fromUser?.id : tx.toUser?.id}
                             src={
-                              tx.toWallet?.userId === userId
-                                ? tx.fromWallet?.user.profilePictureURL ?? DEFAULT_NAME
-                                : tx.toWallet?.user.profilePictureURL ?? DEFAULT_NAME
+                              tx.toUser?.id === userId
+                                ? tx.fromUser?.profilePictureURL ?? DEFAULT_NAME
+                                : tx.toUser?.profilePictureURL ?? DEFAULT_NAME
                             }
                             name={
-                              tx.toWallet?.userId === userId
-                                ? tx.fromWallet?.user.deletedAt
+                              tx.toUser?.id === userId
+                                ? tx.fromUser?.deletedAt
                                   ? undefined
-                                  : tx.fromWallet?.user.name ?? DEFAULT_NAME
-                                : tx.toWallet?.user.deletedAt
+                                  : tx.fromUser?.name ?? DEFAULT_NAME
+                                : tx.toUser?.deletedAt
                                 ? undefined
-                                : tx.toWallet?.user.name ?? DEFAULT_NAME
+                                : tx.toUser?.name ?? DEFAULT_NAME
                             }
                             banned={
-                              tx.toWallet?.userId === userId
-                                ? !!tx.fromWallet?.user.deletedAt
-                                : !!tx.toWallet?.user.deletedAt
+                              tx.toUser?.id === userId
+                                ? !!tx.fromUser?.deletedAt
+                                : !!tx.toUser?.deletedAt
                             }
                           />
 
                           <div className={classes.textSenderWrapper}>
                             <Typography variant="body1" className={classes.textSender}>
-                              {tx.toWallet?.userId === userId
-                                ? tx.fromWallet?.user.deletedAt
+                              {tx.toUser?.id === userId
+                                ? tx.fromUser?.deletedAt
                                   ? i18n.t('Tipping_History.Modal.User_Banned')
-                                  : tx.fromWallet?.user.name ?? DEFAULT_NAME
-                                : tx.toWallet?.user.deletedAt
+                                  : tx.fromUser?.name ?? DEFAULT_NAME
+                                : tx.toUser?.deletedAt
                                 ? i18n.t('Tipping_History.Modal.User_Banned')
-                                : tx.toWallet?.user.name ?? DEFAULT_NAME}
+                                : tx.toUser?.name ?? DEFAULT_NAME}
                             </Typography>
                             <Typography
                               variant="caption"
@@ -275,12 +271,12 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                               {timeAgo(tx.createdAt)}
                             </Typography>
                             <ShowIf condition={isMobile}>
-                              {tx.toWallet?.userId === userId && (
+                              {tx.toUser?.id === userId && (
                                 <Typography className={classes.textReceived}>
                                   {i18n.t('Wallet.History.Received')}
                                 </Typography>
                               )}
-                              {tx.fromWallet?.userId === userId && (
+                              {tx.fromUser?.id === userId && (
                                 <Typography className={classes.textSent}>
                                   {i18n.t('Wallet.History.Sent')}
                                 </Typography>
@@ -290,14 +286,14 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                         </TableCell>
                         <ShowIf condition={!isMobile}>
                           <TableCell align="center">
-                            {tx.toWallet?.userId === userId && (
+                            {tx.toUser?.id === userId && (
                               <div className={classes.received}>
                                 <Typography variant="caption">
                                   {i18n.t('Wallet.History.Received')}
                                 </Typography>
                               </div>
                             )}
-                            {tx.fromWallet?.userId === userId && (
+                            {tx.fromUser?.id === userId && (
                               <div className={classes.sent}>
                                 <Typography variant="caption">
                                   {i18n.t('Wallet.History.Sent')}
@@ -309,12 +305,12 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                         <TableCell align="right">
                           <div className={classes.currencyDetailWrapper}>
                             <div>
-                              {tx.toWallet?.userId === userId && (
+                              {tx.toUser?.id === userId && (
                                 <Typography variant="h5" className={classes.textAmountReceived}>
                                   {parseScientificNotatedNumber(+tx.amount)} {tx.currency.symbol}
                                 </Typography>
                               )}
-                              {tx.fromWallet?.userId === userId && (
+                              {tx.fromUser?.id === userId && (
                                 <Typography variant="h5" className={classes.textAmountSent}>
                                   {parseScientificNotatedNumber(+tx.amount)} {tx.currency.symbol}
                                 </Typography>

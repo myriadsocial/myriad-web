@@ -32,16 +32,10 @@ export const getTransactions = async (
       },
     },
     {
-      relation: 'fromWallet',
-      scope: {
-        include: [{relation: 'user'}],
-      },
+      relation: 'fromUser',
     },
     {
-      relation: 'toWallet',
-      scope: {
-        include: [{relation: 'user'}],
-      },
+      relation: 'toUser',
     },
   ];
 
