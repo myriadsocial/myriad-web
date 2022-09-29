@@ -1040,9 +1040,24 @@
       "Alert": {
         "Copy_Msg": "Alamat dompet disalin!",
         "Connect": "Akun dompet Anda berhasil terhubung!",
-        "Error": "Akun dompet terhubung dengan akun lain!"
+        "Disconnect": {
+          "Confirm": {
+            "Title": "Putuskan Dompet",
+            "Subtitle": "Apakah kamu yakin akan memutus dompet {{name}} dari akunmu?",
+            "Btn_Confirm": "Iya",
+            "Btn_Cancel": "Tidak"
+          },
+          "Success": {
+            "Title": "Dompet Terputus",
+            "Subtitle": "Dompet berhasil terputus",
+            "Btn_Dismiss": "Dismiss"
+          }
+        },
+        "ErrorConnect": "Akun dompet terhubung dengan akun lain!",
+        "ErrorDisconnect": "Akun dompet gagal terputus!"
       },
-      "Btn_Connect": "Hubungkan"
+      "Btn_Connect": "Hubungkan",
+      "Btn_Disconnect": "Putuskan"
     }
   },
   "TopNavbar": {
