@@ -25,12 +25,12 @@ import i18n from 'src/locale';
 export type ManageProps = {
   currentWallet?: UserWallet;
   wallets: UserWallet[];
-  onConnect: (type: string) => void;
+  onConnectDisconnect: (type: string, walletId?: string) => void;
 };
 
 const Button = WithAuthorizeAction(BaseButton);
 
-export const Manage: React.FC<ManageProps> = ({wallets, onConnect}) => {
+export const Manage: React.FC<ManageProps> = ({wallets, onConnectDisconnect}) => {
   const style = useStyles();
   const enqueueSnackbar = useEnqueueSnackbar();
   const {walletList} = useWalletList(wallets);
@@ -42,10 +42,6 @@ export const Manage: React.FC<ManageProps> = ({wallets, onConnect}) => {
     });
   };
 
-  const handleConnectWallet = (selectedWallet: string) => {
-    onConnect(selectedWallet);
-  };
-
   return (
     <>
       <div>
@@ -54,7 +50,19 @@ export const Manage: React.FC<ManageProps> = ({wallets, onConnect}) => {
             <ListItemAvatar>{option.icons}</ListItemAvatar>
             <ListItemText>
               <Typography variant="h5" component="div" color="textPrimary" className={style.name}>
-                {option.title}
+                <div className={style.secondaryAction}>
+                  <span>{option.title}</span>
+                  <ShowIf condition={option.isConnect}>
+                    <Button
+                      variant="text"
+                      size="small"
+                      color="primary"
+                      className={style.button}
+                      onClick={() => onConnectDisconnect(option.id, option.walletId)}>
+                      {i18n.t('Wallet.Manage.Btn_Disconnect')}
+                    </Button>
+                  </ShowIf>
+                </div>
               </Typography>
               <ShowIf condition={option.isConnect}>
                 <TextField
@@ -87,7 +95,7 @@ export const Manage: React.FC<ManageProps> = ({wallets, onConnect}) => {
                   color="secondary"
                   disabled={isMobile}
                   className={style.btnConnect}
-                  onClick={() => handleConnectWallet(option.id)}>
+                  onClick={() => onConnectDisconnect(option.id)}>
                   {i18n.t('Wallet.Manage.Btn_Connect')}
                 </Button>
               </div>
