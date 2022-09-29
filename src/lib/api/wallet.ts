@@ -37,8 +37,7 @@ export const getUserNonce = async (id: string): Promise<UserNonceProps> => {
   return data ? data : {nonce: 0};
 };
 
-export const getUserByWalletAddress = async (address: string): Promise<User & BlockedProps> => {
-  const addr = isHex(`0x${address}`) ? `0x${address}` : address;
+export const getUser = async (): Promise<(User & BlockedProps) | null> => {
   const params: Record<string, any> = {
     filter: {
       include: [
@@ -56,7 +55,7 @@ export const getUserByWalletAddress = async (address: string): Promise<User & Bl
   };
 
   const {data} = await MyriadAPI().request<User & BlockedProps>({
-    url: `wallets/${addr}/user`,
+    url: `user`,
     method: 'GET',
     params,
   });
@@ -119,6 +118,19 @@ export const connectNetwork = async (
 
     return null;
   }
+};
+
+export const disconnectNetwork = async (
+  payload: ConnectNetwork,
+  walletId: string,
+): Promise<Wallet | null> => {
+  const {data} = await MyriadAPI().request<Wallet>({
+    url: `wallets/${walletId}`,
+    method: 'DELETE',
+    data: payload,
+  });
+
+  return data;
 };
 
 export const switchNetwork = async (payload: ConnectNetwork, id: string): Promise<any> => {

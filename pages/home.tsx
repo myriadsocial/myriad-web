@@ -95,7 +95,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   if (anonymous || !userId) {
     await dispatch(setAnonymous(session.user.name));
   } else {
-    await dispatch(fetchUser(userId));
+    await dispatch(fetchUser());
 
     await Promise.all([
       dispatch(fetchConnectedSocials()),

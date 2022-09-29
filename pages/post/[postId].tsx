@@ -129,7 +129,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   const session = await getSession(context);
 
   const anonymous = session?.user.anonymous || !session ? true : false;
-  const userAddress = session?.user.address as string;
 
   let userId: string | undefined = undefined;
   let post: Post | undefined = undefined;
@@ -139,7 +138,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   try {
     if (!anonymous) {
       // TODO: fix ThunkDispatch return type
-      const user = (await dispatch(fetchUser(userAddress))) as any;
+      const user = (await dispatch(fetchUser())) as any;
       userId = user?.id;
     }
 
