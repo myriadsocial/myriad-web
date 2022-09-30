@@ -9,7 +9,6 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import ShowIf from '../common/show-if.component';
 import {useStyles} from './Login.styles';
 import {Accounts} from './render/Accounts';
-import {Login as LoginComponent} from './render/Login';
 import {Options} from './render/Options';
 import {Profile} from './render/Profile';
 
@@ -35,7 +34,7 @@ export const Login: React.FC<LoginProps> = props => {
 
   const styles = useStyles();
 
-  const {anonymous, fetchUserNonce, signInWithExternalAuth, clearNearCache} = useAuthHook();
+  const {fetchUserNonce, signInWithExternalAuth, clearNearCache} = useAuthHook();
   const {checkUsernameAvailable} = useProfileHook();
   const {connectToNear} = useNearApi();
 
@@ -103,12 +102,6 @@ export const Login: React.FC<LoginProps> = props => {
 
   const handleSelectedAccount = (account: InjectedAccountWithMeta) => {
     setSelectedAccount(account);
-  };
-
-  const switchAccount = async (account: InjectedAccountWithMeta, callback: () => void) => {
-    handleSelectedAccount(account);
-
-    checkAccountRegistered(callback, account);
   };
 
   const checkAccountRegistered = useCallback(
@@ -205,12 +198,6 @@ export const Login: React.FC<LoginProps> = props => {
           <Route
             index={false}
             path="/"
-            element={<LoginComponent anonymousLogin={anonymous} switchAccount={switchAccount} />}
-          />
-
-          <Route
-            index={false}
-            path="/wallet"
             element={
               <Options
                 onConnect={handleOnconnect}

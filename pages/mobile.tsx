@@ -101,7 +101,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     if (device.type !== 'mobile') {
       return {
         redirect: {
-          destination: '/home',
+          destination: '/',
           permanent: false,
           headers,
         },

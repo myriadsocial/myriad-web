@@ -1,6 +1,7 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 
+import {useSession} from 'next-auth/react';
 import {useRouter} from 'next/router';
 
 import {ProfileCard} from './ProfileCard';
@@ -16,6 +17,10 @@ type Props = {
 export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
   const total = useSelector<RootState, number>(state => state.notificationState.total);
 
+  const {data: session} = useSession();
+
+  const address = session?.user.address as string;
+
   const router = useRouter();
 
   const {user, anonymous, alias, currentWallet, wallets, networks, userWalletAddress} =
@@ -29,7 +34,11 @@ export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
   };
 
   const handleSignOut = async () => {
-    logout();
+    if (address) {
+      logout(Boolean(address));
+    } else {
+      router.push('/login');
+    }
   };
 
   const handleShowNotificationList = () => {
