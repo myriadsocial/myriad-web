@@ -31,9 +31,10 @@ export const useConnect = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const connectNetwork = async (
+  const connectDisconnectNetwork = async (
     blockchainPlatform: BlockchainPlatform,
     account?: InjectedAccountWithMeta | NearPayload,
+    walletId?: string,
     callback?: (error: boolean) => void,
   ): Promise<boolean> => {
     if (!user) return false;
@@ -49,7 +50,13 @@ export const useConnect = () => {
           if (!nonce) return false;
 
           const polkadotAccount = account as InjectedAccountWithMeta;
-          const polkadotSignature = await PolkadotJs.signWithWallet(polkadotAccount, nonce);
+          const polkadotSignature = await PolkadotJs.signWithWallet(
+            polkadotAccount,
+            nonce,
+            ({signerOpened}) => {
+              if (signerOpened) setLoading(true);
+            },
+          );
 
           if (!polkadotSignature) return false;
 
@@ -88,7 +95,8 @@ export const useConnect = () => {
 
       if (!payload) return false;
 
-      await WalletAPI.connectNetwork(payload, user.id);
+      if (walletId) await WalletAPI.disconnectNetwork(payload, walletId);
+      else await WalletAPI.connectNetwork(payload, user.id);
 
       dispatch(fetchUserWallets());
 
@@ -101,6 +109,8 @@ export const useConnect = () => {
       } else {
         Sentry.captureException(err);
       }
+    } finally {
+      setLoading(false);
     }
 
     return false;
@@ -166,8 +176,10 @@ export const useConnect = () => {
       }
 
       await WalletAPI.switchNetwork(payload, user.id);
-      //TODO: better if joined in one API call
-      await dispatch(fetchUser(currentAddress));
+
+      const currentUser = await WalletAPI.getUser();
+
+      await dispatch(fetchUser(currentUser));
       await dispatch(fetchUserWallets());
 
       callback && callback();
@@ -184,7 +196,7 @@ export const useConnect = () => {
 
   return {
     loading,
-    connectNetwork,
+    connectDisconnectNetwork,
     switchNetwork,
   };
 };

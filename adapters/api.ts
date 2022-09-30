@@ -34,7 +34,7 @@ export default function APIAdapter(): Adapter {
       _debug('getUser', address);
 
       try {
-        const user = await WalletAPI.getUserByWalletAddress(address);
+        const user = await WalletAPI.getUser();
 
         return {id: user.id} as AdapterUser;
       } catch (error) {

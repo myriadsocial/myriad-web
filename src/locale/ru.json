@@ -1040,9 +1040,24 @@
       "Alert": {
         "Copy_Msg": "Адрес кошелька скопирован в буфер!",
         "Connect": "Ваша учетная запись кошелька успешно подключена!",
-        "Error": "Электронный кошелек подключен к другой учетной записи!"
+        "Disconnect": {
+          "Confirm": {
+            "Title": "Disconnect Wallet",
+            "Subtitle": "Are you sure you want to disconnect {{name}} wallet from your account?",
+            "Btn_Confirm": "Yes",
+            "Btn_Cancel": "No"
+          },
+          "Success": {
+            "Title": "Wallet Disconnected",
+            "Subtitle": "Selected wallets have been disconnected successfully",
+            "Btn_Dismiss": "Dismiss"
+          }
+        },
+        "ErrorConnect": "Электронный кошелек подключен к другой учетной записи!",
+        "ErrorDisconnect": "The wallet account is failed to disconnect!"
       },
-      "Btn_Connect": "Соединение"
+      "Btn_Connect": "Соединение",
+      "Btn_Disconnect": "Disconnect"
     }
   },
   "TopNavbar": {

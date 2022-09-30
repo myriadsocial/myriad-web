@@ -171,25 +171,24 @@ export const resetVerifyingSocial = (): ResetVerifyingSocial => ({
 /**
  * Action Creator
  */
-export const fetchUser: ThunkActionCreator<Actions, RootState> =
-  (address: string) => async dispatch => {
-    dispatch(setLoading(true));
+export const fetchUser: ThunkActionCreator<Actions, RootState> = () => async dispatch => {
+  dispatch(setLoading(true));
 
-    let user: User | null = null;
+  let user: User | null = null;
 
-    try {
-      user = await WalletAPI.getUserByWalletAddress(address);
+  try {
+    user = await WalletAPI.getUser();
 
-      dispatch(setCurrentUserWallet(user));
-      dispatch(setUser(user));
-    } catch (error) {
-      dispatch(setError(error));
-    } finally {
-      dispatch(setLoading(false));
-    }
+    dispatch(setCurrentUserWallet(user));
+    dispatch(setUser(user));
+  } catch (error) {
+    dispatch(setError(error));
+  } finally {
+    dispatch(setLoading(false));
+  }
 
-    return user;
-  };
+  return user;
+};
 
 export const fetchConnectedSocials: ThunkActionCreator<Actions, RootState> =
   () => async (dispatch, getState) => {

@@ -1040,9 +1040,24 @@
       "Alert": {
         "Copy_Msg": "Wallet address copied to clipboard!",
         "Connect": "Your wallet account successfully connected!",
-        "Error": "The wallet account connected with another account!"
+        "Disconnect": {
+          "Confirm": {
+            "Title": "Disconnect Wallet",
+            "Subtitle": "Are you sure you want to disconnect {{name}} wallet from your account?",
+            "Btn_Confirm": "Yes",
+            "Btn_Cancel": "No"
+          },
+          "Success": {
+            "Title": "Wallet Disconnected",
+            "Subtitle": "Selected wallets have been disconnected successfully",
+            "Btn_Dismiss": "Dismiss"
+          }
+        },
+        "ErrorConnect": "The wallet account connected with another account!",
+        "ErrorDisconnect": "The wallet account is failed to disconnect!"
       },
-      "Btn_Connect": "Connect"
+      "Btn_Connect": "Connect",
+      "Btn_Disconnect": "Disconnect"
     }
   },
   "TopNavbar": {
