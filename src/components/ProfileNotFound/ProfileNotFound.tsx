@@ -16,7 +16,7 @@ export const ProfileNotFound: React.FC = () => {
   const router = useRouter();
 
   const goHome = () => {
-    router.push('/home');
+    router.push('/');
   };
 
   return (

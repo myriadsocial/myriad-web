@@ -31,7 +31,7 @@ export const NavbarComponent: React.FC<SearchBoxContainerProps> = props => {
 
   const toggleOpenSearch = () => {
     if (router.pathname === '/search') {
-      router.push('/home', undefined, {shallow: true});
+      router.push('/', undefined, {shallow: true});
     } else {
       setIsSearch(!isSearch);
     }

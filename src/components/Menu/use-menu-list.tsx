@@ -47,7 +47,7 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         title: i18n.t('Section.Home'),
         active: selected === 'home',
         icon: HomeIcon,
-        url: '/home',
+        url: '/',
         isDesktop: true,
         isAnimated: false,
       },

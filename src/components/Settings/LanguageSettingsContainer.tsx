@@ -49,7 +49,7 @@ export const LanguageSettingsContainer: React.FC = () => {
       onConfirm: () => {
         router.push(
           {
-            pathname: '/home',
+            pathname: '/',
           },
           undefined,
           {shallow: true},

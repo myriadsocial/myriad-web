@@ -36,7 +36,7 @@ export const ResourceDeleted: React.FC = () => {
         </Typography>
       </div>
 
-      <Button component="a" href="/home" variant="contained" color="primary">
+      <Button component="a" href="/" variant="contained" color="primary">
         Back to homepage
       </Button>
     </div>

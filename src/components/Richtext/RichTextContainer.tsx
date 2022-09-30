@@ -44,7 +44,7 @@ export const RichTextContainer: React.FC = () => {
 
     // change to all tab, on create post
     if (query.type && query.type !== TimelineType.ALL) {
-      router.push('/home', undefined, {shallow: true});
+      router.push('/', undefined, {shallow: true});
     }
   };
 

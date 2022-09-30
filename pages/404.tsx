@@ -33,7 +33,7 @@ const NotFound: React.FC = () => {
       <Typography className={style.title}>{i18n.t('404.Title')}</Typography>
       <Typography className={style.subtitle}>{i18n.t('404.Subtitle')}</Typography>
 
-      <Button component="a" href="/home" variant="contained" color="primary">
+      <Button component="a" href="/" variant="contained" color="primary">
         {i18n.t('404.Btn_Back')}
       </Button>
     </div>

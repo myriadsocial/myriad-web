@@ -11,7 +11,7 @@ describe('Menu Container', () => {
     'https://firebasestorage.googleapis.com/v0/b/myriad-social-mainnet.appspot.com/o/assets%2Flogo_myriad.svg?alt=media&token=9be4d7a6-0a54-4fb3-bab8-1da47343409a';
 
   it('render menu container', () => {
-    singletonRouter.push('/home');
+    singletonRouter.push('/');
     render(<MenuContainer logo={logo} />);
     const renderComponentMenu = screen.getByTestId(`menu-container-test`);
     expect(renderComponentMenu).toBeInTheDocument();
@@ -20,7 +20,7 @@ describe('Menu Container', () => {
   });
 
   it('render menu container with change router', () => {
-    singletonRouter.push('/home');
+    singletonRouter.push('/');
     singletonRouter.push('/friends');
     render(<MenuContainer logo={logo} />);
     const renderComponentMenu = screen.getByTestId(`menu-container-test`);
