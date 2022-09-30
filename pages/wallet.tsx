@@ -85,7 +85,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   if (!session) {
     return {
       redirect: {
-        destination: '/',
+        destination: '/login',
         permanent: false,
       },
     };
