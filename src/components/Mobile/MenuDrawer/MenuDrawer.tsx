@@ -1,4 +1,3 @@
-import {LogoutIcon} from '@heroicons/react/outline';
 import {MenuIcon} from '@heroicons/react/solid';
 
 import React from 'react';
@@ -10,9 +9,6 @@ import {useRouter} from 'next/router';
 import {Button} from '@material-ui/core';
 import Drawer from '@material-ui/core/Drawer';
 import Grid from '@material-ui/core/Grid';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
@@ -47,8 +43,6 @@ export const MenuDrawerComponent: React.FC = () => {
   const {data: session} = useSession();
   const menu = useMenuList(selected);
   const style = useStyles();
-
-  const iconSyles = [style.icon];
 
   React.useEffect(() => {
     parseSelected(router.pathname);
@@ -201,25 +195,6 @@ export const MenuDrawerComponent: React.FC = () => {
                 />
               ))}
             </div>
-          </div>
-          {/* Logout */}
-          <div className={style.logout}>
-            <ListItem
-              component="div"
-              className={style.logoutListItem}
-              ContainerComponent="div"
-              onClick={handleSignOut}>
-              <ListItemIcon className={iconSyles.join(' ')}>
-                <SvgIcon color="error" component={LogoutIcon} />
-              </ListItemIcon>
-              <ListItemText
-                primary={
-                  <Typography component="div" variant="h5" color="error">
-                    Logout
-                  </Typography>
-                }
-              />
-            </ListItem>
           </div>
         </Grid>
         <PromptComponent
