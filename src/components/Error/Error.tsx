@@ -38,7 +38,7 @@ export const Error: React.FC<ErrorProps> = props => {
         An unexpected error has occurred. Try to go to homepage or kindly submit feedback to us.
       </Typography>
 
-      <Button component="a" href="/home" variant="contained" color="primary">
+      <Button component="a" href="/" variant="contained" color="primary">
         Back to homepage
       </Button>
     </div>

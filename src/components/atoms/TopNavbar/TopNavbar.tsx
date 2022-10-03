@@ -45,7 +45,7 @@ export const TopNavbarComponent: React.FC<TopNavbarProps> = props => {
         if (window.history.length > 2) {
           router.back();
         } else {
-          router.push('/home', undefined, {shallow: true});
+          router.push('/', undefined, {shallow: true});
         }
       }
     }

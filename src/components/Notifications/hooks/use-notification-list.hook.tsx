@@ -235,7 +235,7 @@ export const useNotificationList = (
               </div>
             ),
             createdAt: notification.createdAt,
-            href: `/home`,
+            href: `/`,
           };
 
         case NotificationType.COMMENT_VOTE:
@@ -257,7 +257,7 @@ export const useNotificationList = (
               </div>
             ),
             createdAt: notification.createdAt,
-            href: `/home`,
+            href: `/`,
           };
 
         case NotificationType.USER_TIPS:

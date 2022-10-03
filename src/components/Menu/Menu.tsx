@@ -22,8 +22,8 @@ export const Menu: React.FC<MenuProps> = props => {
   const menu = useMenuList(selected);
 
   const gotoHome = () => {
-    if (router.pathname === '/home') return;
-    router.push('/home', undefined, {shallow: true});
+    if (router.pathname === '/') return;
+    router.push('/', undefined, {shallow: true});
   };
 
   const openMenu = (item: MenuDetail) => () => {
