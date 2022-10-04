@@ -175,9 +175,14 @@ export const ManageCointainer: React.FC = () => {
         nonce: signatureData.nonce,
       };
 
-      return connectDisconnectNetwork(BlockchainPlatform.NEAR, payload, walletId, async error => {
-        if (error) await Near.clearLocalStorage();
-      });
+      return connectDisconnectNetwork(
+        BlockchainPlatform.NEAR,
+        payload,
+        walletId,
+        async (disconnect, error) => {
+          if (error || disconnect) await Near.clearLocalStorage();
+        },
+      );
     } catch {
       return false;
     } finally {
@@ -200,7 +205,9 @@ export const ManageCointainer: React.FC = () => {
       case 'near':
         setWalletName('NEAR');
         if (walletId) return setConfirmDisconnect(true);
-        return setShowWalletList(true);
+        setShowWalletList(true);
+        setInitNear(true);
+        return;
       default:
         break;
     }

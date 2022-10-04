@@ -35,7 +35,7 @@ export const useConnect = () => {
     blockchainPlatform: BlockchainPlatform,
     account?: InjectedAccountWithMeta | NearPayload,
     walletId?: string,
-    callback?: (error: boolean) => void,
+    callback?: (disconnect: boolean, error: boolean) => void,
   ): Promise<boolean> => {
     if (!user) return false;
     if (!account) return false;
@@ -95,14 +95,19 @@ export const useConnect = () => {
 
       if (!payload) return false;
 
-      if (walletId) await WalletAPI.disconnectNetwork(payload, walletId);
-      else await WalletAPI.connectNetwork(payload, user.id);
+      if (walletId) {
+        await WalletAPI.disconnectNetwork(payload, walletId);
+
+        callback && callback(true, false);
+      } else {
+        await WalletAPI.connectNetwork(payload, user.id);
+      }
 
       dispatch(fetchUserWallets());
 
       return true;
     } catch (err) {
-      callback && callback(true);
+      callback && callback(false, true);
 
       if (err instanceof AccountRegisteredError) {
         throw err;
