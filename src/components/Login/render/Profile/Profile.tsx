@@ -244,7 +244,7 @@ export const Profile: React.FC<ProfileProps> = props => {
         }
       }
     }
-    navigate('/wallet');
+    navigate('/');
   };
 
   const validate = (): boolean => {
@@ -296,7 +296,7 @@ export const Profile: React.FC<ProfileProps> = props => {
     );
 
     if (!registered) {
-      navigate('/wallet');
+      navigate('/');
     }
   };
 
