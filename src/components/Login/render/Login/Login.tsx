@@ -51,7 +51,7 @@ export const Login: React.FC<LoginProps> = props => {
   };
 
   const chooseWallet = () => {
-    navigate('/wallet');
+    navigate('/');
   };
 
   return (
