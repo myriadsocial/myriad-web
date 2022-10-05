@@ -106,7 +106,7 @@ export const getPost = async (
     const {filter, timelineType, ...restParams} = Object.assign({}, params);
 
     params = restParams;
-    params.q = encodeURIComponent(query);
+    params.q = query;
   }
 
   const {data} = await MyriadAPI().request<PostList>({
