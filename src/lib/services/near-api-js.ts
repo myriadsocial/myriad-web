@@ -143,7 +143,7 @@ export class Near implements IProvider {
       const signInOptions = {
         contractId: publicRuntimeConfig.nearTippingContractId,
         methodNames: ['claim_tip', 'batch_claim_tips'],
-        successUrl: successUrl ?? `${publicRuntimeConfig.appAuthURL}/?auth=${auth}`,
+        successUrl: successUrl ?? `${publicRuntimeConfig.appAuthURL}/login/?auth=${auth}`,
         failureUrl: failureUrl ?? `${publicRuntimeConfig.appAuthURL}`,
       };
 
