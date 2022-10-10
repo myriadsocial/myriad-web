@@ -170,14 +170,12 @@ export const useAuthHook = () => {
     }
   };
 
-  const logout = async (asUser?: boolean) => {
+  const logout = async () => {
     window.localStorage.removeItem(MYRIAD_WALLET_KEY);
 
     const promises: Promise<void | undefined>[] = [
       signOut({
-        callbackUrl: asUser
-          ? publicRuntimeConfig.appAuthURL
-          : publicRuntimeConfig.appAuthURL + '/login',
+        callbackUrl: publicRuntimeConfig.appAuthURL,
         redirect: true,
       }),
     ];
