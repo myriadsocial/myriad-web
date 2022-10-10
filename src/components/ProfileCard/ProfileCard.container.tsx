@@ -35,7 +35,7 @@ export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
 
   const handleSignOut = async () => {
     if (address) {
-      logout(Boolean(address));
+      logout();
     } else {
       router.push('/login');
     }
