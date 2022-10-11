@@ -46,9 +46,7 @@ export const Login: React.FC<LoginProps> = props => {
   const [signatureCancelled, setSignatureCancelled] = useState(false);
   const [loading, setLoading] = useState(false);
   const [walletLoading, setWalletLoading] = useState(Boolean(redirectAuth));
-  const [initialEntries, setInitialEntries] = useState<string[]>(
-    redirectAuth || isMobileSignIn ? ['/wallet'] : ['/'],
-  );
+  const [initialEntries, setInitialEntries] = useState<string[]>(['/']);
 
   useEffect(() => {
     if (redirectAuth === WalletTypeEnum.NEAR || redirectAuth === WalletTypeEnum.MYNEAR) {
