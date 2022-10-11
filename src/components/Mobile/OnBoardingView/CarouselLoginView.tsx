@@ -1,3 +1,4 @@
+//TODO: check if component needs to be removed
 import React from 'react';
 import Carousel from 'react-material-ui-carousel';
 

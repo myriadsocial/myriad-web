@@ -108,7 +108,7 @@ export const MenuDrawerComponent: React.FC = () => {
       logout();
     } else {
       dispatch(clearUser());
-      await router.push(`/`);
+      await router.push(`/login`);
     }
   };
 
