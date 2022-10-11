@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import {useEffect} from 'react';
 
 import {getSession} from 'next-auth/react';
 import getConfig from 'next/config';
@@ -103,8 +103,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   const session = await getSession(context);
-
-  console.log({session});
 
   if (session) {
     return {
