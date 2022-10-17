@@ -1,8 +1,10 @@
-import {render, screen} from '@testing-library/react';
+import {screen} from '@testing-library/react';
 
 import singletonRouter from 'next/router';
 
 import {MenuContainer} from './Menu.container';
+
+import {renderWithProviders} from 'test/test-utils';
 
 jest.mock('next/router', () => require('next-router-mock'));
 
@@ -12,7 +14,7 @@ describe('Menu Container', () => {
 
   it('render menu container', () => {
     singletonRouter.push('/');
-    render(<MenuContainer logo={logo} />);
+    renderWithProviders(<MenuContainer logo={logo} />);
     const renderComponentMenu = screen.getByTestId(`menu-container-test`);
     expect(renderComponentMenu).toBeInTheDocument();
     const renderComponentSelected = screen.getByTestId('list-item-icon-Home');
@@ -22,7 +24,7 @@ describe('Menu Container', () => {
   it('render menu container with change router', () => {
     singletonRouter.push('/');
     singletonRouter.push('/friends');
-    render(<MenuContainer logo={logo} />);
+    renderWithProviders(<MenuContainer logo={logo} />);
     const renderComponentMenu = screen.getByTestId(`menu-container-test`);
     expect(renderComponentMenu).toBeInTheDocument();
     const renderComponentSelected = screen.getByTestId('list-item-icon-Friends');

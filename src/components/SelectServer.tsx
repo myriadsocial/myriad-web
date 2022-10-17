@@ -1,77 +1,261 @@
-import {useState, useMemo} from 'react';
+import {ChevronDownIcon} from '@heroicons/react/outline';
+import {XIcon} from '@heroicons/react/solid';
 
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
-import Typography from '@material-ui/core/Typography';
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import {useState, useMemo, useEffect} from 'react';
 
+import {
+  Card,
+  CardActionArea,
+  CardContent,
+  Box,
+  ButtonBase,
+  Button,
+  SvgIcon,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  List,
+  ListItem,
+  Typography,
+} from '@material-ui/core';
+import {Skeleton} from '@material-ui/lab';
+
+import InstanceCard from './InstanceCard';
+import useStyles from './SelectServer.styles';
+
+import clsx from 'clsx';
 import useMyriadInstance from 'src/components/common/Blockchain/use-myriad-instance.hooks';
+import ShowIf from 'src/components/common/show-if.component';
+import {useAuthHook} from 'src/hooks/auth.hook';
 import {useInstances} from 'src/hooks/use-instances.hooks';
+import MyriadCircle from 'src/images/Icons/myriad-circle.svg';
+import {ServerListProps} from 'src/interfaces/server-list';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      marginLeft: '20px',
-      gap: '4px',
-    },
-    formControl: {
-      width: '250px',
-      height: '40px',
-    },
-    select: {
-      background: '#F6F7FC',
-      borderRadius: '40px',
-    },
-    selectEmpty: {
-      marginTop: theme.spacing(2),
-    },
-  }),
-);
+type SelectServerProps = {
+  onServerSelect?: (server: ServerListProps) => void;
+};
 
-const SelectServer = () => {
+const SelectServer = ({onServerSelect}: SelectServerProps) => {
   const {provider} = useMyriadInstance();
   const {servers, getAllInstances} = useInstances();
 
+  const {logout} = useAuthHook();
+
+  const [openCheckAccountModal, setOpenCheckAccountModal] = useState(false);
+
   const classes = useStyles();
-
-  const [serverId, setServerId] = useState<string | null>(null);
-
-  const handleChange = (event: React.ChangeEvent<{name?: string; value: string}>) => {
-    setServerId(event.target.value);
-  };
 
   useMemo(() => {
     getAllInstances(provider);
   }, [provider]);
 
+  useEffect(() => {
+    if (servers.length > 0) {
+      setSelectedServerId(servers[0].id);
+    }
+  }, [servers]);
+
+  const [open, setOpen] = useState(false);
+  const [selectedServerId, setSelectedServerId] = useState<number | null>(null);
+
+  const selectedInstanceName = selectedServerId
+    ? servers[selectedServerId].detail?.name
+    : 'Unknown Instance';
+
+  const handleOpen = () => {
+    setOpen(!open);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSelect = (serverId: number) => {
+    setSelectedServerId(serverId);
+    setOpen(false);
+    //onServerSelect(servers[serverId]);
+    setOpenCheckAccountModal(true);
+  };
+
+  const handleCloseCheckAccountModal = () => {
+    setOpenCheckAccountModal(false);
+  };
+
   return (
-    <div className={classes.root}>
-      <Typography>Switch Instance</Typography>
-      <FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel htmlFor="outlined-age-native-simple">Select Instance</InputLabel>
-        <Select
-          native
-          value={serverId}
-          onChange={handleChange}
-          label="server-name"
-          inputProps={{
-            name: 'server-name',
-            id: 'outlined-server-name',
-          }}
-          className={classes.select}>
-          <option aria-label="None" value="" />
-          {servers.map(server => (
-            <option key={server.id} value={server.id}>
-              {server.detail?.name ?? 'Unnamed instance'}
-            </option>
-          ))}
-        </Select>
-      </FormControl>
-    </div>
+    <>
+      <div className={classes.root}>
+        <Box style={{marginBottom: 8}}>Select instance</Box>
+        {!servers.length ? (
+          <Skeleton>
+            <Button />
+          </Skeleton>
+        ) : (
+          <ButtonBase
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              background: '#F6F7FC',
+              padding: `8px 12px`,
+              gap: 8,
+              borderRadius: 40,
+            }}
+            onClick={handleOpen}>
+            <SvgIcon component={MyriadCircle} viewBox="0 0 30 30" />
+            <Box>
+              {servers.find(server => server.id === selectedServerId)?.detail?.name ??
+                'Common Server'}
+            </Box>
+            <SvgIcon
+              style={{marginLeft: 'auto'}}
+              component={ChevronDownIcon}
+              fontSize="small"
+              color={'primary'}
+            />
+          </ButtonBase>
+        )}
+      </div>
+
+      <Dialog
+        id="server-list-dialog"
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="list-server-dialog">
+        <DialogTitle
+          id="list-server-dialog-title"
+          style={{display: 'flex', flexDirection: 'column'}}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              position: 'relative',
+            }}>
+            <Box style={{fontWeight: 600, fontSize: 16, textAlign: 'center'}}>Select Instance</Box>
+            <SvgIcon
+              onClick={handleClose}
+              classes={{
+                root: clsx({
+                  [classes.icon]: true,
+                  [classes.right]: true,
+                }),
+              }}
+              component={XIcon}
+              viewBox="0 0 20 20"
+            />
+          </div>
+        </DialogTitle>
+        <DialogContent>
+          <List>
+            <ShowIf condition={servers.length === 0}>
+              <ListItem>
+                <Card>
+                  <CardActionArea>
+                    <CardContent>
+                      <Skeleton />
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </ListItem>
+            </ShowIf>
+            <ShowIf condition={servers.length > 0}>
+              {servers
+                .filter(server => server.detail)
+                .map(server => (
+                  <InstanceCard
+                    key={server.id}
+                    server={server}
+                    onSelect={() => handleSelect(server.id)}
+                    selected={server.id === selectedServerId}
+                  />
+                ))}
+            </ShowIf>
+          </List>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        id="selected-server-dialog"
+        open={openCheckAccountModal}
+        onClose={handleCloseCheckAccountModal}
+        aria-labelledby="selected-server-dialog">
+        <DialogTitle
+          id="selected-server-dialog-title"
+          style={{display: 'flex', flexDirection: 'column'}}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              position: 'relative',
+            }}>
+            <Box style={{fontWeight: 600, fontSize: 16, textAlign: 'center'}}>Select Instance</Box>
+            <SvgIcon
+              onClick={handleCloseCheckAccountModal}
+              classes={{
+                root: clsx({
+                  [classes.icon]: true,
+                  [classes.right]: true,
+                }),
+              }}
+              component={XIcon}
+              viewBox="0 0 20 20"
+            />
+          </div>
+        </DialogTitle>
+        <DialogContent>
+          <List>
+            <ShowIf condition={!Boolean(selectedServerId)}>
+              <ListItem>
+                <Card>
+                  <CardActionArea>
+                    <CardContent>
+                      <Skeleton />
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </ListItem>
+            </ShowIf>
+            <ShowIf condition={Boolean(selectedServerId)}>
+              <InstanceCard
+                key={selectedServerId}
+                server={servers[selectedServerId]}
+                onSelect={() => console.log(`serverId: ${selectedServerId}`)}
+                selected={true}
+              />
+              <ListItem
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  maxWidth: 'fit-content',
+                }}>
+                <Typography style={{whiteSpace: 'pre-line'}}>
+                  {`You don't seem to have an account on ${selectedInstanceName}. Do you wish to create a new account on ${selectedInstanceName}?`}
+                </Typography>
+              </ListItem>
+              <ListItem
+                style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                <Button
+                  onClick={() => {
+                    handleCloseCheckAccountModal();
+                    handleOpen();
+                  }}
+                  size="small"
+                  variant="outlined"
+                  color="secondary">
+                  No, Select Others
+                </Button>
+                <Button onClick={() => logout()} size="small" variant="contained" color="primary">
+                  Sign Out
+                </Button>
+              </ListItem>
+            </ShowIf>
+          </List>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 

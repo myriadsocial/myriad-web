@@ -201,7 +201,7 @@
     },
     "Profile": {
       "Title": "Buat akun baru",
-      "Subtitle": "Kamu hanya bisa membuat username satu kali saja.",
+      "Subtitle": "Kamu hanya bisa membuat username satu kali saja dan itu akan menjadi unik untuk setiap instance.",
       "Helper_Text_Name": "Kamu bisa menggunakan {{min_length}} karakter atau lebih.",
       "Helper_Text_Username": "Kamu bisa menggunakan {{min_length}} karakter atau lebih.",
       "Helper_Validate_Name_Min": "Nama tampilan harus disediakan dan mengandung setidaknya {{min_length}} karakter",

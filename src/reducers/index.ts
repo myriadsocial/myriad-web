@@ -1,3 +1,6 @@
+import {configureStore, combineReducers} from '@reduxjs/toolkit';
+import type {PreloadedState} from '@reduxjs/toolkit';
+
 import {BalanceReducer} from './balance/reducer';
 import {BaseReducer} from './base/reducer';
 import {BlockReducer} from './block/reducer';
@@ -17,8 +20,6 @@ import {TimelineReducer} from './timeline/reducer';
 import {TipSummaryReducer} from './tip-summary/reducer';
 import {TransactionReducer} from './transaction/reducer';
 import {UserReducer} from './user/reducer';
-
-import {combineReducers} from 'redux';
 
 const reducers = {
   baseState: BaseReducer,
@@ -44,4 +45,13 @@ const reducers = {
 
 export const combinedReducers = combineReducers(reducers);
 
+export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
+  return configureStore({
+    reducer: combinedReducers,
+    preloadedState,
+  });
+};
+
 export type RootState = ReturnType<typeof combinedReducers>;
+export type AppStore = ReturnType<typeof setupStore>;
+export type AppDispatch = AppStore['dispatch'];

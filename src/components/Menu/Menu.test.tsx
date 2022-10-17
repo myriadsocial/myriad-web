@@ -1,10 +1,12 @@
-import {fireEvent, render, screen} from '@testing-library/react';
+import {fireEvent, screen} from '@testing-library/react';
 import {renderHook} from '@testing-library/react-hooks';
 
 import singletonRouter from 'next/router';
 
 import {Menu} from './Menu';
 import {useMenuList, MenuId} from './use-menu-list';
+
+import {renderWithProviders} from 'test/test-utils';
 
 jest.mock('next/router', () => require('next-router-mock'));
 
@@ -16,7 +18,7 @@ describe('Menu Component', () => {
   const mockFunction = jest.fn(() => console.info('item clicked'));
 
   it('render list item', () => {
-    render(<Menu selected={selected} onChange={mockFunction} logo={logo} />);
+    renderWithProviders(<Menu selected={selected} onChange={mockFunction} logo={logo} />);
     const renderMenuComponent = screen.getByTestId('menu-test');
     const renderComponentHome = screen.getByTestId(`list-item-${resultMenu.current[0].title}`);
     expect(renderMenuComponent).toBeInTheDocument();
@@ -25,7 +27,7 @@ describe('Menu Component', () => {
   });
 
   it('render list item with animation', () => {
-    render(<Menu selected={selected} onChange={mockFunction} logo={logo} />);
+    renderWithProviders(<Menu selected={selected} onChange={mockFunction} logo={logo} />);
     const renderComponentAnimation = screen.getByTestId(
       `list-item-${resultMenu.current.filter(ar => ar.isAnimated === true)[0].title}`,
     );
@@ -35,7 +37,7 @@ describe('Menu Component', () => {
   });
 
   it('render list item with selected menu', () => {
-    render(<Menu selected={selected} onChange={mockFunction} logo={logo} />);
+    renderWithProviders(<Menu selected={selected} onChange={mockFunction} logo={logo} />);
     const renderComponentSelected = screen.getByTestId(
       `list-item-icon-${resultMenu.current.filter(ar => ar.id === selected)[0].title}`,
     );
@@ -45,7 +47,7 @@ describe('Menu Component', () => {
 
   it('render list with change menu onclick', () => {
     const mockFunction = jest.fn(() => singletonRouter.push('/friends'));
-    render(<Menu selected={selected} onChange={mockFunction} logo={logo} />);
+    renderWithProviders(<Menu selected={selected} onChange={mockFunction} logo={logo} />);
     const renderComponentSelected = screen.getByTestId(
       `list-item-${resultMenu.current.filter(ar => ar.id === selected)[0].title}`,
     );
