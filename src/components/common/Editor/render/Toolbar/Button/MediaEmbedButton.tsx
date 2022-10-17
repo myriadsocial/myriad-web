@@ -24,7 +24,7 @@ export const MediaEmbedToolbarButton = ({id, userId, ...props}: MediaEmbedToolba
     if (files.length === 0) return;
 
     try {
-      const {files: uploadedFiles} = await UploadAPI.video(userId, files[0], {
+      const {files: uploadedFiles} = await UploadAPI.video(files[0], {
         onUploadProgress: (event: ProgressEvent) => {
           const total = Math.round((100 * event.loaded) / event.total);
 

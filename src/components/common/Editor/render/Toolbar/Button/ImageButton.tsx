@@ -34,7 +34,7 @@ export const ImageToolbarButton: React.FC<ImageToolbarButtonProps> = ({
     const size = images.length;
 
     for (const [index, image] of toImageEntries(images)) {
-      const {files} = await UploadAPI.image(userId, image, {
+      const {files} = await UploadAPI.image(image, {
         onUploadProgress: (event: ProgressEvent) => {
           const fileProgress = Math.round((100 * event.loaded) / event.total);
           const totalProgress: number = (100 * index) / size + fileProgress / size;

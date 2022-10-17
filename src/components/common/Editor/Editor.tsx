@@ -205,7 +205,7 @@ export const Editor: React.FC<EditorProps> = props => {
       if (typeof dataURI === 'string') {
         const file = dataURItoBlob(dataURI);
         setUploading(true);
-        const {files} = await UploadAPI.imageAsBuffer(userId, file, {
+        const {files} = await UploadAPI.imageAsBuffer(file, {
           onUploadProgress: (event: ProgressEvent) => {
             const fileProgress = Math.round((100 * event.loaded) / event.total);
 
