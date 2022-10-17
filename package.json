@@ -60,6 +60,7 @@
     "@polkadot/api": "^6.5.2",
     "@polkadot/extension-dapp": "^0.37.2",
     "@polkadot/react-identicon": "^0.58.*",
+    "@reduxjs/toolkit": "^1.8.6",
     "@sentry/nextjs": "^6.19.2",
     "@storybook/addon-links": "^6.3.7",
     "@types/bn.js": "^4.11.6",
