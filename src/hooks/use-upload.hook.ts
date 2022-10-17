@@ -36,7 +36,7 @@ export const useUpload = () => {
     try {
       setProgress(0);
 
-      const data = await UploadAPI.image(user.id, file, {
+      const data = await UploadAPI.image(file, {
         onUploadProgress: (event: ProgressEvent) => {
           const fileProgress =
             (Math.round((100 * event.loaded) / event.total) * (randomIntBetween(5, 8) * 10)) / 100;
@@ -80,7 +80,7 @@ export const useUpload = () => {
     try {
       setProgress(0);
 
-      const data = await UploadAPI.video(user.id, file, {
+      const data = await UploadAPI.video(file, {
         onUploadProgress: (event: ProgressEvent) => {
           const fileProgress =
             (Math.round((100 * event.loaded) / event.total) * (randomIntBetween(5, 8) * 10)) / 100;
