@@ -2,13 +2,16 @@ import MyriadAPI from './base';
 import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
 
-import {User, ActivityLog, BlockedProps} from 'src/interfaces/user';
+import {User, ActivityLog, FriendStatusProps} from 'src/interfaces/user';
 import {WalletDetail} from 'src/interfaces/wallet';
 
 type UserList = BaseList<User>;
 type ActivityList = BaseList<ActivityLog>;
 
-export const getUserDetail = async (id: string, userId?: string): Promise<User & BlockedProps> => {
+export const getUserDetail = async (
+  id: string,
+  userId?: string,
+): Promise<User & FriendStatusProps> => {
   const params: Record<string, any> = {
     filter: {
       include: [
@@ -33,7 +36,7 @@ export const getUserDetail = async (id: string, userId?: string): Promise<User &
     params.userId = userId;
   }
 
-  const {data} = await MyriadAPI().request<User & BlockedProps>({
+  const {data} = await MyriadAPI().request<User & FriendStatusProps>({
     url: `users/${id}`,
     method: 'GET',
     params,

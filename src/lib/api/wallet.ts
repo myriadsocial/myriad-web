@@ -7,7 +7,7 @@ import {BaseErrorResponse} from './interfaces/error-response.interface';
 
 import axios, {AxiosError} from 'axios';
 import {Network} from 'src/interfaces/network';
-import {BlockedProps, User, UserWallet, Wallet} from 'src/interfaces/user';
+import {FriendStatusProps, User, UserWallet, Wallet} from 'src/interfaces/user';
 
 type WalletList = BaseList<UserWallet>;
 type Networks = BaseList<Network>;
@@ -37,7 +37,7 @@ export const getUserNonce = async (id: string): Promise<UserNonceProps> => {
   return data ? data : {nonce: 0};
 };
 
-export const getUser = async (): Promise<(User & BlockedProps) | null> => {
+export const getUser = async (): Promise<(User & FriendStatusProps) | null> => {
   const params: Record<string, any> = {
     filter: {
       include: [
@@ -54,7 +54,7 @@ export const getUser = async (): Promise<(User & BlockedProps) | null> => {
     },
   };
 
-  const {data} = await MyriadAPI().request<User & BlockedProps>({
+  const {data} = await MyriadAPI().request<User & FriendStatusProps>({
     url: `user`,
     method: 'GET',
     params,

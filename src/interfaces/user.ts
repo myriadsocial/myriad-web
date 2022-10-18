@@ -45,9 +45,11 @@ export type UserProps = BaseUser & {
   deletedAt?: string;
 };
 
-export type BlockedProps = {
+export type FriendStatusProps = {
+  friendId: string;
   status: FriendStatus;
-  blocker: string;
+  requester: string;
+  requestee: string;
 };
 
 export type UserMetric = {

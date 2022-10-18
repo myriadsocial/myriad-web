@@ -10,12 +10,16 @@ import debounce from 'lodash/debounce';
 import {useFriendRequest} from 'src/hooks/use-friend-request.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {useReport} from 'src/hooks/use-report.hook';
-import {Friend, FriendStatus} from 'src/interfaces/friend';
+import {FriendStatus} from 'src/interfaces/friend';
 import {ReportProps} from 'src/interfaces/report';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {blockFromFriend} from 'src/reducers/friend/actions';
-import {fetchProfileDetail, fetchProfileExperience} from 'src/reducers/profile/actions';
+import {
+  fetchProfileDetail,
+  fetchProfileExperience,
+  fetchProfileFriend,
+} from 'src/reducers/profile/actions';
 import {ProfileState} from 'src/reducers/profile/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 
@@ -24,22 +28,19 @@ type Props = {
 };
 
 export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
+  const dispatch = useDispatch();
+  const enqueueSnackbar = useEnqueueSnackbar();
+
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
   const {detail: profile, friendStatus} = useSelector<RootState, ProfileState>(
     state => state.profileState,
   );
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
 
-  const dispatch = useDispatch();
-
-  const {requestFriend, removeFriendRequest, toggleRequest, reloadFriendStatus} =
-    useFriendRequest();
+  const {requestFriend, removeFriendRequest, toggleRequest} = useFriendRequest();
   const {sendReportWithAttributes} = useReport();
   const {open: openTipHistory} = useTipHistoryHook();
-  const enqueueSnackbar = useEnqueueSnackbar();
   const {query} = useQueryParams();
-  const {filterTimeline} = useTimelineFilter({
-    owner: profile?.id,
-  });
+  const {filterTimeline} = useTimelineFilter({owner: profile?.id});
 
   const urlLink = () => {
     if (typeof window !== 'undefined') {
@@ -62,9 +63,9 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
   }, 300);
 
   const declineFriendRequest = debounce(() => {
-    if (!friendStatus) return;
+    if (!profile?.status) return;
 
-    removeFriendRequest(friendStatus);
+    removeFriendRequest(profile);
   }, 300);
 
   const handleSubmitReport = (payload: ReportProps) => {
@@ -76,7 +77,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
 
     await dispatch(blockFromFriend(profile.id));
     await dispatch(fetchProfileDetail(profile.id));
-    await reloadFriendStatus();
+    await dispatch(fetchProfileFriend());
 
     enqueueSnackbar({
       message: i18n.t('Profile.Header.Alert.Success_Block'),
@@ -84,13 +85,13 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
     });
   };
 
-  const handleUnblockUser = (friend: Friend) => {
-    toggleRequest(friend, FriendStatus.PENDING);
+  const handleUnblockUser = (friendId: string) => {
+    toggleRequest(friendId, FriendStatus.PENDING);
   };
 
   const handleAcceptFriend = debounce(() => {
-    if (friendStatus) {
-      toggleRequest(friendStatus, FriendStatus.APPROVED);
+    if (profile.status) {
+      toggleRequest(profile?.friendId ?? '', FriendStatus.APPROVED);
 
       enqueueSnackbar({
         message: i18n.t('Profile.Header.Alert.Success_Req'),
@@ -100,9 +101,11 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
   }, 300);
 
   const handleRemoveFriend = () => {
-    if (friendStatus) {
-      removeFriendRequest(friendStatus, () => {
-        if (friendStatus.status === 'approved') {
+    const status = profile?.status;
+
+    if (status) {
+      removeFriendRequest(profile, () => {
+        if (status === 'approved') {
           enqueueSnackbar({
             message: i18n.t('Profile.Header.Alert.Unfriend', {name: profile?.name}),
             variant: 'success',

@@ -8,12 +8,12 @@ import * as Redux from 'redux';
 import {UserExperience} from 'src/interfaces/experience';
 import {Friend} from 'src/interfaces/friend';
 import {SocialMedia} from 'src/interfaces/social';
-import {BlockedProps, User} from 'src/interfaces/user';
+import {FriendStatusProps, User} from 'src/interfaces/user';
 import {PaginationParams} from 'src/lib/api/interfaces/pagination-params.interface';
 
 export interface ProfileState extends BaseState {
   userId?: string;
-  detail?: User & BlockedProps;
+  detail?: User & FriendStatusProps;
   socials: SocialMedia[];
   friends: {
     filter?: string;

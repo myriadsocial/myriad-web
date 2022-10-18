@@ -1,10 +1,11 @@
 import getConfig from 'next/config';
 
+import path from 'path';
 import {Sizes} from 'src/interfaces/assets';
 
 const STORAGE_BASE_URL = 'https://storage.googleapis.com';
 
-export const generateImageSizes = (url: string | Sizes, extension = 'jpg'): Sizes => {
+export const generateImageSizes = (url: string | Sizes): Sizes => {
   const {publicRuntimeConfig} = getConfig();
 
   if (typeof url === 'object') {
@@ -28,14 +29,15 @@ export const generateImageSizes = (url: string | Sizes, extension = 'jpg'): Size
     };
   }
 
+  const extension = path.parse(url).ext;
   const fileId = filename.split('.').slice(0, -1).join('.');
   const pathname = url.replace(STORAGE_BASE_URL, '').replace(filename, '');
 
   return {
-    thumbnail: `${STORAGE_BASE_URL}${pathname}${fileId}_thumbnail.${extension}`,
-    small: `${STORAGE_BASE_URL}${pathname}${fileId}_small.${extension}`,
-    medium: `${STORAGE_BASE_URL}${pathname}${fileId}_medium.${extension}`,
-    large: `${STORAGE_BASE_URL}${pathname}${fileId}.${extension}`,
+    thumbnail: `${STORAGE_BASE_URL}${pathname}${fileId}_thumbnail${extension}`,
+    small: `${STORAGE_BASE_URL}${pathname}${fileId}_small${extension}`,
+    medium: `${STORAGE_BASE_URL}${pathname}${fileId}_medium${extension}`,
+    large: `${STORAGE_BASE_URL}${pathname}${fileId}${extension}`,
   };
 };
 

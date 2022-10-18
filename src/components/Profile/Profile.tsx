@@ -13,11 +13,10 @@ import {useStyles} from './Profile.style';
 import {ProfileHeaderContainer} from 'src/components/ProfileHeader/ProfileHeaderContainer';
 import {UserMenuContainer} from 'src/components/UserMenu';
 import ShowIf from 'src/components/common/show-if.component';
-import {Friend, FriendStatus} from 'src/interfaces/friend';
-import {BlockedProps, User} from 'src/interfaces/user';
+import {FriendStatus} from 'src/interfaces/friend';
+import {FriendStatusProps, User} from 'src/interfaces/user';
 import i18n from 'src/locale';
 import {fetchProfileFriend} from 'src/reducers/profile/actions';
-import {checkFriendedStatus} from 'src/reducers/profile/actions';
 
 const ProfileEditContainer = dynamic(
   () => import('src/components/ProfileEdit/ProfileEditContainer'),
@@ -27,13 +26,12 @@ const ProfileEditContainer = dynamic(
 type ProfileProps = {
   loading: boolean;
   user: User;
-  person: User & BlockedProps;
+  person: User & FriendStatusProps;
   anonymous: boolean;
-  friendStatus: Friend;
 };
 
 export const Profile: React.FC<ProfileProps> = props => {
-  const {user, person, anonymous, friendStatus} = props;
+  const {user, person, anonymous} = props;
 
   const style = useStyles();
   const dispatch = useDispatch();
@@ -43,10 +41,6 @@ export const Profile: React.FC<ProfileProps> = props => {
   useEffect(() => {
     if (!isEditing && person?.id) {
       dispatch(fetchProfileFriend());
-    }
-
-    if (!isEditing && person?.id && !anonymous) {
-      dispatch(checkFriendedStatus());
     }
 
     return undefined;
@@ -85,11 +79,11 @@ export const Profile: React.FC<ProfileProps> = props => {
         <ShowIf condition={!isEditing}>
           <ProfileHeaderContainer edit={handleOpenEdit} />
 
-          <ShowIf condition={friendStatus?.status !== FriendStatus.BLOCKED}>
+          <ShowIf condition={person?.status !== FriendStatus.BLOCKED}>
             <UserMenuContainer isMyriad={person.username === 'myriad_official'} />
           </ShowIf>
 
-          <ShowIf condition={friendStatus?.status === FriendStatus.BLOCKED}>
+          <ShowIf condition={person?.status === FriendStatus.BLOCKED}>
             <Grid
               container
               direction="column"
@@ -97,16 +91,16 @@ export const Profile: React.FC<ProfileProps> = props => {
               alignItems="center"
               className={style.blocked}>
               <Typography variant="h4" className={style.blockedTitle}>
-                {user?.id === person.blocker
+                {user?.id === person.requester
                   ? i18n.t('Profile.Block.User.Title')
                   : i18n.t('Profile.Block.Other.Title')}
               </Typography>
-              <ShowIf condition={user?.id === person.blocker}>
+              <ShowIf condition={user?.id === person.requester}>
                 <Typography variant="body1" component="div">
                   {i18n.t('Profile.Block.User.Subtitle')}
                 </Typography>
               </ShowIf>
-              <ShowIf condition={user?.id !== person.blocker}>
+              <ShowIf condition={user?.id !== person.requester}>
                 <Typography variant="body1" component="div">
                   {i18n.t('Profile.Block.Other.Subtitle')}
                 </Typography>

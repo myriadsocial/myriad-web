@@ -7,7 +7,7 @@ import {Action} from 'redux';
 import {UserExperience, ExperienceType} from 'src/interfaces/experience';
 import {Friend} from 'src/interfaces/friend';
 import {SocialMedia} from 'src/interfaces/social';
-import {BlockedProps, User} from 'src/interfaces/user';
+import {FriendStatusProps, User} from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
 import {PaginationParams} from 'src/lib/api/interfaces/pagination-params.interface';
 import * as SocialAPI from 'src/lib/api/social';
@@ -20,7 +20,7 @@ import {ThunkActionCreator} from 'src/types/thunk';
 
 export interface FetchProfileDetail extends Action {
   type: constants.FETCH_PROFILE_DETAIL;
-  detail: User & BlockedProps;
+  detail: User & FriendStatusProps;
 }
 
 export interface FetchProfileFriend extends PaginationAction {
@@ -77,7 +77,7 @@ export type Actions =
  *
  * Actions
  */
-export const setProfile = (profile: User & BlockedProps): FetchProfileDetail => ({
+export const setProfile = (profile: User & FriendStatusProps): FetchProfileDetail => ({
   type: constants.FETCH_PROFILE_DETAIL,
   detail: profile,
 });
@@ -97,7 +97,7 @@ export const fetchProfileDetail: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     try {
-      const detail: User & BlockedProps = await UserAPI.getUserDetail(userId);
+      const detail: User & FriendStatusProps = await UserAPI.getUserDetail(userId);
 
       dispatch(setProfile(detail));
     } catch (error) {
@@ -216,39 +216,6 @@ export const fetchProfileExperience: ThunkActionCreator<Actions, RootState> =
         experiences,
         meta,
       });
-    } catch (error) {
-      dispatch(setError(error));
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
-
-export const checkFriendedStatus: ThunkActionCreator<Actions, RootState> =
-  () => async (dispatch, getState) => {
-    dispatch(setLoading(true));
-
-    try {
-      const {
-        profileState: {detail: profile},
-        userState: {user},
-      } = getState();
-
-      if (!profile || !user) {
-        throw new Error('User not found');
-      }
-
-      const {data} = await FriendAPI.checkFriendStatus(user.id, [profile.id]);
-
-      if (data.length > 0) {
-        dispatch({
-          type: constants.SET_FRIENDED_STATUS,
-          status: data[0],
-        });
-      } else {
-        dispatch({
-          type: constants.CLEAR_FRIENDED_STATUS,
-        });
-      }
     } catch (error) {
       dispatch(setError(error));
     } finally {

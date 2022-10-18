@@ -9,11 +9,11 @@ import {OfficialBadgeIcon} from 'components/atoms/Icons';
 import {Text} from 'components/atoms/Text';
 import ShowIf from 'components/common/show-if.component';
 import {acronym} from 'src/helpers/string';
-import {User, BlockedProps} from 'src/interfaces/user';
+import {User, FriendStatusProps} from 'src/interfaces/user';
 import i18n from 'src/locale';
 
 type ProfileBannedProps = {
-  person: User & BlockedProps;
+  person: User & FriendStatusProps;
 };
 
 export const ProfileBanned: React.FC<ProfileBannedProps> = ({person}) => {

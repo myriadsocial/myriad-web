@@ -31,7 +31,7 @@ export const useBlockList = (user?: User) => {
       setBlockedUserIds(
         data.map(_data => {
           if (user.id !== _data.requesteeId) return _data.requesteeId;
-          else return _data.requestorId;
+          return _data.requestorId;
         }),
       );
     } catch (error) {
