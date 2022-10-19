@@ -197,7 +197,15 @@
         "Title": "Account Not Found",
         "Subtitle": "There is no account in the wallet you selected."
       },
-      "Tooltip_Wallet": "Coming soon"
+      "Tooltip_Wallet": "Coming soon",
+      "Prompt_Select_Instance": {
+        "Title": "Select Instance",
+        "See_More": "See more",
+        "See_Less": "See less",
+        "No_Account_Description": "You don't seem to have an account on {{instance_name}}. Do you wish to create a new account on {{instance_name}}?",
+        "No_Account_Cancel": "No, Select Others",
+        "No_Account_Confirm": "Sign Out"
+      }
     },
     "Profile": {
       "Wallet": "Wallet Used",

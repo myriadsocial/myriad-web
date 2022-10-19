@@ -15,6 +15,7 @@ import {useTheme} from '@material-ui/core/styles';
 import {alpha, createStyles, makeStyles} from '@material-ui/core/styles';
 
 import {ServerListProps} from 'src/interfaces/server-list';
+import i18n from 'src/locale';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -86,7 +87,9 @@ const InstanceCard = ({server, onSelect, selected}: InstanceCardProps) => {
               fontWeight="fontWeightBold"
               style={{color: '#6E3FC3', textAlign: 'end'}}
               onClick={handleExpand}>
-              {!expanded ? 'See more' : 'See less'}
+              {!expanded
+                ? i18n.t('Login.Options.Prompt_Select_Instance.See_More')
+                : i18n.t('Login.Options.Prompt_Select_Instance.See_Less')}
             </Box>
           </CardContent>
         </CardActionArea>

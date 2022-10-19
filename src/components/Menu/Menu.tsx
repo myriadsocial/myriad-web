@@ -2,6 +2,8 @@ import React from 'react';
 
 import {useRouter} from 'next/router';
 
+import Container from '@material-ui/core/Container';
+
 import {BoxComponent} from '../atoms/Box';
 import {ListItemComponent} from '../atoms/ListItem';
 import {useStyles} from './Menu.styles';
@@ -40,7 +42,9 @@ export const Menu: React.FC<MenuProps> = props => {
           <img src={logo} width={220} height={48} />
         </div>
 
-        <SelectServer />
+        <Container>
+          <SelectServer />
+        </Container>
 
         {menu
           .filter(ar => ar.isDesktop === true)
