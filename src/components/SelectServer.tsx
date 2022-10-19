@@ -3,6 +3,8 @@ import {XIcon} from '@heroicons/react/solid';
 
 import {useState, useMemo, useEffect} from 'react';
 
+import {useRouter} from 'next/router';
+
 import {
   Card,
   CardActionArea,
@@ -42,6 +44,8 @@ const SelectServer = ({onServerSelect}: SelectServerProps) => {
 
   const {logout} = useAuthHook();
 
+  const {asPath} = useRouter();
+
   const [openCheckAccountModal, setOpenCheckAccountModal] = useState(false);
 
   const classes = useStyles();
@@ -75,7 +79,9 @@ const SelectServer = ({onServerSelect}: SelectServerProps) => {
     setSelectedServerId(serverId);
     setOpen(false);
     //onServerSelect(servers[serverId]);
-    setOpenCheckAccountModal(true);
+    if (asPath !== '/login') {
+      setOpenCheckAccountModal(true);
+    }
   };
 
   const handleCloseCheckAccountModal = () => {
