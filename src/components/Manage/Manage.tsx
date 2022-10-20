@@ -30,7 +30,7 @@ export type ManageProps = {
 
 const Button = WithAuthorizeAction(BaseButton);
 
-export const Manage: React.FC<ManageProps> = ({wallets, onConnectDisconnect}) => {
+export const Manage: React.FC<ManageProps> = ({currentWallet, wallets, onConnectDisconnect}) => {
   const style = useStyles();
   const enqueueSnackbar = useEnqueueSnackbar();
   const {walletList} = useWalletList(wallets);
@@ -57,6 +57,7 @@ export const Manage: React.FC<ManageProps> = ({wallets, onConnectDisconnect}) =>
                       variant="text"
                       size="small"
                       color="primary"
+                      disabled={option.id === currentWallet?.networkId}
                       className={style.button}
                       onClick={() => onConnectDisconnect(option.id, option.walletId)}>
                       {i18n.t('Wallet.Manage.Btn_Disconnect')}
