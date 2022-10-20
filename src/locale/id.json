@@ -197,7 +197,14 @@
         "Title": "Akun Tidak Ditemukan",
         "Subtitle": "Tidak ada akun di dompet yang anda pilih."
       },
-      "Tooltip_Wallet": "Segera hadir"
+      "Tooltip_Wallet": "Segera hadir",
+      "Prompt_Select_Instance": {
+        "Title": "Pilih Server",
+        "See_More": "Selengkapnya",
+        "No_Account_Description": "Anda tidak memiliki akun di {{instance_name}}. Buat akun baru di {{instance_name}}?",
+        "No_Account_Cancel": "Tidak, Pilih Lainnya",
+        "No_Account_Confirm": "Keluar"
+      }
     },
     "Profile": {
       "Title": "Buat akun baru",

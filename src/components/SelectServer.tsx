@@ -3,6 +3,8 @@ import {XIcon} from '@heroicons/react/solid';
 
 import {useState, useMemo, useEffect} from 'react';
 
+import {useRouter} from 'next/router';
+
 import {
   Card,
   CardActionArea,
@@ -30,6 +32,7 @@ import {useAuthHook} from 'src/hooks/auth.hook';
 import {useInstances} from 'src/hooks/use-instances.hooks';
 import MyriadCircle from 'src/images/Icons/myriad-circle.svg';
 import {ServerListProps} from 'src/interfaces/server-list';
+import i18n from 'src/locale';
 
 type SelectServerProps = {
   onServerSelect?: (server: ServerListProps) => void;
@@ -40,6 +43,8 @@ const SelectServer = ({onServerSelect}: SelectServerProps) => {
   const {servers, getAllInstances} = useInstances();
 
   const {logout} = useAuthHook();
+
+  const {asPath} = useRouter();
 
   const [openCheckAccountModal, setOpenCheckAccountModal] = useState(false);
 
@@ -74,7 +79,9 @@ const SelectServer = ({onServerSelect}: SelectServerProps) => {
     setSelectedServerId(serverId);
     setOpen(false);
     //onServerSelect(servers[serverId]);
-    setOpenCheckAccountModal(true);
+    if (asPath !== '/login') {
+      setOpenCheckAccountModal(true);
+    }
   };
 
   const handleCloseCheckAccountModal = () => {
@@ -84,7 +91,7 @@ const SelectServer = ({onServerSelect}: SelectServerProps) => {
   return (
     <>
       <div className={classes.root}>
-        <Box style={{marginBottom: 8}}>Select instance</Box>
+        <Box style={{marginBottom: 8}}>{i18n.t('Login.Options.Prompt_Select_Instance.Title')}</Box>
         {!servers.length ? (
           <Skeleton>
             <Button />
@@ -132,7 +139,9 @@ const SelectServer = ({onServerSelect}: SelectServerProps) => {
               alignItems: 'center',
               position: 'relative',
             }}>
-            <Box style={{fontWeight: 600, fontSize: 16, textAlign: 'center'}}>Select Instance</Box>
+            <Box style={{fontWeight: 600, fontSize: 16, textAlign: 'center'}}>
+              {i18n.t('Login.Options.Prompt_Select_Instance.Title')}{' '}
+            </Box>
             <SvgIcon
               onClick={handleClose}
               classes={{
@@ -190,7 +199,9 @@ const SelectServer = ({onServerSelect}: SelectServerProps) => {
               alignItems: 'center',
               position: 'relative',
             }}>
-            <Box style={{fontWeight: 600, fontSize: 16, textAlign: 'center'}}>Select Instance</Box>
+            <Box style={{fontWeight: 600, fontSize: 16, textAlign: 'center'}}>
+              {i18n.t('Login.Options.Prompt_Select_Instance.Title')}{' '}
+            </Box>
             <SvgIcon
               onClick={handleCloseCheckAccountModal}
               classes={{
@@ -232,7 +243,9 @@ const SelectServer = ({onServerSelect}: SelectServerProps) => {
                   maxWidth: 'fit-content',
                 }}>
                 <Typography style={{whiteSpace: 'pre-line'}}>
-                  {`You don't seem to have an account on ${selectedInstanceName}. Do you wish to create a new account on ${selectedInstanceName}?`}
+                  {i18n.t('Login.Options.Prompt_Select_Instance.No_Account_Description', {
+                    instance_name: selectedInstanceName,
+                  })}
                 </Typography>
               </ListItem>
               <ListItem
@@ -245,10 +258,10 @@ const SelectServer = ({onServerSelect}: SelectServerProps) => {
                   size="small"
                   variant="outlined"
                   color="secondary">
-                  No, Select Others
+                  {i18n.t('Login.Options.Prompt_Select_Instance.No_Account_Cancel')}
                 </Button>
                 <Button onClick={() => logout()} size="small" variant="contained" color="primary">
-                  Sign Out
+                  {i18n.t('Login.Options.Prompt_Select_Instance.No_Account_Confirm')}
                 </Button>
               </ListItem>
             </ShowIf>
