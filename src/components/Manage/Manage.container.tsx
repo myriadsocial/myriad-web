@@ -272,7 +272,11 @@ export const ManageCointainer: React.FC = () => {
         title={i18n.t('Wallet.Manage.Alert.Disconnect.Confirm.Title')}
         subtitle={
           <Typography component="div">
-            {i18n.t('Wallet.Manage.Alert.Disconnect.Confirm.Subtitle', {name: walletName})}
+            {walletName === WalletTypeEnum.POLKADOT
+              ? i18n.t('Wallet.Manage.Alert.Disconnect.Confirm.Subtitle_Polkadot', {
+                  name: walletName,
+                })
+              : i18n.t('Wallet.Manage.Alert.Disconnect.Confirm.Subtitle_Near', {name: walletName})}
           </Typography>
         }>
         <div style={{display: 'flex', justifyContent: 'space-evenly'}}>

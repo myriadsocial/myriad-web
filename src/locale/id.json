@@ -1050,9 +1050,10 @@
         "Disconnect": {
           "Confirm": {
             "Title": "Putuskan Dompet",
-            "Subtitle": "Apakah kamu yakin akan memutus dompet {{name}} dari akunmu?",
-            "Btn_Confirm": "Iya",
-            "Btn_Cancel": "Tidak"
+            "Subtitle_Polkadot": "Apakah kamu yakin akan memutus dompet {{name}} dari akunmu?",
+            "Subtitle_Near": "Kamu akan diarahkan menuju halaman dompet {{name}}. Setelah diarahkan, pilih dompet yang ingin diputuskan, dan tandatangani transaksinya.",
+            "Btn_Confirm": "Putuskan Dompet",
+            "Btn_Cancel": "Batal"
           },
           "Success": {
             "Title": "Dompet Terputus",
