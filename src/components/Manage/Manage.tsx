@@ -43,11 +43,21 @@ export const Manage: React.FC<ManageProps> = ({currentWallet, wallets, onConnect
     });
   };
 
-  const disableSubstrateWallet = (option: WalletOption) => {
-    const substrateNetworks = [NetworkIdEnum.POLKADOT, NetworkIdEnum.MYRIAD, NetworkIdEnum.KUSAMA];
-    const isSubstrateWallet = substrateNetworks.includes(option.id as NetworkIdEnum);
+  const disableWallet = (option: WalletOption) => {
+    if (option.id === NetworkIdEnum.POLKADOT) {
+      const substrateNetworks = [
+        NetworkIdEnum.POLKADOT,
+        NetworkIdEnum.MYRIAD,
+        NetworkIdEnum.KUSAMA,
+      ];
+      const isSubstrateWallet = substrateNetworks.includes(
+        currentWallet.networkId as NetworkIdEnum,
+      );
 
-    return isSubstrateWallet ? true : false;
+      return isSubstrateWallet ? true : false;
+    } else {
+      return option.id === currentWallet.networkId ? true : false;
+    }
   };
 
   return (
@@ -65,9 +75,7 @@ export const Manage: React.FC<ManageProps> = ({currentWallet, wallets, onConnect
                       variant="text"
                       size="small"
                       color="primary"
-                      disabled={
-                        option.id === currentWallet?.networkId || disableSubstrateWallet(option)
-                      }
+                      disabled={disableWallet(option)}
                       className={style.button}
                       onClick={() => onConnectDisconnect(option.id, option.walletId)}>
                       {i18n.t('Wallet.Manage.Btn_Disconnect')}
