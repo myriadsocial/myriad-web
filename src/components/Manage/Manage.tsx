@@ -14,11 +14,12 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from './manage.style';
-import {useWalletList} from './use-wallet-list.hook';
+import {useWalletList, WalletOption} from './use-wallet-list.hook';
 
 import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorizeAction';
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import ShowIf from 'src/components/common/show-if.component';
+import {NetworkIdEnum} from 'src/interfaces/network';
 import {UserWallet} from 'src/interfaces/user';
 import i18n from 'src/locale';
 
@@ -42,6 +43,13 @@ export const Manage: React.FC<ManageProps> = ({currentWallet, wallets, onConnect
     });
   };
 
+  const disableSubstrateWallet = (option: WalletOption) => {
+    const substrateNetworks = [NetworkIdEnum.POLKADOT, NetworkIdEnum.MYRIAD, NetworkIdEnum.KUSAMA];
+    const isSubstrateWallet = substrateNetworks.includes(option.id as NetworkIdEnum);
+
+    return isSubstrateWallet ? true : false;
+  };
+
   return (
     <>
       <div>
@@ -57,7 +65,9 @@ export const Manage: React.FC<ManageProps> = ({currentWallet, wallets, onConnect
                       variant="text"
                       size="small"
                       color="primary"
-                      disabled={option.id === currentWallet?.networkId}
+                      disabled={
+                        option.id === currentWallet?.networkId || disableSubstrateWallet(option)
+                      }
                       className={style.button}
                       onClick={() => onConnectDisconnect(option.id, option.walletId)}>
                       {i18n.t('Wallet.Manage.Btn_Disconnect')}
