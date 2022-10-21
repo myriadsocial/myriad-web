@@ -1053,9 +1053,10 @@
         "Disconnect": {
           "Confirm": {
             "Title": "Disconnect Wallet",
-            "Subtitle": "Are you sure you want to disconnect {{name}} wallet from your account?",
-            "Btn_Confirm": "Yes",
-            "Btn_Cancel": "No"
+            "Subtitle_Polkadot": "Are you sure you want to disconnect {{name}} wallet from your account?",
+            "Subtitle_Near": "You will be redirected to {{name}} wallet page. After being redirected, select wallet you wish to disconnect, and sign the transaction.",
+            "Btn_Confirm": "Disconnect Wallet",
+            "Btn_Cancel": "Cancel"
           },
           "Success": {
             "Title": "Wallet Disconnected",
