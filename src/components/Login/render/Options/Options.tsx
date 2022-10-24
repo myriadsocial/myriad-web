@@ -4,7 +4,6 @@ import {useNavigate} from 'react-router';
 
 import Link from 'next/link';
 
-//import {useRouter} from 'next/router';
 import {
   Button,
   Checkbox,
@@ -19,7 +18,6 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import {useStyles} from './Options.style';
 
-//import SelectServer from 'src/components/SelectServer';
 import {MyNearWalletIcon, MyriadFullIcon} from 'src/components/atoms/Icons';
 import {
   EthereumNetworkIcon,
@@ -40,7 +38,6 @@ import {formatNetworkTitle} from 'src/helpers/wallet';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {NetworkIdEnum} from 'src/interfaces/network';
-//import {ServerListProps} from 'src/interfaces/server-list';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
@@ -67,16 +64,6 @@ export const Options: React.FC<OptionProps> = props => {
   const navigate = useNavigate();
   const {enablePolkadotExtension, getPolkadotAccounts} = usePolkadotExtension();
   const {connectToNear} = useNearApi();
-
-  //const router = useRouter();
-
-  //const [serverSelected, setServerSelected] = useState<null | ServerListProps>(null);
-
-  //useEffect(() => {
-  //if (serverSelected) {
-  //router.push({query: {api: `${serverSelected.apiUrl}`}}, undefined, {shallow: true});
-  //}
-  //}, [serverSelected]);
 
   const [networkId, setNetworkId] = useState<NetworkIdEnum | null>(null);
   const [wallet, setWallet] = useState<WalletTypeEnum | null>(null);
@@ -218,10 +205,6 @@ export const Options: React.FC<OptionProps> = props => {
 
     setConnectAttempted(true);
   };
-
-  //const toggleSelected = (server: ServerListProps) => {
-  //setServerSelected(server);
-  //};
 
   return (
     <>
@@ -427,20 +410,12 @@ export const Options: React.FC<OptionProps> = props => {
             />
           </Grid>
 
-          {
-            //<SelectServer onServerSelect={server => toggleSelected(server)} />
-          }
           <div>
             <Button
               variant="contained"
               fullWidth
               color="primary"
-              disabled={
-                !termApproved ||
-                !extensionChecked ||
-                wallet === null
-                //&& !serverSelected
-              }
+              disabled={!termApproved || !extensionChecked || wallet === null}
               onClick={handleConnect}>
               {i18n.t('Login.Options.Connect')}
             </Button>
