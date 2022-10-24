@@ -45,5 +45,8 @@ export const useStyles = makeStyles((theme: Theme) =>
         marginBottom: 4,
       },
     },
+    otpWrapper: {
+      margin: '12px 0px',
+    },
   }),
 );

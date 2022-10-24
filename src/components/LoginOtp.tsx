@@ -6,11 +6,18 @@ import {Button, Typography} from '@material-ui/core';
 import styles from './LoginOtp.module.css';
 import {useStyles} from './LoginOtp.style';
 
+import useDebounce from 'src/hooks/use-debounce.hooks';
+
 const LoginOtp = () => {
+  //TODO: create hook to login using OTP
+  //handle when error logging in with OTP
+
   const classes = useStyles();
 
   const [email] = useState('husni@blocksphere.id');
-  const [otp, setOtp] = useState<string[]>('');
+  const [otp, setOtp] = useState('');
+  const debouncedOtp = useDebounce(otp, 1000);
+  console.log({debouncedOtp});
 
   const handleChange = newValue => {
     setOtp(newValue);
@@ -28,7 +35,7 @@ const LoginOtp = () => {
           </Typography>
         </div>
 
-        <div style={{margin: '12px 0px'}}>
+        <div className={classes.otpWrapper}>
           <OtpInput
             value={otp}
             onChange={handleChange}
@@ -38,10 +45,18 @@ const LoginOtp = () => {
           />
         </div>
 
-        <Button variant="contained" fullWidth color="primary" onClick={console.log('connected')}>
+        <Button
+          variant="contained"
+          fullWidth
+          color="primary"
+          onClick={() => console.log('resend code')}>
           {'Resend Code'}
         </Button>
-        <Button variant="outlined" fullWidth color="secondary" onClick={console.log('back')}>
+        <Button
+          variant="outlined"
+          fullWidth
+          color="secondary"
+          onClick={() => console.log('back to create account page')}>
           {'Back'}
         </Button>
       </div>
