@@ -2,14 +2,10 @@ import React from 'react';
 
 import {useRouter} from 'next/router';
 
-import Container from '@material-ui/core/Container';
-
 import {BoxComponent} from '../atoms/Box';
 import {ListItemComponent} from '../atoms/ListItem';
 import {useStyles} from './Menu.styles';
 import {useMenuList, MenuDetail, MenuId} from './use-menu-list';
-
-import SelectServer from 'src/components/SelectServer';
 
 type MenuProps = {
   selected: MenuId;
@@ -41,10 +37,6 @@ export const Menu: React.FC<MenuProps> = props => {
         <div className={styles.head} onClick={gotoHome} aria-hidden="true">
           <img src={logo} width={220} height={48} />
         </div>
-
-        <Container>
-          <SelectServer />
-        </Container>
 
         {menu
           .filter(ar => ar.isDesktop === true)
