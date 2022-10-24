@@ -170,7 +170,6 @@ export const Experience: React.FC<ExperienceProps> = props => {
     return Boolean(userExperience.subscribed) && !isOwnExperience;
   };
 
-  console.log(userExperience);
   return (
     <>
       <Card className={styles.root}>
