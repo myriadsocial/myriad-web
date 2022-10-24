@@ -7,6 +7,7 @@ import {useRouter} from 'next/router';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 import {ExperienceList} from './ExperienceList';
+import {ExperienceListRightBar} from './ExperienceListRightBar';
 import {useExperienceList} from './hooks/use-experience-list.hook';
 
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
@@ -29,6 +30,7 @@ type ExperienceListContainerProps = {
   buttonLoad?: boolean;
   loadNextPage?: () => void;
   refreshExperience?: () => void;
+  noButton?: boolean;
 };
 
 export const useStyles = makeStyles<Theme, ExperienceListContainerProps>(theme =>
@@ -50,6 +52,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
     buttonLoad,
     loadNextPage,
     refreshExperience,
+    noButton,
   } = props;
 
   const style = useStyles(props);
@@ -131,17 +134,31 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
         next={handleLoadNextPage}
         // TODO: fixed load more with scroll
         loader={buttonLoad ? <LoadMoreComponent loadmore={handleLoadNextPage} /> : <Skeleton />}>
-        <ExperienceList
-          onDelete={handleRemoveExperience}
-          onUnsubscribe={handleUnsubscribeExperience}
-          onSubscribe={handleSubscribeExperience}
-          onClone={handleCloneExperience}
-          viewPostList={handleViewPostList}
-          experiences={experiences}
-          user={user}
-          anonymous={anonymous}
-          {...props}
-        />
+        {noButton ? (
+          <ExperienceListRightBar
+            onDelete={handleRemoveExperience}
+            onUnsubscribe={handleUnsubscribeExperience}
+            onSubscribe={handleSubscribeExperience}
+            onClone={handleCloneExperience}
+            viewPostList={handleViewPostList}
+            experiences={experiences}
+            user={user}
+            anonymous={anonymous}
+            {...props}
+          />
+        ) : (
+          <ExperienceList
+            onDelete={handleRemoveExperience}
+            onUnsubscribe={handleUnsubscribeExperience}
+            onSubscribe={handleSubscribeExperience}
+            onClone={handleCloneExperience}
+            viewPostList={handleViewPostList}
+            experiences={experiences}
+            user={user}
+            anonymous={anonymous}
+            {...props}
+          />
+        )}
       </InfiniteScroll>
     </div>
   );

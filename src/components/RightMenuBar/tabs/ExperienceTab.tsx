@@ -78,6 +78,7 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
       </div>
 
       <ExperienceListContainer
+        noButton={true}
         selectable
         owner={experienceType === 'user' ? ExperienceOwner.CURRENT_USER : ExperienceOwner.TRENDING}
         filterTimeline
