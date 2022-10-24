@@ -8,7 +8,7 @@ import getConfig from 'next/config';
 import NextImage from 'next/image';
 import Link from 'next/link';
 
-import {Button, Grid} from '@material-ui/core';
+import {Grid} from '@material-ui/core';
 import {TextField, InputAdornment} from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -166,29 +166,22 @@ export const Experience: React.FC<ExperienceProps> = props => {
     return false;
   };
 
-  const isSubscribed = () => {
-    return Boolean(userExperience.subscribed) && !isOwnExperience;
-  };
-
-  console.log(userExperience);
   return (
     <>
       <Card className={styles.root}>
         <CardActionArea onClick={handleClickExperience} disableRipple component="div">
-          <Grid container justifyContent="space-between" wrap="nowrap">
-            <div>
-              <NextImage
-                alt={userExperience.experience.name}
-                src={userExperience.experience.experienceImageURL ?? DEFAULT_IMAGE}
-                placeholder="empty"
-                objectFit="cover"
-                objectPosition="center"
-                width={40}
-                height={40}
-                quality={90}
-                className={styles.image}
-              />
-            </div>
+          <Grid container alignItems="center" justifyContent="space-between" wrap="nowrap">
+            <NextImage
+              alt={userExperience.experience.name}
+              src={userExperience.experience.experienceImageURL ?? DEFAULT_IMAGE}
+              placeholder="empty"
+              objectFit="cover"
+              objectPosition="center"
+              width={68}
+              height={68}
+              quality={90}
+              className={styles.image}
+            />
 
             <CardContent classes={{root: styles.cardContent}}>
               <Typography className={styles.title} variant="body1">
@@ -197,52 +190,14 @@ export const Experience: React.FC<ExperienceProps> = props => {
               <Typography variant="caption" color="primary" className={styles.subtitle}>
                 {userExperience.experience.user.name}
               </Typography>
-              <Typography noWrap color="textSecondary">
-                {userExperience.experience.description}
-              </Typography>
-              <Typography>
-                {userExperience.experience.subscribedCount}{' '}
-                <Typography color="textSecondary" component="span">
-                  subscribers{' '}
-                </Typography>
-                {userExperience.experience.clonedCount}{' '}
-                <Typography color="textSecondary" component="span">
-                  cloners
-                </Typography>
-              </Typography>
               <Typography variant="caption" color="textSecondary">
                 {isOwnExperience ? ` ${i18n.t('Experience.List.You')}` : ''}
               </Typography>
             </CardContent>
-            <div style={{display: 'flex', alignItems: 'center'}}>
-              {userExperience?.experience.createdBy === user?.id ? (
-                <Button
-                  style={{width: 140}}
-                  size="small"
-                  variant="contained"
-                  color="primary"
-                  onClick={() => console.log('handleEditExperience')}>
-                  {i18n.t('Experience.Preview.Button.Edit')}
-                </Button>
-              ) : (
-                <Button
-                  style={{width: 140}}
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  onClick={() =>
-                    isSubscribed ? confirmUnsubscribe() : handleSubscribeExperience()
-                  }>
-                  {isSubscribed()
-                    ? i18n.t('Experience.Preview.Button.Unsubscribe')
-                    : i18n.t('Experience.Preview.Button.Subscribe')}
-                </Button>
-              )}
 
-              <IconButton aria-label="settings" onClick={handleClickSettings}>
-                <SvgIcon component={DotsVerticalIcon} viewBox="0 0 24 24" className={styles.icon} />
-              </IconButton>
-            </div>
+            <IconButton aria-label="settings" onClick={handleClickSettings}>
+              <SvgIcon component={DotsVerticalIcon} viewBox="0 0 24 24" className={styles.icon} />
+            </IconButton>
           </Grid>
         </CardActionArea>
       </Card>
