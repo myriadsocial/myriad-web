@@ -1,0 +1,10 @@
+.container {
+  gap: 24px;
+}
+
+.otpInput {
+  width: 46px !important;
+  height: 46px;
+  border: 1px solid #c2c2c2;
+  border-radius: 8px;
+}
