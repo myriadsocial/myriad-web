@@ -67,6 +67,7 @@ export const TrendingExperienceTab: React.FC = () => {
         </Button>
       </div>
       <ExperienceListContainer
+        noButton
         selectable
         enableClone
         enableSubscribe
