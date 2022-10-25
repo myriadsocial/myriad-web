@@ -18,5 +18,33 @@ export const useStyles = makeStyles((theme: Theme) =>
       gap: 8,
       width: '100%',
     },
+    icon: {
+      [theme.breakpoints.down('xs')]: {
+        color: '#404040',
+      },
+    },
+    menu: {
+      borderRadius: 10,
+      marginTop: 8,
+    },
+    delete: {
+      color: '#FE3636',
+    },
+    modal: {
+      paddingBottom: 10,
+    },
+    input: {
+      width: 560,
+      marginBottom: 0,
+      marginTop: 10,
+
+      '& .MuiInputLabel-root, .MuiInputBase-root': {
+        color: '#616161',
+      },
+      [theme.breakpoints.down('xs')]: {
+        width: '100%',
+      },
+    },
+    copy: {},
   }),
 );

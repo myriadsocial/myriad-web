@@ -7,6 +7,7 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import getConfig from 'next/config';
 import NextImage from 'next/image';
 import Link from 'next/link';
+import {useRouter} from 'next/router';
 
 import {Button, Grid} from '@material-ui/core';
 import {TextField, InputAdornment} from '@material-ui/core';
@@ -62,7 +63,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
     onSubscribe,
     onUnsubscribe,
   } = props;
-
+  const router = useRouter();
   const styles = useStyles(props);
   const confirm = useConfirm();
   const enqueueSnackbar = useEnqueueSnackbar();
@@ -166,9 +167,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
     return false;
   };
 
-  const isSubscribed = () => {
-    return Boolean(userExperience.subscribed) && !isOwnExperience;
-  };
+  const isSubscribed = Boolean(userExperience.subscribed) && !isOwnExperience;
 
   return (
     <>
@@ -220,7 +219,9 @@ export const Experience: React.FC<ExperienceProps> = props => {
                   size="small"
                   variant="contained"
                   color="primary"
-                  onClick={() => console.log('handleEditExperience')}>
+                  onClick={() => {
+                    router.push(`/experience/${experienceId}/edit`);
+                  }}>
                   {i18n.t('Experience.Preview.Button.Edit')}
                 </Button>
               ) : (
@@ -232,7 +233,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
                   onClick={() =>
                     isSubscribed ? confirmUnsubscribe() : handleSubscribeExperience()
                   }>
-                  {isSubscribed()
+                  {isSubscribed
                     ? i18n.t('Experience.Preview.Button.Unsubscribe')
                     : i18n.t('Experience.Preview.Button.Subscribe')}
                 </Button>
