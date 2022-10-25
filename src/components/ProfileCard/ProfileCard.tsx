@@ -55,7 +55,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
         <div className={classes.wallet}>
           <ShowIf condition={anonymous}>
             <Button variant="contained" color="primary" onClick={handleSignOut}>
-              Sign in to connect wallet
+              Sign in or Create an Account
             </Button>
           </ShowIf>
           <ShowIf condition={!anonymous}>
