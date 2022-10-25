@@ -14,19 +14,19 @@ import {initialize} from 'src/lib/api/base';
 import i18n from 'src/locale';
 import {wrapper} from 'src/store';
 
-const LoginOtp = dynamic(() => import('src/components/LoginOtp'), {
+const LoginMagicLink = dynamic(() => import('src/components/LoginMagicLink'), {
   ssr: false,
 });
 
 const {publicRuntimeConfig} = getConfig();
 const description = i18n.t('Login.Description');
 
-type LoginOtpPageProps = {
+type LoginMagicLinkProps = {
   mobile: boolean;
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default function LoginPage(props: LoginOtpPageProps) {
+export default function LoginPage(props: LoginMagicLinkProps) {
   const {mobile} = props;
 
   const {showAlert} = useAlertHook();
@@ -53,7 +53,7 @@ export default function LoginPage(props: LoginOtpPageProps) {
 
       <ShowIf condition={!mobile}>
         <LoginLayout>
-          <LoginOtp />
+          <LoginMagicLink />
           <AlertComponent />
         </LoginLayout>
       </ShowIf>
