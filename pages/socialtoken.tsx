@@ -8,6 +8,7 @@ import Head from 'next/head';
 import SocialTokenContainer from 'src/components/SocialToken/SocialToken.container';
 import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
+import {initialize} from 'src/lib/api/base';
 import {getServer} from 'src/lib/api/server';
 import i18n from 'src/locale';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
@@ -79,6 +80,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     ]);
   }
 
+  initialize();
   await dispatch(fetchNetwork());
   await dispatch(fetchExchangeRates());
   await dispatch(fetchUserExperience());
