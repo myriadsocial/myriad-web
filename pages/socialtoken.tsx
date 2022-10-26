@@ -50,6 +50,8 @@ const SocialToken: React.FC<SocialTokenPageProps> = props => {
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
+  const {req} = context;
+
   const dispatch = store.dispatch as ThunkDispatchAction;
   const session = await getSession(context);
 
@@ -64,6 +66,8 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const anonymous = Boolean(session?.user.anonymous);
   const userId = session?.user.address as string;
+
+  initialize({cookie: req.headers.cookie}, anonymous);
 
   if (anonymous || !userId) {
     const username = session?.user.name as string;
@@ -80,7 +84,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     ]);
   }
 
-  initialize();
   await dispatch(fetchNetwork());
   await dispatch(fetchExchangeRates());
   await dispatch(fetchUserExperience());
