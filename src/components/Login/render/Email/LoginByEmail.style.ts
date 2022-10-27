@@ -5,14 +5,16 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       position: 'relative',
       maxHeight: 'fit-content',
-      width: 508,
+      maxWidth: 508,
       background: '#FFFFFF',
       borderRadius: 10,
       padding: 40,
       boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.05)',
-      '& .MuiFormHelperText-contained': {
-        marginLeft: 0,
-        marginRight: 0,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 24,
+      '& .MuiFormControl-root': {
+        marginBottom: 0,
       },
     },
     title: {
@@ -26,6 +28,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 'normal',
       color: 'black',
       textAlign: 'center',
+    },
+    actionWrapper: {
+      display: 'flex',
+      flexDirection: 'row',
+      gap: 24,
     },
   }),
 );
