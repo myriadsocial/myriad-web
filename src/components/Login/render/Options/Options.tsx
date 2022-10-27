@@ -386,29 +386,6 @@ export const Options: React.FC<OptionProps> = props => {
               </Grid>
             </Grid>
           </div>
-          <Grid container direction="column" className={styles.condition}>
-            <FormControlLabel
-              className={styles.termControl}
-              onChange={toggleTermApproved}
-              control={<Checkbox name="term" color="primary" className={styles.checkbox} />}
-              label={
-                <Typography style={{color: '#0A0A0A'}}>
-                  {i18n.t('Login.Options.Text_Terms_1')}&nbsp;
-                  <Link href="/term-of-use" passHref>
-                    <Typography component={'a'} className={styles.term}>
-                      {i18n.t('Login.Options.Text_Terms_2')}
-                    </Typography>
-                  </Link>
-                  &nbsp;{i18n.t('Login.Options.Text_Terms_3')}&nbsp;
-                  <Link href="/privacy-policy" passHref>
-                    <Typography component={'a'} className={styles.term}>
-                      {i18n.t('Login.Options.Text_Terms_4')}
-                    </Typography>
-                  </Link>
-                </Typography>
-              }
-            />
-          </Grid>
 
           <div>
             <Button

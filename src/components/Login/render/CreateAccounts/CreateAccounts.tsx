@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 
 import Link from 'next/link';
 
@@ -20,7 +21,9 @@ import i18n from 'src/locale';
 
 export default function CreateAccounts() {
   const styles = useStyles();
-  const [displayName, setDisplayName] = useState('');
+  const navigate = useNavigate();
+  const [displayName, setDisplayName] = useState<string>('');
+  const [userName, setUserName] = useState<string>('');
 
   const [termApproved, setTermApproved] = useState(false);
 
@@ -54,40 +57,38 @@ export default function CreateAccounts() {
         <FormControl fullWidth variant="outlined" style={{marginBottom: 0}}>
           <InputLabel htmlFor="display-name">Display Name</InputLabel>
           <OutlinedInput
-            //   error={handleError()}
             id="username"
             placeholder="Display Name"
             value={displayName}
             labelWidth={90}
-            inputProps={{maxLength: 16}}
+            inputProps={{maxLength: 22}}
             onChange={e => setDisplayName(e.target.value)}
           />
         </FormControl>
         <div className={styles.wrapperTextCharacter}>
           <Typography className={styles.textCharacter}>
-            You can use 2 or more characters.
+            You can use {22 - displayName.length} or more characters.
           </Typography>
-          <Typography className={styles.textCharacter}>0/22</Typography>
+          <Typography className={styles.textCharacter}>{displayName.length}/22</Typography>
         </div>
       </div>
       <div className={styles.wrapperForm}>
         <FormControl fullWidth variant="outlined" style={{marginBottom: 0}}>
           <InputLabel htmlFor="display-name">Username</InputLabel>
           <OutlinedInput
-            //   error={handleError()}
             id="username"
             placeholder="Username"
-            value={displayName}
+            value={userName}
             labelWidth={70}
             inputProps={{maxLength: 16}}
-            onChange={e => setDisplayName(e.target.value)}
+            onChange={e => setUserName(e.target.value)}
           />
         </FormControl>
         <div className={styles.wrapperTextCharacter}>
           <Typography className={styles.textCharacter}>
-            You can use 2 or more characters.
+            You can use {16 - userName.length} or more characters.
           </Typography>
-          <Typography className={styles.textCharacter}>0/22</Typography>
+          <Typography className={styles.textCharacter}>{userName.length}/16</Typography>
         </div>
         <Grid container direction="column" className={styles.condition}>
           <FormControlLabel
@@ -113,21 +114,11 @@ export default function CreateAccounts() {
           />
         </Grid>
         <div style={{display: 'flex'}}>
-          <Button
-            variant="outlined"
-            fullWidth
-            color="secondary"
-            //   disabled={!termApproved || !extensionChecked || wallet === null}
-            onClick={() => undefined}>
+          <Button variant="outlined" fullWidth color="secondary" onClick={() => navigate('/')}>
             Back
           </Button>
           <div style={{width: 8}} />
-          <Button
-            variant="contained"
-            fullWidth
-            color="primary"
-            //   disabled={!termApproved || !extensionChecked || wallet === null}
-            onClick={() => undefined}>
+          <Button variant="contained" fullWidth color="primary" onClick={() => undefined}>
             Register
           </Button>
         </div>
