@@ -26,6 +26,15 @@ export const useStyles = makeStyles((theme: Theme) =>
       height: 108,
       width: 108,
     },
+    cardSelected: {
+      padding: 10,
+      borderColor: '#6E3FC3',
+      border: 'solid grey 1px',
+      borderRadius: 10,
+      backgroundColor: 'white',
+      height: 108,
+      width: 108,
+    },
     wrapperCard: {height: 108, width: 108},
     textMethod: {fontSize: 12, fontWeight: 600, color: 'black'},
     description: {
@@ -45,5 +54,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: 67,
     },
     tooltip: {color: '#DECCFF'},
+    textOr: {fontSize: 14, color: 'black', marginLeft: 12, marginRight: 12},
   }),
 );
