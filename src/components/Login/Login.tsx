@@ -9,6 +9,7 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import ShowIf from '../common/show-if.component';
 import {useStyles} from './Login.styles';
 import {Accounts} from './render/Accounts';
+import CreateAccounts from './render/CreateAccounts/CreateAccounts';
 import {Options} from './render/Options';
 import {Profile} from './render/Profile';
 import SigninMethod from './render/SignInMethod/SigninMethod';
@@ -195,6 +196,8 @@ export const Login: React.FC<LoginProps> = props => {
       <Router initialEntries={initialEntries} initialIndex={0}>
         <Routes>
           <Route index={false} path="/" element={<SigninMethod />} />
+
+          <Route index={false} path="/createAccounts" element={<CreateAccounts />} />
 
           <Route
             index={false}
