@@ -11,6 +11,7 @@ import {useStyles} from './Login.styles';
 import {Accounts} from './render/Accounts';
 import {Options} from './render/Options';
 import {Profile} from './render/Profile';
+import SigninMethod from './render/SignInMethod/SigninMethod';
 
 import last from 'lodash/last';
 import {useAuthHook} from 'src/hooks/auth.hook';
@@ -193,9 +194,11 @@ export const Login: React.FC<LoginProps> = props => {
     <div className={styles.root}>
       <Router initialEntries={initialEntries} initialIndex={0}>
         <Routes>
+          <Route index={false} path="/" element={<SigninMethod />} />
+
           <Route
             index={false}
-            path="/"
+            path="/options"
             element={
               <Options
                 onConnect={handleOnconnect}
