@@ -1,35 +1,26 @@
-import React, {useState, useMemo} from 'react';
+import React, {useMemo, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {useNavigate} from 'react-router';
 
-import Link from 'next/link';
-
-import {
-  Button,
-  Checkbox,
-  FormControlLabel,
-  Grid,
-  ListItem,
-  Typography,
-  Tooltip,
-} from '@material-ui/core';
+import {Button, Grid, ListItem, Tooltip, Typography} from '@material-ui/core';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import {useStyles} from './Options.style';
 
-import {MyNearWalletIcon, MyriadFullIcon} from 'src/components/atoms/Icons';
 import {
+  CoinbaseWalletisabledIcon,
   EthereumNetworkIcon,
-  PolkadotNetworkIcon,
+  KusamaNetworkIcon,
+  MetamaskWalletDisabledIcon,
+  MyNearWalletIcon,
+  MyriadCircleIcon,
+  MyriadFullIcon,
   NearNetworkIcon,
+  PolkadotNetworkIcon,
   PolygonNetworkDisabledIcon,
   SenderWalletDisabledIcon,
-  CoinbaseWalletisabledIcon,
-  MetamaskWalletDisabledIcon,
   TrustWalletDisabledIcon,
-  KusamaNetworkIcon,
-  MyriadCircleIcon,
 } from 'src/components/atoms/Icons';
 import {PromptComponent as Prompt} from 'src/components/atoms/Prompt/prompt.component';
 import {PolkadotLink} from 'src/components/common/PolkadotLink.component';
@@ -67,7 +58,6 @@ export const Options: React.FC<OptionProps> = props => {
 
   const [networkId, setNetworkId] = useState<NetworkIdEnum | null>(null);
   const [wallet, setWallet] = useState<WalletTypeEnum | null>(null);
-  const [termApproved, setTermApproved] = useState(false);
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
   const [extensionChecked, setExtensionChecked] = useState(false);
   const [extensionEnabled, setExtensionEnabled] = useState(false);
@@ -147,10 +137,6 @@ export const Options: React.FC<OptionProps> = props => {
 
     setExtensionEnabled(installed);
     setExtensionChecked(true);
-  };
-
-  const toggleTermApproved = () => {
-    setTermApproved(!termApproved);
   };
 
   const closeExtensionDisableModal = () => {
@@ -392,7 +378,7 @@ export const Options: React.FC<OptionProps> = props => {
               variant="contained"
               fullWidth
               color="primary"
-              disabled={!termApproved || !extensionChecked || wallet === null}
+              disabled={!extensionChecked || wallet === null}
               onClick={handleConnect}>
               {i18n.t('Login.Options.Connect')}
             </Button>
@@ -570,36 +556,12 @@ export const Options: React.FC<OptionProps> = props => {
               </Grid>
             </div>
 
-            <Grid container direction="column" className={styles.condition}>
-              <FormControlLabel
-                className={styles.termControl}
-                onChange={toggleTermApproved}
-                control={<Checkbox name="term" color="primary" className={styles.checkbox} />}
-                label={
-                  <Typography className={styles.termCondition}>
-                    {i18n.t('Login.Options.Text_Terms_1')}&nbsp;
-                    <Link href="/term-of-use" passHref>
-                      <Typography component={'a'} className={styles.term}>
-                        {i18n.t('Login.Options.Text_Terms_2')}
-                      </Typography>
-                    </Link>
-                    &nbsp;{i18n.t('Login.Options.Text_Terms_3')}&nbsp;
-                    <Link href="/privacy-policy" passHref>
-                      <Typography component={'a'} className={styles.term}>
-                        {i18n.t('Login.Options.Text_Terms_4')}
-                      </Typography>
-                    </Link>
-                  </Typography>
-                }
-              />
-            </Grid>
-
             <div>
               <Button
                 variant="contained"
                 fullWidth
                 color="primary"
-                disabled={!termApproved || !extensionChecked || wallet === null}
+                disabled={!extensionChecked || wallet === null}
                 onClick={handleConnect}>
                 {i18n.t('Login.Options.Connect')}
               </Button>
