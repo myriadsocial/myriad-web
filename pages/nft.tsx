@@ -8,6 +8,7 @@ import Head from 'next/head';
 import NFTContainer from 'src/components/NFT/NFT.container';
 import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
+import {initialize} from 'src/lib/api/base';
 import {getServer} from 'src/lib/api/server';
 import i18n from 'src/locale';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
@@ -47,6 +48,8 @@ const NFTComponent: React.FC<NFTPageProps> = props => {
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
+  const {req} = context;
+
   const dispatch = store.dispatch as ThunkDispatchAction;
   const session = await getSession(context);
 
@@ -61,6 +64,8 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const anonymous = Boolean(session?.user.anonymous);
   const userId = session?.user.address as string;
+
+  initialize({cookie: req.headers.cookie}, anonymous);
 
   if (anonymous || !userId) {
     const username = session?.user.name as string;
