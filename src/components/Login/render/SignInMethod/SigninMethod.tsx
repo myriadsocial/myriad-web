@@ -15,7 +15,7 @@ export default function SigninMethod() {
   const handleSelected = ({method}: {method: string}) => {
     setMethodSelected(method);
     if (method === 'web2') {
-      navigate('/');
+      navigate('/createAccounts');
     } else {
       navigate('/options');
     }
