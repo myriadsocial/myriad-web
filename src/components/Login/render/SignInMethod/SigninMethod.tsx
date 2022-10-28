@@ -67,7 +67,7 @@ export default function SigninMethod() {
         <div className={styles.textOr}>or</div>
         <CardSign
           selected={methodSelected === 'web2'}
-          title={'Web 2.0'}
+          title={'Email'}
           desc="Sign in via Email"
           image={<LoginWeb2 />}
           onClick={() => handleSelected({method: 'web2'})}
