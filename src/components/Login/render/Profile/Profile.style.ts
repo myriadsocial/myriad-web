@@ -27,7 +27,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       bottom: 32,
     },
     action: {
-      marginTop: 80,
+      marginTop: 26,
     },
     mobileRoot: {
       display: 'flex',
@@ -80,6 +80,22 @@ export const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'center',
       columnGap: 8,
       marginTop: '10vw',
+    },
+    condition: {},
+    termControl: {
+      marginBottom: 24,
+      [theme.breakpoints.down('md')]: {
+        marginBottom: 16,
+      },
+    },
+    term: {
+      fontWeight: 400,
+      textDecoration: 'none',
+    },
+    checkbox: {
+      '& .MuiSvgIcon-root': {
+        fill: 'currentColor',
+      },
     },
   }),
 );

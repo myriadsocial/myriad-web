@@ -2,9 +2,18 @@ import React, {useEffect, useCallback, useState, useMemo} from 'react';
 import {useSelector} from 'react-redux';
 import {useNavigate} from 'react-router';
 
+import Link from 'next/link';
 import {useRouter} from 'next/router';
 
-import {Button, Box, Grid, TextField, Typography} from '@material-ui/core';
+import {
+  Button,
+  Box,
+  Grid,
+  TextField,
+  Typography,
+  FormControlLabel,
+  Checkbox,
+} from '@material-ui/core';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
@@ -55,7 +64,7 @@ export const Profile: React.FC<ProfileProps> = props => {
     props;
   const {networks} = useSelector<RootState, UserState>(state => state.userState);
   const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
-
+  const [termApproved, setTermApproved] = useState(false);
   const styles = useStyles();
   const confirm = useConfirm();
   const navigate = useNavigate();
@@ -345,6 +354,10 @@ export const Profile: React.FC<ProfileProps> = props => {
     setExpanded(!expanded);
   };
 
+  const toggleTermApproved = () => {
+    setTermApproved(!termApproved);
+  };
+
   return (
     <>
       <ShowIf condition={!isMobileSignIn}>
@@ -460,13 +473,37 @@ export const Profile: React.FC<ProfileProps> = props => {
             </Typography>
           </div>
 
+          <Grid container direction="column" className={styles.condition}>
+            <FormControlLabel
+              className={styles.termControl}
+              onChange={toggleTermApproved}
+              control={<Checkbox name="term" color="primary" className={styles.checkbox} />}
+              label={
+                <Typography style={{color: '#0A0A0A'}}>
+                  {i18n.t('Login.Options.Text_Terms_1')}&nbsp;
+                  <Link href="/term-of-use" passHref>
+                    <Typography component={'a'} className={styles.term}>
+                      {i18n.t('Login.Options.Text_Terms_2')}
+                    </Typography>
+                  </Link>
+                  &nbsp;{i18n.t('Login.Options.Text_Terms_3')}&nbsp;
+                  <Link href="/privacy-policy" passHref>
+                    <Typography component={'a'} className={styles.term}>
+                      {i18n.t('Login.Options.Text_Terms_4')}
+                    </Typography>
+                  </Link>
+                </Typography>
+              }
+            />
+          </Grid>
+
           <Grid container className={styles.action} justifyContent="space-between">
             <Button onClick={handleChangeWallet} variant="outlined" color="secondary" size="small">
               {i18n.t('Login.Profile.Btn_Change_Wallet')}
             </Button>
 
             <Button
-              disabled={profile.username.value.length === 0}
+              disabled={profile.username.value.length === 0 || !termApproved}
               onClick={handleConfirmation}
               variant="contained"
               color="primary"
@@ -533,6 +570,30 @@ export const Profile: React.FC<ProfileProps> = props => {
                 ({profile.username.value.length}/{USERNAME_MAX_LENGTH})
               </Typography>
             </div>
+
+            <Grid container direction="column" className={styles.condition}>
+              <FormControlLabel
+                className={styles.termControl}
+                onChange={toggleTermApproved}
+                control={<Checkbox name="term" color="primary" className={styles.checkbox} />}
+                label={
+                  <Typography style={{color: '#0A0A0A'}}>
+                    {i18n.t('Login.Options.Text_Terms_1')}&nbsp;
+                    <Link href="/term-of-use" passHref>
+                      <Typography component={'a'} className={styles.term}>
+                        {i18n.t('Login.Options.Text_Terms_2')}
+                      </Typography>
+                    </Link>
+                    &nbsp;{i18n.t('Login.Options.Text_Terms_3')}&nbsp;
+                    <Link href="/privacy-policy" passHref>
+                      <Typography component={'a'} className={styles.term}>
+                        {i18n.t('Login.Options.Text_Terms_4')}
+                      </Typography>
+                    </Link>
+                  </Typography>
+                }
+              />
+            </Grid>
             <div className={styles.actionWrapper}>
               <Button
                 onClick={handleChangeWallet}
@@ -543,7 +604,7 @@ export const Profile: React.FC<ProfileProps> = props => {
               </Button>
 
               <Button
-                disabled={profile.username.value.length === 0}
+                disabled={profile.username.value.length === 0 || termApproved}
                 onClick={handleConfirmation}
                 variant="contained"
                 color="primary"
