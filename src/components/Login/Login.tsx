@@ -202,8 +202,6 @@ export const Login: React.FC<LoginProps> = props => {
 
           <Route index={false} path="/createAccounts" element={<CreateAccounts />} />
 
-          <Route index={false} path="/email" element={<LoginByEmail />} />
-
           <Route
             index={false}
             path="/options"
