@@ -10,6 +10,7 @@ import ShowIf from '../common/show-if.component';
 import {useStyles} from './Login.styles';
 import {Accounts} from './render/Accounts';
 import CreateAccounts from './render/CreateAccounts/CreateAccounts';
+import LoginByEmail from './render/Email/LoginByEmail';
 import {Options} from './render/Options';
 import {Profile} from './render/Profile';
 import SigninMethod from './render/SignInMethod/SigninMethod';
@@ -197,6 +198,8 @@ export const Login: React.FC<LoginProps> = props => {
         <Routes>
           <Route index={false} path="/" element={<SigninMethod />} />
 
+          <Route index={false} path="/email" element={<LoginByEmail />} />
+
           <Route index={false} path="/createAccounts" element={<CreateAccounts />} />
 
           <Route
@@ -223,6 +226,7 @@ export const Login: React.FC<LoginProps> = props => {
               />
             }
           />
+
           <Route
             index={false}
             path="/profile"

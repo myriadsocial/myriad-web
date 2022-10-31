@@ -15,7 +15,7 @@ export default function SigninMethod() {
   const handleSelected = ({method}: {method: string}) => {
     setMethodSelected(method);
     if (method === 'web2') {
-      navigate('/createAccounts');
+      navigate('/email');
     } else {
       navigate('/options');
     }
@@ -67,7 +67,7 @@ export default function SigninMethod() {
         <div className={styles.textOr}>or</div>
         <CardSign
           selected={methodSelected === 'web2'}
-          title={'Email'}
+          title={'Web 2.0'}
           desc="Sign in via Email"
           image={<LoginWeb2 />}
           onClick={() => handleSelected({method: 'web2'})}
