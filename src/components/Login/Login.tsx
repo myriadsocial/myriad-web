@@ -197,7 +197,7 @@ export const Login: React.FC<LoginProps> = props => {
       <Router initialEntries={initialEntries} initialIndex={0}>
         <Routes>
           <Route index={false} path="/" element={<SigninMethod />} />
-          
+
           <Route index={false} path="/email" element={<LoginByEmail />} />
 
           <Route index={false} path="/createAccounts" element={<CreateAccounts />} />
@@ -226,6 +226,7 @@ export const Login: React.FC<LoginProps> = props => {
               />
             }
           />
+
           <Route
             index={false}
             path="/profile"
