@@ -180,6 +180,12 @@
       "Btn_Signin": "Sign in",
       "Btn_Demo": "demo"
     },
+    "Email": {
+      "LoginByEmail" : {
+        "Title": "Sign-in with email",
+        "Subtitle": "You will receive a sign-in link in your inbox."
+      }
+    },
     "Options": {
       "Network": "Select Network",
       "Wallet": "Select Wallet",
