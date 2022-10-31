@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import {useNavigate} from 'react-router';
 
 import {Typography, TextField, Button} from '@material-ui/core';
 
@@ -7,6 +8,7 @@ import {useStyles} from './LoginByEmail.style';
 import i18n from 'src/locale';
 
 const LoginByEmail = () => {
+  const navigate = useNavigate();
   const styles = useStyles();
 
   const [email, setEmail] = useState('');
@@ -56,10 +58,14 @@ const LoginByEmail = () => {
         helperText={error.isError ? error.message : ''}
       />
       <div className={styles.actionWrapper}>
-        <Button variant="outlined" color="primary">
+        <Button variant="outlined" color="secondary" onClick={() => navigate('/')}>
           Back
         </Button>
-        <Button variant="contained" color="primary" disabled={!email.length || error.isError}>
+        <Button
+          variant="contained"
+          color="primary"
+          disabled={!email.length || error.isError}
+          onClick={() => navigate('/createAccounts')}>
           Next
         </Button>
       </div>

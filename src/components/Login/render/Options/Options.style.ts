@@ -156,5 +156,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: 80,
       fontSize: 32,
     },
+    actionWrapper: {
+      display: 'flex',
+      flexDirection: 'row',
+      gap: 16,
+    },
   }),
 );
