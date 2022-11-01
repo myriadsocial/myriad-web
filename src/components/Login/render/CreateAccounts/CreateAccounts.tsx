@@ -19,7 +19,7 @@ import {useStyles} from './CreateAccounts.style';
 import {IcEmail, LogoMyriadCircle} from 'src/images/Icons';
 import i18n from 'src/locale';
 
-export default function CreateAccounts() {
+export default function CreateAccounts({email}: {email: string}) {
   const styles = useStyles();
   const navigate = useNavigate();
   const [displayName, setDisplayName] = useState<string>('');
@@ -36,7 +36,7 @@ export default function CreateAccounts() {
       <Typography className={styles.textTitle}>Email Used</Typography>
       <div className={styles.wrapperEmail}>
         <IcEmail />
-        <Typography className={styles.textEmail}>Hello@gmail.com</Typography>
+        <Typography className={styles.textEmail}>{email}</Typography>
       </div>
       <Typography className={styles.textTitle}>Selected Instance</Typography>
       <div className={styles.wrapperInstance}>
