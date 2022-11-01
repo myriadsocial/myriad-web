@@ -143,8 +143,8 @@ jobs:
               --set-string resources.limits.memory=1024Mi \
               --set replicaCount=2 \
               --set autoscaling.enabled=true \
-              --set autoscaling.minReplicas=2 \
-              --set autoscaling.maxReplicas=100 \
+              --set autoscaling.minReplicas=1 \
+              --set autoscaling.maxReplicas=1 \
               --set-string nodeSelector.pool=general
             kubectl rollout status deployment/myriad-web
       - name: Sleuth webhook
@@ -257,8 +257,8 @@ jobs:
               --set-string resources.limits.memory=1024Mi \
               --set replicaCount=3 \
               --set autoscaling.enabled=true \
-              --set autoscaling.minReplicas=3 \
-              --set autoscaling.maxReplicas=100 \
+              --set autoscaling.minReplicas=1 \
+              --set autoscaling.maxReplicas=1 \
               --set-string nodeSelector.pool=general
             kubectl rollout status deployment/myriad-web
       - name: Sleuth webhook
@@ -371,8 +371,8 @@ jobs:
               --set-string resources.limits.memory=1024Mi \
               --set replicaCount=3 \
               --set autoscaling.enabled=true \
-              --set autoscaling.minReplicas=3 \
-              --set autoscaling.maxReplicas=100 \
+              --set autoscaling.minReplicas=1 \
+              --set autoscaling.maxReplicas=1 \
               --set-string nodeSelector.pool=general
             kubectl rollout status deployment/myriad-web
       - name: Sleuth webhook
