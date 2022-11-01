@@ -180,6 +180,12 @@
       "Btn_Signin": "Masuk",
       "Btn_Demo": "demo"
     },
+    "Email": {
+      "LoginByEmail" : {
+        "Title": "Masuk dengan email",
+        "Subtitle": "Kamu akan memperoleh tautan akses dalam kotak masukmu."
+      }
+    },
     "Options": {
       "Network": "Pilih Jaringan",
       "Wallet": "Pilih Dompet",

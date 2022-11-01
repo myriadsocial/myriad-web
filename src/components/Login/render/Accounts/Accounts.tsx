@@ -46,7 +46,7 @@ export const Accounts: React.FC<AccountListProps> = props => {
   };
 
   const handleBack = () => {
-    navigate('/');
+    navigate('/options');
   };
 
   const handleNext = () => {

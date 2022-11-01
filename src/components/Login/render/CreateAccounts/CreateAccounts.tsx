@@ -114,7 +114,7 @@ export default function CreateAccounts() {
           />
         </Grid>
         <div style={{display: 'flex'}}>
-          <Button variant="outlined" fullWidth color="secondary" onClick={() => navigate('/')}>
+          <Button variant="outlined" fullWidth color="secondary" onClick={() => navigate('/email')}>
             Back
           </Button>
           <div style={{width: 8}} />
