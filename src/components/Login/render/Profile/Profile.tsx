@@ -280,7 +280,7 @@ export const Profile: React.FC<ProfileProps> = props => {
         }
       }
     }
-    navigate('/');
+    navigate('/options');
   };
 
   const validate = (): boolean => {
