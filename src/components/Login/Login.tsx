@@ -16,6 +16,7 @@ import {Profile} from './render/Profile';
 import SigninMethod from './render/SignInMethod/SigninMethod';
 
 import last from 'lodash/last';
+import LoginMagicLink from 'src/components/Login/render/MagicLink/LoginMagicLink';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {useProfileHook} from 'src/hooks/use-profile.hook';
@@ -201,6 +202,8 @@ export const Login: React.FC<LoginProps> = props => {
       <Router initialEntries={initialEntries} initialIndex={0}>
         <Routes>
           <Route index={false} path="/" element={<SigninMethod />} />
+
+          <Route index={false} path="/magiclink" element={<LoginMagicLink />} />
 
           <Route
             index={false}
