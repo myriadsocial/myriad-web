@@ -2,14 +2,11 @@ import React, {useState} from 'react';
 
 import {Button, Typography} from '@material-ui/core';
 
-import {useStyles} from './LoginOtp.style';
+import {useStyles} from '../../../LoginMagicLink.style';
 
 import i18n from 'src/locale';
 
 const LoginMagicLink = () => {
-  //TODO: create hook to login using OTP
-  //handle when error logging in with OTP
-
   const classes = useStyles();
 
   const [email] = useState('husni@blocksphere.id');
