@@ -109,3 +109,11 @@ export const getWalletAddress = async (userId: string): Promise<WalletDetail> =>
 
   return data;
 };
+
+export const getCheckEmail = async (email: string): Promise<boolean> => {
+  const {data} = await MyriadAPI().request<boolean>({
+    url: `/email/${email}`,
+    method: 'GET',
+  });
+  return data;
+};
