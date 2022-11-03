@@ -51,7 +51,6 @@ export const Login: React.FC<LoginProps> = props => {
   const [loading, setLoading] = useState(false);
   const [walletLoading, setWalletLoading] = useState(Boolean(redirectAuth));
   const [initialEntries, setInitialEntries] = useState<string[]>(['/']);
-  const [email, setEmail] = useState<string>('');
 
   useEffect(() => {
     if (redirectAuth === WalletTypeEnum.NEAR || redirectAuth === WalletTypeEnum.MYNEAR) {
@@ -195,6 +194,10 @@ export const Login: React.FC<LoginProps> = props => {
     [selectedAccount, walletType],
   );
 
+  const checkEmailRegistered = useCallback(async (callback: () => void, email: string) => {
+    if (!email.length) throw new Error('Please input your email!');
+  }, []);
+
   if (walletLoading) return null;
 
   return (
@@ -208,7 +211,7 @@ export const Login: React.FC<LoginProps> = props => {
           <Route
             index={false}
             path="/email"
-            element={<LoginByEmail email={email} setEmail={setEmail} />}
+            element={<LoginByEmail onNext={checkEmailRegistered} />}
           />
 
           <Route index={false} path="/createAccounts" element={<CreateAccounts email={email} />} />

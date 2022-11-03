@@ -5,19 +5,16 @@ import {Button, TextField, Typography} from '@material-ui/core';
 
 import {useStyles} from './LoginByEmail.style';
 
-import {getCheckEmail} from 'src/lib/api/user';
 import i18n from 'src/locale';
 
-interface LoginByEmailInterface {
-  email: string;
-  setEmail: (string) => void;
-}
-const LoginByEmail = (props: LoginByEmailInterface) => {
-  const {email, setEmail} = props;
-  const navigate = useNavigate();
+type LoginByEmailProps = {
+  onNext: (callback: () => void, email: string) => Promise<void>;
+};
+
+const LoginByEmail = ({onNext}: LoginByEmailProps) => {
   const styles = useStyles();
 
-  // const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('');
   const [error, setError] = useState({
     isError: false,
     message: '',
@@ -44,13 +41,12 @@ const LoginByEmail = (props: LoginByEmailInterface) => {
     setEmail(event.target.value);
   };
 
-  const handleNext = async () => {
-    const checkEmail = await getCheckEmail(email);
-    if (checkEmail) {
-      //TODO: handle login if email is registered
-    } else {
+  const navigate = useNavigate();
+
+  const handleNext = () => {
+    onNext(() => {
       navigate('/createAccounts');
-    }
+    }, email);
   };
 
   return (
@@ -73,7 +69,7 @@ const LoginByEmail = (props: LoginByEmailInterface) => {
         helperText={error.isError ? error.message : ''}
       />
       <div className={styles.actionWrapper}>
-        <Button variant="outlined" color="secondary" onClick={() => navigate('/')}>
+        <Button variant="outlined" color="primary">
           Back
         </Button>
         <Button
