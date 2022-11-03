@@ -10,6 +10,7 @@ import {Container} from '@material-ui/core';
 
 import useStyles from './DefaultLayout.styles';
 
+import BigTopBanner from 'src/components/BigTopBanner';
 import {withError, WithErrorProps} from 'src/components/Error';
 import {MenuContainer} from 'src/components/Menu';
 import {NotificationsContainer} from 'src/components/Notifications';
@@ -166,6 +167,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
         sender={user}
         currentWallet={getWallet(currentWallet?.network?.blockchainPlatform)}
         currentNetwork={currentWallet?.networkId}>
+        <BigTopBanner />
         <Container maxWidth="lg" disableGutters>
           <div className={classes.root}>
             <div className={classes.firstCol}>

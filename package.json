@@ -121,6 +121,7 @@
     "slate-hyperscript": "^0.77.0",
     "slate-react": "^0.81.0",
     "styled-components": "^5.3.5",
+    "ts-node": "^10.9.1",
     "ua-parser-js": "^1.0.2",
     "unique-names-generator": "^4.7.1",
     "uuid": "^8.3.2",
