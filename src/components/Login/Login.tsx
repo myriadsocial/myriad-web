@@ -16,6 +16,7 @@ import {Profile} from './render/Profile';
 import SigninMethod from './render/SignInMethod/SigninMethod';
 
 import last from 'lodash/last';
+import LoginMagicLink from 'src/components/Login/render/MagicLink/LoginMagicLink';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {useProfileHook} from 'src/hooks/use-profile.hook';
@@ -50,6 +51,7 @@ export const Login: React.FC<LoginProps> = props => {
   const [loading, setLoading] = useState(false);
   const [walletLoading, setWalletLoading] = useState(Boolean(redirectAuth));
   const [initialEntries, setInitialEntries] = useState<string[]>(['/']);
+  const [email, setEmail] = useState<string>('');
 
   useEffect(() => {
     if (redirectAuth === WalletTypeEnum.NEAR || redirectAuth === WalletTypeEnum.MYNEAR) {
@@ -57,6 +59,7 @@ export const Login: React.FC<LoginProps> = props => {
     } else {
       clearNearCache();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [redirectAuth]);
 
   useEffect(() => {
@@ -80,6 +83,7 @@ export const Login: React.FC<LoginProps> = props => {
       data.publicAddress,
       wallet,
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleOnconnect = (accounts: InjectedAccountWithMeta[], networkId: NetworkIdEnum) => {
@@ -187,6 +191,7 @@ export const Login: React.FC<LoginProps> = props => {
           break;
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [selectedAccount, walletType],
   );
 
@@ -198,9 +203,15 @@ export const Login: React.FC<LoginProps> = props => {
         <Routes>
           <Route index={false} path="/" element={<SigninMethod />} />
 
-          <Route index={false} path="/email" element={<LoginByEmail />} />
+          <Route index={false} path="/magiclink" element={<LoginMagicLink />} />
 
-          <Route index={false} path="/createAccounts" element={<CreateAccounts />} />
+          <Route
+            index={false}
+            path="/email"
+            element={<LoginByEmail email={email} setEmail={setEmail} />}
+          />
+
+          <Route index={false} path="/createAccounts" element={<CreateAccounts email={email} />} />
 
           <Route
             index={false}

@@ -1,15 +1,23 @@
 import {useState} from 'react';
+import {useNavigate} from 'react-router';
 
-import {Typography, TextField, Button} from '@material-ui/core';
+import {Button, TextField, Typography} from '@material-ui/core';
 
 import {useStyles} from './LoginByEmail.style';
 
+import {getCheckEmail} from 'src/lib/api/user';
 import i18n from 'src/locale';
 
-const LoginByEmail = () => {
+interface LoginByEmailInterface {
+  email: string;
+  setEmail: (string) => void;
+}
+const LoginByEmail = (props: LoginByEmailInterface) => {
+  const {email, setEmail} = props;
+  const navigate = useNavigate();
   const styles = useStyles();
 
-  const [email, setEmail] = useState('');
+  // const [email, setEmail] = useState('');
   const [error, setError] = useState({
     isError: false,
     message: '',
@@ -36,6 +44,15 @@ const LoginByEmail = () => {
     setEmail(event.target.value);
   };
 
+  const handleNext = async () => {
+    const checkEmail = await getCheckEmail(email);
+    if (checkEmail) {
+      //TODO: handle login if email is registered
+    } else {
+      navigate('/createAccounts');
+    }
+  };
+
   return (
     <div className={styles.root}>
       <div>
@@ -56,10 +73,14 @@ const LoginByEmail = () => {
         helperText={error.isError ? error.message : ''}
       />
       <div className={styles.actionWrapper}>
-        <Button variant="outlined" color="primary">
+        <Button variant="outlined" color="secondary" onClick={() => navigate('/')}>
           Back
         </Button>
-        <Button variant="contained" color="primary" disabled={!email.length || error.isError}>
+        <Button
+          variant="contained"
+          color="primary"
+          disabled={!email.length || error.isError}
+          onClick={handleNext}>
           Next
         </Button>
       </div>

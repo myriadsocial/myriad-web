@@ -280,7 +280,7 @@ export const Profile: React.FC<ProfileProps> = props => {
         }
       }
     }
-    navigate('/');
+    navigate('/options');
   };
 
   const validate = (): boolean => {
@@ -497,20 +497,26 @@ export const Profile: React.FC<ProfileProps> = props => {
             />
           </Grid>
 
-          <Grid container className={styles.action} justifyContent="space-between">
-            <Button onClick={handleChangeWallet} variant="outlined" color="secondary" size="small">
+          <div className={styles.action}>
+            <Button
+              onClick={handleChangeWallet}
+              variant="outlined"
+              color="secondary"
+              size="small"
+              fullWidth>
               {i18n.t('Login.Profile.Btn_Change_Wallet')}
             </Button>
-
+            <div style={{width: 8}} />
             <Button
               disabled={profile.username.value.length === 0 || !termApproved}
               onClick={handleConfirmation}
               variant="contained"
               color="primary"
+              fullWidth
               size="small">
               {i18n.t('Login.Profile.Btn_Register')}
             </Button>
-          </Grid>
+          </div>
         </div>
       </ShowIf>
       <ShowIf condition={isMobileSignIn}>

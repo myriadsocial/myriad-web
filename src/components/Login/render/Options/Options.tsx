@@ -373,10 +373,12 @@ export const Options: React.FC<OptionProps> = props => {
             </Grid>
           </div>
 
-          <div>
+          <div className={styles.actionWrapper}>
+            <Button variant="outlined" color="secondary" onClick={() => navigate('/')}>
+              Back
+            </Button>
             <Button
               variant="contained"
-              fullWidth
               color="primary"
               disabled={!extensionChecked || wallet === null}
               onClick={handleConnect}>
@@ -556,7 +558,10 @@ export const Options: React.FC<OptionProps> = props => {
               </Grid>
             </div>
 
-            <div>
+            <div style={{display: 'flex', flexDirection: 'column', gap: 16}}>
+              <Button variant="outlined" color="secondary" onClick={() => navigate('/')}>
+                Back
+              </Button>
               <Button
                 variant="contained"
                 fullWidth
