@@ -241,7 +241,7 @@
       "Subtitle_1": "We have sent you an email from the address ",
       "Subtitle_2": "Check your inbox and click that link in order to sign-in. Don’t forget to check your spam folder!",
       "Button_Text": "Resend Login Link",
-      "Timer_Text": "You can send your sign-in link again after {{time}} left"
+      "Timer_Text": "You can send your sign-in link again after {{time}} second(s)"
     }
   },
   "Profile_Card": {
