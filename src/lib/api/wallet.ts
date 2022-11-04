@@ -124,8 +124,9 @@ export const disconnectNetwork = async (
   payload: ConnectNetwork,
   walletId: string,
 ): Promise<Wallet | null> => {
+  const address = isHex(`0x${walletId}`) ? `0x${walletId}` : walletId;
   const {data} = await MyriadAPI().request<Wallet>({
-    url: `wallets/${walletId}`,
+    url: `wallets/${address}`,
     method: 'DELETE',
     data: payload,
   });
