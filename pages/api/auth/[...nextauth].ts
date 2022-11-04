@@ -82,11 +82,11 @@ export default NextAuth({
         token: {label: 'Token', type: 'text'},
       },
       async authorize(credentials) {
-        const data = await AuthLinkAPI.loginWithLink(credentials.token);
-
-        if (!data?.accessToken) throw Error('Failed to authorize user!');
-
         try {
+          const data = await AuthLinkAPI.loginWithLink(credentials.token);
+
+          if (!data?.accessToken) throw Error('Failed to authorize user!');
+
           // Any object returned will be saved in `user` property of the JWT
           return emailCredentialToSession(
             credentials as unknown as SignInWithEmailCredential,

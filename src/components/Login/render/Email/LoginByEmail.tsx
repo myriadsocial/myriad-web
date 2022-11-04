@@ -8,7 +8,7 @@ import {useStyles} from './LoginByEmail.style';
 import i18n from 'src/locale';
 
 type LoginByEmailProps = {
-  onNext: (callback: () => void, email: string) => Promise<void>;
+  onNext: (successCallback: () => void, failedCallback: () => void, email: string) => Promise<void>;
 };
 
 const LoginByEmail = ({onNext}: LoginByEmailProps) => {
@@ -44,9 +44,15 @@ const LoginByEmail = ({onNext}: LoginByEmailProps) => {
   const navigate = useNavigate();
 
   const handleNext = () => {
-    onNext(() => {
-      navigate('/createAccounts');
-    }, email);
+    onNext(
+      () => {
+        navigate('/magiclink');
+      },
+      () => {
+        navigate('/createAccounts');
+      },
+      email,
+    );
   };
 
   return (

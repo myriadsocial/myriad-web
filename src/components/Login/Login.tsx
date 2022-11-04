@@ -2,6 +2,8 @@ import React, {useState, useCallback, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import {MemoryRouter as Router, Routes, Route} from 'react-router-dom';
 
+import {signIn} from 'next-auth/react';
+
 import {CircularProgress} from '@material-ui/core';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
@@ -20,8 +22,10 @@ import LoginMagicLink from 'src/components/Login/render/MagicLink/LoginMagicLink
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {useProfileHook} from 'src/hooks/use-profile.hook';
+import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {NetworkIdEnum} from 'src/interfaces/network';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
+import {getCheckEmail} from 'src/lib/api/user';
 import {toHexPublicKey} from 'src/lib/crypto';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
@@ -42,6 +46,9 @@ export const Login: React.FC<LoginProps> = props => {
   const {checkUsernameAvailable} = useProfileHook();
   const {connectToNear} = useNearApi();
 
+  const {query} = useQueryParams();
+
+  const [, setToken] = useState('');
   const [walletType, setWalletType] = useState<WalletTypeEnum | null>(redirectAuth);
   const [networkId, setNetworkId] = useState<NetworkIdEnum | null>(null);
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
@@ -51,6 +58,7 @@ export const Login: React.FC<LoginProps> = props => {
   const [loading, setLoading] = useState(false);
   const [walletLoading, setWalletLoading] = useState(Boolean(redirectAuth));
   const [initialEntries, setInitialEntries] = useState<string[]>(['/']);
+  const [email, setEmail] = useState<string>('');
 
   useEffect(() => {
     if (redirectAuth === WalletTypeEnum.NEAR || redirectAuth === WalletTypeEnum.MYNEAR) {
@@ -64,6 +72,22 @@ export const Login: React.FC<LoginProps> = props => {
   useEffect(() => {
     i18n.changeLanguage(settings.language);
   }, [settings.language]);
+
+  useEffect(() => {
+    if (query.token && typeof query.token === 'string') {
+      const {token} = query;
+
+      //TODO: change name & username to get from createAccounts
+      signIn('emailCredentials', {
+        name: 'cobaOTP',
+        username: 'coba_otp',
+        email,
+        token,
+      });
+
+      setToken(token);
+    }
+  }, [query]);
 
   const checkWalletRegistered = useCallback(async (wallet: WalletTypeEnum) => {
     const data = await connectToNear(undefined, undefined, wallet, 'login near');
@@ -194,9 +218,22 @@ export const Login: React.FC<LoginProps> = props => {
     [selectedAccount, walletType],
   );
 
-  const checkEmailRegistered = useCallback(async (callback: () => void, email: string) => {
-    if (!email.length) throw new Error('Please input your email!');
-  }, []);
+  const checkEmailRegistered = useCallback(
+    async (successCallback: () => void, failedCallback: () => void, email: string) => {
+      if (!email.length) throw new Error('Please input your email!');
+
+      setEmail(email);
+
+      const isEmailRegistered = await getCheckEmail(email);
+
+      if (isEmailRegistered) {
+        successCallback();
+      } else {
+        failedCallback();
+      }
+    },
+    [],
+  );
 
   if (walletLoading) return null;
 
@@ -206,7 +243,7 @@ export const Login: React.FC<LoginProps> = props => {
         <Routes>
           <Route index={false} path="/" element={<SigninMethod />} />
 
-          <Route index={false} path="/magiclink" element={<LoginMagicLink />} />
+          <Route index={false} path="/magiclink" element={<LoginMagicLink email={email} />} />
 
           <Route
             index={false}
