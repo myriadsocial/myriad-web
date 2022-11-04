@@ -16,5 +16,5 @@ export interface SignInWithEmailCredential {
   name: string;
   username: string;
   email: string;
-  token: string;
+  loginToken: string;
 }

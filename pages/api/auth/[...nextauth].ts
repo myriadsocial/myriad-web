@@ -87,10 +87,12 @@ export default NextAuth({
 
           if (!data?.accessToken) throw Error('Failed to authorize user!');
 
+          const payload = encryptMessage(data.accessToken, credentials.username);
+
           // Any object returned will be saved in `user` property of the JWT
           return emailCredentialToSession(
             credentials as unknown as SignInWithEmailCredential,
-            data.accessToken,
+            payload,
           );
         } catch (error) {
           console.log('[api][Auth]', error);
