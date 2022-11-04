@@ -28,6 +28,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     action: {
       marginTop: 26,
+      display: 'flex',
     },
     mobileRoot: {
       display: 'flex',
