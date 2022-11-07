@@ -176,6 +176,7 @@ export default NextAuth({
           address: user.address,
           nonce: user.nonce,
           token: user.token,
+          email: user.email,
         };
       }
 

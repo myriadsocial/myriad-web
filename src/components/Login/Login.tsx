@@ -77,17 +77,16 @@ export const Login: React.FC<LoginProps> = props => {
     if (query.token && typeof query.token === 'string') {
       const {token} = query;
 
-      //TODO: change name & username to get from createAccounts
       signIn('emailCredentials', {
-        name: 'cobaOTP',
-        username: 'coba_otp',
+        name: '',
+        username: '',
         email,
         token,
       });
 
       setToken(token);
     }
-  }, [query]);
+  }, [query, email]);
 
   const checkWalletRegistered = useCallback(async (wallet: WalletTypeEnum) => {
     const data = await connectToNear(undefined, undefined, wallet, 'login near');
