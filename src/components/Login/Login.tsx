@@ -73,20 +73,22 @@ export const Login: React.FC<LoginProps> = props => {
     i18n.changeLanguage(settings.language);
   }, [settings.language]);
 
+  const registeredEmail = localStorage.getItem('email');
+
   useEffect(() => {
-    if (query.token && typeof query.token === 'string') {
+    if (query.token && typeof query.token === 'string' && registeredEmail) {
       const {token} = query;
 
       signIn('emailCredentials', {
         name: '',
         username: '',
-        email,
+        email: registeredEmail,
         token,
       });
 
       setToken(token);
     }
-  }, [query, email]);
+  }, [query, registeredEmail]);
 
   const checkWalletRegistered = useCallback(async (wallet: WalletTypeEnum) => {
     const data = await connectToNear(undefined, undefined, wallet, 'login near');
@@ -222,6 +224,8 @@ export const Login: React.FC<LoginProps> = props => {
       if (!email.length) throw new Error('Please input your email!');
 
       setEmail(email);
+
+      localStorage.setItem('email', email);
 
       const isEmailRegistered = await getCheckEmail(email);
 
