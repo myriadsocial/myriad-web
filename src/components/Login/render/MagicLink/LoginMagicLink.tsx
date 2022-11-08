@@ -1,37 +1,24 @@
 import {useState, useEffect} from 'react';
 
-import {signIn} from 'next-auth/react';
-
 import {Button, Typography} from '@material-ui/core';
 
 import {useStyles} from '../../../LoginMagicLink.style';
 
 import {useAuthLinkHook} from 'src/hooks/auth-link.hook';
-import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import i18n from 'src/locale';
 
-const LoginMagicLink = () => {
-  const [, setToken] = useState('');
-  const [email] = useState('husni@blocksphere.id');
+type LoginMagicLinkProps = {
+  email: string;
+};
 
-  const {query} = useQueryParams();
+const LoginMagicLink = ({email = ''}: LoginMagicLinkProps) => {
+  const [userEmail] = useState(email);
 
   const {requestLink} = useAuthLinkHook();
 
   useEffect(() => {
-    if (query.token && typeof query.token === 'string') {
-      const {token} = query;
-
-      signIn('emailCredentials', {
-        name: 'cobaOTP',
-        username: 'coba_otp',
-        email,
-        token,
-      });
-
-      setToken(token);
-    }
-  }, [query]);
+    handleRequestLink();
+  }, []);
 
   const classes = useStyles();
 
@@ -51,7 +38,7 @@ const LoginMagicLink = () => {
 
   const handleRequestLink = async () => {
     try {
-      const message = await requestLink(email);
+      const message = await requestLink(userEmail);
 
       if (message.length) {
         setCountDown(COOLDOWN_TIME);
@@ -70,7 +57,7 @@ const LoginMagicLink = () => {
         <div className={classes.subtitle}>
           <Typography variant="body1">
             {i18n.t('Login.Magic_Link.Subtitle_1')}
-            <b>{email}</b>
+            <b>{userEmail}</b>
           </Typography>
           <Typography variant="body1">{i18n.t('Login.Magic_Link.Subtitle_2')}</Typography>
         </div>

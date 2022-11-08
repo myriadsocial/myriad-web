@@ -22,14 +22,15 @@ export const credentialToSession = (
 
 export const emailCredentialToSession = (
   emailCredential: SignInWithEmailCredential,
-  accessToken: string,
+  encryption: EncryptionPayload,
 ): User => {
   const session: User = {
     id: null,
     name: emailCredential.name,
     username: emailCredential.username,
-    token: emailCredential.token,
-    accessToken,
+    email: emailCredential.email,
+    loginToken: emailCredential.loginToken,
+    token: encryption.encryptedMessage,
     anonymous: false,
     address: '',
     nonce: null,

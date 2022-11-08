@@ -16,7 +16,7 @@ export const useAuthLinkHook = () => {
     try {
       const message = await AuthLinkAPI.getLinkWithEmail({
         email,
-        callbackURL: publicRuntimeConfig.appAuthURL + '/login-link',
+        callbackURL: publicRuntimeConfig.appAuthURL + 'login',
       });
 
       return message;

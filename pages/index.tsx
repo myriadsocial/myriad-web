@@ -80,13 +80,14 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const anonymous = Boolean(session?.user.anonymous);
   const userId = session?.user.address;
+  const token = session?.user.token;
 
   initialize({cookie: req.headers.cookie}, anonymous);
 
-  if (anonymous || !userId) {
+  if (anonymous || (!userId && !token)) {
     await dispatch(setAnonymous('anonymous'));
   } else {
-    await dispatch(fetchUser(userId));
+    await dispatch(fetchUser());
 
     await Promise.all([
       dispatch(fetchConnectedSocials()),

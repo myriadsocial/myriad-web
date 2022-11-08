@@ -175,7 +175,7 @@ export const useAuthHook = () => {
 
     const promises: Promise<void | undefined>[] = [
       signOut({
-        callbackUrl: publicRuntimeConfig.appAuthURL,
+        callbackUrl: publicRuntimeConfig.appAuthURL + 'login',
         redirect: true,
       }),
     ];
