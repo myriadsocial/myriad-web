@@ -68,6 +68,7 @@ export interface User extends UserProps, BaseModel {
   people?: People[];
   metric?: UserMetric;
   deletedAt?: string;
+  fullAccess?: boolean;
 }
 
 export interface UserTransactionDetail {
