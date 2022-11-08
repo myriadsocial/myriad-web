@@ -87,8 +87,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   if (anonymous || (!userId && !token)) {
     await dispatch(setAnonymous('anonymous'));
   } else {
-    //TODO: should fetchUser for logged user via email
-    await dispatch(fetchUser(userId));
+    await dispatch(fetchUser());
 
     await Promise.all([
       dispatch(fetchConnectedSocials()),
