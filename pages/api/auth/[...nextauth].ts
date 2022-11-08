@@ -82,15 +82,19 @@ export default NextAuth({
         token: {label: 'Token', type: 'text'},
       },
       async authorize(credentials) {
-        const data = await AuthLinkAPI.loginWithLink(credentials.token);
-
-        if (!data?.accessToken) throw Error('Failed to authorize user!');
-
         try {
+          const data = await AuthLinkAPI.loginWithLink(credentials.token);
+
+          if (!data?.accessToken) throw Error('Failed to authorize user!');
+
+          const parsedEmail = credentials.email.replace(/[^a-zA-Z0-9]/g, '');
+
+          const payload = encryptMessage(data.accessToken, parsedEmail);
+
           // Any object returned will be saved in `user` property of the JWT
           return emailCredentialToSession(
             credentials as unknown as SignInWithEmailCredential,
-            data.accessToken,
+            payload,
           );
         } catch (error) {
           console.log('[api][Auth]', error);
@@ -174,6 +178,7 @@ export default NextAuth({
           address: user.address,
           nonce: user.nonce,
           token: user.token,
+          email: user.email,
         };
       }
 

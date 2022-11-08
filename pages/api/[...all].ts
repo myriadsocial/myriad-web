@@ -21,8 +21,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const session = await getSession({req});
 
-    if (session && session.user && session.user.token) {
+    if (
+      session &&
+      session.user &&
+      session.user.token &&
+      session.user.address &&
+      session.user.address.length > 0
+    ) {
       const userToken = decryptMessage(session.user.token, session.user.address);
+
+      headers = {
+        Authorization: `Bearer ${userToken}`,
+      };
+    }
+
+    if (session && session.user && session.user.token && session.user.email) {
+      const parsedEmail = session.user.email.replace(/[^a-zA-Z0-9]/g, '');
+
+      const userToken = decryptMessage(session.user.token, parsedEmail);
 
       headers = {
         Authorization: `Bearer ${userToken}`,

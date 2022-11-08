@@ -37,6 +37,7 @@ export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
     if (address) {
       logout();
     } else {
+      logout();
       router.push('/login');
     }
   };
