@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import dynamic from 'next/dynamic';
 
@@ -32,6 +32,7 @@ export const MyWallet: React.FC<MyWalletProps> = () => {
   const style = useStyles();
 
   const {query} = useQueryParams();
+
   const [tabTexts] = useState([
     {
       id: 'balance',
