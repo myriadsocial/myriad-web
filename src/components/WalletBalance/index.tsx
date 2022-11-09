@@ -3,7 +3,7 @@ import {useSelector} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
-import {Button, Link, Typography} from '@material-ui/core';
+import {Button, Typography} from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
@@ -70,15 +70,17 @@ export const WalletBalances: React.FC<WalletProps> = ({balances, loading}) => {
           <div style={{marginRight: 8, marginTop: 4}}>
             <InfoIconYellow />
           </div>
-          <Typography>
+          {/* <Typography>
             Someone sent you a tip! Connect your wallet now to claim your tip. You can check your
             tip balance{' '}
             <Link onClick={() => router.push({pathname: '/wallet', query: {type: 'tip'}})}>
               here
             </Link>{' '}
             and follow the instructions on how to claim it once your wallet is connected.
+          </Typography> */}
+          <Typography>
+            You don’t have any wallet connected. Connect your wallet now to send tips.
           </Typography>
-          {/* <Typography>You don’t have any wallet connected. Connect your wallet now to send tips. */}
         </div>
         <Button variant="contained" color="primary" onClick={changeToWalletPage} fullWidth>
           Connect Wallet
