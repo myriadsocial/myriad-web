@@ -56,7 +56,7 @@ export const WalletBalances: React.FC<WalletProps> = ({balances, loading}) => {
         </div>
       </ShowIf>
 
-      <ShowIf condition={user.fullAccess}>
+      <ShowIf condition={!user.fullAccess}>
         <div
           style={{
             backgroundColor: '#ffc85726',
@@ -85,7 +85,7 @@ export const WalletBalances: React.FC<WalletProps> = ({balances, loading}) => {
         </Button>
       </ShowIf>
 
-      <ShowIf condition={!loading}>
+      <ShowIf condition={!loading && user.fullAccess}>
         {balances.map(balance => (
           <ListItemComponent
             key={balance.id}

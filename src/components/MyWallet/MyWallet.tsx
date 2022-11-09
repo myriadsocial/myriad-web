@@ -1,7 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import dynamic from 'next/dynamic';
-import {useRouter} from 'next/router';
 
 import {MyWalletProps} from '.';
 import {TabsComponent} from '../atoms/Tabs';
@@ -31,10 +30,8 @@ const TipContainer = dynamic(() => import('../Tip/Tip.container'), {
 
 export const MyWallet: React.FC<MyWalletProps> = () => {
   const style = useStyles();
-  const router = useRouter();
+
   const {query} = useQueryParams();
-  const {type} = router.query;
-  console.log('type', type);
 
   const [tabTexts] = useState([
     {
