@@ -150,8 +150,8 @@ export default NextAuth({
   // pages is not specified for that route.
   // https://next-auth.js.org/configuration/pages
   pages: {
-    signIn: '/', // Displays signin buttons
-    signOut: '/', // Displays form with sign out button
+    signIn: '/login', // Displays signin buttons
+    signOut: '/login', // Displays form with sign out button
     error: '/', // Error code passed in query string as ?error=
     // verifyRequest: '/auth/verify-request', // Used for check email page
     // newUser: null // If set, new users will be directed here on first sign in
