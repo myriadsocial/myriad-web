@@ -158,6 +158,10 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     onOpenTipHistory(person);
   };
 
+  const handleNotFullAccess = () => {
+    //TODO : add modal cta
+  };
+
   return (
     <div>
       <div className={style.root}>
@@ -274,7 +278,8 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
               <ShowIf condition={!self && !!user}>
                 <ShowIf condition={canAddFriend && person.username !== 'myriad_official'}>
                   <Button
-                    onClick={handleSendRequest}
+                    onClick={user.fullAccess ? handleSendRequest : handleNotFullAccess}
+                    disabled={!person.fullAccess}
                     startIcon={
                       <SvgIcon
                         classes={{root: style.fill}}

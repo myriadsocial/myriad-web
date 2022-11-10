@@ -26,6 +26,7 @@ import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorize
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {Modal} from 'src/components/atoms/Modal';
 import ShowIf from 'src/components/common/show-if.component';
+import {useExperienceHook} from 'src/hooks/use-experience-hook';
 import {WrappedExperience} from 'src/interfaces/experience';
 import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
@@ -74,6 +75,8 @@ export const Experience: React.FC<ExperienceProps> = props => {
   const experienceId = userExperience.experience.id;
   const userExperienceId = userExperience.id;
   const link = publicRuntimeConfig.appAuthURL + `/experience/${experienceId}`;
+  const {userExperiencesMeta} = useExperienceHook();
+  const totalOwnedExperience = userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
 
   const handleClickExperience = () => {
     handleCloseSettings();
@@ -84,10 +87,17 @@ export const Experience: React.FC<ExperienceProps> = props => {
   };
 
   const handleCloneExperience = () => {
-    handleCloseSettings();
+    if (totalOwnedExperience === 5) {
+      enqueueSnackbar({
+        message: 'max experiance for lite version is 5, please connect your wallet',
+        variant: 'warning',
+      });
+    } else {
+      handleCloseSettings();
 
-    if (onClone) {
-      onClone(experienceId);
+      if (onClone) {
+        onClone(experienceId);
+      }
     }
   };
 

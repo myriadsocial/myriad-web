@@ -37,13 +37,24 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
 
   const handleCreateExperience = () => {
     const totalOwnedExperience = userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
-    if (totalOwnedExperience >= 10) {
-      enqueueSnackbar({
-        message: i18n.t('Experience.Alert.Max_Exp'),
-        variant: 'warning',
-      });
+    //TODO : ini logikanya masih dibalik
+    if (!user.fullAccess) {
+      if (totalOwnedExperience >= 10) {
+        enqueueSnackbar({
+          message: i18n.t('Experience.Alert.Max_Exp'),
+          variant: 'warning',
+        });
+      } else {
+        router.push('/experience/create');
+      }
     } else {
-      router.push('/experience/create');
+      //TODO : add modal cta
+      if (totalOwnedExperience >= 5) {
+        enqueueSnackbar({
+          message: 'max experiance for lite version is 5, please connect your wallet',
+          variant: 'warning',
+        });
+      }
     }
   };
 
