@@ -74,7 +74,6 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     person,
     user,
   );
-  console.log('person', person);
   const enqueueSnackbar = useEnqueueSnackbar();
   const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
