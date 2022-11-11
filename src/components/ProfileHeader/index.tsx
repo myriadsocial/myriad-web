@@ -4,6 +4,8 @@ import {DotsVerticalIcon} from '@heroicons/react/solid';
 import React from 'react';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
+import {useRouter} from 'next/router';
+
 import {Grid} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -73,7 +75,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     user,
   );
   const enqueueSnackbar = useEnqueueSnackbar();
-
+  const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [anchorElFriend, setAnchorElFriend] = React.useState<null | HTMLElement>(null);
   const [modalReportOpened, setModalReportOpened] = React.useState(false);
@@ -159,7 +161,20 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
   };
 
   const handleNotFullAccess = () => {
-    //TODO : add modal cta
+    confirm({
+      title: 'Create Experience Limit Reached!',
+      description:
+        'You are currently using lite version of Myriad. You can only create up to 5 experience!Connect Web 3.0 Wallet to create more experience',
+      icon: 'warning',
+      confirmationText: 'Connect Web 3.0 Wallet',
+      cancellationText: 'Maybe Later',
+      onConfirm: () => {
+        router.push({pathname: '/wallet', query: {type: 'manage'}});
+      },
+      onCancel: () => {
+        undefined;
+      },
+    });
   };
 
   return (

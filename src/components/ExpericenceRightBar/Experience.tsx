@@ -7,6 +7,7 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import getConfig from 'next/config';
 import NextImage from 'next/image';
 import Link from 'next/link';
+import {useRouter} from 'next/router';
 
 import {Grid} from '@material-ui/core';
 import {TextField, InputAdornment} from '@material-ui/core';
@@ -63,7 +64,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
     onSubscribe,
     onUnsubscribe,
   } = props;
-
+  const router = useRouter();
   const styles = useStyles(props);
   const confirm = useConfirm();
   const enqueueSnackbar = useEnqueueSnackbar();
@@ -88,9 +89,19 @@ export const Experience: React.FC<ExperienceProps> = props => {
 
   const handleCloneExperience = () => {
     if (totalOwnedExperience === 5) {
-      enqueueSnackbar({
-        message: 'max experiance for lite version is 5, please connect your wallet',
-        variant: 'warning',
+      confirm({
+        title: 'Create Experience Limit Reached!',
+        description:
+          'You are currently using lite version of Myriad. You can only create up to 5 experience!Connect Web 3.0 Wallet to create more experience',
+        icon: 'warning',
+        confirmationText: 'Connect Web 3.0 Wallet',
+        cancellationText: 'Maybe Later',
+        onConfirm: () => {
+          router.push({pathname: '/wallet', query: {type: 'manage'}});
+        },
+        onCancel: () => {
+          undefined;
+        },
       });
     } else {
       handleCloseSettings();
