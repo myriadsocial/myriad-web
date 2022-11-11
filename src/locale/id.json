@@ -183,7 +183,10 @@
     "Email": {
       "LoginByEmail" : {
         "Title": "Masuk dengan email",
-        "Subtitle": "Kamu akan memperoleh tautan akses dalam kotak masukmu."
+        "Subtitle": "Kamu akan memperoleh tautan akses dalam kotak masukmu.",
+        "Email_Placeholder": "Ketik emailmu",
+        "Back": "Kembali",
+        "Next": "Lanjutkan"
       }
     },
     "Options": {

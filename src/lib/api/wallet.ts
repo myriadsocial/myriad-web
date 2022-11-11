@@ -203,3 +203,11 @@ export const claimReference = async ({
     return null;
   }
 };
+
+export const getTipStatus = async () => {
+  const {data} = await MyriadAPI().request({
+    url: `/user/tip-status`,
+    method: 'GET',
+  });
+  return data;
+};

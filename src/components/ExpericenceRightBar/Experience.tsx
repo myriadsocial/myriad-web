@@ -7,6 +7,7 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import getConfig from 'next/config';
 import NextImage from 'next/image';
 import Link from 'next/link';
+import {useRouter} from 'next/router';
 
 import {Grid} from '@material-ui/core';
 import {TextField, InputAdornment} from '@material-ui/core';
@@ -26,6 +27,7 @@ import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorize
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {Modal} from 'src/components/atoms/Modal';
 import ShowIf from 'src/components/common/show-if.component';
+import {useExperienceHook} from 'src/hooks/use-experience-hook';
 import {WrappedExperience} from 'src/interfaces/experience';
 import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
@@ -62,7 +64,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
     onSubscribe,
     onUnsubscribe,
   } = props;
-
+  const router = useRouter();
   const styles = useStyles(props);
   const confirm = useConfirm();
   const enqueueSnackbar = useEnqueueSnackbar();
@@ -74,6 +76,8 @@ export const Experience: React.FC<ExperienceProps> = props => {
   const experienceId = userExperience.experience.id;
   const userExperienceId = userExperience.id;
   const link = publicRuntimeConfig.appAuthURL + `/experience/${experienceId}`;
+  const {userExperiencesMeta} = useExperienceHook();
+  const totalOwnedExperience = userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
 
   const handleClickExperience = () => {
     handleCloseSettings();
@@ -84,10 +88,27 @@ export const Experience: React.FC<ExperienceProps> = props => {
   };
 
   const handleCloneExperience = () => {
-    handleCloseSettings();
+    if (totalOwnedExperience === 5) {
+      confirm({
+        title: 'Create Experience Limit Reached!',
+        description:
+          'You are currently using lite version of Myriad. You can only create up to 5 experience!Connect Web 3.0 Wallet to create more experience',
+        icon: 'warning',
+        confirmationText: 'Connect Web 3.0 Wallet',
+        cancellationText: 'Maybe Later',
+        onConfirm: () => {
+          router.push({pathname: '/wallet', query: {type: 'manage'}});
+        },
+        onCancel: () => {
+          undefined;
+        },
+      });
+    } else {
+      handleCloseSettings();
 
-    if (onClone) {
-      onClone(experienceId);
+      if (onClone) {
+        onClone(experienceId);
+      }
     }
   };
 
