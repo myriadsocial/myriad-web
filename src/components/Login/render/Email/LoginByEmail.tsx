@@ -55,6 +55,10 @@ const LoginByEmail = ({onNext}: LoginByEmailProps) => {
     );
   };
 
+  const handleBack = () => {
+    navigate('/');
+  };
+
   return (
     <div className={styles.root}>
       <div>
@@ -68,22 +72,22 @@ const LoginByEmail = ({onNext}: LoginByEmailProps) => {
         id="user-email-input"
         label="Email"
         variant="outlined"
-        placeholder="Add your email"
+        placeholder={i18n.t('Login.Email.LoginByEmail.Email_Placeholder')}
         value={email}
         onChange={handleChange}
         error={error.isError}
         helperText={error.isError ? error.message : ''}
       />
       <div className={styles.actionWrapper}>
-        <Button variant="outlined" color="primary">
-          Back
+        <Button variant="outlined" color="primary" onClick={handleBack}>
+          {i18n.t('Login.Email.LoginByEmail.Back')}
         </Button>
         <Button
           variant="contained"
           color="primary"
           disabled={!email.length || error.isError}
           onClick={handleNext}>
-          Next
+          {i18n.t('Login.Email.LoginByEmail.Next')}
         </Button>
       </div>
     </div>
