@@ -74,6 +74,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     person,
     user,
   );
+  console.log('person', person);
   const enqueueSnackbar = useEnqueueSnackbar();
   const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -164,7 +165,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     confirm({
       title: 'Create Experience Limit Reached!',
       description:
-        'You are currently using lite version of Myriad. You can only create up to 5 experience!Connect Web 3.0 Wallet to create more experience',
+        'You are currently using lite version of Myriad. Connect Web 3.0 Wallet to send friend request.',
       icon: 'warning',
       confirmationText: 'Connect Web 3.0 Wallet',
       cancellationText: 'Maybe Later',
@@ -294,7 +295,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 <ShowIf condition={canAddFriend && person.username !== 'myriad_official'}>
                   <Button
                     onClick={user.fullAccess ? handleSendRequest : handleNotFullAccess}
-                    disabled={!person.fullAccess}
+                    disabled={!person.fullAccess && person.fullAccess !== undefined}
                     startIcon={
                       <SvgIcon
                         classes={{root: style.fill}}
