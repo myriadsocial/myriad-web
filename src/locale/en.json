@@ -183,7 +183,10 @@
     "Email": {
       "LoginByEmail" : {
         "Title": "Sign-in with email",
-        "Subtitle": "You will receive a sign-in link in your inbox."
+        "Subtitle": "You will receive a sign-in link in your inbox.",
+        "Email_Placeholder": "Add your email",
+        "Back": "Back",
+        "Next": "Next"
       }
     },
     "Options": {
