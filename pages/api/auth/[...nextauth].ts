@@ -4,11 +4,12 @@ import getConfig from 'next/config';
 
 import APIAdapter from 'adapters/api';
 import {NetworkIdEnum} from 'src/interfaces/network';
-import {SignInCredential} from 'src/interfaces/session';
+import {SignInCredential, SignInWithEmailCredential} from 'src/interfaces/session';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
+import * as AuthLinkAPI from 'src/lib/api/auth-link';
 import * as AuthAPI from 'src/lib/api/ext-auth';
 import {encryptMessage} from 'src/lib/crypto';
-import {credentialToSession} from 'src/lib/serializers/session';
+import {credentialToSession, emailCredentialToSession} from 'src/lib/serializers/session';
 
 const {serverRuntimeConfig} = getConfig();
 
@@ -20,6 +21,7 @@ export default NextAuth({
   // https://next-auth.js.org/configuration/providers
   providers: [
     CredentialsProvider({
+      id: 'credentials',
       // The name to display on the sign in form (e.g. 'Sign in with...')
       name: 'Wallet Credential',
       // The credentials is used to generate a suitable form on the sign in page.
@@ -35,7 +37,7 @@ export default NextAuth({
         networkId: {label: 'Network ID', type: 'text'},
         publicAddress: {label: 'Public Address', type: 'text'},
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         if (credentials.anonymous === 'true') {
           // Any object returned will be saved in `user` property of the JWT
           return {
@@ -63,6 +65,40 @@ export default NextAuth({
             console.log('[api][Auth]', error);
             return null;
           }
+        }
+      },
+    }),
+    CredentialsProvider({
+      id: 'emailCredentials',
+      // The name to display on the sign in form (e.g. 'Sign in with...')
+      name: 'Email Credential',
+      // The credentials is used to generate a suitable form on the sign in page.
+      // You can specify whatever fields you are expecting to be submitted.
+      // e.g. domain, username, password, 2FA token, etc.
+      credentials: {
+        name: {label: 'Name', type: 'text'},
+        username: {label: 'Username', type: 'text'},
+        email: {label: 'Email', type: 'text'},
+        token: {label: 'Token', type: 'text'},
+      },
+      async authorize(credentials) {
+        try {
+          const data = await AuthLinkAPI.loginWithLink(credentials.token);
+
+          if (!data?.accessToken) throw Error('Failed to authorize user!');
+
+          const parsedEmail = credentials.email.replace(/[^a-zA-Z0-9]/g, '');
+
+          const payload = encryptMessage(data.accessToken, parsedEmail);
+
+          // Any object returned will be saved in `user` property of the JWT
+          return emailCredentialToSession(
+            credentials as unknown as SignInWithEmailCredential,
+            payload,
+          );
+        } catch (error) {
+          console.log('[api][Auth]', error);
+          return null;
         }
       },
     }),
@@ -114,8 +150,8 @@ export default NextAuth({
   // pages is not specified for that route.
   // https://next-auth.js.org/configuration/pages
   pages: {
-    signIn: '/', // Displays signin buttons
-    signOut: '/', // Displays form with sign out button
+    signIn: '/login', // Displays signin buttons
+    signOut: '/login', // Displays form with sign out button
     error: '/', // Error code passed in query string as ?error=
     // verifyRequest: '/auth/verify-request', // Used for check email page
     // newUser: null // If set, new users will be directed here on first sign in
@@ -142,6 +178,7 @@ export default NextAuth({
           address: user.address,
           nonce: user.nonce,
           token: user.token,
+          email: user.email,
         };
       }
 

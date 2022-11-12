@@ -11,3 +11,10 @@ export interface SignInCredential {
   networkId: NetworkIdEnum;
   walletType: WalletTypeEnum;
 }
+
+export interface SignInWithEmailCredential {
+  name: string;
+  username: string;
+  email: string;
+  loginToken: string;
+}

@@ -1,14 +1,17 @@
 import {useState} from 'react';
 import {useNavigate} from 'react-router';
 
-import {Typography, TextField, Button} from '@material-ui/core';
+import {Button, TextField, Typography} from '@material-ui/core';
 
 import {useStyles} from './LoginByEmail.style';
 
 import i18n from 'src/locale';
 
-const LoginByEmail = () => {
-  const navigate = useNavigate();
+type LoginByEmailProps = {
+  onNext: (successCallback: () => void, failedCallback: () => void, email: string) => Promise<void>;
+};
+
+const LoginByEmail = ({onNext}: LoginByEmailProps) => {
   const styles = useStyles();
 
   const [email, setEmail] = useState('');
@@ -38,6 +41,24 @@ const LoginByEmail = () => {
     setEmail(event.target.value);
   };
 
+  const navigate = useNavigate();
+
+  const handleNext = () => {
+    onNext(
+      () => {
+        navigate('/magiclink');
+      },
+      () => {
+        navigate('/createAccounts');
+      },
+      email,
+    );
+  };
+
+  const handleBack = () => {
+    navigate('/');
+  };
+
   return (
     <div className={styles.root}>
       <div>
@@ -51,22 +72,22 @@ const LoginByEmail = () => {
         id="user-email-input"
         label="Email"
         variant="outlined"
-        placeholder="Add your email"
+        placeholder={i18n.t('Login.Email.LoginByEmail.Email_Placeholder')}
         value={email}
         onChange={handleChange}
         error={error.isError}
         helperText={error.isError ? error.message : ''}
       />
       <div className={styles.actionWrapper}>
-        <Button variant="outlined" color="secondary" onClick={() => navigate('/')}>
-          Back
+        <Button variant="outlined" color="primary" onClick={handleBack}>
+          {i18n.t('Login.Email.LoginByEmail.Back')}
         </Button>
         <Button
           variant="contained"
           color="primary"
           disabled={!email.length || error.isError}
-          onClick={() => navigate('/createAccounts')}>
-          Next
+          onClick={handleNext}>
+          {i18n.t('Login.Email.LoginByEmail.Next')}
         </Button>
       </div>
     </div>
