@@ -1,8 +1,27 @@
 import MyriadAPI from './base';
 
+export type SignupWithEmailProps = {
+  username: string;
+  name: string;
+  email: string;
+  callbackURL: string;
+};
+
 type GetLinkWithEmailProps = {
   email: string;
   callbackURL: string;
+};
+
+export const signUpWithEmail = async (values: SignupWithEmailProps) => {
+  const {data} = await MyriadAPI().request({
+    url: '/signup/email',
+    method: 'POST',
+    data: {
+      ...values,
+    },
+  });
+
+  return data;
 };
 
 export const getLinkWithEmail = async (values: GetLinkWithEmailProps): Promise<string> => {

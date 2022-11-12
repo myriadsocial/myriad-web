@@ -4,6 +4,7 @@
 import getConfig from 'next/config';
 
 import * as AuthLinkAPI from 'src/lib/api/auth-link';
+import {SignupWithEmailProps} from 'src/lib/api/auth-link';
 
 //3. When clicking on link, parse the query on /login
 //4. Create api call for POST /login/otp with useEffect when parsing query on /login
@@ -12,6 +13,16 @@ import * as AuthLinkAPI from 'src/lib/api/auth-link';
 const {publicRuntimeConfig} = getConfig();
 
 export const useAuthLinkHook = () => {
+  const registerWithEmail = async (values: SignupWithEmailProps) => {
+    try {
+      const data = await AuthLinkAPI.signUpWithEmail(values);
+
+      return data;
+    } catch (error) {
+      console.log({error});
+    }
+  };
+
   const requestLink = async (email: string): Promise<string> => {
     try {
       const message = await AuthLinkAPI.getLinkWithEmail({
@@ -36,6 +47,7 @@ export const useAuthLinkHook = () => {
   };
 
   return {
+    registerWithEmail,
     requestLink,
     loginWithLink,
   };
