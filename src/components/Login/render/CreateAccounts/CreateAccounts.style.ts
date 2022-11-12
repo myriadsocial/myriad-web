@@ -38,8 +38,8 @@ export const useStyles = makeStyles((theme: Theme) =>
     desc: {fontSize: 12, color: '#0A0A0A'},
     nameInstance: {fontSize: 14, fontWeight: 600, color: '#7342CC', marginBottom: 4},
     wrapperTextCharacter: {display: 'flex', justifyContent: 'space-between'},
-    textCharacter: {fontSize: 12, color: '#757575'},
-    wrapperForm: {marginBottom: 24},
+    textCharacter: {fontSize: 12, color: '#757575', position: 'absolute', right: 0, bottom: 32},
+    wrapperForm: {position: 'relative'},
     textSetUsername: {fontSize: 12, color: '#404040', marginBottom: 24},
     condition: {
       padding: theme.spacing(2, 0),

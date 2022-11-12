@@ -1,29 +1,267 @@
-import {useState} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
+import {useSelector} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
 
+import getConfig from 'next/config';
 import Link from 'next/link';
 
-import {
-  Button,
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  Grid,
-  InputLabel,
-  OutlinedInput,
-  Typography,
-} from '@material-ui/core';
+import {Button, Checkbox, FormControlLabel, Grid, Typography, TextField} from '@material-ui/core';
 
 import {useStyles} from './CreateAccounts.style';
 
+import useConfirm from 'src/components/common/Confirm/use-confirm.hook';
 import {IcEmail, LogoMyriadCircle} from 'src/images/Icons';
 import i18n from 'src/locale';
+import {RootState} from 'src/reducers';
+import {ConfigState} from 'src/reducers/config/reducer';
 
-export default function CreateAccounts({email}: {email: string}) {
+const {publicRuntimeConfig} = getConfig();
+
+const USERNAME_MAX_LENGTH = 16;
+const USERNAME_MIN_LENGTH = 3;
+const DISPLAY_NAME_MAX_LENGTH = 22;
+const DISPLAY_NAME_MIN_LENGTH = 2;
+const DISPLAY_NAME_HELPER_TEXT = i18n.t('Login.Profile.Helper_Text_Name', {
+  min_length: DISPLAY_NAME_MIN_LENGTH,
+});
+const USERNAME_HELPER_TEXT = i18n.t('Login.Profile.Helper_Text_Username', {
+  min_length: USERNAME_MIN_LENGTH,
+});
+
+type CreateAccountProps = {
+  checkUsernameAvailability: (username: string, callback: (available: boolean) => void) => void;
+  email: string;
+};
+
+export default function CreateAccounts({checkUsernameAvailability, email}: CreateAccountProps) {
   const styles = useStyles();
   const navigate = useNavigate();
-  const [displayName, setDisplayName] = useState<string>('');
-  const [userName, setUserName] = useState<string>('');
+  const confirm = useConfirm();
+  const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
+
+  const [account, setAccount] = useState({
+    displayName: {
+      value: '',
+      error: false,
+      helper: DISPLAY_NAME_HELPER_TEXT,
+    },
+    username: {
+      value: '',
+      error: false,
+      helper: USERNAME_HELPER_TEXT,
+    },
+  });
+
+  useEffect(() => {
+    let displayNameHelper = i18n.t('Login.Profile.Helper_Text_Name', {
+      min_length: DISPLAY_NAME_MIN_LENGTH,
+    });
+    let usernameHelper = i18n.t('Login.Profile.Helper_Text_Username', {
+      min_length: USERNAME_MIN_LENGTH,
+    });
+
+    if (account.displayName.value && account.displayName.value.length < DISPLAY_NAME_MIN_LENGTH) {
+      displayNameHelper = i18n.t('Login.Profile.Helper_Validate_Name_Min', {
+        min_length: DISPLAY_NAME_MIN_LENGTH,
+      });
+      console.log({displayNameHelper});
+    } else {
+      const valid = /^([^"'*\\]*)$/.test(account.displayName.value);
+      if (!valid) displayNameHelper = i18n.t('Login.Profile.Helper_Validate_Name_Char');
+    }
+
+    if (account.username.value && account.username.value.length < USERNAME_MIN_LENGTH) {
+      usernameHelper = i18n.t('Login.Profile.Helper_Validate_Username_Min', {
+        min_length: USERNAME_MIN_LENGTH,
+      });
+    } else {
+      const valid = /^[a-zA-Z0-9]+$/.test(account.username.value);
+      if (!valid) usernameHelper = i18n.t('Login.Profile.Helper_Validate_Username_Char');
+    }
+
+    setAccount(prevSetting => ({
+      displayName: {
+        ...prevSetting.displayName,
+        helper: displayNameHelper,
+      },
+      username: {
+        ...prevSetting.username,
+        helper: usernameHelper,
+      },
+    }));
+  }, [settings.language]);
+
+  const handleChangeDisplayName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const displayName = event.target.value;
+
+    setAccount(prevAccount => ({
+      ...prevAccount,
+      displayName: {
+        ...prevAccount.displayName,
+        value: displayName.trim().replace(/\s\s+/g, ' '),
+      },
+    }));
+  };
+
+  const handleChangeUsername = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let username = event.target.value;
+
+    username = username.toLowerCase();
+
+    setAccount(prevAccount => ({
+      ...prevAccount,
+      username: {
+        ...prevAccount.username,
+        value: username.trim(),
+      },
+    }));
+  };
+
+  const validateDisplayName = (): boolean => {
+    let error = false;
+
+    if (!account.displayName.value || account.displayName.value.length < DISPLAY_NAME_MIN_LENGTH) {
+      error = true;
+
+      setAccount(prevSetting => ({
+        ...prevSetting,
+        displayName: {
+          ...prevSetting.displayName,
+          error: true,
+          helper: i18n.t('Login.Profile.Helper_Validate_Name_Min', {
+            min_length: DISPLAY_NAME_MIN_LENGTH,
+          }),
+        },
+      }));
+    } else {
+      const valid = /^([^"'*\\]*)$/.test(account.displayName.value);
+
+      if (!valid) {
+        error = true;
+
+        setAccount(prevSetting => ({
+          ...prevSetting,
+          displayName: {
+            ...prevSetting.displayName,
+            error: true,
+            helper: i18n.t('Login.Profile.Helper_Validate_Name_Char'),
+          },
+        }));
+      } else {
+        error = false;
+
+        setAccount(prevSetting => ({
+          ...prevSetting,
+          displayName: {
+            ...prevSetting.displayName,
+            error: false,
+            helper: DISPLAY_NAME_HELPER_TEXT,
+          },
+        }));
+      }
+    }
+
+    return !error;
+  };
+
+  const validateUsername = (): boolean => {
+    let error = false;
+
+    if (!account.username.value || account.username.value.length < USERNAME_MIN_LENGTH) {
+      error = true;
+
+      setAccount(prevSetting => ({
+        ...prevSetting,
+        username: {
+          ...prevSetting.username,
+          error,
+          helper: i18n.t('Login.Profile.Helper_Validate_Username_Min', {
+            min_length: USERNAME_MIN_LENGTH,
+          }),
+        },
+      }));
+    } else {
+      // only allow alphanumeric char
+      const valid = /^[a-zA-Z0-9]+$/.test(account.username.value);
+
+      if (!valid) {
+        error = true;
+
+        setAccount(prevSetting => ({
+          ...prevSetting,
+          username: {
+            ...prevSetting.username,
+            error: true,
+            helper: i18n.t('Login.Profile.Helper_Validate_Username_Char'),
+          },
+        }));
+      } else {
+        error = false;
+        setAccount(prevSetting => ({
+          ...prevSetting,
+          username: {
+            ...prevSetting.username,
+            error: false,
+            helper: USERNAME_HELPER_TEXT,
+          },
+        }));
+      }
+    }
+
+    return !error;
+  };
+
+  const validateAccount = (): boolean => {
+    const validDisplayName = validateDisplayName();
+    const validUsername = validateUsername();
+
+    return validDisplayName && validUsername;
+  };
+
+  const handleSubmit = async () => {
+    const payload = {
+      username: account.username.value,
+      name: account.displayName.value,
+      email,
+      callbackURL: publicRuntimeConfig.appAuthURL + '/login',
+    };
+
+    //signup here to API
+    //navigate to /magiclink if API call successful
+    console.log('the data to be sent: ', {payload});
+  };
+
+  const confirmRegisterAccount = useCallback(() => {
+    confirm({
+      title: i18n.t('Login.Profile.Prompt.Title'),
+      description: i18n.t('Login.Profile.Prompt.Subtitle'),
+      confirmationText: i18n.t('Login.Profile.Prompt.Btn_Yes'),
+      cancellationText: i18n.t('Login.Profile.Prompt.Btn_No'),
+      onConfirm: handleSubmit,
+    });
+  }, [handleSubmit]);
+
+  const handleConfirmation = useCallback(() => {
+    const validAccount = validateAccount();
+
+    if (validAccount && email) {
+      checkUsernameAvailability(account.username.value, available => {
+        if (available) {
+          console.log('masuk sini');
+          confirmRegisterAccount();
+        } else {
+          setAccount(prevAccount => ({
+            ...prevAccount,
+            username: {
+              ...prevAccount.username,
+              error: true,
+              helper: i18n.t('Login.Profile.Helper_Validate_Username_Taken'),
+            },
+          }));
+        }
+      });
+    }
+  }, [email, account]);
 
   const [termApproved, setTermApproved] = useState(false);
 
@@ -51,45 +289,39 @@ export default function CreateAccounts({email}: {email: string}) {
       </div>
       <Typography className={styles.textTitle}>Create New Account</Typography>
       <Typography className={styles.textSetUsername}>
-        You can only set your username once, and will be unique each instance
+        You can only set your username once, and will be unique for each instance
       </Typography>
       <div className={styles.wrapperForm}>
-        <FormControl fullWidth variant="outlined" style={{marginBottom: 0}}>
-          <InputLabel htmlFor="display-name">Display Name</InputLabel>
-          <OutlinedInput
-            id="username"
-            placeholder="Display Name"
-            value={displayName}
-            labelWidth={90}
-            inputProps={{maxLength: 22}}
-            onChange={e => setDisplayName(e.target.value)}
-          />
-        </FormControl>
-        <div className={styles.wrapperTextCharacter}>
-          <Typography className={styles.textCharacter}>
-            You can use {22 - displayName.length} or more characters.
-          </Typography>
-          <Typography className={styles.textCharacter}>{displayName.length}/22</Typography>
-        </div>
+        <TextField
+          id="display-name"
+          label={i18n.t('Login.Profile.Placeholder_Display_Name')}
+          helperText={account.displayName.helper}
+          error={account.displayName.error}
+          fullWidth
+          variant="outlined"
+          onChange={handleChangeDisplayName}
+          inputProps={{maxLength: DISPLAY_NAME_MAX_LENGTH}}
+        />
+        <Typography className={styles.textCharacter} component="span">
+          {account.displayName.value.length}/{DISPLAY_NAME_MAX_LENGTH}
+        </Typography>
       </div>
       <div className={styles.wrapperForm}>
-        <FormControl fullWidth variant="outlined" style={{marginBottom: 0}}>
-          <InputLabel htmlFor="display-name">Username</InputLabel>
-          <OutlinedInput
-            id="username"
-            placeholder="Username"
-            value={userName}
-            labelWidth={70}
-            inputProps={{maxLength: 16}}
-            onChange={e => setUserName(e.target.value)}
-          />
-        </FormControl>
-        <div className={styles.wrapperTextCharacter}>
-          <Typography className={styles.textCharacter}>
-            You can use {16 - userName.length} or more characters.
-          </Typography>
-          <Typography className={styles.textCharacter}>{userName.length}/16</Typography>
-        </div>
+        <TextField
+          id="username"
+          label={i18n.t('Login.Profile.Placeholder_Username')}
+          helperText={account.username.helper}
+          error={account.username.error}
+          fullWidth
+          variant="outlined"
+          onChange={handleChangeUsername}
+          inputProps={{maxLength: USERNAME_MAX_LENGTH, style: {textTransform: 'lowercase'}}}
+        />
+        <Typography className={styles.textCharacter} component="span">
+          {account.username.value.length}/{USERNAME_MAX_LENGTH}
+        </Typography>
+      </div>
+      <div className={styles.wrapperForm}>
         <Grid container direction="column" className={styles.condition}>
           <FormControlLabel
             className={styles.termControl}
@@ -118,7 +350,7 @@ export default function CreateAccounts({email}: {email: string}) {
             Back
           </Button>
           <div style={{width: 8}} />
-          <Button variant="contained" fullWidth color="primary" onClick={() => undefined}>
+          <Button variant="contained" fullWidth color="primary" onClick={handleConfirmation}>
             Register
           </Button>
         </div>
