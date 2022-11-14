@@ -1170,5 +1170,13 @@
     "Fullscreen": "Play in fullscreen",
     "Toaster_Esc": "Press Esc to exit from fullscreen",
     "Disclaimer": "The Myriad Metaverse integration is an early beta feature. If you encounter problems, or if you want the best experience on the Myriad Metaverse, go to"
+  },
+  "LiteVersion":{
+    "LimitTitleExperiance":"Create Experience Limit Reached!",
+    "LimitTitleFriends":"Unable to Add Friend",
+    "LimitDescExperiance":"You are currently using lite version of Myriad. You can only create up to 5 experience! Connect Web 3.0 Wallet to create more experience",
+    "LimitDescFriends":"Connect Web 3.0 Wallet to send friend request.",
+    "MaybeLater":"Maybe Later",
+    "ConnectWallet":"Connect Web 3.0 Wallet"
   }
 }

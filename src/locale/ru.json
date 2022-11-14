@@ -1143,5 +1143,14 @@
     "Fullscreen": "На большой экран",
     "Toaster_Esc": "Нажмите Esc для отмены большого экрана",
     "Disclaimer": "The Myriad Metaverse integration is an early beta feature. If you encounter problems, or if you want the best experience on the Myriad Metaverse, go to"
+  },
+   "LiteVersion":{
+    "LimitTitleExperiance":"Невозможно добавить друга",
+    "LimitTitleFriends":"Не могу добавить друзей",
+    "Experiance":"В настоящее время вы используете облегченную версию Myriad. Вы можете создать только до 5 опыта! Подключите кошелек Web 3.0, чтобы получить больше возможностей",
+    "Friends":"Подключите кошелек Web 3.0, чтобы отправить запрос на добавление в друзья.",
+    "MaybeLater":"Может быть позже",
+    "ConnectWallet":"Подключить веб-кошелек 3.0"
+  
   }
 }
