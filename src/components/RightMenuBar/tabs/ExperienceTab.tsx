@@ -53,12 +53,11 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
     } else {
       if (totalOwnedExperience >= 5) {
         confirm({
-          title: 'Create Experience Limit Reached!',
-          description:
-            'You are currently using lite version of Myriad. You can only create up to 5 experience!Connect Web 3.0 Wallet to create more experience',
+          title: i18n.t('LiteVersion.LimitTitleExperiance'),
+          description: i18n.t('LiteVersion.LimitDescExperiance'),
           icon: 'warning',
-          confirmationText: 'Connect Web 3.0 Wallet',
-          cancellationText: 'Maybe Later',
+          confirmationText: i18n.t('LiteVersion.ConnectWallet'),
+          cancellationText: i18n.t('LiteVersion.MaybeLater'),
           onConfirm: () => {
             router.push({pathname: '/wallet', query: {type: 'manage'}});
           },

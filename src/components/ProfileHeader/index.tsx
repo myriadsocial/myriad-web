@@ -162,12 +162,11 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
 
   const handleNotFullAccess = () => {
     confirm({
-      title: 'Create Experience Limit Reached!',
-      description:
-        'You are currently using lite version of Myriad. Connect Web 3.0 Wallet to send friend request.',
+      title: i18n.t('LiteVersion.LimitTitleFriends'),
+      description: i18n.t('LiteVersion.LimitDescFriends'),
       icon: 'warning',
-      confirmationText: 'Connect Web 3.0 Wallet',
-      cancellationText: 'Maybe Later',
+      confirmationText: i18n.t('LiteVersion.ConnectWallet'),
+      cancellationText: i18n.t('LiteVersion.MaybeLater'),
       onConfirm: () => {
         router.push({pathname: '/wallet', query: {type: 'manage'}});
       },
