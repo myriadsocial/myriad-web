@@ -65,7 +65,7 @@ export const WalletBalances: React.FC<WalletProps> = ({balances, loading}) => {
         </div>
       </ShowIf>
 
-      <ShowIf condition={!user.fullAccess}>
+      <ShowIf condition={!user.fullAccess && user.fullAccess !== undefined}>
         <div
           style={{
             backgroundColor: '#ffc85726',

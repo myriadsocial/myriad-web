@@ -292,7 +292,11 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
               <ShowIf condition={!self && !!user}>
                 <ShowIf condition={canAddFriend && person.username !== 'myriad_official'}>
                   <Button
-                    onClick={user.fullAccess ? handleSendRequest : handleNotFullAccess}
+                    onClick={
+                      user.fullAccess && user.fullAccess !== undefined
+                        ? handleSendRequest
+                        : handleNotFullAccess
+                    }
                     disabled={!person.fullAccess && person.fullAccess !== undefined}
                     startIcon={
                       <SvgIcon
