@@ -10,6 +10,7 @@ import {Button, Checkbox, FormControlLabel, Grid, Typography, TextField} from '@
 import {useStyles} from './CreateAccounts.style';
 
 import useConfirm from 'src/components/common/Confirm/use-confirm.hook';
+import {useAuthLinkHook} from 'src/hooks/auth-link.hook';
 import {IcEmail, LogoMyriadCircle} from 'src/images/Icons';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
@@ -29,14 +30,19 @@ const USERNAME_HELPER_TEXT = i18n.t('Login.Profile.Helper_Text_Username', {
 });
 
 type CreateAccountProps = {
-  checkUsernameAvailability: (username: string, callback: (available: boolean) => void) => void;
+  checkNewUsernameAvailability: (username: string, callback: (available: boolean) => void) => void;
   email: string;
 };
 
-export default function CreateAccounts({checkUsernameAvailability, email}: CreateAccountProps) {
+export const CreateAccounts: React.FC<CreateAccountProps> = props => {
+  const {checkNewUsernameAvailability, email} = props;
+
   const styles = useStyles();
   const navigate = useNavigate();
   const confirm = useConfirm();
+
+  const {registerWithEmail} = useAuthLinkHook();
+
   const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
 
   const [account, setAccount] = useState({
@@ -52,6 +58,12 @@ export default function CreateAccounts({checkUsernameAvailability, email}: Creat
     },
   });
 
+  const [checked, setChecked] = useState(true);
+
+  const handleChangeCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+  };
+
   useEffect(() => {
     let displayNameHelper = i18n.t('Login.Profile.Helper_Text_Name', {
       min_length: DISPLAY_NAME_MIN_LENGTH,
@@ -64,7 +76,6 @@ export default function CreateAccounts({checkUsernameAvailability, email}: Creat
       displayNameHelper = i18n.t('Login.Profile.Helper_Validate_Name_Min', {
         min_length: DISPLAY_NAME_MIN_LENGTH,
       });
-      console.log({displayNameHelper});
     } else {
       const valid = /^([^"'*\\]*)$/.test(account.displayName.value);
       if (!valid) displayNameHelper = i18n.t('Login.Profile.Helper_Validate_Name_Char');
@@ -219,12 +230,23 @@ export default function CreateAccounts({checkUsernameAvailability, email}: Creat
   };
 
   const handleSubmit = async () => {
+    if (!email || !account) return;
+
     const payload = {
       username: account.username.value,
       name: account.displayName.value,
       email,
       callbackURL: publicRuntimeConfig.appAuthURL + '/login',
     };
+
+    const registered = await registerWithEmail(payload);
+
+    if (registered) {
+      navigate('/magiclink');
+    } else {
+      console.log('register failed');
+      navigate('/');
+    }
 
     //signup here to API
     //navigate to /magiclink if API call successful
@@ -244,10 +266,9 @@ export default function CreateAccounts({checkUsernameAvailability, email}: Creat
   const handleConfirmation = useCallback(() => {
     const validAccount = validateAccount();
 
-    if (validAccount && email) {
-      checkUsernameAvailability(account.username.value, available => {
+    if (validAccount && (account || email)) {
+      checkNewUsernameAvailability(account.username.value, available => {
         if (available) {
-          console.log('masuk sini');
           confirmRegisterAccount();
         } else {
           setAccount(prevAccount => ({
@@ -261,12 +282,16 @@ export default function CreateAccounts({checkUsernameAvailability, email}: Creat
         }
       });
     }
-  }, [email, account]);
+  }, [account, email]);
 
   const [termApproved, setTermApproved] = useState(false);
 
   const toggleTermApproved = () => {
     setTermApproved(!termApproved);
+  };
+
+  const handleBack = () => {
+    navigate('/email');
   };
 
   return (
@@ -326,7 +351,16 @@ export default function CreateAccounts({checkUsernameAvailability, email}: Creat
           <FormControlLabel
             className={styles.termControl}
             onChange={toggleTermApproved}
-            control={<Checkbox name="term" color="primary" className={styles.checkbox} />}
+            control={
+              <Checkbox
+                checked={checked}
+                onChange={handleChangeCheck}
+                inputProps={{'aria-label': 'controlled'}}
+                name="term"
+                color="primary"
+                className={styles.checkbox}
+              />
+            }
             label={
               <Typography style={{color: '#0A0A0A'}}>
                 {i18n.t('Login.Options.Text_Terms_1')}&nbsp;
@@ -346,15 +380,20 @@ export default function CreateAccounts({checkUsernameAvailability, email}: Creat
           />
         </Grid>
         <div style={{display: 'flex'}}>
-          <Button variant="outlined" fullWidth color="secondary" onClick={() => navigate('/email')}>
+          <Button variant="outlined" fullWidth color="secondary" onClick={handleBack}>
             Back
           </Button>
           <div style={{width: 8}} />
-          <Button variant="contained" fullWidth color="primary" onClick={handleConfirmation}>
+          <Button
+            variant="contained"
+            fullWidth
+            color="primary"
+            disabled={!validateAccount() || !checked}
+            onClick={handleConfirmation}>
             Register
           </Button>
         </div>
       </div>
     </div>
   );
-}
+};

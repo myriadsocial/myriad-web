@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {useNavigate} from 'react-router';
 
 import {Button, TextField, Typography} from '@material-ui/core';
@@ -8,10 +8,12 @@ import {useStyles} from './LoginByEmail.style';
 import i18n from 'src/locale';
 
 type LoginByEmailProps = {
-  onNext: (successCallback: () => void, failedCallback: () => void, email: string) => Promise<void>;
+  onNext?: (successCallback: () => void, failedCallback: () => void, email: string) => void;
 };
 
-const LoginByEmail = ({onNext}: LoginByEmailProps) => {
+const LoginByEmail: React.FC<LoginByEmailProps> = props => {
+  const {onNext} = props;
+
   const styles = useStyles();
 
   const [email, setEmail] = useState('');
@@ -44,15 +46,16 @@ const LoginByEmail = ({onNext}: LoginByEmailProps) => {
   const navigate = useNavigate();
 
   const handleNext = () => {
-    onNext(
-      () => {
-        navigate('/magiclink');
-      },
-      () => {
-        navigate('/createAccounts');
-      },
-      email,
-    );
+    onNext &&
+      onNext(
+        () => {
+          navigate('/magiclink');
+        },
+        () => {
+          navigate('/profile');
+        },
+        email,
+      );
   };
 
   const handleBack = () => {

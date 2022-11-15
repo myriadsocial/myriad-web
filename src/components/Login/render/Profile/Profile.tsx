@@ -40,6 +40,8 @@ import {ConfigState} from 'src/reducers/config/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 
 type ProfileProps = {
+  //TODO: integrate email registration here instead of in CreateAccounts (error in useNavigate)
+  email: string;
   checkUsernameAvailability: (username: string, callback: (available: boolean) => void) => void;
   walletType: WalletTypeEnum | null;
   networkId: NetworkIdEnum | null;

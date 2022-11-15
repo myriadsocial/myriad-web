@@ -11,7 +11,7 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import ShowIf from '../common/show-if.component';
 import {useStyles} from './Login.styles';
 import {Accounts} from './render/Accounts';
-import CreateAccounts from './render/CreateAccounts/CreateAccounts';
+import {CreateAccounts} from './render/CreateAccounts';
 import LoginByEmail from './render/Email/LoginByEmail';
 import {Options} from './render/Options';
 import {Profile} from './render/Profile';
@@ -223,8 +223,6 @@ export const Login: React.FC<LoginProps> = props => {
     async (successCallback: () => void, failedCallback: () => void, email: string) => {
       if (!email.length) throw new Error('Please input your email!');
 
-      setEmail(email);
-
       localStorage.setItem('email', email);
 
       const isEmailRegistered = await getCheckEmail(email);
@@ -235,8 +233,18 @@ export const Login: React.FC<LoginProps> = props => {
         failedCallback();
       }
     },
-    [],
+    [email],
   );
+
+  const handleOnNextEmail = (
+    successCallback: () => void,
+    failedCallback: () => void,
+    email: string,
+  ) => {
+    setEmail(email);
+
+    checkEmailRegistered(successCallback, failedCallback, email);
+  };
 
   if (walletLoading) return null;
 
@@ -251,14 +259,14 @@ export const Login: React.FC<LoginProps> = props => {
           <Route
             index={false}
             path="/email"
-            element={<LoginByEmail onNext={checkEmailRegistered} />}
+            element={<LoginByEmail onNext={handleOnNextEmail} />}
           />
 
           <Route
             index={false}
-            path="/createAccounts"
+            path="/create"
             element={
-              <CreateAccounts email={email} checkUsernameAvailability={checkUsernameAvailable} />
+              <CreateAccounts email={email} checkNewUsernameAvailability={checkUsernameAvailable} />
             }
           />
 
@@ -292,6 +300,7 @@ export const Login: React.FC<LoginProps> = props => {
             path="/profile"
             element={
               <Profile
+                email={email}
                 networkId={networkId}
                 walletType={walletType}
                 publicAddress={nearWallet}
