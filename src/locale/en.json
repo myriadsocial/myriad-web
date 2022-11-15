@@ -1177,6 +1177,7 @@
     "LimitDescExperiance":"You are currently using lite version of Myriad. You can only create up to 5 experience! Connect Web 3.0 Wallet to create more experience",
     "LimitDescFriends":"Connect Web 3.0 Wallet to send friend request.",
     "MaybeLater":"Maybe Later",
-    "ConnectWallet":"Connect Web 3.0 Wallet"
+    "ConnectWallet":"Connect Web 3.0 Wallet",
+    "DisclaimerEditProfile":"You are currently using lite version of Myriad. You can edit only the display name. Connect Web 3.0 Wallet to have all access in editing your profile"
   }
 }

@@ -88,10 +88,7 @@ export const Profile: React.FC<ProfileProps> = props => {
               <div style={{marginRight: 8, marginTop: 4}}>
                 <InfoIconYellow />
               </div>
-              <Typography>
-                You are currently using lite version of Myriad. You can edit only the display name.
-                Connect Web 3.0 Wallet to have all access in editing your profile
-              </Typography>
+              <Typography>{i18n.t('LiteVersion.DisclaimerEditProfile')}</Typography>
             </div>
           </ShowIf>
           <ProfileEditContainer onClose={handleCloseEdit} />
