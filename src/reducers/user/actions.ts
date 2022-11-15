@@ -179,7 +179,18 @@ export const fetchUser: ThunkActionCreator<Actions, RootState> = () => async dis
   try {
     user = await WalletAPI.getUser();
 
-    dispatch(setCurrentUserWallet(user));
+    //Define empty arrays for users without wallets and currencies (login with email only)
+    if (!user.wallets) {
+      user.wallets = [];
+    }
+    if (!user.currencies) {
+      user.currencies = [];
+    }
+
+    if (user.wallets.length > 0 && user.currencies.length > 0) {
+      dispatch(setCurrentUserWallet(user));
+    }
+
     dispatch(setUser(user));
   } catch (error) {
     dispatch(setError(error));

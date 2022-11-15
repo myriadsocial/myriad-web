@@ -20,12 +20,6 @@ type Props = {
 export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
   const router = useRouter();
   const confirm = useConfirm();
-
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const [profilePic, setProfilePic] = React.useState<File | undefined | string>(
-    user?.profilePictureURL,
-  );
-  const [bannerPic, setBannerPic] = React.useState<File | undefined | string>(user?.bannerImageURL);
   const {
     updateProfile,
     loadingUpdate,
@@ -38,10 +32,17 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
     usernameStatus,
     usernameAvailable,
   } = useProfileHook();
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const [profilePic, setProfilePic] = React.useState<File | undefined | string>(
+    user?.profilePictureURL,
+  );
+
+  const [bannerPic, setBannerPic] = React.useState<File | undefined | string>(user?.bannerImageURL);
   const enqueueSnackbar = useEnqueueSnackbar();
 
   useEffect(() => {
     checkUsernameStatus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const hanleUpdateBannerImage = async (image: File): Promise<void> => {
@@ -105,6 +106,7 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
         redirectToProfile();
       },
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [redirectToProfile, user]);
 
   const getImageBannerString = () => {

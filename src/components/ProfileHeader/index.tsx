@@ -4,6 +4,8 @@ import {DotsVerticalIcon} from '@heroicons/react/solid';
 import React from 'react';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
+import {useRouter} from 'next/router';
+
 import {Grid} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -73,7 +75,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     user,
   );
   const enqueueSnackbar = useEnqueueSnackbar();
-
+  const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [anchorElFriend, setAnchorElFriend] = React.useState<null | HTMLElement>(null);
   const [modalReportOpened, setModalReportOpened] = React.useState(false);
@@ -156,6 +158,22 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
   const showProfileTipHistory = () => {
     handleCloseMenu();
     onOpenTipHistory(person);
+  };
+
+  const handleNotFullAccess = () => {
+    confirm({
+      title: i18n.t('LiteVersion.LimitTitleFriends'),
+      description: i18n.t('LiteVersion.LimitDescFriends'),
+      icon: 'warning',
+      confirmationText: i18n.t('LiteVersion.ConnectWallet'),
+      cancellationText: i18n.t('LiteVersion.MaybeLater'),
+      onConfirm: () => {
+        router.push({pathname: '/wallet', query: {type: 'manage'}});
+      },
+      onCancel: () => {
+        undefined;
+      },
+    });
   };
 
   return (
@@ -274,7 +292,12 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
               <ShowIf condition={!self && !!user}>
                 <ShowIf condition={canAddFriend && person.username !== 'myriad_official'}>
                   <Button
-                    onClick={handleSendRequest}
+                    onClick={
+                      user.fullAccess && user.fullAccess !== undefined
+                        ? handleSendRequest
+                        : handleNotFullAccess
+                    }
+                    disabled={!person.fullAccess && person.fullAccess !== undefined}
                     startIcon={
                       <SvgIcon
                         classes={{root: style.fill}}

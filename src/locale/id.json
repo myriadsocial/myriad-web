@@ -183,7 +183,10 @@
     "Email": {
       "LoginByEmail" : {
         "Title": "Masuk dengan email",
-        "Subtitle": "Kamu akan memperoleh tautan akses dalam kotak masukmu."
+        "Subtitle": "Kamu akan memperoleh tautan akses dalam kotak masukmu.",
+        "Email_Placeholder": "Ketik emailmu",
+        "Back": "Kembali",
+        "Next": "Lanjutkan"
       }
     },
     "Options": {
@@ -1157,5 +1160,14 @@
     "Fullscreen": "Mainkan pada layar penuh",
     "Toaster_Esc": "Tekan Esc untuk keluar dari layar penuh",
     "Disclaimer": "Integrasi Myriad Metaverse masih dalam tahap beta. Jika Anda mengalami masalah, atau jika Anda menginginkan pengalaman terbaik di Myriad Metaverse, kunjungi"
+  },
+   "LiteVersion":{
+    "LimitTitleExperiance":"Batas Buat Pengalaman Tercapai!",
+    "LimitTitleFriends":"Tidak bisa menambah teman",
+    "Experiance":"Anda sedang menggunakan Myriad versi lite. Anda hanya dapat membuat hingga 5 pengalaman! Hubungkan Dompet Web 3.0 untuk menciptakan lebih banyak pengalaman",
+    "Friends":"Hubungkan Web 3.0 Wallet untuk mengirim permintaan pertemanan.",
+    "MaybeLater":"Mungkin Nanti",
+    "ConnectWallet":"Hubungkan Dompet Web 3.0",
+    "DisclaimerEditProfile":"Saat ini Anda menggunakan Myriad versi lite. Anda hanya dapat mengedit nama tampilan. Hubungkan Web 3.0 Wallet untuk memiliki semua akses dalam mengedit profil Anda"
   }
 }

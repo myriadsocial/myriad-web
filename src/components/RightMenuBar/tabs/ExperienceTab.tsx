@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from './Tab.style';
 
+import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {ExperienceListContainer, EmptyExperience} from 'src/components/ExperienceList';
 import ShowIf from 'src/components/common/show-if.component';
@@ -24,6 +25,8 @@ type ExperienceTabProps = {
 
 export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
   const {experienceType = 'user'} = props;
+  const confirm = useConfirm();
+
   const router = useRouter();
   const styles = useStyles();
   const {userExperiences, userExperiencesMeta, loadNextUserExperience} = useExperienceHook();
@@ -37,13 +40,32 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
 
   const handleCreateExperience = () => {
     const totalOwnedExperience = userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
-    if (totalOwnedExperience >= 10) {
-      enqueueSnackbar({
-        message: i18n.t('Experience.Alert.Max_Exp'),
-        variant: 'warning',
-      });
+
+    if (user.fullAccess && user.fullAccess !== undefined) {
+      if (totalOwnedExperience >= 10) {
+        enqueueSnackbar({
+          message: i18n.t('Experience.Alert.Max_Exp'),
+          variant: 'warning',
+        });
+      } else {
+        router.push('/experience/create');
+      }
     } else {
-      router.push('/experience/create');
+      if (totalOwnedExperience >= 5) {
+        confirm({
+          title: i18n.t('LiteVersion.LimitTitleExperiance'),
+          description: i18n.t('LiteVersion.LimitDescExperiance'),
+          icon: 'warning',
+          confirmationText: i18n.t('LiteVersion.ConnectWallet'),
+          cancellationText: i18n.t('LiteVersion.MaybeLater'),
+          onConfirm: () => {
+            router.push({pathname: '/wallet', query: {type: 'manage'}});
+          },
+          onCancel: () => {
+            undefined;
+          },
+        });
+      }
     }
   };
 

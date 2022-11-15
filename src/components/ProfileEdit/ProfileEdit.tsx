@@ -245,6 +245,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
       <FormControl classes={{root: style.mb}} fullWidth variant="outlined">
         <InputLabel htmlFor="bio">{i18n.t('Profile.Edit.Subtitle_5')}</InputLabel>
         <OutlinedInput
+          disabled={!user.fullAccess && user.fullAccess !== undefined}
           id="bio"
           placeholder="Bio"
           value={newUser?.bio}
@@ -259,6 +260,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
         <InputLabel htmlFor="website">{i18n.t('Profile.Edit.Subtitle_6')}</InputLabel>
         <OutlinedInput
           id="website"
+          disabled={!user.fullAccess && user.fullAccess !== undefined}
           placeholder="mysite.url"
           value={newUser?.websiteURL}
           onChange={handleChange('websiteURL')}

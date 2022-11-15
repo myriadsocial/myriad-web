@@ -379,16 +379,16 @@ export const Profile: React.FC<ProfileProps> = props => {
                   borderRadius: 4,
                   gap: 8,
                 }}>
-                {walletIcons['polkadot']}
+                {walletIcons[walletType]}
                 <div>
                   <Box
                     fontSize={14}
                     fontWeight="fontWeightRegular"
                     style={{color: 'rgba(115, 66, 204, 1)'}}>
-                    {account.meta.name}
+                    {account?.meta?.name || ''}
                   </Box>
                   <Box fontSize={12} fontWeight="fontWeightRegular" style={{color: '#0A0A0A'}}>
-                    {account.address}
+                    {account?.address || publicAddress?.split('/')[1] || 'Unknown Account'}
                   </Box>
                 </div>
               </div>
@@ -425,9 +425,9 @@ export const Profile: React.FC<ProfileProps> = props => {
                   <Box
                     fontSize={10}
                     fontWeight="fontWeightBold"
-                    style={{color: '#6E3FC3', textAlign: 'end'}}
+                    style={{color: '#6E3FC3', textAlign: 'end', cursor: 'pointer'}}
                     onClick={handleExpand}>
-                    More
+                    {expanded ? 'Less' : 'More'}
                   </Box>
                 </div>
               </div>
