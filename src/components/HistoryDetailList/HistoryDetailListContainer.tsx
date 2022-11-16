@@ -24,7 +24,7 @@ export const HistoryDetailListContainer: React.FC = () => {
     sortTransaction,
   } = useTransaction();
 
-  if (!user || !currentWallet) return null;
+  if (!user) return null;
 
   const handleNextPage = () => {
     loadTransactions(meta.currentPage + 1);

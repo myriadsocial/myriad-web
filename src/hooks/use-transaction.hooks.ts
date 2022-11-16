@@ -14,7 +14,7 @@ import {UserState} from 'src/reducers/user/reducer';
 
 export const useTransaction = () => {
   const dispatch = useDispatch();
-  const {user, currentWallet} = useSelector<RootState, UserState>(state => state.userState);
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
   const {transactions, meta, filter, pagination, loading} = useSelector<
     RootState,
     TransactionState
@@ -22,8 +22,8 @@ export const useTransaction = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    currentWallet && loadTransactions();
-  }, [currentWallet]);
+    loadTransactions();
+  }, []);
 
   const orderType = (): TransactionOrderType => {
     if (pagination?.orderField === 'amount' && pagination.sort === 'DESC')

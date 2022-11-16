@@ -92,7 +92,7 @@ export const useClaimTip = () => {
   }, [errorCode, transactionHashes, errorMessage, errorCode]);
 
   useEffect(() => {
-    if (currentWallet) {
+    if (currentWallet || !user.fullAccess) {
       if (txFee && !errorMessage && !errorCode) {
         let message = 'Claiming Reference Success';
         let variant: VariantType = 'success';
@@ -118,13 +118,13 @@ export const useClaimTip = () => {
         getTip();
       }
     }
-  }, [currentWallet]);
+  }, [currentWallet, user.fullAccess]);
 
   const getTip = async (verifyNearTips = false, nativeBalance = '0.00') => {
     setLoading(true);
 
     if (!user || !server) return setLoading(false);
-    const currentNetworkId = currentWallet.networkId;
+    const currentNetworkId = currentWallet?.networkId ?? null;
     const sortedNetworkPromise = [];
 
     try {

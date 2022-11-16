@@ -42,12 +42,12 @@ export const WalletBalances: React.FC<WalletProps> = ({balances, loading}) => {
   const router = useRouter();
 
   const changeToWalletPage = () => {
-    router.push('/wallet?type=manage');
+    router.push({pathname: '/wallet', query: {type: 'manage'}});
   };
 
   const checkStatusTips = async () => {
     const data = await getTipStatus();
-    setIsHaveTips(data);
+    setIsHaveTips(data.status);
   };
 
   useEffect(() => {
