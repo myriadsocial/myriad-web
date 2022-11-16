@@ -42,7 +42,7 @@ export const WalletBalances: React.FC<WalletProps> = ({balances, loading}) => {
   const router = useRouter();
 
   const changeToWalletPage = () => {
-    router.push('/wallet');
+    router.push('/wallet?type=manage');
   };
 
   const checkStatusTips = async () => {

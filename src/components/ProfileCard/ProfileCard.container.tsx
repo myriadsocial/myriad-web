@@ -33,6 +33,10 @@ export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
     }
   };
 
+  const handleConnectWeb3Wallet = () => {
+    router.push(`/wallet?type=manage`);
+  };
+
   const handleSignOut = async () => {
     if (address) {
       logout();
@@ -59,6 +63,7 @@ export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
       onViewProfile={handleViewProfile}
       handleSignOut={handleSignOut}
       onShowNotificationList={handleShowNotificationList}
+      handleConnectWeb3Wallet={handleConnectWeb3Wallet}
     />
   );
 };

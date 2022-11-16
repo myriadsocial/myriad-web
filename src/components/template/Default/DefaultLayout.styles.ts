@@ -5,8 +5,7 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       display: 'flex',
       justifyContent: 'space-between',
-      padding: '0 30px',
-
+      padding: '10px 30px',
       [theme.breakpoints.down('xs')]: {
         padding: '0px',
       },

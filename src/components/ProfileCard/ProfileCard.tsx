@@ -11,6 +11,7 @@ import {ProfileCardProps} from './ProfileCard.interfaces';
 import {useStyles} from './ProfileCard.style';
 import {ProfileContent} from './index';
 
+import {CommonWalletIcon} from 'components/atoms/Icons';
 import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import {formatAddress} from 'src/helpers/wallet';
@@ -26,6 +27,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
     wallets,
     alias,
     notificationCount,
+    handleConnectWeb3Wallet,
     handleSignOut,
     onViewProfile,
     onShowNotificationList,
@@ -58,7 +60,13 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
               Sign in or Create an Account
             </Button>
           </ShowIf>
-          <ShowIf condition={!anonymous}>
+          <ShowIf condition={!anonymous && !wallets.length}>
+            <Button variant="contained" color="primary" onClick={handleConnectWeb3Wallet}>
+              <CommonWalletIcon viewBox="1 -3.5 20 20" />
+              <span style={{paddingLeft: '5px'}}>Connect Web 3.0 wallet</span>
+            </Button>
+          </ShowIf>
+          <ShowIf condition={!anonymous && !!wallets.length}>
             <ShowIf condition={Boolean(currentWallet)}>
               <NetworkOption currentWallet={currentWallet} wallets={wallets} networks={networks} />
               <Typography component="div" className={classes.address}>

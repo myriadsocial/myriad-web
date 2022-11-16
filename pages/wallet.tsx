@@ -1,5 +1,4 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
 
 import {Session} from 'next-auth';
 import {getSession} from 'next-auth/react';
@@ -9,11 +8,11 @@ import Head from 'next/head';
 
 import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
+import {useUserHook} from 'src/hooks/use-user.hook';
 import {initialize} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import {getServer, Server} from 'src/lib/api/server';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
@@ -25,7 +24,6 @@ import {
   fetchUserWallets,
   fetchNetwork,
 } from 'src/reducers/user/actions';
-import {UserState} from 'src/reducers/user/reducer';
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
@@ -45,7 +43,7 @@ type WalletPageProps = {
 };
 
 const Wallet: React.FC<WalletPageProps> = props => {
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const {user} = useUserHook();
 
   if (!user) return null;
 
@@ -93,10 +91,11 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const anonymous = Boolean(session?.user.anonymous);
   const userId = session?.user.address as string;
+  const token = session?.user.token;
 
   initialize({cookie: req.headers.cookie}, anonymous);
 
-  if (anonymous || !userId) {
+  if (anonymous || (!userId && !token)) {
     const username = session?.user.name as string;
 
     await dispatch(setAnonymous(username));
@@ -105,15 +104,17 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
     await Promise.all([
       dispatch(fetchConnectedSocials()),
-      dispatch(fetchAvailableToken()),
       dispatch(countNewNotification()),
       dispatch(fetchUserExperience()),
       dispatch(fetchUserWallets()),
     ]);
   }
 
-  await dispatch(fetchNetwork());
-  await dispatch(fetchExchangeRates());
+  await Promise.all([
+    dispatch(fetchAvailableToken()),
+    dispatch(fetchNetwork()),
+    dispatch(fetchExchangeRates()),
+  ]);
 
   const data = await getServer();
 
