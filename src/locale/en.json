@@ -1178,6 +1178,8 @@
     "LimitDescFriends":"Connect Web 3.0 Wallet to send friend request.",
     "MaybeLater":"Maybe Later",
     "ConnectWallet":"Connect Web 3.0 Wallet",
-    "DisclaimerEditProfile":"You are currently using lite version of Myriad. You can edit only the display name. Connect Web 3.0 Wallet to have all access in editing your profile"
+    "DisclaimerEditProfile":"You are currently using lite version of Myriad. You can edit only the display name. Connect Web 3.0 Wallet to have all access in editing your profile",
+    "LimitTitlePost":"You have 0 the remaining posts",
+    "LimitDescPost":"You are currently using lite version of Myriad. You can post up to 6 times a day and will be reset every 00:00 UTC. Connect Web 3.0 Wallet to post without restriction."
   }
 }
