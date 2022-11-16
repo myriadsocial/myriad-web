@@ -53,7 +53,6 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
   const {
     isLoading,
     transactions,
-    wallet,
     currencies,
     filter,
     orderType,
@@ -108,7 +107,7 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
       case 'received': {
         filterTransaction({
           ...filter,
-          to: wallet.id,
+          to: userId,
           from: undefined,
         });
         break;
@@ -117,7 +116,7 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
       case 'sent': {
         filterTransaction({
           ...filter,
-          from: wallet.id,
+          from: userId,
           to: undefined,
         });
         break;

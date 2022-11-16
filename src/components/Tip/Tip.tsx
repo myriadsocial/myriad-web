@@ -110,7 +110,7 @@ export const Tip: React.FC<TipProps> = props => {
   };
 
   const showTokens = () => {
-    if (isShowVerifyReference() && network.id === currentWallet.networkId) {
+    if (isShowVerifyReference() && network.id === currentWallet?.networkId) {
       return (
         <TipClaimReference
           networkId={network.id}
@@ -173,7 +173,7 @@ export const Tip: React.FC<TipProps> = props => {
           </Typography>
         </ListItemText>
         <div className={style.secondaryAction}>
-          <ShowIf condition={!!currentWallet && currentWallet.networkId !== network.id}>
+          <ShowIf condition={currentWallet?.networkId !== network.id}>
             <Button
               disabled
               className={style.button}
@@ -184,7 +184,7 @@ export const Tip: React.FC<TipProps> = props => {
               {i18n.t('Wallet.Tip.Switch')}
             </Button>
           </ShowIf>
-          <ShowIf condition={!!currentWallet && currentWallet.networkId == network.id}>
+          <ShowIf condition={!!currentWallet && currentWallet?.networkId == network.id}>
             <Button
               disabled={isShowVerifyReference()}
               className={style.button}

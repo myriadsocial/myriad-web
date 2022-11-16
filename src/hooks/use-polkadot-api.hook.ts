@@ -19,7 +19,7 @@ export const usePolkadotApi = () => {
     network: Network,
   ): Promise<TipsResultsProps> => {
     const serverId = server.accountId[network.id];
-    const accountId = wallet.id;
+    const accountId = wallet?.id ?? null;
     const peopleIds: string[] = [];
     const data: TipsBalanceData = {
       native: {
@@ -110,7 +110,7 @@ export const usePolkadotApi = () => {
       };
 
       if (referenceId) currencyIds.push(referenceId);
-      if (wallet.networkId === network.id) {
+      if (wallet?.networkId === network.id) {
         if (native) nativeDecimal = currency.decimal;
         if (!tipsBalance.accountId && tipsBalance.amount.gt(BN_ZERO)) accountIdExist = false;
       }
@@ -126,7 +126,7 @@ export const usePolkadotApi = () => {
 
     let feeInfo = null;
 
-    if (network.id === wallet.networkId && !accountIdExist) {
+    if (network.id === wallet?.networkId && !accountIdExist) {
       const fee = await PolkadotJs.claimReferenceFee(provider.provider, wallet.id, {
         references: {referenceType: 'people', referenceIds: peopleIds},
         mainReferences: {referenceType: 'user', referenceIds: [referenceId]},
