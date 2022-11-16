@@ -141,8 +141,6 @@ export const useClaimTip = () => {
               network,
             );
 
-            console.log(result);
-
             const {tipsResults, feeInfo: fee} = result;
 
             if (fee) setFeeInfo(fee);
@@ -164,8 +162,6 @@ export const useClaimTip = () => {
               verifyNearTips,
               nativeBalance,
             );
-
-            console.log(result);
 
             const {tipsResults, feeInfo: fee} = result;
 
@@ -191,8 +187,6 @@ export const useClaimTip = () => {
       }
 
       const networksWithTip = await Promise.all<Network[]>(sortedNetworkPromise);
-
-      console.log(networksWithTip);
 
       setTipsEachNetwork(networksWithTip);
     } catch {

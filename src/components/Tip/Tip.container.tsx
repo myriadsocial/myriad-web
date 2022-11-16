@@ -59,6 +59,7 @@ export const TipContainer: React.FC = () => {
   const [extensionInstalled, setExtensionInstalled] = useState<boolean>(false);
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
   const [tipsBalanceInfo, setTipsBalanceInfo] = useState<TipsBalanceInfo>(null);
+  const [isHaveTips, setIsHaveTips] = useState<boolean>(false);
 
   const handleClaimTip = (networkId: string, ftIdentifier: string) => {
     claim(networkId, ftIdentifier, ({claimSuccess, errorMessage}) => {
@@ -180,12 +181,26 @@ export const TipContainer: React.FC = () => {
     return '';
   };
 
-  const showNetwork = (network: Network) => {
+  const showNetwork = (network: Network, element: number) => {
     const tipsBalances = tipWithBalances(network);
     const nativeToken = getNativeToken(network?.tips ?? []);
 
-    if (!tipsBalances.length) {
+    if (tipsBalances.length === 0) {
+      if (!currentWallet) {
+        if (isHaveTips) return;
+        if (element != tipsEachNetwork.length - 1) return;
+        return (
+          <div style={{marginTop: 20}} key={network.id}>
+            <Empty
+              title={i18n.t('Wallet.Tip.Empty.Title')}
+              subtitle={i18n.t('Wallet.Tip.Empty.Subtitle')}
+            />
+          </div>
+        );
+      }
+
       if (!isShow(network)) return;
+
       switch (network.id) {
         case NetworkIdEnum.MYRIAD:
         case NetworkIdEnum.NEAR:
@@ -201,6 +216,8 @@ export const TipContainer: React.FC = () => {
           return;
       }
     }
+
+    if (!isHaveTips) setIsHaveTips(true);
 
     return (
       <BoxComponent isWithChevronRightIcon={false} marginTop={'20px'} key={network.id}>
@@ -234,7 +251,7 @@ export const TipContainer: React.FC = () => {
           <ShimerComponent />
         </BoxComponent>
       ) : (
-        tipsEachNetwork.map(network => showNetwork(network))
+        tipsEachNetwork.map((network, element) => showNetwork(network, element))
       )}
       <PolkadotAccountList
         align="left"
