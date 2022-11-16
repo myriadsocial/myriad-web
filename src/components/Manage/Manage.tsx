@@ -51,12 +51,12 @@ export const Manage: React.FC<ManageProps> = ({currentWallet, wallets, onConnect
         NetworkIdEnum.KUSAMA,
       ];
       const isSubstrateWallet = substrateNetworks.includes(
-        currentWallet.networkId as NetworkIdEnum,
+        currentWallet?.networkId as NetworkIdEnum,
       );
 
       return isSubstrateWallet ? true : false;
     } else {
-      return option.id === currentWallet.networkId ? true : false;
+      return option.id === currentWallet?.networkId ? true : false;
     }
   };
 
