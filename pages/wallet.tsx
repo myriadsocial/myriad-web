@@ -45,8 +45,6 @@ type WalletPageProps = {
 const Wallet: React.FC<WalletPageProps> = props => {
   const {user} = useUserHook();
 
-  console.log(user);
-
   if (!user) return null;
 
   return (
