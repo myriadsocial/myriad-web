@@ -75,6 +75,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
 
   const [cookies] = useCookies([COOKIE_CONSENT_NAME]);
   const {user, anonymous, currentWallet, updateUserFcmToken} = useUserHook();
+  const isWeb2Users = !user?.wallets.length;
 
   const [showNotification, setShowNotification] = useState<boolean>(false);
   const [provider, setProvider] = useState<IProvider>(null);
@@ -167,7 +168,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
         sender={user}
         currentWallet={getWallet(currentWallet?.network?.blockchainPlatform)}
         currentNetwork={currentWallet?.networkId}>
-        <BigTopBanner />
+        {isWeb2Users && <BigTopBanner />}
         <Container maxWidth="lg" disableGutters>
           <div className={classes.root}>
             <div className={classes.firstCol}>
