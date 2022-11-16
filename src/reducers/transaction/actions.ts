@@ -101,16 +101,12 @@ export const fetchTransactions: ThunkActionCreator<Actions, RootState> =
 
     try {
       const {
-        userState: {user, currentWallet},
+        userState: {user},
         transactionState: {filter, pagination},
       } = getState();
 
       if (!user) {
         throw new Error('User not found');
-      }
-
-      if (!currentWallet) {
-        throw new Error('current wallet not found');
       }
 
       const {data: transactions, meta} = await TransactionAPI.getTransactions(filter, {

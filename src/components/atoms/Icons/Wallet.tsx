@@ -4,6 +4,7 @@ import {SvgIcon, SvgIconProps} from '@material-ui/core';
 
 import Polkadot24 from 'src/images/network/Polkadot24.svg';
 import CoinbaseDisabled from 'src/images/wallet/coinbase-disabled.svg';
+import CommonWallet from 'src/images/wallet/commonWallet.svg';
 import MetamaskDisabled from 'src/images/wallet/metamask-disabled.svg';
 import MyNearWallet from 'src/images/wallet/my-near-wallet.svg';
 import SenderWalletDisabled from 'src/images/wallet/sender-wallet-disabled.svg';
@@ -36,4 +37,8 @@ export const MetamaskWalletDisabledIcon: React.FC<SvgIconProps> = props => (
 
 export const TrustWalletDisabledIcon: React.FC<SvgIconProps> = props => (
   <SvgIcon component={TrustDisabled} viewBox="0 0 32 32" {...props} />
+);
+
+export const CommonWalletIcon: React.FC<SvgIconProps> = props => (
+  <SvgIcon component={CommonWallet} viewBox="0 0 32 32" {...props} />
 );

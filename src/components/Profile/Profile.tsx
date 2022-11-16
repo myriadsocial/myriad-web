@@ -13,6 +13,7 @@ import {useStyles} from './Profile.style';
 import {ProfileHeaderContainer} from 'src/components/ProfileHeader/ProfileHeaderContainer';
 import {UserMenuContainer} from 'src/components/UserMenu';
 import ShowIf from 'src/components/common/show-if.component';
+import InfoIconYellow from 'src/images/Icons/InfoIconYellow.svg';
 import {FriendStatus} from 'src/interfaces/friend';
 import {FriendStatusProps, User} from 'src/interfaces/user';
 import i18n from 'src/locale';
@@ -73,6 +74,23 @@ export const Profile: React.FC<ProfileProps> = props => {
     <div className={style.root}>
       <div className={style.scroll}>
         <ShowIf condition={isEditing}>
+          <ShowIf condition={!user.fullAccess && user.fullAccess !== undefined}>
+            <div
+              style={{
+                backgroundColor: '#ffc85726',
+                padding: 10,
+                borderRadius: 8,
+                fontSize: 14,
+                display: 'flex',
+                alignItems: 'start',
+                marginBottom: 16,
+              }}>
+              <div style={{marginRight: 8, marginTop: 4}}>
+                <InfoIconYellow />
+              </div>
+              <Typography>{i18n.t('LiteVersion.DisclaimerEditProfile')}</Typography>
+            </div>
+          </ShowIf>
           <ProfileEditContainer onClose={handleCloseEdit} />
         </ShowIf>
 

@@ -1,4 +1,4 @@
-import {Actions as BaseAction, setLoading, setError} from '../base/actions';
+import {Actions as BaseAction, setError, setLoading} from '../base/actions';
 import {RootState} from '../index';
 import * as constants from './constants';
 import {TimelineFilters} from './reducer';
@@ -6,7 +6,6 @@ import {TimelineFilters} from './reducer';
 import axios from 'axios';
 import {Action} from 'redux';
 import {Comment} from 'src/interfaces/comment';
-import {FriendStatus} from 'src/interfaces/friend';
 import {ReferenceType, SectionType, Vote} from 'src/interfaces/interaction';
 import {Post, PostMetric, PostProps, PostVisibility} from 'src/interfaces/post';
 import {TimelineFilterFields, TimelineOrderType, TimelineType} from 'src/interfaces/timeline';
@@ -261,7 +260,6 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
         },
       });
     } catch (error) {
-      console.error(error);
       dispatch(setError(error));
     } finally {
       dispatch(setTimelineLoading(false));
@@ -269,7 +267,8 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
   };
 
 export const createPost: ThunkActionCreator<Actions, RootState> =
-  (post: PostProps, images: string[], callback: () => void) => async (dispatch, getState) => {
+  (post: PostProps, images: string[], callback: () => void, failedCallback: () => void) =>
+  async (dispatch, getState) => {
     const {
       userState: {user},
     } = getState();
@@ -298,10 +297,14 @@ export const createPost: ThunkActionCreator<Actions, RootState> =
 
       callback();
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 413) {
-        dispatch(setError(new Error(i18n.t('Post_Create.Error.ImageTooLarge'))));
+      if (error.response.data.error.message === 'ActionLimitExceeded') {
+        failedCallback();
       } else {
-        dispatch(setError(new Error(i18n.t('Post_Create.Error.Default'))));
+        if (axios.isAxiosError(error) && error.response?.status === 413) {
+          dispatch(setError(new Error(i18n.t('Post_Create.Error.ImageTooLarge'))));
+        } else {
+          dispatch(setError(new Error(i18n.t('Post_Create.Error.Default'))));
+        }
       }
     } finally {
       dispatch(setLoading(false));

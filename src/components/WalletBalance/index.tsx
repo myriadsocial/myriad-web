@@ -42,7 +42,7 @@ export const WalletBalances: React.FC<WalletProps> = ({balances, loading}) => {
   const router = useRouter();
 
   const changeToWalletPage = () => {
-    router.push('/wallet');
+    router.push({pathname: '/wallet', query: {type: 'manage'}});
   };
 
   const checkStatusTips = async () => {
@@ -65,7 +65,7 @@ export const WalletBalances: React.FC<WalletProps> = ({balances, loading}) => {
         </div>
       </ShowIf>
 
-      <ShowIf condition={!user.fullAccess}>
+      <ShowIf condition={!user.fullAccess && user.fullAccess !== undefined}>
         <div
           style={{
             backgroundColor: '#ffc85726',

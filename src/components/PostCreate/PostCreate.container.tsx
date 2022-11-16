@@ -2,12 +2,14 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 
 import dynamic from 'next/dynamic';
+import {useRouter} from 'next/router';
 
 import {Button, useMediaQuery} from '@material-ui/core';
 import {useTheme} from '@material-ui/core/styles';
 
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
 
+import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
@@ -26,7 +28,8 @@ const PostCreate = dynamic(() => import('./PostCreate'), {ssr: false});
 
 export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   const {open, onClose} = props;
-
+  const confirm = useConfirm();
+  const router = useRouter();
   const dispatch = useDispatch();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
@@ -74,13 +77,34 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
           }),
         );
       } else {
+        console.log('di klik');
         dispatch(
-          createPost(post, [], () => {
-            enqueueSnackbar({
-              message: i18n.t('Post_Create.Success_Toaster'),
-              variant: 'success',
-            });
-          }),
+          createPost(
+            post,
+            [],
+            () => {
+              enqueueSnackbar({
+                message: i18n.t('Post_Create.Success_Toaster'),
+                variant: 'success',
+              });
+            },
+            () => {
+              confirm({
+                title: i18n.t('LiteVersion.LimitTitlePost'),
+                description: i18n.t('LiteVersion.LimitDescPost'),
+                icon: 'warning',
+                confirmationText: i18n.t('LiteVersion.ConnectWallet'),
+                cancellationText: i18n.t('LiteVersion.MaybeLater'),
+                onConfirm: () => {
+                  router.push({pathname: '/wallet', query: {type: 'manage'}});
+                  undefined;
+                },
+                onCancel: () => {
+                  undefined;
+                },
+              });
+            },
+          ),
         );
       }
 

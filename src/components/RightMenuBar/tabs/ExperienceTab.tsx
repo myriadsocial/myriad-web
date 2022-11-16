@@ -41,7 +41,7 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
   const handleCreateExperience = () => {
     const totalOwnedExperience = userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
 
-    if (user.fullAccess) {
+    if (user.fullAccess && user.fullAccess !== undefined) {
       if (totalOwnedExperience >= 10) {
         enqueueSnackbar({
           message: i18n.t('Experience.Alert.Max_Exp'),
