@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 
+import getConfig from 'next/config';
 import Link from 'next/link';
 
 import {
@@ -16,19 +17,52 @@ import {
 
 import {useStyles} from './CreateAccounts.style';
 
+import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import {IcEmail, LogoMyriadCircle} from 'src/images/Icons';
+import {signUpWithEmail} from 'src/lib/api/auth-link';
 import i18n from 'src/locale';
 
+const {publicRuntimeConfig} = getConfig();
 export default function CreateAccounts({email}: {email: string}) {
   const styles = useStyles();
+  const confirm = useConfirm();
   const navigate = useNavigate();
   const [displayName, setDisplayName] = useState<string>('');
   const [userName, setUserName] = useState<string>('');
 
-  const [termApproved, setTermApproved] = useState(false);
+  const [isTermApproved, setIsTermApproved] = useState<boolean>(false);
 
   const toggleTermApproved = () => {
-    setTermApproved(!termApproved);
+    setIsTermApproved(!isTermApproved);
+  };
+
+  const payload = {
+    username: userName,
+    name: displayName,
+    email: email,
+    callbackURL: publicRuntimeConfig.appAuthURL + 'login',
+  };
+  const _handleRegister = async () => {
+    const response = await signUpWithEmail(payload);
+    if (response) {
+      navigate('/magiclink');
+    }
+  };
+
+  const _showModal = () => {
+    confirm({
+      title: i18n.t('LiteVersion.CreateAccountEmail'),
+      description: i18n.t('LiteVersion.CreateAccountEmailDesc'),
+      icon: 'warning',
+      confirmationText: i18n.t('LiteVersion.Confirm'),
+      cancellationText: i18n.t('LiteVersion.Cancel'),
+      onConfirm: () => {
+        _handleRegister();
+      },
+      onCancel: () => {
+        undefined;
+      },
+    });
   };
 
   return (
@@ -118,7 +152,12 @@ export default function CreateAccounts({email}: {email: string}) {
             Back
           </Button>
           <div style={{width: 8}} />
-          <Button variant="contained" fullWidth color="primary" onClick={() => undefined}>
+          <Button
+            disabled={!isTermApproved || userName.length === 0 || displayName.length === 0}
+            variant="contained"
+            fullWidth
+            color="primary"
+            onClick={_showModal}>
             Register
           </Button>
         </div>

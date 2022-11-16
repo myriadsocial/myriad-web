@@ -1162,6 +1162,10 @@
     "Disclaimer": "Integrasi Myriad Metaverse masih dalam tahap beta. Jika Anda mengalami masalah, atau jika Anda menginginkan pengalaman terbaik di Myriad Metaverse, kunjungi"
   },
    "LiteVersion":{
+    "Cancel":"Batal",
+    "Confirm":"Konfirmasi",
+    "CreateAccountEmail":"Buat Akun Baru",
+    "CreateAccountEmailDesc":"Anda akan membuat akun baru. Anda masih dapat menambahkan dompet kripto nanti.",
     "LimitTitleExperiance":"Batas Buat Pengalaman Tercapai!",
     "LimitTitleFriends":"Tidak bisa menambah teman",
     "Experiance":"Anda sedang menggunakan Myriad versi lite. Anda hanya dapat membuat hingga 5 pengalaman! Hubungkan Dompet Web 3.0 untuk menciptakan lebih banyak pengalaman",
