@@ -7,6 +7,8 @@ import IconButton from '@material-ui/core/IconButton';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
+import {User} from 'src/interfaces/user';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -42,12 +44,14 @@ type ButtonUploadProps = {
   accept: 'image' | 'video' | 'file';
   loading?: boolean;
   onImageSelected: (file: File) => void;
+  user: User;
 };
 
 export const IconButtonUpload: React.FC<ButtonUploadProps> = ({
   onImageSelected,
   accept,
   loading,
+  user,
 }) => {
   const styles = useStyles();
 
@@ -82,7 +86,7 @@ export const IconButtonUpload: React.FC<ButtonUploadProps> = ({
       />
       <div className={styles.wrapper}>
         <IconButton
-          onClick={selectFile}
+          onClick={user.fullAccess ? selectFile : undefined}
           disabled={loading}
           classes={{root: styles.action}}
           aria-label="upload-background">

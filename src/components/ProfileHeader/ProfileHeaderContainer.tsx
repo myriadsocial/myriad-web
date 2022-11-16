@@ -54,6 +54,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
       dispatch(fetchProfileExperience());
       filterTimeline(query);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile]);
 
   const sendFriendReqest = debounce(() => {
