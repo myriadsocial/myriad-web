@@ -47,7 +47,7 @@ export const WalletBalances: React.FC<WalletProps> = ({balances, loading}) => {
 
   const checkStatusTips = async () => {
     const data = await getTipStatus();
-    setIsHaveTips(data);
+    setIsHaveTips(data.status);
   };
 
   useEffect(() => {
