@@ -77,10 +77,10 @@ export const useNearApi = () => {
 
       if (verifyNearTips) {
         if (currency.native) formatted_amount = nearBalance;
-        accountId = wallet.id;
+        accountId = wallet?.id ?? null;
       }
 
-      if (!accountId && wallet.networkId === network.id) {
+      if (!accountId && wallet?.networkId === network.id) {
         if (currency.native) nativeDecimal = currency.decimal;
         if (parseFloat(formatted_amount) > 0) {
           const decimal = new BN(BN_TEN).pow(new BN(currency.decimal.toString()));
@@ -105,7 +105,7 @@ export const useNearApi = () => {
 
     let feeInfo = null;
 
-    if (network.id === wallet.networkId && !accountIdExist) {
+    if (network.id === wallet?.networkId && !accountIdExist) {
       const fee = await Near.claimReferenceFee(network.rpcURL);
       const finalTxFee = formatBalanceV2(fee.toString(), nativeDecimal, 4);
 

@@ -228,7 +228,7 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
   };
 
   const handleConnectWallet = () => {
-    router.push(`/wallet?type=manage`);
+    router.push({pathname: '/wallet', query: {type: 'manage'}});
   };
 
   const showConfirmDialog = (selected: NetworkIdEnum) => {
