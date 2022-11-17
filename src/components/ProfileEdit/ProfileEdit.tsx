@@ -183,6 +183,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
               {acronym(user.name)}
             </Avatar>
             <ImageButton
+              user={user}
               title="Edit Image profile"
               onImageSelected={handleUpdateProfilePicture}
               removePicture={handleRemovePicture}
@@ -201,6 +202,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
         <div className={style.bgBox}>
           <CardMedia className={style.media} image={imageBanner} title={user.name} />
           <IconButtonUpload
+            user={user}
             title="Edit Banner Image"
             onImageSelected={hanleUpdateBannerImage}
             loading={uploadingBanner}
