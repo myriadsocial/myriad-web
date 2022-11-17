@@ -42,6 +42,10 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
 
   const router = useRouter();
 
+  const {wallets} = user;
+
+  const isWeb2Users = !wallets.length && !anonymous;
+
   const icons = React.useMemo(
     () => ({
       polkadot: <PolkadotNetworkIcon />,
@@ -143,14 +147,26 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
             <div className={classes.column}>
               <Typography component="span">{i18n.t('Profile_Card.Network')}</Typography>
               <Typography component="span" className={classes.flex}>
-                {getSelectedIcon()} {formatNetworkTitle(currentWallet?.network)}
+                {isWeb2Users ? (
+                  'Not Connected'
+                ) : (
+                  <>
+                    {getSelectedIcon()} {formatNetworkTitle(currentWallet?.network)}
+                  </>
+                )}
               </Typography>
             </div>
             <div className={classes.column}>
               <Typography component="span">{i18n.t('Profile_Card.Wallet')}</Typography>
               <Typography component="span" className={classes.flex}>
-                {getSelectedIcon(true)}
-                {formatWalletTitle(currentWallet?.network)}
+                {isWeb2Users ? (
+                  'Not Connected'
+                ) : (
+                  <>
+                    {getSelectedIcon(true)}
+                    {formatWalletTitle(currentWallet?.network)}
+                  </>
+                )}
               </Typography>
             </div>
           </div>
