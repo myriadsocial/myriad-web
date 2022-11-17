@@ -4,6 +4,7 @@ import {useSelector} from 'react-redux';
 import getConfig from 'next/config';
 
 import {AccountSettingsContainer} from '../AccountSettingsContainer';
+import EmailSettings from '../EmailSettings';
 import {LanguageSettingsContainer} from '../LanguageSettingsContainer';
 import {NotificationSettingsContainer} from '../NotificationSettings.container';
 import {BlockListContainer} from '../render/BlockList';
@@ -18,6 +19,7 @@ const {publicRuntimeConfig} = getConfig();
 export type SettingsType =
   | 'account'
   | 'notification'
+  | 'email'
   | 'block'
   | 'language'
   | 'about'
@@ -71,6 +73,12 @@ export const useSettingList = (): SettingsOption<SettingsType>[] => {
         title: i18n.t('Setting.List_Menu.Account_Title'),
         subtitle: i18n.t('Setting.List_Menu.Account_Subtitle'),
         component: <AccountSettingsContainer />,
+      },
+      {
+        id: 'email',
+        title: 'Email Configuration',
+        subtitle: 'Set email address for another method of login',
+        component: <EmailSettings />,
       },
       {
         id: 'notification',
