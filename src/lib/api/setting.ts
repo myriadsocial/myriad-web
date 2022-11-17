@@ -1,6 +1,11 @@
 import MyriadAPI from './base';
 
-import {NotificationSettingItems, PrivacySettings} from 'src/interfaces/setting';
+import {
+  NotificationSettingItems,
+  PrivacySettings,
+  ResendVerificationEmailPayloadType,
+  UpdateEmailPayloadType,
+} from 'src/interfaces/setting';
 
 export const updateAccountSettings = async (
   userId: string,
@@ -43,5 +48,36 @@ export const getNotificationSettings = async (
     method: 'GET',
   });
 
+  return data;
+};
+
+export const sendVerificationEmailServices = async (
+  payload: ResendVerificationEmailPayloadType,
+): Promise<ResendVerificationEmailPayloadType> => {
+  const {data} = await MyriadAPI().request<ResendVerificationEmailPayloadType>({
+    url: `/user/otp/email`,
+    method: 'POST',
+    data: payload,
+  });
+
+  return data;
+};
+
+export const updateEmail = async (
+  payload: UpdateEmailPayloadType,
+): Promise<UpdateEmailPayloadType> => {
+  const {data} = await MyriadAPI().request<UpdateEmailPayloadType>({
+    url: `/user/email-setting`,
+    method: 'PATCH',
+    data: payload,
+  });
+  return data;
+};
+
+export const deleteEmail = async (token: string): Promise<string> => {
+  const {data} = await MyriadAPI().request<string>({
+    url: `/user/email-setting?token=${token}`,
+    method: 'DELETE',
+  });
   return data;
 };

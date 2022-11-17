@@ -20,6 +20,11 @@ export interface FetchAvailableToken extends Action {
   type: constants.FETCH_AVAILABLE_TOKEN;
   payload: Currency[];
 }
+
+export interface LoadingConfig extends Action {
+  type: constants.SET_LOADING_CONFIG;
+  payload: boolean;
+}
 export interface UpdateNotificationSetting extends Action {
   type: constants.UPDATE_NOTIFICATION_SETTING;
   settings: NotificationSettingItems;
@@ -43,7 +48,8 @@ export type Actions =
   | FetchPrivacySetting
   | UpdateNotificationSetting
   | SetLanguageSetting
-  | BaseAction;
+  | BaseAction
+  | LoadingConfig;
 
 /**
  *
@@ -53,6 +59,12 @@ export type Actions =
 /**
  * Action Creator
  */
+
+export const setLoadingConfig = (loading: boolean): LoadingConfig => ({
+  type: constants.SET_LOADING_CONFIG,
+  payload: loading,
+});
+
 export const fetchAccountPrivacySetting: ThunkActionCreator<Action, RootState> =
   (id: string) => async dispatch => {
     dispatch(setLoading(true));
@@ -165,4 +177,50 @@ export const updateLanguageSetting: ThunkActionCreator<Actions, RootState> =
       type: constants.SET_LANGUAGE_SETTING,
       lang: language,
     });
+  };
+
+export const sendVerificationEmail: ThunkActionCreator<Actions, RootState> =
+  (
+    payload: Parameters<typeof SettingAPI.sendVerificationEmailServices>[0],
+    callbackSuccess: () => void,
+  ) =>
+  async dispatch => {
+    dispatch(setLoadingConfig(true));
+
+    try {
+      await SettingAPI.sendVerificationEmailServices(payload);
+      callbackSuccess();
+    } catch (error) {
+      dispatch(setError(error));
+    } finally {
+      dispatch(setLoadingConfig(false));
+    }
+  };
+
+export const updateEmail: ThunkActionCreator<Actions, RootState> =
+  (payload: Parameters<typeof SettingAPI.updateEmail>[0], callbackSuccess: () => void) =>
+  async dispatch => {
+    dispatch(setLoadingConfig(true));
+    try {
+      await SettingAPI.updateEmail(payload);
+      callbackSuccess();
+    } catch (error) {
+      dispatch(setError(error));
+    } finally {
+      dispatch(setLoadingConfig(false));
+    }
+  };
+
+export const deleteEmail: ThunkActionCreator<Actions, RootState> =
+  (payload: Parameters<typeof SettingAPI.deleteEmail>[0], callbackSuccess: () => void) =>
+  async dispatch => {
+    dispatch(setLoadingConfig(true));
+    try {
+      await SettingAPI.deleteEmail(payload);
+      callbackSuccess();
+    } catch (error) {
+      dispatch(setError(error));
+    } finally {
+      dispatch(setLoadingConfig(false));
+    }
   };
