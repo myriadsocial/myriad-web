@@ -1173,7 +1173,7 @@
     "MaybeLater":"Mungkin Nanti",
     "ConnectWallet":"Hubungkan Dompet Web 3.0",
     "DisclaimerEditProfile":"Saat ini Anda menggunakan Myriad versi lite. Anda hanya dapat mengedit nama tampilan. Hubungkan Web 3.0 Wallet untuk memiliki semua akses dalam mengedit profil Anda",
-    "LimitTitlePost":"Anda memiliki 0 pos yang tersisa",
+    "LimitTitlePost":"Anda memiliki {{count}} pos yang tersisa",
     "LimitDescPost":"Anda sedang menggunakan Myriad versi lite. Anda dapat memposting hingga 6 kali sehari dan akan direset setiap pukul 00:00 UTC. Hubungkan Web 3.0 Wallet untuk memposting tanpa batasan."
   }
 }

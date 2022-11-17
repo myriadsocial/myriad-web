@@ -14,6 +14,7 @@ import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 import {PostImportError} from 'src/lib/api/errors/post-import.error';
+import {getCountPost} from 'src/lib/api/user';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {loadUsers, searchUsers} from 'src/reducers/search/actions';
@@ -54,6 +55,27 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
     [user],
   );
 
+  const _handlePostNotFullAccess = async () => {
+    const response = await getCountPost();
+    const count = response.count;
+    if (count) {
+      confirm({
+        title: i18n.t('LiteVersion.LimitTitlePost', {count}),
+        description: i18n.t('LiteVersion.LimitDescPost'),
+        icon: 'warning',
+        confirmationText: i18n.t('LiteVersion.ConnectWallet'),
+        cancellationText: i18n.t('LiteVersion.MaybeLater'),
+        onConfirm: () => {
+          router.push({pathname: '/wallet', query: {type: 'manage'}});
+          undefined;
+        },
+        onCancel: () => {
+          undefined;
+        },
+      });
+    }
+  };
+
   const submitPost = useCallback(
     (post: string | Partial<Post>, attributes?: Pick<Post, 'NSFWTag' | 'visibility'>) => {
       if (typeof post === 'string') {
@@ -77,20 +99,21 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
           }),
         );
       } else {
-        console.log('di klik');
         dispatch(
           createPost(
             post,
             [],
             () => {
-              enqueueSnackbar({
-                message: i18n.t('Post_Create.Success_Toaster'),
-                variant: 'success',
-              });
+              user.fullAccess
+                ? enqueueSnackbar({
+                    message: i18n.t('Post_Create.Success_Toaster'),
+                    variant: 'success',
+                  })
+                : _handlePostNotFullAccess();
             },
             () => {
               confirm({
-                title: i18n.t('LiteVersion.LimitTitlePost'),
+                title: i18n.t('LiteVersion.LimitTitlePost', {count: 0}),
                 description: i18n.t('LiteVersion.LimitDescPost'),
                 icon: 'warning',
                 confirmationText: i18n.t('LiteVersion.ConnectWallet'),
