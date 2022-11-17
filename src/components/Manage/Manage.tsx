@@ -112,7 +112,7 @@ export const Manage: React.FC<ManageProps> = ({currentWallet, wallets, onConnect
                   variant="outlined"
                   size="small"
                   color="secondary"
-                  disabled={isMobile}
+                  disabled={isMobile && option.id === 'polkadot'}
                   className={style.btnConnect}
                   onClick={() => onConnectDisconnect(option.id)}>
                   {i18n.t('Wallet.Manage.Btn_Connect')}
