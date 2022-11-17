@@ -193,7 +193,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
           <div style={{marginRight: 8, marginTop: 4}}>
             <InfoIconYellow />
           </div>
-          <Typography>{`${person.username} ${i18n.t('LimitDescProfile')}`}</Typography>
+          <Typography>{`${person.username} ${i18n.t('LiteVersion.LimitDescProfile')}`}</Typography>
         </div>
       </ShowIf>
       <div className={style.root}>
