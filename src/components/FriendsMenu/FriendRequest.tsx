@@ -1,5 +1,4 @@
-import {XCircleIcon} from '@heroicons/react/outline';
-import {CheckCircleIcon} from '@heroicons/react/outline';
+import {CheckCircleIcon, XCircleIcon} from '@heroicons/react/outline';
 
 import React from 'react';
 
@@ -43,7 +42,24 @@ export const FriendRequestComponent: React.FC<FriendRequestProps> = props => {
   const list = useFriendRequestList(requests, user);
 
   if (requests.length === 0) {
-    return <Empty title={i18n.t('Friends.Empty.Friend_Request.Title')} />;
+    return (
+      <Empty
+        image={'/images/illustration/EmptyStateFriendReq.svg'}
+        title={'Nothing to see here!'}
+        subtitle="Connect your Web 3.0 wallet to unlock this feature"
+        // eslint-disable-next-line react/no-children-prop
+        children={
+          <div style={{width: '100%', marginTop: 24}}>
+            <Link href={{pathname: '/wallet', query: {type: 'manage'}}} shallow passHref>
+              <Button onClick={() => undefined} color="primary" variant="contained" size="small">
+                {i18n.t('LiteVersion.ConnectWallet')}
+              </Button>
+            </Link>
+          </div>
+        }
+        withImage
+      />
+    );
   }
 
   return (
