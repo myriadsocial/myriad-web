@@ -65,6 +65,8 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
             undefined;
           },
         });
+      } else {
+        router.push('/experience/create');
       }
     }
   };
