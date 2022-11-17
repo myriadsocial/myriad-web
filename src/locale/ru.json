@@ -226,6 +226,7 @@
     "Profile": "Профиль",
     "Logout": "Выйти",
     "Network": "Сеть",
+    "NotConnected": "Не подключен",
     "Wallet": "Кошелек"
   },
   "Profile": {
