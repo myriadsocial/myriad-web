@@ -82,6 +82,13 @@ export const ConfigReducer: Redux.Reducer<ConfigState, Actions> = (state = inita
       };
     }
 
+    case constants.SET_LOADING_CONFIG: {
+      return {
+        ...state,
+        loading: action.payload,
+      };
+    }
+
     default: {
       return state;
     }

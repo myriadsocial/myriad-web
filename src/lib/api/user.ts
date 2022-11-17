@@ -117,3 +117,11 @@ export const getCheckEmail = async (email: string): Promise<boolean> => {
   });
   return data;
 };
+
+export const getCountPost = async (): Promise<{count: number}> => {
+  const {data} = await MyriadAPI().request<{count: number}>({
+    url: `/posts/action`,
+    method: 'GET',
+  });
+  return data;
+};
