@@ -75,7 +75,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
 
   const [cookies] = useCookies([COOKIE_CONSENT_NAME]);
   const {user, anonymous, currentWallet, updateUserFcmToken} = useUserHook();
-  const isWeb2Users = !user?.wallets.length;
+  const isWeb2Users = !user?.wallets.length && !anonymous;
 
   const [showNotification, setShowNotification] = useState<boolean>(false);
   const [provider, setProvider] = useState<IProvider>(null);
