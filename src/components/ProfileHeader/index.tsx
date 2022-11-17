@@ -193,9 +193,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
           <div style={{marginRight: 8, marginTop: 4}}>
             <InfoIconYellow />
           </div>
-          <Typography>
-            {`${person.username}is using lite version of Myriad. You can only send a friend request to users with active wallet.`}{' '}
-          </Typography>
+          <Typography>{`${person.username} ${i18n.t('LimitDescProfile')}`}</Typography>
         </div>
       </ShowIf>
       <div className={style.root}>

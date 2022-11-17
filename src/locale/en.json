@@ -1177,6 +1177,7 @@
     "Confirm":"Confirm",
     "CreateAccountEmail":"Create a new account",
     "CreateAccountEmailDesc":"You will create a new account. You can still add a crypto wallet later.",
+    "LimitDescProfile":"is using lite version of Myriad. You can only send a friend request to users with active wallet.",
     "LimitTitleExperiance":"Create Experience Limit Reached!",
     "LimitTitleFriends":"Unable to Add Friend",
     "LimitDescExperiance":"You are currently using lite version of Myriad. You can only create up to 5 experience! Connect Web 3.0 Wallet to create more experience",
