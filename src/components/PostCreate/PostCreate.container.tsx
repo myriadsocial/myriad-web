@@ -67,7 +67,6 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
         cancellationText: i18n.t('LiteVersion.MaybeLater'),
         onConfirm: () => {
           router.push({pathname: '/wallet', query: {type: 'manage'}});
-          undefined;
         },
         onCancel: () => {
           undefined;
@@ -91,10 +90,12 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
 
               setDialogFailedImport({open: true, message});
             } else {
-              enqueueSnackbar({
-                message: i18n.t('Post_Import.Success_Toaster'),
-                variant: 'success',
-              });
+              user.fullAccess
+                ? enqueueSnackbar({
+                    message: i18n.t('Post_Import.Success_Toaster'),
+                    variant: 'success',
+                  })
+                : _handlePostNotFullAccess();
             }
           }),
         );
@@ -120,7 +121,6 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
                 cancellationText: i18n.t('LiteVersion.MaybeLater'),
                 onConfirm: () => {
                   router.push({pathname: '/wallet', query: {type: 'manage'}});
-                  undefined;
                 },
                 onCancel: () => {
                   undefined;
@@ -133,6 +133,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
 
       onClose();
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
 

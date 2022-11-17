@@ -1,7 +1,8 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {useSelector, useDispatch, shallowEqual} from 'react-redux';
+import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 
 import dynamic from 'next/dynamic';
+import {useRouter} from 'next/router';
 
 import useConfirm from '../common/Confirm/use-confirm.hook';
 import {CommentList} from './CommentList';
@@ -12,9 +13,10 @@ import ShowIf from 'src/components/common/show-if.component';
 import {useBlockList} from 'src/hooks/use-blocked-list.hook';
 import {useCommentHook} from 'src/hooks/use-comment.hook';
 import {Comment, CommentProps} from 'src/interfaces/comment';
-import {SectionType, ReferenceType, Vote} from 'src/interfaces/interaction';
+import {ReferenceType, SectionType, Vote} from 'src/interfaces/interaction';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
+import {getCountPost} from 'src/lib/api/user';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {searchUsers} from 'src/reducers/search/actions';
@@ -37,7 +39,7 @@ type CommentListContainerProps = {
 
 export const CommentListContainer: React.FC<CommentListContainerProps> = props => {
   const {placeholder, referenceId, type, section, focus, expand, user, scrollToPost} = props;
-
+  const router = useRouter();
   const dispatch = useDispatch();
   const confirm = useConfirm();
   const {
@@ -68,6 +70,26 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
     loadInitComment(section);
   }, [referenceId]);
 
+  const _handlePostNotFullAccess = async () => {
+    const response = await getCountPost();
+    const count = response.count;
+    if (count) {
+      confirm({
+        title: i18n.t('LiteVersion.LimitTitlePost', {count}),
+        description: i18n.t('LiteVersion.LimitDescPost'),
+        icon: 'warning',
+        confirmationText: i18n.t('LiteVersion.ConnectWallet'),
+        cancellationText: i18n.t('LiteVersion.MaybeLater'),
+        onConfirm: () => {
+          router.push({pathname: '/wallet', query: {type: 'manage'}});
+        },
+        onCancel: () => {
+          undefined;
+        },
+      });
+    }
+  };
+
   const handleSubmitComment = useCallback((comment: Partial<CommentProps>) => {
     if (user) {
       const attributes: CommentProps = {
@@ -91,7 +113,10 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
           );
         }
       });
+
+      !user.fullAccess && _handlePostNotFullAccess();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleUpdateDownvote = useCallback((commentId: string, total: number, vote: Vote) => {
