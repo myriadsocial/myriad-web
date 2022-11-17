@@ -27,6 +27,7 @@ import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorize
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {Modal} from 'src/components/atoms/Modal';
 import ShowIf from 'src/components/common/show-if.component';
+import {useExperienceHook} from 'src/hooks/use-experience-hook';
 import {WrappedExperience} from 'src/interfaces/experience';
 import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
@@ -75,7 +76,8 @@ export const Experience: React.FC<ExperienceProps> = props => {
   const experienceId = userExperience.experience.id;
   const userExperienceId = userExperience.id;
   const link = publicRuntimeConfig.appAuthURL + `/experience/${experienceId}`;
-
+  const {userExperiencesMeta} = useExperienceHook();
+  const totalOwnedExperience = userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
   const handleClickExperience = () => {
     handleCloseSettings();
 
@@ -85,10 +87,26 @@ export const Experience: React.FC<ExperienceProps> = props => {
   };
 
   const handleCloneExperience = () => {
-    handleCloseSettings();
+    if (totalOwnedExperience >= 5 || !user.fullAccess || user.fullAccess !== undefined) {
+      confirm({
+        title: i18n.t('LiteVersion.LimitTitleExperiance'),
+        description: i18n.t('LiteVersion.LimitDescExperiance'),
+        icon: 'warning',
+        confirmationText: i18n.t('LiteVersion.ConnectWallet'),
+        cancellationText: i18n.t('LiteVersion.MaybeLater'),
+        onConfirm: () => {
+          router.push({pathname: '/wallet', query: {type: 'manage'}});
+        },
+        onCancel: () => {
+          undefined;
+        },
+      });
+    } else {
+      handleCloseSettings();
 
-    if (onClone) {
-      onClone(experienceId);
+      if (onClone) {
+        onClone(experienceId);
+      }
     }
   };
 

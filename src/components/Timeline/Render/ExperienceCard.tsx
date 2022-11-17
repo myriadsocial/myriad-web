@@ -130,13 +130,34 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = props => {
     handleCloseSettings();
 
     const totalOwnedExperience = userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
-    if (totalOwnedExperience >= 10) {
-      enqueueSnackbar({
-        message: i18n.t('Experience.List.Alert'),
-        variant: 'warning',
-      });
+
+    if (user.fullAccess && user.fullAccess !== undefined) {
+      if (totalOwnedExperience >= 10) {
+        enqueueSnackbar({
+          message: i18n.t('Experience.List.Alert'),
+          variant: 'warning',
+        });
+      } else {
+        router.push(`/experience/${experience.id}/clone`);
+      }
     } else {
-      router.push(`/experience/${experience.id}/clone`);
+      if (totalOwnedExperience >= 5) {
+        confirm({
+          title: i18n.t('LiteVersion.LimitTitleExperiance'),
+          description: i18n.t('LiteVersion.LimitDescExperiance'),
+          icon: 'warning',
+          confirmationText: i18n.t('LiteVersion.ConnectWallet'),
+          cancellationText: i18n.t('LiteVersion.MaybeLater'),
+          onConfirm: () => {
+            router.push({pathname: '/wallet', query: {type: 'manage'}});
+          },
+          onCancel: () => {
+            undefined;
+          },
+        });
+      } else {
+        router.push(`/experience/${experience.id}/clone`);
+      }
     }
   };
 
