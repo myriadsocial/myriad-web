@@ -40,7 +40,7 @@ export default function CreateAccounts({email}: {email: string}) {
     username: userName,
     name: displayName,
     email: email,
-    callbackURL: publicRuntimeConfig.appAuthURL + 'login',
+    callbackURL: publicRuntimeConfig.appAuthURL + '/login',
   };
   const _handleRegister = async () => {
     const response = await signUpWithEmail(payload);
