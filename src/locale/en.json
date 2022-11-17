@@ -1172,12 +1172,18 @@
     "Disclaimer": "The Myriad Metaverse integration is an early beta feature. If you encounter problems, or if you want the best experience on the Myriad Metaverse, go to"
   },
   "LiteVersion":{
+    "Cancel":"Cancel",
+    "Confirm":"Confirm",
+    "CreateAccountEmail":"Create a new account",
+    "CreateAccountEmailDesc":"You will create a new account. You can still add a crypto wallet later.",
     "LimitTitleExperiance":"Create Experience Limit Reached!",
     "LimitTitleFriends":"Unable to Add Friend",
     "LimitDescExperiance":"You are currently using lite version of Myriad. You can only create up to 5 experience! Connect Web 3.0 Wallet to create more experience",
     "LimitDescFriends":"Connect Web 3.0 Wallet to send friend request.",
     "MaybeLater":"Maybe Later",
     "ConnectWallet":"Connect Web 3.0 Wallet",
-    "DisclaimerEditProfile":"You are currently using lite version of Myriad. You can edit only the display name. Connect Web 3.0 Wallet to have all access in editing your profile"
+    "DisclaimerEditProfile":"You are currently using lite version of Myriad. You can edit only the display name. Connect Web 3.0 Wallet to have all access in editing your profile",
+    "LimitTitlePost":"You have {{count}} the remaining posts",
+    "LimitDescPost":"You are currently using lite version of Myriad. You can post up to 6 times a day and will be reset every 00:00 UTC. Connect Web 3.0 Wallet to post without restriction."
   }
 }

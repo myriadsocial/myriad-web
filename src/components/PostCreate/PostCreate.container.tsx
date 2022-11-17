@@ -2,16 +2,19 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 
 import dynamic from 'next/dynamic';
+import {useRouter} from 'next/router';
 
 import {Button, useMediaQuery} from '@material-ui/core';
 import {useTheme} from '@material-ui/core/styles';
 
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
 
+import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 import {PostImportError} from 'src/lib/api/errors/post-import.error';
+import {getCountPost} from 'src/lib/api/user';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {loadUsers, searchUsers} from 'src/reducers/search/actions';
@@ -26,7 +29,8 @@ const PostCreate = dynamic(() => import('./PostCreate'), {ssr: false});
 
 export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   const {open, onClose} = props;
-
+  const confirm = useConfirm();
+  const router = useRouter();
   const dispatch = useDispatch();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
@@ -50,6 +54,27 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
     },
     [user],
   );
+
+  const _handlePostNotFullAccess = async () => {
+    const response = await getCountPost();
+    const count = response.count;
+    if (count) {
+      confirm({
+        title: i18n.t('LiteVersion.LimitTitlePost', {count}),
+        description: i18n.t('LiteVersion.LimitDescPost'),
+        icon: 'warning',
+        confirmationText: i18n.t('LiteVersion.ConnectWallet'),
+        cancellationText: i18n.t('LiteVersion.MaybeLater'),
+        onConfirm: () => {
+          router.push({pathname: '/wallet', query: {type: 'manage'}});
+          undefined;
+        },
+        onCancel: () => {
+          undefined;
+        },
+      });
+    }
+  };
 
   const submitPost = useCallback(
     (post: string | Partial<Post>, attributes?: Pick<Post, 'NSFWTag' | 'visibility'>) => {
@@ -75,12 +100,34 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
         );
       } else {
         dispatch(
-          createPost(post, [], () => {
-            enqueueSnackbar({
-              message: i18n.t('Post_Create.Success_Toaster'),
-              variant: 'success',
-            });
-          }),
+          createPost(
+            post,
+            [],
+            () => {
+              user.fullAccess
+                ? enqueueSnackbar({
+                    message: i18n.t('Post_Create.Success_Toaster'),
+                    variant: 'success',
+                  })
+                : _handlePostNotFullAccess();
+            },
+            () => {
+              confirm({
+                title: i18n.t('LiteVersion.LimitTitlePost', {count: 0}),
+                description: i18n.t('LiteVersion.LimitDescPost'),
+                icon: 'warning',
+                confirmationText: i18n.t('LiteVersion.ConnectWallet'),
+                cancellationText: i18n.t('LiteVersion.MaybeLater'),
+                onConfirm: () => {
+                  router.push({pathname: '/wallet', query: {type: 'manage'}});
+                  undefined;
+                },
+                onCancel: () => {
+                  undefined;
+                },
+              });
+            },
+          ),
         );
       }
 

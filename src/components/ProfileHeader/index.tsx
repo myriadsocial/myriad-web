@@ -29,6 +29,7 @@ import {OfficialBadgeIcon} from 'src/components/atoms/Icons';
 import {ReportComponent} from 'src/components/atoms/Report/Report.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {acronym} from 'src/helpers/string';
+import InfoIconYellow from 'src/images/Icons/InfoIconYellow.svg';
 import {Friend} from 'src/interfaces/friend';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {ReportProps} from 'src/interfaces/report';
@@ -178,6 +179,25 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
 
   return (
     <div>
+      <ShowIf condition={!person.fullAccess && user.fullAccess}>
+        <div
+          style={{
+            backgroundColor: '#ffc85726',
+            padding: 10,
+            borderRadius: 8,
+            fontSize: 14,
+            display: 'flex',
+            alignItems: 'start',
+            marginBottom: 16,
+          }}>
+          <div style={{marginRight: 8, marginTop: 4}}>
+            <InfoIconYellow />
+          </div>
+          <Typography>
+            {`${person.username}is using lite version of Myriad. You can only send a friend request to users with active wallet.`}{' '}
+          </Typography>
+        </div>
+      </ShowIf>
       <div className={style.root}>
         <CardMedia
           className={style.media}

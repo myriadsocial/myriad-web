@@ -103,7 +103,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   initialize({cookie: req.headers.cookie}, anonymous);
 
-  if (anonymous || !userId) {
+  if (anonymous) {
     const username = generateAnonymousUser();
 
     await dispatch(setAnonymous(username));
