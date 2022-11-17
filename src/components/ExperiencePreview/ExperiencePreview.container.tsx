@@ -38,6 +38,7 @@ export const ExperiencePreviewContainer: React.FC = () => {
 
   const handleCloneExperience = (experienceId: string) => {
     const totalOwnedExperience = userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
+
     if (totalOwnedExperience >= 10) {
       enqueueSnackbar({
         message: i18n.t('Experience.Alert.Max_Exp'),

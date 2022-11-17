@@ -77,6 +77,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
     userExperiencesMeta,
   } = useExperienceHook();
   const {list: experiences} = useExperienceList(owner);
+  const totalOwnedExperience = userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
 
   const handleViewPostList = (type: TimelineType, userExperience: WrappedExperience) => {
     if (filterTimeline) {
@@ -97,8 +98,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
   const handleCloneExperience = (experienceId: string) => {
     if (!enableClone) return;
 
-    const totalOwnedExperience = userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
-    if (totalOwnedExperience >= 5 && !user.fullAccess && user.fullAccess !== undefined) {
+    if (totalOwnedExperience >= 5 || !user.fullAccess || user.fullAccess !== undefined) {
       confirm({
         title: i18n.t('LiteVersion.LimitTitleExperiance'),
         description: i18n.t('LiteVersion.LimitDescExperiance'),
