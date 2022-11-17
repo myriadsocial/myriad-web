@@ -252,6 +252,7 @@
     "Profile": "Profile",
     "Logout": "Log out",
     "Network": "Network",
+    "NotConnected": "Not Connected",
     "Wallet": "Wallet"
   },
   "Profile": {

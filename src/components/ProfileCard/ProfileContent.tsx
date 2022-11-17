@@ -148,7 +148,7 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
               <Typography component="span">{i18n.t('Profile_Card.Network')}</Typography>
               <Typography component="span" className={classes.flex}>
                 {isWeb2Users ? (
-                  'Not Connected'
+                  `${i18n.t('Profile_Card.NotConnected')}`
                 ) : (
                   <>
                     {getSelectedIcon()} {formatNetworkTitle(currentWallet?.network)}
@@ -160,7 +160,7 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
               <Typography component="span">{i18n.t('Profile_Card.Wallet')}</Typography>
               <Typography component="span" className={classes.flex}>
                 {isWeb2Users ? (
-                  'Not Connected'
+                  `${i18n.t('Profile_Card.NotConnected')}`
                 ) : (
                   <>
                     {getSelectedIcon(true)}
