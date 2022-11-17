@@ -28,5 +28,11 @@ export const useStyles = makeStyles<Theme, SendTipButtonProps>(theme =>
     wrapperButton: {
       marginTop: 32,
     },
+    wrapperButtonFlex: {
+      marginTop: 32,
+      display: 'flex',
+      justifyContent: 'space-between',
+      gap: '8px',
+    },
   }),
 );

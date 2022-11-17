@@ -670,6 +670,10 @@
       "Title": "Kirim Tip",
       "Subtitle": "Hargai orang lain dengan mengirimkan tip dengan cryptocurrency"
     },
+    "Prompt_Web2": {
+      "Title": "Wallet Not Connected",
+      "Subtitle": "You don’t have any wallet connected to your account, let’s try to connect your wallet to send tip"
+    },
     "Prompt_Success": {
       "Title": "Tip terkirim!",
       "Subtitle_1": "Tip ke ",

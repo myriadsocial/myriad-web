@@ -654,6 +654,10 @@
       "Title": "Послать чаевые",
       "Subtitle": "Поощрите других, отправляя чаевые в стабильной криптовалюте"
     },
+    "Prompt_Web2": {
+      "Title": "Wallet Not Connected",
+      "Subtitle": "You don’t have any wallet connected to your account, let’s try to connect your wallet to send tip"
+    },
     "Prompt_Success": {
       "Title": "Отправлено!",
       "Subtitle_1": "Вознаградить ",

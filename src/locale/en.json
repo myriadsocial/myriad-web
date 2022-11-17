@@ -680,6 +680,10 @@
       "Title": "Send Tip",
       "Subtitle": "Appreciate others by sending tips with cryptocurrencies."
     },
+    "Prompt_Web2": {
+      "Title": "Wallet Not Connected",
+      "Subtitle": "You don’t have any wallet connected to your account, let’s try to connect your wallet to send tip"
+    },
     "Prompt_Success": {
       "Title": "Tip sent!",
       "Subtitle_1": "Tip to ",

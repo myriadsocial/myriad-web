@@ -3,6 +3,8 @@ import {CurrencyDollarIcon} from '@heroicons/react/outline';
 import React, {useState} from 'react';
 import {shallowEqual, useSelector} from 'react-redux';
 
+import {useRouter} from 'next/router';
+
 import {
   Button,
   CircularProgress,
@@ -17,6 +19,7 @@ import ShowIf from '../show-if.component';
 import {useStyles} from './SendTipButton.style';
 
 import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
+import {useUserHook} from 'src/hooks/use-user.hook';
 import {Comment} from 'src/interfaces/comment';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {People} from 'src/interfaces/people';
@@ -55,15 +58,21 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
   } = props;
 
   const styles = useStyles({mobile, color: props.color});
+  const router = useRouter();
   const tipping = useTipping();
-
+  const {user} = useUserHook();
   const [promptFailedTip, setPromptFailedTip] = useState(false);
   const [tipInfoOpened, setTipInfoOpened] = useState(false);
+  const [prompWeb2Users, setPrompWeb2Users] = useState(false);
+
+  const {wallets} = user || {wallets: []};
 
   const anonymous = useSelector<RootState, boolean>(
     state => state.userState.anonymous,
     shallowEqual,
   );
+
+  const isWeb2Users = !wallets.length && !anonymous;
 
   const icon = <SvgIcon color="inherit" component={CurrencyDollarIcon} viewBox="0 0 24 24" />;
 
@@ -71,11 +80,24 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
     setTipInfoOpened(false);
   };
 
+  const handleCloseConnectWalletWarningPrompt = () => {
+    setPrompWeb2Users(false);
+  };
+
+  const handleConnectWeb3Wallet = () => {
+    router.push(`/wallet?type=manage`);
+  };
+
   const handleSendTip = async () => {
     let receiver: WithWalletDetail<User | People> | WithWalletDetail<People> | null = null;
 
     if (anonymous) {
       setTipInfoOpened(true);
+      return;
+    }
+
+    if (isWeb2Users) {
+      setPrompWeb2Users(true);
       return;
     }
 
@@ -146,6 +168,25 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
         <div className={styles.wrapperButton}>
           <Button variant="contained" color="primary" onClick={handleCloseTipInfo}>
             Back
+          </Button>
+        </div>
+      </PromptComponent>
+
+      <PromptComponent
+        icon="warning"
+        title={i18n.t('Tipping.Prompt_Web2.Title')}
+        subtitle={i18n.t('Tipping.Prompt_Web2.Subtitle')}
+        open={prompWeb2Users}
+        onCancel={handleCloseConnectWalletWarningPrompt}>
+        <div className={styles.wrapperButtonFlex}>
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={handleCloseConnectWalletWarningPrompt}>
+            Cancel
+          </Button>
+          <Button variant="contained" color="primary" onClick={handleConnectWeb3Wallet}>
+            Connect Wallet
           </Button>
         </div>
       </PromptComponent>
