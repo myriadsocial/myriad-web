@@ -83,7 +83,21 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
             if (error) {
               const {statusCode} = error.getErrorData();
               let message: string = error.message;
-
+              if (statusCode === 422) {
+                return confirm({
+                  title: i18n.t('LiteVersion.LimitTitlePost', {count: 0}),
+                  description: i18n.t('LiteVersion.LimitDescPost'),
+                  icon: 'warning',
+                  confirmationText: i18n.t('LiteVersion.ConnectWallet'),
+                  cancellationText: i18n.t('LiteVersion.MaybeLater'),
+                  onConfirm: () => {
+                    router.push({pathname: '/wallet', query: {type: 'manage'}});
+                  },
+                  onCancel: () => {
+                    undefined;
+                  },
+                });
+              }
               if ([400, 403, 404, 409].includes(statusCode)) {
                 message = i18n.t(`Home.RichText.Prompt_Import.Error.${statusCode}`);
               }

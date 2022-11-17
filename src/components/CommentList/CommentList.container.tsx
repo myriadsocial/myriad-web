@@ -101,18 +101,37 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
         section: comment.section ?? section,
       } as CommentProps;
 
-      reply(user, attributes, () => {
-        if (downvoting) {
-          dispatch(
-            downvote(downvoting, section, (vote: Vote) => {
-              // update vote count if reference is a comment
-              if ('section' in downvoting) {
-                updateDownvote(downvoting.id, downvoting.metric.downvotes + 1, vote);
-              }
-            }),
-          );
-        }
-      });
+      reply(
+        user,
+        attributes,
+        () => {
+          if (downvoting) {
+            dispatch(
+              downvote(downvoting, section, (vote: Vote) => {
+                // update vote count if reference is a comment
+                if ('section' in downvoting) {
+                  updateDownvote(downvoting.id, downvoting.metric.downvotes + 1, vote);
+                }
+              }),
+            );
+          }
+        },
+        () => {
+          confirm({
+            title: i18n.t('LiteVersion.LimitTitlePost', {count: 0}),
+            description: i18n.t('LiteVersion.LimitDescPost'),
+            icon: 'warning',
+            confirmationText: i18n.t('LiteVersion.ConnectWallet'),
+            cancellationText: i18n.t('LiteVersion.MaybeLater'),
+            onConfirm: () => {
+              router.push({pathname: '/wallet', query: {type: 'manage'}});
+            },
+            onCancel: () => {
+              undefined;
+            },
+          });
+        },
+      );
 
       !user.fullAccess && _handlePostNotFullAccess();
     }
