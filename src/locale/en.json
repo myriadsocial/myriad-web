@@ -252,6 +252,7 @@
     "Profile": "Profile",
     "Logout": "Log out",
     "Network": "Network",
+    "NotConnected": "Not Connected",
     "Wallet": "Wallet"
   },
   "Profile": {
@@ -678,6 +679,10 @@
     "Prompt_Mobile": {
       "Title": "Send Tip",
       "Subtitle": "Appreciate others by sending tips with cryptocurrencies."
+    },
+    "Prompt_Web2": {
+      "Title": "Wallet Not Connected",
+      "Subtitle": "You don’t have any wallet connected to your account, let’s try to connect your wallet to send tip"
     },
     "Prompt_Success": {
       "Title": "Tip sent!",
@@ -1176,6 +1181,7 @@
     "Confirm":"Confirm",
     "CreateAccountEmail":"Create a new account",
     "CreateAccountEmailDesc":"You will create a new account. You can still add a crypto wallet later.",
+    "LimitDescProfile":"is using lite version of Myriad. You can only send a friend request to users with active wallet.",
     "LimitTitleExperiance":"Create Experience Limit Reached!",
     "LimitTitleFriends":"Unable to Add Friend",
     "LimitDescExperiance":"You are currently using lite version of Myriad. You can only create up to 5 experience! Connect Web 3.0 Wallet to create more experience",
@@ -1183,7 +1189,7 @@
     "MaybeLater":"Maybe Later",
     "ConnectWallet":"Connect Web 3.0 Wallet",
     "DisclaimerEditProfile":"You are currently using lite version of Myriad. You can edit only the display name. Connect Web 3.0 Wallet to have all access in editing your profile",
-    "LimitTitlePost":"You have 0 the remaining posts",
+    "LimitTitlePost":"You have {{count}} the remaining posts",
     "LimitDescPost":"You are currently using lite version of Myriad. You can post up to 6 times a day and will be reset every 00:00 UTC. Connect Web 3.0 Wallet to post without restriction."
   }
 }

@@ -19,3 +19,13 @@ export enum Privacy {
   PUBLIC = 'public',
   PRIVATE = 'private',
 }
+
+export type ResendVerificationEmailPayloadType = {
+  email: string;
+  callbackURL: string;
+};
+
+export type UpdateEmailPayloadType = {
+  email: string;
+  token: string;
+};

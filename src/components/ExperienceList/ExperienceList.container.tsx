@@ -10,6 +10,7 @@ import {ExperienceList} from './ExperienceList';
 import {ExperienceListRightBar} from './ExperienceListRightBar';
 import {useExperienceList} from './hooks/use-experience-list.hook';
 
+import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {Skeleton} from 'src/components/Expericence';
 import {LoadMoreComponent} from 'src/components/atoms/LoadMore/LoadMore';
@@ -58,7 +59,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
   const style = useStyles(props);
   const router = useRouter();
   const enqueueSnackbar = useEnqueueSnackbar();
-
+  const confirm = useConfirm();
   const user = useSelector<RootState, User | undefined>(
     state => state.userState.user,
     shallowEqual,
@@ -76,6 +77,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
     userExperiencesMeta,
   } = useExperienceHook();
   const {list: experiences} = useExperienceList(owner);
+  const totalOwnedExperience = userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
 
   const handleViewPostList = (type: TimelineType, userExperience: WrappedExperience) => {
     if (filterTimeline) {
@@ -96,14 +98,29 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
   const handleCloneExperience = (experienceId: string) => {
     if (!enableClone) return;
 
-    const totalOwnedExperience = userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
-    if (totalOwnedExperience >= 10) {
-      enqueueSnackbar({
-        message: i18n.t('Experience.List.Alert'),
-        variant: 'warning',
+    if (totalOwnedExperience >= 5 && !user.fullAccess && user.fullAccess !== undefined) {
+      confirm({
+        title: i18n.t('LiteVersion.LimitTitleExperiance'),
+        description: i18n.t('LiteVersion.LimitDescExperiance'),
+        icon: 'warning',
+        confirmationText: i18n.t('LiteVersion.ConnectWallet'),
+        cancellationText: i18n.t('LiteVersion.MaybeLater'),
+        onConfirm: () => {
+          router.push({pathname: '/wallet', query: {type: 'manage'}});
+        },
+        onCancel: () => {
+          undefined;
+        },
       });
     } else {
-      router.push(`/experience/${experienceId}/clone`);
+      if (totalOwnedExperience >= 10) {
+        enqueueSnackbar({
+          message: i18n.t('Experience.List.Alert'),
+          variant: 'warning',
+        });
+      } else {
+        router.push(`/experience/${experienceId}/clone`);
+      }
     }
   };
 

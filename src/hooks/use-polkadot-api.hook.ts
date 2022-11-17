@@ -52,6 +52,7 @@ export const usePolkadotApi = () => {
 
     for (const socialTip of socialTips) {
       if (socialTip.length === 0) continue;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       for (const [_, rawTipBalance] of socialTip as [StorageKey<AnyTuple>, Codec][]) {
         const tipsBalance = rawTipBalance.toHuman() as unknown as TipsResult;
         const ftIdentifier = tipsBalance.tipsBalanceInfo.ftIdentifier;
@@ -77,6 +78,7 @@ export const usePolkadotApi = () => {
       }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     for (const [_, rawTipBalance] of userTips as [StorageKey<AnyTuple>, Codec][]) {
       const tipsBalance = rawTipBalance.toHuman() as unknown as TipsResult;
       const ftIdentifier = tipsBalance.tipsBalanceInfo.ftIdentifier;
