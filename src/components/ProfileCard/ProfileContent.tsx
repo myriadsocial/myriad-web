@@ -42,7 +42,7 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
 
   const router = useRouter();
 
-  const {wallets} = user;
+  const {wallets} = user || {wallets: []};
 
   const isWeb2Users = !wallets.length && !anonymous;
 
