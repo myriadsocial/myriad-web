@@ -87,7 +87,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
   };
 
   const handleCloneExperience = () => {
-    if (totalOwnedExperience >= 5 || !user.fullAccess || user.fullAccess !== undefined) {
+    if (totalOwnedExperience >= 5 && !user.fullAccess && user.fullAccess !== undefined) {
       confirm({
         title: i18n.t('LiteVersion.LimitTitleExperiance'),
         description: i18n.t('LiteVersion.LimitDescExperiance'),
