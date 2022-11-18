@@ -40,7 +40,7 @@ export const useStyles = makeStyles(() =>
       width: 108,
     },
     wrapperCard: {height: 108, width: 108},
-    textMethod: {fontSize: 11.5, fontWeight: 600, color: 'black'},
+    textMethod: {fontSize: 11.2, fontWeight: 600, color: 'black'},
     description: {
       textAlign: 'center',
       fontSize: 10,
