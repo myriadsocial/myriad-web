@@ -19,14 +19,13 @@ import {
   CircularProgress,
 } from '@material-ui/core';
 
-import validator from 'validator';
-
 import {useStyles} from './Settings.styles';
 
 import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {RootState} from 'src/reducers';
 import {sendVerificationEmail, updateEmail, deleteEmail} from 'src/reducers/config/actions';
+import validator from 'validator';
 
 const {publicRuntimeConfig} = getConfig();
 

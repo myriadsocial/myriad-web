@@ -3,11 +3,10 @@ import {useNavigate} from 'react-router';
 
 import {Button, TextField, Typography} from '@material-ui/core';
 
-import validator from 'validator';
-
 import {useStyles} from './LoginByEmail.style';
 
 import i18n from 'src/locale';
+import validator from 'validator';
 
 type LoginByEmailProps = {
   onNext: (successCallback: () => void, failedCallback: () => void, email: string) => Promise<void>;
