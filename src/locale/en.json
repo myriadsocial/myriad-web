@@ -157,7 +157,8 @@
     "Description": "A social platform that’s entirely under your control. Remain anonymous, look for your own topics, choose your interface and control what you see.",
     "Alert": {
       "Title": "Login failed",
-      "Message": "Something wrong when try to loggedin."
+      "Message": "Something wrong when try to loggedin.",
+      "Invalid_OTP": "Your sign in link is invalid. Please try again."
     },
     "Layout": {
       "Title_left": "Social Media with ",
