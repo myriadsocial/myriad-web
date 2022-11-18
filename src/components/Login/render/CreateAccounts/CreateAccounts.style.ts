@@ -15,6 +15,9 @@ export const useStyles = makeStyles((theme: Theme) =>
         marginRight: 0,
       },
     },
+    box: {
+      position: 'relative',
+    },
     textEmail: {fontSize: 14, fontWeight: 600, marginLeft: 8, color: 'black'},
     textTitle: {fontSize: 16, color: 'black', fontWeight: 600},
     wrapperEmail: {
@@ -62,6 +65,13 @@ export const useStyles = makeStyles((theme: Theme) =>
       '& .MuiSvgIcon-root': {
         fill: 'currentColor',
       },
+    },
+    count: {
+      fontSize: 12,
+      color: theme.palette.text.secondary,
+      position: 'absolute',
+      right: 0,
+      bottom: 32,
     },
   }),
 );
