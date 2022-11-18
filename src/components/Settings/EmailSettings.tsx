@@ -25,6 +25,7 @@ import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {RootState} from 'src/reducers';
 import {sendVerificationEmail, updateEmail, deleteEmail} from 'src/reducers/config/actions';
+import validator from 'validator';
 
 const {publicRuntimeConfig} = getConfig();
 
@@ -35,6 +36,10 @@ const EmailSetting = () => {
   const loading = useSelector<RootState>(({configState: {loading}}) => loading);
   const timeOutCountDown = useRef(null);
   const [emailValue, setEmail] = useState('');
+  const [error, setError] = useState({
+    isError: false,
+    message: '',
+  });
   const [isPromptDialogOpen, setIsPromptDialogOpen] = useState(false);
   const [countDown, setCountDown] = useState(30);
   const [isWeb3AddEmailAddress, setIsWeb3AddEmailAddress] = useState(false);
@@ -84,8 +89,23 @@ const EmailSetting = () => {
     }
   }, [dispatch, token, newEmail, push, isDelete]);
 
-  const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
+  const onChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const input = event.target.value;
+
+    if (!input.length) {
+      setError({isError: false, message: ''});
+    } else if (!validator.isEmail(input)) {
+      setError({
+        isError: true,
+        message: 'Please enter a valid email!',
+      });
+    } else {
+      setError({
+        isError: false,
+        message: '',
+      });
+    }
+    setEmail(event.target.value);
   };
 
   const onClosePromptDialog = () => {
@@ -141,7 +161,7 @@ const EmailSetting = () => {
         open={isPromptDialogOpen}
         icon="success"
         title="Your Verifiaction Link Has Been Sent"
-        subtitle={`We have sent you an email from the address ${emailValue} Check your inbox and click that link in order to verify your email address. 
+        subtitle={`We have sent you an email from the address ${emailValue} Check your inbox and click that link in order to verify your email address.
 Don’t forget to check your spam folder!`}
         onCancel={() => null}>
         <>
@@ -196,6 +216,8 @@ Don’t forget to check your spam folder!`}
               style={{marginBottom: 'unset'}}
               onChange={onChangeEmail}
               disabled={isWeb2users || !isWeb3UsersAndDontHaveEmail}
+              error={error.isError}
+              helperText={error.isError ? error.message : ''}
             />
             <Button
               size="small"
