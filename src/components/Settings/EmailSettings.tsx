@@ -36,6 +36,10 @@ const EmailSetting = () => {
   const loading = useSelector<RootState>(({configState: {loading}}) => loading);
   const timeOutCountDown = useRef(null);
   const [emailValue, setEmail] = useState('');
+  const [error, setError] = useState({
+    isError: false,
+    message: '',
+  });
   const [isPromptDialogOpen, setIsPromptDialogOpen] = useState(false);
   const [countDown, setCountDown] = useState(30);
   const [isWeb3AddEmailAddress, setIsWeb3AddEmailAddress] = useState(false);
@@ -50,11 +54,6 @@ const EmailSetting = () => {
   useEffect(() => {
     setEmail(email);
   }, [email]);
-
-  const [error, setError] = useState({
-    isError: false,
-    message: '',
-  });
 
   useEffect(() => {
     if (countDown === 30) {
