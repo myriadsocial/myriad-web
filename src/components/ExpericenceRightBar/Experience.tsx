@@ -103,6 +103,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
         },
       });
     } else {
+      console.log('ok');
       handleCloseSettings();
 
       if (onClone) {

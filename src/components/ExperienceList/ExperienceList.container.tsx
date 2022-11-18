@@ -96,6 +96,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
   };
 
   const handleCloneExperience = (experienceId: string) => {
+    console.log('enableClone', enableClone);
     if (!enableClone) return;
 
     if (totalOwnedExperience >= 5 && !user.fullAccess && user.fullAccess !== undefined) {
