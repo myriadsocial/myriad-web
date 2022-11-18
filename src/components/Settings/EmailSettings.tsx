@@ -28,7 +28,7 @@ import {sendVerificationEmail, updateEmail, deleteEmail} from 'src/reducers/conf
 import validator from 'validator';
 
 const {publicRuntimeConfig} = getConfig();
-const countDownTime = 60
+const countDownTime = 60;
 
 const EmailSetting = () => {
   const styles = useStyles();
@@ -57,8 +57,8 @@ const EmailSetting = () => {
   }, [email]);
 
   useEffect(() => {
-    if(countDown <= 0) {
-      clearInterval(timeOutCountDown.current)
+    if (countDown <= 0) {
+      clearInterval(timeOutCountDown.current);
     }
     if (countDown === countDownTime) {
       timeOutCountDown.current = setInterval(() => {
@@ -159,7 +159,7 @@ const EmailSetting = () => {
   return (
     <Paper elevation={0} className={styles.root}>
       <PromptComponent
-        open={isPromptDialogOpen} 
+        open={isPromptDialogOpen}
         icon="success"
         title="Your Verifiaction Link Has Been Sent"
         subtitle={`We have sent you an email from the address ${emailValue} Check your inbox and click that link in order to verify your email address.
