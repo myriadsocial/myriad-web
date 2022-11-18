@@ -19,6 +19,8 @@ import {
   CircularProgress,
 } from '@material-ui/core';
 
+import validator from 'validator';
+
 import {useStyles} from './Settings.styles';
 
 import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
@@ -49,6 +51,11 @@ const EmailSetting = () => {
   useEffect(() => {
     setEmail(email);
   }, [email]);
+
+  const [error, setError] = useState({
+    isError: false,
+    message: '',
+  });
 
   useEffect(() => {
     if (countDown === 30) {
@@ -84,8 +91,23 @@ const EmailSetting = () => {
     }
   }, [dispatch, token, newEmail, push, isDelete]);
 
-  const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
+  const onChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const input = event.target.value;
+
+    if (!input.length) {
+      setError({isError: false, message: ''});
+    } else if (!validator.isEmail(input)) {
+      setError({
+        isError: true,
+        message: 'Please enter a valid email!',
+      });
+    } else {
+      setError({
+        isError: false,
+        message: '',
+      });
+    }
+    setEmail(event.target.value);
   };
 
   const onClosePromptDialog = () => {
@@ -141,7 +163,7 @@ const EmailSetting = () => {
         open={isPromptDialogOpen}
         icon="success"
         title="Your Verifiaction Link Has Been Sent"
-        subtitle={`We have sent you an email from the address ${emailValue} Check your inbox and click that link in order to verify your email address. 
+        subtitle={`We have sent you an email from the address ${emailValue} Check your inbox and click that link in order to verify your email address.
 Don’t forget to check your spam folder!`}
         onCancel={() => null}>
         <>
@@ -196,6 +218,8 @@ Don’t forget to check your spam folder!`}
               style={{marginBottom: 'unset'}}
               onChange={onChangeEmail}
               disabled={isWeb2users || !isWeb3UsersAndDontHaveEmail}
+              error={error.isError}
+              helperText={error.isError ? error.message : ''}
             />
             <Button
               size="small"

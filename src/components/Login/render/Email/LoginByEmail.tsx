@@ -3,6 +3,8 @@ import {useNavigate} from 'react-router';
 
 import {Button, TextField, Typography} from '@material-ui/core';
 
+import validator from 'validator';
+
 import {useStyles} from './LoginByEmail.style';
 
 import i18n from 'src/locale';
@@ -20,14 +22,12 @@ const LoginByEmail = ({onNext}: LoginByEmailProps) => {
     message: '',
   });
 
-  const isEmail = (email: string) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const input = event.target.value;
 
     if (!input.length) {
       setError({isError: false, message: ''});
-    } else if (!isEmail(input)) {
+    } else if (!validator.isEmail(input)) {
       setError({
         isError: true,
         message: 'Please enter a valid email!',
