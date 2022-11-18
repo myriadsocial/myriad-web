@@ -17,7 +17,13 @@ type useCommentHookProps = {
   hasMoreComment: boolean;
   loadInitComment: (section?: SectionType) => void;
   loadMoreComment: (section?: SectionType) => void;
-  reply: (user: User, comment: CommentProps, callback?: () => void) => void;
+  reply: (
+    user: User,
+    comment: CommentProps,
+    callback?: () => void,
+    callbackError?: () => void,
+  ) => void;
+
   updateUpvote: (commentId: string, total: number, vote: Vote) => void;
   updateDownvote: (commentId: string, total: number, vote: Vote) => void;
   updateRemoveUpvote: (commentId: string) => void;
@@ -100,36 +106,44 @@ export const useCommentHook = (referenceId: string): useCommentHookProps => {
     }
   };
 
-  const reply = async (user: User, comment: CommentProps, callback?: () => void) => {
-    const data = await CommentAPI.reply(comment);
-    const postId = data.postId;
+  const reply = async (
+    user: User,
+    comment: CommentProps,
+    callback?: () => void,
+    callbackError?: () => void,
+  ) => {
+    try {
+      const data = await CommentAPI.reply(comment);
 
-    // if replying post
-    if (comment.referenceId === referenceId) {
-      setComments(prevComments => [{...data, user}, ...prevComments]);
-    } else {
-      const newComment = comments.map(item => {
-        if (item.id === data.referenceId && item.replies) {
-          item.replies.unshift({...data, user});
-        }
+      const postId = data.postId;
+      if (comment.referenceId === referenceId) {
+        setComments(prevComments => [{...data, user}, ...prevComments]);
+      } else {
+        const newComment = comments.map(item => {
+          if (item.id === data.referenceId && item.replies) {
+            item.replies.unshift({...data, user});
+          }
 
-        if (item.replies) {
-          item.replies.map(reply => {
-            if (reply.id === data.referenceId && reply.replies) {
-              reply.replies.unshift({...data, user});
-            }
-            return reply;
-          });
-        }
-        return item;
-      });
+          if (item.replies) {
+            item.replies.map(reply => {
+              if (reply.id === data.referenceId && reply.replies) {
+                reply.replies.unshift({...data, user});
+              }
+              return reply;
+            });
+          }
+          return item;
+        });
 
-      setComments(newComment);
+        setComments(newComment);
+      }
+
+      dispatch(increaseCommentCount(postId, comment.section));
+
+      callback && callback();
+    } catch (error) {
+      callbackError();
     }
-
-    dispatch(increaseCommentCount(postId, comment.section));
-
-    callback && callback();
   };
 
   const updateUpvote = (commentId: string, total: number, vote: Vote) => {
