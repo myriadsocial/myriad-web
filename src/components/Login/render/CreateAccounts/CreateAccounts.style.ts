@@ -15,6 +15,9 @@ export const useStyles = makeStyles((theme: Theme) =>
         marginRight: 0,
       },
     },
+    box: {
+      position: 'relative',
+    },
     textEmail: {fontSize: 14, fontWeight: 600, marginLeft: 8, color: 'black'},
     textTitle: {fontSize: 16, color: 'black', fontWeight: 600},
     wrapperEmail: {

@@ -281,11 +281,7 @@ export const Login: React.FC<LoginProps> = props => {
             index={false}
             path="/createAccounts"
             element={
-              <CreateAccounts
-                email={email}
-                account={selectedAccount}
-                checkUsernameAvailability={checkUsernameAvailable}
-              />
+              <CreateAccounts email={email} checkUsernameAvailability={checkUsernameAvailable} />
             }
           />
 

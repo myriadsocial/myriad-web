@@ -37,8 +37,6 @@ export default function CreateAccounts(props: ProfileProps) {
   const confirm = useConfirm();
   const navigate = useNavigate();
   const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
-  // const [displayName, setDisplayName] = useState<string>('');
-  // const [userName, setUserName] = useState<string>('');
 
   const [profile, setProfile] = useState({
     name: {
@@ -53,8 +51,6 @@ export default function CreateAccounts(props: ProfileProps) {
     },
   });
   const [isTermApproved, setIsTermApproved] = useState<boolean>(false);
-
-  console.log('profile', profile);
 
   const toggleTermApproved = () => {
     setIsTermApproved(!isTermApproved);
@@ -298,68 +294,38 @@ export default function CreateAccounts(props: ProfileProps) {
         You can only set your username once, and will be unique each instance
       </Typography>
       <div className={styles.wrapperForm}>
-        <TextField
-          id="name"
-          label={i18n.t('Login.Profile.Placeholder_Display_Name')}
-          helperText={profile.name.helper}
-          error={profile.name.error}
-          fullWidth
-          variant="outlined"
-          onChange={handleChangeName}
-          inputProps={{maxLength: DISPLAY_NAME_MAX_LENGTH}}
-        />
-        <Typography className={`${styles.count}`} component="span">
-          ({profile.name.value.length}/{DISPLAY_NAME_MAX_LENGTH})
-        </Typography>
-        <TextField
-          id="username"
-          label={i18n.t('Login.Profile.Placeholder_Username')}
-          helperText={profile.username.helper}
-          error={profile.username.error}
-          fullWidth
-          variant="outlined"
-          onChange={handleChangeUsername}
-          inputProps={{maxLength: USERNAME_MAX_LENGTH, style: {textTransform: 'lowercase'}}}
-        />
-        <Typography className={`${styles.count}`} component="span">
-          ({profile.username.value.length}/{USERNAME_MAX_LENGTH})
-        </Typography>
-        {/* <FormControl fullWidth variant="outlined" style={{marginBottom: 0}}>
-          <InputLabel htmlFor="display-name">Display Name</InputLabel>
-          <OutlinedInput
-            id="username"
-            placeholder="Display Name"
-            value={displayName}
-            labelWidth={90}
-            inputProps={{maxLength: 22}}
-            onChange={e => setDisplayName(e.target.value)}
+        <div className={styles.box}>
+          <TextField
+            id="name"
+            label={i18n.t('Login.Profile.Placeholder_Display_Name')}
+            helperText={profile.name.helper}
+            error={profile.name.error}
+            fullWidth
+            variant="outlined"
+            onChange={handleChangeName}
+            inputProps={{maxLength: DISPLAY_NAME_MAX_LENGTH}}
           />
-        </FormControl> */}
-        {/* <div className={styles.wrapperTextCharacter}>
-          <Typography className={styles.textCharacter}>
-            You can use {22 - displayName.length} or more characters.
+          <Typography className={`${styles.count}`} component="span">
+            ({profile.name.value.length}/{DISPLAY_NAME_MAX_LENGTH})
           </Typography>
-          <Typography className={styles.textCharacter}>{displayName.length}/22</Typography>
-        </div> */}
+        </div>
+        <div className={styles.box}>
+          <TextField
+            id="username"
+            label={i18n.t('Login.Profile.Placeholder_Username')}
+            helperText={profile.username.helper}
+            error={profile.username.error}
+            fullWidth
+            variant="outlined"
+            onChange={handleChangeUsername}
+            inputProps={{maxLength: USERNAME_MAX_LENGTH, style: {textTransform: 'lowercase'}}}
+          />
+          <Typography className={`${styles.count}`} component="span">
+            ({profile.username.value.length}/{USERNAME_MAX_LENGTH})
+          </Typography>
+        </div>
       </div>
       <div className={styles.wrapperForm}>
-        {/* <FormControl fullWidth variant="outlined" style={{marginBottom: 0}}>
-          <InputLabel htmlFor="display-name">Username</InputLabel>
-          <OutlinedInput
-            id="username"
-            placeholder="Username"
-            value={userName}
-            labelWidth={70}
-            inputProps={{maxLength: 16}}
-            onChange={e => setUserName(e.target.value)}
-          />
-        </FormControl> */}
-        {/* <div className={styles.wrapperTextCharacter}>
-          <Typography className={styles.textCharacter}>
-            You can use {16 - userName.length} or more characters.
-          </Typography>
-          <Typography className={styles.textCharacter}>{userName.length}/16</Typography>
-        </div> */}
         <Grid container direction="column" className={styles.condition}>
           <FormControlLabel
             className={styles.termControl}
