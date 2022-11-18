@@ -56,6 +56,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     term: {
       fontWeight: 400,
       textDecoration: 'none',
+      color: '#7342CC',
     },
     checkbox: {
       '& .MuiSvgIcon-root': {
