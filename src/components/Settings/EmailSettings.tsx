@@ -28,6 +28,7 @@ import {sendVerificationEmail, updateEmail, deleteEmail} from 'src/reducers/conf
 import validator from 'validator';
 
 const {publicRuntimeConfig} = getConfig();
+const countDownTime = 60;
 
 const EmailSetting = () => {
   const styles = useStyles();
@@ -41,7 +42,7 @@ const EmailSetting = () => {
     message: '',
   });
   const [isPromptDialogOpen, setIsPromptDialogOpen] = useState(false);
-  const [countDown, setCountDown] = useState(30);
+  const [countDown, setCountDown] = useState(0);
   const [isWeb3AddEmailAddress, setIsWeb3AddEmailAddress] = useState(false);
 
   const {user, wallets} = useUserHook();
@@ -56,13 +57,13 @@ const EmailSetting = () => {
   }, [email]);
 
   useEffect(() => {
-    if (countDown === 30) {
+    if (countDown <= 0) {
+      clearInterval(timeOutCountDown.current);
+    }
+    if (countDown === countDownTime) {
       timeOutCountDown.current = setInterval(() => {
         setCountDown(prev => prev - 1);
       }, 1000);
-    }
-    if (countDown === 0) {
-      clearInterval(timeOutCountDown.current);
     }
   }, [countDown]);
 
@@ -115,7 +116,7 @@ const EmailSetting = () => {
   };
 
   const openPromptDialogAndStartCountDown = () => {
-    setCountDown(30);
+    setCountDown(countDownTime);
     setIsPromptDialogOpen(true);
   };
 
