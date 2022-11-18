@@ -284,8 +284,8 @@ export default function CreateAccounts(props: ProfileProps) {
         <div className={styles.wrapperTextInstance}>
           <Typography className={styles.nameInstance}>Myriad Official</Typography>
           <Typography className={styles.desc}>
-            A social metaverse & metasocial on web3, pulling content from mainstream social media
-            and turning every post into a tipping
+            Decentralized metasocial network, pulling content from mainstream social media and
+            turning every post into a tipping wallet.
           </Typography>
         </div>
       </div>
