@@ -16,11 +16,6 @@ const LoginMagicLink = ({email = ''}: LoginMagicLinkProps) => {
 
   const {requestLink} = useAuthLinkHook();
 
-  useEffect(() => {
-    handleRequestLink();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const classes = useStyles();
 
   const COOLDOWN_TIME = 60;
