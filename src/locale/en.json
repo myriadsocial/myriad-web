@@ -219,7 +219,7 @@
     },
     "Profile": {
       "Wallet": "Wallet Used",
-      "Instance": "Selected Instance",
+      "Instance": "Selected Federated Instance",
       "Title": "Create new account",
       "Subtitle": "You can only set your username once and it will be unique for each instance.",
       "Helper_Text_Name": "You can use {{min_length}} or more characters.",
