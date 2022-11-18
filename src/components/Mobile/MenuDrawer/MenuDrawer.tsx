@@ -2,9 +2,8 @@ import {LogoutIcon} from '@heroicons/react/outline';
 import {MenuIcon} from '@heroicons/react/solid';
 
 import React from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 
-import {useSession} from 'next-auth/react';
 import {useRouter} from 'next/router';
 
 import {
@@ -18,8 +17,8 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import {Skeleton} from 'components/ProfileCard/Network.skeleton';
 import {NetworkOption} from 'components/ProfileCard/NetworkOption/NetworkOption';
+import {CommonWalletIcon} from 'components/atoms/Icons';
 import ShowIf from 'components/common/show-if.component';
 import {useMenuList, MenuId, MenuDetail} from 'src/components/Menu/use-menu-list';
 import {Metric} from 'src/components/Metric';
@@ -32,7 +31,6 @@ import {useAuthHook} from 'src/hooks/auth.hook';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {RootState} from 'src/reducers';
 import {NotificationState} from 'src/reducers/notification/reducer';
-import {clearUser} from 'src/reducers/user/actions';
 
 export const MenuDrawerComponent: React.FC = () => {
   const {total} = useSelector<RootState, NotificationState>(state => state.notificationState);
@@ -45,8 +43,6 @@ export const MenuDrawerComponent: React.FC = () => {
     useUserHook();
 
   const router = useRouter();
-  const dispatch = useDispatch();
-  const {data: session} = useSession();
   const menu = useMenuList(selected);
   const style = useStyles();
 
@@ -99,17 +95,16 @@ export const MenuDrawerComponent: React.FC = () => {
     }
   };
 
+  const handleConnectWeb3Wallet = () => {
+    router.push(`/wallet?type=manage`);
+  };
+
   const handleOpenDrawer = () => {
     setOpenDrawer(!openDrawer);
   };
 
   const handleSignOut = async () => {
-    if (session) {
-      logout();
-    } else {
-      dispatch(clearUser());
-      await router.push(`/login`);
-    }
+    logout();
   };
 
   const openMenu = (item: MenuDetail) => () => {
@@ -180,8 +175,11 @@ export const MenuDrawerComponent: React.FC = () => {
                       {formatAddress(currentWallet, userWalletAddress)}
                     </Typography>
                   </ShowIf>
-                  <ShowIf condition={!currentWallet}>
-                    <Skeleton />
+                  <ShowIf condition={!anonymous && !wallets.length}>
+                    <Button variant="contained" color="primary" onClick={handleConnectWeb3Wallet}>
+                      <CommonWalletIcon viewBox="1 -3.5 20 20" />
+                      <span style={{paddingLeft: '5px'}}>Connect Web 3.0 wallet</span>
+                    </Button>
                   </ShowIf>
                 </ShowIf>
               </div>
