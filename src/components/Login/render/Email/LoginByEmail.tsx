@@ -5,6 +5,7 @@ import {Button, TextField, Typography} from '@material-ui/core';
 
 import {useStyles} from './LoginByEmail.style';
 
+import {useAuthLinkHook} from 'src/hooks/auth-link.hook';
 import i18n from 'src/locale';
 import validator from 'validator';
 
@@ -14,6 +15,7 @@ type LoginByEmailProps = {
 
 const LoginByEmail = ({onNext}: LoginByEmailProps) => {
   const styles = useStyles();
+  const {requestLink} = useAuthLinkHook();
 
   const [email, setEmail] = useState('');
   const [error, setError] = useState({
@@ -45,6 +47,7 @@ const LoginByEmail = ({onNext}: LoginByEmailProps) => {
   const handleNext = () => {
     onNext(
       () => {
+        requestLink(email);
         navigate('/magiclink');
       },
       () => {
