@@ -107,6 +107,10 @@ export const MenuDrawerComponent: React.FC = () => {
     logout();
   };
 
+  const handleLoginOrCreateAccount = () => {
+    router.push('/login');
+  };
+
   const openMenu = (item: MenuDetail) => () => {
     if (item.url === '/wallet' && !user) {
       setOpenPromptDrawer(true);
@@ -158,8 +162,8 @@ export const MenuDrawerComponent: React.FC = () => {
               {/* network */}
               <div className={style.wallet}>
                 <ShowIf condition={anonymous}>
-                  <Button variant="contained" color="primary" onClick={handleSignOut}>
-                    Sign in to connect wallet
+                  <Button variant="contained" color="primary" onClick={handleLoginOrCreateAccount}>
+                    Sign in or Create an Account
                   </Button>
                 </ShowIf>
                 <ShowIf condition={!anonymous}>
