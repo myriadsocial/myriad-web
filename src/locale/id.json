@@ -157,7 +157,8 @@
     "Description": "Platform sosial yang sepenuhnya berada di bawah kendali Anda. Tetap anonim, cari topik Anda sendiri, pilih antarmuka Anda dan kendalikan apa yang Anda lihat.",
     "Alert": {
       "Title": "Login gagal",
-      "Message": "Terjadi kesalahan ketika melakukan login."
+      "Message": "Terjadi kesalahan ketika melakukan login.",
+      "Invalid_OTP": "Tautan masuk anda sudah tidak valid. Silahkan coba lagi"
     },
     "Layout": {
       "Title_left": "Media Sosial dengan ",

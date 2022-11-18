@@ -86,7 +86,7 @@ export const Profile: React.FC<ProfileProps> = props => {
   });
 
   const TEXT =
-    'Metaverse hunter for all. Join us to get more metaverse hunter lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor';
+    'Decentralized metasocial network, pulling content from mainstream social media and turning every post into a tipping wallet.';
 
   useEffect(() => {
     let nameHelper = i18n.t('Login.Profile.Helper_Text_Name', {
@@ -128,7 +128,7 @@ export const Profile: React.FC<ProfileProps> = props => {
 
   const walletIcons = useMemo(
     () => ({
-      polkadot: <PolkadotNetworkIcon />,
+      'polkadot{.js}': <PolkadotNetworkIcon />,
       sender: <SenderWalletDisabledIcon />,
       near: <NearNetworkIcon />,
       'my-near': <MyNearWalletIcon />,
@@ -346,13 +346,11 @@ export const Profile: React.FC<ProfileProps> = props => {
     });
   }, [handleSubmit]);
 
-  const [text] = useState(TEXT);
+  // const [expanded, setExpanded] = useState(false);
 
-  const [expanded, setExpanded] = useState(false);
-
-  const handleExpand = () => {
-    setExpanded(!expanded);
-  };
+  // const handleExpand = () => {
+  //   setExpanded(!expanded);
+  // };
 
   const toggleTermApproved = () => {
     setTermApproved(!termApproved);
@@ -415,20 +413,18 @@ export const Profile: React.FC<ProfileProps> = props => {
                     fontSize={14}
                     fontWeight="fontWeightRegular"
                     style={{color: 'rgba(115, 66, 204, 1)'}}>
-                    Myriad
+                    Myriad Official
                   </Box>
                   <Box fontSize={12} fontWeight="fontWeightRegular" style={{color: '#0A0A0A'}}>
-                    {text.split(' ').length > 10 && !expanded
-                      ? `${text.split(' ').slice(0, 10).join(' ')}...`
-                      : TEXT}
+                    {TEXT}
                   </Box>
-                  <Box
+                  {/* <Box
                     fontSize={10}
                     fontWeight="fontWeightBold"
                     style={{color: '#6E3FC3', textAlign: 'end', cursor: 'pointer'}}
                     onClick={handleExpand}>
                     {expanded ? 'Less' : 'More'}
-                  </Box>
+                  </Box> */}
                 </div>
               </div>
             </div>

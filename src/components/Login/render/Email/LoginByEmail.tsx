@@ -5,7 +5,9 @@ import {Button, TextField, Typography} from '@material-ui/core';
 
 import {useStyles} from './LoginByEmail.style';
 
+import {useAuthLinkHook} from 'src/hooks/auth-link.hook';
 import i18n from 'src/locale';
+import validator from 'validator';
 
 type LoginByEmailProps = {
   onNext: (successCallback: () => void, failedCallback: () => void, email: string) => Promise<void>;
@@ -13,6 +15,7 @@ type LoginByEmailProps = {
 
 const LoginByEmail = ({onNext}: LoginByEmailProps) => {
   const styles = useStyles();
+  const {requestLink} = useAuthLinkHook();
 
   const [email, setEmail] = useState('');
   const [error, setError] = useState({
@@ -20,14 +23,12 @@ const LoginByEmail = ({onNext}: LoginByEmailProps) => {
     message: '',
   });
 
-  const isEmail = (email: string) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const input = event.target.value;
 
     if (!input.length) {
       setError({isError: false, message: ''});
-    } else if (!isEmail(input)) {
+    } else if (!validator.isEmail(input)) {
       setError({
         isError: true,
         message: 'Please enter a valid email!',
@@ -46,6 +47,7 @@ const LoginByEmail = ({onNext}: LoginByEmailProps) => {
   const handleNext = () => {
     onNext(
       () => {
+        requestLink(email);
         navigate('/magiclink');
       },
       () => {

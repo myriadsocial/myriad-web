@@ -1,4 +1,3 @@
-import {useState} from 'react';
 import {useNavigate} from 'react-router';
 
 import {IconButton, Tooltip, Typography, withStyles} from '@material-ui/core';
@@ -7,13 +6,11 @@ import {useStyles} from './SigninMethod.style';
 
 import {IcInfo, LoginWeb2, LoginWeb3} from 'src/images/illustration';
 
-export default function SigninMethod() {
+export default function SigninMethod({disableSignIn}: {disableSignIn: boolean}) {
   const navigate = useNavigate();
   const styles = useStyles();
-  const [methodSelected, setMethodSelected] = useState<string>('');
 
   const handleSelected = ({method}: {method: string}) => {
-    setMethodSelected(method);
     if (method === 'web2') {
       navigate('/email');
     } else {
@@ -21,7 +18,7 @@ export default function SigninMethod() {
     }
   };
 
-  const CardSign = ({image, title, desc, onClick, tooltip, selected}) => {
+  const CardSign = ({image, title, desc, onClick, tooltip, disabled}) => {
     const BlueOnGreenTooltip = withStyles({
       tooltip: {
         color: 'black',
@@ -30,12 +27,13 @@ export default function SigninMethod() {
     })(Tooltip);
     return (
       <div className={styles.wrapperCard}>
-        <div className={selected ? styles.cardSelected : styles.card}>
+        <div className={disabled ? styles.disabledCard : styles.card}>
           <button
+            disabled={disabled}
             type="button"
             onClick={onClick}
-            style={{border: 0, background: 'white', cursor: 'pointer'}}>
-            {image}
+            style={{border: 0, background: 'white', cursor: !disabled ? 'pointer' : 'progress'}}>
+            <span style={{opacity: !disabled ? '1' : '0.5'}}>{image}</span>
             <Typography className={styles.textMethod}>{title}</Typography>
           </button>
         </div>
@@ -57,21 +55,21 @@ export default function SigninMethod() {
       <Typography className={styles.textSubtitle}>Subtitle: Choose your sign-in methods</Typography>
       <div className={styles.wrapperCards}>
         <CardSign
-          selected={methodSelected === 'web3'}
-          title={'Web 3.0'}
+          title={'Crypto Wallet'}
           desc="Sign in via Web 3.0"
-          image={<LoginWeb3 />}
+          image={<LoginWeb3 className={{opacity: 0.1}} />}
           tooltip="Sign-in with a crypto wallet to unlock all the features of Myriad-Social."
           onClick={() => handleSelected({method: 'web3'})}
+          disabled={disableSignIn}
         />
         <div className={styles.textOr}>or</div>
         <CardSign
-          selected={methodSelected === 'web2'}
-          title={'Web 2.0'}
-          desc="Sign in via Email"
+          title={'Email'}
+          desc="Sign in via Web 2.0"
           image={<LoginWeb2 />}
           onClick={() => handleSelected({method: 'web2'})}
-          tooltip="Signing-in via email lets you use many of Myriad’s features. You can get the real deal later by adding a crypto wallet address in your wallet settings. We will not use your email for commercial purposes."
+          disabled={disableSignIn}
+          tooltip="Sign-in via email lets you use many of Myriad’s features. You can get the real deal later by adding a crypto wallet address in your wallet settings. We will not use your email for commercial purposes."
         />
       </div>
     </div>

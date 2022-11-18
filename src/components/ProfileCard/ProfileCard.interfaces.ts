@@ -12,6 +12,7 @@ export type ProfileCardProps = {
   isMobile?: boolean;
   notificationCount: number;
   handleSignOut?: () => void;
+  handleLoginOrCreateAccount?: () => void;
   handleConnectWeb3Wallet?: () => void;
   onViewProfile: () => void;
   onShowNotificationList: () => void;

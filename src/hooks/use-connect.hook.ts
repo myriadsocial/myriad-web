@@ -13,7 +13,7 @@ import * as WalletAPI from 'src/lib/api/wallet';
 import {toHexPublicKey} from 'src/lib/crypto';
 import {PolkadotJs} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
-import {fetchUser, fetchUserWallets} from 'src/reducers/user/actions';
+import {fetchUser, fetchUserWallets, setFullAccess} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 export interface NearPayload {
@@ -103,6 +103,11 @@ export const useConnect = () => {
         await WalletAPI.connectNetwork(payload, user.id);
       }
 
+      if (!user.fullAccess) {
+        await dispatch(fetchUser());
+      }
+
+      dispatch(setFullAccess());
       dispatch(fetchUserWallets());
 
       return true;

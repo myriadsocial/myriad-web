@@ -119,6 +119,7 @@ export const FriendListContainer: React.FC<FriendListContainerProps> = props => 
       onFilter={handleFilterFriend}
       onSort={handleSortFriend}
       onLoadNextPage={handleLoadMore}
+      isProfile={isProfile}
     />
   );
 };

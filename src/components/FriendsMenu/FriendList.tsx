@@ -8,6 +8,7 @@ import Link from 'next/link';
 import {useRouter} from 'next/router';
 
 import {Menu, MenuItem, Grid} from '@material-ui/core';
+import BaseButton from '@material-ui/core/Button';
 import BaseIconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -50,6 +51,7 @@ export type FriendListProps = {
   disableFilter?: boolean;
   disableSort?: boolean;
   friends: Friend[];
+  isProfile: boolean;
   hasMore: boolean;
   onSearch: (query: string) => void;
   onFilter: (type: FriendType) => void;
@@ -73,6 +75,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     onFilter,
     onSort,
     onLoadNextPage,
+    isProfile,
   } = props;
   const style = useStyles({...props, type, disableFilter});
   const router = useRouter();
@@ -85,7 +88,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
 
   const {user: currentUser} = useSelector<RootState, UserState>(state => state.userState);
   const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
-
+  const Button = WithAuthorizeAction(BaseButton);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [currentFriend, setCurrentFriend] = useState<null | UserWithMutual>(null);
 
@@ -229,12 +232,33 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   };
 
   if (friends.length === 0 && !isFiltered) {
-    return (
-      <Empty
-        title={i18n.t('Friends.Empty.Friend_List.Title')}
-        subtitle={i18n.t('Friends.Empty.Friend_List.Subtitle')}
-      />
-    );
+    if (user.fullAccess)
+      return (
+        <Empty
+          title={i18n.t('Friends.Empty.Friend_List.Title')}
+          subtitle={i18n.t('Friends.Empty.Friend_List.Subtitle')}
+        />
+      );
+    if (!isProfile)
+      return (
+        <Empty
+          image={'/images/illustration/EmptyStateFriendReq.svg'}
+          title={'Nothing to see here!'}
+          subtitle="Connect your Web 3.0 wallet to unlock this feature"
+          // eslint-disable-next-line react/no-children-prop
+          children={
+            <div style={{width: '100%', marginTop: 24}}>
+              <Link href={{pathname: '/wallet', query: {type: 'manage'}}} shallow passHref>
+                <Button onClick={() => undefined} color="primary" variant="contained" size="small">
+                  {i18n.t('LiteVersion.ConnectWallet')}
+                </Button>
+              </Link>
+            </div>
+          }
+          withImage
+        />
+      );
+    return <Empty title={'Nothing to see here!'} subtitle="Friend list is empty." />;
   }
 
   return (

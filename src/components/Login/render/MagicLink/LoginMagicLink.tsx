@@ -16,13 +16,9 @@ const LoginMagicLink = ({email = ''}: LoginMagicLinkProps) => {
 
   const {requestLink} = useAuthLinkHook();
 
-  useEffect(() => {
-    handleRequestLink();
-  }, []);
-
   const classes = useStyles();
 
-  const COOLDOWN_TIME = 30;
+  const COOLDOWN_TIME = 60;
 
   const [countDown, setCountDown] = useState(COOLDOWN_TIME);
 
