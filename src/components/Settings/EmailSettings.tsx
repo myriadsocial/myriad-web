@@ -28,6 +28,7 @@ import {sendVerificationEmail, updateEmail, deleteEmail} from 'src/reducers/conf
 import validator from 'validator';
 
 const {publicRuntimeConfig} = getConfig();
+const countDownTime = 60
 
 const EmailSetting = () => {
   const styles = useStyles();
@@ -41,7 +42,7 @@ const EmailSetting = () => {
     message: '',
   });
   const [isPromptDialogOpen, setIsPromptDialogOpen] = useState(false);
-  const [countDown, setCountDown] = useState(30);
+  const [countDown, setCountDown] = useState(0);
   const [isWeb3AddEmailAddress, setIsWeb3AddEmailAddress] = useState(false);
 
   const {user, wallets} = useUserHook();
@@ -56,13 +57,13 @@ const EmailSetting = () => {
   }, [email]);
 
   useEffect(() => {
-    if (countDown === 60) {
-      timeOutCountDown.current = setInterval(() => {
-        setCountDown(prev => prev === 0 ? prev : prev - 1);
-      }, 1000);
+    if(countDown <= 0) {
+      clearInterval(timeOutCountDown.current)
     }
-    if (countDown === 0) {
-      clearInterval(timeOutCountDown.current);
+    if (countDown === countDownTime) {
+      timeOutCountDown.current = setInterval(() => {
+        setCountDown(prev => prev - 1);
+      }, 1000);
     }
   }, [countDown]);
 
@@ -115,7 +116,7 @@ const EmailSetting = () => {
   };
 
   const openPromptDialogAndStartCountDown = () => {
-    setCountDown(60);
+    setCountDown(countDownTime);
     setIsPromptDialogOpen(true);
   };
 
@@ -158,7 +159,7 @@ const EmailSetting = () => {
   return (
     <Paper elevation={0} className={styles.root}>
       <PromptComponent
-        open={isPromptDialogOpen}
+        open={isPromptDialogOpen} 
         icon="success"
         title="Your Verifiaction Link Has Been Sent"
         subtitle={`We have sent you an email from the address ${emailValue} Check your inbox and click that link in order to verify your email address.
