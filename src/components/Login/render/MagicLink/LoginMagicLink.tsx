@@ -18,11 +18,12 @@ const LoginMagicLink = ({email = ''}: LoginMagicLinkProps) => {
 
   useEffect(() => {
     handleRequestLink();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const classes = useStyles();
 
-  const COOLDOWN_TIME = 30;
+  const COOLDOWN_TIME = 60;
 
   const [countDown, setCountDown] = useState(COOLDOWN_TIME);
 
