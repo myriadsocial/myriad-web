@@ -106,7 +106,7 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
         selectable
         owner={experienceType === 'user' ? ExperienceOwner.CURRENT_USER : ExperienceOwner.TRENDING}
         filterTimeline
-        enableClone={experienceType === 'trending'}
+        enableClone={experienceType === 'trending' || experienceType === 'user'}
         enableSubscribe={experienceType === 'trending'}
         hasMore={
           Boolean(user)
