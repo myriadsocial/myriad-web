@@ -56,9 +56,9 @@ const EmailSetting = () => {
   }, [email]);
 
   useEffect(() => {
-    if (countDown === 30) {
+    if (countDown === 60) {
       timeOutCountDown.current = setInterval(() => {
-        setCountDown(prev => prev - 1);
+        setCountDown(prev => prev === 0 ? prev : prev - 1);
       }, 1000);
     }
     if (countDown === 0) {
@@ -115,7 +115,7 @@ const EmailSetting = () => {
   };
 
   const openPromptDialogAndStartCountDown = () => {
-    setCountDown(30);
+    setCountDown(60);
     setIsPromptDialogOpen(true);
   };
 
