@@ -3,6 +3,7 @@ import {useSelector} from 'react-redux';
 import {MemoryRouter as Router, Routes, Route} from 'react-router-dom';
 
 import {signIn} from 'next-auth/react';
+import {useRouter} from 'next/router';
 
 import {CircularProgress} from '@material-ui/core';
 
@@ -20,6 +21,7 @@ import SigninMethod from './render/SignInMethod/SigninMethod';
 import last from 'lodash/last';
 import LoginMagicLink from 'src/components/Login/render/MagicLink/LoginMagicLink';
 import {useAuthHook} from 'src/hooks/auth.hook';
+import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {useProfileHook} from 'src/hooks/use-profile.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
@@ -40,6 +42,7 @@ export const Login: React.FC<LoginProps> = props => {
   const {redirectAuth, isMobileSignIn} = props;
   const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
 
+  const router = useRouter();
   const styles = useStyles();
 
   const {fetchUserNonce, signInWithExternalAuth, clearNearCache} = useAuthHook();
@@ -47,6 +50,7 @@ export const Login: React.FC<LoginProps> = props => {
   const {connectToNear} = useNearApi();
 
   const {query} = useQueryParams();
+  const {showAlert} = useAlertHook();
 
   const [, setToken] = useState('');
   const [walletType, setWalletType] = useState<WalletTypeEnum | null>(redirectAuth);
@@ -59,6 +63,7 @@ export const Login: React.FC<LoginProps> = props => {
   const [walletLoading, setWalletLoading] = useState(Boolean(redirectAuth));
   const [initialEntries, setInitialEntries] = useState<string[]>(['/']);
   const [email, setEmail] = useState<string>('');
+  const [disableSignIn, setDisableSignIn] = useState<boolean>(false);
 
   useEffect(() => {
     if (redirectAuth === WalletTypeEnum.NEAR || redirectAuth === WalletTypeEnum.MYNEAR) {
@@ -79,14 +84,32 @@ export const Login: React.FC<LoginProps> = props => {
     if (query.token && typeof query.token === 'string' && registeredEmail) {
       const {token} = query;
 
+      setDisableSignIn(true);
+
       signIn('emailCredentials', {
         name: '',
         username: '',
         email: registeredEmail,
         token,
+        redirect: false,
+      }).then(response => {
+        if (response.ok) {
+          router.reload();
+          router.push('/');
+        }
+
+        if (response.error) {
+          showAlert({
+            message: token ? i18n.t('Login.Alert.Invalid_OTP') : i18n.t('Login.Alert.Message'),
+            severity: 'error',
+            title: i18n.t('Login.Alert.Title'),
+          });
+          setDisableSignIn(false);
+        }
       });
 
       setToken(token);
+      router.replace({pathname: '/login', query: {}}, undefined, {shallow: true});
     }
   }, [query, registeredEmail]);
 
@@ -244,7 +267,7 @@ export const Login: React.FC<LoginProps> = props => {
     <div className={styles.root}>
       <Router initialEntries={initialEntries} initialIndex={0}>
         <Routes>
-          <Route index={false} path="/" element={<SigninMethod />} />
+          <Route index={false} path="/" element={<SigninMethod disableSignIn={disableSignIn} />} />
 
           <Route index={false} path="/magiclink" element={<LoginMagicLink email={email} />} />
 

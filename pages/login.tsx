@@ -1,16 +1,12 @@
-import {useEffect} from 'react';
-
 import {getSession} from 'next-auth/react';
 import getConfig from 'next/config';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import {useRouter} from 'next/router';
 
 import AlertComponent from 'src/components/atoms/Alert/Alert.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {LoginLayout} from 'src/components/template/Login';
 import {MobileLayout} from 'src/components/template/Login';
-import {useAlertHook} from 'src/hooks/use-alert.hook';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
 import {initialize} from 'src/lib/api/base';
 import i18n from 'src/locale';
@@ -40,20 +36,6 @@ type IndexPageProps = {
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function LoginPage(props: IndexPageProps) {
   const {mobile, redirectAuth} = props;
-
-  const {query} = useRouter();
-
-  const {showAlert} = useAlertHook();
-
-  useEffect(() => {
-    if (query.error) {
-      showAlert({
-        message: i18n.t('Login.Alert.Message'),
-        severity: 'error',
-        title: i18n.t('Login.Alert.Title'),
-      });
-    }
-  }, [query.error]);
 
   return (
     <>
