@@ -104,6 +104,10 @@ export interface ResetVerifyingSocial extends Action {
   type: constants.RESET_VERIFYING_SOCIAL_ACCOUNT;
 }
 
+export interface SetFullAccess extends Action {
+  type: constants.SET_FULLACCESS;
+}
+
 /**
  * Union Action Types
  */
@@ -125,6 +129,7 @@ export type Actions =
   | FetchUserTransactionDetail
   | SetVerifyingSocial
   | ResetVerifyingSocial
+  | SetFullAccess
   | BaseAction;
 
 /**
@@ -134,6 +139,10 @@ export type Actions =
 export const setUser = (user: User): FetchUser => ({
   type: constants.FETCH_USER,
   user,
+});
+
+export const setFullAccess = (): SetFullAccess => ({
+  type: constants.SET_FULLACCESS,
 });
 
 export const setCurrentUserWallet = (user: User): FetchCurrentUserWallet => {
