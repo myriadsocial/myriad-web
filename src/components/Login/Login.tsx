@@ -277,7 +277,17 @@ export const Login: React.FC<LoginProps> = props => {
             element={<LoginByEmail onNext={checkEmailRegistered} />}
           />
 
-          <Route index={false} path="/createAccounts" element={<CreateAccounts email={email} />} />
+          <Route
+            index={false}
+            path="/createAccounts"
+            element={
+              <CreateAccounts
+                email={email}
+                account={selectedAccount}
+                checkUsernameAvailability={checkUsernameAvailable}
+              />
+            }
+          />
 
           <Route
             index={false}

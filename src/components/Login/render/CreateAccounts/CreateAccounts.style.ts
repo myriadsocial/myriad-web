@@ -63,5 +63,12 @@ export const useStyles = makeStyles((theme: Theme) =>
         fill: 'currentColor',
       },
     },
+    count: {
+      fontSize: 12,
+      color: theme.palette.text.secondary,
+      position: 'absolute',
+      right: 0,
+      bottom: 32,
+    },
   }),
 );
