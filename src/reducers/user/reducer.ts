@@ -184,6 +184,16 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (state = initalSta
       };
     }
 
+    case constants.SET_FULLACCESS: {
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          fullAccess: true,
+        },
+      };
+    }
+
     default: {
       return state;
     }

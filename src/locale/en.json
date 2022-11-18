@@ -157,7 +157,8 @@
     "Description": "A social platform that’s entirely under your control. Remain anonymous, look for your own topics, choose your interface and control what you see.",
     "Alert": {
       "Title": "Login failed",
-      "Message": "Something wrong when try to loggedin."
+      "Message": "Something wrong when try to loggedin.",
+      "Invalid_OTP": "Your sign in link is invalid. Please try again."
     },
     "Layout": {
       "Title_left": "Social Media with ",
@@ -241,7 +242,7 @@
     },
     "Magic_Link": {
       "Title": "Your sign-in link has been sent.",
-      "Subtitle_1": "We have sent you an email from the address ",
+      "Subtitle_1": "We have sent you an email to the address ",
       "Subtitle_2": "Check your inbox and click that link in order to sign-in. Don’t forget to check your spam folder!",
       "Button_Text": "Resend Login Link",
       "Timer_Text": "You can send your sign-in link again after {{time}} second(s)"

@@ -25,10 +25,14 @@ export const useStyles = makeStyles(() =>
       backgroundColor: 'white',
       height: 108,
       width: 108,
+      '&:hover': {
+        borderColor: '#6E3FC3',
+        background: 'rgba(255, 255, 255, 0.8)',
+      },
     },
-    cardSelected: {
+    disabledCard: {
       padding: 10,
-      borderColor: '#6E3FC3',
+      borderColor: '#E0E0E0',
       border: 'solid grey 1px',
       borderRadius: 10,
       backgroundColor: 'white',
@@ -36,7 +40,7 @@ export const useStyles = makeStyles(() =>
       width: 108,
     },
     wrapperCard: {height: 108, width: 108},
-    textMethod: {fontSize: 12, fontWeight: 600, color: 'black'},
+    textMethod: {fontSize: 11.5, fontWeight: 600, color: 'black'},
     description: {
       textAlign: 'center',
       fontSize: 10,
