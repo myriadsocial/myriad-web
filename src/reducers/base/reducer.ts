@@ -12,17 +12,6 @@ const initalState: BaseState = {
 export const BaseReducer: Redux.Reducer<BaseState, Actions> = (state = initalState, action) => {
   switch (action.type) {
     case constants.ACTION_FAILED: {
-      if (action.payload instanceof Error) {
-        return {
-          ...state,
-          error: {
-            severity: 'error',
-            title: action.payload.name,
-            message: action.payload.message,
-          },
-        };
-      }
-
       if (axios.isAxiosError(action.payload)) {
         return {
           ...state,
@@ -30,6 +19,16 @@ export const BaseReducer: Redux.Reducer<BaseState, Actions> = (state = initalSta
             severity: 'error',
             title: action.payload.response?.data.error.name,
             message: action.payload.response?.data.error.message,
+          },
+        };
+      }
+      if (action.payload instanceof Error) {
+        return {
+          ...state,
+          error: {
+            severity: 'error',
+            title: action.payload.name,
+            message: action.payload.message,
           },
         };
       }

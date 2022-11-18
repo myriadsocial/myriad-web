@@ -198,16 +198,16 @@ export const sendVerificationEmail: ThunkActionCreator<Actions, RootState> =
   };
 
 export const updateEmail: ThunkActionCreator<Actions, RootState> =
-  (payload: Parameters<typeof SettingAPI.updateEmail>[0], callbackSuccess: () => void) =>
+  (payload: Parameters<typeof SettingAPI.updateEmail>[0], callbackAfterUpdate: () => void) =>
   async dispatch => {
     dispatch(setLoadingConfig(true));
     try {
       await SettingAPI.updateEmail(payload);
-      callbackSuccess();
     } catch (error) {
       dispatch(setError(error));
     } finally {
       dispatch(setLoadingConfig(false));
+      callbackAfterUpdate();
     }
   };
 

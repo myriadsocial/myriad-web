@@ -86,7 +86,7 @@ export const Profile: React.FC<ProfileProps> = props => {
   });
 
   const TEXT =
-    'Metaverse hunter for all. Join us to get more metaverse hunter lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor';
+    'A social metaverse & metasocial on web3, pulling content from mainstream social media and turning every post into a tipping';
 
   useEffect(() => {
     let nameHelper = i18n.t('Login.Profile.Helper_Text_Name', {
@@ -415,7 +415,7 @@ export const Profile: React.FC<ProfileProps> = props => {
                     fontSize={14}
                     fontWeight="fontWeightRegular"
                     style={{color: 'rgba(115, 66, 204, 1)'}}>
-                    Myriad
+                    Myriad Official
                   </Box>
                   <Box fontSize={12} fontWeight="fontWeightRegular" style={{color: '#0A0A0A'}}>
                     {text.split(' ').length > 10 && !expanded
