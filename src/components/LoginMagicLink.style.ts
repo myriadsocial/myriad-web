@@ -36,6 +36,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
     },
     subtitle: {
+      textAlign: 'center',
       marginBottom: 12,
       '& .MuiTypography-root': {
         color: '#0A0A0A',

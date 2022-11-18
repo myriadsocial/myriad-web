@@ -2,7 +2,6 @@ import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 
 import getConfig from 'next/config';
-import Link from 'next/link';
 
 import {
   Button,
@@ -49,6 +48,10 @@ export default function CreateAccounts({email}: {email: string}) {
     }
   };
 
+  const handleVisitWeb = (url: string) => {
+    window.open(publicRuntimeConfig.appAuthURL + url, '_blank', 'noopener,noreferrer');
+  };
+
   const _showModal = () => {
     confirm({
       title: i18n.t('LiteVersion.CreateAccountEmail'),
@@ -72,15 +75,15 @@ export default function CreateAccounts({email}: {email: string}) {
         <IcEmail />
         <Typography className={styles.textEmail}>{email}</Typography>
       </div>
-      <Typography className={styles.textTitle}>Selected Instance</Typography>
+      <Typography className={styles.textTitle}>Selected Federated Instance</Typography>
       <div className={styles.wrapperInstance}>
         <LogoMyriadCircle />
         <div className={styles.wrapperTextInstance}>
-          <Typography className={styles.nameInstance}>Myriad</Typography>
+          <Typography className={styles.nameInstance}>Myriad Official</Typography>
           <Typography className={styles.desc}>
-            Metaverse hunter for all. Join us to get more metaverse hun...
+            A social metaverse & metasocial on web3, pulling content from mainstream social media
+            and turning every post into a tipping
           </Typography>
-          <Typography className={styles.textSeeMore}>See more</Typography>
         </div>
       </div>
       <Typography className={styles.textTitle}>Create New Account</Typography>
@@ -132,17 +135,19 @@ export default function CreateAccounts({email}: {email: string}) {
             label={
               <Typography style={{color: '#0A0A0A'}}>
                 {i18n.t('Login.Options.Text_Terms_1')}&nbsp;
-                <Link href="/term-of-use" passHref>
-                  <Typography component={'a'} className={styles.term}>
-                    {i18n.t('Login.Options.Text_Terms_2')}
-                  </Typography>
-                </Link>
+                <Typography
+                  component={'a'}
+                  className={styles.term}
+                  onClick={() => handleVisitWeb('/term-of-use')}>
+                  {i18n.t('Login.Options.Text_Terms_2')}
+                </Typography>
                 &nbsp;{i18n.t('Login.Options.Text_Terms_3')}&nbsp;
-                <Link href="/privacy-policy" passHref>
-                  <Typography component={'a'} className={styles.term}>
-                    {i18n.t('Login.Options.Text_Terms_4')}
-                  </Typography>
-                </Link>
+                <Typography
+                  component={'a'}
+                  className={styles.term}
+                  onClick={() => handleVisitWeb('/privacy-policy')}>
+                  {i18n.t('Login.Options.Text_Terms_4')}
+                </Typography>
               </Typography>
             }
           />
