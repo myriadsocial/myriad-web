@@ -29,6 +29,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
     notificationCount,
     handleConnectWeb3Wallet,
     handleSignOut,
+    handleLoginOrCreateAccount,
     onViewProfile,
     onShowNotificationList,
     currentWallet,
@@ -56,7 +57,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
         />
         <div className={classes.wallet}>
           <ShowIf condition={anonymous}>
-            <Button variant="contained" color="primary" onClick={handleSignOut}>
+            <Button variant="contained" color="primary" onClick={handleLoginOrCreateAccount}>
               Sign in or Create an Account
             </Button>
           </ShowIf>
