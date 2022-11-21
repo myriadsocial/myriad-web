@@ -1,4 +1,7 @@
-import {useState, useEffect} from 'react';
+import {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+
+import {useRouter} from 'next/router';
 
 import {Button, Typography} from '@material-ui/core';
 
@@ -21,6 +24,37 @@ const LoginMagicLink = ({email = ''}: LoginMagicLinkProps) => {
   const COOLDOWN_TIME = 60;
 
   const [countDown, setCountDown] = useState(COOLDOWN_TIME);
+  const router = useRouter();
+  const navigate = useNavigate();
+  const browserTabcloseHandler = e => {
+    e.preventDefault();
+    e.returnValue = '';
+  };
+
+  useEffect(() => {
+    if (window) {
+      router.beforePopState(() => {
+        const result = window.confirm('are you sure you want to leave?');
+        if (result) {
+          window.history.pushState('/login', '');
+          navigate('/email');
+        } else {
+        }
+        return false;
+      });
+      window.onbeforeunload = browserTabcloseHandler;
+    }
+
+    return () => {
+      if (window) {
+        window.onbeforeunload = null;
+      }
+      router.beforePopState(() => {
+        return true;
+      });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router]);
 
   useEffect(() => {
     if (countDown > 0) {
