@@ -8,7 +8,7 @@ type NotificationList = BaseList<Notification>;
 
 export const getNotification = async (userId: string, page = 1): Promise<NotificationList> => {
   const {data} = await MyriadAPI().request<NotificationList>({
-    url: `/notifications`,
+    url: `/user/notifications`,
     method: 'GET',
     params: {
       pageNumber: page,
@@ -26,7 +26,7 @@ export const getNotification = async (userId: string, page = 1): Promise<Notific
 
 export const countNewNotification = async (userId: string): Promise<number> => {
   const {data} = await MyriadAPI().request<TotalNewNotification>({
-    url: `/notifications/count`,
+    url: `/user/notifications/count`,
     method: 'GET',
     params: {
       where: {
@@ -40,14 +40,14 @@ export const countNewNotification = async (userId: string): Promise<number> => {
 
 export const markAsRead = async (id: string): Promise<void> => {
   await MyriadAPI().request<TotalNewNotification>({
-    url: `/notifications/${id}/read`,
+    url: `/user/notifications/read?id=${id}`,
     method: 'PATCH',
   });
 };
 
 export const markItemsAsRead = async (): Promise<void> => {
   await MyriadAPI().request<TotalNewNotification>({
-    url: `/notifications/read`,
+    url: `/user/notifications/read`,
     method: 'PATCH',
   });
 };

@@ -27,7 +27,7 @@ export const addUserToken = async (values: UserCurrencyProps): Promise<Currency>
 
 export const getUserCurrencies = async (userId: string): Promise<UserCurrencyList> => {
   const {data} = await MyriadAPI().request<UserCurrencyList>({
-    url: '/user-currencies',
+    url: '/user/currencies',
     method: 'GET',
     params: {
       filter: {
@@ -45,16 +45,12 @@ export const getUserCurrencies = async (userId: string): Promise<UserCurrencyLis
 
 export const updateCurrencySet = async (
   userId: string,
-  currenciesId: string[],
+  currencyIds: string[],
   networkId: string,
 ): Promise<void> => {
   await MyriadAPI().request({
-    url: `/user-currencies`,
+    url: `/user/currencies`,
     method: 'PATCH',
-    data: {
-      networkId: networkId,
-      userId: userId,
-      currencyIds: currenciesId,
-    },
+    data: {currencyIds},
   });
 };
