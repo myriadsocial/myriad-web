@@ -14,7 +14,7 @@ export const getUserSocials = async (userId: string, all: boolean): Promise<Soci
   }
 
   const {data} = await MyriadAPI().request<SocialMediaList>({
-    url: `/user-social-medias`,
+    url: `/user/social-medias`,
     method: 'GET',
     params: {
       filter: {
@@ -30,7 +30,7 @@ export const getUserSocials = async (userId: string, all: boolean): Promise<Soci
 
 export const updateSocialAsPrimary = async (userSocialId: string): Promise<void> => {
   await MyriadAPI().request({
-    url: `/user-social-medias/${userSocialId}/primary`,
+    url: `/user/social-medias/${userSocialId}/primary`,
     method: 'PATCH',
   });
 };
@@ -42,7 +42,7 @@ export const verifySocialAccount = async (
 ): Promise<void> => {
   await MyriadAPI().request({
     method: 'POST',
-    url: `/user-social-medias/verify`,
+    url: `/user/social-medias/verify`,
     data: {
       username,
       platform,
@@ -54,6 +54,6 @@ export const verifySocialAccount = async (
 export const disconnectSocial = async (credentialId: string): Promise<void> => {
   await MyriadAPI().request({
     method: 'DELETE',
-    url: `/user-social-medias/${credentialId}`,
+    url: `/user/social-medias/${credentialId}`,
   });
 };

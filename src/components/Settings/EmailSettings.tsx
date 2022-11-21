@@ -50,7 +50,7 @@ const EmailSetting = () => {
   const isWeb2users = !wallets.length;
   const isWeb3UsersAndDontHaveEmail = wallets.length && !email;
 
-  const {token, newEmail, isDelete} = query;
+  const {token, isDelete} = query;
 
   useEffect(() => {
     setEmail(email);
@@ -68,17 +68,11 @@ const EmailSetting = () => {
   }, [countDown]);
 
   useEffect(() => {
-    if (token && newEmail) {
+    if (token && !isDelete) {
       dispatch(
-        updateEmail(
-          {
-            email: newEmail,
-            token,
-          },
-          () => {
-            push('/settings?section=email');
-          },
-        ),
+        updateEmail(token, () => {
+          push('/settings?section=email');
+        }),
       );
     }
     if (token && isDelete) {
@@ -88,7 +82,7 @@ const EmailSetting = () => {
         }),
       );
     }
-  }, [dispatch, token, newEmail, push, isDelete]);
+  }, [dispatch, token, push, isDelete]);
 
   const onChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     const input = event.target.value;
@@ -129,8 +123,7 @@ const EmailSetting = () => {
       sendVerificationEmail(
         {
           email: emailValue,
-          callbackURL:
-            publicRuntimeConfig.appAuthURL + `/settings?section=email&newEmail=${emailValue}`,
+          callbackURL: publicRuntimeConfig.appAuthURL + `/settings?section=email`,
         },
         openPromptDialogAndStartCountDown,
       ),

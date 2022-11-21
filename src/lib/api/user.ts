@@ -37,7 +37,7 @@ export const getUserDetail = async (
   }
 
   const {data} = await MyriadAPI().request<User & FriendStatusProps>({
-    url: `users/${id}`,
+    url: `/users/${id}`,
     method: 'GET',
     params,
   });
@@ -47,7 +47,7 @@ export const getUserDetail = async (
 
 export const updateUser = async (userId: string, values: Partial<User>): Promise<User> => {
   const {data} = await MyriadAPI().request<User>({
-    url: `/users/${userId}`,
+    url: `/user/me`,
     method: 'PATCH',
     data: values,
   });
@@ -94,16 +94,16 @@ export const checkUsername = async (userId: string): Promise<ActivityList> => {
 
 export const getUsername = async (username: string): Promise<boolean> => {
   const {data} = await MyriadAPI().request({
-    url: `/username/${username}`,
+    url: `/users/username/${username}`,
     method: 'GET',
   });
 
-  return data;
+  return data.status;
 };
 
 export const getWalletAddress = async (userId: string): Promise<WalletDetail> => {
   const {data} = await MyriadAPI().request<WalletDetail>({
-    url: `/users/${userId}/walletaddress`,
+    url: `/user/${userId}/walletaddress`,
     method: 'GET',
   });
 
@@ -111,16 +111,16 @@ export const getWalletAddress = async (userId: string): Promise<WalletDetail> =>
 };
 
 export const getCheckEmail = async (email: string): Promise<boolean> => {
-  const {data} = await MyriadAPI().request<boolean>({
-    url: `/email/${email}`,
+  const {data} = await MyriadAPI().request<{status: boolean}>({
+    url: `/users/email/${email}`,
     method: 'GET',
   });
-  return data;
+  return data.status;
 };
 
 export const getCountPost = async (): Promise<{count: number}> => {
   const {data} = await MyriadAPI().request<{count: number}>({
-    url: `/posts/action`,
+    url: `/user/posts/action`,
     method: 'GET',
   });
   return data;

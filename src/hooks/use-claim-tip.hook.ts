@@ -225,7 +225,6 @@ export const useClaimTip = () => {
       });
 
       const trxInfo = {
-        userId: user.id,
         walletId: currentWallet.id,
         currencyIds: [currency.id],
       };
@@ -271,14 +270,13 @@ export const useClaimTip = () => {
       if (!serverId) throw new Error('ServerNotExists');
 
       const trxInfo = {
-        userId: user.id,
         walletId: currentWallet.id,
         currencyIds,
       };
 
       await provider.claimTip(serverId, userId, ftIdentifiers, JSON.stringify(trxInfo), true);
 
-      if (currencyIds.length > 0) TransactionAPI.updateTransaction({userId, walletId, currencyIds});
+      if (currencyIds.length > 0) TransactionAPI.updateTransaction({walletId, currencyIds});
 
       getTip();
     } catch (error) {

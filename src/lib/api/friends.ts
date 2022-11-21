@@ -13,7 +13,7 @@ type FriendRequestList = BaseList<Friend>;
 
 export const getFriendRequests = async (userId: string, page = 1): Promise<FriendRequestList> => {
   const {data} = await MyriadAPI().request<FriendRequestList>({
-    url: `/friends`,
+    url: `/user/friends`,
     method: 'GET',
     params: {
       mutual: 'true',
@@ -36,7 +36,7 @@ export const getFriends = async (
   const {page = 1, limit = PAGINATION_LIMIT, orderField = 'createdAt', sort = 'DESC'} = pagination;
 
   const {data} = await MyriadAPI().request<FriendList>({
-    url: `/friends`,
+    url: `/user/friends`,
     method: 'GET',
     params: {
       mutual: 'true',
@@ -88,7 +88,7 @@ export const getBlockList = async (userId: string, page = 1): Promise<FriendList
   }
 
   const {data} = await MyriadAPI().request<FriendList>({
-    url: `/friends`,
+    url: `/user/friends`,
     method: 'GET',
     params,
   });
@@ -145,7 +145,7 @@ export const searchFriend = async (
 
 export const sendRequest = async (userId: string, requesteeId: string): Promise<Friend> => {
   const result = await MyriadAPI().request<Friend>({
-    url: `/friends`,
+    url: `/user/friends`,
     method: 'POST',
     data: {
       status: FriendStatus.PENDING,
@@ -159,7 +159,7 @@ export const sendRequest = async (userId: string, requesteeId: string): Promise<
 
 export const toggleRequest = async (requestId: string, status: FriendStatus): Promise<void> => {
   await MyriadAPI().request({
-    url: `/friends/${requestId}`,
+    url: `/user/friends/${requestId}`,
     method: 'PATCH',
     data: {
       status,
@@ -169,14 +169,14 @@ export const toggleRequest = async (requestId: string, status: FriendStatus): Pr
 
 export const deleteRequest = async (requestId: string): Promise<void> => {
   await MyriadAPI().request({
-    url: `/friends/${requestId}`,
+    url: `/user/friends/${requestId}`,
     method: 'DELETE',
   });
 };
 
 export const blockUser = async (requesteeId: string, userId: string): Promise<Friend> => {
   const result = await MyriadAPI().request({
-    url: '/friends',
+    url: '/user/friends',
     method: 'POST',
     data: {
       status: FriendStatus.BLOCKED,
