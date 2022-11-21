@@ -154,6 +154,14 @@
     "Polkadot_Alert": "Polkadot hanya tersedia dalam mode desktop"
   },
   "Login": {
+    "Magic_Link": {
+      "Title": "Tautan masuk anda sudah terkirim",
+      "Subtitle_1": "Kami telah mengirimi Anda email ke alamatnya",
+      "Subtitle_2": "Periksa kotak masuk Anda dan klik tautan itu untuk masuk. Jangan lupa untuk memeriksa folder spam Anda!",
+      "Button_Text": "Kirim Ulang Tautan Masuk",
+      "Timer_Text": "Anda dapat mengirim kembali tautan masuk Anda setelah {{time}} detik(s)",
+      "From":"dari"
+    },
     "Description": "Platform sosial yang sepenuhnya berada di bawah kendali Anda. Tetap anonim, cari topik Anda sendiri, pilih antarmuka Anda dan kendalikan apa yang Anda lihat.",
     "Alert": {
       "Title": "Login gagal",
