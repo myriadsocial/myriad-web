@@ -176,10 +176,9 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
       },
     });
   };
-
   return (
     <div>
-      <ShowIf condition={!person.fullAccess && user.fullAccess}>
+      <ShowIf condition={user.fullAccess && !person.fullAccess && person.fullAccess !== undefined}>
         <div
           style={{
             backgroundColor: '#ffc85726',
