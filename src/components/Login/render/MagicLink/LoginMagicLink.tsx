@@ -89,6 +89,9 @@ const LoginMagicLink = ({email = ''}: LoginMagicLinkProps) => {
             {i18n.t('Login.Magic_Link.Subtitle_1')}
             <b>{userEmail}</b>
           </Typography>
+          <Typography variant="body1">
+            {i18n.t('Login.Magic_Link.From')} <b>no-reply@myriad.systems</b>.
+          </Typography>
           <Typography variant="body1">{i18n.t('Login.Magic_Link.Subtitle_2')}</Typography>
         </div>
 
