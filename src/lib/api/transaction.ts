@@ -9,7 +9,7 @@ type TransactionList = BaseList<Transaction>;
 
 export const storeTransaction = async (values: TransactionProps): Promise<Transaction> => {
   const {data} = await MyriadAPI().request<Transaction>({
-    url: '/transactions',
+    url: '/user/transactions',
     method: 'POST',
     data: values,
   });
@@ -48,7 +48,7 @@ export const getTransactions = async (
   }
 
   const {data} = await MyriadAPI().request<TransactionList>({
-    url: '/transactions',
+    url: '/user/transactions',
     method: 'GET',
     params: {
       pageNumber: page,
@@ -69,7 +69,7 @@ export const getTransactions = async (
 
 export const updateTransaction = async (transactionInfo: TransactionInfo): Promise<void> => {
   await MyriadAPI().request({
-    url: `/transactions`,
+    url: `/user/transactions`,
     method: 'PATCH',
     data: transactionInfo,
   });

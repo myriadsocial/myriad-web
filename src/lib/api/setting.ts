@@ -12,7 +12,7 @@ export const updateAccountSettings = async (
   settings: Partial<PrivacySettings>,
 ): Promise<PrivacySettings> => {
   const {data} = await MyriadAPI().request<PrivacySettings>({
-    url: `/users/${userId}/account-setting`,
+    url: `/user/account-setting`,
     method: 'PATCH',
     data: settings,
   });
@@ -21,7 +21,7 @@ export const updateAccountSettings = async (
 
 export const getAccountSettings = async (userId: string): Promise<PrivacySettings> => {
   const {data} = await MyriadAPI().request<PrivacySettings>({
-    url: `/users/${userId}/account-setting`,
+    url: `/user/account-setting`,
     method: 'GET',
   });
 
@@ -33,7 +33,7 @@ export const updateNotificationSettings = async (
   settings: NotificationSettingItems,
 ): Promise<NotificationSettingItems> => {
   const {data} = await MyriadAPI().request<NotificationSettingItems>({
-    url: `/users/${userId}/notification-setting`,
+    url: `/user/notification-setting`,
     method: 'PATCH',
     data: settings,
   });
@@ -44,7 +44,7 @@ export const getNotificationSettings = async (
   userId: string,
 ): Promise<NotificationSettingItems> => {
   const {data} = await MyriadAPI().request<NotificationSettingItems>({
-    url: `/users/${userId}/notification-setting`,
+    url: `/user/notification-setting`,
     method: 'GET',
   });
 
@@ -63,13 +63,10 @@ export const sendVerificationEmailServices = async (
   return data;
 };
 
-export const updateEmail = async (
-  payload: UpdateEmailPayloadType,
-): Promise<UpdateEmailPayloadType> => {
+export const updateEmail = async (token: string): Promise<UpdateEmailPayloadType> => {
   const {data} = await MyriadAPI().request<UpdateEmailPayloadType>({
-    url: `/user/email-setting`,
+    url: `/user/email-setting?token=${token}`,
     method: 'PATCH',
-    data: payload,
   });
   return data;
 };

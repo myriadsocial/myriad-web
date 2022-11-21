@@ -55,7 +55,7 @@ export const getUser = async (): Promise<(User & FriendStatusProps) | null> => {
   };
 
   const {data} = await MyriadAPI().request<User & FriendStatusProps>({
-    url: `user`,
+    url: `/user/me`,
     method: 'GET',
     params,
   });
@@ -65,7 +65,7 @@ export const getUser = async (): Promise<(User & FriendStatusProps) | null> => {
 
 export const getCurrentUserWallet = async (): Promise<UserWallet> => {
   const {data} = await MyriadAPI().request({
-    url: `/wallet`,
+    url: `/user/wallet`,
     method: 'GET',
   });
 
@@ -101,7 +101,7 @@ export const connectNetwork = async (
 ): Promise<Wallet | null> => {
   try {
     const {data} = await MyriadAPI().request<Wallet>({
-      url: `users/${id}/wallets`,
+      url: `/user/connect-wallet`,
       method: 'POST',
       data: payload,
     });
@@ -126,7 +126,7 @@ export const disconnectNetwork = async (
 ): Promise<Wallet | null> => {
   const address = isHex(`0x${walletId}`) ? `0x${walletId}` : walletId;
   const {data} = await MyriadAPI().request<Wallet>({
-    url: `wallets/${address}`,
+    url: `/user/wallets/${address}`,
     method: 'DELETE',
     data: payload,
   });
@@ -137,7 +137,7 @@ export const disconnectNetwork = async (
 export const switchNetwork = async (payload: ConnectNetwork, id: string): Promise<any> => {
   try {
     const data = await MyriadAPI().request({
-      url: `users/${id}/networks`,
+      url: `/user/switch-network`,
       method: 'PATCH',
       data: payload,
     });
@@ -186,7 +186,7 @@ export const claimReference = async ({
 }) => {
   try {
     const {data} = await MyriadAPI().request({
-      url: '/claim-references',
+      url: '/user/claim-references',
       method: 'POST',
       data: {txFee, tippingContractId},
     });

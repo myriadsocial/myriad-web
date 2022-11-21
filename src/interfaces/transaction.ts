@@ -60,7 +60,6 @@ export enum TransactionOrderType {
 }
 
 export type TransactionInfo = {
-  userId: string;
   walletId: string;
   currencyIds: string[];
 };
