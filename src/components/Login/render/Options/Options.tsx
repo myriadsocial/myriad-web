@@ -15,7 +15,6 @@ import {
   MetamaskWalletDisabledIcon,
   MyNearWalletIcon,
   MyriadCircleIcon,
-  MyriadFullIcon,
   NearNetworkIcon,
   PolkadotNetworkIcon,
   PolygonNetworkDisabledIcon,
@@ -429,16 +428,6 @@ export const Options: React.FC<OptionProps> = props => {
       </ShowIf>
       <ShowIf condition={isMobileSignIn}>
         <div className={styles.mobileRoot}>
-          <div className={styles.logoWrapper}>
-            <div className={styles.logo}>
-              <MyriadFullIcon />
-            </div>
-
-            <Typography variant="h5" component="h1" className={styles.title}>
-              {i18n.t('Login.Layout.Title_left')}{' '}
-              <span className={styles.titlePrimary}>{i18n.t('Login.Layout.Title_right')}</span>
-            </Typography>
-          </div>
           <div className={styles.mobileCard}>
             <div style={{marginBottom: 24}}>
               <div className={styles.title}>
