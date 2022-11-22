@@ -769,7 +769,8 @@
         "Subtitle": "Find or invite your friends to Myriad 😉"
       },
       "Friend_Request": {
-        "Title": "Friend request is empty"
+      "Title": "Friend request is empty",
+       "Subtitle": "Anda tidak memiliki permintaan yang tertunda"
       }
     },
     "Button": {
