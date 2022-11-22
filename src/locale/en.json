@@ -1191,6 +1191,7 @@
     "LimitDescExperience":"You are currently using lite version of Myriad. You can only create up to 5 timelines! Connect Web 3.0 Wallet to create more timeline",
     "LimitDescFriends":"Oops! You need to connect your wallet to do that. Alternatively, you can follow timelines curated by {{username}}",
     "ViewTimelines":"View timelines",
+    "MaybeLater": "Maybe Later",
     "ConnectWallet":"Connect Web 3.0 Wallet",
     "DisclaimerEditProfile":"You are currently using lite version of Myriad. You can edit only the display name. Connect Web 3.0 Wallet to have all access in editing your profile",
     "LimitTitlePost":"You have {{count}} the remaining posts",
