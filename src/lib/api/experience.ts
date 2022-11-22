@@ -294,7 +294,7 @@ export const addPostsExperience = async (
   listExperiences: string[],
 ): Promise<ExperienceList> => {
   const {data} = await MyriadAPI().request<ExperienceList>({
-    url: `/experience/posts`,
+    url: `/experiences/post`,
     method: 'POST',
     data: {
       experienceIds: listExperiences,
