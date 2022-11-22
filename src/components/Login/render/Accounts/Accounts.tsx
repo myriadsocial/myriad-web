@@ -8,6 +8,7 @@ import Identicon from '@polkadot/react-identicon';
 
 import {useStyles} from './Accounts.style';
 
+import useMobileDetect from 'src/hooks/use-is-mobile-detect';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
 import i18n from 'src/locale';
 
@@ -24,7 +25,9 @@ type AccountListProps = {
 };
 
 export const Accounts: React.FC<AccountListProps> = props => {
-  const styles = useStyles();
+  const detect = useMobileDetect();
+
+  const styles = useStyles(detect.isMobile())();
   const navigate = useNavigate();
 
   const {accounts, onSelect, onNext, signature} = props;

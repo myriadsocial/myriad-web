@@ -320,7 +320,7 @@
         "Post": "Post",
         "Kudos": "Kudos",
         "Friends": "Friends",
-        "Experience": "Experience"
+        "Experience": "Timelines"
       }
     },
     "Banned": {
@@ -859,9 +859,9 @@
     "Friends": "Friends",
     "Social_Media": "Social Media",
     "Wallet": "Wallet",
-    "Trending_Experience": "Trending Experience",
+    "Trending_Experience": "Trending Timelines",
     "Trending_Experience_Desc": "Top 10 Experiences",
-    "Experience": "Experience",
+    "Mytimelines": "My Timelines",
     "Profile": "Profile",
     "Settings": "Settings",
     "Notification": "Notification",

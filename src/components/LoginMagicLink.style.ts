@@ -13,6 +13,10 @@ export const useStyles = makeStyles((theme: Theme) =>
         padding: '30px 21px',
         width: 490,
       },
+      [theme.breakpoints.down('xs')]: {
+        padding: '30px 21px',
+        width: 'unset',
+      },
     },
     wrapper: {
       display: 'flex',
