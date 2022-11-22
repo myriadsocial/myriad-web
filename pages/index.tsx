@@ -12,6 +12,7 @@ import {RichTextContainer} from 'src/components/Richtext/RichTextContainer';
 import {AppStatusBanner} from 'src/components/common/Banner';
 import {TippingSuccess} from 'src/components/common/Tipping/render/Tipping.success';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
+import {generateAnonymousUser} from 'src/helpers/auth';
 import {initialize} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import {getServer} from 'src/lib/api/server';
@@ -78,14 +79,14 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const session = await getSession(context);
 
-  const anonymous = Boolean(session?.user.anonymous);
-  const userId = session?.user.address;
-  const token = session?.user.token;
+  const anonymous = Boolean(session?.user.anonymous) || !session;
 
   initialize({cookie: req.headers.cookie}, anonymous);
 
-  if (anonymous || (!userId && !token)) {
-    await dispatch(setAnonymous('anonymous'));
+  if (anonymous) {
+    const username = generateAnonymousUser();
+
+    await dispatch(setAnonymous(username));
   } else {
     await dispatch(fetchUser());
 
