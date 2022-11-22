@@ -237,7 +237,7 @@ export const getExperiencePost = async (
   page = 1,
 ): Promise<PostsExperienceList> => {
   const {data} = await MyriadAPI().request<PostsExperienceList>({
-    url: `/experiences/${experienceId}/posts`,
+    url: `/experience/${experienceId}/posts`,
     method: 'GET',
     params: {
       pageNumber: page,
