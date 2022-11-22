@@ -84,6 +84,14 @@ export const fetchAccountPrivacySetting: ThunkActionCreator<Action, RootState> =
     }
   };
 
+export const setPrivacySetting = (privacySetting: PrivacySettings): FetchPrivacySetting => ({
+  type: constants.FETCH_PRIVACY_SETTING,
+  settings: {
+    accountPrivacy: privacySetting.accountPrivacy,
+    socialMediaPrivacy: privacySetting.socialMediaPrivacy,
+  },
+});
+
 export const updatePrivacySetting: ThunkActionCreator<Action, RootState> =
   (id: string, payload: PrivacySettings, callback?: () => void) => async dispatch => {
     dispatch(setLoading(true));
@@ -100,6 +108,7 @@ export const updatePrivacySetting: ThunkActionCreator<Action, RootState> =
       dispatch(setLoading(false));
     }
   };
+
 export const updateNotificationSetting: ThunkActionCreator<Action, RootState> =
   (id: string, settings: NotificationSettingItems, callback?: () => void) => async dispatch => {
     dispatch(setLoading(true));

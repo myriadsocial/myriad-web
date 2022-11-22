@@ -3,6 +3,7 @@ import {Currency} from './currency';
 import {FriendStatus} from './friend';
 import {NetworkIdEnum, Network, NetworkProps} from './network';
 import {People} from './people';
+import {PrivacySettings} from './setting';
 import {TransactionDetail} from './transaction';
 
 export interface UserSocialMedia {
@@ -70,6 +71,7 @@ export interface User extends UserProps, BaseModel {
   deletedAt?: string;
   fullAccess?: boolean;
   email?: string;
+  accountSetting?: PrivacySettings;
 }
 
 export interface UserTransactionDetail {

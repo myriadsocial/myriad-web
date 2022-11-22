@@ -28,6 +28,9 @@ export const getUserDetail = async (
             ],
           },
         },
+        {
+          relation: 'accountSetting',
+        },
       ],
     },
   };
