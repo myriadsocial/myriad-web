@@ -100,8 +100,8 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
 
     if (totalOwnedExperience >= 5 && !user.fullAccess && user.fullAccess !== undefined) {
       confirm({
-        title: i18n.t('LiteVersion.LimitTitleExperiance'),
-        description: i18n.t('LiteVersion.LimitDescExperiance'),
+        title: i18n.t('LiteVersion.LimitTitleExperience'),
+        description: i18n.t('LiteVersion.LimitDescExperience'),
         icon: 'warning',
         confirmationText: i18n.t('LiteVersion.ConnectWallet'),
         cancellationText: i18n.t('LiteVersion.MaybeLater'),
