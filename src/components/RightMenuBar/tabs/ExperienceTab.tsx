@@ -53,8 +53,8 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
     } else {
       if (totalOwnedExperience >= 5) {
         confirm({
-          title: i18n.t('LiteVersion.LimitTitleExperiance'),
-          description: i18n.t('LiteVersion.LimitDescExperiance'),
+          title: i18n.t('LiteVersion.LimitTitleExperience'),
+          description: i18n.t('LiteVersion.LimitDescExperience'),
           icon: 'warning',
           confirmationText: i18n.t('LiteVersion.ConnectWallet'),
           cancellationText: i18n.t('LiteVersion.MaybeLater'),
@@ -85,7 +85,7 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
           marginBottom: 12,
         }}>
         <Typography variant={'h4'} className={styles.title}>
-          Experience
+          Timeline
         </Typography>
 
         <ShowIf condition={Boolean(user) && experienceType === 'user'}>

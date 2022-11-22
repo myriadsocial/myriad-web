@@ -45,8 +45,8 @@ export const FriendRequestComponent: React.FC<FriendRequestProps> = props => {
     if (user.fullAccess)
       return (
         <Empty
-          title={i18n.t('Friends.Empty.Friend_List.Title')}
-          subtitle={i18n.t('Friends.Empty.Friend_List.Subtitle')}
+          title={i18n.t('Friends.Empty.Friend_Request.Title')}
+          subtitle={i18n.t('Friends.Empty.Friend_Request.Subtitle')}
         />
       );
 

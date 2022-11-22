@@ -18,8 +18,7 @@ import {healthcheck} from 'src/lib/api/healthcheck';
 import {getServer} from 'src/lib/api/server';
 import * as UserAPI from 'src/lib/api/user';
 import i18n from 'src/locale';
-import {fetchAvailableToken} from 'src/reducers/config/actions';
-import {fetchAccountPrivacySetting} from 'src/reducers/config/actions';
+import {fetchAvailableToken, setPrivacySetting} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
 import {fetchFriend} from 'src/reducers/friend/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
@@ -107,7 +106,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     const username = generateAnonymousUser();
 
     await dispatch(setAnonymous(username));
-    await dispatch(fetchAccountPrivacySetting(profileId));
   } else {
     await dispatch(fetchUser());
 
@@ -115,7 +113,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       dispatch(fetchConnectedSocials(userId === profileId)),
       dispatch(fetchAvailableToken()),
       dispatch(countNewNotification()),
-      dispatch(fetchAccountPrivacySetting(profileId)),
       dispatch(fetchFriend()),
       dispatch(fetchUserWallets()),
     ]);
@@ -127,8 +124,13 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   try {
     const detail = await UserAPI.getUserDetail(profileId, userId);
+    const privacySetting = detail?.accountSetting ?? {
+      accountPrivacy: 'public',
+      socialMediaPrivacy: 'public',
+    };
 
     await dispatch(setProfile(detail));
+    await dispatch(setPrivacySetting(privacySetting));
 
     const data = await getServer();
     return {

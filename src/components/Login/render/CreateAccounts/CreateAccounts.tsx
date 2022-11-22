@@ -9,6 +9,7 @@ import {Button, Checkbox, FormControlLabel, Grid, TextField, Typography} from '@
 import {useStyles} from './CreateAccounts.style';
 
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
+import useMobileDetect from 'src/hooks/use-is-mobile-detect';
 import {IcEmail, LogoMyriadCircle} from 'src/images/Icons';
 import {signUpWithEmail} from 'src/lib/api/auth-link';
 import i18n from 'src/locale';
@@ -32,7 +33,9 @@ type ProfileProps = {
   email: string;
 };
 export default function CreateAccounts(props: ProfileProps) {
-  const styles = useStyles();
+  const detect = useMobileDetect();
+
+  const styles = useStyles(detect.isMobile())();
   const {checkUsernameAvailability, email} = props;
   const confirm = useConfirm();
   const navigate = useNavigate();

@@ -86,7 +86,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const session = await getSession(context);
 
-  const anonymous = Boolean(session?.user.anonymous);
+  const anonymous = Boolean(session?.user.anonymous) || !session;
 
   initialize({cookie: req.headers.cookie}, anonymous);
 
@@ -120,7 +120,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     return {
       props: {
         title: experience.name,
-        description: experience.description,
+        description: experience?.description ?? '',
         image: experience.experienceImageURL,
         logo: data.images.logo_banner,
       },

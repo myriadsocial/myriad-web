@@ -7,9 +7,11 @@ import {Container, Button} from '@material-ui/core';
 import useStyles from './BigTopBanner.styles';
 
 import {CommonWalletIcon} from 'components/atoms/Icons';
+import useIsMobile from 'src/hooks/use-is-mobile-detect';
 
 const BigTopBanner = () => {
-  const classes = useStyles();
+  const detect = useIsMobile();
+  const classes = useStyles(detect.isMobile())();
   const router = useRouter();
   const handleConnectWeb3Wallet = () => {
     router.push(`/wallet?type=manage`);

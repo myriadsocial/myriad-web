@@ -4,37 +4,37 @@
       "Confirmation_Unsub": {
         "Title": "Unsubscribe?",
         "Desc_1": "Do you want to unsubscribe?",
-        "Desc_2": "You won't see more post from this experience",
+        "Desc_2": "You won't see more post from this timeline",
         "Btn": "Unsubscribe"
       },
-      "Max_Exp": "You can only add up to 10 experiences max"
+      "Max_Exp": "You can only add up to 10 timelines max"
     },
     "Clone": {
-      "Title": "Clone Experience",
+      "Title": "Clone Timeline",
       "Type": "Clone"
     },
     "Edit": {
-      "Title": "Edit Experience",
+      "Title": "Edit Timeline",
       "Type": "Edit"
     },
     "List": {
-      "Alert": "You can only add up to 10 experiences max",
-      "Copy": "Experience link copied to clipboard!",
+      "Alert": "You can only add up to 10 timelines max",
+      "Copy": "Timeline link copied to clipboard!",
       "Prompt_Delete": {
-        "Title": "Delete Experience?",
-        "Desc": "Are you sure you want to delete this experience? You can't undo this in the future.",
+        "Title": "Delete Timeline?",
+        "Desc": "Are you sure you want to delete this Timeline? You can't undo this in the future.",
         "Btn_Yes": "Yes, proceed to delete"
       },
       "Prompt_Unsub": {
         "Title": "Unsubscribe?",
         "Desc_1": "Do you want to unsubscribe?",
-        "Desc_2": "You won't see more post from this experience",
+        "Desc_2": "You won't see more post from this Timeline",
         "Btn_Yes": "Unsubscribe"
       },
       "You": "(you)",
       "Menu": {
         "View": "View Details",
-        "Edit": "Edit experience",
+        "Edit": "Edit Timeline",
         "Clone": "Clone",
         "Subscribe": "Subscribe",
         "Unsubscribe": "Unsubscribe",
@@ -43,20 +43,20 @@
       },
       "Modal": {
         "Title": "Share",
-        "Subtitle": "Let others know about this Experience on Myriad.Social"
+        "Subtitle": "Let others know about this Timeline on Myriad.Social"
       },
       "Empty": {
         "Text_1": "Uh-oh!",
-        "Text_2": "You haven't created any experience yet. Experience allows you to customize various tags and people to be shown in your timeline.",
-        "Btn_Create": "Create Experience"
+        "Text_2": "You haven't created any timeline yet. Timeline allows you to customize various tags and people to be shown in your feed.",
+        "Btn_Create": "Create Timeline"
       }
     },
     "Preview": {
-      "Title": "Preview Experience",
+      "Title": "Preview Timeline",
       "Text_1": "subscribers",
       "Text_2": "cloners",
       "Button": {
-        "Edit": "Edit experience",
+        "Edit": "Edit timeline",
         "Subscribe": "Subscribe",
         "Unsubscribe": "Unsubscribe",
         "Clone": "Clone"
@@ -72,21 +72,21 @@
         "Post": "Post"
       },
       "Post": {
-        "Empty": "Added posts will appear here. You can add a post to experience by select 'add post to experience' on more option."
+        "Empty": "Added posts will appear here. You can add a post to Timeline by select 'add post to Timeline' on more option."
       }
     },
     "Create": {
-      "Title": "Create Experience"
+      "Title": "Create Timeline"
     },
     "Editor": {
       "Header": "Set up your customizable timeline",
-      "Sub_Header": "Fill the experience detail to create experience.",
+      "Sub_Header": "Fill the timeline detail to create timeline.",
       "Title": {
-        "Clone": "Clone Experience",
-        "Create": "Create Experience",
-        "Edit": "Edit Experience"
+        "Clone": "Clone Timeline",
+        "Create": "Create Timeline",
+        "Edit": "Edit Timeline"
       },
-      "Subtitle_1": "Experience Name",
+      "Subtitle_1": "Timeline Name",
       "Subtitle_2": "Description",
       "Subtitle_3": "Picture",
       "Label_1": "Included tags",
@@ -97,7 +97,7 @@
       "Placeholder_3": "Search people here",
       "Post": {
         "Title": "Post",
-        "Desc": "Added posts will appear here. You can add a post to experience by select 'add post to experience' on more option."
+        "Desc": "Added posts will appear here. You can add a post to timeline by select 'add post to timeline' on more option."
       },
       "Btn": {
         "Clone": "Clone",
@@ -105,7 +105,7 @@
         "Edit": "Save"
       },
       "Menu_Post": {
-        "Remove": "Remove from experience"
+        "Remove": "Remove from timeline"
       },
       "Helper": {
         "Name": "Must between 1-50 character",
@@ -115,15 +115,15 @@
       }
     },
     "Modal_Add_Post": {
-      "Title": "Select experience",
-      "Subtitle_1": "Add post to experience below. You",
-      "Subtitle_2": "can unselect it to remove from experience",
-      "Tooltip": "Experience",
+      "Title": "Select timeline",
+      "Subtitle_1": "Add post to timeline below. You",
+      "Subtitle_2": "can unselect it to remove from timeline",
+      "Tooltip": "Timeline",
       "Tooltip_Text": "Some posts will not be visible to other users due to visibility restrictions by their owners.",
       "Select_All": "Select all",
       "Card_Own": "(you)",
       "Empty_Title": "Uh-oh",
-      "Empty_Subtitle": "You haven't created any experience yet.",
+      "Empty_Subtitle": "You haven't created any timeline yet.",
       "Btn_Confirm": "Confirm"
     }
   },
@@ -320,7 +320,7 @@
         "Post": "Post",
         "Kudos": "Kudos",
         "Friends": "Friends",
-        "Experience": "Experience"
+        "Experience": "Timeline"
       }
     },
     "Banned": {
@@ -353,7 +353,7 @@
     "Tab": {
       "Post": "Post",
       "Comments": "Comments",
-      "Experience": "Experience",
+      "Experience": "Timeline",
       "Friends": "Friends",
       "Social_Media": "Social Media",
       "Wallet_Address": "Wallet Address"
@@ -372,13 +372,13 @@
     "Experience": {
       "Empty": {
         "Title": "Nothing to see here!",
-        "Subtitle": "This user hasn't created any Experience yet."
+        "Subtitle": "This user hasn't created any Timeline yet."
       },
       "Sort": {
         "Title": "Filter by",
-        "All": "All Experience",
-        "Personal": "Personal Experience",
-        "Subscribed": "Subscribed Experience"
+        "All": "All Timeline",
+        "Personal": "Personal Timeline",
+        "Subscribed": "Subscribed Timeline"
       }
     },
     "Friend": {
@@ -418,7 +418,7 @@
       "Subtitle_3": "if you think this was a mistake"
     },
     "Search": {
-      "Placeholder": "Search for people, topics, or experiences in Myriad"
+      "Placeholder": "Search for people, topics, or timeline in Myriad"
     },
     "RichText": {
       "Placeholder": "What's on your mind?",
@@ -494,7 +494,7 @@
         "Confirm_Private_Text": "Yes, let's go",
         "Cancel_Private_Text": "No, let me rethink"
       },
-      "Add_Post_To_Experience": "Add post to experience",
+      "Add_Post_To_Experience": "Add post to timeline",
       "Report": "Report",
       "Delete_Post": "Delete Post"
     },
@@ -509,9 +509,9 @@
     "Experience": {
       "Added": "added to",
       "And": "and",
-      "Other_Exp": "{{number}} other experiences",
-      "Modal_Title": "Post in Experience",
-      "Modal_Sub": "This post is already added to this experience"
+      "Other_Exp": "{{number}} other timeline",
+      "Modal_Title": "Post in Timeline",
+      "Modal_Sub": "This post is already added to this timeline"
     }
   },
   "Post_Create": {
@@ -604,9 +604,9 @@
     },
     "Type_Filter": {
       "All": "All",
-      "Friend": "Friend",
+      "Friend": "Friends",
       "Trending": "Trending",
-      "Experience": "Experience"
+      "Experience": "Timeline"
     },
     "Order": {
       "Latest": "Latest",
@@ -769,7 +769,8 @@
         "Subtitle": "Find or invite your friends to Myriad 😉"
       },
       "Friend_Request": {
-        "Title": "Friend request is empty"
+      "Title": "Friend request is empty",
+       "Subtitle": "You don't have any pending requests"
       }
     },
     "Button": {
@@ -851,16 +852,17 @@
     "Helper_Text": "Search results for ",
     "Post_Tab": "Post",
     "Users_Tab": "User",
-    "Experience_Tab": "Experience"
+    "Experience_Tab": "Timeline"
   },
   "Section": {
     "Home": "Home",
     "Friends": "Friends",
     "Social_Media": "Social Media",
     "Wallet": "Wallet",
-    "Trending_Experience": "Trending Experience",
-    "Trending_Experience_Desc": "Top 10 Experiences",
-    "Experience": "Experience",
+    "Trending_Experience": "Trending Timeline",
+    "Trending_Experience_Desc": "Top 10 Timeline",
+    "Experience": "Timeline",
+    "Mytimelines": "My Timelines",
     "Profile": "Profile",
     "Settings": "Settings",
     "Notification": "Notification",
@@ -1099,7 +1101,7 @@
       "Friends": "Friends",
       "Social_Media": "Social Media",
       "Wallet": "Wallet",
-      "Experience": "Experience",
+      "Experience": "Timeline",
       "Profile": "Profile",
       "Settings": "Settings",
       "Notification": "Notification",
@@ -1114,9 +1116,9 @@
       "SocialMedia": "{{total}} account connected",
       "Wallet": "View your balance or manage your wallet",
       "Profile": "Profile Detail",
-      "Experience_Create": "Create Experience",
-      "Experience_Clone": "Clone Experience",
-      "Experience_Edit": "Edit Experience",
+      "Experience_Create": "Create Timeline",
+      "Experience_Clone": "Clone Timeline",
+      "Experience_Edit": "Edit Timeline",
       "NFT": "Underway",
       "Social_Token": "Underway",
       "Myriad_Town": "Myriad lies at the crossroads of real life and digital interaction"
@@ -1156,7 +1158,7 @@
     "Loading_More": "Loading more"
   },
   "Cookies": {
-    "Text_1": "This website uses cookies to enhance your online experience.",
+    "Text_1": "This website uses cookies to enhance your online timeline.",
     "Text_2": "Terms and Conditions"
   },
   "Banner": {
@@ -1169,14 +1171,14 @@
   },
   "Tooltip": {
     "Chat": "Chat feature, coming soon",
-    "Trending_Exp": "Show the top 10 experiences based on total subscribers and clone in 24 hours."
+    "Trending_Exp": "Show the top 10 timelines based on total subscribers and clone in 24 hours."
   },
   "Myriad_Town": {
     "Title_Head": "{{appname}} - Myriad.Town",
     "Visit": "Visit Myriad.Town",
     "Fullscreen": "Play in fullscreen",
     "Toaster_Esc": "Press Esc to exit from fullscreen",
-    "Disclaimer": "The Myriad Metaverse integration is an early beta feature. If you encounter problems, or if you want the best experience on the Myriad Metaverse, go to"
+    "Disclaimer": "The Myriad Metaverse integration is an early beta feature. If you encounter problems, or if you want the best timeline on the Myriad Metaverse, go to"
   },
   "LiteVersion":{
     "Cancel":"Cancel",
@@ -1184,11 +1186,11 @@
     "CreateAccountEmail":"Create a new account",
     "CreateAccountEmailDesc":"You will create a new account. You can still add a crypto wallet later.",
     "LimitDescProfile":"is using lite version of Myriad. You can only send a friend request to users with active wallet.",
-    "LimitTitleExperiance":"Create Experience Limit Reached!",
+    "LimitTitleExperience":"Create Timeline Limit Reached!",
     "LimitTitleFriends":"Unable to Add Friend",
-    "LimitDescExperiance":"You are currently using lite version of Myriad. You can only create up to 5 experience! Connect Web 3.0 Wallet to create more experience",
-    "LimitDescFriends":"Connect Web 3.0 Wallet to send friend request.",
-    "MaybeLater":"Maybe Later",
+    "LimitDescExperience":"You are currently using lite version of Myriad. You can only create up to 5 timelines! Connect Web 3.0 Wallet to create more timeline",
+    "LimitDescFriends":"Oops! You need to connect your wallet to do that. Alternatively, you can follow timelines curated by {{username}}",
+    "ViewTimelines":"View timelines",
     "ConnectWallet":"Connect Web 3.0 Wallet",
     "DisclaimerEditProfile":"You are currently using lite version of Myriad. You can edit only the display name. Connect Web 3.0 Wallet to have all access in editing your profile",
     "LimitTitlePost":"You have {{count}} the remaining posts",

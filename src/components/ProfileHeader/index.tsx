@@ -164,21 +164,24 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
   const handleNotFullAccess = () => {
     confirm({
       title: i18n.t('LiteVersion.LimitTitleFriends'),
-      description: i18n.t('LiteVersion.LimitDescFriends'),
+      description: i18n.t('LiteVersion.LimitDescFriends', {username: person.username}),
       icon: 'warning',
       confirmationText: i18n.t('LiteVersion.ConnectWallet'),
-      cancellationText: i18n.t('LiteVersion.MaybeLater'),
+      cancellationText: i18n.t('LiteVersion.ViewTimelines'),
       onConfirm: () => {
         router.push({pathname: '/wallet', query: {type: 'manage'}});
       },
       onCancel: () => {
-        undefined;
+        router.replace({pathname: `/profile/${person.id}`, query: {tab: 'experience'}}, undefined, {
+          shallow: true,
+        });
       },
     });
   };
   return (
     <div>
-      <ShowIf condition={user.fullAccess && !person.fullAccess && person.fullAccess !== undefined}>
+      <ShowIf
+        condition={user?.fullAccess && !person?.fullAccess && person.fullAccess !== undefined}>
         <div
           style={{
             backgroundColor: '#ffc85726',
@@ -310,7 +313,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 <ShowIf condition={canAddFriend && person.username !== 'myriad_official'}>
                   <Button
                     onClick={
-                      user.fullAccess && user.fullAccess !== undefined
+                      user?.fullAccess && user?.fullAccess !== undefined
                         ? handleSendRequest
                         : handleNotFullAccess
                     }
