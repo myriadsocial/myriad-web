@@ -770,7 +770,7 @@
       },
       "Friend_Request": {
       "Title": "Friend request is empty",
-       "Subtitle": "Anda tidak memiliki permintaan yang tertunda"
+       "Subtitle": "You don't have any pending requests"
       }
     },
     "Button": {
