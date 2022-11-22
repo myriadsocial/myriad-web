@@ -47,7 +47,7 @@
       },
       "Empty": {
         "Text_1": "Uh-oh!",
-        "Text_2": "You haven't created any timeline yet. Timeline allows you to customize various tags and people to be shown in your timeline.",
+        "Text_2": "You haven't created any timeline yet. Timeline allows you to customize various tags and people to be shown in your feed.",
         "Btn_Create": "Create Timeline"
       }
     },
