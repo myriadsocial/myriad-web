@@ -304,7 +304,7 @@ export const removePost = async (postId: string): Promise<void> => {
 
 export const getWalletAddress = async (postId: string): Promise<WalletDetail> => {
   const {data} = await MyriadAPI().request<WalletDetail>({
-    url: `/post/${postId}/walletaddress`,
+    url: `/walletaddress/post/${postId}`,
     method: 'GET',
   });
 
