@@ -604,7 +604,7 @@
     },
     "Type_Filter": {
       "All": "All",
-      "Friend": "Friend",
+      "Friend": "Friends",
       "Trending": "Trending",
       "Experience": "Timeline"
     },
@@ -1188,9 +1188,9 @@
     "LimitDescProfile":"is using lite version of Myriad. You can only send a friend request to users with active wallet.",
     "LimitTitleExperience":"Create Timeline Limit Reached!",
     "LimitTitleFriends":"Unable to Add Friend",
-    "LimitDescExperience":"You are currently using lite version of Myriad. You can only create up to 5 timeline! Connect Web 3.0 Wallet to create more experience",
-    "LimitDescFriends":"Connect Web 3.0 Wallet to send friend request.",
-    "MaybeLater":"Maybe Later",
+    "LimitDescExperience":"You are currently using lite version of Myriad. You can only create up to 5 timelines! Connect Web 3.0 Wallet to create more timeline",
+    "LimitDescFriends":"Oops! You need to connect your wallet to do that. Alternatively, you can follow timelines curated by {{username}}",
+    "ViewTimelines":"View timelines",
     "ConnectWallet":"Connect Web 3.0 Wallet",
     "DisclaimerEditProfile":"You are currently using lite version of Myriad. You can edit only the display name. Connect Web 3.0 Wallet to have all access in editing your profile",
     "LimitTitlePost":"You have {{count}} the remaining posts",
