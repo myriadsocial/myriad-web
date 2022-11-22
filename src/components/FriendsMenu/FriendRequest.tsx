@@ -42,6 +42,14 @@ export const FriendRequestComponent: React.FC<FriendRequestProps> = props => {
   const list = useFriendRequestList(requests, user);
 
   if (requests.length === 0) {
+    if (user.fullAccess)
+      return (
+        <Empty
+          title={i18n.t('Friends.Empty.Friend_List.Title')}
+          subtitle={i18n.t('Friends.Empty.Friend_List.Subtitle')}
+        />
+      );
+
     return (
       <Empty
         image={'/images/illustration/EmptyStateFriendReq.svg'}
