@@ -37,7 +37,7 @@ export const Profile: React.FC<ProfileProps> = props => {
   const style = useStyles();
   const dispatch = useDispatch();
   const router = useRouter();
-  const isEditing = router.query?.edit === 'edit';
+  const isEditing = router.query?.edit === 'edit' && Boolean(user);
 
   useEffect(() => {
     if (!isEditing && person?.id) {
@@ -74,7 +74,7 @@ export const Profile: React.FC<ProfileProps> = props => {
     <div className={style.root}>
       <div className={style.scroll}>
         <ShowIf condition={isEditing}>
-          <ShowIf condition={!user.fullAccess && user.fullAccess !== undefined}>
+          <ShowIf condition={!user?.fullAccess && user?.fullAccess !== undefined}>
             <div
               style={{
                 backgroundColor: '#ffc85726',

@@ -5,6 +5,7 @@ import {MemoryRouter as Router, Routes, Route} from 'react-router-dom';
 import {signIn} from 'next-auth/react';
 import {useRouter} from 'next/router';
 
+import {Typography} from '@material-ui/core';
 import {CircularProgress} from '@material-ui/core';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
@@ -18,10 +19,12 @@ import {Options} from './render/Options';
 import {Profile} from './render/Profile';
 import SigninMethod from './render/SignInMethod/SigninMethod';
 
+import {MyriadFullIcon} from 'components/atoms/Icons';
 import last from 'lodash/last';
 import LoginMagicLink from 'src/components/Login/render/MagicLink/LoginMagicLink';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useAlertHook} from 'src/hooks/use-alert.hook';
+import useMobileDetect from 'src/hooks/use-is-mobile-detect';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {useProfileHook} from 'src/hooks/use-profile.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
@@ -40,6 +43,7 @@ type LoginProps = {
 
 export const Login: React.FC<LoginProps> = props => {
   const {redirectAuth, isMobileSignIn} = props;
+  const detect = useMobileDetect();
   const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
 
   const router = useRouter();
@@ -265,6 +269,15 @@ export const Login: React.FC<LoginProps> = props => {
 
   return (
     <div className={styles.root}>
+      {detect.isMobile() && (
+        <div className={styles.iconMobile}>
+          <MyriadFullIcon />
+          <Typography className={styles.iconTitle}>
+            Social media with{' '}
+            <span style={{color: '#6E3FC3', fontWeight: '600'}}>No Boundaries</span>
+          </Typography>
+        </div>
+      )}
       <Router initialEntries={initialEntries} initialIndex={0}>
         <Routes>
           <Route index={false} path="/" element={<SigninMethod disableSignIn={disableSignIn} />} />

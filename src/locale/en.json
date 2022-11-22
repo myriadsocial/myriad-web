@@ -321,6 +321,7 @@
         "Kudos": "Kudos",
         "Friends": "Friends",
         "Experience": "Timeline"
+        "Experience": "Timelines"
       }
     },
     "Banned": {
@@ -769,7 +770,8 @@
         "Subtitle": "Find or invite your friends to Myriad 😉"
       },
       "Friend_Request": {
-        "Title": "Friend request is empty"
+      "Title": "Friend request is empty",
+       "Subtitle": "You don't have any pending requests"
       }
     },
     "Button": {
@@ -861,6 +863,7 @@
     "Trending_Experience": "Trending Timeline",
     "Trending_Experience_Desc": "Top 10 Timeline",
     "Experience": "Timeline",
+    "Mytimelines": "My Timelines",
     "Profile": "Profile",
     "Settings": "Settings",
     "Notification": "Notification",

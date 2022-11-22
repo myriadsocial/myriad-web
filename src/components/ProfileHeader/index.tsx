@@ -178,7 +178,8 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
   };
   return (
     <div>
-      <ShowIf condition={user.fullAccess && !person.fullAccess && person.fullAccess !== undefined}>
+      <ShowIf
+        condition={user?.fullAccess && !person?.fullAccess && person.fullAccess !== undefined}>
         <div
           style={{
             backgroundColor: '#ffc85726',
@@ -310,7 +311,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 <ShowIf condition={canAddFriend && person.username !== 'myriad_official'}>
                   <Button
                     onClick={
-                      user.fullAccess && user.fullAccess !== undefined
+                      user?.fullAccess && user?.fullAccess !== undefined
                         ? handleSendRequest
                         : handleNotFullAccess
                     }
