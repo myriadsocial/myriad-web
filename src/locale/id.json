@@ -1187,6 +1187,7 @@
     "LimitDescExperience":"Anda sedang menggunakan Myriad versi lite. Anda hanya dapat membuat hingga 5 linimasa! Hubungkan Dompet Web 3.0 untuk menciptakan lebih banyak linimasa",
     "LimitDescFriends":"Ups! Anda perlu menghubungkan dompet Anda untuk melakukan itu. Atau, Anda dapat mengikuti linimasa yang dikuratori oleh {{username}}",
     "ViewTimelines":"Tampilkan linimasa",
+    "MaybeLater": "Nanti Saja",
     "ConnectWallet":"Hubungkan Dompet Web 3.0",
     "DisclaimerEditProfile":"Saat ini Anda menggunakan Myriad versi lite. Anda hanya dapat mengedit nama tampilan. Hubungkan Web 3.0 Wallet untuk memiliki semua akses dalam mengedit profil Anda",
     "LimitTitlePost":"Anda memiliki {{count}} pos yang tersisa",
