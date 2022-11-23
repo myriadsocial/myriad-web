@@ -110,7 +110,7 @@ export const loadUserComments = async (
 
 export const getWalletAddress = async (commentId: string): Promise<WalletDetail> => {
   const {data} = await MyriadAPI().request<WalletDetail>({
-    url: `/comment/${commentId}/walletaddress`,
+    url: `/walletaddress/comment/${commentId}`,
     method: 'GET',
   });
 

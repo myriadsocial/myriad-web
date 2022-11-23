@@ -28,6 +28,9 @@ export const getUserDetail = async (
             ],
           },
         },
+        {
+          relation: 'accountSetting',
+        },
       ],
     },
   };
@@ -103,7 +106,7 @@ export const getUsername = async (username: string): Promise<boolean> => {
 
 export const getWalletAddress = async (userId: string): Promise<WalletDetail> => {
   const {data} = await MyriadAPI().request<WalletDetail>({
-    url: `/user/${userId}/walletaddress`,
+    url: `/walletaddress/user/${userId}`,
     method: 'GET',
   });
 

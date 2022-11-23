@@ -288,8 +288,8 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   const validateExperience = (): boolean => {
     const validName = newExperience.name.length > 0;
     const validPicture = Boolean(newExperience.experienceImageURL);
-    const validTags = newExperience.allowedTags.length > 0;
-    const validPeople = newExperience.people.filter(people => !isEmpty(people.id)).length > 0;
+    const validTags = newExperience.allowedTags.length >= 0;
+    const validPeople = newExperience.people.filter(people => !isEmpty(people.id)).length >= 0;
 
     setErrors({
       name: !validName,
@@ -455,7 +455,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
                     : undefined
                 }
                 onChange={handleSearchTags}
-                helperText={i18n.t('Experience.Editor.Helper.Tag')}
+                helperText={''}
                 InputProps={{
                   ...params.InputProps,
                   endAdornment: <React.Fragment>{params.InputProps.endAdornment}</React.Fragment>,
@@ -528,7 +528,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
                   ...params.InputProps,
                   endAdornment: <React.Fragment>{params.InputProps.endAdornment}</React.Fragment>,
                 }}
-                helperText={i18n.t('Experience.Editor.Helper.People')}
+                helperText={''}
               />
             )}
             renderOption={(option, state: AutocompleteRenderOptionState) => {

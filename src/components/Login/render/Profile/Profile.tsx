@@ -26,7 +26,6 @@ import {
   MyNearWalletIcon,
   MyriadCircleIcon,
 } from 'src/components/atoms/Icons';
-import {MyriadFullIcon} from 'src/components/atoms/Icons';
 import useConfirm from 'src/components/common/Confirm/use-confirm.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import {useAuthHook} from 'src/hooks/auth.hook';
@@ -517,16 +516,6 @@ export const Profile: React.FC<ProfileProps> = props => {
       </ShowIf>
       <ShowIf condition={isMobileSignIn}>
         <div className={styles.mobileRoot}>
-          <div className={styles.logoWrapper}>
-            <div className={styles.logo}>
-              <MyriadFullIcon />
-            </div>
-
-            <Typography variant="h5" component="h1" className={styles.title}>
-              {i18n.t('Login.Layout.Title_left')}{' '}
-              <span className={styles.titlePrimary}>{i18n.t('Login.Layout.Title_right')}</span>
-            </Typography>
-          </div>
           <div className={styles.mobileCard}>
             <div style={{marginBottom: 24}}>
               <div className={styles.title}>
@@ -606,7 +595,7 @@ export const Profile: React.FC<ProfileProps> = props => {
               </Button>
 
               <Button
-                disabled={profile.username.value.length === 0 || termApproved}
+                disabled={!profile.username.value || !termApproved}
                 onClick={handleConfirmation}
                 variant="contained"
                 color="primary"

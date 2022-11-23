@@ -154,6 +154,14 @@
     "Polkadot_Alert": "Polkadot hanya tersedia dalam mode desktop"
   },
   "Login": {
+    "Magic_Link": {
+      "Title": "Tautan masuk anda sudah terkirim",
+      "Subtitle_1": "Kami telah mengirimi Anda email ke alamatnya",
+      "Subtitle_2": "Periksa kotak masuk Anda dan klik tautan itu untuk masuk. Jangan lupa untuk memeriksa folder spam Anda!",
+      "Button_Text": "Kirim Ulang Tautan Masuk",
+      "Timer_Text": "Anda dapat mengirim kembali tautan masuk Anda setelah {{time}} detik(s)",
+      "From":"dari"
+    },
     "Description": "Platform sosial yang sepenuhnya berada di bawah kendali Anda. Tetap anonim, cari topik Anda sendiri, pilih antarmuka Anda dan kendalikan apa yang Anda lihat.",
     "Alert": {
       "Title": "Login gagal",
@@ -758,7 +766,8 @@
         "Subtitle": "Temukan atau undang teman Anda ke Myriad 😉"
       },
       "Friend_Request": {
-        "Title": "Permintaan pertemanan kosong"
+        "Title": "Permintaan pertemanan kosong",
+        "Subtitle": "Temukan atau undang teman Anda ke Myriad 😉"
       }
     },
     "Button": {
@@ -849,7 +858,7 @@
     "Wallet": "Dompet",
     "Trending_Experience": "Pengalaman Tren",
     "Trending_Experience_Desc": "10 Pengalaman Terbaik",
-    "Experience": "Pengalaman",
+    "Mytimelines": "My Timelines",
     "Profile": "Profil",
     "Settings": "Pengaturan",
     "Notification": "Notifikasi",
@@ -1171,13 +1180,14 @@
     "Cancel":"Batal",
     "Confirm":"Konfirmasi",
     "CreateAccountEmail":"Buat Akun Baru",
-    "LimitDescProfile":"menggunakan Myriad versi lite. Anda hanya dapat mengirim permintaan pertemanan kepada pengguna dengan dompet aktif.",
     "CreateAccountEmailDesc":"Anda akan membuat akun baru. Anda masih dapat menambahkan dompet kripto nanti.",
-    "LimitTitleExperiance":"Batas Buat Pengalaman Tercapai!",
+    "LimitDescProfile":"menggunakan Myriad versi lite. Anda hanya dapat mengirim permintaan pertemanan kepada pengguna dengan dompet aktif.",
+    "LimitTitleExperience":"Batas Buat Pengalaman Tercapai!",
     "LimitTitleFriends":"Tidak bisa menambah teman",
-    "Experiance":"Anda sedang menggunakan Myriad versi lite. Anda hanya dapat membuat hingga 5 pengalaman! Hubungkan Dompet Web 3.0 untuk menciptakan lebih banyak pengalaman",
-    "Friends":"Hubungkan Web 3.0 Wallet untuk mengirim permintaan pertemanan.",
-    "MaybeLater":"Mungkin Nanti",
+    "LimitDescExperience":"Anda sedang menggunakan Myriad versi lite. Anda hanya dapat membuat hingga 5 linimasa! Hubungkan Dompet Web 3.0 untuk menciptakan lebih banyak linimasa",
+    "LimitDescFriends":"Ups! Anda perlu menghubungkan dompet Anda untuk melakukan itu. Atau, Anda dapat mengikuti linimasa yang dikuratori oleh {{username}}",
+    "ViewTimelines":"Tampilkan linimasa",
+    "MaybeLater": "Nanti Saja",
     "ConnectWallet":"Hubungkan Dompet Web 3.0",
     "DisclaimerEditProfile":"Saat ini Anda menggunakan Myriad versi lite. Anda hanya dapat mengedit nama tampilan. Hubungkan Web 3.0 Wallet untuk memiliki semua akses dalam mengedit profil Anda",
     "LimitTitlePost":"Anda memiliki {{count}} pos yang tersisa",
