@@ -353,7 +353,7 @@
     "Tab": {
       "Post": "Post",
       "Comments": "Comments",
-      "Experience": "Timeline",
+      "Experience": "Timelines",
       "Friends": "Friends",
       "Social_Media": "Social Media",
       "Wallet_Address": "Wallet Address"
@@ -376,9 +376,9 @@
       },
       "Sort": {
         "Title": "Filter by",
-        "All": "All Timeline",
-        "Personal": "Personal Timeline",
-        "Subscribed": "Subscribed Timeline"
+        "All": "All Timelines",
+        "Personal": "Personal Timelines",
+        "Subscribed": "Subscribed Timelines"
       }
     },
     "Friend": {
