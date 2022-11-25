@@ -353,7 +353,7 @@
     "Tab": {
       "Post": "Post",
       "Comments": "Comments",
-      "Experience": "Timeline",
+      "Experience": "Timelines",
       "Friends": "Friends",
       "Social_Media": "Social Media",
       "Wallet_Address": "Wallet Address"
@@ -376,9 +376,9 @@
       },
       "Sort": {
         "Title": "Filter by",
-        "All": "All Timeline",
-        "Personal": "Personal Timeline",
-        "Subscribed": "Subscribed Timeline"
+        "All": "All Timelines",
+        "Personal": "Personal Timelines",
+        "Subscribed": "Subscribed Timelines"
       }
     },
     "Friend": {
@@ -418,7 +418,7 @@
       "Subtitle_3": "if you think this was a mistake"
     },
     "Search": {
-      "Placeholder": "Search for people, topics, or timeline in Myriad"
+      "Placeholder": "Search for people, topics, or timelines in Myriad"
     },
     "RichText": {
       "Placeholder": "What's on your mind?",
@@ -859,7 +859,7 @@
     "Friends": "Friends",
     "Social_Media": "Social Media",
     "Wallet": "Wallet",
-    "Trending_Experience": "Trending Timeline",
+    "Trending_Experience": "Trending Timelines",
     "Trending_Experience_Desc": "Top 10 Timeline",
     "Experience": "Timeline",
     "Mytimelines": "My Timelines",

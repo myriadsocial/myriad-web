@@ -85,7 +85,7 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
           marginBottom: 12,
         }}>
         <Typography variant={'h4'} className={styles.title}>
-          Timeline
+          My Timelines
         </Typography>
 
         <ShowIf condition={Boolean(user) && experienceType === 'user'}>
