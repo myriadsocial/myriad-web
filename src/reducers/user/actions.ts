@@ -339,19 +339,6 @@ export const fetchUserWallets: ThunkActionCreator<Actions, RootState> =
         payload: wallets,
         meta,
       });
-
-      const primaryWallet = wallets.find(wallet => wallet.primary === true);
-
-      if (primaryWallet) {
-        const wallet = {
-          ...primaryWallet,
-          user,
-        };
-        dispatch({
-          type: constants.FETCH_CURRENT_USER_WALLETS,
-          payload: wallet,
-        });
-      }
     } catch (error) {
       dispatch(setError(error.message));
     } finally {

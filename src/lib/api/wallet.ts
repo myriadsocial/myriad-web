@@ -30,7 +30,7 @@ export type ConnectNetwork = {
 export const getUserNonce = async (id: string): Promise<UserNonceProps> => {
   const address = isHex(`0x${id}`) ? `0x${id}` : id;
   const {data} = await MyriadAPI().request({
-    url: `auth/nonce?id=${address}&type=wallet`,
+    url: `/authentication/nonce?id=${address}&type=wallet`,
     method: 'GET',
   });
 
@@ -88,7 +88,7 @@ export const getUserWallets = async (userId: string): Promise<WalletList> => {
 
 export const getUserNonceByUserId = async (id: string): Promise<UserNonceProps> => {
   const {data} = await MyriadAPI().request({
-    url: `/auth/nonce?id=${id}&type=user`,
+    url: `/authentication/nonce?id=${id}&type=user`,
     method: 'GET',
   });
 

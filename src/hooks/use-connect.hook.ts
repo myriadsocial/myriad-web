@@ -187,9 +187,7 @@ export const useConnect = () => {
 
       await WalletAPI.switchNetwork(payload, user.id);
 
-      const currentUser = await WalletAPI.getUser();
-
-      await dispatch(fetchUser(currentUser));
+      await dispatch(fetchUser());
       await dispatch(fetchUserWallets());
 
       callback && callback();

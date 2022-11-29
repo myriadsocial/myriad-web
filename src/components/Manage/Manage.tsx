@@ -19,7 +19,6 @@ import {useWalletList, WalletOption} from './use-wallet-list.hook';
 import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorizeAction';
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import ShowIf from 'src/components/common/show-if.component';
-import {NetworkIdEnum} from 'src/interfaces/network';
 import {UserWallet} from 'src/interfaces/user';
 import i18n from 'src/locale';
 
@@ -44,20 +43,7 @@ export const Manage: React.FC<ManageProps> = ({currentWallet, wallets, onConnect
   };
 
   const disableWallet = (option: WalletOption) => {
-    if (option.id === NetworkIdEnum.POLKADOT) {
-      const substrateNetworks = [
-        NetworkIdEnum.POLKADOT,
-        NetworkIdEnum.MYRIAD,
-        NetworkIdEnum.KUSAMA,
-      ];
-      const isSubstrateWallet = substrateNetworks.includes(
-        currentWallet?.networkId as NetworkIdEnum,
-      );
-
-      return isSubstrateWallet ? true : false;
-    } else {
-      return option.id === currentWallet?.networkId ? true : false;
-    }
+    return option.blockchainPlatform === currentWallet?.network?.blockchainPlatform;
   };
 
   return (
