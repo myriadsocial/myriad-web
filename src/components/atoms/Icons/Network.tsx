@@ -3,9 +3,9 @@ import React from 'react';
 import {SvgIcon, SvgIconProps} from '@material-ui/core';
 
 import Kusama from 'src/images/network/Kusama.svg';
-import Debio from 'src/images/network/debio.svg';
 import Near24 from 'src/images/network/Near24.svg';
 import Polkadot24 from 'src/images/network/Polkadot24.svg';
+import Debio from 'src/images/network/debio.svg';
 import Ethereum from 'src/images/network/ethereum-disabled.svg';
 import Near from 'src/images/network/near.svg';
 import PolygonDisabled from 'src/images/network/polygon-disabled.svg';
