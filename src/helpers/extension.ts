@@ -53,6 +53,10 @@ export const convertToPolkadotAddress = (address: string, currentWallet: UserWal
         return encodeAddress(hexToU8a(address), 42);
       }
 
+      case NetworkIdEnum.DEBIO: {
+        return encodeAddress(hexToU8a(address), 42);
+      }
+
       case NetworkIdEnum.KUSAMA: {
         return encodeAddress(hexToU8a(address), 2);
       }

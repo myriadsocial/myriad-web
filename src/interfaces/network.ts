@@ -12,6 +12,7 @@ export enum NetworkIdEnum {
   NEAR = 'near',
   MYRIAD = 'myriad',
   KUSAMA = 'kusama',
+  DEBIO = 'debio',
 }
 
 export type NetworkProps = {
