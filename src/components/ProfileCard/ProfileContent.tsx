@@ -8,7 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 
 import {Avatar, AvatarSize} from '../atoms/Avatar';
-import {NotificationIcon} from '../atoms/Icons';
+import {DebioNetworkIcon, NotificationIcon} from '../atoms/Icons';
 import {ProfileCardProps} from './ProfileCard.interfaces';
 import {useStyles} from './profileContent.style';
 
@@ -52,6 +52,7 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
       kusama: <KusamaNetworkIcon />,
       near: <NearNetworkIcon24 />,
       myriad: <MyriadCircleIcon />,
+      debio: <DebioNetworkIcon />,
     }),
     [],
   );
