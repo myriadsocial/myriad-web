@@ -12,6 +12,7 @@ import {
   CoinbaseWalletisabledIcon,
   EthereumNetworkIcon,
   KusamaNetworkIcon,
+  DebioNetworkIcon,
   MetamaskWalletDisabledIcon,
   MyNearWalletIcon,
   MyriadCircleIcon,
@@ -75,6 +76,7 @@ export const Options: React.FC<OptionProps> = props => {
       kusama: <KusamaNetworkIcon className={getMobileIconStyles} />,
       near: <NearNetworkIcon className={getMobileIconStyles} />,
       myriad: <MyriadCircleIcon className={getMobileIconStyles} />,
+      debio: <DebioNetworkIcon className={getMobileIconStyles} />,
     }),
     [],
   );

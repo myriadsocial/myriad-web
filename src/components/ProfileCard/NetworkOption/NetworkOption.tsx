@@ -18,6 +18,7 @@ import {
   MyriadCircleIcon,
   PolkadotNetworkIcon,
   KusamaNetworkIcon,
+  DebioNetworkIcon,
 } from 'src/components/atoms/Icons';
 import {formatNetworkTitle} from 'src/helpers/wallet';
 import {Network} from 'src/interfaces/network';
@@ -48,6 +49,7 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({
       kusama: <KusamaNetworkIcon />,
       near: <NearNetworkIcon24 />,
       myriad: <MyriadCircleIcon />,
+      debio: <DebioNetworkIcon />,
     }),
     [],
   );
