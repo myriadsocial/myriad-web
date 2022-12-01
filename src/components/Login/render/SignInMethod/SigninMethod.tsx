@@ -55,9 +55,7 @@ export default function SigninMethod({disableSignIn}: {disableSignIn: boolean}) 
     <>
       <div className={styles.root}>
         <Typography className={styles.textSign}>Sign-in Methods</Typography>
-        <Typography className={styles.textSubtitle}>
-          Choose your sign-in methods
-        </Typography>
+        <Typography className={styles.textSubtitle}>Choose your sign-in methods</Typography>
         <div className={styles.wrapperCards}>
           <CardSign
             title={'Crypto Wallet'}
