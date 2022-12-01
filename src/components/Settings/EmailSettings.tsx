@@ -154,8 +154,10 @@ const EmailSetting = () => {
       <PromptComponent
         open={isPromptDialogOpen}
         icon="success"
-        title="Your Verifiaction Link Has Been Sent"
-        subtitle={`We have sent you an email from the address ${emailValue} Check your inbox and click that link in order to verify your email address.
+        title="Your Verification Link Has Been Sent"
+        subtitle={`We have sent you an email to the address ${emailValue} Check your inbox and click that link in order to ${
+          isWeb3UsersAndDontHaveEmail ? 'verify' : 'remove'
+        }  your email address.
 Don’t forget to check your spam folder!`}
         onCancel={() => null}>
         <>
@@ -183,9 +185,9 @@ Don’t forget to check your spam folder!`}
               color="primary"
               disabled={countDown !== 0}
               onClick={isWeb3UsersAndDontHaveEmail ? onClickSendVerificationEMail : onDeleteEmail}>
-              Resend this verify email again
+              Resend verification email
             </Button>
-            <span>You can send your sign-in link again after {countDown}s left</span>
+            <span>You can send your verification link again in {countDown}s</span>
           </div>
         </>
       </PromptComponent>
