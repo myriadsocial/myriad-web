@@ -64,7 +64,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
   }, 300);
 
   const declineFriendRequest = debounce(() => {
-    if (!profile?.status) return;
+    if (!profile?.friendInfo.status) return;
 
     removeFriendRequest(profile);
   }, 300);
@@ -91,8 +91,8 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
   };
 
   const handleAcceptFriend = debounce(() => {
-    if (profile.status) {
-      toggleRequest(profile?.friendId ?? '', FriendStatus.APPROVED);
+    if (profile?.friendInfo.status) {
+      toggleRequest(profile?.friendInfo.id ?? '', FriendStatus.APPROVED);
 
       enqueueSnackbar({
         message: i18n.t('Profile.Header.Alert.Success_Req'),
@@ -102,7 +102,7 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
   }, 300);
 
   const handleRemoveFriend = () => {
-    const status = profile?.status;
+    const status = profile?.friendInfo.status;
 
     if (status) {
       removeFriendRequest(profile, () => {

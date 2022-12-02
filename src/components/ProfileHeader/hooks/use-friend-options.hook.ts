@@ -10,18 +10,15 @@ type FriendOptions = {
   canAddFriend: boolean;
 };
 
-export const useFriendOptions = (
-  person: User & FriendStatusProps,
-  currentUser?: User,
-): FriendOptions => {
-  const self = (): boolean => person?.status === FriendStatus.OWNED;
-  const isFriend = (): boolean => person?.status === FriendStatus.APPROVED;
+export const useFriendOptions = (person: User & {friendInfo: FriendStatusProps}): FriendOptions => {
+  const self = (): boolean => person?.friendInfo.status === 'owner';
+  const isFriend = (): boolean => person?.friendInfo.status === 'friends';
   const isRequested = (): boolean => {
-    return person?.status === FriendStatus.PENDING && person?.requestee === currentUser?.id;
+    return person?.friendInfo.status === 'respond';
   };
 
   const isRequesting = (): boolean => {
-    return person?.status === FriendStatus.PENDING && person?.requester === currentUser?.id;
+    return person?.friendInfo.status === 'requested';
   };
 
   return {
@@ -29,7 +26,7 @@ export const useFriendOptions = (
     isFriend: isFriend(),
     isRequested: isRequested(),
     isRequesting: isRequesting(),
-    canAddFriend: !self() && !Boolean(person?.status),
-    isBlocked: person?.status === FriendStatus.BLOCKED,
+    canAddFriend: !self() && !Boolean(person?.friendInfo.status),
+    isBlocked: person?.friendInfo.status === FriendStatus.BLOCKED,
   };
 };

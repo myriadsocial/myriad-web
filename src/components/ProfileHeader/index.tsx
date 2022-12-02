@@ -37,7 +37,7 @@ import {FriendStatusProps, User} from 'src/interfaces/user';
 import i18n from 'src/locale';
 
 export type Props = {
-  person: User & FriendStatusProps;
+  person: User & {friendInfo: FriendStatusProps};
   user?: User;
   status?: Friend;
   onSendRequest: () => void;
@@ -71,10 +71,8 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
   } = props;
   const style = useStyles();
   const confirm = useConfirm();
-  const {self, canAddFriend, isBlocked, isFriend, isRequested, isRequesting} = useFriendOptions(
-    person,
-    user,
-  );
+  const {self, canAddFriend, isBlocked, isFriend, isRequested, isRequesting} =
+    useFriendOptions(person);
   const enqueueSnackbar = useEnqueueSnackbar();
   const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -134,9 +132,8 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
   };
 
   const handleSendRequest = () => {
-    console.log(person);
-    if (person?.status) {
-      onUnblockFriend(person?.friendId ?? '');
+    if (person?.friendInfo.status) {
+      onUnblockFriend(person?.friendInfo.id ?? '');
     } else {
       onSendRequest();
     }

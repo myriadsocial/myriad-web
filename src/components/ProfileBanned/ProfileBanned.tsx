@@ -13,7 +13,7 @@ import {User, FriendStatusProps} from 'src/interfaces/user';
 import i18n from 'src/locale';
 
 type ProfileBannedProps = {
-  person: User & FriendStatusProps;
+  person: User & {friendInfo: FriendStatusProps};
 };
 
 export const ProfileBanned: React.FC<ProfileBannedProps> = ({person}) => {

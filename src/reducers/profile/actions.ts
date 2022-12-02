@@ -20,7 +20,7 @@ import {ThunkActionCreator} from 'src/types/thunk';
 
 export interface FetchProfileDetail extends Action {
   type: constants.FETCH_PROFILE_DETAIL;
-  detail: User & FriendStatusProps;
+  detail: User & {friendInfo: FriendStatusProps};
 }
 
 export interface FetchProfileFriend extends PaginationAction {
@@ -77,7 +77,9 @@ export type Actions =
  *
  * Actions
  */
-export const setProfile = (profile: User & FriendStatusProps): FetchProfileDetail => ({
+export const setProfile = (
+  profile: User & {friendInfo: FriendStatusProps},
+): FetchProfileDetail => ({
   type: constants.FETCH_PROFILE_DETAIL,
   detail: profile,
 });
@@ -97,7 +99,7 @@ export const fetchProfileDetail: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     try {
-      const detail: User & FriendStatusProps = await UserAPI.getUserDetail(userId);
+      const detail: User & {friendInfo: FriendStatusProps} = await UserAPI.getUserDetail(userId);
 
       dispatch(setProfile(detail));
     } catch (error) {

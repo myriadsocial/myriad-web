@@ -168,10 +168,12 @@ export const blockFromFriend: ThunkActionCreator<Actions, RootState> =
         dispatch(
           setProfile({
             ...detail,
-            friendId: blocked.id,
-            status: blocked.status,
-            requestee: blocked.requesteeId,
-            requester: blocked.requestorId,
+            friendInfo: {
+              id: blocked.id,
+              status: blocked.status,
+              requesteeId: blocked.requesteeId,
+              requestorId: blocked.requestorId,
+            },
           }),
         );
       }
