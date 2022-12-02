@@ -4,8 +4,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
 
-console.log(process.env);
-
 const {version} = require('./package.json');
 
 /** @type {import('next').NextConfig} */
