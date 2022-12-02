@@ -12,7 +12,6 @@ import {useExperienceList} from './hooks/use-experience-list.hook';
 
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {Skeleton} from 'src/components/Expericence';
 import {LoadMoreComponent} from 'src/components/atoms/LoadMore/LoadMore';
 import {ExperienceOwner, useExperienceHook} from 'src/hooks/use-experience-hook';
 import {WrappedExperience} from 'src/interfaces/experience';
@@ -50,7 +49,6 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
     enableSubscribe,
     hasMore = false,
     filterTimeline = false,
-    buttonLoad,
     loadNextPage,
     refreshExperience,
     noButton,
@@ -149,8 +147,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> = p
         dataLength={experiences.length}
         hasMore={hasMore}
         next={handleLoadNextPage}
-        // TODO: fixed load more with scroll
-        loader={buttonLoad ? <LoadMoreComponent loadmore={handleLoadNextPage} /> : <Skeleton />}>
+        loader={<LoadMoreComponent loadmore={handleLoadNextPage} />}>
         {noButton ? (
           <ExperienceListRightBar
             onDelete={handleRemoveExperience}
