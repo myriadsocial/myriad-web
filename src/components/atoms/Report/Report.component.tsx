@@ -60,7 +60,7 @@ export const ReportComponent: React.FC<Props> = props => {
         <Typography variant="h5" gutterBottom={true} style={{fontWeight: 600}}>
           {i18n.t('Profile.Modal_Report.Subtitle_1')}
           <Typography variant="h5" component="span" color="primary" style={{fontWeight: 600}}>
-            {user.name}
+            {` ${user.name}`}
           </Typography>
           ?
         </Typography>

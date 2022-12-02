@@ -49,6 +49,7 @@ export const formatWalletTitle = (network?: Network, networkId?: NetworkIdEnum) 
   if (networkId) {
     switch (networkId) {
       case NetworkIdEnum.MYRIAD:
+      case NetworkIdEnum.DEBIO:
       case NetworkIdEnum.KUSAMA:
       case NetworkIdEnum.POLKADOT:
         return 'Polkadot{.js}';

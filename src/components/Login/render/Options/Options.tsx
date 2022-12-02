@@ -12,6 +12,7 @@ import {
   CoinbaseWalletisabledIcon,
   EthereumNetworkIcon,
   KusamaNetworkIcon,
+  DebioNetworkIcon,
   MetamaskWalletDisabledIcon,
   MyNearWalletIcon,
   MyriadCircleIcon,
@@ -28,7 +29,7 @@ import {formatNetworkTitle} from 'src/helpers/wallet';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {NetworkIdEnum} from 'src/interfaces/network';
-import {WalletTypeEnum} from 'src/interfaces/wallet';
+import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
@@ -55,6 +56,7 @@ export const Options: React.FC<OptionProps> = props => {
   const {enablePolkadotExtension, getPolkadotAccounts} = usePolkadotExtension();
   const {connectToNear} = useNearApi();
 
+  const [blockchainPlatform, setBlockchainPlatform] = useState<BlockchainPlatform | null>(null);
   const [networkId, setNetworkId] = useState<NetworkIdEnum | null>(null);
   const [wallet, setWallet] = useState<WalletTypeEnum | null>(null);
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
@@ -74,6 +76,7 @@ export const Options: React.FC<OptionProps> = props => {
       kusama: <KusamaNetworkIcon className={getMobileIconStyles} />,
       near: <NearNetworkIcon className={getMobileIconStyles} />,
       myriad: <MyriadCircleIcon className={getMobileIconStyles} />,
+      debio: <DebioNetworkIcon className={getMobileIconStyles} />,
     }),
     [],
   );
@@ -88,27 +91,20 @@ export const Options: React.FC<OptionProps> = props => {
     [],
   );
 
-  const setSelectedNetwork = (networkId: NetworkIdEnum) => () => {
-    setNetworkId(networkId);
+  const setSelectedNetwork =
+    (networkId: NetworkIdEnum, blockchainPlatform: BlockchainPlatform) => () => {
+      setNetworkId(networkId);
+      setBlockchainPlatform(blockchainPlatform);
 
-    switch (networkId) {
-      case NetworkIdEnum.POLKADOT:
-        setSelectedWallet(WalletTypeEnum.POLKADOT)();
-        break;
-      case NetworkIdEnum.MYRIAD:
-        setSelectedWallet(WalletTypeEnum.POLKADOT)();
-        break;
-      case NetworkIdEnum.KUSAMA:
-        setSelectedWallet(WalletTypeEnum.POLKADOT)();
-        break;
-      case NetworkIdEnum.NEAR:
-        setSelectedWallet(WalletTypeEnum.NEAR)();
-        break;
-      default:
-        setWallet(null);
-        break;
-    }
-  };
+      switch (blockchainPlatform) {
+        case BlockchainPlatform.SUBSTRATE:
+          return setSelectedWallet(WalletTypeEnum.POLKADOT)();
+        case BlockchainPlatform.NEAR:
+          return setSelectedWallet(WalletTypeEnum.NEAR)();
+        default:
+          return setWallet(null);
+      }
+    };
 
   const setSelectedWallet = (value: WalletTypeEnum) => () => {
     switch (value) {
@@ -209,7 +205,7 @@ export const Options: React.FC<OptionProps> = props => {
                   <ListItem
                     disableGutters
                     selected={networkId === network.id}
-                    onClick={setSelectedNetwork(network.id as NetworkIdEnum)}>
+                    onClick={setSelectedNetwork(network.id, network.blockchainPlatform)}>
                     <div className={styles.card}>
                       {icons[network.id as keyof typeof icons]}
                       <Typography>{formatNetworkTitle(network)}</Typography>
@@ -261,13 +257,7 @@ export const Options: React.FC<OptionProps> = props => {
               justifyContent="flex-start"
               alignContent="center"
               classes={{root: styles.list}}>
-              <ShowIf
-                condition={
-                  networkId === null ||
-                  networkId === NetworkIdEnum.POLKADOT ||
-                  networkId === NetworkIdEnum.KUSAMA ||
-                  networkId === NetworkIdEnum.MYRIAD
-                }>
+              <ShowIf condition={blockchainPlatform === BlockchainPlatform.SUBSTRATE}>
                 <Grid item xs={3}>
                   <ListItem
                     component={'button'}
@@ -285,7 +275,7 @@ export const Options: React.FC<OptionProps> = props => {
                   </ListItem>
                 </Grid>
               </ShowIf>
-              <ShowIf condition={networkId === null || networkId === NetworkIdEnum.NEAR}>
+              <ShowIf condition={blockchainPlatform === BlockchainPlatform.NEAR}>
                 {[WalletTypeEnum.NEAR, WalletTypeEnum.MYNEAR].map(e => {
                   return (
                     <Grid item xs={3} key={e}>
@@ -312,7 +302,7 @@ export const Options: React.FC<OptionProps> = props => {
                   );
                 })}
               </ShowIf>
-              <ShowIf condition={networkId === null || networkId === NetworkIdEnum.NEAR}>
+              <ShowIf condition={blockchainPlatform === BlockchainPlatform.NEAR}>
                 <Grid item xs={3}>
                   <Tooltip
                     title={
@@ -454,7 +444,7 @@ export const Options: React.FC<OptionProps> = props => {
                       <ListItem
                         disableGutters
                         selected={networkId === network.id}
-                        onClick={setSelectedNetwork(network.id)}>
+                        onClick={setSelectedNetwork(network.id, network.blockchainPlatform)}>
                         <div className={styles.rowCard}>
                           {icons[network.id as keyof typeof icons]}
                           <Typography>{formatNetworkTitle(network)}</Typography>
@@ -476,7 +466,7 @@ export const Options: React.FC<OptionProps> = props => {
                 justifyContent="flex-start"
                 direction="column"
                 classes={{root: styles.list}}>
-                <ShowIf condition={networkId === null || networkId === NetworkIdEnum.NEAR}>
+                <ShowIf condition={blockchainPlatform === BlockchainPlatform.NEAR}>
                   {[WalletTypeEnum.NEAR, WalletTypeEnum.MYNEAR].map(e => {
                     return (
                       <Grid item xs={12} key={e}>
@@ -499,7 +489,7 @@ export const Options: React.FC<OptionProps> = props => {
                     );
                   })}
                 </ShowIf>
-                <ShowIf condition={networkId === null || networkId === NetworkIdEnum.NEAR}>
+                <ShowIf condition={blockchainPlatform === BlockchainPlatform.NEAR}>
                   <Grid item xs={12}>
                     <Tooltip
                       title={
@@ -520,13 +510,7 @@ export const Options: React.FC<OptionProps> = props => {
                     </Tooltip>
                   </Grid>
                 </ShowIf>
-                <ShowIf
-                  condition={
-                    networkId === null ||
-                    networkId === NetworkIdEnum.POLKADOT ||
-                    networkId === NetworkIdEnum.KUSAMA ||
-                    networkId === NetworkIdEnum.MYRIAD
-                  }>
+                <ShowIf condition={blockchainPlatform === BlockchainPlatform.SUBSTRATE}>
                   <Grid item xs={12}>
                     <ListItem
                       component={'button'}

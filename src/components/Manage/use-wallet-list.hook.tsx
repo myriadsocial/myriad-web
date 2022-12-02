@@ -10,6 +10,7 @@ export type WalletOption = {
   icons: JSX.Element;
   isConnect: boolean;
   walletId: string;
+  blockchainPlatform: BlockchainPlatform;
 };
 
 type WalletListHook = {
@@ -36,6 +37,7 @@ export const useWalletList = (wallets: Wallet[]): WalletListHook => {
           wallets.find(i => i?.network?.blockchainPlatform === BlockchainPlatform.NEAR),
         ),
         walletId: findWalletId(BlockchainPlatform.NEAR) ?? 'nearId.near',
+        blockchainPlatform: BlockchainPlatform.NEAR,
       },
       {
         id: 'polkadot',
@@ -45,6 +47,7 @@ export const useWalletList = (wallets: Wallet[]): WalletListHook => {
           wallets.find(i => i?.network?.blockchainPlatform === BlockchainPlatform.SUBSTRATE),
         ),
         walletId: findWalletId(BlockchainPlatform.SUBSTRATE) ?? 'polkadotId',
+        blockchainPlatform: BlockchainPlatform.SUBSTRATE,
       },
     ];
   }, [wallets]);
