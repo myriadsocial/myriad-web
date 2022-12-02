@@ -1,20 +1,20 @@
 import {InformationCircleIcon} from '@heroicons/react/outline';
 
-import React, {useCallback, useState, useEffect} from 'react';
+import React, {useCallback, useState} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import {useSelector} from 'react-redux';
 
 import {
+  Button,
+  CardActionArea,
+  CardContent,
+  CardMedia,
   Checkbox,
-  Typography,
-  Tooltip,
+  Grid,
   IconButton,
   SvgIcon,
-  CardActionArea,
-  Grid,
-  CardMedia,
-  CardContent,
-  Button,
+  Tooltip,
+  Typography,
 } from '@material-ui/core';
 
 import ModalAddToPostContext, {HandleConfirmAddPostExperience} from './ModalAddToPost.context';
@@ -104,11 +104,6 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
     addPostsToExperience,
     loading,
   } = useExperienceHook();
-
-  useEffect(() => {
-    if (Boolean(user) && userExperiencesMeta.currentPage < userExperiencesMeta.totalPageCount)
-      loadNextUserExperience();
-  }, [user, userExperiencesMeta]);
 
   const [postId, setPostId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
