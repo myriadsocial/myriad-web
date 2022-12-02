@@ -10,6 +10,7 @@ export enum SectionTitle {
   SETTINGS = 'Settings',
   NOTIFICATION = 'Notification',
   TIMELINE = 'Timeline',
+  MY_TIMELINE = 'My Timelines',
   NFT = 'NFT',
   MYRIAD_TOWN = 'Myriad.Town',
   SOCIAL_TOKEN = 'Social Token',
