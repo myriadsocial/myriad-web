@@ -38,7 +38,7 @@ const ExperiencePageComponent: React.FC<ExperiencePageProps> = props => {
 
       <TopNavbarComponent
         description={'Custom timeline'}
-        sectionTitle={SectionTitle.EXPERIENCE}
+        sectionTitle={SectionTitle.MY_TIMELINE}
         type={'menu'}
       />
 
