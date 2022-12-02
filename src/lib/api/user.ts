@@ -11,7 +11,7 @@ type ActivityList = BaseList<ActivityLog>;
 export const getUserDetail = async (
   id: string,
   userId?: string,
-): Promise<User & FriendStatusProps> => {
+): Promise<User & {friendInfo: FriendStatusProps}> => {
   const params: Record<string, any> = {
     filter: {
       include: [
@@ -39,7 +39,7 @@ export const getUserDetail = async (
     params.userId = userId;
   }
 
-  const {data} = await MyriadAPI().request<User & FriendStatusProps>({
+  const {data} = await MyriadAPI().request<User & {friendInfo: FriendStatusProps}>({
     url: `/users/${id}`,
     method: 'GET',
     params,

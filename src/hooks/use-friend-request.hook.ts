@@ -20,19 +20,19 @@ export const useFriendRequest = () => {
     await dispatch(createFriendRequest(profile));
   };
 
-  const removeFriendRequest = async (profile: User & FriendStatusProps, callback?: () => void) => {
-    if (!profile?.friendId) return;
+  const removeFriendRequest = async (
+    profile: User & {friendInfo: FriendStatusProps},
+    callback?: () => void,
+  ) => {
+    if (!profile?.friendInfo.id) return;
 
-    await dispatch(deleteFriendRequest(profile.friendId));
+    await dispatch(deleteFriendRequest(profile?.friendInfo.id));
     await loadUsersFriends();
     await dispatch(fetchProfileFriend());
     await dispatch(
       setProfile({
         ...profile,
-        friendId: null,
-        status: null,
-        requestee: null,
-        requester: null,
+        friendInfo: null,
       }),
     );
 

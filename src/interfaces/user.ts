@@ -1,6 +1,5 @@
 import {BaseModel} from './base.interface';
 import {Currency} from './currency';
-import {FriendStatus} from './friend';
 import {NetworkIdEnum, Network, NetworkProps} from './network';
 import {People} from './people';
 import {PrivacySettings} from './setting';
@@ -47,10 +46,10 @@ export type UserProps = BaseUser & {
 };
 
 export type FriendStatusProps = {
-  friendId: string;
-  status: FriendStatus;
-  requester: string;
-  requestee: string;
+  id: string;
+  status: string;
+  requestorId: string;
+  requesteeId: string;
 };
 
 export type UserMetric = {

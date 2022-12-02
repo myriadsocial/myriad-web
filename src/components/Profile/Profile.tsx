@@ -27,7 +27,7 @@ const ProfileEditContainer = dynamic(
 type ProfileProps = {
   loading: boolean;
   user: User;
-  person: User & FriendStatusProps;
+  person: User & {friendInfo: FriendStatusProps};
   anonymous: boolean;
 };
 
@@ -97,11 +97,11 @@ export const Profile: React.FC<ProfileProps> = props => {
         <ShowIf condition={!isEditing}>
           <ProfileHeaderContainer edit={handleOpenEdit} />
 
-          <ShowIf condition={person?.status !== FriendStatus.BLOCKED}>
+          <ShowIf condition={person?.friendInfo.status !== FriendStatus.BLOCKED}>
             <UserMenuContainer isMyriad={person.username === 'myriad_official'} />
           </ShowIf>
 
-          <ShowIf condition={person?.status === FriendStatus.BLOCKED}>
+          <ShowIf condition={person?.friendInfo.status === FriendStatus.BLOCKED}>
             <Grid
               container
               direction="column"
@@ -109,16 +109,16 @@ export const Profile: React.FC<ProfileProps> = props => {
               alignItems="center"
               className={style.blocked}>
               <Typography variant="h4" className={style.blockedTitle}>
-                {user?.id === person.requester
+                {user?.id === person?.friendInfo.requestorId
                   ? i18n.t('Profile.Block.User.Title')
                   : i18n.t('Profile.Block.Other.Title')}
               </Typography>
-              <ShowIf condition={user?.id === person.requester}>
+              <ShowIf condition={user?.id === person?.friendInfo.requestorId}>
                 <Typography variant="body1" component="div">
                   {i18n.t('Profile.Block.User.Subtitle')}
                 </Typography>
               </ShowIf>
-              <ShowIf condition={user?.id !== person.requester}>
+              <ShowIf condition={user?.id !== person?.friendInfo.requestorId}>
                 <Typography variant="body1" component="div">
                   {i18n.t('Profile.Block.Other.Subtitle')}
                 </Typography>

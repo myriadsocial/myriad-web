@@ -23,7 +23,7 @@ export const ProfileContainer: React.FC<ProfileContainerProps> = props => {
   );
   const {person, loading} = useSelector<
     RootState,
-    {person: User & FriendStatusProps; loading: boolean}
+    {person: User & {friendInfo: FriendStatusProps}; loading: boolean}
   >(
     state => ({
       person: state.profileState.detail,

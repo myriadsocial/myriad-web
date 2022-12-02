@@ -1,12 +1,9 @@
-import {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {useBlockList} from './use-blocked-list.hook';
 
-import {isErrorWithMessage, ErrorWithMessage} from 'src/helpers/error';
 import {Friend, FriendStatus} from 'src/interfaces/friend';
 import {User} from 'src/interfaces/user';
-import * as FriendAPI from 'src/lib/api/friends';
 import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
 import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
 import {RootState} from 'src/reducers';
@@ -35,10 +32,6 @@ export const useFriendsHook = (user?: User) => {
   const {currentPage: currentFriendRequestPage} = useSelector<RootState, ListMeta>(
     state => state.friendRequestState.meta,
   );
-
-  const [friended, setFriended] = useState<Friend[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<ErrorWithMessage | null>(null);
 
   const loadRequests = () => {
     if (!user) return;
@@ -107,9 +100,6 @@ export const useFriendsHook = (user?: User) => {
   };
 
   return {
-    error,
-    loading,
-    friended,
     hasMore: currentFriendPage < totalPageCount,
     loadFriends,
     loadMoreFriends,
