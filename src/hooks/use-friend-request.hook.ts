@@ -24,9 +24,9 @@ export const useFriendRequest = () => {
     profile: User & {friendInfo: FriendStatusProps},
     callback?: () => void,
   ) => {
-    if (!profile?.friendInfo.id) return;
+    if (!profile?.friendInfo?.id) return;
 
-    await dispatch(deleteFriendRequest(profile?.friendInfo.id));
+    await dispatch(deleteFriendRequest(profile?.friendInfo?.id));
     await loadUsersFriends();
     await dispatch(fetchProfileFriend());
     await dispatch(

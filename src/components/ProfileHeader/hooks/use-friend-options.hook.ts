@@ -11,22 +11,14 @@ type FriendOptions = {
 };
 
 export const useFriendOptions = (person: User & {friendInfo: FriendStatusProps}): FriendOptions => {
-  const self = (): boolean => person?.friendInfo.status === 'owner';
-  const isFriend = (): boolean => person?.friendInfo.status === 'friends';
-  const isRequested = (): boolean => {
-    return person?.friendInfo.status === 'respond';
-  };
-
-  const isRequesting = (): boolean => {
-    return person?.friendInfo.status === 'requested';
-  };
+  const self = (): boolean => person?.friendInfo?.status === 'owner';
 
   return {
     self: self(),
-    isFriend: isFriend(),
-    isRequested: isRequested(),
-    isRequesting: isRequesting(),
-    canAddFriend: !self() && !Boolean(person?.friendInfo.status),
-    isBlocked: person?.friendInfo.status === FriendStatus.BLOCKED,
+    isFriend: person?.friendInfo?.status === 'friends',
+    isRequested: person?.friendInfo?.status === 'respond',
+    isRequesting: person?.friendInfo?.status === 'requested',
+    canAddFriend: !self() && !Boolean(person?.friendInfo?.status),
+    isBlocked: person?.friendInfo?.status === FriendStatus.BLOCKED,
   };
 };

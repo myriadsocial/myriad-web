@@ -79,7 +79,7 @@ export const createFriendRequest: ThunkActionCreator<Actions, RootState> =
           ...profile,
           friendInfo: {
             id: friend.id,
-            status: 'respond',
+            status: 'requested',
             requestorId: user.id,
             requesteeId: profile.id,
           },
@@ -132,6 +132,7 @@ export const toggleFriendRequest: ThunkActionCreator<Actions, RootState> =
     try {
       const {
         userState: {user},
+        profileState: {detail},
       } = getState();
 
       if (!user) {
@@ -142,6 +143,15 @@ export const toggleFriendRequest: ThunkActionCreator<Actions, RootState> =
 
       if (status === FriendStatus.APPROVED) {
         dispatch(fetchFriend());
+        dispatch(
+          setProfile({
+            ...detail,
+            friendInfo: {
+              ...detail.friendInfo,
+              status: 'friends',
+            },
+          }),
+        );
       }
 
       dispatch(fetchFriendRequest(user));

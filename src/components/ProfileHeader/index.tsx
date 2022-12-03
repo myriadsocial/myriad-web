@@ -132,8 +132,8 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
   };
 
   const handleSendRequest = () => {
-    if (person?.friendInfo.status) {
-      onUnblockFriend(person?.friendInfo.id ?? '');
+    if (person?.friendInfo?.status) {
+      onUnblockFriend(person?.friendInfo?.id ?? '');
     } else {
       onSendRequest();
     }
@@ -175,6 +175,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
       },
     });
   };
+
   return (
     <div>
       <ShowIf
