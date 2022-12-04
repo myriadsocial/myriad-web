@@ -22,7 +22,7 @@ import {TippingProvider} from 'src/components/common/Tipping/Tipping.provider';
 import ShowIf from 'src/components/common/show-if.component';
 import {useInstances} from 'src/hooks/use-instances.hooks';
 import {useUserHook} from 'src/hooks/use-user.hook';
-import {IProvider, MYRIAD_WALLET_KEY} from 'src/interfaces/blockchain-interface';
+import {IProvider} from 'src/interfaces/blockchain-interface';
 import {NotificationProps} from 'src/interfaces/notification';
 import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
 import * as FirebaseAnalytic from 'src/lib/firebase/analytic';
@@ -75,15 +75,17 @@ const Default: React.FC<DefaultLayoutProps> = props => {
 
   const [cookies] = useCookies([COOKIE_CONSENT_NAME, COOKIE_INSTANCE_URL]);
 
+  const {data: session} = useSession();
   const {user, anonymous, currentWallet, updateUserFcmToken} = useUserHook();
   const {instance} = useInstances();
-  const {data: session} = useSession();
 
   const [showNotification, setShowNotification] = useState<boolean>(false);
   const [provider, setProvider] = useState<IProvider>(null);
   const [initialize, setInitialize] = useState<boolean>(true);
 
   const loadingNear = router.query.loading as string | null;
+  const network = currentWallet?.network;
+  const walletType = session?.user?.walletType as WalletTypeEnum;
 
   const initializeProvider = useCallback(async () => {
     if (anonymous) return;
@@ -92,11 +94,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
     if (loadingNear) dispatch(clearBalances());
     dispatch(clearBalances());
 
-    const walletType = window.localStorage.getItem(MYRIAD_WALLET_KEY);
-    const blockchain = await BlockchainProvider.connect(
-      currentWallet.network,
-      walletType as WalletTypeEnum,
-    );
+    const blockchain = await BlockchainProvider.connect(network, walletType as WalletTypeEnum);
     const provider = blockchain?.provider;
 
     if (provider) provider.accountId = currentWallet.id;
@@ -185,8 +183,8 @@ const Default: React.FC<DefaultLayoutProps> = props => {
       <TippingProvider
         anonymous={anonymous}
         sender={user}
-        currentWallet={getWallet(currentWallet?.network?.blockchainPlatform)}
-        currentNetwork={currentWallet?.networkId}>
+        currentWallet={getWallet(currentWallet?.blockchainPlatform)}
+        currentNetwork={currentWallet?.network.id}>
         <Container maxWidth="lg" disableGutters>
           <div className={classes.root}>
             <div className={classes.firstCol}>

@@ -79,7 +79,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
       return null;
     }
 
-    const wallet = user.wallets.find(ar => ar.networkId === currentNetwork);
+    const wallet = user.wallets.find(ar => ar?.network.id === currentNetwork);
 
     return wallet?.id ?? null;
   };

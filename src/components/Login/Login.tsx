@@ -32,13 +32,15 @@ import useMobileDetect from 'src/hooks/use-is-mobile-detect';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {useProfileHook} from 'src/hooks/use-profile.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
-import {NetworkIdEnum} from 'src/interfaces/network';
-import {WalletTypeEnum} from 'src/interfaces/wallet';
+import {Network, NetworkIdEnum} from 'src/interfaces/network';
+import {WalletWithSigner} from 'src/interfaces/user';
+import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
 import {getCheckEmail} from 'src/lib/api/user';
 import {toHexPublicKey} from 'src/lib/crypto';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {ConfigState} from 'src/reducers/config/reducer';
+import {UserState} from 'src/reducers/user/reducer';
 
 type LoginProps = {
   redirectAuth: WalletTypeEnum | null;
@@ -49,6 +51,7 @@ export const Login: React.FC<LoginProps> = props => {
   const {redirectAuth, isMobileSignIn} = props;
   const detect = useMobileDetect();
   const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
+  const {networks} = useSelector<RootState, UserState>(state => state.userState);
 
   const router = useRouter();
   const styles = useStyles();
@@ -66,10 +69,9 @@ export const Login: React.FC<LoginProps> = props => {
 
   const [, setToken] = useState('');
   const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
-  const [walletType, setWalletType] = useState<WalletTypeEnum | null>(redirectAuth);
-  const [networkId, setNetworkId] = useState<NetworkIdEnum | null>(null);
+  const [currentNetwork, setCurrentNetwork] = useState<Network | null>(null);
+  const [currentWallet, setCurrentWallet] = useState<WalletWithSigner | null>(null);
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
-  const [nearWallet, setNearWallet] = useState('');
   const [selectedAccount, setSelectedAccount] = useState<InjectedAccountWithMeta | null>(null);
   const [signatureCancelled, setSignatureCancelled] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -129,43 +131,48 @@ export const Login: React.FC<LoginProps> = props => {
     }
   }, [query, registeredEmail]);
 
-  const checkWalletRegistered = useCallback(async (wallet: WalletTypeEnum) => {
-    const data = await connectToNear(undefined, undefined, wallet, 'login near');
+  const checkWalletRegistered = useCallback(async (walletType: WalletTypeEnum) => {
+    setDisableSignIn(true);
+
+    const data = await connectToNear(undefined, undefined, walletType, 'login near');
 
     if (!data) return;
 
-    setNearWallet(data.publicAddress);
+    const wallet = {
+      id: data.publicAddress,
+      blockchainPlatform: BlockchainPlatform.NEAR,
+      type: walletType,
+    };
+
+    const network = networks.find(e => e.id === NetworkIdEnum.NEAR);
+
+    if (!network) return;
 
     checkAccountRegistered(
       () => {
         setInitialEntries(['/profile']);
-        setNetworkId(NetworkIdEnum.NEAR);
         setWalletLoading(false);
       },
-      undefined,
-      data.publicAddress,
-      wallet,
+      wallet as WalletWithSigner,
+      network,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleOnconnect = (accounts: InjectedAccountWithMeta[], networkId: NetworkIdEnum) => {
-    setNetworkId(networkId);
+  const handleOnconnect = (accounts: InjectedAccountWithMeta[], network: Network) => {
+    setCurrentNetwork(network);
     setAccounts(accounts);
-    setWalletType(WalletTypeEnum.POLKADOT);
   };
 
   const handleOnConnectNear = (
-    nearId: string,
     callback: () => void,
-    networkId: NetworkIdEnum,
-    walletType: WalletTypeEnum,
+    network: Network,
+    wallet: WalletWithSigner,
   ) => {
-    setNetworkId(networkId);
-    setNearWallet(nearId);
-    setWalletType(walletType);
+    setCurrentNetwork(network);
+    setCurrentWallet(wallet);
 
-    checkAccountRegistered(callback, undefined, nearId, walletType);
+    checkAccountRegistered(callback, wallet);
   };
 
   const handleSelectedAccount = (account: InjectedAccountWithMeta) => {
@@ -173,90 +180,62 @@ export const Login: React.FC<LoginProps> = props => {
   };
 
   const checkAccountRegistered = useCallback(
-    async (
-      callback: () => void,
-      account?: InjectedAccountWithMeta,
-      nearId?: string,
-      walletType?: WalletTypeEnum,
-    ) => {
-      switch (walletType) {
-        case WalletTypeEnum.POLKADOT:
-          {
-            const currentAccount = account ?? selectedAccount;
+    async (callback: () => void, wallet: WalletWithSigner, nearNetwork?: Network) => {
+      const network = currentNetwork ?? nearNetwork;
 
-            if (currentAccount) {
-              setLoading(true);
-              setSignatureCancelled(false);
+      if (!network) return;
 
-              const address = toHexPublicKey(currentAccount);
-              const {nonce} = await fetchUserNonce(address);
+      setCurrentWallet(wallet);
 
-              if (nonce > 0) {
-                const success = await signInWithExternalAuth(
-                  networkId,
-                  nonce,
-                  currentAccount,
-                  undefined,
-                  walletType,
-                );
+      let address = null;
 
-                if (!success) {
-                  setSignatureCancelled(true);
-                  setLoading(false);
-                }
-              } else {
-                // register
-                setLoading(false);
-                callback();
-              }
-            }
-          }
+      switch (wallet.type) {
+        case WalletTypeEnum.POLKADOT: {
+          if (!selectedAccount) return;
+
+          setLoading(true);
+          setSignatureCancelled(false);
+
+          address = toHexPublicKey(selectedAccount);
           break;
+        }
 
         case WalletTypeEnum.MYNEAR:
         case WalletTypeEnum.NEAR: {
-          if (nearId) {
-            const address = last(nearId.split('/'));
-
-            if (!address) {
-              setLoading(false);
-              callback();
-
-              return;
-            }
-
-            const {nonce} = await fetchUserNonce(address);
-
-            if (nonce > 0) {
-              setWalletLoading(false);
-              const success = await signInWithExternalAuth(
-                networkId,
-                nonce,
-                undefined,
-                nearId,
-                walletType,
-              );
-
-              if (!success) {
-                setSignatureCancelled(true);
-                setLoading(false);
-              }
-            } else {
-              // register
-              setLoading(false);
-              callback();
-            }
-          }
+          if (!wallet.id) break;
+          address = last(wallet.id.split('/')) ?? null;
           break;
         }
 
         default:
           break;
       }
-      localStorage.removeItem('email');
+
+      if (!address) {
+        setLoading(false);
+        callback();
+        return;
+      }
+
+      const {nonce} = await fetchUserNonce(address);
+
+      if (nonce > 0) {
+        setWalletLoading(false);
+        const success = await signInWithExternalAuth(nonce, wallet, network);
+
+        if (success) return;
+        setSignatureCancelled(true);
+        setLoading(false);
+        setDisableSignIn(false);
+        return;
+      }
+
+      // register
+      setLoading(false);
+      callback();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [selectedAccount, walletType],
+    [selectedAccount, currentWallet],
   );
 
   const checkEmailRegistered = useCallback(
@@ -349,10 +328,8 @@ export const Login: React.FC<LoginProps> = props => {
             path="/profile"
             element={
               <Profile
-                networkId={networkId}
-                walletType={walletType}
-                publicAddress={nearWallet}
-                account={selectedAccount}
+                network={currentNetwork}
+                wallet={currentWallet}
                 checkUsernameAvailability={checkUsernameAvailable}
                 isMobileSignIn={isMobileSignIn}
                 instance={instance}

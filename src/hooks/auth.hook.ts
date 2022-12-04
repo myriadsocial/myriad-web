@@ -9,9 +9,9 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {COOKIE_INSTANCE_URL} from 'components/SelectServer';
 import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
-import {MYRIAD_WALLET_KEY} from 'src/interfaces/blockchain-interface';
-import {NetworkIdEnum} from 'src/interfaces/network';
-import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
+import {Network, NetworkIdEnum} from 'src/interfaces/network';
+import {WalletWithSigner} from 'src/interfaces/user';
+import {WalletTypeEnum} from 'src/interfaces/wallet';
 import * as AuthAPI from 'src/lib/api/ext-auth';
 import * as WalletAPI from 'src/lib/api/wallet';
 import {toHexPublicKey} from 'src/lib/crypto';
@@ -64,97 +64,73 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
   };
 
   const signInWithExternalAuth = async (
-    networkId: NetworkIdEnum,
     nonce: number,
-    account?: InjectedAccountWithMeta,
-    nearAddress?: string,
-    walletType?: WalletTypeEnum,
+    wallet: WalletWithSigner,
+    network: Network,
   ) => {
-    const blockchainPlatform =
-      networkId === NetworkIdEnum.NEAR ? BlockchainPlatform.NEAR : BlockchainPlatform.SUBSTRATE;
+    let signInCredential = {
+      nonce,
+      networkType: network.id,
+      walletType: wallet.type,
+      blockchainPlatform: network.blockchainPlatform,
+      instanceURL: cookies[COOKIE_INSTANCE_URL],
+    };
 
-    if (account) {
-      const signature = await PolkadotJs.signWithWallet(account, nonce);
+    switch (wallet.type) {
+      case WalletTypeEnum.POLKADOT: {
+        if (!wallet.signer) return false;
+        const signature = await PolkadotJs.signWithWallet(wallet.signer, nonce);
+        if (!signature) return false;
+        const address = toHexPublicKey(wallet.signer);
+        const userSignature = {address, publicAddress: address, signature};
+        signInCredential = {...signInCredential, ...userSignature};
+        break;
+      }
 
-      if (!signature) return false;
-
-      signIn('credentials', {
-        address: toHexPublicKey(account),
-        publicAddress: toHexPublicKey(account),
-        signature,
-        walletType: WalletTypeEnum.POLKADOT,
-        networkType: networkId,
-        nonce,
-        instanceURL: cookies[COOKIE_INSTANCE_URL],
-        blockchainPlatform,
-        callbackUrl: redirect || publicRuntimeConfig.appAuthURL,
-      });
-
-      window.localStorage.setItem(MYRIAD_WALLET_KEY, walletType);
-
-      return true;
-    }
-
-    if (nearAddress && nearAddress.length > 0) {
-      const nearAccount = nearAddress.split('/')[1];
-      const network = networks.find(network => network.id === NetworkIdEnum.NEAR);
-
-      if (!network) return false;
-
-      const near = await Near.connect(network, walletType);
-      const wallet = near.provider.wallet;
-      const data = await Near.signWithWallet(
-        wallet,
-        undefined,
-        {nonce},
-        'sign in with external auth',
-      );
-
-      if (data && !data.signature) return false;
-
-      if (data) {
-        signIn('credentials', {
+      case WalletTypeEnum.NEAR:
+      case WalletTypeEnum.MYNEAR: {
+        const nearAccount = wallet.id.split('/')[1];
+        const near = await Near.connect(network, wallet.type);
+        const nearWallet = near.provider.wallet;
+        const data = await Near.signWithWallet(nearWallet, undefined, {nonce});
+        if (!data?.signature) return false;
+        const userSignature = {
           address: nearAccount,
           publicAddress: data.publicAddress,
           signature: data.signature,
-          walletType: WalletTypeEnum.NEAR,
-          networkType: NetworkIdEnum.NEAR,
-          nonce,
-          instanceURL: cookies[COOKIE_INSTANCE_URL],
-          blockchainPlatform,
-          callbackUrl: publicRuntimeConfig.appAuthURL,
-        });
-
-        window.localStorage.setItem(MYRIAD_WALLET_KEY, walletType);
-
-        return true;
+        };
+        signInCredential = {...signInCredential, ...userSignature};
+        break;
       }
+
+      default:
+        return false;
     }
 
-    return false;
+    const callbackUrl = redirect ?? publicRuntimeConfig.appAuthURL;
+    signIn('credentials', {...signInCredential, callbackUrl});
+    return true;
   };
 
   const signUpWithExternalAuth = async (
-    id: string,
     name: string,
     username: string,
-    networkId: NetworkIdEnum,
-    account?: InjectedAccountWithMeta,
-    walletType?: WalletTypeEnum,
+    wallet: WalletWithSigner,
+    network: Network,
   ): Promise<boolean> => {
     let nonce = null;
 
-    const [address, nearAddress] = id.split('/');
+    const [address, nearAddress] = wallet.id.split('/');
     const data = await AuthAPI.signUp({
       address: nearAddress ?? address,
       name,
       username,
-      network: networkId,
+      network: network.id,
     });
 
     if (data) nonce = data.nonce;
     if (!nonce) return false;
-    return signInWithExternalAuth(networkId, nonce, account, id, walletType);
+    return signInWithExternalAuth(nonce, wallet, network);
   };
 
   const clearNearCache = async (): Promise<void> => {
@@ -167,7 +143,6 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
   };
 
   const logout = async (url?: string) => {
-    window.localStorage.removeItem(MYRIAD_WALLET_KEY);
     window.localStorage.removeItem('email');
 
     const promises: Promise<SignOutResponse | void>[] = [

@@ -16,5 +16,4 @@ export type ProfileCardProps = {
   handleConnectWeb3Wallet?: () => void;
   onViewProfile: () => void;
   onShowNotificationList: () => void;
-  userWalletAddress: null | string;
 };

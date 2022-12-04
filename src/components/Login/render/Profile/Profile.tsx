@@ -16,8 +16,6 @@ import {
   Checkbox,
 } from '@material-ui/core';
 
-import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
-
 import {useStyles} from './Profile.style';
 
 import {
@@ -29,23 +27,20 @@ import {
 import useConfirm from 'src/components/common/Confirm/use-confirm.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import {useAuthHook} from 'src/hooks/auth.hook';
-import {NetworkIdEnum} from 'src/interfaces/network';
+import {Network} from 'src/interfaces/network';
+import {WalletWithSigner} from 'src/interfaces/user';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
 import {Server} from 'src/lib/api/server';
-import {toHexPublicKey} from 'src/lib/crypto';
 import {BlockchainProvider} from 'src/lib/services/blockchain-provider';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {ConfigState} from 'src/reducers/config/reducer';
-import {UserState} from 'src/reducers/user/reducer';
 
 type ProfileProps = {
   checkUsernameAvailability: (username: string, callback: (available: boolean) => void) => void;
-  walletType: WalletTypeEnum | string | null;
-  networkId: NetworkIdEnum | null;
+  network: Network | null;
+  wallet: WalletWithSigner | null;
   instance: Server;
-  account?: InjectedAccountWithMeta | null;
-  publicAddress?: string;
   isMobileSignIn?: boolean;
 };
 
@@ -61,19 +56,8 @@ const USERNAME_HELPER_TEXT = i18n.t('Login.Profile.Helper_Text_Username', {
 });
 
 export const Profile: React.FC<ProfileProps> = props => {
-  const {
-    walletType,
-    checkUsernameAvailability,
-    account,
-    publicAddress,
-    networkId,
-    isMobileSignIn,
-    instance,
-  } = props;
+  const {checkUsernameAvailability, network, wallet, isMobileSignIn, instance} = props;
 
-  const {networks} = useSelector<RootState, UserState>(state => state.userState);
-  const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
-  const [termApproved, setTermApproved] = useState(false);
   const styles = useStyles();
   const confirm = useConfirm();
   const navigate = useNavigate();
@@ -81,6 +65,9 @@ export const Profile: React.FC<ProfileProps> = props => {
 
   const {signUpWithExternalAuth} = useAuthHook();
 
+  const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
+
+  const [termApproved, setTermApproved] = useState(false);
   const [profile, setProfile] = useState({
     name: {
       value: '',
@@ -263,20 +250,16 @@ export const Profile: React.FC<ProfileProps> = props => {
   };
 
   const handleChangeWallet = async () => {
-    if (walletType === WalletTypeEnum.NEAR) {
-      const network = networks.find(network => network.id === NetworkIdEnum.NEAR);
+    if (wallet.type === WalletTypeEnum.NEAR) {
+      const blockchain = await BlockchainProvider.connect(network);
+      const provider = blockchain.Near;
+      const {wallet} = provider.provider;
 
-      if (network) {
-        const blockchain = await BlockchainProvider.connect(network);
-        const provider = blockchain.Near;
-        const {wallet} = provider.provider;
-
-        if (wallet.isSignedIn()) {
-          wallet.signOut();
-          router.replace(router.route, undefined, {shallow: true});
-        } else {
-          console.log('no signed in NEAR wallet found!');
-        }
+      if (wallet.isSignedIn()) {
+        wallet.signOut();
+        router.replace(router.route, undefined, {shallow: true});
+      } else {
+        console.log('no signed in NEAR wallet found!');
       }
     }
     navigate('/options');
@@ -292,7 +275,7 @@ export const Profile: React.FC<ProfileProps> = props => {
   const handleConfirmation = useCallback(() => {
     const valid = validate();
 
-    if (valid && (account || publicAddress)) {
+    if (valid) {
       checkUsernameAvailability(profile.username.value, available => {
         if (available) {
           confirmRegisterProfile();
@@ -308,26 +291,14 @@ export const Profile: React.FC<ProfileProps> = props => {
         }
       });
     }
-  }, [account, profile]);
+  }, [profile]);
 
   const handleSubmit = async () => {
-    let substrateAccount: InjectedAccountWithMeta | undefined;
-    let address = publicAddress;
-
-    if (walletType === WalletTypeEnum.POLKADOT) {
-      if (!account) return;
-      address = toHexPublicKey(account);
-      substrateAccount = account;
-    }
-
-    if (!address) return;
     const registered = await signUpWithExternalAuth(
-      address,
       profile.name.value,
       profile.username.value,
-      networkId,
-      substrateAccount,
-      walletType as WalletTypeEnum,
+      wallet,
+      network,
     );
 
     if (!registered) {
@@ -378,16 +349,16 @@ export const Profile: React.FC<ProfileProps> = props => {
                   borderRadius: 4,
                   gap: 8,
                 }}>
-                {walletIcons[walletType]}
+                {walletIcons[wallet.type]}
                 <div>
                   <Box
                     fontSize={14}
                     fontWeight="fontWeightRegular"
                     style={{color: 'rgba(115, 66, 204, 1)'}}>
-                    {account?.meta?.name || ''}
+                    {wallet?.signer?.meta?.name || ''}
                   </Box>
                   <Box fontSize={12} fontWeight="fontWeightRegular" style={{color: '#0A0A0A'}}>
-                    {account?.address || publicAddress?.split('/')[1] || 'Unknown Account'}
+                    {wallet?.signer?.address || wallet.id?.split('/')[1] || 'Unknown Account'}
                   </Box>
                 </div>
               </div>

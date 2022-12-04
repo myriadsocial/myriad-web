@@ -5,14 +5,17 @@ import {Network, NetworkIdEnum} from 'src/interfaces/network';
 import {UserWallet} from 'src/interfaces/user';
 import {BlockchainPlatform} from 'src/interfaces/wallet';
 
-export const formatAddress = (currentWallet: UserWallet, address: null | string) => {
-  if (address && address.length > 14) {
+export const formatAddress = (currentWallet: UserWallet) => {
+  if (!currentWallet) return 'Unknown Address';
+  const {id, blockchainPlatform, network} = currentWallet;
+  const networkId = network?.id;
+  if (id && id.length > 14) {
     let validAddress = '';
 
-    if (currentWallet?.network?.blockchainPlatform === BlockchainPlatform.SUBSTRATE) {
-      validAddress = convertToPolkadotAddress(address, currentWallet);
+    if (blockchainPlatform === BlockchainPlatform.SUBSTRATE && networkId) {
+      validAddress = convertToPolkadotAddress(id, networkId);
     } else {
-      validAddress = address;
+      validAddress = id;
     }
 
     return (
@@ -21,7 +24,7 @@ export const formatAddress = (currentWallet: UserWallet, address: null | string)
       validAddress.substring(validAddress.length - 4, validAddress.length)
     );
   }
-  return address;
+  return id;
 };
 
 export const formatNetworkTitle = (network?: Network, networkId?: NetworkIdEnum) => {

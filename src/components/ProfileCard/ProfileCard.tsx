@@ -34,7 +34,6 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
     onShowNotificationList,
     currentWallet,
     networks,
-    userWalletAddress,
   } = props;
 
   const {loadingBlockchain: loading} = useBlockchain();
@@ -46,14 +45,13 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
         <ProfileContent
           user={user}
           anonymous={anonymous}
-          currentWallet={currentWallet}
           alias={alias}
-          networks={networks}
           notificationCount={notificationCount}
           onShowNotificationList={onShowNotificationList}
           onViewProfile={onViewProfile}
           handleSignOut={handleSignOut}
-          userWalletAddress={userWalletAddress}
+          networks={networks}
+          currentWallet={currentWallet}
         />
         <div className={classes.wallet}>
           <ShowIf condition={anonymous}>
@@ -74,9 +72,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
                 <ShowIf condition={loading}>
                   <Skeleton variant="text" height={20} />
                 </ShowIf>
-                <ShowIf condition={!loading}>
-                  {formatAddress(currentWallet, userWalletAddress)}
-                </ShowIf>
+                <ShowIf condition={!loading}>{formatAddress(currentWallet)}</ShowIf>
               </Typography>
             </ShowIf>
             <ShowIf condition={!currentWallet}>

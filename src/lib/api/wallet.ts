@@ -48,26 +48,9 @@ export const getUserNonce = async (id: string, apiURL?: string): Promise<UserNon
 };
 
 export const getUser = async (): Promise<User | null> => {
-  const params: Record<string, any> = {
-    filter: {
-      include: [
-        {
-          relation: 'wallets',
-          scope: {
-            include: [{relation: 'network'}],
-            where: {
-              primary: true,
-            },
-          },
-        },
-      ],
-    },
-  };
-
   const {data} = await MyriadAPI().request<User>({
     url: `/user/me`,
     method: 'GET',
-    params,
   });
 
   return data;
@@ -86,11 +69,6 @@ export const getUserWallets = async (userId: string): Promise<WalletList> => {
   const {data} = await MyriadAPI().request({
     url: `/users/${userId}/wallets`,
     method: 'GET',
-    params: {
-      filter: {
-        include: ['network'],
-      },
-    },
   });
 
   return data;
@@ -144,9 +122,9 @@ export const disconnectNetwork = async (
   return data;
 };
 
-export const switchNetwork = async (payload: ConnectNetwork, id: string): Promise<any> => {
+export const switchNetwork = async (payload: ConnectNetwork, id: string): Promise<Wallet> => {
   try {
-    const data = await MyriadAPI().request({
+    const {data} = await MyriadAPI().request<Wallet>({
       url: `/user/switch-network`,
       method: 'PATCH',
       data: payload,

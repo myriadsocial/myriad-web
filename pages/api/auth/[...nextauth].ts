@@ -34,7 +34,7 @@ const createOptions = (req: NextApiRequest) => ({
         signature: {label: 'Wallet Signature', type: 'text'},
         nonce: {label: 'Nonce', type: 'text'},
         walletType: {label: 'Wallet Type', type: 'text'},
-        networkType: {label: 'Network ID', type: 'text'},
+        networkType: {label: 'Network Type', type: 'text'},
         publicAddress: {label: 'Public Address', type: 'text'},
         instanceURL: {label: 'Instance url', type: 'text'},
         blockchainPlatform: {label: 'Blockchain Platform', type: 'text'},

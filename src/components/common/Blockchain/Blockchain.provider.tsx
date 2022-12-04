@@ -16,7 +16,7 @@ import {useAuthHook} from 'src/hooks/auth.hook';
 import {NearPayload, useConnect} from 'src/hooks/use-connect.hook';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
-import {IProvider, MYRIAD_WALLET_KEY} from 'src/interfaces/blockchain-interface';
+import {IProvider} from 'src/interfaces/blockchain-interface';
 import {Network, NetworkIdEnum} from 'src/interfaces/network';
 import {UserWallet} from 'src/interfaces/user';
 import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
@@ -78,7 +78,7 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
   const action = router.query.action as string | string[] | null;
   const wallet = router.query.wallet as string | string[] | null;
 
-  const currentNetworkId = currentWallet?.networkId;
+  const currentNetworkId = currentWallet?.network?.id;
 
   useEffect(() => {
     if (!Array.isArray(action) && action === 'switch') {
@@ -131,11 +131,9 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
 
     if (networkId === currentNetworkId) return;
 
-    const wallet = wallets?.find(
-      wallet => wallet?.network?.blockchainPlatform === blockchainPlatform,
-    );
+    const wallet = wallets?.find(wallet => wallet?.blockchainPlatform === blockchainPlatform);
 
-    switch (wallet?.network?.blockchainPlatform) {
+    switch (wallet?.blockchainPlatform) {
       case BlockchainPlatform.SUBSTRATE:
         return checkExtensionInstalled(networkId);
       case BlockchainPlatform.NEAR:
@@ -182,7 +180,6 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
 
     await handleSwitchNetwork(BlockchainPlatform.NEAR, network.id, payload, async err => {
       if (err) await Near.clearLocalStorage();
-      else window.localStorage.setItem(MYRIAD_WALLET_KEY, walletType);
     });
 
     router.replace(redirectUrl, undefined, {shallow: true});
@@ -205,7 +202,7 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
 
   const getAvailableAccounts = async (networkId: NetworkIdEnum) => {
     const wallet = wallets?.find(
-      wallet => wallet?.network?.blockchainPlatform === BlockchainPlatform.SUBSTRATE,
+      wallet => wallet?.blockchainPlatform === BlockchainPlatform.SUBSTRATE,
     );
 
     const accounts = await getRegisteredAccounts();

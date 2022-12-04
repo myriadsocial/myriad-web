@@ -41,18 +41,18 @@ import {RootState} from 'src/reducers';
 import {NotificationState} from 'src/reducers/notification/reducer';
 
 export const MenuDrawerComponent: React.FC = () => {
+  const enqueueSnackbar = useEnqueueSnackbar();
+
   const {total} = useSelector<RootState, NotificationState>(state => state.notificationState);
 
   const [selected, setSelected] = React.useState<MenuId>('home');
   const [openDrawer, setOpenDrawer] = React.useState(false);
   const [openPromptDrawer, setOpenPromptDrawer] = React.useState(false);
   const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
-  const {switchInstance, loadingSwitch, onLoadingSwitch} = useInstances();
 
   const {logout} = useAuthHook();
-  const {user, alias, anonymous, userWalletAddress, networks, currentWallet, wallets} =
-    useUserHook();
-  const enqueueSnackbar = useEnqueueSnackbar();
+  const {user, alias, anonymous, networks, currentWallet, wallets} = useUserHook();
+  const {switchInstance, loadingSwitch, onLoadingSwitch} = useInstances();
 
   const router = useRouter();
   const menu = useMenuList(selected);
@@ -182,12 +182,12 @@ export const MenuDrawerComponent: React.FC = () => {
               <ProfileContent
                 user={user}
                 alias={alias}
-                networks={networks}
                 notificationCount={total}
                 onShowNotificationList={handleShowNotification}
                 onViewProfile={handleViewProfile}
                 isMobile={true}
-                userWalletAddress={userWalletAddress}
+                currentWallet={currentWallet}
+                networks={networks}
               />
               {/* network */}
               <div className={style.wallet}>
@@ -198,15 +198,10 @@ export const MenuDrawerComponent: React.FC = () => {
                 </ShowIf>
                 <ShowIf condition={!anonymous}>
                   <ShowIf condition={Boolean(currentWallet)}>
-                    <NetworkOption
-                      currentWallet={currentWallet}
-                      wallets={wallets}
-                      networks={networks}
-                      isMobile={true}
-                    />
+                    <NetworkOption wallets={wallets} networks={networks} isMobile={true} />
 
                     <Typography component="div" className={style.address}>
-                      {formatAddress(currentWallet, userWalletAddress)}
+                      {formatAddress(currentWallet)}
                     </Typography>
                   </ShowIf>
                   <ShowIf condition={!anonymous && !wallets.length}>

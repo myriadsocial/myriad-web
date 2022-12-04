@@ -38,6 +38,7 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
     handleSignOut,
     currentWallet,
   } = props;
+
   const classes = useStyles({...props});
 
   const router = useRouter();
@@ -67,7 +68,7 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
   };
 
   const getSelectedIcon = (isWallet?: boolean) => {
-    const networkId = currentWallet?.networkId;
+    const networkId = currentWallet?.network?.id;
 
     if (isWallet) {
       switch (networkId) {

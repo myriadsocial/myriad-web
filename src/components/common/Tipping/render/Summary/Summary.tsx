@@ -45,7 +45,7 @@ export const Summary: React.FC<SummaryProps> = props => {
   const {currentWallet} = useSelector<RootState, UserState>(state => state.userState);
 
   const styles = useStyles();
-
+  const networkId = currentWallet?.network?.id;
   const total = amount.gt(BN_ZERO)
     ? currency.native
       ? amount.add(transactionFee)
@@ -76,10 +76,10 @@ export const Summary: React.FC<SummaryProps> = props => {
             </div>
             <Typography className={styles.textWarning}>
               The tip will be stored in Myriad Escrow because the user hasn’t connected the
-              {` ${currentWallet.networkId === 'near' ? 'NEAR Wallet' : 'polkadot{.js}'} `}
+              {` ${networkId === 'near' ? 'NEAR Wallet' : 'polkadot{.js}'} `}
               yet. Once they connect their{' '}
-              {` ${currentWallet.networkId === 'near' ? 'NEAR Wallet' : 'polkadot{.js}'}`}, they
-              will be able to claim their tip.
+              {` ${networkId === 'near' ? 'NEAR Wallet' : 'polkadot{.js}'}`}, they will be able to
+              claim their tip.
             </Typography>
           </div>
         )}

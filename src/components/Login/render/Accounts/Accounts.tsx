@@ -9,17 +9,14 @@ import Identicon from '@polkadot/react-identicon';
 import {useStyles} from './Accounts.style';
 
 import useMobileDetect from 'src/hooks/use-is-mobile-detect';
-import {WalletTypeEnum} from 'src/interfaces/wallet';
+import {WalletWithSigner} from 'src/interfaces/user';
+import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
+import {toHexPublicKey} from 'src/lib/crypto';
 import i18n from 'src/locale';
 
 type AccountListProps = {
   onSelect: (account: InjectedAccountWithMeta) => void;
-  onNext: (
-    callback: () => void,
-    account?: InjectedAccountWithMeta,
-    nearId?: string,
-    walletType?: WalletTypeEnum,
-  ) => void;
+  onNext: (callback: () => void, wallet: WalletWithSigner) => void;
   accounts: InjectedAccountWithMeta[];
   signature: boolean;
 };
@@ -55,14 +52,16 @@ export const Accounts: React.FC<AccountListProps> = props => {
   const handleNext = () => {
     setSubmitted(true);
 
-    onNext(
-      () => {
-        navigate('/profile');
-      },
-      undefined,
-      undefined,
-      WalletTypeEnum.POLKADOT,
-    );
+    const wallet = {
+      id: toHexPublicKey(selectedAccount),
+      blockchainPlatform: BlockchainPlatform.SUBSTRATE,
+      type: WalletTypeEnum.POLKADOT,
+      signer: selectedAccount,
+    };
+
+    onNext(() => {
+      navigate('/profile');
+    }, wallet as WalletWithSigner);
   };
 
   return (

@@ -1,9 +1,12 @@
+import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
+
 import {BaseModel} from './base.interface';
 import {Currency} from './currency';
-import {NetworkIdEnum, Network, NetworkProps} from './network';
+import {Network} from './network';
 import {People} from './people';
 import {PrivacySettings} from './setting';
 import {TransactionDetail} from './transaction';
+import {BlockchainPlatform, WalletTypeEnum} from './wallet';
 
 export interface UserSocialMedia {
   id: string;
@@ -23,12 +26,16 @@ export type UserOnTransaction = BaseUser & {
   id: string;
 };
 
-export interface Wallet extends BaseModel, NetworkProps {
+export interface Wallet extends BaseModel {
   network?: Network;
-  networkId: NetworkIdEnum;
-  primary: boolean;
+  blockchainPlatform: BlockchainPlatform;
   userId: string;
+  type?: WalletTypeEnum;
 }
+
+export type WalletWithSigner = Wallet & {
+  signer?: InjectedAccountWithMeta;
+};
 
 export type UserWallet = Wallet & {
   user: User;

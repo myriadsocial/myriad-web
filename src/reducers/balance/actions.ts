@@ -88,17 +88,14 @@ export const loadBalances: ThunkActionCreator<Actions, RootState> =
   (provider: IProvider, force = false) =>
   async (dispatch, getState) => {
     const {
-      userState: {user, currencies, anonymous},
+      userState: {user, currencies, anonymous, currentWallet},
       balanceState: {initialized},
     } = getState();
 
     dispatch(setBalanceLoading(true));
 
     if (anonymous || !user || (initialized && !force)) return;
-
-    // Only parse address to fetch balance when wallets are successfully fetched
-    if (!('wallets' in user) || user.wallets?.length === 0) return;
-    if (!user.wallets[0]?.network) return;
+    if (!currentWallet) return;
 
     try {
       if (!provider) throw new Error('NotConnected');

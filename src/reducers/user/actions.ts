@@ -147,11 +147,9 @@ export const setFullAccess = (): SetFullAccess => ({
 
 export const setCurrentUserWallet = (user: User): FetchCurrentUserWallet => {
   const wallet = user.wallets[0];
-  const network = wallet.network;
   const userWallet: UserWallet = {
     ...wallet,
     user,
-    network,
   };
 
   return {
@@ -187,14 +185,6 @@ export const fetchUser: ThunkActionCreator<Actions, RootState> = () => async dis
 
   try {
     user = await WalletAPI.getUser();
-
-    //Define empty arrays for users without wallets and currencies (login with email only)
-    if (!user.wallets) {
-      user.wallets = [];
-    }
-    if (!user.currencies) {
-      user.currencies = [];
-    }
 
     if (user.wallets.length > 0 && user.currencies.length > 0) {
       dispatch(setCurrentUserWallet(user));

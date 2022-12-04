@@ -21,13 +21,6 @@ export const getUserDetail = async (
         },
         {
           relation: 'wallets',
-          scope: {
-            include: [
-              {
-                relation: 'network',
-              },
-            ],
-          },
         },
         {
           relation: 'accountSetting',

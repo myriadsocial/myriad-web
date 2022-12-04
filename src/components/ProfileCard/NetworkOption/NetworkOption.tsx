@@ -41,7 +41,7 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({
   const {switchNetwork} = useBlockchain();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const currentNetworkId = currentWallet?.networkId;
+  const currentNetworkId = currentWallet?.network?.id;
 
   const icons = React.useMemo(
     () => ({
@@ -69,7 +69,7 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({
 
   const getSelectedText = (): string => {
     const selectedNetwork = networks.find(network => network.id === currentNetworkId);
-    return formatNetworkTitle(selectedNetwork) ?? currentWallet?.networkId ?? '';
+    return formatNetworkTitle(selectedNetwork) ?? currentNetworkId ?? '';
   };
 
   const getSelectedIcon = () => {

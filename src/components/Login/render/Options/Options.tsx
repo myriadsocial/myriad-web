@@ -31,8 +31,9 @@ import {formatNetworkTitle} from 'src/helpers/wallet';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
-import {NetworkIdEnum} from 'src/interfaces/network';
+import {Network, NetworkIdEnum} from 'src/interfaces/network';
 import {ServerListProps} from 'src/interfaces/server-list';
+import {WalletWithSigner} from 'src/interfaces/user';
 import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
@@ -40,33 +41,25 @@ import {UserState} from 'src/reducers/user/reducer';
 
 type OptionProps = {
   network?: string;
-  onConnect?: (accounts: InjectedAccountWithMeta[], networkId: NetworkIdEnum) => void;
-  onConnectNear?: (
-    nearId: string,
-    callback: () => void,
-    networkId: NetworkIdEnum,
-    walletType: WalletTypeEnum,
-  ) => void;
+  onConnect?: (accounts: InjectedAccountWithMeta[], network: Network) => void;
+  onConnectNear?: (callback: () => void, network: Network, wallet: WalletWithSigner) => void;
   isMobileSignIn?: boolean;
 };
 
 export const Options: React.FC<OptionProps> = props => {
+  const {onConnect, onConnectNear, isMobileSignIn} = props;
   const {networks} = useSelector<RootState, UserState>(state => state.userState);
 
   const styles = useStyles();
+  const navigate = useNavigate();
 
   const {query} = useQueryParams();
   const {network} = query;
-
-  const {onConnect, onConnectNear, isMobileSignIn} = props;
-
-  const navigate = useNavigate();
   const {enablePolkadotExtension, getPolkadotAccounts} = usePolkadotExtension();
   const {connectToNear} = useNearApi();
 
-  const [blockchainPlatform, setBlockchainPlatform] = useState<BlockchainPlatform | null>(null);
-  const [networkId, setNetworkId] = useState<NetworkIdEnum | null>(null);
-  const [wallet, setWallet] = useState<WalletTypeEnum | null>(null);
+  const [currentNetwork, setCurrentNetwork] = useState<Network | null>(null);
+  const [walletType, setWalletType] = useState<WalletTypeEnum | null>(null);
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
   const [extensionChecked, setExtensionChecked] = useState(false);
   const [extensionEnabled, setExtensionEnabled] = useState(false);
@@ -79,7 +72,7 @@ export const Options: React.FC<OptionProps> = props => {
 
   const getMobileIconStyles = isMobileSignIn ? styles.rowCardIcon : styles.icon;
 
-  const icons = useMemo(
+  const networkIcons = useMemo(
     () => ({
       polkadot: <PolkadotNetworkIcon className={getMobileIconStyles} />,
       kusama: <KusamaNetworkIcon className={getMobileIconStyles} />,
@@ -101,32 +94,29 @@ export const Options: React.FC<OptionProps> = props => {
     [],
   );
 
-  const setSelectedNetwork =
-    (networkId: NetworkIdEnum, blockchainPlatform: BlockchainPlatform) => () => {
-      setNetworkId(networkId);
-      setBlockchainPlatform(blockchainPlatform);
+  const setSelectedNetwork = (network: Network) => () => {
+    setCurrentNetwork(network);
 
-      switch (blockchainPlatform) {
-        case BlockchainPlatform.SUBSTRATE:
-          return setSelectedWallet(WalletTypeEnum.POLKADOT)();
-        case BlockchainPlatform.NEAR:
-          console.log('test');
-          return setSelectedWallet(WalletTypeEnum.NEAR)();
-        default:
-          return setWallet(null);
-      }
-    };
+    switch (network.blockchainPlatform) {
+      case BlockchainPlatform.SUBSTRATE:
+        return setSelectedWallet(WalletTypeEnum.POLKADOT)();
+      case BlockchainPlatform.NEAR:
+        return setSelectedWallet(WalletTypeEnum.NEAR)();
+      default:
+        return setWalletType(null);
+    }
+  };
 
   const setSelectedWallet = (value: WalletTypeEnum) => () => {
     switch (value) {
       case WalletTypeEnum.POLKADOT:
-        setWallet(value);
+        setWalletType(value);
         checkPolkdostExtensionInstalled();
         break;
 
       case WalletTypeEnum.MYNEAR:
       case WalletTypeEnum.NEAR:
-        setWallet(value);
+        setWalletType(value);
         setExtensionChecked(true);
         setExtensionEnabled(true);
         break;
@@ -149,7 +139,8 @@ export const Options: React.FC<OptionProps> = props => {
 
   const handleConnect = useCallback(async () => {
     const accounts: InjectedAccountWithMeta[] = [];
-    switch (wallet) {
+
+    switch (walletType) {
       case WalletTypeEnum.POLKADOT:
         const polkadotAccounts = await getPolkadotAccounts();
 
@@ -157,11 +148,11 @@ export const Options: React.FC<OptionProps> = props => {
 
         if (accounts.length > 0) {
           setAccounts(accounts);
-          onConnect && onConnect(accounts, networkId);
+          onConnect && onConnect(accounts, currentNetwork);
 
           navigate('/account');
         } else {
-          setWallet(null);
+          setWalletType(null);
           if (network) {
             setHideOptions(true);
           }
@@ -171,17 +162,21 @@ export const Options: React.FC<OptionProps> = props => {
 
       case WalletTypeEnum.MYNEAR:
       case WalletTypeEnum.NEAR: {
-        const data = await connectToNear(undefined, undefined, wallet, 'login option');
+        const data = await connectToNear(undefined, undefined, walletType, 'login option');
 
         if (data) {
+          const wallet = {
+            id: data.publicAddress,
+            blockchainPlatform: BlockchainPlatform.NEAR,
+            type: walletType,
+          };
           onConnectNear &&
             onConnectNear(
-              data.publicAddress,
               () => {
                 navigate('/profile');
               },
-              networkId,
-              wallet,
+              currentNetwork,
+              wallet as WalletWithSigner,
             );
         } else {
           // redirection to near auth page
@@ -191,12 +186,12 @@ export const Options: React.FC<OptionProps> = props => {
       }
 
       default:
-        setWallet(null);
+        setWalletType(null);
         break;
     }
 
     setConnectAttempted(true);
-  }, [wallet, networkId]);
+  }, [walletType, currentNetwork]);
 
   useEffect(() => {
     const doSelectAccount = async () => {
@@ -210,7 +205,7 @@ export const Options: React.FC<OptionProps> = props => {
       const installed = await checkPolkdostExtensionInstalled();
       if (!installed) return setHideOptions(true);
 
-      setSelectedNetwork(networkExists.id, BlockchainPlatform.SUBSTRATE)();
+      setSelectedNetwork(networkExists)();
       setSelectedWallet(WalletTypeEnum.POLKADOT)();
       return setTimeout(() => {
         handleConnect();
@@ -220,14 +215,11 @@ export const Options: React.FC<OptionProps> = props => {
   }, [handleConnect]);
 
   const handleSwitchInstance = (server: ServerListProps, callback?: () => void) => {
-    setWallet(null);
-    setNetworkId(null);
-    setBlockchainPlatform(null);
+    setWalletType(null);
+    setCurrentNetwork(null);
 
     callback && callback();
   };
-
-  console.log(wallet);
 
   return (
     <ShowIf condition={hideOptions}>
@@ -246,10 +238,10 @@ export const Options: React.FC<OptionProps> = props => {
                 <Grid item xs={3} key={network.id}>
                   <ListItem
                     disableGutters
-                    selected={networkId === network.id}
-                    onClick={setSelectedNetwork(network.id, network.blockchainPlatform)}>
+                    selected={currentNetwork?.id === network.id}
+                    onClick={setSelectedNetwork(network)}>
                     <div className={styles.card}>
-                      {icons[network.id as keyof typeof icons]}
+                      {networkIcons[network.id as keyof typeof networkIcons]}
                       <Typography>{formatNetworkTitle(network)}</Typography>
                     </div>
                   </ListItem>
@@ -291,7 +283,7 @@ export const Options: React.FC<OptionProps> = props => {
           </div>
           {/* WALLET LIST */}
           <div className={styles.wrapper}>
-            <ShowIf condition={Boolean(wallet)}>
+            <ShowIf condition={Boolean(walletType)}>
               <div className={styles.title}>
                 <Typography variant="h5">{i18n.t('Login.Options.Wallet')}</Typography>
               </div>
@@ -301,16 +293,17 @@ export const Options: React.FC<OptionProps> = props => {
               justifyContent="flex-start"
               alignContent="center"
               classes={{root: styles.list}}>
-              <ShowIf condition={blockchainPlatform === BlockchainPlatform.SUBSTRATE}>
+              <ShowIf
+                condition={currentNetwork?.blockchainPlatform === BlockchainPlatform.SUBSTRATE}>
                 <Grid item xs={3}>
                   <ListItem
                     component={'button'}
                     disableGutters
-                    disabled={networkId === null}
-                    selected={wallet === WalletTypeEnum.POLKADOT}
+                    disabled={currentNetwork?.id === null}
+                    selected={walletType === WalletTypeEnum.POLKADOT}
                     onClick={setSelectedWallet(WalletTypeEnum.POLKADOT)}
                     className={
-                      networkId !== NetworkIdEnum.POLKADOT ? styles.walletCardDisabled : ''
+                      currentNetwork?.id !== NetworkIdEnum.POLKADOT ? styles.walletCardDisabled : ''
                     }>
                     <div className={styles.walletCard}>
                       <PolkadotNetworkIcon className={styles.icon} />
@@ -338,17 +331,19 @@ export const Options: React.FC<OptionProps> = props => {
                   </Tooltip>
                 </Grid>
               </ShowIf>
-              <ShowIf condition={blockchainPlatform === BlockchainPlatform.NEAR}>
+              <ShowIf condition={currentNetwork?.blockchainPlatform === BlockchainPlatform.NEAR}>
                 {[WalletTypeEnum.NEAR, WalletTypeEnum.MYNEAR].map(e => {
                   return (
                     <Grid item xs={3} key={e}>
                       <ListItem
                         disableGutters
-                        disabled={networkId === null || networkId !== NetworkIdEnum.NEAR}
-                        selected={e === wallet}
+                        disabled={
+                          currentNetwork?.id === null || currentNetwork?.id !== NetworkIdEnum.NEAR
+                        }
+                        selected={e === walletType}
                         onClick={setSelectedWallet(e)}
                         className={
-                          networkId !== NetworkIdEnum.NEAR ? styles.walletCardDisabled : ''
+                          currentNetwork?.id !== NetworkIdEnum.NEAR ? styles.walletCardDisabled : ''
                         }>
                         <div className={styles.card}>
                           {e === WalletTypeEnum.NEAR ? (
@@ -365,7 +360,7 @@ export const Options: React.FC<OptionProps> = props => {
                   );
                 })}
               </ShowIf>
-              <ShowIf condition={blockchainPlatform === BlockchainPlatform.NEAR}>
+              <ShowIf condition={currentNetwork?.blockchainPlatform === BlockchainPlatform.NEAR}>
                 <Grid item xs={3}>
                   <Tooltip
                     title={
@@ -433,7 +428,7 @@ export const Options: React.FC<OptionProps> = props => {
             <Button
               variant="contained"
               color="primary"
-              disabled={!extensionChecked || wallet === null}
+              disabled={!extensionChecked || walletType === null}
               onClick={handleConnect}>
               {i18n.t('Login.Options.Connect')}
             </Button>
@@ -466,7 +461,7 @@ export const Options: React.FC<OptionProps> = props => {
               extensionChecked &&
               extensionEnabled &&
               accounts.length === 0 &&
-              networkId === NetworkIdEnum.POLKADOT
+              currentNetwork?.id === NetworkIdEnum.POLKADOT
             }
             onCancel={closeExtensionDisableModal}
             subtitle={<Typography>{i18n.t('Login.Options.Prompt_Account.Subtitle')}</Typography>}>
@@ -498,7 +493,7 @@ export const Options: React.FC<OptionProps> = props => {
                       <>
                         <ListItem disableGutters disabled>
                           <div className={styles.rowCard}>
-                            {icons['polkadot']}
+                            {networkIcons['polkadot']}
                             <Typography>{formatNetworkTitle(network)}</Typography>
                           </div>
                         </ListItem>
@@ -507,10 +502,10 @@ export const Options: React.FC<OptionProps> = props => {
                     ) : (
                       <ListItem
                         disableGutters
-                        selected={networkId === network.id}
-                        onClick={setSelectedNetwork(network.id, network.blockchainPlatform)}>
+                        selected={currentNetwork?.id === network.id}
+                        onClick={setSelectedNetwork(network)}>
                         <div className={styles.rowCard}>
-                          {icons[network.id as keyof typeof icons]}
+                          {networkIcons[network.id as keyof typeof networkIcons]}
                           <Typography>{formatNetworkTitle(network)}</Typography>
                         </div>
                       </ListItem>
@@ -522,7 +517,7 @@ export const Options: React.FC<OptionProps> = props => {
 
             {/* WALLET LIST */}
             <div>
-              <ShowIf condition={Boolean(wallet)}>
+              <ShowIf condition={Boolean(walletType)}>
                 <div className={styles.title}>
                   <Typography variant="h5">{i18n.t('Login.Options.Wallet')}</Typography>
                 </div>
@@ -532,17 +527,21 @@ export const Options: React.FC<OptionProps> = props => {
                 justifyContent="flex-start"
                 direction="column"
                 classes={{root: styles.list}}>
-                <ShowIf condition={blockchainPlatform === BlockchainPlatform.NEAR}>
+                <ShowIf condition={currentNetwork?.blockchainPlatform === BlockchainPlatform.NEAR}>
                   {[WalletTypeEnum.NEAR, WalletTypeEnum.MYNEAR].map(e => {
                     return (
                       <Grid item xs={12} key={e}>
                         <ListItem
                           disableGutters
-                          disabled={networkId === null || networkId !== NetworkIdEnum.NEAR}
-                          selected={e === wallet}
+                          disabled={
+                            currentNetwork?.id === null || currentNetwork?.id !== NetworkIdEnum.NEAR
+                          }
+                          selected={e === walletType}
                           onClick={setSelectedWallet(e)}
                           className={
-                            networkId !== NetworkIdEnum.NEAR ? styles.walletCardDisabled : ''
+                            currentNetwork?.id !== NetworkIdEnum.NEAR
+                              ? styles.walletCardDisabled
+                              : ''
                           }>
                           <div className={styles.rowCard}>
                             {walletIcons[e]}
@@ -555,7 +554,7 @@ export const Options: React.FC<OptionProps> = props => {
                     );
                   })}
                 </ShowIf>
-                <ShowIf condition={blockchainPlatform === BlockchainPlatform.NEAR}>
+                <ShowIf condition={currentNetwork?.blockchainPlatform === BlockchainPlatform.NEAR}>
                   <Grid item xs={12}>
                     <Tooltip
                       title={
@@ -576,16 +575,19 @@ export const Options: React.FC<OptionProps> = props => {
                     </Tooltip>
                   </Grid>
                 </ShowIf>
-                <ShowIf condition={blockchainPlatform === BlockchainPlatform.SUBSTRATE}>
+                <ShowIf
+                  condition={currentNetwork?.blockchainPlatform === BlockchainPlatform.SUBSTRATE}>
                   <Grid item xs={12}>
                     <ListItem
                       component={'button'}
                       disableGutters
-                      disabled={networkId === null}
-                      selected={wallet === WalletTypeEnum.POLKADOT}
+                      disabled={currentNetwork?.id === null}
+                      selected={walletType === WalletTypeEnum.POLKADOT}
                       onClick={setSelectedWallet(WalletTypeEnum.POLKADOT)}
                       className={
-                        networkId !== NetworkIdEnum.POLKADOT ? styles.walletCardDisabled : ''
+                        currentNetwork?.id !== NetworkIdEnum.POLKADOT
+                          ? styles.walletCardDisabled
+                          : ''
                       }>
                       <div className={styles.rowCard}>
                         {walletIcons['polkadot']}
@@ -607,7 +609,7 @@ export const Options: React.FC<OptionProps> = props => {
                 variant="contained"
                 fullWidth
                 color="primary"
-                disabled={!extensionChecked || wallet === null}
+                disabled={!extensionChecked || walletType === null}
                 onClick={handleConnect}>
                 {i18n.t('Login.Options.Connect')}
               </Button>
@@ -643,7 +645,7 @@ export const Options: React.FC<OptionProps> = props => {
               extensionChecked &&
               extensionEnabled &&
               accounts.length === 0 &&
-              networkId === NetworkIdEnum.POLKADOT
+              currentNetwork?.id === NetworkIdEnum.POLKADOT
             }
             onCancel={closeExtensionDisableModal}
             subtitle={<Typography>{i18n.t('Login.Options.Prompt_Account.Subtitle')}</Typography>}>

@@ -47,7 +47,7 @@ export default function LoginPage(props: IndexPageProps) {
         <meta name="description" content={description}></meta>
         <meta property="og:title" content={publicRuntimeConfig.appName} key="ogtitle" />
         <meta property="og:description" content={description} key="ogdesc" />
-        <title>{publicRuntimeConfig.appName.concat(' | Login')}</title>
+        <title>{publicRuntimeConfig.appName} - Login</title>
       </Head>
 
       <ShowIf condition={!mobile}>
