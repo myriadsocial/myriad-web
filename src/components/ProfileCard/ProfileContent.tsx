@@ -153,7 +153,7 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
                   `${i18n.t('Profile_Card.NotConnected')}`
                 ) : (
                   <>
-                    {getSelectedIcon()} {formatNetworkTitle(currentWallet?.network)}
+                    {getSelectedIcon()} {formatNetworkTitle(currentWallet?.network?.id)}
                   </>
                 )}
               </Typography>

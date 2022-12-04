@@ -1,18 +1,18 @@
 import React from 'react';
 
+import {useSession} from 'next-auth/react';
 import dynamic from 'next/dynamic';
+import {useRouter} from 'next/router';
 
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Skeleton from '@material-ui/lab/Skeleton';
+import {Skeleton} from '@material-ui/lab';
 
-import {Skeleton as NetworkSkeleton} from './Network.skeleton';
 import {ProfileCardProps} from './ProfileCard.interfaces';
 import {useStyles} from './ProfileCard.style';
 import {ProfileContent} from './index';
 
 import {CommonWalletIcon} from 'components/atoms/Icons';
-import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import {formatAddress} from 'src/helpers/wallet';
 
@@ -24,7 +24,6 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
   const {
     user,
     anonymous = false,
-    wallets,
     alias,
     notificationCount,
     handleConnectWeb3Wallet,
@@ -36,8 +35,12 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
     networks,
   } = props;
 
-  const {loadingBlockchain: loading} = useBlockchain();
+  const router = useRouter();
   const classes = useStyles();
+  const nearLoading = router?.query?.loading;
+  const loading = nearLoading === 'true';
+
+  const {data: session} = useSession();
 
   return (
     <div className={classes.root}>
@@ -66,18 +69,13 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
             </Button>
           </ShowIf>
           <ShowIf condition={!anonymous && user?.fullAccess}>
-            <ShowIf condition={Boolean(currentWallet)}>
-              <NetworkOption currentWallet={currentWallet} wallets={wallets} networks={networks} />
-              <Typography component="div" className={classes.address}>
-                <ShowIf condition={loading}>
-                  <Skeleton variant="text" height={20} />
-                </ShowIf>
-                <ShowIf condition={!loading}>{formatAddress(currentWallet)}</ShowIf>
-              </Typography>
-            </ShowIf>
-            <ShowIf condition={!currentWallet}>
-              <NetworkSkeleton />
-            </ShowIf>
+            <NetworkOption networks={networks} />
+            <Typography component="div" className={classes.address}>
+              <ShowIf condition={loading}>
+                <Skeleton variant="text" height={20} />
+              </ShowIf>
+              <ShowIf condition={!loading}>{formatAddress(session)}</ShowIf>
+            </Typography>
           </ShowIf>
         </div>
       </div>

@@ -2,6 +2,7 @@ import {isHex} from '@polkadot/util';
 
 import MyriadAPI from './base';
 import {AccountRegisteredError} from './errors/account-registered.error';
+import {LoginResponseProps} from './ext-auth';
 import {BaseList} from './interfaces/base-list.interface';
 import {BaseErrorResponse} from './interfaces/error-response.interface';
 
@@ -122,9 +123,9 @@ export const disconnectNetwork = async (
   return data;
 };
 
-export const switchNetwork = async (payload: ConnectNetwork, id: string): Promise<Wallet> => {
+export const switchNetwork = async (payload: ConnectNetwork): Promise<LoginResponseProps> => {
   try {
-    const {data} = await MyriadAPI().request<Wallet>({
+    const {data} = await MyriadAPI().request<LoginResponseProps>({
       url: `/user/switch-network`,
       method: 'PATCH',
       data: payload,

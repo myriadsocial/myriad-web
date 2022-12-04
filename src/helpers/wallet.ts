@@ -1,22 +1,16 @@
+import {Session} from 'next-auth';
+
 import {convertToPolkadotAddress} from './extension';
 
 import capitalize from 'lodash/capitalize';
 import {Network, NetworkIdEnum} from 'src/interfaces/network';
-import {UserWallet} from 'src/interfaces/user';
 import {BlockchainPlatform} from 'src/interfaces/wallet';
 
-export const formatAddress = (currentWallet: UserWallet) => {
-  if (!currentWallet) return 'Unknown Address';
-  const {id, blockchainPlatform, network} = currentWallet;
-  const networkId = network?.id;
-  if (id && id.length > 14) {
-    let validAddress = '';
-
-    if (blockchainPlatform === BlockchainPlatform.SUBSTRATE && networkId) {
-      validAddress = convertToPolkadotAddress(id, networkId);
-    } else {
-      validAddress = id;
-    }
+export const formatAddress = (session?: Session) => {
+  if (!session?.user?.address) return 'Unknown Address';
+  if (session.user.address.length > 14) {
+    const networkId = session?.user?.networkType as string;
+    const validAddress = convertToPolkadotAddress(session.user.address, networkId);
 
     return (
       validAddress.substring(0, 4) +
@@ -24,16 +18,16 @@ export const formatAddress = (currentWallet: UserWallet) => {
       validAddress.substring(validAddress.length - 4, validAddress.length)
     );
   }
-  return id;
+
+  return session.user.address;
 };
 
-export const formatNetworkTitle = (network?: Network, networkId?: NetworkIdEnum) => {
-  const id = network?.id ?? networkId;
-  switch (id) {
+export const formatNetworkTitle = (networkId?: NetworkIdEnum) => {
+  switch (networkId) {
     case NetworkIdEnum.NEAR:
-      return id.toUpperCase();
+      return networkId.toUpperCase();
     default:
-      return capitalize(id ?? 'unknown');
+      return capitalize(networkId ?? 'unknown');
   }
 };
 

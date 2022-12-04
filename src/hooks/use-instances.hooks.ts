@@ -50,6 +50,8 @@ export const useInstances = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingSwitch, setLoadingSwitch] = useState<boolean>(false);
 
+  const address = session?.user?.address;
+
   const getAllInstances = useCallback(async () => {
     try {
       if (!provider) return;
@@ -100,8 +102,8 @@ export const useInstances = () => {
     const withEmail = session?.user?.loginType === LoginType.EMAIL;
     if (withEmail) return loginWithEmail(server.apiUrl, email);
 
-    const {nonce} = await fetchUserNonce(currentWallet.id, server.apiUrl);
-    const network = await NetworkAPI.getNetwork(currentWallet.networkId, server.apiUrl);
+    const {nonce} = await fetchUserNonce(address, server.apiUrl);
+    const network = await NetworkAPI.getNetwork(session.user.networkType, server.apiUrl);
 
     if (!network) throw new Error('NetworkNotExist');
     if (nonce <= 0) throw new Error('AccountNotFound');
@@ -125,7 +127,7 @@ export const useInstances = () => {
         if (!installed) throw new Error('ExtensionNotInstalled');
 
         const accounts = await getRegisteredAccounts();
-        const account = accounts.find(e => toHexPublicKey(e) === currentWallet.id);
+        const account = accounts.find(e => toHexPublicKey(e) === address);
 
         if (!account) throw new Error('SubstrateAccountNotFound');
 

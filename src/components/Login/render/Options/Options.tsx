@@ -242,7 +242,7 @@ export const Options: React.FC<OptionProps> = props => {
                     onClick={setSelectedNetwork(network)}>
                     <div className={styles.card}>
                       {networkIcons[network.id as keyof typeof networkIcons]}
-                      <Typography>{formatNetworkTitle(network)}</Typography>
+                      <Typography>{formatNetworkTitle(network.id)}</Typography>
                     </div>
                   </ListItem>
                 </Grid>
@@ -494,7 +494,7 @@ export const Options: React.FC<OptionProps> = props => {
                         <ListItem disableGutters disabled>
                           <div className={styles.rowCard}>
                             {networkIcons['polkadot']}
-                            <Typography>{formatNetworkTitle(network)}</Typography>
+                            <Typography>{formatNetworkTitle(network.id)}</Typography>
                           </div>
                         </ListItem>
                         <Typography color="primary">* {i18n.t('Mobile.Polkadot_Alert')}</Typography>
@@ -506,7 +506,7 @@ export const Options: React.FC<OptionProps> = props => {
                         onClick={setSelectedNetwork(network)}>
                         <div className={styles.rowCard}>
                           {networkIcons[network.id as keyof typeof networkIcons]}
-                          <Typography>{formatNetworkTitle(network)}</Typography>
+                          <Typography>{formatNetworkTitle(network.id)}</Typography>
                         </div>
                       </ListItem>
                     )}

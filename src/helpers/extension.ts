@@ -45,7 +45,7 @@ export const unsubscribeFromAccounts = async (): Promise<void> => {
   }
 };
 
-export const convertToPolkadotAddress = (address: string, networkId: string): string => {
+export const convertToPolkadotAddress = (address: string, networkId?: string): string => {
   if (isHex(address)) {
     switch (networkId) {
       case NetworkIdEnum.MYRIAD: {

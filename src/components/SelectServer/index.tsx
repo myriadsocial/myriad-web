@@ -33,7 +33,6 @@ import {unionBy} from 'lodash';
 import ShowIf from 'src/components/common/show-if.component';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useInstances} from 'src/hooks/use-instances.hooks';
-import {useUserHook} from 'src/hooks/use-user.hook';
 import {ServerListProps} from 'src/interfaces/server-list';
 import {LoginType} from 'src/interfaces/session';
 import initialize from 'src/lib/api/base';
@@ -73,7 +72,6 @@ const SelectServer = ({
   const {data: session} = useSession();
   const {servers, getAllInstances, loading} = useInstances();
   const {logout} = useAuthHook();
-  const {currentWallet} = useUserHook();
 
   const [, setCookies] = useCookies([COOKIE_INSTANCE_URL]);
   const [selectedServer, setSelectedServer] = useState<ServerListProps | null>(null);
@@ -124,7 +122,7 @@ const SelectServer = ({
     const query =
       session?.user?.loginType === LoginType.EMAIL
         ? `&email=${session.user.email}`
-        : `&network=${currentWallet.networkId}`;
+        : `&network=${session.user.networkType}`;
     await logout(`/login?instance=${server.apiUrl}${query}`);
   };
 

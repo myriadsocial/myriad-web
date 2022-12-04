@@ -2,6 +2,9 @@ import {ChevronDownIcon} from '@heroicons/react/outline';
 
 import React from 'react';
 
+import {useSession} from 'next-auth/react';
+import {useRouter} from 'next/router';
+
 import Button from '@material-ui/core/Button';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -9,6 +12,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
+import {Skeleton} from '@material-ui/lab';
 
 import {useStyles} from './networkOption.style';
 
@@ -21,27 +25,24 @@ import {
   DebioNetworkIcon,
 } from 'src/components/atoms/Icons';
 import {formatNetworkTitle} from 'src/helpers/wallet';
-import {Network} from 'src/interfaces/network';
-import {UserWallet} from 'src/interfaces/user';
+import {Network, NetworkIdEnum} from 'src/interfaces/network';
 
 export type NetworkOptionProps = {
-  currentWallet?: UserWallet;
-  wallets?: UserWallet[];
   networks: Network[];
   isMobile?: boolean;
 };
 
-export const NetworkOption: React.FC<NetworkOptionProps> = ({
-  currentWallet,
-  networks,
-  isMobile = false,
-}) => {
+export const NetworkOption: React.FC<NetworkOptionProps> = ({networks, isMobile = false}) => {
   const styles = useStyles();
+  const router = useRouter();
+
+  const nearLoading = router?.query?.loading;
+  const loading = nearLoading === 'true';
 
   const {switchNetwork} = useBlockchain();
+  const {data: session} = useSession();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const currentNetworkId = currentWallet?.network?.id;
 
   const icons = React.useMemo(
     () => ({
@@ -68,15 +69,22 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({
   };
 
   const getSelectedText = (): string => {
-    const selectedNetwork = networks.find(network => network.id === currentNetworkId);
-    return formatNetworkTitle(selectedNetwork) ?? currentNetworkId ?? '';
+    const networkId = session?.user?.networkType as NetworkIdEnum;
+    return formatNetworkTitle(networkId);
   };
 
   const getSelectedIcon = () => {
-    const match = networks.find(network => network.id === currentNetworkId);
-
-    return match?.id && icons[match.id as keyof typeof icons];
+    const networkId = session?.user?.networkType as NetworkIdEnum;
+    return networkId && icons[networkId as keyof typeof icons];
   };
+
+  if (loading) {
+    return (
+      <Typography component="div" className={styles.network}>
+        <Skeleton variant="text" height={20} />
+      </Typography>
+    );
+  }
 
   return (
     <>
@@ -102,9 +110,9 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({
             key={network.id}
             onClick={() => handleSwitchNetwork(network)}
             disabled={!isMobile ? false : network.id === 'near' ? false : true}
-            className={network.id === currentNetworkId ? styles.menu : ''}>
+            className={network.id === session?.user?.networkType ? styles.menu : ''}>
             <ListItemIcon>{icons[network.id as keyof typeof icons]}</ListItemIcon>
-            <ListItemText>{formatNetworkTitle(network)}</ListItemText>
+            <ListItemText>{formatNetworkTitle(network.id)}</ListItemText>
           </MenuItem>
         ))}
       </Menu>
