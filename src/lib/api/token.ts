@@ -1,7 +1,7 @@
 import MyriadAPI from './base';
 import {BaseList} from './interfaces/base-list.interface';
 
-import {Currency, UserCurrency, UserCurrencyProps} from 'src/interfaces/currency';
+import {Currency, UserCurrency} from 'src/interfaces/currency';
 
 type CurrencyList = BaseList<Currency>;
 type UserCurrencyList = BaseList<UserCurrency>;
@@ -10,16 +10,6 @@ export const getTokens = async (): Promise<CurrencyList> => {
   const {data} = await MyriadAPI().request<CurrencyList>({
     url: '/currencies',
     method: 'GET',
-  });
-
-  return data;
-};
-
-export const addUserToken = async (values: UserCurrencyProps): Promise<Currency> => {
-  const {data} = await MyriadAPI().request<Currency>({
-    url: `/user-currencies`,
-    method: 'POST',
-    data: values,
   });
 
   return data;
@@ -43,11 +33,7 @@ export const getUserCurrencies = async (userId: string): Promise<UserCurrencyLis
   return data;
 };
 
-export const updateCurrencySet = async (
-  userId: string,
-  currencyIds: string[],
-  networkId: string,
-): Promise<void> => {
+export const updateCurrencySet = async (currencyIds: string[]): Promise<void> => {
   await MyriadAPI().request({
     url: `/user/currencies`,
     method: 'PATCH',

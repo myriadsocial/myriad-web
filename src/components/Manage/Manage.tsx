@@ -4,6 +4,8 @@ import React from 'react';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {isMobile} from 'react-device-detect';
 
+import {useSession} from 'next-auth/react';
+
 import {TextField, InputAdornment} from '@material-ui/core';
 import BaseButton from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -23,17 +25,17 @@ import {UserWallet} from 'src/interfaces/user';
 import i18n from 'src/locale';
 
 export type ManageProps = {
-  currentWallet?: UserWallet;
   wallets: UserWallet[];
   onConnectDisconnect: (type: string, walletId?: string) => void;
 };
 
 const Button = WithAuthorizeAction(BaseButton);
 
-export const Manage: React.FC<ManageProps> = ({currentWallet, wallets, onConnectDisconnect}) => {
+export const Manage: React.FC<ManageProps> = ({wallets, onConnectDisconnect}) => {
   const style = useStyles();
   const enqueueSnackbar = useEnqueueSnackbar();
   const {walletList} = useWalletList(wallets);
+  const {data: session} = useSession();
 
   const handleLinkCopied = () => {
     enqueueSnackbar({
@@ -43,7 +45,7 @@ export const Manage: React.FC<ManageProps> = ({currentWallet, wallets, onConnect
   };
 
   const disableWallet = (option: WalletOption) => {
-    return option.blockchainPlatform === currentWallet?.network?.blockchainPlatform;
+    return option.blockchainPlatform === session?.user?.blockchainPlatform;
   };
 
   return (

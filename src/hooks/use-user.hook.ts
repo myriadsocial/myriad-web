@@ -14,7 +14,6 @@ type UserHookProps = {
   anonymous: boolean;
   alias: string;
   networks: Network[];
-  currentWallet?: UserWallet;
   wallets: UserWallet[];
   disconnectSocial: (social: SocialsEnum) => void;
   updateUserFcmToken: (token: string) => void;
@@ -43,18 +42,16 @@ export const useUserHook = (): UserHookProps => {
     }),
     shallowEqual,
   );
-  const {networks, currentWallet, wallets, userWalletAddress} = useSelector<
+  const {networks, wallets, userWalletAddress} = useSelector<
     RootState,
     {
       networks: Network[];
-      currentWallet?: UserWallet;
       wallets: UserWallet[];
       userWalletAddress: string;
     }
   >(
     state => ({
       networks: state.userState.networks,
-      currentWallet: state.userState.currentWallet,
       wallets: state.userState.wallets,
       userWalletAddress: state.userState.userWalletAddress,
     }),
@@ -105,7 +102,6 @@ export const useUserHook = (): UserHookProps => {
     anonymous,
     alias,
     networks,
-    currentWallet,
     wallets,
     disconnectSocial,
     updateUserFcmToken,

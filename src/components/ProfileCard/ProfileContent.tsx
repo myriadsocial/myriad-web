@@ -1,5 +1,6 @@
 import React from 'react';
 
+import {useSession} from 'next-auth/react';
 import {useRouter} from 'next/router';
 
 import {Badge, Grid} from '@material-ui/core';
@@ -23,7 +24,7 @@ import {Modal} from 'src/components/atoms/Modal';
 import {formatCount} from 'src/helpers/number';
 import {formatNetworkTitle, formatWalletTitle} from 'src/helpers/wallet';
 import {NetworkIdEnum} from 'src/interfaces/network';
-import {WalletTypeEnum} from 'src/interfaces/wallet';
+import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
 import i18n from 'src/locale';
 
 export const ProfileContent: React.FC<ProfileCardProps> = props => {
@@ -36,16 +37,17 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
     onShowNotificationList,
     isMobile,
     handleSignOut,
-    currentWallet,
   } = props;
 
   const classes = useStyles({...props});
 
   const router = useRouter();
 
-  const {wallets} = user || {wallets: []};
+  const {data: session} = useSession();
 
-  const isWeb2Users = !wallets.length && !anonymous;
+  const isWeb2Users = !user?.fullAccess && !anonymous;
+  const networkId = session?.user?.networkType as NetworkIdEnum;
+  const blockchainPlatform = session?.user?.blockchainPlatfomr as BlockchainPlatform;
 
   const icons = React.useMemo(
     () => ({
@@ -68,7 +70,7 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
   };
 
   const getSelectedIcon = (isWallet?: boolean) => {
-    const networkId = currentWallet?.network?.id;
+    const networkId = session?.user?.networkType;
 
     if (isWallet) {
       switch (networkId) {
@@ -153,7 +155,7 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
                   `${i18n.t('Profile_Card.NotConnected')}`
                 ) : (
                   <>
-                    {getSelectedIcon()} {formatNetworkTitle(currentWallet?.network?.id)}
+                    {getSelectedIcon()} {formatNetworkTitle(networkId)}
                   </>
                 )}
               </Typography>
@@ -166,7 +168,7 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
                 ) : (
                   <>
                     {getSelectedIcon(true)}
-                    {formatWalletTitle(currentWallet?.network)}
+                    {formatWalletTitle(blockchainPlatform)}
                   </>
                 )}
               </Typography>

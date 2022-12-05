@@ -24,7 +24,6 @@ export interface UserState extends BaseState {
   anonymous: boolean;
   alias: string;
   verifying: boolean;
-  currentWallet?: UserWallet;
   wallets: UserWallet[];
   networks: Network[];
   userWalletAddress: string | null;
@@ -102,13 +101,6 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (state = initalSta
       };
     }
 
-    case constants.ADD_USER_TOKEN: {
-      return {
-        ...state,
-        currencies: [...state.currencies, action.payload],
-      };
-    }
-
     case constants.FETCH_USER_SOCIALS: {
       return {
         ...state,
@@ -123,13 +115,6 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (state = initalSta
           data: [...state.experiences.data, ...action.experiences],
           meta: action.meta,
         },
-      };
-    }
-
-    case constants.FETCH_CURRENT_USER_WALLETS: {
-      return {
-        ...state,
-        currentWallet: action.payload,
       };
     }
 

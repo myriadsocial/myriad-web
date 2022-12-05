@@ -39,7 +39,7 @@ export const useInstances = () => {
   const {provider} = useMyriadInstance();
   const {fetchUserNonce, getRegisteredAccounts, logout} = useAuthHook();
   const {requestLink} = useAuthLinkHook();
-  const {anonymous, currentWallet} = useUserHook();
+  const {anonymous} = useUserHook();
   const {enablePolkadotExtension} = usePolkadotExtension();
   const {server: currentServer, apiURL: currentApiURL} = useSelector<RootState, ServerState>(
     state => state.serverState,
@@ -118,7 +118,7 @@ export const useInstances = () => {
       redirect: false,
     };
 
-    switch (currentWallet.blockchainPlatform) {
+    switch (session.user.blockchainPlatform) {
       case BlockchainPlatform.SUBSTRATE: {
         walletType = walletType ?? WalletTypeEnum.POLKADOT;
 

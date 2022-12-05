@@ -31,7 +31,6 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
     handleLoginOrCreateAccount,
     onViewProfile,
     onShowNotificationList,
-    currentWallet,
     networks,
   } = props;
 
@@ -54,7 +53,6 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
           onViewProfile={onViewProfile}
           handleSignOut={handleSignOut}
           networks={networks}
-          currentWallet={currentWallet}
         />
         <div className={classes.wallet}>
           <ShowIf condition={anonymous}>

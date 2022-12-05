@@ -21,7 +21,7 @@ export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
   const router = useRouter();
 
   const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
-  const {user, anonymous, alias, currentWallet, networks, wallets} = useUserHook();
+  const {user, anonymous, alias, networks, wallets} = useUserHook();
   const {logout} = useAuthHook();
 
   const handleViewProfile = () => {
@@ -50,7 +50,6 @@ export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
     <ProfileCard
       user={user}
       anonymous={anonymous}
-      currentWallet={currentWallet}
       networks={networks}
       wallets={wallets}
       alias={alias}

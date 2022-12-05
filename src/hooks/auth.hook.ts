@@ -74,6 +74,7 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
       walletType: wallet.type,
       blockchainPlatform: network.blockchainPlatform,
       instanceURL: cookies[COOKIE_INSTANCE_URL],
+      blockchainPlatform: network.blockchainPlatform,
     };
 
     switch (wallet.type) {
@@ -109,6 +110,7 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
 
     const callbackUrl = redirect ?? publicRuntimeConfig.appAuthURL;
     signIn('credentials', {...signInCredential, callbackUrl});
+    window.localStorage.setItem('currentNetwork', JSON.stringify(network));
     return true;
   };
 

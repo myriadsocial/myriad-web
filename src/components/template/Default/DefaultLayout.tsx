@@ -20,11 +20,13 @@ import {RightMenuBar} from 'src/components/RightMenuBar/RightMenuBar';
 import {CookieConsent, COOKIE_CONSENT_NAME} from 'src/components/common/CookieConsent';
 import {TippingProvider} from 'src/components/common/Tipping/Tipping.provider';
 import ShowIf from 'src/components/common/show-if.component';
+import {strToJson} from 'src/helpers/string';
 import {useInstances} from 'src/hooks/use-instances.hooks';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {IProvider} from 'src/interfaces/blockchain-interface';
+import {Network, NetworkIdEnum} from 'src/interfaces/network';
 import {NotificationProps} from 'src/interfaces/notification';
-import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
+import {WalletTypeEnum} from 'src/interfaces/wallet';
 import * as FirebaseAnalytic from 'src/lib/firebase/analytic';
 import * as FirebaseMessaging from 'src/lib/firebase/messaging';
 import {BlockchainProvider} from 'src/lib/services/blockchain-provider';
@@ -76,7 +78,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
   const [cookies] = useCookies([COOKIE_CONSENT_NAME, COOKIE_INSTANCE_URL]);
 
   const {data: session} = useSession();
-  const {user, anonymous, currentWallet, updateUserFcmToken} = useUserHook();
+  const {user, anonymous, updateUserFcmToken, networks} = useUserHook();
   const {instance} = useInstances();
 
   const [showNotification, setShowNotification] = useState<boolean>(false);
@@ -84,27 +86,41 @@ const Default: React.FC<DefaultLayoutProps> = props => {
   const [initialize, setInitialize] = useState<boolean>(true);
 
   const loadingNear = router.query.loading as string | null;
-  const network = currentWallet?.network;
   const walletType = session?.user?.walletType as WalletTypeEnum;
+  const networkType = session?.user?.networkType as NetworkIdEnum;
+  const address = session?.user?.address;
 
   const initializeProvider = useCallback(async () => {
     if (anonymous) return;
     if (!initialize) return;
-    if (!currentWallet) return;
     if (loadingNear) dispatch(clearBalances());
     dispatch(clearBalances());
 
-    const blockchain = await BlockchainProvider.connect(network, walletType as WalletTypeEnum);
+    let stringifyNetwork = window.localStorage.getItem('currentNetwork');
+
+    if (!stringifyNetwork) {
+      const network = networks.find(e => e.id === networkType);
+      if (!network) return;
+      stringifyNetwork = JSON.stringify(network);
+      window.localStorage.setItem('currentNetwork', stringifyNetwork);
+    }
+
+    const currentNetwork = strToJson<Network>(stringifyNetwork);
+
+    const blockchain = await BlockchainProvider.connect(
+      currentNetwork,
+      walletType as WalletTypeEnum,
+    );
     const provider = blockchain?.provider;
 
-    if (provider) provider.accountId = currentWallet.id;
+    if (provider) provider.accountId = address;
 
     setProvider(provider);
     dispatch(loadBalances(provider, true));
-    dispatch(fetchUserWalletAddress(provider, currentWallet.id));
+    dispatch(fetchUserWalletAddress(provider, address));
     setInitialize(false);
     /* eslint-disable react-hooks/exhaustive-deps*/
-  }, [anonymous, initialize, currentWallet, loadingNear]);
+  }, [anonymous, initialize, loadingNear]);
 
   useEffect(() => {
     initializeProvider();
@@ -160,31 +176,13 @@ const Default: React.FC<DefaultLayoutProps> = props => {
     setProvider(null);
   };
 
-  const getWallet = (blockchainPlatform?: BlockchainPlatform) => {
-    switch (blockchainPlatform) {
-      case BlockchainPlatform.SUBSTRATE:
-        return WalletTypeEnum.POLKADOT;
-
-      case BlockchainPlatform.NEAR:
-        return WalletTypeEnum.NEAR;
-
-      default:
-        return;
-    }
-  };
-
   return (
     <BlockchainProviderComponent
       server={instance}
       provider={provider}
-      currentWallet={currentWallet}
       onChangeProvider={onInitializeBlockchain}
       loadingBlockchain={initialize}>
-      <TippingProvider
-        anonymous={anonymous}
-        sender={user}
-        currentWallet={getWallet(currentWallet?.blockchainPlatform)}
-        currentNetwork={currentWallet?.network.id}>
+      <TippingProvider anonymous={anonymous} sender={user}>
         <Container maxWidth="lg" disableGutters>
           <div className={classes.root}>
             <div className={classes.firstCol}>

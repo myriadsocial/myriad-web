@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {useSession} from 'next-auth/react';
+
 import Avatar from '@material-ui/core/Avatar';
 import Backdrop from '@material-ui/core/Backdrop';
 import Button from '@material-ui/core/Button';
@@ -23,7 +25,6 @@ import {
 import ShowIf from 'src/components/common/show-if.component';
 import {TipsResult} from 'src/interfaces/blockchain-interface';
 import {Network} from 'src/interfaces/network';
-import {UserWallet} from 'src/interfaces/user';
 import i18n from 'src/locale';
 
 type TipProps = {
@@ -31,7 +32,6 @@ type TipProps = {
   network: Network;
   loading: boolean;
   nativeToken: string;
-  currentWallet?: UserWallet;
   txFee?: string;
   onClaim: (networkId: string, ftIdentifier: string) => void;
   onClaimAll: (networkId: string) => void;
@@ -67,12 +67,12 @@ export const Tip: React.FC<TipProps> = props => {
     onHandleVerifyRef,
     onSwitchNetwork,
     nativeToken,
-    currentWallet,
     loading,
     txFee,
   } = props;
 
   const style = useStyles();
+  const {data: session} = useSession();
 
   const icons = React.useMemo(
     () => ({
@@ -110,7 +110,7 @@ export const Tip: React.FC<TipProps> = props => {
   };
 
   const showTokens = () => {
-    if (isShowVerifyReference() && network.id === currentWallet?.networkId) {
+    if (isShowVerifyReference() && network.id === session?.user?.networkType) {
       return (
         <TipClaimReference
           networkId={network.id}
@@ -135,11 +135,7 @@ export const Tip: React.FC<TipProps> = props => {
                   </Typography>
                 </div>
                 <Button
-                  disabled={
-                    (currentWallet && currentWallet.networkId !== network.id) ||
-                    !tip.accountId ||
-                    loading
-                  }
+                  disabled={session?.user?.networkType !== network.id || !tip.accountId || loading}
                   onClick={() => handleClaim(network.id, tip.tipsBalanceInfo.ftIdentifier)}
                   size="small"
                   className={style.buttonClaim}
@@ -173,7 +169,7 @@ export const Tip: React.FC<TipProps> = props => {
           </Typography>
         </ListItemText>
         <div className={style.secondaryAction}>
-          <ShowIf condition={currentWallet?.networkId !== network.id}>
+          <ShowIf condition={session?.user?.networkType !== network.id}>
             <Button
               disabled
               className={style.button}
@@ -184,7 +180,7 @@ export const Tip: React.FC<TipProps> = props => {
               {i18n.t('Wallet.Tip.Switch')}
             </Button>
           </ShowIf>
-          <ShowIf condition={!!currentWallet && currentWallet?.networkId == network.id}>
+          <ShowIf condition={session?.user?.networkType == network.id}>
             <Button
               disabled={isShowVerifyReference()}
               className={style.button}

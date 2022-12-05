@@ -1,5 +1,6 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+
+import {useSession} from 'next-auth/react';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -19,8 +20,6 @@ import ShowIf from 'src/components/common/show-if.component';
 import InfoIconYellow from 'src/images/Icons/InfoIconYellow.svg';
 import {BalanceDetail} from 'src/interfaces/balance';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {UserState} from 'src/reducers/user/reducer';
 
 type SummaryProps = {
   amount: BN;
@@ -42,10 +41,10 @@ export const Summary: React.FC<SummaryProps> = props => {
     nativeSymbol,
     isTipping = true,
   } = props;
-  const {currentWallet} = useSelector<RootState, UserState>(state => state.userState);
+  const {data: session} = useSession();
 
   const styles = useStyles();
-  const networkId = currentWallet?.network?.id;
+  const networkId = session?.user?.networkType;
   const total = amount.gt(BN_ZERO)
     ? currency.native
       ? amount.add(transactionFee)

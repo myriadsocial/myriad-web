@@ -5,6 +5,7 @@ import React, {useState} from 'react';
 import {useCookies} from 'react-cookie';
 import {useSelector} from 'react-redux';
 
+import {useSession} from 'next-auth/react';
 import {useRouter} from 'next/router';
 
 import {
@@ -51,7 +52,8 @@ export const MenuDrawerComponent: React.FC = () => {
   const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
 
   const {logout} = useAuthHook();
-  const {user, alias, anonymous, networks, currentWallet, wallets} = useUserHook();
+  const {data: session} = useSession();
+  const {user, alias, anonymous, networks} = useUserHook();
   const {switchInstance, loadingSwitch, onLoadingSwitch} = useInstances();
 
   const router = useRouter();
@@ -186,7 +188,6 @@ export const MenuDrawerComponent: React.FC = () => {
                 onShowNotificationList={handleShowNotification}
                 onViewProfile={handleViewProfile}
                 isMobile={true}
-                currentWallet={currentWallet}
                 networks={networks}
               />
               {/* network */}
@@ -197,14 +198,13 @@ export const MenuDrawerComponent: React.FC = () => {
                   </Button>
                 </ShowIf>
                 <ShowIf condition={!anonymous}>
-                  <ShowIf condition={Boolean(currentWallet)}>
-                    <NetworkOption wallets={wallets} networks={networks} isMobile={true} />
-
+                  <ShowIf condition={user?.fullAccess}>
+                    <NetworkOption networks={networks} isMobile={true} />
                     <Typography component="div" className={style.address}>
-                      {formatAddress(currentWallet)}
+                      {formatAddress(session)}
                     </Typography>
                   </ShowIf>
-                  <ShowIf condition={!anonymous && !wallets.length}>
+                  <ShowIf condition={!anonymous && !user?.fullAccess}>
                     <Button variant="contained" color="primary" onClick={handleConnectWeb3Wallet}>
                       <CommonWalletIcon viewBox="1 -3.5 20 20" />
                       <span style={{paddingLeft: '5px'}}>Connect Web 3.0 wallet</span>

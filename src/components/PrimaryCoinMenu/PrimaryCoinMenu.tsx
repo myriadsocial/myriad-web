@@ -7,7 +7,6 @@ import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
 
 import {useStyles} from '.';
-import {User} from '../../interfaces/user';
 import {Button, ButtonVariant, ButtonColor} from '../atoms/Button';
 import {DraggableBalanceCard} from './DraggableBalanceCard';
 
@@ -19,14 +18,12 @@ import i18n from 'src/locale';
 type PrimaryCoinMenuProps = {
   balanceDetails: BalanceDetail[];
   togglePrimaryCoinMenu: () => void;
-  user: User;
-  networkId: string;
 };
 
 export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
-  const {togglePrimaryCoinMenu, balanceDetails, user, networkId} = props;
+  const {togglePrimaryCoinMenu, balanceDetails} = props;
   const classes = useStyles();
 
   const enqueueSnackbar = useEnqueueSnackbar();
@@ -56,7 +53,7 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
   };
 
   const handleSetDefaultCurrency = () => {
-    updateCurrencySet(user.id, coins, networkId, () => {
+    updateCurrencySet(coins, () => {
       enqueueSnackbar({
         message: i18n.t('Wallet.Primary_Coin.Alert.Msg'),
         variant: 'success',

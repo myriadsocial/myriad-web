@@ -3,6 +3,7 @@ import {CurrencyDollarIcon} from '@heroicons/react/outline';
 import React, {useState} from 'react';
 import {shallowEqual, useSelector} from 'react-redux';
 
+import {useSession} from 'next-auth/react';
 import {useRouter} from 'next/router';
 
 import {
@@ -25,7 +26,7 @@ import {ReferenceType} from 'src/interfaces/interaction';
 import {People} from 'src/interfaces/people';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
-import {WalletDetail} from 'src/interfaces/wallet';
+import {WalletDetail, WalletTypeEnum} from 'src/interfaces/wallet';
 import * as CommentAPI from 'src/lib/api/comment';
 import * as PostAPI from 'src/lib/api/post';
 import * as UserAPI from 'src/lib/api/user';
@@ -60,19 +61,21 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
   const styles = useStyles({mobile, color: props.color});
   const router = useRouter();
   const tipping = useTipping();
+
   const {user} = useUserHook();
+  const {data: session} = useSession();
+
   const [promptFailedTip, setPromptFailedTip] = useState(false);
   const [tipInfoOpened, setTipInfoOpened] = useState(false);
   const [prompWeb2Users, setPrompWeb2Users] = useState(false);
-
-  const {wallets} = user || {wallets: []};
 
   const anonymous = useSelector<RootState, boolean>(
     state => state.userState.anonymous,
     shallowEqual,
   );
 
-  const isWeb2Users = !wallets.length && !anonymous;
+  const isWeb2Users = !user?.fullAccess && !anonymous;
+  const walletType = session?.user?.walletType as WalletTypeEnum;
 
   const icon = <SvgIcon color="inherit" component={CurrencyDollarIcon} viewBox="0 0 24 24" />;
 
@@ -199,7 +202,7 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
         subtitle={
           <Typography component="div">
             {i18n.t('Tipping.Send_Tip_Error.Not_Connected', {
-              wallet: tipping.currentWallet?.toUpperCase(),
+              wallet: walletType?.replace('-', '').toUpperCase(),
             })}
           </Typography>
         }>

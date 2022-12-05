@@ -12,7 +12,7 @@ type PrimaryCoinMenuContainer = {
 };
 
 export const PrimaryCoinMenuContainer: React.FC<PrimaryCoinMenuContainer> = props => {
-  const {user, currentWallet} = useSelector<RootState, UserState>(state => state.userState);
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
 
   const {togglePrimaryCoinMenu} = props;
 
@@ -24,8 +24,6 @@ export const PrimaryCoinMenuContainer: React.FC<PrimaryCoinMenuContainer> = prop
     <PrimaryCoinMenu
       togglePrimaryCoinMenu={togglePrimaryCoinMenu}
       balanceDetails={balanceDetails}
-      user={user}
-      networkId={currentWallet.networkId}
     />
   );
 };

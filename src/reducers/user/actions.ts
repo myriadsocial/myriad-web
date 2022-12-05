@@ -6,19 +6,16 @@ import {Actions as BaseAction, setLoading, setError, PaginationAction} from '../
 import {RootState} from '../index';
 import * as constants from './constants';
 
-import axios from 'axios';
 import {Action} from 'redux';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {IProvider} from 'src/interfaces/blockchain-interface';
-import {Currency} from 'src/interfaces/currency';
 import {WrappedExperience} from 'src/interfaces/experience';
 import {SocialsEnum} from 'src/interfaces/index';
-import {NetworkIdEnum, Network} from 'src/interfaces/network';
+import {Network} from 'src/interfaces/network';
 import {SocialMedia} from 'src/interfaces/social';
 import {User, UserTransactionDetail, UserWallet} from 'src/interfaces/user';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import * as SocialAPI from 'src/lib/api/social';
-import * as TokenAPI from 'src/lib/api/token';
 import * as UserAPI from 'src/lib/api/user';
 import * as WalletAPI from 'src/lib/api/wallet';
 import {ThunkActionCreator} from 'src/types/thunk';
@@ -41,11 +38,6 @@ export interface FetchUser extends Action {
   user: User;
 }
 
-export interface AddUserToken extends Action {
-  type: constants.ADD_USER_TOKEN;
-  payload: Currency;
-}
-
 export interface SetDefaultCurrency extends Action {
   type: constants.SET_DEFAULT_CURRENCY;
   user: User;
@@ -59,11 +51,6 @@ export interface FetchConnectedSocials extends Action {
 export interface FetchUserExperience extends PaginationAction {
   type: constants.FETCH_USER_EXPERIENCE;
   experiences: WrappedExperience[];
-}
-
-export interface FetchCurrentUserWallet extends Action {
-  type: constants.FETCH_CURRENT_USER_WALLETS;
-  payload: UserWallet;
 }
 
 export interface FetchNetwork extends PaginationAction {
@@ -116,12 +103,10 @@ export type Actions =
   | FetchUser
   | FetchConnectedSocials
   | FetchUserExperience
-  | FetchCurrentUserWallet
   | AddUserWallet
   | FetchUserWallets
   | FetchNetwork
   | FetchUserWalletAddress
-  | AddUserToken
   | SetDefaultCurrency
   | SetUserAsAnonymous
   | UpdateUser
@@ -144,19 +129,6 @@ export const setUser = (user: User): FetchUser => ({
 export const setFullAccess = (): SetFullAccess => ({
   type: constants.SET_FULLACCESS,
 });
-
-export const setCurrentUserWallet = (user: User): FetchCurrentUserWallet => {
-  const wallet = user.wallets[0];
-  const userWallet: UserWallet = {
-    ...wallet,
-    user,
-  };
-
-  return {
-    type: constants.FETCH_CURRENT_USER_WALLETS,
-    payload: userWallet,
-  };
-};
 
 export const setAnonymous = (alias: string): SetUserAsAnonymous => ({
   type: constants.SET_USER_AS_ANONYMOUS,
@@ -185,10 +157,6 @@ export const fetchUser: ThunkActionCreator<Actions, RootState> = () => async dis
 
   try {
     user = await WalletAPI.getUser();
-
-    if (user.wallets.length > 0 && user.currencies.length > 0) {
-      dispatch(setCurrentUserWallet(user));
-    }
 
     dispatch(setUser(user));
   } catch (error) {
@@ -285,30 +253,6 @@ export const fetchUserWalletAddress: ThunkActionCreator<Actions, RootState> =
     });
 
     dispatch(setLoading(false));
-  };
-
-export const fetchCurrentUserWallets: ThunkActionCreator<Actions, RootState> =
-  () => async (dispatch, getState) => {
-    dispatch(setLoading(true));
-
-    const {
-      userState: {user},
-    } = getState();
-
-    if (!user) return;
-
-    try {
-      const data = await WalletAPI.getCurrentUserWallet();
-
-      dispatch({
-        type: constants.FETCH_CURRENT_USER_WALLETS,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch(setError(error));
-    } finally {
-      dispatch(setLoading(false));
-    }
   };
 
 export const fetchUserWallets: ThunkActionCreator<Actions, RootState> =
@@ -451,61 +395,15 @@ export const setAsPrimary: ThunkActionCreator<Actions, RootState> =
     }
   };
 
-export const addUserCurrency: ThunkActionCreator<Actions, RootState> =
-  (selectedCurrency: Currency, callback?: () => void) => async (dispatch, getState) => {
-    dispatch(setLoading(true));
-    const {
-      userState: {user},
-    } = getState();
-
-    if (!user) return;
-
-    try {
-      await TokenAPI.addUserToken({
-        currencyId: selectedCurrency.id,
-        userId: user.id,
-      });
-
-      dispatch({
-        type: constants.ADD_USER_TOKEN,
-        payload: selectedCurrency,
-      });
-
-      callback && callback();
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 422) {
-        dispatch(setError(new Error('Token already added to your wallet!')));
-      } else {
-        dispatch(setError(error));
-      }
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
-
 export const fetchNetwork: ThunkActionCreator<Actions, RootState> = () => async dispatch => {
   dispatch(setLoading(true));
 
   try {
     const {data: networks, meta} = await WalletAPI.getNetworks();
-    const filterNetwork: Network[] = [];
-
-    for (const network of networks) {
-      const networkWithTips = {
-        ...network,
-        tips: [],
-      };
-
-      if (network.id === NetworkIdEnum.MYRIAD) {
-        filterNetwork.unshift(networkWithTips);
-      } else {
-        filterNetwork.push(networkWithTips);
-      }
-    }
 
     dispatch({
       type: constants.FETCH_NETWORK,
-      payload: filterNetwork,
+      payload: networks,
       meta,
     });
   } catch (error) {

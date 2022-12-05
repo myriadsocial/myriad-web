@@ -1,6 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {useSession} from 'next-auth/react';
 import dynamic from 'next/dynamic';
 
 import {Box, Button, Grid, Typography} from '@material-ui/core';
@@ -15,6 +16,8 @@ import {Modal} from 'src/components/atoms/Modal';
 import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {ReferenceType} from 'src/interfaces/interaction';
+import {NetworkIdEnum} from 'src/interfaces/network';
+import {WalletTypeEnum} from 'src/interfaces/wallet';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
@@ -33,10 +36,11 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
   children,
   anonymous,
   sender,
-  currentWallet,
-  currentNetwork,
 }) => {
   const dispatch = useDispatch();
+
+  const {data: session} = useSession();
+
   const [tipFormOpened, setOpenTipForm] = useState(false);
   const [options, setOptions] = useState<TippingOptions>();
   const [enabled, setTippingEnabled] = useState(false);
@@ -44,6 +48,9 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
   const [currencyTipped, setTippingCurrency] = useState<BalanceDetail>();
   const [transactionUrl, setTransactionUrl] = useState<string>();
   const [amount, setAmount] = useState<BN>(INITIAL_AMOUNT);
+
+  const currentNetworkId = session?.user?.networkType as NetworkIdEnum;
+  const currentWalletType = session?.user?.walletType as WalletTypeEnum;
 
   const {balanceDetails: balances, loading} = useSelector<RootState, BalanceState>(
     state => state.balanceState,
@@ -64,7 +71,7 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
         setOpenTipForm(true);
       }
     },
-    [anonymous, currentWallet],
+    [anonymous, currentWalletType],
   );
 
   const handleCloseTipForm = useCallback(() => {
@@ -100,11 +107,11 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
 
   return (
     <>
-      <SendTipContext.Provider value={{currentWallet, enabled, loading, send: tipping}}>
+      <SendTipContext.Provider value={{enabled, loading, send: tipping}}>
         {children}
       </SendTipContext.Provider>
 
-      {!!options && !!sender && !!defaultCurrency && currentNetwork && (
+      {!!options && !!sender && !!defaultCurrency && currentNetworkId && (
         <Modal
           gutter="none"
           open={tipFormOpened}
@@ -114,9 +121,7 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
           subtitle={isTipping() && i18n.t('Tipping.Modal_Main.Subtitle')}>
           <Tipping
             defaultCurrency={defaultCurrency}
-            currentNetwork={currentNetwork}
             balances={balances}
-            sender={sender}
             onSuccess={handleSuccessTipping}
             {...options}
           />

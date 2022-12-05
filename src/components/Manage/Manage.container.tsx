@@ -57,9 +57,7 @@ export const ManageCointainer: React.FC = () => {
   const {loading, connectDisconnectNetwork} = useConnect();
   const {publicRuntimeConfig} = getConfig();
 
-  const {user, currentWallet, wallets} = useSelector<RootState, UserState>(
-    state => state.userState,
-  );
+  const {user, wallets} = useSelector<RootState, UserState>(state => state.userState);
 
   const [showAccountList, setShowAccountList] = React.useState(false);
   const [showWalletList, setShowWalletList] = React.useState(false);
@@ -245,11 +243,7 @@ export const ManageCointainer: React.FC = () => {
       marginTop={'20px'}
       paddingLeft={isMobile ? 0 : 1}
       paddingRight={isMobile ? 0 : theme.spacing(3.75)}>
-      <Manage
-        currentWallet={currentWallet}
-        wallets={wallets}
-        onConnectDisconnect={onConnectDisconnect}
-      />
+      <Manage wallets={wallets} onConnectDisconnect={onConnectDisconnect} />
       <PolkadotAccountList
         align="left"
         title="Select account"

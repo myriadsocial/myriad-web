@@ -18,8 +18,6 @@ export const credentialToSession = (
     // Login detail
     token: encryption.encryptedMessage,
     instanceURL: credential.instanceURL,
-    walletType: credential.walletType,
-    networkType: credential.networkType,
     loginType: credential.loginType,
 
     // Blockchain detail

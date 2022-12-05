@@ -128,6 +128,7 @@ const createOptions = (req: NextApiRequest) => ({
         networkType: {label: 'Network ID', type: 'text'},
         publicAddress: {label: 'Public Address', type: 'text'},
         instanceURL: {label: 'Instance url', type: 'text'},
+        blockchainPlatform: {label: 'Blockchain platform', type: 'text'},
       },
       async authorize(credentials) {
         const session = await getSession({req});
@@ -155,8 +156,6 @@ const createOptions = (req: NextApiRequest) => ({
         } catch {
           // ignore
         }
-
-        return session.user;
       },
     }),
   ],

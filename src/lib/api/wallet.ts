@@ -149,18 +149,6 @@ export const getNetworks = async (): Promise<Networks> => {
   const {data} = await MyriadAPI().request({
     url: `/networks`,
     method: 'GET',
-    params: {
-      filter: {
-        include: [
-          {
-            relation: 'currencies',
-            scope: {
-              order: 'priority ASC',
-            },
-          },
-        ],
-      },
-    },
   });
 
   return data;

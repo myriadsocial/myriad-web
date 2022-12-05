@@ -9,9 +9,7 @@ import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const HistoryDetailListContainer: React.FC = () => {
-  const {user, currentWallet, currencies} = useSelector<RootState, UserState>(
-    state => state.userState,
-  );
+  const {user, currencies} = useSelector<RootState, UserState>(state => state.userState);
   const {
     loading,
     transactions,
@@ -37,7 +35,6 @@ export const HistoryDetailListContainer: React.FC = () => {
       <HistoryDetailList
         userId={user.id}
         currencies={currencies}
-        wallet={currentWallet}
         isLoading={loading}
         transactions={transactions}
         hasMore={hasMore}

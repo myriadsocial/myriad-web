@@ -29,7 +29,6 @@ import {useExchangeRate} from 'src/hooks/use-exchange-rate.hook';
 import {Currency} from 'src/interfaces/currency';
 import {NetworkIdEnum} from 'src/interfaces/network';
 import {Transaction, TransactionOrderType} from 'src/interfaces/transaction';
-import {UserWallet} from 'src/interfaces/user';
 import i18n from 'src/locale';
 import {TransactionFilterProps} from 'src/reducers/transaction/actions';
 
@@ -39,7 +38,6 @@ type HistoryDetailListProps = {
   orderType: TransactionOrderType;
   hasMore: boolean;
   currencies: Currency[];
-  wallet: UserWallet;
   isLoading: boolean;
   userId: string;
   nextPage: () => void;

@@ -1,6 +1,8 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {useSelector} from 'react-redux';
 
+import {useSession} from 'next-auth/react';
+
 import {Backdrop, CircularProgress} from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -22,12 +24,13 @@ import {Button, ButtonVariant} from 'src/components/atoms/Button';
 import {CurrencyOptionComponent} from 'src/components/atoms/CurrencyOption';
 import {ListItemComponent} from 'src/components/atoms/ListItem';
 import {formatBalance} from 'src/helpers/balance';
-import {toBigNumber} from 'src/helpers/string';
+import {toBigNumber, strToJson} from 'src/helpers/string';
 import {useWallet} from 'src/hooks/use-wallet-hook';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {TipsBalanceInfo} from 'src/interfaces/blockchain-interface';
 import {ReferenceType} from 'src/interfaces/interaction';
-import {User} from 'src/interfaces/user';
+import {CURRENT_NETWORK_KEY, Network, NetworkIdEnum} from 'src/interfaces/network';
+import {WalletTypeEnum} from 'src/interfaces/wallet';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
@@ -36,22 +39,21 @@ const INITIAL_AMOUNT = new BN(-1);
 
 export const Tipping: React.FC<SendTipProps> = props => {
   const {
-    sender,
     receiver,
     reference,
     referenceType,
     referenceId,
     balances,
     defaultCurrency,
-    currentNetwork,
-    currencyContent,
     onSuccess,
+    currencyContent,
   } = props;
 
   const classes = useStyles();
   const {isSignerLoading, sendTip, payUnlockableContent} = useWallet();
+  const {data: session} = useSession();
 
-  const {currentWallet, currencies} = useSelector<RootState, UserState>(state => state.userState);
+  const {currencies, networks} = useSelector<RootState, UserState>(state => state.userState);
   const [amount, setAmount] = useState<BN>(INITIAL_AMOUNT);
   const [transactionFee, setTransactionFee] = useState<BN>(INITIAL_AMOUNT);
   const [assetMinBalance, setAssetMinBalance] = useState<BN>(BN_ZERO);
@@ -61,6 +63,9 @@ export const Tipping: React.FC<SendTipProps> = props => {
   const [loadingFee, setLoadingFee] = useState(true);
   const [tippingAmountValid, setTippingAmountValid] = useState(false);
   const [minInput, setMinInput] = useState<number>(0);
+
+  const walletType = session?.user?.walletType as WalletTypeEnum;
+  const networkType = session?.user?.networkType as NetworkIdEnum;
 
   useEffect(() => {
     if (isTipping()) return;
@@ -72,16 +77,10 @@ export const Tipping: React.FC<SendTipProps> = props => {
     const nativeCurrency = currencies.find(e => e.native);
 
     return nativeCurrency?.symbol ?? currency.symbol;
-  }, [currentWallet]);
+  }, [walletType]);
 
-  const getAddressByUser = (user: User) => {
-    if (!user.wallets.length) {
-      return null;
-    }
-
-    const wallet = user.wallets.find(ar => ar?.network.id === currentNetwork);
-
-    return wallet?.id ?? null;
+  const getAddressByUser = () => {
+    return session?.user?.address ?? null;
   };
 
   const handleChangeAgreement = (accepted: boolean) => {
@@ -89,7 +88,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
   };
 
   const calculateTransactionFee = async (selected: BalanceDetail) => {
-    const senderAddress = getAddressByUser(sender);
+    const senderAddress = getAddressByUser();
 
     if (!receiver.walletDetail || !senderAddress) return;
 
@@ -135,9 +134,21 @@ export const Tipping: React.FC<SendTipProps> = props => {
   const signTransaction = async () => {
     if (amount.lte(BN_ZERO)) return;
 
-    const senderAddress = getAddressByUser(sender);
+    const senderAddress = getAddressByUser();
 
     if (!receiver.walletDetail || !senderAddress) return;
+
+    let stringifyNetwork = window.localStorage.getItem(CURRENT_NETWORK_KEY);
+
+    if (!stringifyNetwork) {
+      const network = networks.find(e => e.id === networkType);
+      if (!network) return;
+      stringifyNetwork = JSON.stringify(network);
+      window.localStorage.setItem(CURRENT_NETWORK_KEY, stringifyNetwork);
+    }
+
+    const currentNetwork = strToJson<Network>(stringifyNetwork);
+
     if (isTipping()) {
       if (currency.native) receiver.walletDetail.ftIdentifier = 'native';
       else receiver.walletDetail.ftIdentifier = currency.referenceId;
@@ -146,7 +157,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
         from: senderAddress,
         to: receiver.id,
         amount,
-        currency: {...currency, network: currentWallet.network},
+        currency: {...currency, network: currentNetwork},
         walletDetail: receiver.walletDetail,
         type: null,
         referenceId: null,
@@ -156,7 +167,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
       if ([ReferenceType.POST, ReferenceType.COMMENT].includes(referenceType)) {
         Object.assign(attributes, {
           type: referenceType,
-          referenceId: reference?.id,
+          referenceId: reference.id,
         });
       }
 
@@ -177,7 +188,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
         attributes.type,
         attributes.referenceId,
         hash => {
-          onSuccess(currency, currentWallet?.network?.explorerURL, hash, attributes.amount);
+          onSuccess(currency, currentNetwork?.explorerURL, hash, attributes.amount);
 
           setAmount(INITIAL_AMOUNT);
           setTransactionFee(INITIAL_AMOUNT);
@@ -203,7 +214,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
         referenceType,
         referenceId,
         hash => {
-          onSuccess(currency, currentWallet?.network?.explorerURL, hash, amount);
+          onSuccess(currency, currentNetwork?.explorerURL, hash, amount);
 
           setAmount(INITIAL_AMOUNT);
           setTransactionFee(INITIAL_AMOUNT);

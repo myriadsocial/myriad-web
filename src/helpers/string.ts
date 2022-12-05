@@ -148,3 +148,13 @@ export const htmlToJson = (html: any) => {
 
   return {img, text};
 };
+
+export function strToJson<T>(value: string): T | null {
+  try {
+    return JSON.parse(value);
+  } catch {
+    // ignore
+  }
+
+  return null;
+}

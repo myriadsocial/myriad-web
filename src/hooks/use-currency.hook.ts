@@ -12,18 +12,13 @@ export const useCurrency = () => {
     dispatch(getUserCurrencies());
   };
 
-  const updateCurrencySet = async (
-    userId: string,
-    balanceDetails: BalanceDetail[],
-    networkId: string,
-    callback?: () => void,
-  ) => {
+  const updateCurrencySet = async (balanceDetails: BalanceDetail[], callback?: () => void) => {
     try {
       dispatch(setDefaultCurrency(balanceDetails));
 
       const currencyIds = balanceDetails.map(e => e.id);
 
-      await TokenAPI.updateCurrencySet(userId, currencyIds, networkId);
+      await TokenAPI.updateCurrencySet(currencyIds);
 
       callback && callback();
     } catch (error) {

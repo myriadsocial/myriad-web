@@ -153,6 +153,7 @@ export const useConnect = () => {
         networkType: network.id,
         walletType: wallet.type,
         instanceURL: session.user.instanceURL,
+        blockchainPlatform,
       };
 
       switch (blockchainPlatform) {
@@ -210,21 +211,20 @@ export const useConnect = () => {
 
       const response = await signIn('switchNetwork', {...credential, redirect: false});
 
-      if (response.error) throw new Error('FailedToSwitch');
+      if (response.error) {
+        throw new Error('FailedToSwitch');
+      }
 
       await dispatch(fetchUser());
       await dispatch(fetchUserWallets());
 
       router.replace(redirectUrl, undefined, {shallow: true});
 
+      window.localStorage.setItem('currentNetwork', JSON.stringify(network));
+
       callback && callback();
     } catch (error) {
-      console.log(error);
-      if (error instanceof AccountRegisteredError) {
-        throw error;
-      } else {
-        console.log(error);
-      }
+      throw error;
     } finally {
       setLoading(false);
     }

@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {useSession} from 'next-auth/react';
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 
@@ -16,11 +17,11 @@ import {useConnect} from 'src/hooks/use-connect.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {IProvider} from 'src/interfaces/blockchain-interface';
 import {Network, NetworkIdEnum} from 'src/interfaces/network';
-import {UserWallet, Wallet, WalletWithSigner} from 'src/interfaces/user';
+import {Wallet, WalletWithSigner} from 'src/interfaces/user';
 import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
-import {AccountRegisteredError} from 'src/lib/api/errors/account-registered.error';
 import {Server} from 'src/lib/api/server';
 import {toHexPublicKey} from 'src/lib/crypto';
+import {Near} from 'src/lib/services/near-api-js';
 import {RootState} from 'src/reducers';
 import {clearBalances} from 'src/reducers/balance/actions';
 import {UserState} from 'src/reducers/user/reducer';
@@ -39,7 +40,6 @@ const NearSelectorList = dynamic(() => import('components/NearSelector/NearSelec
 interface BlockchainProviderProps {
   server: Server;
   provider: IProvider;
-  currentWallet: UserWallet;
   loadingBlockchain: boolean;
   onChangeProvider: () => void;
 }
@@ -48,7 +48,6 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
   children,
   server,
   provider,
-  currentWallet,
   onChangeProvider,
   loadingBlockchain,
 }) => {
@@ -59,6 +58,7 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
   const {enablePolkadotExtension} = usePolkadotExtension();
   const {getRegisteredAccounts} = useAuthHook();
   const {switchNetwork, loading: loadingSwitch} = useConnect();
+  const {data: session} = useSession();
 
   const enqueueSnackbar = useEnqueueSnackbar();
   const confirm = useConfirm();
@@ -73,7 +73,7 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
   const action = router.query.action as string | string[] | null;
   const walletType = router.query.walletType as string | string[] | null;
 
-  const currentNetworkId = currentWallet?.network?.id;
+  const currentNetworkId = session?.user?.networkType as NetworkIdEnum;
 
   useEffect(() => {
     if (
@@ -96,7 +96,7 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
     }
   }, [action, walletType]);
 
-  const handleOpenPrompt = (select: NetworkIdEnum) => {
+  const handleOpenPrompt = (select: Network) => {
     showConfirmDialog(select);
   };
 
@@ -124,12 +124,10 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
         error = false;
       });
     } catch (err) {
-      if (err instanceof AccountRegisteredError) {
-        enqueueSnackbar({
-          message: 'Failed! ' + err.message,
-          variant: 'error',
-        });
-      }
+      enqueueSnackbar({
+        message: `Failed to switch to ${network.id.toUpperCase()} network`,
+        variant: 'error',
+      });
     } finally {
       callback && callback(error);
     }
@@ -149,7 +147,7 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
       case BlockchainPlatform.NEAR:
         return checkWalletList(network, wallet);
       default:
-        handleOpenPrompt(networkId);
+        handleOpenPrompt(network);
     }
   };
 
@@ -186,7 +184,10 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
     closeWalletList();
     if (!network || !wallet) return;
     wallet.type = walletType;
-    handleSwitchNetwork(wallet, network);
+    handleSwitchNetwork(wallet, network, async error => {
+      if (!error) return;
+      await Near.clearLocalStorage();
+    });
   };
 
   const handleSelectedSubstrateAccount = (account: InjectedAccountWithMeta) => {
@@ -200,15 +201,13 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
     router.push({pathname: '/wallet', query: {type: 'manage'}});
   };
 
-  const showConfirmDialog = (selected: NetworkIdEnum) => {
+  const showConfirmDialog = (selected: Network) => {
     confirm({
-      title: `You didn’t connect your ${formatNetworkTitle(selected)}!`,
+      title: `You didn’t connect your ${formatNetworkTitle(selected?.id)}!`,
       description: `This account is not connected with ${formatWalletTitle(
-        undefined,
-        selected,
+        selected?.blockchainPlatform,
       )}. Please connect to ${formatWalletTitle(
-        undefined,
-        selected,
+        selected?.blockchainPlatform,
       )} in wallet manage tab. Do you want to connect your account?`,
       icon: 'warning',
       confirmationText: 'Yes',

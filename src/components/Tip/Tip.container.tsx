@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
 
+import {useSession} from 'next-auth/react';
 import dynamic from 'next/dynamic';
 
 import {Backdrop, CircularProgress, NoSsr} from '@material-ui/core';
@@ -51,15 +52,18 @@ export const TipContainer: React.FC = () => {
   } = useClaimTip();
 
   const {loadingSwitch, switchNetwork} = useBlockchain();
-  const {currentWallet, user} = useSelector<RootState, UserState>(state => state.userState);
+  const {user} = useSelector<RootState, UserState>(state => state.userState);
   const {enablePolkadotExtension} = usePolkadotExtension();
   const {getRegisteredAccounts} = useAuthHook();
+  const {data: session} = useSession();
 
   const [showAccountList, setShowAccountList] = useState<boolean>(false);
   const [extensionInstalled, setExtensionInstalled] = useState<boolean>(false);
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
   const [tipsBalanceInfo, setTipsBalanceInfo] = useState<TipsBalanceInfo>(null);
   const [isHaveTips, setIsHaveTips] = useState<boolean>(false);
+
+  const networkId = session?.user?.networkType;
 
   const handleClaimTip = (networkId: string, ftIdentifier: string) => {
     claim(networkId, ftIdentifier, ({claimSuccess, errorMessage}) => {
@@ -90,7 +94,7 @@ export const TipContainer: React.FC = () => {
   };
 
   const isShow = (network: Network) => {
-    if (network.id === currentWallet?.networkId) return true;
+    if (network.id === networkId) return true;
     return false;
   };
 
@@ -102,9 +106,9 @@ export const TipContainer: React.FC = () => {
         throw new Error('Insufficient Gas Fee');
       }
 
-      if (!server?.accountId?.[currentWallet?.networkId]) throw new Error('Server not exists');
+      if (!server?.accountId?.[networkId]) throw new Error('Server not exists');
 
-      const serverId = server.accountId[currentWallet?.networkId];
+      const serverId = server.accountId[networkId];
       const tipsBalanceInfo = {
         serverId: serverId,
         referenceType: 'user',
@@ -186,7 +190,7 @@ export const TipContainer: React.FC = () => {
     const nativeToken = getNativeToken(network?.tips ?? []);
 
     if (tipsBalances.length === 0) {
-      if (!currentWallet) {
+      if (!user?.fullAccess) {
         if (isHaveTips) return;
         if (element != tipsEachNetwork.length - 1) return;
         return (
@@ -233,7 +237,6 @@ export const TipContainer: React.FC = () => {
         loading={claiming}
         tips={tipsBalances}
         network={network}
-        currentWallet={currentWallet}
         onClaim={handleClaimTip}
         onClaimAll={handleClaimTipAll}
         onSwitchNetwork={switchNetwork}
