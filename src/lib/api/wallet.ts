@@ -8,7 +8,7 @@ import {BaseErrorResponse} from './interfaces/error-response.interface';
 
 import axios, {AxiosError} from 'axios';
 import {Network} from 'src/interfaces/network';
-import {User, UserWallet, Wallet} from 'src/interfaces/user';
+import {User, UserWallet} from 'src/interfaces/user';
 
 type WalletList = BaseList<UserWallet>;
 type Networks = BaseList<Network>;
@@ -17,7 +17,7 @@ type UserNonceProps = {
   nonce: number;
 };
 
-export type ConnectNetwork = {
+export type ConnectWallet = {
   publicAddress: string;
   nonce: number;
   signature: string | null;
@@ -84,12 +84,9 @@ export const getUserNonceByUserId = async (id: string): Promise<UserNonceProps> 
   return data ? data : {nonce: 0};
 };
 
-export const connectNetwork = async (
-  payload: ConnectNetwork,
-  id: string,
-): Promise<Wallet | null> => {
+export const connectWallet = async (payload: ConnectWallet): Promise<LoginResponseProps | void> => {
   try {
-    const {data} = await MyriadAPI().request<Wallet>({
+    const {data} = await MyriadAPI().request<LoginResponseProps | void>({
       url: `/user/connect-wallet`,
       method: 'POST',
       data: payload,
@@ -109,12 +106,9 @@ export const connectNetwork = async (
   }
 };
 
-export const disconnectNetwork = async (
-  payload: ConnectNetwork,
-  walletId: string,
-): Promise<Wallet | null> => {
+export const disconnectWallet = async (payload: ConnectWallet, walletId: string): Promise<void> => {
   const address = isHex(`0x${walletId}`) ? `0x${walletId}` : walletId;
-  const {data} = await MyriadAPI().request<Wallet>({
+  const {data} = await MyriadAPI().request<void>({
     url: `/user/wallets/${address}`,
     method: 'DELETE',
     data: payload,
@@ -123,7 +117,7 @@ export const disconnectNetwork = async (
   return data;
 };
 
-export const switchNetwork = async (payload: ConnectNetwork): Promise<LoginResponseProps> => {
+export const switchNetwork = async (payload: ConnectWallet): Promise<LoginResponseProps> => {
   try {
     const {data} = await MyriadAPI().request<LoginResponseProps>({
       url: `/user/switch-network`,

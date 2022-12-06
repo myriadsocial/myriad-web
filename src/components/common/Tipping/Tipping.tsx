@@ -27,7 +27,6 @@ import {formatBalance} from 'src/helpers/balance';
 import {toBigNumber, strToJson} from 'src/helpers/string';
 import {useWallet} from 'src/hooks/use-wallet-hook';
 import {BalanceDetail} from 'src/interfaces/balance';
-import {TipsBalanceInfo} from 'src/interfaces/blockchain-interface';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {CURRENT_NETWORK_KEY, Network, NetworkIdEnum} from 'src/interfaces/network';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
@@ -197,7 +196,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
     } else {
       const [instanceId, unlockableContentId, userId, walletAddress] =
         receiver?.walletDetail?.referenceId?.split('/') ?? [];
-      const tipsBalanceInfo: TipsBalanceInfo = {
+      const tipsBalanceInfo = {
         serverId: receiver?.walletDetail?.serverId,
         referenceType: receiver?.walletDetail?.referenceType,
         referenceId: unlockableContentId,

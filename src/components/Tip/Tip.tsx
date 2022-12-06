@@ -23,7 +23,7 @@ import {
   KusamaNetworkIcon,
 } from 'src/components/atoms/Icons';
 import ShowIf from 'src/components/common/show-if.component';
-import {TipsResult} from 'src/interfaces/blockchain-interface';
+import {TipsResult} from 'src/interfaces/blockchain';
 import {Network} from 'src/interfaces/network';
 import i18n from 'src/locale';
 

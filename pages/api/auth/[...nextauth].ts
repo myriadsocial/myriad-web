@@ -158,7 +158,54 @@ const createOptions = (req: NextApiRequest) => ({
         }
       },
     }),
+    CredentialsProvider({
+      id: 'connectWallet',
+      // The name to display on the sign in form (e.g. 'Sign in with...')
+      name: 'Connect Network',
+      // The credentials is used to generate a suitable form on the sign in page.
+      // You can specify whatever fields you are expecting to be submitted.
+      // e.g. domain, username, password, 2FA token, etc.
+      credentials: {
+        address: {label: 'Address', type: 'text'},
+        signature: {label: 'Wallet Signature', type: 'text'},
+        nonce: {label: 'Nonce', type: 'text'},
+        walletType: {label: 'Wallet Type', type: 'text'},
+        networkType: {label: 'Network ID', type: 'text'},
+        publicAddress: {label: 'Public Address', type: 'text'},
+        instanceURL: {label: 'Instance url', type: 'text'},
+        blockchainPlatform: {label: 'Blockchain platform', type: 'text'},
+      },
+      async authorize(credentials) {
+        const session = await getSession({req});
+        const anonymous = Boolean(session?.user.anonymous) || !session;
+
+        try {
+          initialize({cookie: req.headers.cookie}, anonymous);
+
+          const data = await WalletAPI.connectWallet({
+            nonce: Number(credentials.nonce),
+            publicAddress: credentials.publicAddress,
+            signature: credentials.signature,
+            walletType: credentials.walletType as WalletTypeEnum,
+            networkType: credentials.networkType as NetworkIdEnum,
+          });
+
+          if (!data) return session.user;
+          if (!data?.token?.accessToken) throw Error('Failed to authorize user!');
+
+          const user = data.user;
+          const accessToken = data.token.accessToken;
+          const payload = encryptMessage(accessToken, credentials.address);
+          const signInCredential = parseCredential(user, credentials, LoginType.EMAIL);
+
+          return credentialToSession(signInCredential, payload);
+        } catch (err) {
+          throw err;
+        }
+      },
+    }),
   ],
+
   // Database optional. MySQL, Maria DB, Postgres and MongoDB are supported.
   // https://next-auth.js.org/configuration/databases
   //

@@ -5,11 +5,12 @@ import {signIn, signOut, SignOutResponse} from 'next-auth/react';
 import getConfig from 'next/config';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
+import {isHex} from '@polkadot/util';
 
 import {COOKIE_INSTANCE_URL} from 'components/SelectServer';
 import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
-import {Network, NetworkIdEnum} from 'src/interfaces/network';
+import {CURRENT_NETWORK_KEY, Network, NetworkIdEnum} from 'src/interfaces/network';
 import {WalletWithSigner} from 'src/interfaces/user';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
 import * as AuthAPI from 'src/lib/api/ext-auth';
@@ -72,7 +73,6 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
       nonce,
       networkType: network.id,
       walletType: wallet.type,
-      blockchainPlatform: network.blockchainPlatform,
       instanceURL: cookies[COOKIE_INSTANCE_URL],
       blockchainPlatform: network.blockchainPlatform,
     };
@@ -90,15 +90,17 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
 
       case WalletTypeEnum.NEAR:
       case WalletTypeEnum.MYNEAR: {
-        const nearAccount = wallet.id.split('/')[1];
+        const nearAddress = wallet.id.split('/')[1];
+        const address = isHex(`0x${nearAddress}`) ? `0x${nearAddress}` : nearAddress;
         const near = await Near.connect(network, wallet.type);
         const nearWallet = near.provider.wallet;
         const data = await Near.signWithWallet(nearWallet, undefined, {nonce});
         if (!data?.signature) return false;
+        const {signature, publicAddress} = data;
         const userSignature = {
-          address: nearAccount,
-          publicAddress: data.publicAddress,
-          signature: data.signature,
+          address,
+          publicAddress,
+          signature,
         };
         signInCredential = {...signInCredential, ...userSignature};
         break;
@@ -110,7 +112,7 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
 
     const callbackUrl = redirect ?? publicRuntimeConfig.appAuthURL;
     signIn('credentials', {...signInCredential, callbackUrl});
-    window.localStorage.setItem('currentNetwork', JSON.stringify(network));
+    window.localStorage.setItem(CURRENT_NETWORK_KEY, JSON.stringify(network));
     return true;
   };
 
@@ -145,6 +147,7 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
   };
 
   const logout = async (url?: string) => {
+    window.localStorage.removeItem(CURRENT_NETWORK_KEY);
     window.localStorage.removeItem('email');
 
     const promises: Promise<SignOutResponse | void>[] = [

@@ -22,16 +22,18 @@ import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorize
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import {UserWallet} from 'src/interfaces/user';
+import {WalletTypeEnum} from 'src/interfaces/wallet';
 import i18n from 'src/locale';
 
 export type ManageProps = {
   wallets: UserWallet[];
-  onConnectDisconnect: (type: string, walletId?: string) => void;
+  onConnect: (option: WalletOption) => void;
+  onDisconnect: (option: WalletOption) => void;
 };
 
 const Button = WithAuthorizeAction(BaseButton);
 
-export const Manage: React.FC<ManageProps> = ({wallets, onConnectDisconnect}) => {
+export const Manage: React.FC<ManageProps> = ({wallets, onConnect, onDisconnect}) => {
   const style = useStyles();
   const enqueueSnackbar = useEnqueueSnackbar();
   const {walletList} = useWalletList(wallets);
@@ -65,7 +67,7 @@ export const Manage: React.FC<ManageProps> = ({wallets, onConnectDisconnect}) =>
                       color="primary"
                       disabled={disableWallet(option)}
                       className={style.button}
-                      onClick={() => onConnectDisconnect(option.id, option.walletId)}>
+                      onClick={() => onConnect(option)}>
                       {i18n.t('Wallet.Manage.Btn_Disconnect')}
                     </Button>
                   </ShowIf>
@@ -100,9 +102,9 @@ export const Manage: React.FC<ManageProps> = ({wallets, onConnectDisconnect}) =>
                   variant="outlined"
                   size="small"
                   color="secondary"
-                  disabled={isMobile && option.id === 'polkadot'}
+                  disabled={isMobile && option.id === WalletTypeEnum.POLKADOT}
                   className={style.btnConnect}
-                  onClick={() => onConnectDisconnect(option.id)}>
+                  onClick={() => onDisconnect(option)}>
                   {i18n.t('Wallet.Manage.Btn_Connect')}
                 </Button>
               </div>

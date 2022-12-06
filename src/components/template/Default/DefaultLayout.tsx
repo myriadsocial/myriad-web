@@ -23,8 +23,8 @@ import ShowIf from 'src/components/common/show-if.component';
 import {strToJson} from 'src/helpers/string';
 import {useInstances} from 'src/hooks/use-instances.hooks';
 import {useUserHook} from 'src/hooks/use-user.hook';
-import {IProvider} from 'src/interfaces/blockchain-interface';
-import {Network, NetworkIdEnum} from 'src/interfaces/network';
+import {IProvider} from 'src/interfaces/blockchain';
+import {CURRENT_NETWORK_KEY, Network, NetworkIdEnum} from 'src/interfaces/network';
 import {NotificationProps} from 'src/interfaces/notification';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
 import * as FirebaseAnalytic from 'src/lib/firebase/analytic';
@@ -96,13 +96,13 @@ const Default: React.FC<DefaultLayoutProps> = props => {
     if (loadingNear) dispatch(clearBalances());
     dispatch(clearBalances());
 
-    let stringifyNetwork = window.localStorage.getItem('currentNetwork');
+    let stringifyNetwork = window.localStorage.getItem(CURRENT_NETWORK_KEY);
 
     if (!stringifyNetwork) {
       const network = networks.find(e => e.id === networkType);
       if (!network) return;
       stringifyNetwork = JSON.stringify(network);
-      window.localStorage.setItem('currentNetwork', stringifyNetwork);
+      window.localStorage.setItem(CURRENT_NETWORK_KEY, stringifyNetwork);
     }
 
     const currentNetwork = strToJson<Network>(stringifyNetwork);

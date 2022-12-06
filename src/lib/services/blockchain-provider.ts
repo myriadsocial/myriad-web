@@ -1,4 +1,4 @@
-import {BlockchainProps} from '../../interfaces/blockchain-interface';
+import {BlockchainProps} from '../../interfaces/blockchain';
 import {Near} from './near-api-js';
 import {PolkadotJs} from './polkadot-js';
 

@@ -1,6 +1,6 @@
 import {createContext} from 'react';
 
-import {IProvider} from 'src/interfaces/blockchain-interface';
+import {IProvider} from 'src/interfaces/blockchain';
 import {Network} from 'src/interfaces/network';
 import {Server} from 'src/lib/api/server';
 

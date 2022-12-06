@@ -17,10 +17,9 @@ import {COOKIE_INSTANCE_URL} from 'components/SelectServer';
 import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
 import useMyriadInstance from 'components/common/Blockchain/use-myriad-instance.hooks';
 import * as nearAPI from 'near-api-js';
-import {MYRIAD_WALLET_KEY} from 'src/interfaces/blockchain-interface';
 import {ServerListProps} from 'src/interfaces/server-list';
 import {LoginType} from 'src/interfaces/session';
-import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
+import {BlockchainPlatform} from 'src/interfaces/wallet';
 import * as NetworkAPI from 'src/lib/api/network';
 import {getCheckEmail} from 'src/lib/api/user';
 import {toHexPublicKey} from 'src/lib/crypto';
@@ -108,9 +107,8 @@ export const useInstances = () => {
     if (!network) throw new Error('NetworkNotExist');
     if (nonce <= 0) throw new Error('AccountNotFound');
 
-    let walletType = window.localStorage.getItem(MYRIAD_WALLET_KEY);
     let credentials = {
-      walletType,
+      walletType: session?.user?.walletType ?? null,
       nonce,
       instanceURL: server.apiUrl,
       networkType: network.id,
@@ -120,8 +118,6 @@ export const useInstances = () => {
 
     switch (session.user.blockchainPlatform) {
       case BlockchainPlatform.SUBSTRATE: {
-        walletType = walletType ?? WalletTypeEnum.POLKADOT;
-
         const installed = await enablePolkadotExtension();
 
         if (!installed) throw new Error('ExtensionNotInstalled');
@@ -137,16 +133,14 @@ export const useInstances = () => {
 
         if (!signature) throw new Error('FailedSignature');
         const address = toHexPublicKey(account);
-        const data = {address, publicAddress: address, signature, walletType};
+        const data = {address, publicAddress: address, signature};
         credentials = {...credentials, ...data};
         break;
       }
 
       // TODO: switch instance with NEAR when wallet is cleared manually on local storage
       case BlockchainPlatform.NEAR: {
-        walletType = walletType ?? WalletTypeEnum.MYNEAR;
-
-        const near = await Near.connect(network, walletType as WalletTypeEnum);
+        const near = await Near.connect(network, session.user.walletType);
         const wallet = near?.provider?.wallet;
 
         if (!wallet.isSignedIn) throw new Error('NearAccountNotSignIn');
@@ -157,7 +151,7 @@ export const useInstances = () => {
         const userSignature = keyPair.sign(Buffer.from(numberToHex(nonce)));
         const publicAddress = u8aToHex(userSignature.publicKey.data);
         const signature = u8aToHex(userSignature.signature);
-        const data = {address, publicAddress, signature, walletType};
+        const data = {address, publicAddress, signature};
         credentials = {...credentials, ...data};
         break;
       }
@@ -170,8 +164,6 @@ export const useInstances = () => {
     if (!result.ok) throw new Error('FailedSwitchInstance');
 
     setCookies(COOKIE_INSTANCE_URL, server.apiUrl);
-    window.localStorage.setItem(MYRIAD_WALLET_KEY, walletType);
-
     const pathname = router.pathname;
     const query = router.query;
     await router.replace({pathname, query: {...query, instance: server.apiUrl}});

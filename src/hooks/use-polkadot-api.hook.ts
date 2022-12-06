@@ -3,7 +3,7 @@ import {AnyTuple, Codec} from '@polkadot/types/types';
 import {BN, BN_ZERO} from '@polkadot/util';
 
 import {formatBalanceV2} from 'src/helpers/balance';
-import {TipsResultsProps, TipsBalanceData, TipsResult} from 'src/interfaces/blockchain-interface';
+import {TipsResultsProps, TipsBalanceData, TipsResult} from 'src/interfaces/blockchain';
 import {Network} from 'src/interfaces/network';
 import {SocialMedia} from 'src/interfaces/social';
 import {Wallet} from 'src/interfaces/user';

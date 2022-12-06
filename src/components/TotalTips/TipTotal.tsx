@@ -19,7 +19,7 @@ import {Modal, ModalProps} from '../atoms/Modal';
 import {useStyles} from './totalTips.style';
 
 import {formatUsd} from 'src/helpers/balance';
-import {TipsResult} from 'src/interfaces/blockchain-interface';
+import {TipsResult} from 'src/interfaces/blockchain';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {ExchangeRateState} from 'src/reducers/exchange-rate/reducer';

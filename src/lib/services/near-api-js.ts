@@ -16,7 +16,7 @@ import {
   TipsBalanceInfo,
   TipsNearResult,
   TipsNearResultWithPagination,
-} from '../../interfaces/blockchain-interface';
+} from '../../interfaces/blockchain';
 
 import assign from 'lodash/assign';
 import * as nearAPI from 'near-api-js';

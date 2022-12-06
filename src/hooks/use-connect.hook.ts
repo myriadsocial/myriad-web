@@ -7,20 +7,19 @@ import {signIn, useSession} from 'next-auth/react';
 import getConfig from 'next/config';
 import {useRouter} from 'next/router';
 
-import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {isHex} from '@polkadot/util';
 
 import {useNearApi} from './use-near-api.hook';
 
-import {Network, NetworkIdEnum} from 'src/interfaces/network';
+import {CURRENT_NETWORK_KEY, Network, NetworkIdEnum} from 'src/interfaces/network';
 import {WalletWithSigner} from 'src/interfaces/user';
-import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
+import {BlockchainPlatform} from 'src/interfaces/wallet';
 import {AccountRegisteredError} from 'src/lib/api/errors/account-registered.error';
 import * as WalletAPI from 'src/lib/api/wallet';
 import {toHexPublicKey} from 'src/lib/crypto';
 import {PolkadotJs} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
-import {fetchUser, fetchUserWallets, setFullAccess} from 'src/reducers/user/actions';
+import {fetchUser, fetchUserWallets} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 export interface NearPayload {
@@ -42,88 +41,112 @@ export const useConnect = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const connectDisconnectNetwork = async (
-    blockchainPlatform: BlockchainPlatform,
-    account?: InjectedAccountWithMeta | NearPayload,
-    walletId?: string,
-    callback?: (disconnect: boolean, error: boolean) => void,
-  ): Promise<boolean> => {
-    if (!user) return false;
-    if (!account) return false;
+  const connectWallet = async (
+    wallet: WalletWithSigner,
+    network: Network,
+    callback?: (error: boolean) => void,
+  ): Promise<void> => {
+    if (!user) return;
 
     try {
-      let payload = null;
+      const redirectUrl = new URL(router.asPath, publicRuntimeConfig.appAuthURL);
+      const blockchainPlatform = wallet.blockchainPlatform;
+      const credential = {
+        walletType: wallet.type,
+        blockchainPlatform,
+        instanceURL: session.user.instanceURL,
+        nonce: 0,
+        publicAddress: '',
+        signature: '',
+        networkType: '',
+      };
 
       switch (blockchainPlatform) {
-        case BlockchainPlatform.SUBSTRATE:
+        case BlockchainPlatform.SUBSTRATE: {
           const {nonce} = await WalletAPI.getUserNonceByUserId(user?.id);
-
-          if (!nonce) return false;
-
-          const polkadotAccount = account as InjectedAccountWithMeta;
-          const polkadotSignature = await PolkadotJs.signWithWallet(
-            polkadotAccount,
+          if (!nonce) return;
+          if (!wallet.signer) return;
+          const signature = await PolkadotJs.signWithWallet(
+            wallet.signer,
             nonce,
             ({signerOpened}) => {
               if (signerOpened) setLoading(true);
             },
           );
-
-          if (!polkadotSignature) return false;
-
-          const polkadotAddress = toHexPublicKey(polkadotAccount);
-
-          payload = {
-            publicAddress: polkadotAddress,
-            nonce,
-            signature: polkadotSignature,
-            networkType: NetworkIdEnum.POLKADOT,
-            walletType: WalletTypeEnum.POLKADOT,
-            data: {
-              id: polkadotAddress,
-            },
-          };
-
+          if (!signature) return;
+          Object.assign(credential, {
+            nonce: nonce,
+            address: toHexPublicKey(wallet.signer),
+            publicAddress: toHexPublicKey(wallet.signer),
+            signature: signature,
+            networkType: NetworkIdEnum.MYRIAD,
+          });
           break;
+        }
 
-        case BlockchainPlatform.NEAR:
-          const nearAccount = account as NearPayload;
-          const {pubKey, nearAddress, nonce: nearNonce} = nearAccount;
+        case BlockchainPlatform.NEAR: {
+          const callbackUrl = new URL(router.asPath, publicRuntimeConfig.appAuthURL);
 
-          payload = {
-            publicAddress: pubKey,
-            nonce: nearNonce,
-            signature: nearAccount.signature,
+          // clear previous query param
+          redirectUrl.hash = '';
+          redirectUrl.search = '';
+          callbackUrl.hash = '';
+          callbackUrl.search = '';
+
+          callbackUrl.searchParams.set('type', 'manage');
+          callbackUrl.searchParams.set('action', 'connect');
+          callbackUrl.searchParams.set('walletType', wallet.type);
+
+          const url = callbackUrl.toString();
+          const data = await connectToNear(
+            {successCallbackURL: url, failedCallbackURL: url},
+            {userId: user.id, network},
+            wallet.type,
+          );
+
+          if (!data) return;
+          const address = data.publicAddress.split('/')[1];
+          Object.assign(credential, {
+            nonce: data.nonce,
+            address: isHex(`0x${address}`) ? `0x${address}` : address,
+            publicAddress: data.publicAddress,
+            signature: data.signature,
             networkType: NetworkIdEnum.NEAR,
-            walletType: WalletTypeEnum.NEAR,
-            data: {
-              id: isHex(`0x${nearAddress}`) ? `0x${nearAddress}` : nearAddress,
-            },
-          };
-
+          });
           break;
+        }
+
+        default:
+          throw new Error('FailedToConnect');
       }
 
-      if (!payload) return false;
-
-      if (walletId) {
-        await WalletAPI.disconnectNetwork(payload, walletId);
-
-        callback && callback(true, false);
+      if (user.fullAccess) {
+        await WalletAPI.connectWallet({
+          publicAddress: credential.publicAddress,
+          nonce: credential.nonce,
+          signature: credential.signature,
+          networkType: credential.networkType,
+          walletType: credential.walletType,
+        });
       } else {
-        await WalletAPI.connectNetwork(payload, user.id);
+        const response = await signIn('connectWallet', {...credential, redirect: false});
+
+        if (response.error) {
+          throw new Error('FailedToConnect');
+        }
+
+        dispatch(fetchUser());
+
+        router.replace(redirectUrl, undefined, {shallow: true});
+
+        window.localStorage.setItem(CURRENT_NETWORK_KEY, JSON.stringify(network));
       }
 
-      if (!user.fullAccess) {
-        await dispatch(fetchUser());
-      }
-
-      dispatch(setFullAccess());
       dispatch(fetchUserWallets());
 
-      return true;
+      callback && callback(false);
     } catch (err) {
-      callback && callback(false, true);
+      callback && callback(true);
 
       if (err instanceof AccountRegisteredError) {
         throw err;
@@ -133,8 +156,103 @@ export const useConnect = () => {
     } finally {
       setLoading(false);
     }
+  };
 
-    return false;
+  const disconnectWallet = async (
+    wallet: WalletWithSigner,
+    network?: Network,
+    callback?: (error: boolean) => void,
+  ): Promise<void> => {
+    if (!user) return;
+
+    try {
+      const redirectUrl = new URL(router.asPath, publicRuntimeConfig.appAuthURL);
+      const blockchainPlatform = wallet.blockchainPlatform;
+      const credential: Partial<WalletAPI.ConnectWallet> = {
+        walletType: wallet.type,
+      };
+
+      let address = null;
+
+      switch (blockchainPlatform) {
+        case BlockchainPlatform.SUBSTRATE: {
+          const {nonce} = await WalletAPI.getUserNonceByUserId(user?.id);
+          if (!nonce) return;
+          if (!wallet.signer) return;
+          const signature = await PolkadotJs.signWithWallet(
+            wallet.signer,
+            nonce,
+            ({signerOpened}) => {
+              if (signerOpened) setLoading(true);
+            },
+          );
+          if (!signature) return;
+          address = toHexPublicKey(wallet.signer);
+
+          credential.publicAddress = address;
+          credential.signature = signature;
+          credential.networkType = NetworkIdEnum.MYRIAD;
+          credential.nonce = nonce;
+          break;
+        }
+
+        case BlockchainPlatform.NEAR: {
+          if (!network) return;
+          const callbackUrl = new URL(router.asPath, publicRuntimeConfig.appAuthURL);
+
+          // clear previous query param
+          redirectUrl.hash = '';
+          redirectUrl.search = '';
+          callbackUrl.hash = '';
+          callbackUrl.search = '';
+
+          callbackUrl.searchParams.set('type', 'manage');
+          callbackUrl.searchParams.set('action', 'disconnect');
+          callbackUrl.searchParams.set('walletType', wallet.type);
+
+          const url = callbackUrl.toString();
+          const data = await connectToNear(
+            {successCallbackURL: url, failedCallbackURL: url},
+            {userId: user.id, network},
+            wallet.type,
+          );
+
+          if (!data) return;
+          const [publicAddress, nearAddress] = data.publicAddress.split('/');
+          address = nearAddress;
+
+          credential.nonce = data.nonce;
+          credential.signature = data.signature;
+          credential.networkType = NetworkIdEnum.NEAR;
+          credential.publicAddress = publicAddress;
+
+          break;
+        }
+
+        default:
+          throw new Error('FailedToConnect');
+      }
+
+      if (!address) throw new Error('AddressNotFound');
+
+      await WalletAPI.disconnectWallet(credential as WalletAPI.ConnectWallet, address);
+
+      dispatch(fetchUserWallets());
+
+      router.replace(redirectUrl, undefined, {shallow: true});
+
+      callback && callback(false);
+    } catch (err) {
+      callback && callback(true);
+
+      if (err instanceof AccountRegisteredError) {
+        throw err;
+      } else {
+        Sentry.captureException(err);
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const switchNetwork = async (
@@ -190,14 +308,15 @@ export const useConnect = () => {
 
           const signatureData = await connectToNear(
             {successCallbackURL: callbackUrl.toString(), failedCallbackURL: redirectUrl.toString()},
-            {network},
+            {userId: user.id, network},
             wallet.type,
             'switch',
           );
 
           if (!signatureData) return;
+          const address = signatureData.publicAddress.split('/')[1];
           Object.assign(credential, {
-            address: signatureData.publicAddress.split('/')[1],
+            address: isHex(`0x${address}`) ? `0x${address}` : address,
             nonce: signatureData.nonce,
             publicAddress: signatureData.publicAddress,
             signature: signatureData.signature,
@@ -220,7 +339,7 @@ export const useConnect = () => {
 
       router.replace(redirectUrl, undefined, {shallow: true});
 
-      window.localStorage.setItem('currentNetwork', JSON.stringify(network));
+      window.localStorage.setItem(CURRENT_NETWORK_KEY, JSON.stringify(network));
 
       callback && callback();
     } catch (error) {
@@ -232,7 +351,8 @@ export const useConnect = () => {
 
   return {
     loading,
-    connectDisconnectNetwork,
+    connectWallet,
+    disconnectWallet,
     switchNetwork,
   };
 };

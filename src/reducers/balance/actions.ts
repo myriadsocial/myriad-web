@@ -5,7 +5,7 @@ import * as constants from './constants';
 import {Action} from 'redux';
 import {formatNumber} from 'src/helpers/balance';
 import {BalanceDetail} from 'src/interfaces/balance';
-import {IProvider} from 'src/interfaces/blockchain-interface';
+import {IProvider} from 'src/interfaces/blockchain';
 import {Currency, CurrencyId} from 'src/interfaces/currency';
 import * as TokenAPI from 'src/lib/api/token';
 import {ThunkActionCreator} from 'src/types/thunk';

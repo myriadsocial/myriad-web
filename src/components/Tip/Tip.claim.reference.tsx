@@ -6,7 +6,7 @@ import {Typography, Button} from '@material-ui/core';
 
 import {useStyles} from './tip.style';
 
-import {TipsResult} from 'src/interfaces/blockchain-interface';
+import {TipsResult} from 'src/interfaces/blockchain';
 import i18n from 'src/locale';
 
 const TipTotal = dynamic(() => import('../TotalTips/TipTotal'), {

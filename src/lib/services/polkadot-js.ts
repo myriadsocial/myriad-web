@@ -16,8 +16,8 @@ import {
   SignTransaction,
   SignTransactionCallbackProps,
   TipsBalanceInfo,
-} from '../../interfaces/blockchain-interface';
-import {IProvider} from '../../interfaces/blockchain-interface';
+} from '../../interfaces/blockchain';
+import {IProvider} from '../../interfaces/blockchain';
 import {NoAccountException} from './errors/NoAccountException';
 import {SignRawException} from './errors/SignRawException';
 

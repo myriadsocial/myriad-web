@@ -3,7 +3,7 @@ import {useSelector} from 'react-redux';
 import {BN, BN_ZERO, BN_TEN} from '@polkadot/util';
 
 import {formatBalanceV2} from 'src/helpers/balance';
-import {CallbackURL, SignatureProps, TipsResultsProps} from 'src/interfaces/blockchain-interface';
+import {CallbackURL, SignatureProps, TipsResultsProps} from 'src/interfaces/blockchain';
 import {Network, NetworkIdEnum} from 'src/interfaces/network';
 import {Wallet} from 'src/interfaces/user';
 import {WalletTypeEnum} from 'src/interfaces/wallet';

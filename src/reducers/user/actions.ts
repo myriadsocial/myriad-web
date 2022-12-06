@@ -8,7 +8,7 @@ import * as constants from './constants';
 
 import {Action} from 'redux';
 import {BalanceDetail} from 'src/interfaces/balance';
-import {IProvider} from 'src/interfaces/blockchain-interface';
+import {IProvider} from 'src/interfaces/blockchain';
 import {WrappedExperience} from 'src/interfaces/experience';
 import {SocialsEnum} from 'src/interfaces/index';
 import {Network} from 'src/interfaces/network';

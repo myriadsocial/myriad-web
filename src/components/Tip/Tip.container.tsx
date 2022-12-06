@@ -20,7 +20,7 @@ import {Empty} from 'src/components/atoms/Empty';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useClaimTip} from 'src/hooks/use-claim-tip.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
-import {TipsBalanceInfo, TipsResult} from 'src/interfaces/blockchain-interface';
+import {TipsBalanceInfo, TipsResult} from 'src/interfaces/blockchain';
 import {Network, NetworkIdEnum} from 'src/interfaces/network';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';

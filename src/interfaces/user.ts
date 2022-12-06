@@ -2,7 +2,6 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import {BaseModel} from './base.interface';
 import {Currency} from './currency';
-import {Network} from './network';
 import {People} from './people';
 import {PrivacySettings} from './setting';
 import {TransactionDetail} from './transaction';
@@ -27,7 +26,6 @@ export type UserOnTransaction = BaseUser & {
 };
 
 export interface Wallet extends BaseModel {
-  network?: Network;
   blockchainPlatform: BlockchainPlatform;
   userId: string;
   type?: WalletTypeEnum;

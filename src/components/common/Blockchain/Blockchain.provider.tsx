@@ -15,7 +15,7 @@ import {formatNetworkTitle, formatWalletTitle} from 'src/helpers/wallet';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useConnect} from 'src/hooks/use-connect.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
-import {IProvider} from 'src/interfaces/blockchain-interface';
+import {IProvider} from 'src/interfaces/blockchain';
 import {Network, NetworkIdEnum} from 'src/interfaces/network';
 import {Wallet, WalletWithSigner} from 'src/interfaces/user';
 import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';

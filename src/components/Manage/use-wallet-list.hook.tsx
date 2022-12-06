@@ -2,10 +2,10 @@ import React from 'react';
 
 import {NearNetworkIcon24, PolkadotNetworkIcon} from 'src/components/atoms/Icons';
 import {Wallet} from 'src/interfaces/user';
-import {BlockchainPlatform} from 'src/interfaces/wallet';
+import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
 
 export type WalletOption = {
-  id: string;
+  id: WalletTypeEnum;
   title: string;
   icons: JSX.Element;
   isConnect: boolean;
@@ -19,37 +19,33 @@ type WalletListHook = {
 
 export const useWalletList = (wallets: Wallet[]): WalletListHook => {
   const walletList = React.useMemo<WalletOption[]>(() => {
-    const findWalletId = (platform: BlockchainPlatform) => {
-      let walletId;
-      wallets.forEach(wallet => {
-        if (wallet?.network?.blockchainPlatform === platform) walletId = wallet.id;
-      });
-
-      return walletId;
-    };
-
-    return [
+    const defaultWallet = [
       {
-        id: 'near',
+        id: WalletTypeEnum.NEAR,
         title: 'NEAR Wallet',
         icons: <NearNetworkIcon24 width={40} height={40} />,
-        isConnect: Boolean(
-          wallets.find(i => i?.network?.blockchainPlatform === BlockchainPlatform.NEAR),
-        ),
-        walletId: findWalletId(BlockchainPlatform.NEAR) ?? 'nearId.near',
+        isConnect: false,
+        walletId: null,
         blockchainPlatform: BlockchainPlatform.NEAR,
       },
       {
-        id: 'polkadot',
+        id: WalletTypeEnum.POLKADOT,
         title: 'polkadot{.js}',
         icons: <PolkadotNetworkIcon width={40} height={40} />,
-        isConnect: Boolean(
-          wallets.find(i => i?.network?.blockchainPlatform === BlockchainPlatform.SUBSTRATE),
-        ),
-        walletId: findWalletId(BlockchainPlatform.SUBSTRATE) ?? 'polkadotId',
+        isConnect: false,
+        walletId: null,
         blockchainPlatform: BlockchainPlatform.SUBSTRATE,
       },
     ];
+
+    return defaultWallet.map(e => {
+      const found = wallets.find(wallet => wallet.blockchainPlatform === e.blockchainPlatform);
+      return {
+        ...e,
+        isConnect: Boolean(found),
+        walletId: found?.id ?? e.walletId,
+      };
+    });
   }, [wallets]);
 
   return {

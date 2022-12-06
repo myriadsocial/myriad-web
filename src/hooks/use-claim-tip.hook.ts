@@ -12,7 +12,7 @@ import {usePolkadotApi} from './use-polkadot-api.hook';
 import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {VariantType} from 'notistack';
-import {FeeInfo, TipsBalanceInfo} from 'src/interfaces/blockchain-interface';
+import {FeeInfo, TipsBalanceInfo} from 'src/interfaces/blockchain';
 import {Network, NetworkIdEnum} from 'src/interfaces/network';
 import * as TransactionAPI from 'src/lib/api/transaction';
 import * as WalletAPI from 'src/lib/api/wallet';
