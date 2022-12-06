@@ -1,6 +1,6 @@
 import {createPluginFactory} from '@udecode/plate-core';
-import { getOnKeydownLimit } from './onKeydownLimit';
 
+import {getOnKeydownLimit} from './onKeydownLimit';
 import {CharLimitPlugin} from './type';
 import {withCharLimit} from './withCharLimit';
 
