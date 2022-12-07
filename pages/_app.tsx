@@ -30,7 +30,6 @@ const App = (props: AppProps) => {
   return (
     <I18nextProvider i18n={i18n}>
       <Head>
-        <link rel="shortcut icon" href="/favicon.svg" />
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
         <meta property="og:site_name" content={publicRuntimeConfig.appName} />
       </Head>

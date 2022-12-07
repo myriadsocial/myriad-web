@@ -21,6 +21,7 @@ import {
   PolygonNetworkDisabledIcon,
   SenderWalletDisabledIcon,
   TrustWalletDisabledIcon,
+  NovaDisableIcon,
 } from 'src/components/atoms/Icons';
 import {PromptComponent as Prompt} from 'src/components/atoms/Prompt/prompt.component';
 import {PolkadotLink} from 'src/components/common/PolkadotLink.component';
@@ -86,6 +87,7 @@ export const Options: React.FC<OptionProps> = props => {
       polkadot: <PolkadotNetworkIcon className={getMobileIconStyles} />,
       sender: <SenderWalletDisabledIcon className={getMobileIconStyles} />,
       near: <NearNetworkIcon className={getMobileIconStyles} />,
+      nova: <NovaDisableIcon className={getMobileIconStyles} />,
       'my-near': <MyNearWalletIcon className={getMobileIconStyles} />,
     }),
     [],
@@ -273,6 +275,25 @@ export const Options: React.FC<OptionProps> = props => {
                       <Typography>Polkadot.js</Typography>
                     </div>
                   </ListItem>
+                </Grid>
+                <Grid item xs={3}>
+                  <Tooltip
+                    title={
+                      <Typography component="span">
+                        {i18n.t('Login.Options.Tooltip_Wallet')}
+                      </Typography>
+                    }
+                    arrow>
+                    <ListItem
+                      disableGutters
+                      disabled
+                      onClick={setSelectedWallet(WalletTypeEnum.SENDER)}>
+                      <div className={styles.walletCard}>
+                        {walletIcons['nova']}
+                        <Typography style={{fontSize: 13}}>Nova Wallet</Typography>
+                      </div>
+                    </ListItem>
+                  </Tooltip>
                 </Grid>
               </ShowIf>
               <ShowIf condition={blockchainPlatform === BlockchainPlatform.NEAR}>
