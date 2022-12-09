@@ -44,4 +44,8 @@ export const menuOptions: MenuOptions<PostVisibility>[] = [
     id: PostVisibility.PRIVATE,
     title: i18n.t('Post_Create.Visibility.Only_Me'),
   },
+  {
+    id: PostVisibility.CUSTOM,
+    title: 'Custom',
+  },
 ];

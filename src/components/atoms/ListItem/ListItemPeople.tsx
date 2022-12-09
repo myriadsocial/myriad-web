@@ -21,7 +21,7 @@ type ListItemComponentProps = ListItemProps & {
   action?: string | React.ReactNode;
   active?: boolean;
   url?: string;
-  platform?: SocialsEnum;
+  platform?: SocialsEnum | string;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
