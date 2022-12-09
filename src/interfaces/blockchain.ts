@@ -7,7 +7,7 @@ import {Near} from '../lib/services/near-api-js';
 import {PolkadotJs} from '../lib/services/polkadot-js';
 
 import * as nearAPI from 'near-api-js';
-import {Network} from 'src/interfaces/network';
+import {CurrencyWithTips, Network} from 'src/interfaces/network';
 import {WalletDetail} from 'src/interfaces/wallet';
 import {Server} from 'src/lib/api/server';
 
@@ -42,7 +42,6 @@ export interface IProvider {
   payTransactionFee: (
     tipsBalanceInfo: TipsBalanceInfo,
     trxFee: string,
-    nativeBalance?: string,
     ...args: [SignerProps, SignTransaction]
   ) => Promise<string>;
 
@@ -207,16 +206,16 @@ export interface TipsResult {
   tipsBalanceInfo: TipsBalanceInfo;
   accountId: string;
   amount: string;
-  symbol: string;
-  imageURL: string;
-}
-
-export interface TipsResultsProps {
-  tipsResults: TipsResult[];
-  feeInfo?: FeeInfo;
 }
 
 export interface FeeInfo {
   formattedTrxFee: string;
   trxFee: string;
+}
+
+export interface TipsResultsProps {
+  currencies: CurrencyWithTips[];
+  feeInfo?: FeeInfo;
+  isUserHasTip?: boolean;
+  hasToClaimed?: boolean;
 }

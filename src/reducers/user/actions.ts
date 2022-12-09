@@ -11,7 +11,7 @@ import {BalanceDetail} from 'src/interfaces/balance';
 import {IProvider} from 'src/interfaces/blockchain';
 import {WrappedExperience} from 'src/interfaces/experience';
 import {SocialsEnum} from 'src/interfaces/index';
-import {Network} from 'src/interfaces/network';
+import {Network, NetworkIdEnum} from 'src/interfaces/network';
 import {SocialMedia} from 'src/interfaces/social';
 import {User, UserTransactionDetail, UserWallet} from 'src/interfaces/user';
 import * as ExperienceAPI from 'src/lib/api/experience';
@@ -395,20 +395,34 @@ export const setAsPrimary: ThunkActionCreator<Actions, RootState> =
     }
   };
 
-export const fetchNetwork: ThunkActionCreator<Actions, RootState> = () => async dispatch => {
-  dispatch(setLoading(true));
+export const fetchNetwork: ThunkActionCreator<Actions, RootState> =
+  (withCurrencies = false) =>
+  async dispatch => {
+    dispatch(setLoading(true));
 
-  try {
-    const {data: networks, meta} = await WalletAPI.getNetworks();
+    try {
+      const {data: networks, meta} = await WalletAPI.getNetworks(withCurrencies);
+      const filterNetworks = [];
 
-    dispatch({
-      type: constants.FETCH_NETWORK,
-      payload: networks,
-      meta,
-    });
-  } catch (error) {
-    dispatch(setError(error.message));
-  } finally {
-    dispatch(setLoading(false));
-  }
-};
+      if (withCurrencies) {
+        for (const network of networks) {
+          if (!network?.currencies) network.currencies = [];
+          if (network.id === NetworkIdEnum.MYRIAD) {
+            filterNetworks.unshift(network);
+          } else {
+            filterNetworks.push(network);
+          }
+        }
+      }
+
+      dispatch({
+        type: constants.FETCH_NETWORK,
+        payload: withCurrencies ? filterNetworks : networks,
+        meta,
+      });
+    } catch (error) {
+      dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };

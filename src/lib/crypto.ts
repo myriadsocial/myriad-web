@@ -60,6 +60,10 @@ export const toHexPublicKey = (account: InjectedAccountWithMeta): string => {
   return u8aToHex(decodeAddress(account.address));
 };
 
+export const toHexPublicKeyWithAddress = (address: string): string => {
+  return u8aToHex(decodeAddress(address));
+};
+
 export const generateKey = (name: string): KeyDetail => {
   const derivationPath = '';
 

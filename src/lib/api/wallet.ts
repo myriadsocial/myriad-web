@@ -139,10 +139,19 @@ export const switchNetwork = async (payload: ConnectWallet): Promise<LoginRespon
   }
 };
 
-export const getNetworks = async (): Promise<Networks> => {
+export const getNetworks = async (withCurrencies = false): Promise<Networks> => {
+  const params: Record<string, any> = {};
+
+  if (withCurrencies) {
+    params.filter = {
+      include: [{relation: 'currencies'}],
+    };
+  }
+
   const {data} = await MyriadAPI().request({
     url: `/networks`,
     method: 'GET',
+    params,
   });
 
   return data;

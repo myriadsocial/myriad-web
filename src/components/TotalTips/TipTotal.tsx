@@ -19,13 +19,13 @@ import {Modal, ModalProps} from '../atoms/Modal';
 import {useStyles} from './totalTips.style';
 
 import {formatUsd} from 'src/helpers/balance';
-import {TipsResult} from 'src/interfaces/blockchain';
+import {CurrencyWithTips} from 'src/interfaces/network';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {ExchangeRateState} from 'src/reducers/exchange-rate/reducer';
 
 type TipTotalNearProps = Pick<ModalProps, 'onClose' | 'open'> & {
-  tipsResults: TipsResult[];
+  tipsResults: CurrencyWithTips[];
   handleVerifyReference: () => void;
 };
 
@@ -64,7 +64,7 @@ const TipTotal: React.FC<TipTotalNearProps> = props => {
                     <TableCell component="th" scope="row" className={styles.tableCell}>
                       <Avatar
                         name={balanceDetail.symbol}
-                        src={balanceDetail.imageURL}
+                        src={balanceDetail.image}
                         size={AvatarSize.MEDIUM}
                       />
                       <Typography variant="h5" color="textPrimary">
@@ -78,7 +78,7 @@ const TipTotal: React.FC<TipTotalNearProps> = props => {
                         </Typography>
                         <Typography variant="caption" color="textSecondary">
                           {`~${formatUsd(
-                            parseFloat(balanceDetail.amount),
+                            parseFloat(balanceDetail.amount.toString()),
                             getDetailExchangeRate(balanceDetail.symbol),
                           )} USD`}
                         </Typography>

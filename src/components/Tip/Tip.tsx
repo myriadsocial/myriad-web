@@ -15,7 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import {TipClaimReference} from './Tip.claim.reference';
 import {useStyles} from './tip.style';
 
-import {MenuOptions} from 'src/components/atoms/DropdownMenu';
+import {capitalize} from 'lodash';
 import {
   NearNetworkIcon24,
   MyriadCircleIcon,
@@ -23,57 +23,28 @@ import {
   KusamaNetworkIcon,
 } from 'src/components/atoms/Icons';
 import ShowIf from 'src/components/common/show-if.component';
-import {TipsResult} from 'src/interfaces/blockchain';
-import {Network} from 'src/interfaces/network';
+import {strToJson} from 'src/helpers/string';
+import {CURRENT_NETWORK_KEY, Network, NetworkIdEnum} from 'src/interfaces/network';
 import i18n from 'src/locale';
 
 type TipProps = {
-  tips: TipsResult[];
   network: Network;
   loading: boolean;
-  nativeToken: string;
   txFee?: string;
-  onClaim: (networkId: string, ftIdentifier: string) => void;
-  onClaimAll: (networkId: string) => void;
-  onHandleVerifyRef: (networkId: string, nativeBalance: string | number) => void;
+  onClaim: (ftIdentifier: string) => void;
+  onClaimAll: () => void;
+  onHandleVerifyRef: (networkId: string) => void;
   onSwitchNetwork: (network: Network) => void;
 };
 
-const networkOptions: MenuOptions<string>[] = [
-  {
-    id: 'polkadot',
-    title: 'Polkadot',
-  },
-  {
-    id: 'kusama',
-    title: 'Kusama',
-  },
-  {
-    id: 'near',
-    title: 'NEAR',
-  },
-  {
-    id: 'myriad',
-    title: 'Myriad',
-  },
-];
-
 export const Tip: React.FC<TipProps> = props => {
-  const {
-    tips,
-    network,
-    onClaim,
-    onClaimAll,
-    onHandleVerifyRef,
-    onSwitchNetwork,
-    nativeToken,
-    loading,
-    txFee,
-  } = props;
+  const {network, onClaim, onClaimAll, onHandleVerifyRef, onSwitchNetwork, loading, txFee} = props;
 
   const style = useStyles();
+
   const {data: session} = useSession();
 
+  const currencies = network?.currencies ?? [];
   const icons = React.useMemo(
     () => ({
       polkadot: <PolkadotNetworkIcon width={'24px'} height={'24px'} />,
@@ -84,37 +55,32 @@ export const Tip: React.FC<TipProps> = props => {
     [],
   );
 
-  const handleClaim = (networkId: string, ftIdentifier: string) => {
-    // PUT CODE HERE
-    onClaim(networkId, ftIdentifier);
+  const handleClaim = (ftIdentifier: string) => {
+    onClaim(ftIdentifier);
   };
 
   const handleClaimAll = () => {
-    onClaimAll(network.id);
+    onClaimAll();
   };
 
   const handleSwitchNetwork = () => {
     onSwitchNetwork(network);
   };
 
-  const formatNetworkName = () => {
-    const selected = networkOptions.find(e => e.id == network.id);
-
-    return selected?.title;
-  };
-
-  const isShowVerifyReference = () => {
-    const tip = tips.find(e => e.accountId === null);
-    if (tip) return true;
-    return false;
+  const formatNetworkName = (networkId: NetworkIdEnum) => {
+    if (networkId === NetworkIdEnum.NEAR) return networkId.toUpperCase();
+    return capitalize(networkId);
   };
 
   const showTokens = () => {
-    if (isShowVerifyReference() && network.id === session?.user?.networkType) {
+    if (network.hasToClaimed && network.id === session?.user?.networkType) {
+      const networkStringify = window.localStorage.getItem(CURRENT_NETWORK_KEY);
+      const currentNetwork = strToJson<Network>(networkStringify);
+      const nativeToken = currentNetwork.currencySymbol ?? '';
+
       return (
         <TipClaimReference
-          networkId={network.id}
-          tipsResults={tips}
+          tipsResults={currencies}
           onHandleVerifyRef={onHandleVerifyRef}
           token={nativeToken}
           txFee={txFee}
@@ -124,19 +90,21 @@ export const Tip: React.FC<TipProps> = props => {
 
     return (
       <Grid container direction="row" justifyContent="flex-start" alignItems="center" spacing={2}>
-        {tips.map((tip, i) => (
+        {currencies.map((tip, i) => (
           <Grid item xs={12} md={6} key={i}>
             <div className={style.content}>
               <div className={style.flex}>
                 <div>
-                  <Avatar className={style.avatar} src={tip.imageURL} />
+                  <Avatar className={style.avatar} src={tip.image} />
                   <Typography component="p" variant="h5">
                     {tip.symbol}
                   </Typography>
                 </div>
                 <Button
-                  disabled={session?.user?.networkType !== network.id || !tip.accountId || loading}
-                  onClick={() => handleClaim(network.id, tip.tipsBalanceInfo.ftIdentifier)}
+                  disabled={
+                    session?.user?.networkType !== network.id || loading || network.hasToClaimed
+                  }
+                  onClick={() => handleClaim(tip?.referenceId ?? 'native')}
                   size="small"
                   className={style.buttonClaim}
                   color="primary"
@@ -165,7 +133,7 @@ export const Tip: React.FC<TipProps> = props => {
         <ListItemAvatar>{icons[network.id as keyof typeof icons]}</ListItemAvatar>
         <ListItemText>
           <Typography variant="h6" component="span" color="textPrimary">
-            {formatNetworkName()}
+            {formatNetworkName(network.id)}
           </Typography>
         </ListItemText>
         <div className={style.secondaryAction}>
@@ -182,7 +150,7 @@ export const Tip: React.FC<TipProps> = props => {
           </ShowIf>
           <ShowIf condition={session?.user?.networkType == network.id}>
             <Button
-              disabled={isShowVerifyReference()}
+              disabled={network.hasToClaimed}
               className={style.button}
               size="small"
               color="primary"

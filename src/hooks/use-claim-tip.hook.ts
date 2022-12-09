@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 
+import {useSession} from 'next-auth/react';
 import getConfig from 'next/config';
 import {useRouter} from 'next/router';
 
@@ -35,6 +36,7 @@ export const useClaimTip = () => {
   const {getClaimTipNear} = useNearApi();
   const {getClaimTipMyriad} = usePolkadotApi();
   const {server, provider} = useBlockchain();
+  const {data: session} = useSession();
 
   const [loading, setLoading] = useState(true);
   const [claiming, setClaiming] = useState(false);
@@ -47,14 +49,14 @@ export const useClaimTip = () => {
     trxFee: '0',
   });
 
-  const currentWallet = user.wallets[0];
+  const currentNetworkId = session?.user?.networkType ?? (null as NetworkIdEnum);
+  const accountId = session?.user?.address ?? (null as string);
 
   const transactionHashes = router.query.transactionHashes as string | null;
   const errorCode = router.query.errorCode as string | null;
   const errorMessage = router.query.errorMessage as string | null;
   const txFee = router.query.txFee as string | null;
   const txInfo = router.query.txInfo as string | null;
-  const nativeBalance = router.query.balance as string | null;
 
   useEffect(() => {
     const url = new URL(router.asPath, publicRuntimeConfig.appAuthURL);
@@ -92,20 +94,20 @@ export const useClaimTip = () => {
   }, [errorCode, transactionHashes, errorMessage, errorCode]);
 
   useEffect(() => {
-    if (currentWallet || !user.fullAccess) {
+    if (currentNetworkId || !user.fullAccess) {
       if (txFee && !errorMessage && !errorCode) {
         let message = 'Claiming Reference Success';
         let variant: VariantType = 'success';
-        let verifyNearTips = true;
+        let isClaimingSucceed = true;
 
         claimReference(txFee)
           .catch(error => {
-            verifyNearTips = false;
+            isClaimingSucceed = false;
             message = error.message;
             variant = 'error';
           })
           .finally(() => {
-            getTip(verifyNearTips, nativeBalance);
+            getTip(isClaimingSucceed);
             enqueueSnackbar({message, variant});
 
             const url = new URL(router.asPath, publicRuntimeConfig.appAuthURL);
@@ -118,13 +120,13 @@ export const useClaimTip = () => {
         getTip();
       }
     }
-  }, [currentWallet, user.fullAccess]);
+  }, [currentNetworkId, user.fullAccess]);
 
-  const getTip = async (verifyNearTips = false, nativeBalance = '0.00') => {
+  const getTip = async (isClaimingSucceed = false) => {
     setLoading(true);
 
     if (!user || !server) return setLoading(false);
-    const currentNetworkId = currentWallet?.networkId ?? null;
+
     const sortedNetworkPromise = [];
 
     try {
@@ -133,44 +135,33 @@ export const useClaimTip = () => {
 
         switch (network.id) {
           case NetworkIdEnum.MYRIAD: {
-            const result = await getClaimTipMyriad(
-              server,
-              user.id,
-              currentWallet,
-              socials,
-              network,
-            );
-
-            const {tipsResults, feeInfo: fee} = result;
+            const result = await getClaimTipMyriad(user.id, server, socials, network);
+            const {currencies, feeInfo: fee, isUserHasTip, hasToClaimed} = result;
 
             if (fee) setFeeInfo(fee);
 
-            return {
-              ...network,
-              tips: tipsResults,
-            };
+            network.currencies = currencies;
+            network.isUserHasTip = isUserHasTip;
+            network.hasToClaimed = hasToClaimed;
+            return network;
           }
 
           case NetworkIdEnum.NEAR: {
-            const referenceIds = socials.map(social => social.peopleId);
             const result = await getClaimTipNear(
-              server.accountId[network.id],
               user.id,
-              referenceIds,
-              currentWallet,
+              server,
+              socials,
               network,
-              verifyNearTips,
-              nativeBalance,
+              isClaimingSucceed,
             );
-
-            const {tipsResults, feeInfo: fee} = result;
+            const {currencies, feeInfo: fee, isUserHasTip, hasToClaimed} = result;
 
             if (fee) setFeeInfo(fee);
 
-            return {
-              ...network,
-              tips: tipsResults,
-            };
+            network.currencies = currencies;
+            network.isUserHasTip = isUserHasTip;
+            network.hasToClaimed = hasToClaimed;
+            return network;
           }
 
           default:
@@ -196,17 +187,12 @@ export const useClaimTip = () => {
     }
   };
 
-  const claim = async (
-    networkId: string,
-    ftIdentifier: string,
-    callback?: (ClaimProps: ClaimProps) => void,
-  ) => {
+  const claim = async (ftIdentifier: string, callback?: (ClaimProps: ClaimProps) => void) => {
     if (!user) return;
-    if (!user?.wallets[0]) return;
+    if (!session?.user?.address) return;
+    if (!session?.user?.networkType) return;
 
-    const selectedNetwork = networks.find(network => network.id == networkId);
-
-    if (!selectedNetwork) return;
+    const networkId = session?.user?.networkType as NetworkIdEnum;
 
     let errorMessage = null;
     let claimSuccess = true;
@@ -214,18 +200,19 @@ export const useClaimTip = () => {
     setClaiming(true);
 
     try {
-      if (!server?.accountId?.[selectedNetwork.id]) {
+      if (!server?.accountId?.[networkId]) {
         throw new Error('ServerNotExists');
       }
 
-      const serverId = server?.accountId?.[selectedNetwork.id];
-      const currency = selectedNetwork.currencies?.find(({native, referenceId}) => {
+      const serverId = server?.accountId?.[networkId];
+      const selectedNetwork = networks.find(network => network.id === networkId);
+      const currency = selectedNetwork?.currencies?.find(({native, referenceId}) => {
         if (ftIdentifier === 'native' && native) return true;
         return referenceId === ftIdentifier;
       });
 
       const trxInfo = {
-        walletId: currentWallet.id,
+        walletId: accountId,
         currencyIds: [currency.id],
       };
 
@@ -243,16 +230,19 @@ export const useClaimTip = () => {
     }
   };
 
-  const claimAll = async (networkId: string, callback?: (claimProps: ClaimProps) => void) => {
+  const claimAll = async (callback?: (claimProps: ClaimProps) => void) => {
     if (!user) return;
-    if (!server?.accountId?.[networkId]) return;
+    if (!session?.user?.address) return;
+    if (!session?.user?.networkType) return;
+
+    const networkId = session?.user?.networkType as NetworkIdEnum;
 
     let errorMessage = null;
     let claimSuccess = true;
 
     setClaimingAll(true);
 
-    const walletId = currentWallet.id;
+    const walletId = accountId;
     const serverId = server?.accountId?.[networkId];
     const selectedNetwork = networks.find(network => network.id == networkId);
     const userId = user.id;
@@ -270,7 +260,7 @@ export const useClaimTip = () => {
       if (!serverId) throw new Error('ServerNotExists');
 
       const trxInfo = {
-        walletId: currentWallet.id,
+        walletId: accountId,
         currencyIds,
       };
 
@@ -296,20 +286,22 @@ export const useClaimTip = () => {
 
       await WalletAPI.claimReference({txFee, tippingContractId});
 
-      if (currentWallet.networkId !== NetworkIdEnum.NEAR) {
+      if (session?.user.networkType !== NetworkIdEnum.NEAR) {
         const updatedNetwork = tipsEachNetwork.map(e => {
-          if (e.id !== currentWallet?.networkId) return e;
-          const tips = e.tips.map(tip => {
-            return {
-              ...tip,
-              accountId: currentWallet.id,
-            };
+          if (e.id !== session?.user.networkType) return e;
+          if (!e?.currencies) return e;
+          if (session?.user?.address) return e;
+          if (session?.user?.networkType === NetworkIdEnum.NEAR) return e;
+
+          const currencies = e.currencies.map(currency => {
+            currency.accountId = session?.user?.address;
+            return currency;
           });
 
-          return {
-            ...e,
-            tips,
-          };
+          e.currencies = currencies;
+          e.hasToClaimed = false;
+          e.isUserHasTip = true;
+          return e;
         });
 
         setTipsEachNetwork(updatedNetwork);
@@ -322,7 +314,6 @@ export const useClaimTip = () => {
   const payTransactionFee = async (
     tipsBalanceInfo: TipsBalanceInfo,
     amount: string,
-    nativeBalance?: string,
     account?: InjectedAccountWithMeta,
     callback?: (hash?: string) => void,
   ) => {
@@ -334,7 +325,6 @@ export const useClaimTip = () => {
       hash = await provider.payTransactionFee(
         tipsBalanceInfo,
         amount,
-        nativeBalance,
         account,
         ({signerOpened}) => {
           if (signerOpened) setSignerLoading(true);

@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
 
+import {useSession} from 'next-auth/react';
 import dynamic from 'next/dynamic';
 
 import {Typography, Button} from '@material-ui/core';
 
 import {useStyles} from './tip.style';
 
-import {TipsResult} from 'src/interfaces/blockchain';
+import {CurrencyWithTips, NetworkIdEnum} from 'src/interfaces/network';
 import i18n from 'src/locale';
 
 const TipTotal = dynamic(() => import('../TotalTips/TipTotal'), {
@@ -14,28 +15,29 @@ const TipTotal = dynamic(() => import('../TotalTips/TipTotal'), {
 });
 
 type TipClaimReferenceProps = {
-  networkId: string;
   token?: string;
   txFee?: string;
-  tipsResults: TipsResult[];
-  onHandleVerifyRef: (networkId: string, nativeBalance: string | number) => void;
+  tipsResults: CurrencyWithTips[];
+  onHandleVerifyRef: (networkId: string) => void;
 };
 
 export const TipClaimReference: React.FC<TipClaimReferenceProps> = ({
-  networkId,
   tipsResults,
   onHandleVerifyRef,
   txFee = '0.00',
   token = '',
 }) => {
   const style = useStyles();
+
+  const {data: session} = useSession();
+
   const [isShowModalTotalTips, setIsShowModalTotalTips] = useState<boolean>(false);
 
-  const onVerifyReference = () => {
-    const tip = tipsResults.find(item => item.tipsBalanceInfo.ftIdentifier === 'native');
-    const nativeBalance = tip ? tip.amount : '0.000';
+  const networkId = session?.user?.networkType as NetworkIdEnum;
 
-    onHandleVerifyRef(networkId, nativeBalance);
+  const onVerifyReference = () => {
+    if (!networkId) return;
+    onHandleVerifyRef(networkId);
   };
 
   return (

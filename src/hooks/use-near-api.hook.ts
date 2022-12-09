@@ -1,12 +1,20 @@
 import {useSelector} from 'react-redux';
 
-import {BN, BN_ZERO, BN_TEN} from '@polkadot/util';
+import {useSession} from 'next-auth/react';
+
+import {BN, BN_ZERO} from '@polkadot/util';
 
 import {formatBalanceV2} from 'src/helpers/balance';
-import {CallbackURL, SignatureProps, TipsResultsProps} from 'src/interfaces/blockchain';
+import {
+  CallbackURL,
+  SignatureProps,
+  TipsBalanceData,
+  TipsResultsProps,
+} from 'src/interfaces/blockchain';
 import {Network, NetworkIdEnum} from 'src/interfaces/network';
-import {Wallet} from 'src/interfaces/user';
+import {SocialMedia} from 'src/interfaces/social';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
+import {Server} from 'src/lib/api/server';
 import {Near} from 'src/lib/services/near-api-js';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
@@ -18,6 +26,7 @@ type UserNetwork = {
 
 export const useNearApi = () => {
   const {networks} = useSelector<RootState, UserState>(state => state.userState);
+  const {data: session} = useSession();
 
   const connectToNear = async (
     callbackURL?: CallbackURL,
@@ -47,65 +56,92 @@ export const useNearApi = () => {
   };
 
   const getClaimTipNear = async (
-    serverId: string,
-    referenceId: string,
-    referenceIds: string[],
-    wallet: Wallet,
+    currentUserId: string,
+    server: Server,
+    socials: SocialMedia[],
     network: Network,
-    verifyNearTips = false,
-    nearBalance = '0.00',
+    isClaimingSucceed = false,
   ): Promise<TipsResultsProps> => {
-    const data = await Near.claimTipBalances(network.rpcURL, serverId, referenceId, referenceIds);
+    // Initialize
+    const serverId = server.accountId[network.id];
+    const accountId = session?.user?.address ?? null;
+    const peopleIds = socials.map(social => social.peopleId);
+    const data: TipsBalanceData = {};
 
-    let nativeDecimal = 0;
-    let accountIdExist = true;
+    const socialTip = await Near.claimTipBalances(
+      network.rpcURL,
+      serverId,
+      currentUserId,
+      peopleIds,
+    );
 
-    const tipsResults = data.map(e => {
-      const currency = network.currencies.find(currency => {
-        const ftIdentifier = e.tips_balance.tips_balance_info.ft_identifier;
-        if (currency.native && ftIdentifier === 'native') return true;
-        if (ftIdentifier === currency.referenceId) return true;
-        return false;
-      });
+    let hasToClaimed = false;
 
-      const {tips_balance, symbol, unclaimed_reference_ids} = e;
-      const {account_id, tips_balance_info} = tips_balance;
-      const {server_id, reference_type, reference_id, ft_identifier} = tips_balance_info;
+    for (const tip of socialTip) {
+      const tipsBalance = tip.tips_balance;
+      const tipsBalanceReferenceType = tipsBalance.tips_balance_info.reference_type;
+      const tipsBalanceReferenceId = tipsBalance.tips_balance_info.reference_id;
+      const ftIdentifier = tipsBalance.tips_balance_info.ft_identifier;
+      const amount = new BN(tipsBalance.amount);
 
-      let {formatted_amount} = e;
-      let accountId = unclaimed_reference_ids.length === 0 ? account_id : null;
-
-      if (verifyNearTips) {
-        if (currency.native) formatted_amount = nearBalance;
-        accountId = wallet?.id ?? null;
+      if (amount.isZero()) continue;
+      if (data[ftIdentifier] === undefined) {
+        data[ftIdentifier] = {
+          tipsBalanceInfo: {
+            serverId,
+            referenceType: 'user',
+            referenceId: currentUserId,
+            ftIdentifier,
+          },
+          amount: new BN(0),
+          accountId: null,
+        };
       }
-
-      if (!accountId && wallet?.networkId === network.id) {
-        if (currency.native) nativeDecimal = currency.decimal;
-        if (parseFloat(formatted_amount) > 0) {
-          const decimal = new BN(BN_TEN).pow(new BN(currency.decimal.toString()));
-          const amount = new BN(formatted_amount).mul(decimal);
-          if (amount.gt(BN_ZERO)) accountIdExist = false;
+      const dataAmount = data[ftIdentifier].amount;
+      data[ftIdentifier].amount = dataAmount.add(amount);
+      if (data[ftIdentifier].accountId) continue;
+      if (tipsBalanceReferenceType === 'user' && tipsBalanceReferenceId === currentUserId) {
+        if (!tipsBalance.account_id) continue;
+        if (accountId === tipsBalance.account_id) {
+          data[ftIdentifier].accountId = accountId;
         }
       }
 
-      return {
-        symbol,
-        accountId,
-        amount: parseFloat(formatted_amount).toFixed(3),
-        tipsBalanceInfo: {
-          serverId: server_id,
-          referenceType: reference_type,
-          referenceId: reference_id,
-          ftIdentifier: ft_identifier,
-        },
-        imageURL: currency?.image,
-      };
+      if (tipsBalanceReferenceType === 'people' && amount.gt(BN_ZERO)) {
+        hasToClaimed = true;
+      }
+    }
+
+    let isUserHasTip = false;
+    let nativeDecimal = 0;
+
+    const currencyIds = ['native'];
+    const currencies = network.currencies.map(currency => {
+      const {native, referenceId, decimal} = currency;
+      const ftIdentifier = native && !referenceId ? 'native' : referenceId;
+      const tipsBalance = data[ftIdentifier];
+
+      if (native) nativeDecimal = decimal;
+      if (!tipsBalance) return currency;
+      if (tipsBalance.amount.lte(BN_ZERO)) return currency;
+      if (referenceId) currencyIds.push(referenceId);
+
+      isUserHasTip = true;
+
+      currency.accountId = tipsBalance.accountId;
+      currency.amount = formatBalanceV2(tipsBalance.amount.toString(), decimal, 3);
+
+      return currency;
     });
 
     let feeInfo = null;
 
-    if (network.id === wallet?.networkId && !accountIdExist) {
+    if (isClaimingSucceed) {
+      hasToClaimed = false;
+      isUserHasTip = true;
+    }
+
+    if (network.id === session?.user?.networkType && hasToClaimed) {
       const fee = await Near.claimReferenceFee(network.rpcURL);
       const finalTxFee = formatBalanceV2(fee.toString(), nativeDecimal, 4);
 
@@ -116,8 +152,10 @@ export const useNearApi = () => {
     }
 
     return {
-      tipsResults,
+      currencies,
       feeInfo,
+      isUserHasTip,
+      hasToClaimed,
     };
   };
 

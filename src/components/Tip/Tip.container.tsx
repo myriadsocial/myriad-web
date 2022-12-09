@@ -1,12 +1,9 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {useSelector} from 'react-redux';
 
 import {useSession} from 'next-auth/react';
-import dynamic from 'next/dynamic';
 
 import {Backdrop, CircularProgress, NoSsr} from '@material-ui/core';
-
-import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import {BoxComponent} from '../atoms/Box';
 import {ShimerComponent} from './Shimer';
@@ -20,18 +17,11 @@ import {Empty} from 'src/components/atoms/Empty';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useClaimTip} from 'src/hooks/use-claim-tip.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
-import {TipsBalanceInfo, TipsResult} from 'src/interfaces/blockchain';
 import {Network, NetworkIdEnum} from 'src/interfaces/network';
+import {toHexPublicKey} from 'src/lib/crypto';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
-
-const PolkadotAccountList = dynamic(
-  () => import('components/PolkadotAccountList/PolkadotAccountList'),
-  {
-    ssr: false,
-  },
-);
 
 export const TipContainer: React.FC = () => {
   const enqueueSnackbar = useEnqueueSnackbar();
@@ -57,16 +47,10 @@ export const TipContainer: React.FC = () => {
   const {getRegisteredAccounts} = useAuthHook();
   const {data: session} = useSession();
 
-  const [showAccountList, setShowAccountList] = useState<boolean>(false);
-  const [extensionInstalled, setExtensionInstalled] = useState<boolean>(false);
-  const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
-  const [tipsBalanceInfo, setTipsBalanceInfo] = useState<TipsBalanceInfo>(null);
-  const [isHaveTips, setIsHaveTips] = useState<boolean>(false);
-
   const networkId = session?.user?.networkType;
 
-  const handleClaimTip = (networkId: string, ftIdentifier: string) => {
-    claim(networkId, ftIdentifier, ({claimSuccess, errorMessage}) => {
+  const handleClaimTip = (ftIdentifier: string) => {
+    claim(ftIdentifier, ({claimSuccess, errorMessage}) => {
       if (networkId === NetworkIdEnum.MYRIAD) {
         // TODO: Register translation
         const variant = claimSuccess ? 'success' : 'warning';
@@ -77,8 +61,8 @@ export const TipContainer: React.FC = () => {
     });
   };
 
-  const handleClaimTipAll = (networkId: string) => {
-    claimAll(networkId, ({claimSuccess, errorMessage}) => {
+  const handleClaimTipAll = () => {
+    claimAll(({claimSuccess, errorMessage}) => {
       if (networkId === NetworkIdEnum.MYRIAD) {
         // TODO: Register translation
         const variant = claimSuccess ? 'success' : 'warning';
@@ -87,10 +71,6 @@ export const TipContainer: React.FC = () => {
         enqueueSnackbar({message, variant});
       }
     });
-  };
-
-  const tipWithBalances = (network: Network) => {
-    return network?.tips.filter(tip => Math.ceil(Number(tip.amount)) > 0) ?? [];
   };
 
   const isShow = (network: Network) => {
@@ -98,8 +78,11 @@ export const TipContainer: React.FC = () => {
     return false;
   };
 
-  const handleVerifyReference = async (networkId: string, nativeBalance: string | number) => {
+  const handleVerifyReference = async (networkId: string) => {
     if (!user?.id) return;
+
+    let message = 'Claiming Reference Success';
+    let variant: VariantType = 'success';
 
     try {
       if (parseInt(feeInfo.trxFee) <= 0) {
@@ -116,98 +99,37 @@ export const TipContainer: React.FC = () => {
         ftIdentifier: 'native',
       };
 
-      switch (networkId) {
-        case NetworkIdEnum.NEAR: {
-          await payTransactionFee(tipsBalanceInfo, feeInfo.trxFee, nativeBalance.toString());
-          break;
-        }
+      let account = null;
 
-        case NetworkIdEnum.MYRIAD: {
-          checkExtensionInstalled();
-          setTipsBalanceInfo(tipsBalanceInfo);
-          break;
-        }
+      if (networkId === NetworkIdEnum.MYRIAD) {
+        const installed = await enablePolkadotExtension();
+        if (!installed) throw new Error('Polkadot{.js} extensions is not installed');
+        const accounts = await getRegisteredAccounts();
 
-        default:
-          return;
+        account = accounts.find(account => {
+          const format = toHexPublicKey(account);
+          if (format === session?.user?.address) return true;
+          return false;
+        });
+        if (!account) throw new Error('Account not exists');
       }
-    } catch (error) {
-      // TODO: Register Translation
-      enqueueSnackbar({
-        message: error.message,
-        variant: 'error',
-      });
-    }
-  };
 
-  const closeAccountList = () => {
-    setShowAccountList(false);
-  };
-
-  const checkExtensionInstalled = async () => {
-    const installed = await enablePolkadotExtension();
-
-    setShowAccountList(true);
-    setExtensionInstalled(installed);
-
-    getAvailableAccounts();
-  };
-
-  const getAvailableAccounts = async () => {
-    const accounts = await getRegisteredAccounts();
-
-    setAccounts(accounts);
-  };
-
-  const handleConnect = async (account?: InjectedAccountWithMeta) => {
-    closeAccountList();
-
-    if (!account) return;
-
-    let message = 'Claiming Reference Success';
-    let variant: VariantType = 'success';
-
-    try {
-      await payTransactionFee(tipsBalanceInfo, feeInfo.trxFee, undefined, account);
+      await payTransactionFee(tipsBalanceInfo, feeInfo.trxFee, account);
     } catch (error) {
       variant = error.message === 'Cancelled' ? 'warning' : 'error';
       message = error.message;
     } finally {
-      setTipsBalanceInfo(null);
-
       enqueueSnackbar({variant, message});
     }
   };
 
-  const getNativeToken = (tips: TipsResult[]) => {
-    const native = tips.find(tip => tip?.tipsBalanceInfo?.ftIdentifier === 'native');
-    if (native) return native.symbol;
-    return '';
-  };
-
-  const showNetwork = (network: Network, element: number) => {
-    const tipsBalances = tipWithBalances(network);
-    const nativeToken = getNativeToken(network?.tips ?? []);
-
-    if (tipsBalances.length === 0) {
-      if (!user?.fullAccess) {
-        if (isHaveTips) return;
-        if (element != tipsEachNetwork.length - 1) return;
-        return (
-          <div style={{marginTop: 20}} key={network.id}>
-            <Empty
-              title={i18n.t('Wallet.Tip.Empty.Title')}
-              subtitle={i18n.t('Wallet.Tip.Empty.Subtitle')}
-            />
-          </div>
-        );
-      }
-
+  const showNetwork = (network: Network) => {
+    if (!network.isUserHasTip) {
       if (!isShow(network)) return;
 
       switch (network.id) {
         case NetworkIdEnum.MYRIAD:
-        case NetworkIdEnum.NEAR:
+        case NetworkIdEnum.NEAR: {
           return (
             <div style={{marginTop: 20}} key={network.id}>
               <Empty
@@ -216,32 +138,30 @@ export const TipContainer: React.FC = () => {
               />
             </div>
           );
+        }
+
         default:
           return;
       }
     }
 
-    if (!isHaveTips) setIsHaveTips(true);
-
     return (
       <BoxComponent isWithChevronRightIcon={false} marginTop={'20px'} key={network.id}>
-        {showTip(network, tipsBalances, nativeToken)}
+        {showTip(network)}
       </BoxComponent>
     );
   };
 
-  const showTip = (network: Network, tipsBalances: TipsResult[], token: string) => {
+  const showTip = (network: Network) => {
     if ((claimingAll || verifyingReference) && isShow(network)) return <ShimerComponent />;
     return (
       <Tip
         loading={claiming}
-        tips={tipsBalances}
         network={network}
         onClaim={handleClaimTip}
         onClaimAll={handleClaimTipAll}
         onSwitchNetwork={switchNetwork}
         onHandleVerifyRef={handleVerifyReference}
-        nativeToken={token}
         txFee={feeInfo.formattedTrxFee}
       />
     );
@@ -254,17 +174,8 @@ export const TipContainer: React.FC = () => {
           <ShimerComponent />
         </BoxComponent>
       ) : (
-        tipsEachNetwork.map((network, element) => showNetwork(network, element))
+        tipsEachNetwork.map(network => showNetwork(network))
       )}
-      <PolkadotAccountList
-        align="left"
-        title="Select account"
-        isOpen={showAccountList && extensionInstalled}
-        accounts={accounts}
-        onSelect={handleConnect}
-        onClose={closeAccountList}
-      />
-
       <Backdrop className={styles.backdrop} open={claimingAll || isSignerLoading}>
         <CircularProgress color="primary" />
       </Backdrop>

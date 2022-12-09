@@ -2,8 +2,6 @@ import {BaseModel} from './base.interface';
 import {Currency} from './currency';
 import {BlockchainPlatform} from './wallet';
 
-import {TipsResult} from 'src/interfaces/blockchain';
-
 export const CURRENT_NETWORK_KEY = '@Current_Network_Key';
 
 export enum NetworkIdEnum {
@@ -23,14 +21,21 @@ export type NetworkProps = {
   rpcURL: string;
   explorerURL: string;
   blockchainPlatform: BlockchainPlatform;
+  currencySymbol: string;
   walletURL?: string;
   additionalWalletURL?: string;
   helperURL?: string;
 };
 
+export type CurrencyWithTips = Currency & {
+  accountId: string | null;
+  amount: string | null;
+};
+
 export type Network = NetworkProps &
   BaseModel & {
     id: NetworkIdEnum;
-    currencies: Currency[];
-    tips: TipsResult[];
+    currencies?: CurrencyWithTips[];
+    isUserHasTip?: boolean;
+    hasToClaimed?: boolean;
   };
