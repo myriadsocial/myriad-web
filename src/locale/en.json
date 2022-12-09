@@ -1196,5 +1196,9 @@
     "DisclaimerEditProfile":"You are currently using lite version of Myriad. You can edit only the display name. Connect Web 3.0 Wallet to have all access in editing your profile",
     "LimitTitlePost":"You have {{count}} the remaining posts",
     "LimitDescPost":"You are currently using lite version of Myriad. You can post up to 6 times a day and will be reset every 00:00 UTC. Connect Web 3.0 Wallet to post without restriction."
+  },
+   "Visibilities":{
+    "PostVisibilities":"Your post will be visible to you and the added people",
+    "Custom":"Custom"
   }
 }

@@ -3,7 +3,7 @@ import React, {useCallback} from 'react';
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 
-import {useMediaQuery, useTheme} from '@material-ui/core';
+import {SvgIcon, Typography, useMediaQuery, useTheme} from '@material-ui/core';
 
 import {PostDetailProps} from './PostDetail.interface';
 import {useStyles} from './PostDetail.styles';
@@ -16,7 +16,9 @@ import {LinkPreview} from 'src/components/atoms/LinkPreview';
 import {NSFW} from 'src/components/atoms/NSFW/NSFW.component';
 import {SendTipButton} from 'src/components/common/SendTipButton/SendTipButton';
 import {useToggle} from 'src/hooks/use-toggle.hook';
+import {IcInfoBlack} from 'src/images/Icons';
 import {ReferenceType} from 'src/interfaces/interaction';
+import i18n from 'src/locale';
 
 const Reddit = dynamic(() => import('./render/Reddit'), {ssr: false});
 const Twitter = dynamic(() => import('./render/Twitter'), {ssr: false});
@@ -26,7 +28,6 @@ const Video = dynamic(() => import('src/components/atoms/Video/Video'), {ssr: fa
 export const PostDetail: React.FC<PostDetailProps> = props => {
   const {user, post, type, expand, preview, ...restProps} = props;
   const {onRemoveVote, onToggleDownvote, onUpvote, onToggleShowComment} = restProps;
-
   const router = useRouter();
   const styles = useStyles();
   const theme = useTheme();
@@ -52,6 +53,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     router.push(`/topic/hashtag?tag=${hashtag.replace('#', '')}`, undefined, {
       shallow: true,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleUpvote = useCallback(() => {
@@ -60,6 +62,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     } else {
       onUpvote(post);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [upvoted]);
 
   const handleDownVote = useCallback(() => {
@@ -68,6 +71,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     } else {
       onToggleDownvote(post);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [downvoted, upvoted]);
 
   return (
@@ -90,6 +94,14 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
 
           <ShowIf condition={['twitter'].includes(post.platform) && post.text.length > 0}>
             <Twitter text={post.text} onHashtagClicked={handleHashtagClicked} />
+          </ShowIf>
+          <ShowIf condition={post.visibility === 'selected_user'}>
+            <div style={{display: 'flex', marginTop: 16}}>
+              <SvgIcon component={IcInfoBlack} viewBox="0 0 24 24" />
+              <Typography style={{fontSize: 12}}>
+                {i18n.t('Visibilities.PostVisibilities')}
+              </Typography>
+            </div>
           </ShowIf>
 
           <ShowIf condition={['reddit'].includes(post.platform)}>

@@ -46,6 +46,6 @@ export const menuOptions: MenuOptions<PostVisibility>[] = [
   },
   {
     id: PostVisibility.CUSTOM,
-    title: 'Custom',
+    title: i18n.t('Visibilities.Custom'),
   },
 ];
