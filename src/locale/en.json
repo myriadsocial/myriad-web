@@ -428,7 +428,7 @@
           "400": "Sorry, You can not import this post because the link is invalid",
           "404": "Sorry, You can not import this post because the link is invalid",
           "403": "Sorry, You can not import this post because the account is private",
-          "409": "Sorry, you can not import this post because this post has been imported"
+          "409": "You have already imported this post"
         }
       }
     }
