@@ -1,1 +1,2 @@
-export * from './tranforms';
+export * from './transforms';
+export * from './createLinkPlugin';

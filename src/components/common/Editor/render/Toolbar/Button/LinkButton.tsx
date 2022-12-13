@@ -11,7 +11,7 @@ import {ToolbarButton, ToolbarButtonProps} from '@udecode/plate-ui-toolbar';
 import React, {useState} from 'react';
 
 import {Modal} from 'components/atoms/Modal';
-import {getPrevLink, upsertLink} from 'components/common/Editor/plugins/Link';
+import {getPrevLink, upsertLinkAtSelection} from 'components/common/Editor/plugins/Link';
 import {EmbedURL} from 'src/components/EmbedURL';
 import {useToggle} from 'src/hooks/use-toggle.hook';
 import i18n from 'src/locale';
@@ -35,7 +35,7 @@ export const LinkToolbarButton = withPlateEventProvider(
     };
 
     const handleConfirmLink = (url: string | null) => {
-      upsertLink(editor, url);
+      upsertLinkAtSelection(editor, { url });
       toggleLinkDialog();
     };
 
