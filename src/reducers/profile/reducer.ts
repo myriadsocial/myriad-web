@@ -13,7 +13,7 @@ import {PaginationParams} from 'src/lib/api/interfaces/pagination-params.interfa
 
 export interface ProfileState extends BaseState {
   userId?: string;
-  detail?: User & FriendStatusProps;
+  detail?: User & {friendInfo: FriendStatusProps};
   socials: SocialMedia[];
   friends: {
     filter?: string;

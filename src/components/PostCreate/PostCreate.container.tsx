@@ -40,6 +40,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   const [dialogFailedImport, setDialogFailedImport] = useState({
     open: false,
     message: '',
+    postId: '',
   });
 
   useEffect(() => {
@@ -81,8 +82,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
         dispatch(
           importPost(post, attributes, (error: PostImportError | null) => {
             if (error) {
-              const {statusCode} = error.getErrorData();
-              let message: string = error.message;
+              const {statusCode, message: postId} = error.getErrorData();
               if (statusCode === 422) {
                 return confirm({
                   title: i18n.t('LiteVersion.LimitTitlePost', {count: 0}),
@@ -98,11 +98,12 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
                   },
                 });
               }
+              let message: string = error.message;
               if ([400, 403, 404, 409].includes(statusCode)) {
                 message = i18n.t(`Home.RichText.Prompt_Import.Error.${statusCode}`);
               }
 
-              setDialogFailedImport({open: true, message});
+              setDialogFailedImport({open: true, message, postId});
             } else {
               user.fullAccess
                 ? enqueueSnackbar({
@@ -171,15 +172,25 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
         onCancel={() => setDialogFailedImport({...dialogFailedImport, open: false})}>
         <div
           style={{
+            marginTop: 32,
             display: 'flex',
             justifyContent: 'center',
+            gap: '20px',
           }}>
+          <Button
+            size="small"
+            variant="outlined"
+            color="secondary"
+            onClick={() => setDialogFailedImport({...dialogFailedImport, open: false})}>
+            {i18n.t('General.OK')}
+          </Button>
+          {/* TODO: Added translation */}
           <Button
             size="small"
             variant="contained"
             color="primary"
-            onClick={() => setDialogFailedImport({...dialogFailedImport, open: false})}>
-            {i18n.t('General.OK')}
+            onClick={() => router.push({pathname: `/post/${dialogFailedImport.postId}`})}>
+            See post
           </Button>
         </div>
       </PromptComponent>

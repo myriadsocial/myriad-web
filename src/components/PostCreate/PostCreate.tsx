@@ -10,6 +10,7 @@ import {DropdownMenu} from '../atoms/DropdownMenu';
 import {Modal} from '../atoms/Modal';
 import {TabPanel} from '../atoms/TabPanel';
 import {useStyles} from './PostCreate.styles';
+import SettingVisibility from './SettingVisibility';
 import {menuOptions} from './default';
 import {serialize} from './formatter';
 
@@ -45,6 +46,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
 
   const [activeTab, setActiveTab] = useState<PostCreateType>('create');
   const [post, setPost] = useState<Partial<Post>>(initialPost);
+
   const [importUrl, setImport] = useState<string | undefined>();
 
   const header: Record<PostCreateType, {title: string; subtitle: string}> = {
@@ -92,6 +94,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
 
       onSubmit({
         ...attributes,
+        selectedUserIds: post.selectedUserIds,
         NSFWTag: post.NSFWTag,
         visibility: post.visibility ?? PostVisibility.PUBLIC,
       });
@@ -156,17 +159,37 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
             </Button>
           </ShowIf>
         </div>
-
-        <Button
-          disabled={false}
-          variant="contained"
-          color="primary"
-          size="small"
-          fullWidth={isMobile}
-          onClick={handleSubmit}>
-          {i18n.t('Post_Create.Confirm')}
-        </Button>
+        <ShowIf condition={post.visibility !== 'selected_user'}>
+          <Button
+            disabled={false}
+            variant="contained"
+            color="primary"
+            size="small"
+            fullWidth={isMobile}
+            onClick={handleSubmit}>
+            {i18n.t('Post_Create.Confirm')}
+          </Button>
+        </ShowIf>
       </div>
+      <ShowIf condition={post.visibility === 'selected_user'}>
+        <SettingVisibility setPost={setPost} />
+        <div
+          style={{
+            display: 'flex',
+            width: '100%',
+            justifyContent: 'flex-end',
+          }}>
+          <Button
+            disabled={false}
+            variant="contained"
+            color="primary"
+            size="small"
+            fullWidth={isMobile}
+            onClick={handleSubmit}>
+            {i18n.t('Post_Create.Confirm')}
+          </Button>
+        </div>
+      </ShowIf>
     </Modal>
   );
 };

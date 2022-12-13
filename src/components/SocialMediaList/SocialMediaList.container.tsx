@@ -13,6 +13,7 @@ import {SocialDetail} from './use-social-media-list.hook';
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {useShareSocial} from 'src/hooks/use-share-social';
 import {SocialsEnum} from 'src/interfaces/social';
+import {getIdentity} from 'src/lib/api/social';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
@@ -26,6 +27,7 @@ export const SocialMediaListContainer: React.FC = () => {
   const {user, socials} = useSelector<RootState, UserState>(state => state.userState);
   const enqueueSnackbar = useEnqueueSnackbar();
   const [selectedSocial, setSelectedSocial] = useState<SocialsEnum | null>(null);
+  const [addSocialHash, setAddSocialHash] = useState<string | null>(null);
 
   const address = session?.user.address as string;
 
@@ -33,8 +35,11 @@ export const SocialMediaListContainer: React.FC = () => {
     router.push(`/socials`);
   };
 
-  const handleAddSocialMedia = (social: SocialsEnum) => {
+  const handleAddSocialMedia = async (social: SocialsEnum) => {
     setSelectedSocial(social);
+
+    const {hash} = await getIdentity();
+    setAddSocialHash(hash);
   };
 
   const closeAddSocialMedia = () => {
@@ -93,7 +98,8 @@ export const SocialMediaListContainer: React.FC = () => {
         {selectedSocial && (
           <>
             <AddSocialMedia
-              open={Boolean(selectedSocial)}
+              open={Boolean(addSocialHash)}
+              hash={addSocialHash}
               social={selectedSocial}
               address={address}
               onClose={closeAddSocialMedia}

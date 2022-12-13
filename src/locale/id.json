@@ -425,7 +425,7 @@
           "400": "Maaf, Kamu berusaha mengimpor postingan yang tidak valid",
           "404": "Maaf, Kamu berusaha mengimpor postingan yang tidak valid",
           "403": "Maaf, Kamu tidak bisa mengimpor postingan ini, \n karena akun ini adalah private",
-          "409": "Maaf, kamu tidak bisa mengimpot postingan ini, \n karena postingan ini telah diimpor sebelumnya"
+          "409": "Kamu telah mengimpor postingan ini"
         }
       }
     }
@@ -1192,5 +1192,9 @@
     "DisclaimerEditProfile":"Saat ini Anda menggunakan Myriad versi lite. Anda hanya dapat mengedit nama tampilan. Hubungkan Web 3.0 Wallet untuk memiliki semua akses dalam mengedit profil Anda",
     "LimitTitlePost":"Anda memiliki {{count}} pos yang tersisa",
     "LimitDescPost":"Anda sedang menggunakan Myriad versi lite. Anda dapat memposting hingga 6 kali sehari dan akan direset setiap pukul 00:00 UTC. Hubungkan Web 3.0 Wallet untuk memposting tanpa batasan."
+  },
+    "Visibilities":{
+    "PostVisibilities":"Pos Anda akan terlihat oleh Anda dan orang yang ditambahkan",
+    "Custom":"Kustom"
   }
 }

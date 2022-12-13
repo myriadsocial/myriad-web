@@ -16,7 +16,7 @@ import {RootState} from 'src/reducers';
 export type UserMenuTabs = 'post' | 'comments' | 'experience' | 'social' | 'friend' | 'setting';
 
 export const useUserTabs = (excludes: UserMenuTabs[]): TabItems<UserMenuTabs>[] => {
-  const profile = useSelector<RootState, User & FriendStatusProps>(
+  const profile = useSelector<RootState, User & {friendInfo: FriendStatusProps}>(
     state => state.profileState.detail,
     shallowEqual,
   );

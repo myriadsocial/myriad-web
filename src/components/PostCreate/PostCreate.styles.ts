@@ -1,4 +1,4 @@
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import {alpha, createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -59,6 +59,40 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     markdown: {
       width: 120,
+    },
+    fill: {
+      fill: 'currentColor',
+      '& .MuiSvgIcon-root': {
+        fill: 'currentColor',
+      },
+    },
+    removePeople: {
+      '& .MuiSvgIcon-root': {
+        fill: 'currentColor',
+      },
+    },
+    people: {},
+    preview: {
+      marginBottom: 30,
+
+      '& .MuiListItem-root:hover': {
+        backgroundColor: alpha('#FFC857', 0.15),
+
+        '&::before,&::after': {
+          content: '""',
+          position: 'absolute',
+          width: 30,
+          height: '100%',
+          top: 0,
+          backgroundColor: alpha('#FFC857', 0.15),
+        },
+        '&::before': {
+          left: -30,
+        },
+        '&::after': {
+          right: -30,
+        },
+      },
     },
   }),
 );

@@ -7,12 +7,17 @@ import CoinbaseDisabled from 'src/images/wallet/coinbase-disabled.svg';
 import CommonWallet from 'src/images/wallet/commonWallet.svg';
 import MetamaskDisabled from 'src/images/wallet/metamask-disabled.svg';
 import MyNearWallet from 'src/images/wallet/my-near-wallet.svg';
+import NovaDisable from 'src/images/wallet/nova-disable.svg';
 import SenderWalletDisabled from 'src/images/wallet/sender-wallet-disabled.svg';
 import SenderWallet from 'src/images/wallet/sender-wallet.svg';
 import TrustDisabled from 'src/images/wallet/trust-disabled.svg';
 
 export const PolkadotWalletIcon: React.FC<SvgIconProps> = props => (
   <SvgIcon component={Polkadot24} viewBox="0 0 32 32" {...props} />
+);
+
+export const NovaDisableIcon: React.FC<SvgIconProps> = props => (
+  <SvgIcon component={NovaDisable} viewBox="0 0 32 32" {...props} />
 );
 
 export const MyNearWalletIcon: React.FC<SvgIconProps> = props => (

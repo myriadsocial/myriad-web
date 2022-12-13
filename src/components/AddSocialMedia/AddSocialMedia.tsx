@@ -31,6 +31,7 @@ import i18n from 'src/locale';
 type AddSocialMediaProps = Pick<ModalProps, 'onClose' | 'open'> & {
   social: SocialsEnum;
   address?: string;
+  hash: string;
   verifying?: boolean;
   verify: (social: SocialsEnum, profileUrl: string) => void;
   onDrawer?: boolean;
@@ -49,7 +50,7 @@ const prefix: Record<SocialsEnum, string> = {
 };
 
 export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
-  const {social, address, open, verifying = false, onClose, verify, onDrawer = false} = props;
+  const {social, hash, open, verifying = false, onClose, verify, onDrawer = false} = props;
 
   const styles = useStyles();
   const theme = useTheme();
@@ -62,7 +63,7 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
 
   const APP_URL = publicRuntimeConfig.appAuthURL ?? '';
   const message = i18n.t('SocialMedia.Modal.Msg', {
-    address,
+    address: hash,
     url: publicRuntimeConfig.myriadWebsiteURL,
   });
 

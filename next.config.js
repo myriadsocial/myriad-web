@@ -3,6 +3,7 @@ const {withSentryConfig} = require('@sentry/nextjs');
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
+
 const {version} = require('./package.json');
 
 /** @type {import('next').NextConfig} */
@@ -76,4 +77,18 @@ const sentryWebpackPluginOptions = {
   // https://github.com/getsentry/sentry-webpack-plugin#options.
 };
 
-module.exports = withSentryConfig(withBundleAnalyzer(moduleExports), sentryWebpackPluginOptions);
+const withPwaWrapper = () => {
+  if (process.env.NODE_ENV === 'test') return moduleExports;
+
+  const nextPwa = require('next-pwa');
+
+  const withPWA = nextPwa({
+    dest: 'public',
+    register: true,
+    skipWaiting: true,
+  });
+
+  return withPWA(moduleExports);
+};
+
+module.exports = withSentryConfig(withBundleAnalyzer(withPwaWrapper()), sentryWebpackPluginOptions);

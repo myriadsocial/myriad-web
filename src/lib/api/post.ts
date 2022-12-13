@@ -199,6 +199,7 @@ export const findPosts = async (
 };
 
 export const createPost = async (values: PostProps): Promise<Post> => {
+  console.log('values >>>', values);
   const {data} = await MyriadAPI().request<Post>({
     url: '/user/posts',
     method: 'POST',

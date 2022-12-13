@@ -1,5 +1,6 @@
 import {createPluginFactory} from '@udecode/plate-core';
 
+import {getOnKeydownLimit} from './onKeydownLimit';
 import {CharLimitPlugin} from './type';
 import {withCharLimit} from './withCharLimit';
 
@@ -13,6 +14,9 @@ export const createCharLimitPlugin = createPluginFactory<CharLimitPlugin>({
   isElement: false,
   isInline: false,
   isVoid: true,
+  handlers: {
+    onKeyDown: getOnKeydownLimit,
+  },
   withOverrides: withCharLimit,
   options: {
     max: 5000,

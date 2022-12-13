@@ -17,6 +17,7 @@ import {ListItemSocialComponent} from 'src/components/atoms/ListItem/ListItemSoc
 import {capitalize} from 'src/helpers/string';
 import {SocialMedia, SocialsEnum} from 'src/interfaces/social';
 import {User} from 'src/interfaces/user';
+import {getIdentity} from 'src/lib/api/social';
 import i18n from 'src/locale';
 
 type SocialsProps = {
@@ -52,18 +53,19 @@ export const Socials: React.FC<SocialsProps> = props => {
   const [selectedSocial, setSelectedSocial] = useState<SocialsEnum>(SocialsEnum.TWITTER);
   const [people, setPeople] = useState<SocialMedia[]>([]);
   const [selectedPeople, setSelectedPeople] = useState<string | null>(null);
-  const [addSocial, setAddSocial] = useState(false);
+  const [addSocialHash, setAddSocialHash] = useState<string | null>(null);
   const [openPromptDrawer, setOpenPromptDrawer] = useState(false);
 
   const enabledSocial = [SocialsEnum.TWITTER, SocialsEnum.REDDIT];
 
   useEffect(() => {
     getPeopleList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedSocial, socials]);
 
   useEffect(() => {
     if (!verifying) {
-      setAddSocial(false);
+      setAddSocialHash(null);
     }
   }, [verifying]);
 
@@ -97,17 +99,22 @@ export const Socials: React.FC<SocialsProps> = props => {
     onSetAsPrimary(account);
   };
 
-  const toggleAddSocialMedia = () => {
+  const openAddSocialMedia = async () => {
     if (!user) {
       setOpenPromptDrawer(true);
     } else {
-      setAddSocial(prevStatus => !prevStatus);
+      const {hash} = await getIdentity();
+      setAddSocialHash(hash);
     }
+  };
+
+  const closeAddSocialMedia = () => {
+    setAddSocialHash(null);
   };
 
   const verifySocialMedia = (social: SocialsEnum, profileUrl: string) => {
     onVerifySocialMedia(social, profileUrl);
-    toggleAddSocialMedia();
+    closeAddSocialMedia();
   };
 
   const confirmDisconnectSocial = (social: SocialMedia): void => {
@@ -183,7 +190,7 @@ export const Socials: React.FC<SocialsProps> = props => {
 
             <ListItem role={undefined} disableGutters>
               <ListItemText disableTypography className={styles.action}>
-                <Button color="primary" disableRipple variant="text" onClick={toggleAddSocialMedia}>
+                <Button color="primary" disableRipple variant="text" onClick={openAddSocialMedia}>
                   {i18n.t('SocialMedia.Add', {platform: capitalize(selectedSocial)})}
                 </Button>
               </ListItemText>
@@ -200,10 +207,11 @@ export const Socials: React.FC<SocialsProps> = props => {
 
         <NoSsr>
           <AddSocialMedia
-            open={addSocial}
+            open={Boolean(addSocialHash)}
+            hash={addSocialHash}
             social={selectedSocial}
             address={address}
-            onClose={toggleAddSocialMedia}
+            onClose={closeAddSocialMedia}
             verifying={verifying}
             verify={verifySocialMedia}
           />

@@ -28,6 +28,15 @@ export const getUserSocials = async (userId: string, all: boolean): Promise<Soci
   return data;
 };
 
+export const getIdentity = async () => {
+  const {data} = await MyriadAPI().request<{hash: string}>({
+    url: `/user/social-medias/identity`,
+    method: 'GET',
+  });
+
+  return data;
+};
+
 export const updateSocialAsPrimary = async (userSocialId: string): Promise<void> => {
   await MyriadAPI().request({
     url: `/user/social-medias/${userSocialId}/primary`,

@@ -7,7 +7,7 @@ import * as constants from './constants';
 import axios from 'axios';
 import {Action} from 'redux';
 import {Friend, FriendStatus} from 'src/interfaces/friend';
-import {FriendStatusProps, User} from 'src/interfaces/user';
+import {User} from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
 import {ThunkActionCreator} from 'src/types/thunk';
 
@@ -59,7 +59,7 @@ export const fetchFriendRequest: ThunkActionCreator<Actions, RootState> =
   };
 
 export const createFriendRequest: ThunkActionCreator<Actions, RootState> =
-  (profile: User & FriendStatusProps) => async (dispatch, getState) => {
+  (profile: User) => async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     const {
@@ -77,10 +77,12 @@ export const createFriendRequest: ThunkActionCreator<Actions, RootState> =
       dispatch(
         setProfile({
           ...profile,
-          friendId: friend.id,
-          status: FriendStatus.PENDING,
-          requester: user.id,
-          requestee: profile.id,
+          friendInfo: {
+            id: friend.id,
+            status: 'requested',
+            requestorId: user.id,
+            requesteeId: profile.id,
+          },
         }),
       );
     } catch (error) {
@@ -130,6 +132,7 @@ export const toggleFriendRequest: ThunkActionCreator<Actions, RootState> =
     try {
       const {
         userState: {user},
+        profileState: {detail},
       } = getState();
 
       if (!user) {
@@ -140,6 +143,15 @@ export const toggleFriendRequest: ThunkActionCreator<Actions, RootState> =
 
       if (status === FriendStatus.APPROVED) {
         dispatch(fetchFriend());
+        dispatch(
+          setProfile({
+            ...detail,
+            friendInfo: {
+              ...detail.friendInfo,
+              status: 'friends',
+            },
+          }),
+        );
       }
 
       dispatch(fetchFriendRequest(user));
