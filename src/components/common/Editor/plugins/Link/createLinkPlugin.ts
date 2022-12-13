@@ -1,9 +1,7 @@
-import { LinkPlugin } from '@udecode/plate';
-import {
-  createPluginFactory,
-  isUrl as isUrlProtocol,
-} from '@udecode/plate-core';
-import { withLink } from './withLink';
+import {LinkPlugin} from '@udecode/plate';
+import {createPluginFactory, isUrl as isUrlProtocol} from '@udecode/plate-core';
+
+import {withLink} from './withLink';
 
 export const ELEMENT_LINK = 'a';
 
@@ -14,7 +12,7 @@ export const createLinkPlugin = createPluginFactory<LinkPlugin>({
   key: ELEMENT_LINK,
   isElement: true,
   isInline: true,
-  props: ({ element }) => ({ nodeProps: { url: element?.url } }),
+  props: ({element}) => ({nodeProps: {url: element?.url}}),
   withOverrides: withLink,
   options: {
     isUrl: isUrlProtocol,
@@ -24,14 +22,14 @@ export const createLinkPlugin = createPluginFactory<LinkPlugin>({
       afterMatch: true,
     },
   },
-  then: (editor, { type }) => ({
+  then: (editor, {type}) => ({
     deserializeHtml: {
       rules: [
         {
           validNodeName: 'A',
         },
       ],
-      getNode: (el) => ({
+      getNode: el => ({
         type,
         url: el.getAttribute('href'),
       }),

@@ -1,4 +1,4 @@
-import { ELEMENT_LINK, TLinkElement } from '@udecode/plate';
+import {ELEMENT_LINK, TLinkElement} from '@udecode/plate';
 import {
   collapseSelection,
   getLeafNode,
@@ -10,7 +10,8 @@ import {
   unwrapNodes,
   Value,
 } from '@udecode/plate-core';
-import { wrapLink } from './wrapLink';
+
+import {wrapLink} from './wrapLink';
 
 /**
  * Unwrap link at a location (default: selection).
@@ -28,7 +29,7 @@ export const upsertLinkAtSelection = <V extends Value>(
      * If true, wrap the link at the location (default: selection) even if the selection is collapsed.
      */
     wrap?: boolean;
-  }
+  },
 ) => {
   if (!editor.selection) return;
 
@@ -38,7 +39,7 @@ export const upsertLinkAtSelection = <V extends Value>(
     return insertNodes<TLinkElement>(editor, {
       type,
       url,
-      children: [{ text: url }],
+      children: [{text: url}],
     });
   }
 
@@ -49,9 +50,9 @@ export const upsertLinkAtSelection = <V extends Value>(
     select(editor, inlinePath);
   }
 
-  unwrapNodes(editor, { at: editor.selection, match: { type } });
+  unwrapNodes(editor, {at: editor.selection, match: {type}});
 
-  wrapLink(editor, { at: editor.selection, url });
+  wrapLink(editor, {at: editor.selection, url});
 
-  collapseSelection(editor, { edge: 'end' });
+  collapseSelection(editor, {edge: 'end'});
 };

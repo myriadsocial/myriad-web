@@ -35,7 +35,7 @@ export const LinkToolbarButton = withPlateEventProvider(
     };
 
     const handleConfirmLink = (url: string | null) => {
-      upsertLinkAtSelection(editor, { url });
+      upsertLinkAtSelection(editor, {url});
       toggleLinkDialog();
     };
 
