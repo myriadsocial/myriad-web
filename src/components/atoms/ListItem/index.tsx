@@ -35,7 +35,7 @@ const useStyles = makeStyles<Theme, ListItemComponentProps>((theme: Theme) =>
   createStyles({
     root: {
       paddingLeft: 0,
-      [theme.breakpoints.up('xs')]: {
+      [theme.breakpoints.up('sm')]: {
         display: props =>
           ['experience', 'wallet', 'topic', 'socials'].includes(props.id as string) && 'none',
       },
