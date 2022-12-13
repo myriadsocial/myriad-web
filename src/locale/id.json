@@ -425,7 +425,7 @@
           "400": "Maaf, Kamu berusaha mengimpor postingan yang tidak valid",
           "404": "Maaf, Kamu berusaha mengimpor postingan yang tidak valid",
           "403": "Maaf, Kamu tidak bisa mengimpor postingan ini, \n karena akun ini adalah private",
-          "409": "Maaf, kamu tidak bisa mengimpot postingan ini, \n karena postingan ini telah diimpor sebelumnya"
+          "409": "Kamu telah mengimpor postingan ini"
         }
       }
     }
