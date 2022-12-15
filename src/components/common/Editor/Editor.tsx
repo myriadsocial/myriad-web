@@ -8,7 +8,6 @@ import {
   createImagePlugin,
   createItalicPlugin,
   createKbdPlugin,
-  createLinkPlugin,
   createListPlugin,
   createMediaEmbedPlugin,
   createParagraphPlugin,
@@ -58,6 +57,7 @@ import {
   createEmojiPlugin,
   createHashtagPlugin,
   createImageListPlugin,
+  createLinkPlugin,
   createMentionPlugin,
 } from './plugins';
 import {Counter} from './render/Counter';
