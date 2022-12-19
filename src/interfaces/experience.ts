@@ -36,6 +36,8 @@ export interface ExperienceProps extends Searchable {
   allowedTags: string[];
   prohibitedTags?: string[];
   people: People[];
+  visibility: string;
+  selectedUserIds: string[];
 }
 
 export interface Experience extends ExperienceProps, BaseModel {
@@ -64,4 +66,9 @@ export interface WrappedExperience {
   experience: Experience;
   friend?: boolean;
   private?: boolean;
+}
+
+export interface VisibilityItem {
+  id: string;
+  name: string;
 }

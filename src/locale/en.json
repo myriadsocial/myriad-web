@@ -92,9 +92,13 @@
       "Label_1": "Included tags",
       "Label_2": "Excluded tags",
       "Label_3": "People",
+      "Label_4": "Privacy",
+      "Label_5": "Custom People",
       "Placeholder_1": "topic you want to follow",
       "Placeholder_2": "topic you want to exclude",
       "Placeholder_3": "Search people here",
+      "Placeholder_4": "Select Type of Privacy",
+      "Placeholder_5": "Custom People Who Can View",
       "Post": {
         "Title": "Post",
         "Desc": "Added posts will appear here. You can add a post to timeline by select 'add post to timeline' on more option."
@@ -112,7 +116,13 @@
         "Image": "Required",
         "Tag": "Add at least one tag",
         "People": "Add at least one people"
+      },
+      "Visibility" : {
+        "Public" : "Public",
+        "OnlyMe" : "Only Me",
+        "Custom" : "Custom"
       }
+      
     },
     "Modal_Add_Post": {
       "Title": "Select timeline",

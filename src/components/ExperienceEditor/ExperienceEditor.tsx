@@ -1,4 +1,4 @@
-import {SearchIcon, XCircleIcon, PlusCircleIcon} from '@heroicons/react/solid';
+import {SearchIcon, XCircleIcon, PlusCircleIcon, ChevronDownIcon} from '@heroicons/react/solid';
 
 import React, {useState, useEffect, useRef} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -24,7 +24,7 @@ import {
   AutocompleteRenderOptionState,
 } from '@material-ui/lab';
 
-import {ExperienceProps, Tag} from '../../interfaces/experience';
+import {ExperienceProps, VisibilityItem, Tag} from '../../interfaces/experience';
 import {People} from '../../interfaces/people';
 import {PostDetailExperience} from '../PostDetailExperience/PostDetailExperience';
 import {Dropzone} from '../atoms/Dropzone';
@@ -62,6 +62,8 @@ const DEFAULT_EXPERIENCE: ExperienceProps = {
   allowedTags: [],
   people: [],
   prohibitedTags: [],
+  visibility: '',
+  selectedUserIds: [],
 };
 
 export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
@@ -95,11 +97,15 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   const [, setDetailChanged] = useState<boolean>(false);
   const [isLoading, setIsloading] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [selectedVisibility, setSelectedVisibility] = useState<VisibilityItem>();
+  const [selectedUserIds, setSelectedUserIds] = useState<People[]>([]);
   const [errors, setErrors] = useState({
     name: false,
     picture: false,
     tags: false,
     people: false,
+    visibility: false,
+    selectedUserId: false,
   });
 
   useEffect(() => {
@@ -290,15 +296,29 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     const validPicture = Boolean(newExperience.experienceImageURL);
     const validTags = newExperience.allowedTags.length >= 0;
     const validPeople = newExperience.people.filter(people => !isEmpty(people.id)).length >= 0;
+    const validSelectedUserIds = selectedUserIds.length > 0;
+    const validVisibility = newExperience.visibility.length > 0;
 
     setErrors({
       name: !validName,
       picture: !validPicture,
       tags: !validTags,
       people: !validPeople,
+      visibility: !validVisibility,
+      selectedUserId:
+        selectedVisibility && selectedVisibility?.name === 'selected_user'
+          ? validSelectedUserIds
+          : !validSelectedUserIds,
     });
 
-    return validName && validPicture && validTags && validPeople;
+    return (
+      validName &&
+      validPicture &&
+      validTags &&
+      validPeople &&
+      validVisibility &&
+      validSelectedUserIds
+    );
   };
 
   const saveExperience = () => {
@@ -342,6 +362,75 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     });
   };
 
+  const visibilityList: VisibilityItem[] = [
+    {
+      id: 'public',
+      name: i18n.t('Experience.Editor.Visibility.Public'),
+    },
+    {
+      id: 'private',
+      name: i18n.t('Experience.Editor.Visibility.OnlyMe'),
+    },
+    {
+      id: 'selected_user',
+      name: i18n.t('Experience.Editor.Visibility.Custom'),
+    },
+  ];
+
+  const handleVisibilityChange = (
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    event: React.ChangeEvent<{}>,
+    value: VisibilityItem,
+    reason: AutocompleteChangeReason,
+  ) => {
+    if (reason === 'select-option') {
+      setSelectedUserIds([]);
+      setSelectedVisibility(value);
+      setNewExperience(prevExperience => ({
+        ...prevExperience,
+        visibility: value?.id,
+      }));
+
+      setDetailChanged(true);
+    }
+  };
+
+  const handleVisibilityPeopleChange = (
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    event: React.ChangeEvent<{}>,
+    value: People[],
+    reason: AutocompleteChangeReason,
+  ) => {
+    const people = selectedUserIds ? selectedUserIds : [];
+    if (reason === 'select-option') {
+      setSelectedUserIds([...people, ...value.filter(option => people.indexOf(option) === -1)]);
+      clearSearchedPeople();
+    }
+
+    setDetailChanged(true);
+  };
+
+  const removeVisibilityPeople = (selected: People) => () => {
+    setSelectedUserIds(
+      selectedUserIds ? selectedUserIds.filter(people => people.id != selected.id) : [],
+    );
+
+    setDetailChanged(true);
+  };
+
+  const mappingUserIds = () => {
+    const mapIds = Object.values(selectedUserIds.map(option => option.id));
+    setNewExperience(prevExperience => ({
+      ...prevExperience,
+      selectedUserIds: mapIds,
+    }));
+  };
+
+  useEffect(() => {
+    mappingUserIds();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedUserIds]);
+
   return (
     <div className={styles.root} ref={ref}>
       <div className={styles.header}>
@@ -357,7 +446,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
             variant="contained"
             style={{width: 'auto'}}
             onClick={saveExperience}>
-            {i18n.t(`Experience.Editor.Btn.${type}`)}
+            c{i18n.t(`Experience.Editor.Btn.${type}`)}
           </Button>
         </FormControl>
       </div>
@@ -407,6 +496,133 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
             </Typography>
           </FormControl>
 
+          <Autocomplete
+            id="experience-visibility"
+            options={visibilityList}
+            getOptionLabel={option => option.name}
+            getOptionSelected={(option, value) => option?.id === value.id}
+            autoHighlight={false}
+            disableClearable
+            onChange={handleVisibilityChange}
+            value={selectedVisibility || null}
+            popupIcon={
+              <SvgIcon
+                classes={{root: styles.fill}}
+                component={ChevronDownIcon}
+                viewBox={'0 0 20 20'}
+              />
+            }
+            renderInput={({inputProps, ...rest}) => (
+              <TextField
+                {...rest}
+                error={errors.visibility}
+                label={i18n.t('Experience.Editor.Label_4')}
+                placeholder={i18n.t('Experience.Editor.Placeholder_4')}
+                variant="outlined"
+                inputProps={{...inputProps, readOnly: true}}
+              />
+            )}
+          />
+
+          {selectedVisibility?.id === 'selected_user' && (
+            <>
+              <Autocomplete
+                id="experience-custom-visibility-people"
+                className={styles.people}
+                value={(selectedUserIds as People[]) ?? []}
+                multiple
+                options={people}
+                getOptionSelected={(option, value) => option.id === value.id}
+                filterSelectedOptions={true}
+                getOptionLabel={option => `${option.username} ${option.name}`}
+                disableClearable
+                autoHighlight={false}
+                popupIcon={
+                  <SvgIcon
+                    classes={{root: styles.fill}}
+                    component={SearchIcon}
+                    viewBox={'0 0 20 20'}
+                  />
+                }
+                onChange={handleVisibilityPeopleChange}
+                renderTags={() => null}
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    error={errors.selectedUserId}
+                    label={i18n.t('Experience.Editor.Placeholder_5')}
+                    placeholder={i18n.t('Experience.Editor.Placeholder_5')}
+                    variant="outlined"
+                    onChange={handleSearchPeople}
+                    InputProps={{
+                      ...params.InputProps,
+                      endAdornment: (
+                        <React.Fragment>{params.InputProps.endAdornment}</React.Fragment>
+                      ),
+                    }}
+                    helperText={i18n.t('Experience.Editor.Helper.People')}
+                  />
+                )}
+                renderOption={(option, state: AutocompleteRenderOptionState) => {
+                  if (option.id === '') return null;
+                  return (
+                    <div className={styles.option}>
+                      <ListItemPeopleComponent
+                        id="selectable-experience-list-item"
+                        title={option.name}
+                        subtitle={<Typography variant="caption">@{option.username}</Typography>}
+                        avatar={option.profilePictureURL}
+                        platform={option.platform}
+                        action={
+                          <IconButton className={styles.removePeople}>
+                            {state.selected ? (
+                              <SvgIcon
+                                classes={{root: styles.fill}}
+                                component={XCircleIcon}
+                                color="error"
+                                viewBox={'0 0 20 20'}
+                              />
+                            ) : (
+                              <SvgIcon
+                                classes={{root: styles.fill}}
+                                component={PlusCircleIcon}
+                                viewBox={'0 0 20 20'}
+                              />
+                            )}
+                          </IconButton>
+                        }
+                      />
+                    </div>
+                  );
+                }}
+              />
+              <div className={styles.preview}>
+                {selectedUserIds
+                  .filter(people => !isEmpty(people.id))
+                  .map(people => (
+                    <ListItemPeopleComponent
+                      id="selected-experience-list-item"
+                      key={people.id}
+                      title={people.name}
+                      subtitle={<Typography variant="caption">@{people.username}</Typography>}
+                      avatar={people.profilePictureURL}
+                      platform={people.platform}
+                      action={
+                        <IconButton onClick={removeVisibilityPeople(people)}>
+                          <SvgIcon
+                            classes={{root: styles.fill}}
+                            component={XCircleIcon}
+                            color="error"
+                            viewBox={'0 0 20 20'}
+                          />
+                        </IconButton>
+                      }
+                    />
+                  ))}
+              </div>
+            </>
+          )}
+
           <FormControl fullWidth variant="outlined" style={{position: 'relative'}}>
             <InputLabel htmlFor="experience-description">
               {i18n.t('Experience.Editor.Subtitle_2')}
@@ -420,7 +636,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
               inputProps={{maxLength: 280}}
               multiline
             />
-            <FormHelperText id="experience-name-error">&nbsp;</FormHelperText>
+            <FormHelperText id="experience-description-error">&nbsp;</FormHelperText>
             <Typography variant="subtitle1" className={styles.counter}>
               {newExperience?.description?.length ?? 0}/280
             </Typography>

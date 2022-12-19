@@ -92,9 +92,13 @@
       "Label_1": "Tag yang diikuti",
       "Label_2": "Tag yang dikecualikan",
       "Label_3": "Orang",
+      "Label_4": "Privasi",
+      "Label_5": "Pilih Orang",
       "Placeholder_1": "topik yang ingin Anda ikuti",
       "Placeholder_2": "topik yang ingin Anda kecualikan",
       "Placeholder_3": "Cari orang di sini",
+      "Placeholder_4": "Pilih Tipe Privasi",
+      "Placeholder_5": "Pilih siapa saja yang dapat melihat",
       "Post": {
         "Title": "Pos",
         "Desc": "Pos yang ditambahkan akan muncul di sini. Anda dapat menambahkan postingan ke pengalaman dengan memilih 'tambahkan postingan ke pengalaman' pada opsi lainnya."
@@ -112,6 +116,11 @@
         "Image": "Harus di isi",
         "Tag": "Tambah minimal satu tag",
         "People": "Tambah minimal satu orang"
+      },
+      "Visibility" : {
+        "Public" : "Publik",
+        "OnlyMe" : "Hanya Saya",
+        "Custom" : "Kustom"
       }
     },
     "Modal_Add_Post": {
