@@ -375,6 +375,7 @@
       "See": "Lihat Pos",
       "Comment": "Anda mengomentari “{{text}}...” yang diposting oleh {{name}}.",
       "Reply": "Anda membalas komentar di “{{text}}...” yang Diposting oleh {{name}}."
+      
     },
     "Experience": {
       "Empty": {
@@ -661,7 +662,8 @@
       "Error_Login": "Silahkan masuk untuk melanjutkan pembuatan laporan",
       "Toaster_Success": "Laporan postingan telah terkirim"
     },
-    "Load_More": "Lihat balasan lainnya"
+    "Load_More": "Lihat balasan lainnya",
+    "ExclusiveContent" : "Lampirkan Konten Eksklusif"
   },
   "Tipping": {
     "Modal_Main": {
@@ -1206,5 +1208,17 @@
     "Visibilities":{
     "PostVisibilities":"Pos Anda akan terlihat oleh Anda dan orang yang ditambahkan",
     "Custom":"Kustom"
+  },
+  "ExclusiveContent" : {
+    "Create" : "Buat Konten Ekslusif",
+    "Label" : {
+      "ExclusiveContentPrice" : "Harga Konten Ekslusif",
+      "ChangeCurrency" : "Ubah Mata Uang",
+      "Fee" : "5% biaya platform akan ditambahkan ke pembayaran Anda",
+      "ToS" : "Saya setuju dengan Myriad {{ToS}} tentang konten Exclusive"
+    },
+    "Placeholder" : {
+      "AddPrice" : "Masukan Harga"
+    }
   }
 }

@@ -27,5 +27,18 @@ export const useStyles = makeStyles((theme: Theme) =>
         right: -85,
       },
     },
+    inputExclusiveAmount: {
+      width: '100%',
+      '&.MuiTextField-root': {
+        marginBottom: '5px !important',
+      },
+      '& .MuiInputBase-input': {
+        padding: '0 10px !important',
+        height: 40,
+      },
+      '& .MuiInputLabel-outlined:not(.MuiInputLabel-shrink)': {
+        transform: 'translate(14px, 13px) scale(1)',
+      },
+    },
   }),
 );

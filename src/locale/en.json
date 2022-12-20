@@ -665,7 +665,8 @@
       "Error_Login": "Please login to continue your report",
       "Toaster_Success": "Post report has been submitted"
     },
-    "Load_More": "View more replies"
+    "Load_More": "View more replies",
+    "ExclusiveContent" : "Attach Exclusive Content"
   },
   "Tipping": {
     "Modal_Main": {
@@ -1211,5 +1212,17 @@
    "Visibilities":{
     "PostVisibilities":"Your post will be visible to you and the added people",
     "Custom":"Custom"
+  },
+  "ExclusiveContent" : {
+    "Create" : "Create Unlockable Content",
+    "Label" : {
+      "ExclusiveContentPrice" : "Exclusive Content Price",
+      "ChangeCurrency" : "Change Currency",
+      "Fee" : "5% platform fee will be added to your payment",
+      "ToS" : "I agree to the Myriad {{ToS}} about exclusive content"
+    },
+    "Placeholder" : {
+      "AddPrice" : "Add Price"
+    }
   }
 }

@@ -50,5 +50,8 @@ export const useStyles = makeStyles<Theme, CommentEditorProps>(theme =>
       color: theme.palette.text.secondary,
       transform: 'rotate(45deg)',
     },
+    attachButton: {
+      marginRight: '20px !important',
+    },
   }),
 );
