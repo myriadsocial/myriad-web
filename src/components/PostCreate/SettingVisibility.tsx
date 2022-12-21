@@ -13,8 +13,9 @@ import {ListItemPeopleComponent} from '../atoms/ListItem/ListItemPeople';
 import {useStyles} from './SettingVisibility.styles';
 
 import {debounce, isEmpty} from 'lodash';
-import {useExperienceHook} from 'src/hooks/use-experience-hook';
+import {useSearchHook} from 'src/hooks/use-search.hooks';
 import {People} from 'src/interfaces/people';
+import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
 
 interface SettingVisibilityInterface {
@@ -23,54 +24,55 @@ interface SettingVisibilityInterface {
 export default function SettingVisibility(props: SettingVisibilityInterface) {
   const {setPost} = props;
   const styles = useStyles();
-  const [peopleSelected, setPeopleSelected] = useState([]);
-  const {people, searchPeople} = useExperienceHook();
+  const [userSelected, setUserSelected] = useState([]);
+  const {searchUsers, users, clearUsers} = useSearchHook();
   const handlePeopleChange = (
     // eslint-disable-next-line @typescript-eslint/ban-types
     event: React.ChangeEvent<{}>,
-    value: People[],
+    value: User[],
     reason: AutocompleteChangeReason,
   ) => {
     if (reason === 'select-option') {
-      setPeopleSelected(value);
+      setUserSelected(value);
       setPost(prevPost => ({
         ...prevPost,
         selectedUserIds: value.map(item => {
           return item.id;
         }),
       }));
-      clearSearchedPeople();
+      clearSearchedUser();
     }
   };
 
-  const clearSearchedPeople = () => {
+  const clearSearchedUser = () => {
     const debounceSubmit = debounce(() => {
-      searchPeople('');
+      clearUsers();
     }, 300);
 
     debounceSubmit();
   };
 
-  const handleSearchPeople = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchUser = (event: React.ChangeEvent<HTMLInputElement>) => {
     const debounceSubmit = debounce(() => {
-      searchPeople(event.target.value);
+      searchUsers(event.target.value);
     }, 300);
 
     debounceSubmit();
   };
 
-  const removeSelectedPeople = (selected: People) => () => {
-    setPeopleSelected(peopleSelected.filter(people => people.id != selected.id));
+  const removeSelectedUser = (selected: People) => () => {
+    setUserSelected(userSelected.filter(people => people.id != selected.id));
   };
 
   return (
     <div>
       <Autocomplete
         id="experience-people"
+        onBlur={clearSearchedUser}
         className={styles.people}
-        value={peopleSelected}
+        value={userSelected}
         multiple
-        options={people}
+        options={users}
         getOptionSelected={(option, value) => option.id === value.id}
         filterSelectedOptions={true}
         getOptionLabel={option => `${option.username} ${option.name}`}
@@ -90,7 +92,7 @@ export default function SettingVisibility(props: SettingVisibilityInterface) {
             label={i18n.t('Experience.Editor.Label_3')}
             placeholder={i18n.t('Experience.Editor.Placeholder_3')}
             variant="outlined"
-            onChange={handleSearchPeople}
+            onChange={handleSearchUser}
             InputProps={{
               ...params.InputProps,
               endAdornment: <React.Fragment>{params.InputProps.endAdornment}</React.Fragment>,
@@ -132,18 +134,18 @@ export default function SettingVisibility(props: SettingVisibilityInterface) {
         }}
       />
       <div className={styles.preview}>
-        {peopleSelected
-          .filter(people => !isEmpty(people.id))
-          .map(people => (
+        {userSelected
+          .filter(users => !isEmpty(users.id))
+          .map(user => (
             <ListItemPeopleComponent
               id="selected-experience-list-item"
-              key={people.id}
-              title={people.name}
-              subtitle={<Typography variant="caption">@{people.username}</Typography>}
-              avatar={people.profilePictureURL}
-              platform={people.platform}
+              key={user.id}
+              title={user.name}
+              subtitle={<Typography variant="caption">@{user.username}</Typography>}
+              avatar={user.profilePictureURL}
+              platform={user.platform}
               action={
-                <IconButton onClick={removeSelectedPeople(people)}>
+                <IconButton onClick={removeSelectedUser(user)}>
                   <SvgIcon
                     classes={{root: styles.fill}}
                     component={XCircleIcon}
