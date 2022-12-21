@@ -14874,6 +14874,11 @@ pupa@^2.1.1:
   dependencies:
     escape-goat "^2.0.0"
 
+pwa-install-handler@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/pwa-install-handler/-/pwa-install-handler-2.2.0.tgz#4f18bf2f7d2229ad5aced7d06e3c24b4fabbce3e"
+  integrity sha512-o6aw7LLbEb62P7ZIgPFaKHw03I6GC+yN5fFTltACCl4YEoqJj5Jmi8n8lNpM10ZRQ73hvyllml2rCmkmDgJD3A==
+
 q@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
@@ -15381,6 +15386,13 @@ react-universal-interface@^0.6.2:
   version "0.6.2"
   resolved "https://registry.yarnpkg.com/react-universal-interface/-/react-universal-interface-0.6.2.tgz#5e8d438a01729a4dbbcbeeceb0b86be146fe2b3b"
   integrity sha512-dg8yXdcQmvgR13RIlZbTRQOoUrDciFVoSBZILwjE2LFISxZZ8loVJKAkuzswl5js8BHda79bIb2b84ehU8IjXw==
+
+react-use-pwa-install@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/react-use-pwa-install/-/react-use-pwa-install-0.2.1.tgz#ab93094fe79ef0ab8c70ff11698b4032b7c90a4a"
+  integrity sha512-BRZyz5HCqeTPE4xJyb4zoGQJT/ReK8Czq7fYNxFNpf14RIKjsf1x7Do86w7Tig5GolfMOjKo0I0CixjqAyKzsQ==
+  dependencies:
+    pwa-install-handler "^2.2.0"
 
 react-use@^17.3.2:
   version "17.4.0"

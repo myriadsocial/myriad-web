@@ -1,42 +1,30 @@
 import {XIcon} from '@heroicons/react/solid';
 
-import {
-  /* useEffect, */
-  useState,
-} from 'react';
-import {useReactPWAInstall} from 'react-pwa-install';
+import {useState} from 'react';
+import {usePWAInstall} from 'react-use-pwa-install';
 
 import Image from 'next/image';
 
+import {useTheme, useMediaQuery} from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Snackbar from '@material-ui/core/Snackbar';
 import Typography from '@material-ui/core/Typography';
 
 const PwaWrapper = () => {
   const [isOpen, setOpen] = useState(true);
-  const {pwaInstall, supported, isInstalled} = useReactPWAInstall();
-  // useEffect(() => {
-  //   window.addEventListener('beforeinstallprompt', function (event: BeforeInstallPromptEvent) {
-  //     // Don't display the standard one
-  //     event.preventDefault();
-
-  //     console.log('ini event', event);
-  //     setTimeout(() => {
-  //       console.log('ini trigger prompt');
-  //       setOpen(true);
-  //     }, 2000);
-  //   });
-  // }, []);
+  const install = usePWAInstall();
+  const theme = useTheme();
+  const isMobileAndTablet = useMediaQuery(theme.breakpoints.down('sm'));
+  console.log(isMobileAndTablet)
 
   const onInstall = () => {
-    pwaInstall({
-      description: 'Add Myriad App To Home Screen',
-    });
+    onClose();
+    install();
   };
 
   const onClose = () => setOpen(false);
 
-  if (isInstalled() && !supported()) return null;
+  if (!install || !isMobileAndTablet) return null;
 
   return (
     <Snackbar
@@ -72,9 +60,9 @@ const PwaWrapper = () => {
             justifyContent: 'space-between',
             paddingLeft: '6px',
             paddingRight: '40px',
-            gridGap: '100px',
+            gridGap: '70px',
           }}>
-          <Box>
+          <Box sx={{minWidth: '100px'}}>
             <Typography variant="body1">Add Myriad</Typography>
             <Typography variant="body1">To Home Screen</Typography>
           </Box>

@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import {useCookies} from 'react-cookie';
-import ReactPWAInstallProvider from 'react-pwa-install';
 import {useDispatch} from 'react-redux';
 
 import {Session} from 'next-auth';
@@ -171,46 +170,44 @@ const Default: React.FC<DefaultLayoutProps> = props => {
         currentWallet={getWallet(currentWallet?.network?.blockchainPlatform)}
         currentNetwork={currentWallet?.networkId}>
         {isWeb2Users && <BigTopBanner />}
-        <ReactPWAInstallProvider>
-          <Container maxWidth="lg" disableGutters>
-            <div className={classes.root}>
-              <div className={classes.firstCol}>
-                <div className={classes.innerFirstColWrapper}>
-                  <div>
-                    <MenuContainer logo={logo} />
-                  </div>
-                  <div>
-                    <SocialMediaListContainer />
-                  </div>
-                  <div>
-                    <WalletBalancesContainer />
-                  </div>
+        <Container maxWidth="lg" disableGutters>
+          <div className={classes.root}>
+            <div className={classes.firstCol}>
+              <div className={classes.innerFirstColWrapper}>
+                <div>
+                  <MenuContainer logo={logo} />
                 </div>
-              </div>
-
-              <div className={classes.secondCol}>
-                <div className={classes.innerSecondColWrapper}>{children}</div>
-              </div>
-
-              <div className={classes.thirdCol}>
-                <div className={classes.innerThirdColWrapper}>
-                  <ProfileCardContainer toggleNotification={handleToggleNotification} />
-
-                  <ShowIf condition={!showNotification}>
-                    <RightMenuBar />
-                  </ShowIf>
-
-                  <ShowIf condition={showNotification}>
-                    <NotificationsContainer infinite={false} size="small" />
-                  </ShowIf>
+                <div>
+                  <SocialMediaListContainer />
+                </div>
+                <div>
+                  <WalletBalancesContainer />
                 </div>
               </div>
             </div>
-          </Container>
 
-          <PwaWrapper />
-          <CookieConsent />
-        </ReactPWAInstallProvider>
+            <div className={classes.secondCol}>
+              <div className={classes.innerSecondColWrapper}>{children}</div>
+            </div>
+
+            <div className={classes.thirdCol}>
+              <div className={classes.innerThirdColWrapper}>
+                <ProfileCardContainer toggleNotification={handleToggleNotification} />
+
+                <ShowIf condition={!showNotification}>
+                  <RightMenuBar />
+                </ShowIf>
+
+                <ShowIf condition={showNotification}>
+                  <NotificationsContainer infinite={false} size="small" />
+                </ShowIf>
+              </div>
+            </div>
+          </div>
+        </Container>
+
+        <PwaWrapper />
+        <CookieConsent />
       </TippingProvider>
     </BlockchainProviderComponent>
   );
