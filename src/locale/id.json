@@ -69,7 +69,8 @@
           "Sub_Excluded": "Tag yang dikecualikan"
         },
         "People": "Orang",
-        "Post": "Pos"
+        "Post": "Pos",
+        "Privacy" : "Privasi"
       },
       "Post": {
         "Empty": "Pos yang ditambahkan akan muncul di sini. Anda dapat menambahkan postingan ke pengalaman dengan memilih 'tambahkan postingan ke pengalaman' pada opsi lainnya."

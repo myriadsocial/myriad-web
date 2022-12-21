@@ -69,7 +69,8 @@
           "Sub_Excluded": "Excluded tag"
         },
         "People": "People",
-        "Post": "Post"
+        "Post": "Post",
+        "Privacy" : "Privacy"
       },
       "Post": {
         "Empty": "Added posts will appear here. You can add a post to Timeline by select 'add post to Timeline' on more option."

@@ -18,12 +18,15 @@ import {useStyles} from './experience.style';
 
 import {Empty} from 'components/atoms/Empty';
 import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorizeAction';
+import ShowIf from 'components/common/show-if.component';
 import {ListItemPeopleComponent} from 'src/components/atoms/ListItem/ListItemPeople';
 import {acronym} from 'src/helpers/string';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
 import {Experience, WrappedExperience} from 'src/interfaces/experience';
 import {People} from 'src/interfaces/people';
 import {SocialsEnum} from 'src/interfaces/social';
+import {User} from 'src/interfaces/user';
+import * as UserAPI from 'src/lib/api/user';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
@@ -61,6 +64,8 @@ export const ExperiencePreview: React.FC<Props> = props => {
   const [promptSignin, setPromptSignin] = React.useState(false);
   const [isExpandPeople, setIsExpandPeople] = React.useState(false);
   const [isExpandPost, setIsExpandPost] = React.useState(false);
+  const [selectedUserIds, setSelectedUserIds] = React.useState<User[]>([]);
+  const [isLoadingSelectedUser, setIsLoadingSelectedUser] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     loadPostExperience(experience.id);
@@ -167,6 +172,25 @@ export const ExperiencePreview: React.FC<Props> = props => {
   const handleNextPagePosts = () => {
     loadNextPostExperience(experience.id);
   };
+
+  const checkVisibility = () => {
+    if (experience?.visibility === 'private') return i18n.t('Experience.Editor.Visibility.OnlyMe');
+    else if (experience?.visibility === 'public')
+      return i18n.t('Experience.Editor.Visibility.Public');
+    else if (experience?.visibility === 'selected_user')
+      return i18n.t('Experience.Editor.Visibility.Custom');
+  };
+
+  const getSelectedIds = async (userIds: string[]) => {
+    setIsLoadingSelectedUser(true);
+    const selectedUserIds = await UserAPI.getUserByIds(userIds);
+    setSelectedUserIds(selectedUserIds?.data as unknown as User[]);
+    setIsLoadingSelectedUser(false);
+  };
+
+  React.useEffect(() => {
+    getSelectedIds(experience?.selectedUserIds);
+  }, [experience]);
 
   return (
     <div className={style.root}>
@@ -293,6 +317,29 @@ export const ExperiencePreview: React.FC<Props> = props => {
         </Typography>
         <Typography>{parsingTags(TagsProps.PROHIBITED)}</Typography>
       </div>
+      {experience?.visibility && (
+        <div className={style.mb30}>
+          <Typography className={style.subtitle}>
+            {i18n.t('Experience.Preview.Subheader.Privacy')}
+          </Typography>
+          <Typography className={style.tagSection}>{checkVisibility()}</Typography>
+          {selectedUserIds.length > 0 &&
+            selectedUserIds.map(person => (
+              <ListItemPeopleComponent
+                key={person.id}
+                onClick={() => handleOpenProfile(person as unknown as People)}
+                id="selectable-experience-list-item"
+                title={person.name}
+                subtitle={<Typography variant="caption">@{person.username}</Typography>}
+                avatar={person.profilePictureURL}
+                platform={'myriad'}
+              />
+            ))}
+          <ShowIf condition={isLoadingSelectedUser}>
+            <Loading />
+          </ShowIf>
+        </div>
+      )}
       <div className={style.subtitleContainer}>
         <Typography className={style.subtitle}>
           {i18n.t('Experience.Preview.Subheader.People')}
