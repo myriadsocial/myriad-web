@@ -9,7 +9,7 @@ type UserList = BaseList<User>;
 type ActivityList = BaseList<ActivityLog>;
 
 export const getUserDetail = async (
-  id: string,
+  userNameOrId: string,
   userId?: string,
 ): Promise<User & {friendInfo: FriendStatusProps}> => {
   const params: Record<string, any> = {
@@ -40,7 +40,7 @@ export const getUserDetail = async (
   }
 
   const {data} = await MyriadAPI().request<User & {friendInfo: FriendStatusProps}>({
-    url: `/users/${id}`,
+    url: `/users/${userNameOrId}`,
     method: 'GET',
     params,
   });
