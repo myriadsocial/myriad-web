@@ -105,6 +105,7 @@
     "react-markdown": "^8.0.1",
     "react-material-ui-carousel": "v2",
     "react-player": "^2.10.0",
+    "react-pwa-install": "^1.0.12",
     "react-redux": "^7.2.4",
     "react-router-dom": "^6.2.2",
     "react-share": "^4.4.0",
