@@ -8,6 +8,7 @@ import {ExperienceEditor} from './ExperienceEditor';
 import debounce from 'lodash/debounce';
 import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
+import {useSearchHook} from 'src/hooks/use-search.hooks';
 import {useUpload} from 'src/hooks/use-upload.hook';
 import {ExperienceProps} from 'src/interfaces/experience';
 import i18n from 'src/locale';
@@ -23,6 +24,7 @@ export const ExperienceContainer: React.FC = () => {
     searchPeople,
     loadExperience,
   } = useExperienceHook();
+  const {searchUsers, users} = useSearchHook();
   const style = useStyles();
 
   const {uploadImage} = useUpload();
@@ -50,6 +52,10 @@ export const ExperienceContainer: React.FC = () => {
     searchPeople(query);
   }, 300);
 
+  const handleSearchUser = debounce((query: string) => {
+    searchUsers(query);
+  }, 300);
+
   return (
     <>
       <div className={style.mb}>
@@ -68,6 +74,8 @@ export const ExperienceContainer: React.FC = () => {
           onImageUpload={onImageUpload}
           onSearchPeople={handleSearchPeople}
           onSave={onSave}
+          onSearchUser={handleSearchUser}
+          users={users}
         />
       </div>
     </>

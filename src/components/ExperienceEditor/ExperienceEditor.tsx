@@ -35,7 +35,10 @@ import {useStyles} from './Experience.styles';
 
 import {debounce, isEmpty} from 'lodash';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
+import {useSearchHook} from 'src/hooks/use-search.hooks';
 import {Post} from 'src/interfaces/post';
+import {User} from 'src/interfaces/user';
+import * as UserAPI from 'src/lib/api/user';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
@@ -50,6 +53,8 @@ type ExperienceEditorProps = {
   onSearchPeople: (query: string) => void;
   onSave: (experience: ExperienceProps) => void;
   onImageUpload: (files: File[]) => Promise<string>;
+  onSearchUser?: (query: string) => void;
+  users?: User[];
 };
 
 enum TagsProps {
@@ -76,6 +81,8 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     onImageUpload,
     onSearchTags,
     onSearchPeople,
+    onSearchUser,
+    users,
   } = props;
   const styles = useStyles();
 
@@ -88,6 +95,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     addPostsToExperience,
   } = useExperienceHook();
   const router = useRouter();
+  const {clearUsers} = useSearchHook();
 
   const ref = useRef(null);
   const {anonymous, user} = useSelector<RootState, UserState>(state => state.userState);
@@ -98,7 +106,8 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   const [isLoading, setIsloading] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [selectedVisibility, setSelectedVisibility] = useState<VisibilityItem>();
-  const [selectedUserIds, setSelectedUserIds] = useState<People[]>([]);
+  const [selectedUserIds, setSelectedUserIds] = useState<User[]>([]);
+  const [isLoadingSelectedUser, setIsLoadingSelectedUser] = useState<boolean>(false);
   const [errors, setErrors] = useState({
     name: false,
     picture: false,
@@ -296,8 +305,11 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     const validPicture = Boolean(newExperience.experienceImageURL);
     const validTags = newExperience.allowedTags.length >= 0;
     const validPeople = newExperience.people.filter(people => !isEmpty(people.id)).length >= 0;
-    const validSelectedUserIds = selectedUserIds.length > 0;
-    const validVisibility = newExperience.visibility.length > 0;
+    const validSelectedUserIds =
+      selectedVisibility && selectedVisibility?.id === 'selected_user'
+        ? selectedUserIds.length > 0
+        : !isEmpty(selectedVisibility?.id);
+    const validVisibility = !isEmpty(selectedVisibility?.id);
 
     setErrors({
       name: !validName,
@@ -305,10 +317,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       tags: !validTags,
       people: !validPeople,
       visibility: !validVisibility,
-      selectedUserId:
-        selectedVisibility && selectedVisibility?.name === 'selected_user'
-          ? validSelectedUserIds
-          : !validSelectedUserIds,
+      selectedUserId: !validSelectedUserIds,
     });
 
     return (
@@ -383,34 +392,49 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     value: VisibilityItem,
     reason: AutocompleteChangeReason,
   ) => {
-    if (reason === 'select-option') {
-      setSelectedUserIds([]);
-      setSelectedVisibility(value);
-      setNewExperience(prevExperience => ({
-        ...prevExperience,
-        visibility: value?.id,
-      }));
+    setSelectedVisibility(value);
+    setNewExperience(prevExperience => ({
+      ...prevExperience,
+      visibility: value?.id,
+    }));
 
-      setDetailChanged(true);
-    }
+    setDetailChanged(true);
+  };
+
+  const handleSearchUser = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const debounceSubmit = debounce(() => {
+      onSearchUser(event.target.value);
+    }, 300);
+
+    debounceSubmit();
+  };
+
+  const clearSearchedUser = () => {
+    const debounceSubmit = debounce(() => {
+      onSearchUser('');
+    }, 300);
+
+    debounceSubmit();
   };
 
   const handleVisibilityPeopleChange = (
     // eslint-disable-next-line @typescript-eslint/ban-types
     event: React.ChangeEvent<{}>,
-    value: People[],
+    value: User[],
     reason: AutocompleteChangeReason,
   ) => {
     const people = selectedUserIds ? selectedUserIds : [];
+    console.log({value});
     if (reason === 'select-option') {
       setSelectedUserIds([...people, ...value.filter(option => people.indexOf(option) === -1)]);
-      clearSearchedPeople();
+      clearSearchedUser();
+      clearUsers();
     }
 
     setDetailChanged(true);
   };
 
-  const removeVisibilityPeople = (selected: People) => () => {
+  const removeVisibilityPeople = (selected: User) => () => {
     setSelectedUserIds(
       selectedUserIds ? selectedUserIds.filter(people => people.id != selected.id) : [],
     );
@@ -419,17 +443,42 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   };
 
   const mappingUserIds = () => {
-    const mapIds = Object.values(selectedUserIds.map(option => option.id));
-    setNewExperience(prevExperience => ({
-      ...prevExperience,
-      selectedUserIds: mapIds,
-    }));
+    console.log({selectedVisibility});
+    if (selectedVisibility?.id === 'selected_user') {
+      const mapIds = Object.values(selectedUserIds.map(option => option.id));
+      setNewExperience(prevExperience => ({
+        ...prevExperience,
+        selectedUserIds: mapIds,
+      }));
+    } else {
+      setNewExperience(prevExperience => ({
+        ...prevExperience,
+        selectedUserIds: [],
+      }));
+    }
   };
 
   useEffect(() => {
     mappingUserIds();
+    setDetailChanged(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedUserIds]);
+  }, [selectedUserIds, experience]);
+
+  const getSelectedIds = async (userIds: string[]) => {
+    setIsLoadingSelectedUser(true);
+    const selectedUserIds = await UserAPI.getUserByIds(userIds);
+    setSelectedUserIds(selectedUserIds?.data as unknown as User[]);
+    setIsLoadingSelectedUser(false);
+  };
+
+  useEffect(() => {
+    if (experience) {
+      const visibility = visibilityList.find(option => option.id === experience?.visibility);
+      setSelectedVisibility(visibility);
+
+      getSelectedIds(experience?.selectedUserIds);
+    }
+  }, [experience]);
 
   return (
     <div className={styles.root} ref={ref}>
@@ -446,7 +495,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
             variant="contained"
             style={{width: 'auto'}}
             onClick={saveExperience}>
-            c{i18n.t(`Experience.Editor.Btn.${type}`)}
+            {i18n.t(`Experience.Editor.Btn.${type}`)}
           </Button>
         </FormControl>
       </div>
@@ -528,10 +577,11 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
             <>
               <Autocomplete
                 id="experience-custom-visibility-people"
+                onBlur={clearUsers}
                 className={styles.people}
-                value={(selectedUserIds as People[]) ?? []}
+                value={(selectedUserIds as User[]) ?? []}
                 multiple
-                options={people}
+                options={users}
                 getOptionSelected={(option, value) => option.id === value.id}
                 filterSelectedOptions={true}
                 getOptionLabel={option => `${option.username} ${option.name}`}
@@ -553,7 +603,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
                     label={i18n.t('Experience.Editor.Placeholder_5')}
                     placeholder={i18n.t('Experience.Editor.Placeholder_5')}
                     variant="outlined"
-                    onChange={handleSearchPeople}
+                    onChange={handleSearchUser}
                     InputProps={{
                       ...params.InputProps,
                       endAdornment: (
@@ -572,7 +622,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
                         title={option.name}
                         subtitle={<Typography variant="caption">@{option.username}</Typography>}
                         avatar={option.profilePictureURL}
-                        platform={option.platform}
+                        platform={'myriad'}
                         action={
                           <IconButton className={styles.removePeople}>
                             {state.selected ? (
@@ -596,7 +646,11 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
                   );
                 }}
               />
+
               <div className={styles.preview}>
+                <ShowIf condition={isLoadingSelectedUser}>
+                  <Loading />
+                </ShowIf>
                 {selectedUserIds
                   .filter(people => !isEmpty(people.id))
                   .map(people => (
@@ -606,7 +660,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
                       title={people.name}
                       subtitle={<Typography variant="caption">@{people.username}</Typography>}
                       avatar={people.profilePictureURL}
-                      platform={people.platform}
+                      platform={'myriad'}
                       action={
                         <IconButton onClick={removeVisibilityPeople(people)}>
                           <SvgIcon
