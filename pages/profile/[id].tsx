@@ -99,6 +99,8 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   const anonymous = session?.user.anonymous || !session ? true : false;
   const userId = session?.user.address as string;
   const profileId = params?.id as string;
+  const userNameParams = params?.profileByUserName as string;
+  const usernameOrId = profileId || userNameParams;
 
   initialize({cookie: req.headers.cookie}, anonymous);
 
@@ -123,7 +125,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   await dispatch(fetchUserExperience());
 
   try {
-    const detail = await UserAPI.getUserDetail(profileId, userId);
+    const detail = await UserAPI.getUserDetail(usernameOrId, userId);
     const privacySetting = detail?.accountSetting ?? {
       accountPrivacy: 'public',
       socialMediaPrivacy: 'public',
