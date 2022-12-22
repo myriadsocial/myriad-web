@@ -8,6 +8,7 @@ import {useStyles} from './experience.style';
 import debounce from 'lodash/debounce';
 import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
+import {useSearchHook} from 'src/hooks/use-search.hooks';
 import {useUpload} from 'src/hooks/use-upload.hook';
 import {ExperienceProps} from 'src/interfaces/experience';
 import i18n from 'src/locale';
@@ -24,6 +25,7 @@ export const ExperienceEditContainer: React.FC = () => {
     getExperienceDetail,
     updateExperience,
   } = useExperienceHook();
+  const {searchUsers, users} = useSearchHook();
   const {uploadImage} = useUpload();
   const router = useRouter();
 
@@ -40,6 +42,7 @@ export const ExperienceEditContainer: React.FC = () => {
   };
 
   const onSave = (attributes: ExperienceProps) => {
+    console.log({attributes});
     if (!experience) return;
 
     updateExperience(experience.id, attributes, () => {
@@ -53,6 +56,10 @@ export const ExperienceEditContainer: React.FC = () => {
 
   const handleSearchPeople = debounce((query: string) => {
     searchPeople(query);
+  }, 300);
+
+  const handleSearchUser = debounce((query: string) => {
+    searchUsers(query);
   }, 300);
 
   return (
@@ -73,6 +80,8 @@ export const ExperienceEditContainer: React.FC = () => {
             onImageUpload={onImageUpload}
             onSearchPeople={handleSearchPeople}
             onSave={onSave}
+            onSearchUser={handleSearchUser}
+            users={users}
           />
         )}
       </div>

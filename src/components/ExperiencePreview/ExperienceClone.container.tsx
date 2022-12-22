@@ -8,6 +8,7 @@ import {useStyles} from './experience.style';
 import debounce from 'lodash/debounce';
 import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
+import {useSearchHook} from 'src/hooks/use-search.hooks';
 import {useUpload} from 'src/hooks/use-upload.hook';
 import {ExperienceProps} from 'src/interfaces/experience';
 import i18n from 'src/locale';
@@ -16,6 +17,7 @@ export const ExperienceCloneContainer: React.FC = () => {
   // TODO: separate hook for tag, people and experience
   const {searchTags, tags, searchPeople, people, experience, getExperienceDetail, cloneExperience} =
     useExperienceHook();
+  const {searchUsers, users} = useSearchHook();
   const {uploadImage} = useUpload();
   const router = useRouter();
   const style = useStyles();
@@ -64,6 +66,8 @@ export const ExperienceCloneContainer: React.FC = () => {
             onImageUpload={onImageUpload}
             onSearchPeople={handleSearchPeople}
             onSave={handleCloneExperience}
+            onSearchUser={searchUsers}
+            users={users}
           />
         )}
       </div>

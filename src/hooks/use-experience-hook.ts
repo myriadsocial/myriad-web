@@ -136,6 +136,8 @@ export const useExperienceHook = () => {
       'experienceImageURL',
       'prohibitedTags',
       'people',
+      'visibility',
+      'selectedUserIds',
     ]);
 
     dispatch(
@@ -162,6 +164,8 @@ export const useExperienceHook = () => {
       'experienceImageURL',
       'prohibitedTags',
       'people',
+      'visibility',
+      'selectedUserIds',
     ]);
 
     dispatch(

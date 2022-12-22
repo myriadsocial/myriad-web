@@ -128,3 +128,23 @@ export const getCountPost = async (): Promise<{count: number}> => {
   });
   return data;
 };
+
+export const getUserByIds = async (userIds?: string[]): Promise<UserList> => {
+  const params: Record<string, any> = {
+    filter: {
+      where: {
+        id: {
+          inq: userIds,
+        },
+      },
+    },
+  };
+
+  const {data} = await MyriadAPI().request<UserList>({
+    url: '/users',
+    method: 'GET',
+    params,
+  });
+
+  return data;
+};
