@@ -7,7 +7,6 @@ import {Button, SvgIcon, Typography} from '@material-ui/core';
 
 import {BN} from '@polkadot/util';
 
-import {Modal} from '../atoms/Modal';
 import CurrencyOption from './CurrencyOption';
 import {useStyles} from './ExclusiveCreate.styles';
 
@@ -23,9 +22,7 @@ import {BalanceState} from 'src/reducers/balance/reducer';
 
 type PostCreateProps = {
   user: User;
-  open: boolean;
   isMobile?: boolean;
-  onClose: () => void;
   onSearchPeople: (query: string) => void;
   onSubmit: (
     post: Partial<Post> | string,
@@ -36,7 +33,7 @@ type PostCreateProps = {
 const INITIAL_AMOUNT = new BN(-1);
 
 export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
-  const {open, user, isMobile, onClose, onSearchPeople} = props;
+  const {user, isMobile, onSearchPeople} = props;
   const styles = useStyles();
   const [currency, setCurrency] = useState<BalanceDetail>();
   const [amount, setAmount] = useState<BN>(INITIAL_AMOUNT);
@@ -45,9 +42,6 @@ export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
   const {balanceDetails: balances} = useSelector<RootState, BalanceState>(
     state => state.balanceState,
   );
-  const handleClose = () => {
-    onClose();
-  };
 
   const handleSelectCurrency = (currency: BalanceDetail) => {
     setCurrency(currency);
@@ -64,13 +58,7 @@ export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
   const isDisabledButton = !agreementChecked;
 
   return (
-    <Modal
-      title={i18n.t('ExclusiveContent.Create')}
-      onClose={handleClose}
-      open={open}
-      fullScreen={isMobile}
-      maxWidth="md"
-      className={styles.root}>
+    <>
       <Editor userId={user.id} mobile={isMobile} onSearchMention={onSearchPeople} />
       <div className={styles.currencyWrapper}>
         <div style={{width: 'calc(100% - 152px)'}}>
@@ -115,7 +103,7 @@ export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
           {i18n.t('Post_Create.Confirm')}
         </Button>
       </div>
-    </Modal>
+    </>
   );
 };
 

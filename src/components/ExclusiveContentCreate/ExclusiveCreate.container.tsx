@@ -8,7 +8,9 @@ import {Button, useMediaQuery} from '@material-ui/core';
 import {useTheme} from '@material-ui/core/styles';
 
 import {PromptComponent} from '../atoms/Prompt/prompt.component';
+import {useStyles} from './ExclusiveCreate.styles';
 
+import {Modal} from 'components/atoms/Modal';
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {Post} from 'src/interfaces/post';
@@ -35,6 +37,7 @@ export const ExclusiveCreateContainer: React.FC<PostCreateContainerType> = props
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
   const enqueueSnackbar = useEnqueueSnackbar();
+  const styles = useStyles();
 
   const user = useSelector<RootState, User | null>(state => state.userState.user, shallowEqual);
   const [dialogFailedImport, setDialogFailedImport] = useState({
@@ -156,14 +159,21 @@ export const ExclusiveCreateContainer: React.FC<PostCreateContainerType> = props
 
   return (
     <>
-      <ExclusiveCreate
-        user={user}
-        open={open}
+      <Modal
+        title={i18n.t('ExclusiveContent.Create')}
         onClose={onClose}
-        onSearchPeople={handleSearchPeople}
-        onSubmit={submitPost}
-        isMobile={isMobile}
-      />
+        open={open}
+        fullScreen={isMobile}
+        maxWidth="md"
+        className={styles.root}>
+        <ExclusiveCreate
+          user={user}
+          onSearchPeople={handleSearchPeople}
+          onSubmit={submitPost}
+          isMobile={isMobile}
+        />
+      </Modal>
+
       <PromptComponent
         title={i18n.t('Home.RichText.Prompt_Import.Title')}
         subtitle={dialogFailedImport.message}
