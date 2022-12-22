@@ -110,6 +110,7 @@
     "react-share": "^4.4.0",
     "react-spinners": "^0.11.0",
     "react-textarea-autosize": "^8.3.4",
+    "react-use-pwa-install": "^0.2.1",
     "redux": "^4.1.0",
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.3.0",

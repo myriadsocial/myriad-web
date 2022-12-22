@@ -13455,6 +13455,11 @@ mkdirp@^1.0.3, mkdirp@^1.0.4:
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
 
+mobile-device-detect@^0.4.3:
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/mobile-device-detect/-/mobile-device-detect-0.4.3.tgz#05d73b4bde7ccb5beda1c4bd0ea0986ce30b1f3f"
+  integrity sha512-SN9EBE9SoJgkb83kuUVoIp3R9OGYE5dYEnLEz2oLooh0DzgtQ72BJmpNGqrgFvmfE4iLR2CaVJ3RjUcStheVZg==
+
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"
@@ -14869,6 +14874,11 @@ pupa@^2.1.1:
   dependencies:
     escape-goat "^2.0.0"
 
+pwa-install-handler@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/pwa-install-handler/-/pwa-install-handler-2.2.0.tgz#4f18bf2f7d2229ad5aced7d06e3c24b4fabbce3e"
+  integrity sha512-o6aw7LLbEb62P7ZIgPFaKHw03I6GC+yN5fFTltACCl4YEoqJj5Jmi8n8lNpM10ZRQ73hvyllml2rCmkmDgJD3A==
+
 q@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
@@ -15256,6 +15266,13 @@ react-proptype-conditional-require@^1.0.4:
   resolved "https://registry.yarnpkg.com/react-proptype-conditional-require/-/react-proptype-conditional-require-1.0.4.tgz#69c2d5741e6df5e08f230f36bbc2944ee1222555"
   integrity sha1-acLVdB5t9eCPIw82u8KUTuEiJVU=
 
+react-pwa-install@^1.0.12:
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/react-pwa-install/-/react-pwa-install-1.0.12.tgz#f7203bd1ca2b2a4204bfc469ee11813d9c2567a9"
+  integrity sha512-zy1ZPfUIDTiBap1pycB6IZw+8wSRwncFwtjuUHYwRX2+285EabTcvXAwl2PdIzcXc1fh+K0ZI6Snccx5bgLpxg==
+  dependencies:
+    mobile-device-detect "^0.4.3"
+
 react-redux@^7.2.0, react-redux@^7.2.4:
   version "7.2.6"
   resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-7.2.6.tgz#49633a24fe552b5f9caf58feb8a138936ddfe9aa"
@@ -15369,6 +15386,13 @@ react-universal-interface@^0.6.2:
   version "0.6.2"
   resolved "https://registry.yarnpkg.com/react-universal-interface/-/react-universal-interface-0.6.2.tgz#5e8d438a01729a4dbbcbeeceb0b86be146fe2b3b"
   integrity sha512-dg8yXdcQmvgR13RIlZbTRQOoUrDciFVoSBZILwjE2LFISxZZ8loVJKAkuzswl5js8BHda79bIb2b84ehU8IjXw==
+
+react-use-pwa-install@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/react-use-pwa-install/-/react-use-pwa-install-0.2.1.tgz#ab93094fe79ef0ab8c70ff11698b4032b7c90a4a"
+  integrity sha512-BRZyz5HCqeTPE4xJyb4zoGQJT/ReK8Czq7fYNxFNpf14RIKjsf1x7Do86w7Tig5GolfMOjKo0I0CixjqAyKzsQ==
+  dependencies:
+    pwa-install-handler "^2.2.0"
 
 react-use@^17.3.2:
   version "17.4.0"

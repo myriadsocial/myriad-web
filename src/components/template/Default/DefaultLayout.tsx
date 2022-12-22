@@ -14,6 +14,7 @@ import BigTopBanner from 'src/components/BigTopBanner';
 import {withError, WithErrorProps} from 'src/components/Error';
 import {MenuContainer} from 'src/components/Menu';
 import {NotificationsContainer} from 'src/components/Notifications';
+import PwaWrapper from 'src/components/PwaWrapper';
 import {RightMenuBar} from 'src/components/RightMenuBar/RightMenuBar';
 import {CookieConsent, COOKIE_CONSENT_NAME} from 'src/components/common/CookieConsent';
 import {TippingProvider} from 'src/components/common/Tipping/Tipping.provider';
@@ -205,6 +206,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
           </div>
         </Container>
 
+        <PwaWrapper />
         <CookieConsent />
       </TippingProvider>
     </BlockchainProviderComponent>
