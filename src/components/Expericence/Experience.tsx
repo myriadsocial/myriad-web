@@ -151,6 +151,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
       title: i18n.t('Experience.List.Prompt_Unsub.Title'),
       description: `${i18n.t('Experience.List.Prompt_Unsub.Desc_1')}\n ${i18n.t(
         'Experience.List.Prompt_Unsub.Desc_2',
+        {experience_name: userExperience.experience.name},
       )}`,
       icon: 'warning',
       confirmationText: i18n.t('Experience.List.Prompt_Unsub.Btn_Yes'),
