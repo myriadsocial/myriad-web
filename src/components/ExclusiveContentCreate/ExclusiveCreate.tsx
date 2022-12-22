@@ -1,16 +1,17 @@
 import {InformationCircleIcon} from '@heroicons/react/outline';
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 
 import {Button, SvgIcon, Typography} from '@material-ui/core';
 
-import {BN} from '@polkadot/util';
+import {BN, BN_ZERO} from '@polkadot/util';
 
 import CurrencyOption from './CurrencyOption';
 import {useStyles} from './ExclusiveCreate.styles';
 
-import {Editor} from 'components/common/Editor';
+import {serialize} from 'components/PostCreate/formatter';
+import {checkEditor, Editor, getEditorSelectors} from 'components/common/Editor';
 import {TermOfService} from 'components/common/TermOfService';
 import {InputAmount} from 'components/common/Tipping/render/InputAmount';
 import {Currency} from 'src/interfaces/currency';
@@ -33,11 +34,13 @@ type PostCreateProps = {
 const INITIAL_AMOUNT = new BN(-1);
 
 export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
-  const {user, isMobile, onSearchPeople} = props;
+  const {user, isMobile, onSearchPeople, onSubmit} = props;
   const styles = useStyles();
   const [currency, setCurrency] = useState<Currency>();
   const [amount, setAmount] = useState<BN>(INITIAL_AMOUNT);
   const [agreementChecked, setAgreementChecked] = useState<boolean>(false);
+  const [isDisabledButton, setIsDisabledButton] = useState<boolean>(true);
+  const [isErrorEditor, setIsErrorEditor] = useState<boolean>(false);
 
   const {availableCurrencies: balances} = useSelector<RootState, ConfigState>(
     state => state.configState,
@@ -52,14 +55,36 @@ export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
   };
 
   const handleSubmit = () => {
-    return null;
+    const store = getEditorSelectors(`exclusive-${user.id}`);
+    const value = store.value();
+
+    if (checkEditor(value)) {
+      setIsErrorEditor(false);
+      const attributes = serialize(value);
+
+      onSubmit({
+        ...attributes,
+      });
+    } else {
+      setIsErrorEditor(true);
+    }
   };
 
-  const isDisabledButton = !agreementChecked;
+  useEffect(() => {
+    if (agreementChecked && currency && !amount.lte(BN_ZERO)) setIsDisabledButton(false);
+    else setIsDisabledButton(true);
+  }, [agreementChecked, currency, amount]);
 
   return (
     <>
-      <Editor userId={user.id} mobile={isMobile} onSearchMention={onSearchPeople} />
+      <div style={{marginBottom: 20}}>
+        <Editor
+          userId={`exclusive-${user.id}`}
+          mobile={isMobile}
+          onSearchMention={onSearchPeople}
+          isErrorEditor={isErrorEditor}
+        />
+      </div>
       <div className={styles.currencyWrapper}>
         <div style={{width: 'calc(100% - 152px)'}}>
           <InputAmount

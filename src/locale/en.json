@@ -666,7 +666,7 @@
       "Toaster_Success": "Post report has been submitted"
     },
     "Load_More": "View more replies",
-    "ExclusiveContent" : "Attach Exclusive Content"
+    "ExclusiveContent" : "{{type}} Exclusive Content"
   },
   "Tipping": {
     "Modal_Main": {
@@ -1214,12 +1214,15 @@
     "Custom":"Custom"
   },
   "ExclusiveContent" : {
-    "Create" : "Create Unlockable Content",
+    "Create" : "Create Exclusive Content",
+    "Add" : "Add Exclusive Content",
+    "Attach" : "Attach Exclusive Content",
+    "Remove" : "Remove Exclusive Content",
     "Label" : {
+      "ExclusiveContent" : "Exclusive Content",
       "ExclusiveContentPrice" : "Exclusive Content Price",
       "ChangeCurrency" : "Change Currency",
-      "Fee" : "5% platform fee will be added to your payment",
-      "ToS" : "I agree to the Myriad {{ToS}} about exclusive content"
+      "Fee" : "5% platform fee will be added to your payment"
     },
     "Placeholder" : {
       "AddPrice" : "Add Price"

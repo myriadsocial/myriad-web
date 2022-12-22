@@ -8,7 +8,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       background: '#FFF',
       fontSize: '14px',
       fontWeight: 400,
-      marginRight: theme.spacing(1),
       border: '1px solid #C2C2C2',
       borderRadius: 6,
     },

@@ -1,4 +1,4 @@
-import {PhotographIcon} from '@heroicons/react/outline';
+import {PhotographIcon, TrashIcon} from '@heroicons/react/outline';
 import {FilmIcon} from '@heroicons/react/outline';
 import {PaperAirplaneIcon} from '@heroicons/react/outline';
 import {EmojiHappyIcon} from '@heroicons/react/outline';
@@ -22,6 +22,7 @@ import {useEditorState} from 'components/common/Editor';
 import {EmojiPickerToolbarButton} from 'components/common/Editor/render/Toolbar/Button';
 import {formatToString} from 'components/common/NodeViewer/formatter';
 import ShowIf from 'components/common/show-if.component';
+import {Post} from 'src/interfaces/post';
 import i18n from 'src/locale';
 
 type CommentActionProps = {
@@ -32,22 +33,28 @@ type CommentActionProps = {
 
 export const CommentAction: React.FC<CommentActionProps> = props => {
   const {expand, mobile, onSubmit} = props;
-  const [createExclusiveOpened, setCreateExclusiveOpened] = useState(false);
+  const [openExclusiveOpened, setOpenExclusiveOpened] = useState(false);
+  const [exclusiveContent, setExclusiveContent] = useState<string | Partial<Post>>();
 
   const styles = useStyles({mobile: false});
   const editor = useEditorState();
 
   const length = editor.children.map(element => formatToString(element)).join(' ').length;
 
-  const handleOpenCreateExclusiveContent = () => {
-    setCreateExclusiveOpened(true);
-  };
-
-  const handleCloseCreateExclusive = () => {
-    setCreateExclusiveOpened(false);
+  const handleOpenExclusiveContent = () => {
+    setOpenExclusiveOpened(!openExclusiveOpened);
   };
 
   if (!expand && length === 0) return null;
+
+  const handleSubmitExclusiveContent = (content: string | Partial<Post>) => {
+    setExclusiveContent(content);
+    handleOpenExclusiveContent();
+  };
+
+  const handleRemoveExclusiveContent = () => {
+    setExclusiveContent('');
+  };
 
   return (
     <>
@@ -72,16 +79,29 @@ export const CommentAction: React.FC<CommentActionProps> = props => {
           </ShowIf>
         </ButtonGroup>
         <ButtonGroup color="primary">
-          <IconButton
-            aria-label="reply"
-            onClick={handleOpenCreateExclusiveContent}
-            disabled={length === 0}
-            className={styles.attachButton}>
-            <SvgIcon component={PaperClipIcon} viewBox="0 0 24 24" />
-            <Typography component="span" color="primary" variant="body1">
-              {i18n.t('Post_Comment.ExclusiveContent')}
-            </Typography>
-          </IconButton>
+          {!exclusiveContent ? (
+            <IconButton
+              onClick={handleOpenExclusiveContent}
+              disabled={length === 0}
+              className={styles.attachButton}>
+              <SvgIcon component={PaperClipIcon} viewBox="0 0 24 24" />
+              <Typography component="span" color="primary" variant="body1">
+                {i18n.t('ExclusiveContent.Attach')}
+              </Typography>
+            </IconButton>
+          ) : (
+            <IconButton
+              onClick={handleRemoveExclusiveContent}
+              disabled={length === 0}
+              className={styles.attachButton}
+              style={{color: '#f44336'}}>
+              <SvgIcon component={TrashIcon} viewBox="0 0 24 24" />
+              <Typography component="span" color="error" variant="body1">
+                {i18n.t('ExclusiveContent.Remove')}
+              </Typography>
+            </IconButton>
+          )}
+
           <IconButton aria-label="reply" onClick={onSubmit} disabled={length === 0}>
             <SvgIcon
               className={length === 0 ? styles.disabled : styles.replyIcon}
@@ -91,7 +111,11 @@ export const CommentAction: React.FC<CommentActionProps> = props => {
           </IconButton>
         </ButtonGroup>
       </CardActions>
-      <ExclusiveCreateContainer open={createExclusiveOpened} onClose={handleCloseCreateExclusive} />
+      <ExclusiveCreateContainer
+        open={openExclusiveOpened}
+        onClose={handleOpenExclusiveContent}
+        onSubmit={handleSubmitExclusiveContent}
+      />
     </>
   );
 };

@@ -13,6 +13,8 @@ import {
 
 import {EditorValue, Editor, MyOverrideByKey, MyPlatePlugin} from './Editor.interface';
 
+import {serialize} from 'components/PostCreate/formatter';
+
 /**
  * Utils
  */
@@ -36,3 +38,19 @@ export const initial: EditorValue = [
     children: [{text: ''}],
   },
 ];
+
+export const checkEditor = (editor: EditorValue) => {
+  const checker = [];
+  const value = JSON.parse(serialize(editor).text);
+  value.map((v: any) => {
+    if (v.type === 'p') {
+      checker.push(v.children[0].text !== '');
+    } else if (v.type === 'img' || v.type === 'media_embed') {
+      checker.push(v.url !== '');
+    } else if (v.type === 'ol' || v.type === 'ul') {
+      checker.push(v.children[0].children[0].children[0].text !== '');
+    }
+  });
+
+  return checker.includes(true);
+};

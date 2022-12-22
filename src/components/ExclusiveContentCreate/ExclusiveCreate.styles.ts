@@ -148,5 +148,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       columnGap: 5,
     },
+    buttonSubmit: {
+      [theme.breakpoints.down('xs')]: {
+        marginTop: 20,
+      },
+    },
   }),
 );

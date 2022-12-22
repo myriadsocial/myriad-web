@@ -663,7 +663,7 @@
       "Toaster_Success": "Laporan postingan telah terkirim"
     },
     "Load_More": "Lihat balasan lainnya",
-    "ExclusiveContent" : "Lampirkan Konten Eksklusif"
+    "ExclusiveContent" : "{{Lampirkan}} Konten Eksklusif"
   },
   "Tipping": {
     "Modal_Main": {
@@ -1210,12 +1210,15 @@
     "Custom":"Kustom"
   },
   "ExclusiveContent" : {
-    "Create" : "Buat Konten Ekslusif",
+    "Create" : "Buat Konten Eksklusif",
+    "Add" : "Tambah Konten Eksklusif",
+    "Attach" : "Lampirkan Konten Eksklusif",
+    "Remove" : "Hapus Konten Eksklusif",
     "Label" : {
-      "ExclusiveContentPrice" : "Harga Konten Ekslusif",
+      "ExclusiveContent" : "Konten Eksklusif",
+      "ExclusiveContentPrice" : "Harga Konten Eksklusif",
       "ChangeCurrency" : "Ubah Mata Uang",
-      "Fee" : "5% biaya platform akan ditambahkan ke pembayaran Anda",
-      "ToS" : "Saya setuju dengan Myriad {{ToS}} tentang konten Exclusive"
+      "Fee" : "5% biaya platform akan ditambahkan ke pembayaran Anda"
     },
     "Placeholder" : {
       "AddPrice" : "Masukan Harga"

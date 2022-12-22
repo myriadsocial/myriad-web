@@ -52,6 +52,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     option: {
       display: 'flex',
       alignItems: 'center',
+      columnGap: 4,
 
       [theme.breakpoints.down('xs')]: {
         marginLeft: 20,
@@ -93,6 +94,15 @@ export const useStyles = makeStyles((theme: Theme) =>
           right: -30,
         },
       },
+    },
+    giftIcon: {
+      width: 16,
+      marginRight: '10px !important',
+      color: '#7342CC',
+    },
+    arrowLeftIcon: {
+      width: 24,
+      color: '#7342CC',
     },
   }),
 );

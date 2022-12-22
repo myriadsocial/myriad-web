@@ -1,6 +1,8 @@
+import {ArrowLeftIcon, GiftIcon, TrashIcon} from '@heroicons/react/outline';
+
 import React, {useState} from 'react';
 
-import {Button} from '@material-ui/core';
+import {Button, IconButton, SvgIcon, Typography} from '@material-ui/core';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 
@@ -14,6 +16,7 @@ import SettingVisibility from './SettingVisibility';
 import {menuOptions} from './default';
 import {serialize} from './formatter';
 
+import ExclusiveCreate from 'components/ExclusiveContentCreate/ExclusiveCreate';
 import {Editor} from 'components/common/Editor';
 import {getEditorSelectors} from 'components/common/Editor/store';
 import ShowIf from 'src/components/common/show-if.component';
@@ -49,6 +52,9 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
 
   const [importUrl, setImport] = useState<string | undefined>();
 
+  const [showExclusive, setShowExclusive] = useState<boolean>(false);
+  const [exclusiveContent, setExclusiveContent] = useState<string | Partial<Post>>();
+
   const header: Record<PostCreateType, {title: string; subtitle: string}> = {
     create: {
       title: i18n.t('Post_Create.Title'),
@@ -77,6 +83,8 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
   };
 
   const handleSubmit = () => {
+    setShowExclusive(false);
+
     if (activeTab === 'import' && importUrl) {
       onSubmit(importUrl, {
         NSFWTag: post.NSFWTag,
@@ -104,6 +112,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
   const handleClose = () => {
     setPost(initialPost);
     setImport(undefined);
+    setShowExclusive(false);
 
     onClose();
   };
@@ -112,83 +121,147 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
     setImport(undefined);
   };
 
+  const handleExclusiveContent = (type: string) => {
+    type === 'Add' ? setShowExclusive(!showExclusive) : setExclusiveContent('');
+  };
+
+  const handleSubmitExclusiveContent = (content: string | Partial<Post>) => {
+    setExclusiveContent(content);
+    handleExclusiveContent('Add');
+  };
+
   return (
     <Modal
-      title={header[activeTab].title}
-      subtitle={header[activeTab].subtitle}
+      title={!showExclusive ? header[activeTab].title : i18n.t('ExclusiveContent.Add')}
+      subtitle={!showExclusive ? header[activeTab].subtitle : ''}
       onClose={handleClose}
       open={open}
       fullScreen={isMobile}
       maxWidth="md"
       className={styles.root}>
-      <Tabs
-        value={activeTab}
-        indicatorColor="secondary"
-        onChange={handleTabChange}
-        className={styles.tabs}>
-        <Tab label={i18n.t('Post_Create.Tab_Label')} value="create" />
-        <Tab label={i18n.t('Post_Import.Tab_Label')} value="import" />
-      </Tabs>
+      <ShowIf condition={!showExclusive}>
+        <Tabs
+          value={activeTab}
+          indicatorColor="secondary"
+          onChange={handleTabChange}
+          className={styles.tabs}>
+          <Tab label={i18n.t('Post_Create.Tab_Label')} value="create" />
+          <Tab label={i18n.t('Post_Import.Tab_Label')} value="import" />
+        </Tabs>
 
-      <TabPanel value={activeTab} index="create">
-        <Editor userId={user.id} mobile={isMobile} onSearchMention={onSearchPeople} />
-      </TabPanel>
+        <TabPanel value={activeTab} index="create">
+          <Editor userId={user.id} mobile={isMobile} onSearchMention={onSearchPeople} />
+        </TabPanel>
 
-      <TabPanel value={activeTab} index="import">
-        <PostImport value={importUrl} onChange={handlePostUrlChange} onError={handleErrorImport} />
-      </TabPanel>
-
-      <div className={styles.action}>
-        <div className={styles.option}>
-          <DropdownMenu<PostVisibility>
-            title={i18n.t('Post_Create.Visibility.Label')}
-            options={menuOptions}
-            useIconOnMobile={false}
-            onChange={handleVisibilityChange}
+        <TabPanel value={activeTab} index="import">
+          <PostImport
+            value={importUrl}
+            onChange={handlePostUrlChange}
+            onError={handleErrorImport}
           />
+        </TabPanel>
+        <div className={styles.action}>
+          <div className={styles.option}>
+            <DropdownMenu<PostVisibility>
+              title={i18n.t('Post_Create.Visibility.Label')}
+              options={menuOptions}
+              useIconOnMobile={false}
+              onChange={handleVisibilityChange}
+            />
 
-          <NSFWTags
-            maxWidth={isMobile ? 'xs' : 'md'}
-            tags={post.NSFWTag?.split(',') || []}
-            onConfirm={handleConfirmNSFWTags}
-          />
+            <NSFWTags
+              maxWidth={isMobile ? 'xs' : 'md'}
+              tags={post.NSFWTag?.split(',') || []}
+              onConfirm={handleConfirmNSFWTags}
+            />
 
-          <ShowIf condition={false}>
-            <Button color="primary" size="small" className={styles.markdown}>
-              Markdown Mode
+            <ShowIf condition={!showExclusive}>
+              {!exclusiveContent ? (
+                <>
+                  <IconButton
+                    aria-label="exclusive-content"
+                    onClick={() => handleExclusiveContent('Add')}>
+                    <SvgIcon component={GiftIcon} viewBox="0 0 24 24" className={styles.giftIcon} />
+                    <Typography
+                      component="span"
+                      color="primary"
+                      variant="body1"
+                      style={{lineHeight: 1.8}}>
+                      {i18n.t('ExclusiveContent.Add')}
+                    </Typography>
+                  </IconButton>
+                </>
+              ) : (
+                <>
+                  <IconButton
+                    aria-label="exclusive-content"
+                    onClick={() => handleExclusiveContent('Delete')}>
+                    <SvgIcon
+                      component={TrashIcon}
+                      viewBox="0 0 24 24"
+                      className={styles.giftIcon}
+                      style={{color: '#f44336'}}
+                    />
+                    <Typography
+                      component="span"
+                      variant="body1"
+                      style={{lineHeight: 1.8, color: '#f44336'}}>
+                      {i18n.t('ExclusiveContent.Remove')}
+                    </Typography>
+                  </IconButton>
+                </>
+              )}
+            </ShowIf>
+
+            <ShowIf condition={false}>
+              <Button color="primary" size="small" className={styles.markdown}>
+                Markdown Mode
+              </Button>
+            </ShowIf>
+          </div>
+          <ShowIf condition={post.visibility !== 'selected_user'}>
+            <Button
+              disabled={false}
+              variant="contained"
+              color="primary"
+              size="small"
+              fullWidth={isMobile}
+              onClick={handleSubmit}>
+              {i18n.t('Post_Create.Confirm')}
             </Button>
           </ShowIf>
         </div>
-        <ShowIf condition={post.visibility !== 'selected_user'}>
-          <Button
-            disabled={false}
-            variant="contained"
-            color="primary"
-            size="small"
-            fullWidth={isMobile}
-            onClick={handleSubmit}>
-            {i18n.t('Post_Create.Confirm')}
-          </Button>
+        <ShowIf condition={post.visibility === 'selected_user'}>
+          <SettingVisibility setPost={setPost} />
+          <div
+            style={{
+              display: 'flex',
+              width: '100%',
+              justifyContent: 'flex-end',
+            }}>
+            <Button
+              disabled={false}
+              variant="contained"
+              color="primary"
+              size="small"
+              fullWidth={isMobile}
+              onClick={handleSubmit}>
+              {i18n.t('Post_Create.Confirm')}
+            </Button>
+          </div>
         </ShowIf>
-      </div>
-      <ShowIf condition={post.visibility === 'selected_user'}>
-        <SettingVisibility setPost={setPost} />
-        <div
-          style={{
-            display: 'flex',
-            width: '100%',
-            justifyContent: 'flex-end',
-          }}>
-          <Button
-            disabled={false}
-            variant="contained"
-            color="primary"
-            size="small"
-            fullWidth={isMobile}
-            onClick={handleSubmit}>
-            {i18n.t('Post_Create.Confirm')}
-          </Button>
-        </div>
+      </ShowIf>
+
+      <ShowIf condition={showExclusive}>
+        <IconButton aria-label="exclusive-content" onClick={() => handleExclusiveContent('Add')}>
+          <SvgIcon component={ArrowLeftIcon} viewBox="0 0 24 24" className={styles.arrowLeftIcon} />
+        </IconButton>
+        <ExclusiveCreate
+          user={user}
+          onSearchPeople={onSearchPeople}
+          isMobile={isMobile}
+          onSubmit={handleSubmitExclusiveContent}
+        />
       </ShowIf>
     </Modal>
   );
