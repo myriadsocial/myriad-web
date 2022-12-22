@@ -8,12 +8,10 @@
 
 /// <reference lib="webworker" />
 
-export declare global {
-  interface ServiceWorkerGlobalScope {
-    /**
-     * Disallow accessing `CacheStorage APIs directly to ensure that all accesses go through a
-     * `NamedCacheStorage` instance (exposed by the `Adapter`).
-     */
-    caches: unknown;
-  }
+declare interface ServiceWorkerGlobalScope {
+  /**
+   * Disallow accessing `CacheStorage APIs directly to ensure that all accesses go through a
+   * `NamedCacheStorage` instance (exposed by the `Adapter`).
+   */
+  caches: unknown;
 }
