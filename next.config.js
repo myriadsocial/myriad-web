@@ -78,17 +78,18 @@ const sentryWebpackPluginOptions = {
 };
 
 const withPwaWrapper = () => {
-  if (process.env.NODE_ENV === 'test') return moduleExports;
+  return moduleExports;
+  // if (process.env.NODE_ENV === 'test') return moduleExports;
 
-  const nextPwa = require('next-pwa');
+  // const nextPwa = require('next-pwa');
 
-  const withPWA = nextPwa({
-    dest: 'public',
-    register: true,
-    skipWaiting: true,
-  });
+  // const withPWA = nextPwa({
+  //   dest: 'public',
+  //   register: true,
+  //   skipWaiting: true,
+  // });
 
-  return withPWA(moduleExports);
+  // return withPWA(moduleExports);
 };
 
 module.exports = withSentryConfig(withBundleAnalyzer(withPwaWrapper()), sentryWebpackPluginOptions);
