@@ -15,14 +15,14 @@ import Typography from '@material-ui/core/Typography';
 import {useStyles} from './CurrencyOption.style';
 
 import {Avatar, AvatarSize} from 'components/atoms/Avatar';
-import {BalanceDetail} from 'src/interfaces/balance';
+import {Currency} from 'src/interfaces/currency';
 import i18n from 'src/locale';
 
 export type CurrencyOptionProps = {
-  currentCurrency: BalanceDetail;
-  balances: BalanceDetail[];
+  currentCurrency: Currency;
+  balances: Currency[];
   isMobile?: boolean;
-  handleSelect: (BalanceDetail) => void;
+  handleSelect: (Currency) => void;
 };
 
 export const CurrencyOption: React.FC<CurrencyOptionProps> = ({

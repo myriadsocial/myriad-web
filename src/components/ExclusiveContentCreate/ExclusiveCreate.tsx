@@ -13,18 +13,18 @@ import {useStyles} from './ExclusiveCreate.styles';
 import {Editor} from 'components/common/Editor';
 import {TermOfService} from 'components/common/TermOfService';
 import {InputAmount} from 'components/common/Tipping/render/InputAmount';
-import {BalanceDetail} from 'src/interfaces/balance';
+import {Currency} from 'src/interfaces/currency';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
-import {BalanceState} from 'src/reducers/balance/reducer';
+import {ConfigState} from 'src/reducers/config/reducer';
 
 type PostCreateProps = {
   user: User;
   isMobile?: boolean;
   onSearchPeople: (query: string) => void;
-  onSubmit: (
+  onSubmit?: (
     post: Partial<Post> | string,
     attributes?: Pick<Post, 'NSFWTag' | 'visibility'>,
   ) => void;
@@ -35,15 +35,15 @@ const INITIAL_AMOUNT = new BN(-1);
 export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
   const {user, isMobile, onSearchPeople} = props;
   const styles = useStyles();
-  const [currency, setCurrency] = useState<BalanceDetail>();
+  const [currency, setCurrency] = useState<Currency>();
   const [amount, setAmount] = useState<BN>(INITIAL_AMOUNT);
   const [agreementChecked, setAgreementChecked] = useState<boolean>(false);
 
-  const {balanceDetails: balances} = useSelector<RootState, BalanceState>(
-    state => state.balanceState,
+  const {availableCurrencies: balances} = useSelector<RootState, ConfigState>(
+    state => state.configState,
   );
 
-  const handleSelectCurrency = (currency: BalanceDetail) => {
+  const handleSelectCurrency = (currency: Currency) => {
     setCurrency(currency);
   };
 
@@ -85,15 +85,16 @@ export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
       </div>
       <div
         style={{
-          display: 'flex',
+          display: isMobile ? 'relative' : 'flex',
           width: '100%',
           justifyContent: 'space-between',
         }}>
         <TermOfService
-          about={i18n.t('Tipping.Modal_Main.About')}
+          about={i18n.t('ExclusiveContent.Label.ExclusiveContent')}
           onChange={handleChangeAgreement}
         />
         <Button
+          className={styles.buttonSubmit}
           disabled={isDisabledButton}
           variant="contained"
           color="primary"
