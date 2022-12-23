@@ -4,7 +4,7 @@
       "Confirmation_Unsub": {
         "Title": "Unsubscribe?",
         "Desc_1": "Do you want to unsubscribe?",
-        "Desc_2": "You won't see more post from this timeline",
+        "Desc_2": "Unsubscribing will remove {{experience_name}} from your Timeline list.",
         "Btn": "Unsubscribe"
       },
       "Max_Exp": "You can only add up to 10 timelines max"
@@ -22,13 +22,13 @@
       "Copy": "Timeline link copied to clipboard!",
       "Prompt_Delete": {
         "Title": "Delete Timeline?",
-        "Desc": "Are you sure you want to delete this Timeline? You can't undo this in the future.",
-        "Btn_Yes": "Yes, proceed to delete"
+        "Desc": "Are you sure you want to delete this Timeline? You will not be able to undo this.",
+        "Btn_Yes": "Yes, Delete"
       },
       "Prompt_Unsub": {
         "Title": "Unsubscribe?",
         "Desc_1": "Do you want to unsubscribe?",
-        "Desc_2": "You won't see more post from this Timeline",
+        "Desc_2": "Unsubscribing will remove {{experience_name}} from your Timeline list.",
         "Btn_Yes": "Unsubscribe"
       },
       "You": "(you)",
@@ -47,7 +47,7 @@
       },
       "Empty": {
         "Text_1": "Uh-oh!",
-        "Text_2": "You haven't created any timeline yet. Timeline allows you to customize various tags and people to be shown in your feed.",
+        "Text_2": "You haven't created any Timeline yet. Timelines are collections of people, posts, and hashtags, that help you keep your content tidy.",
         "Btn_Create": "Create Timeline"
       }
     },
@@ -65,15 +65,15 @@
         "Author": "Author",
         "Tags": {
           "Title": "Tags",
-          "Sub_Included": "Included tag",
-          "Sub_Excluded": "Excluded tag"
+          "Sub_Included": "Included tags",
+          "Sub_Excluded": "Excluded tags"
         },
         "People": "People",
         "Post": "Post",
         "Privacy" : "Privacy"
       },
       "Post": {
-        "Empty": "Added posts will appear here. You can add a post to Timeline by select 'add post to Timeline' on more option."
+        "Empty": "Added posts will appear here. You can add a post to your Timelines by selecting 'add post to Timeline' (three dots menu on the top right of each post)."
       }
     },
     "Create": {
@@ -81,7 +81,7 @@
     },
     "Editor": {
       "Header": "Set up your customizable timeline",
-      "Sub_Header": "Fill the timeline detail to create timeline.",
+      "Sub_Header": "Fill-in the blank, save, and enjoy your new Timeline.",
       "Title": {
         "Clone": "Clone Timeline",
         "Create": "Create Timeline",
@@ -95,14 +95,14 @@
       "Label_3": "People",
       "Label_4": "Privacy",
       "Label_5": "Custom People",
-      "Placeholder_1": "topic you want to follow",
-      "Placeholder_2": "topic you want to exclude",
+      "Placeholder_1": "topics you want to follow",
+      "Placeholder_2": "topics you want to exclude",
       "Placeholder_3": "Search people here",
       "Placeholder_4": "Select Type of Privacy",
       "Placeholder_5": "Custom People Who Can View",
       "Post": {
         "Title": "Post",
-        "Desc": "Added posts will appear here. You can add a post to timeline by select 'add post to timeline' on more option."
+        "Desc": "Manually added posts will appear here. You can manually add a post to an Timeline by selecting 'add post to Timeline' on the top-right menu of each post."
       },
       "Btn": {
         "Clone": "Clone",
@@ -113,7 +113,7 @@
         "Remove": "Remove from timeline"
       },
       "Helper": {
-        "Name": "Must between 1-50 character",
+        "Name": "Must be between 1-50 character",
         "Image": "Required",
         "Tag": "Add at least one tag",
         "People": "Add at least one people"
@@ -123,14 +123,14 @@
         "OnlyMe" : "Only Me",
         "Custom" : "Custom"
       }
-      
+
     },
     "Modal_Add_Post": {
       "Title": "Select timeline",
       "Subtitle_1": "Add post to timeline below. You",
-      "Subtitle_2": "can unselect it to remove from timeline",
+      "Subtitle_2": "can unselect it to remove it from Timeline",
       "Tooltip": "Timeline",
-      "Tooltip_Text": "Some posts will not be visible to other users due to visibility restrictions by their owners.",
+      "Tooltip_Text": "Some posts will not be visible to other users due to visibility restrictions from their owners.",
       "Select_All": "Select all",
       "Card_Own": "(you)",
       "Empty_Title": "Uh-oh",
@@ -152,23 +152,23 @@
     "Title": "Are you sure?"
   },
   "Mobile": {
-    "title": "We are trully sorry",
-    "subtitle": "Sign in on mobile is not available yet",
-    "subtitle_2": "To access Myriad, you need to view in dekstop mode and install",
-    "subtitle_3": "Sign in on mobile is not available yet. To access Myriad, you need to use desktop browser and install Polakdot.js",
+    "title": "We are truly sorry",
+    "subtitle": "Sign-in on mobile is not available yet",
+    "subtitle_2": "To access Myriad, you need to view in desktop mode and install",
+    "subtitle_3": "Sign-in on mobile is not available yet. To access Myriad, you need to use desktop browser and install Polakdot.js",
     "button_label": "Visit Myriad Social",
     "button_label_sign_in": "Try demo version",
     "Alert_Connect": {
       "Title": "Connect your Social Media!",
       "Subtitle": "Get rewards by connecting your Twitter or Reddit account."
     },
-    "Polkadot_Alert": "Polkadot available for desktop only"
+    "Polkadot_Alert": "Polkadot is currently only available for desktop browsers."
   },
   "Login": {
-    "Description": "A social platform that’s entirely under your control. Remain anonymous, look for your own topics, choose your interface and control what you see.",
+    "Description": "A social platform that’s entirely under your control. Remain anonymous, look for your own topics, control what you see.",
     "Alert": {
       "Title": "Login failed",
-      "Message": "Something wrong when try to loggedin.",
+      "Message": "Something wrong when trying to log-in",
       "Invalid_OTP": "Your sign in link is invalid. Please try again."
     },
     "Layout": {
@@ -211,8 +211,8 @@
       "Connect": "Connect",
       "Prompt_Extension": {
         "Title": "Extension Not Found",
-        "Subtitle_1": "Kindly check if you have",
-        "Subtitle_2": "installed on your browser"
+        "Subtitle_1": "Kindly check if you have ",
+        "Subtitle_2": "Polkadot.js"
       },
       "Prompt_Account": {
         "Title": "Account Not Found",
@@ -246,7 +246,7 @@
       "Btn_Register": "Register",
       "Prompt": {
         "Title": "Create a new account",
-        "Subtitle": "You will create a new account. Please make sure you don't have a Myriad account before. You can connect other wallet in the manage tab.",
+        "Subtitle": "You will create a new account, not related to any previously existing Myriad account. You can connect other wallets from the 'manage' tab.",
         "Btn_No": "Cancel",
         "Btn_Yes": "Confirm"
       }
@@ -282,7 +282,7 @@
     "Block": {
       "User": {
         "Title": "You have blocked this user",
-        "Subtitle": "You can’t see their posts or send them a friend request. Go to setting to manage your block list."
+        "Subtitle": "You will not see them or their content anymore. Go to setting to manage your block list."
       },
       "Other": {
         "Title": "Sorry, you have been blocked by this user",
@@ -336,7 +336,7 @@
     },
     "Banned": {
       "Title": "Account banned",
-      "Description": "This account has been banned by Myriad due to violating our <policy>Privacy Policy</policy>."
+      "Description": "This account has been banned for breaking our community rule. "
     },
     "Edit": {
       "Title": "Edit Profile",
@@ -456,7 +456,7 @@
     "Embed_Link": "Embed Link",
     "Embed_Link_PLaceholder": "Copy and paste this code into your website or blog",
     "Copy_URL_Message": "Link copied!",
-    "Confirmation_Message": "This post is successfully shared to your timeline"
+    "Confirmation_Message": "This post was successfully shared to your Timeline"
   },
   "Post_Detail": {
     "Imported_Post": "Imported",
@@ -597,7 +597,7 @@
     "Importer_List_Subtitle": "users imported this post",
     "Post_Preview": "Post Preview",
     "Validation_Message": {
-      "unsupported": "Currently we can only import post from reddit and twitter",
+      "unsupported": "Currently, you can only import post from Reddit and Twitter",
       "invalid": "Sorry, You can not import this post because the link is invalid"
     }
   },
@@ -640,8 +640,8 @@
     "Send_Tip": "Send tip",
     "Confirm_Delete": {
       "Title": "Delete Comment",
-      "Description": "Are you sure to remove this comment?",
-      "Confirm_Text": "Yes, proceed to delete",
+      "Description": "Are you sure you want to remove this comment?",
+      "Confirm_Text": "Yes, remove it",
       "Cancel_Text": "No, let me rethink"
     },
     "Private_Account": "[This comment is from a private account]",
@@ -801,14 +801,14 @@
   },
   "Maintenance": {
     "Title_Head": "{{appname}} - Maintenance",
-    "Title": "Under maintenance",
+    "Title": "Shucks, there's no one here!",
     "Subtitle": "Our website is currently under maintenance, please comeback later.",
     "Btn_Web": "Myriad web"
   },
   "404": {
     "Title": "Whoops! You've moved so fast and you got lost",
     "Subtitle": "The page you are looking for is not found 😢. Please check the URL or maybe this page was deleted or might never exist.",
-    "Btn_Back": "Back to home"
+    "Btn_Back": "Back home"
   },
   "Notification": {
     "Title": "{{appname}} - Notification",
@@ -833,7 +833,7 @@
       "Comment_Mention": "Mentioned you in a comment",
       "User_Tip": "You received tip from {{name}} ({{amount}})",
       "Post_Tip": "Your post received tip from {{name}} ({{amount}})",
-      "Comment_Tip": "Your reply received tip from {{name}} ({{amount}})",
+      "Comment_Tip": "Your comment received tip from {{name}} ({{amount}})",
       "Report": {
         "Approved": "Report has been approved",
         "Removed": "Post has been removed"
@@ -844,10 +844,10 @@
       },
       "User_Banned": {
         "Other": "{{name}} account has been banned by admin based on your report",
-        "User": "You have been banned due to breaking our community rule"
+        "User": "You have been banned for breaking our community rule"
       },
       "Connect_Socmed": "Your {{platform}} account @{{username}} successfully connected to Myriad",
-      "Disconnect_Socmed": "Your {{platform}} account @{{username}} successfully disconnected from Myriad by @{{user}}"
+      "Disconnect_Socmed": "Your {{platform}} account @{{username}} successfully disconnected from @{{user}} Myriad account."
     },
     "Footer": {
       "View": "View all notifications"
@@ -927,7 +927,7 @@
       "Blocked_Title": "Blocked User Settings",
       "Blocked_Subtitle": "Manage your blocked list",
       "Blocked_Setting": {
-        "Description": "When you blocked someone, that person won't be able to view your profile and post, add you as a friend, tag you or message you and you won't see post or notification from them.",
+        "Description": "People you block won't be able to view your profile and post, add you as a friend, tag you or message you and you won't see post or notification from them.",
         "Empty_Block": "You haven't blocked anyone yet"
       },
       "Language_Title": "Language Settings",
@@ -974,7 +974,7 @@
       "Text_1": "Fill in your {{platform}} account URL",
       "Text_2": {
         "Reddit": "Copy the text below and post it on your Reddit profile. Do not post the text on a Subreddit.",
-        "Other": "Copy text below and post it on your timeline. Make sure your account is not protected."
+        "Other": "Copy the text below and post it on your Timeline. Make sure your account is not protected."
       },
       "Msg": "I'm part of the @myriad_social {{address}}\n\n{{url}}",
       "Text_3": "Verify your {{platform}} account, repeat step 2 if it’s not verified",
@@ -997,7 +997,7 @@
   "Wallet": {
     "Title": "{{appname}} - Wallet",
     "Header": "Wallet",
-    "Anonymous": "Please Login to access this feature",
+    "Anonymous": "Please Log-in to access this feature",
     "Tab": {
       "Balance": "Balance",
       "History": "History",
@@ -1009,7 +1009,7 @@
       "Hide_0": "Hide 0 balance",
       "Search_Empty": {
         "Title": "No results",
-        "Subtitle": "Please make sure your keywords match with current network you were in."
+        "Subtitle": "Please make sure your keywords match with the the network of your current wallet."
       },
       "Sort": "Sort",
       "Sort_Opt": {
@@ -1062,11 +1062,11 @@
     "Tip": {
       "Alert": {
         "Insufficient": "Insufficient balance",
-        "Success": "Tips will be add to your wallet shortly."
+        "Success": "Tips will be sent to your wallet shortly."
       },
       "Empty": {
-        "Title": "You have no tip",
-        "Subtitle": "Start to make a post to get tips from other users."
+        "Title": "Oof. Your tipping jar is empty. ",
+        "Subtitle": "Start posting or importing social media content, tips are coming your way!"
       },
       "Claim_All": "Claim all",
       "Claim": "Claim",
@@ -1079,7 +1079,7 @@
       },
       "Total_Tip": {
         "Title": "Total Tips",
-        "Subtitle": "You can claim all this tips after verified your reference."
+        "Subtitle": "You can claim those tips after verifying your reference."
       }
     },
     "Manage": {
@@ -1100,7 +1100,7 @@
             "Btn_Dismiss": "Dismiss"
           }
         },
-        "ErrorConnect": "The wallet account connected with another account!",
+        "ErrorConnect": "This wallet is connected to another account.",
         "ErrorDisconnect": "The wallet account is failed to disconnect!"
       },
       "Btn_Connect": "Connect",
@@ -1148,7 +1148,7 @@
     },
     "Error_File_Large": "File is larger than {{maxSize}}Mb",
     "Video": {
-      "Not_Preview": "We cannot preview your video, preview video can be done after you confirm it.",
+      "Not_Preview": "Video preview will be available after you confirm its upload.",
       "Not_Support": "Video encoding not supported."
     }
   },

@@ -140,6 +140,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
       title: i18n.t('Experience.Alert.Confirmation_Unsub.Title'),
       description: `${i18n.t('Experience.Alert.Confirmation_Unsub.Desc_1')}\n ${i18n.t(
         'Experience.Alert.Confirmation_Unsub.Desc_2',
+        {experience_name: experience.name},
       )}`,
       confirmationText: i18n.t('Experience.Alert.Confirmation_Unsub.Btn'),
       onConfirm: () => {

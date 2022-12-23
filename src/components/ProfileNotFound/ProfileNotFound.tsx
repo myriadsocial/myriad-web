@@ -33,7 +33,7 @@ export const ProfileNotFound: React.FC = () => {
           This user might be blocked or banned from our system
         </Typography>
         <Button onClick={goHome} variant="contained" color="primary" size="medium">
-          Back to Home
+          Back Home
         </Button>
       </div>
     </div>
