@@ -1,9 +1,11 @@
+import {GiftIcon} from '@heroicons/react/outline';
+
 import React, {useCallback} from 'react';
 
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 
-import {SvgIcon, Typography, useMediaQuery, useTheme} from '@material-ui/core';
+import {Button, SvgIcon, Typography, useMediaQuery, useTheme} from '@material-ui/core';
 
 import {PostDetailProps} from './PostDetail.interface';
 import {useStyles} from './PostDetail.styles';
@@ -112,6 +114,15 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           <ShowIf condition={['reddit'].includes(post.platform)}>
             <Reddit title={post.title} text={post.text} onHashtagClicked={handleHashtagClicked} />
           </ShowIf>
+
+          {post.asset?.exclusiveContents && post.asset?.exclusiveContents.length > 0 && (
+            <Button
+              className={styles.buttonExclusive}
+              variant="contained"
+              startIcon={<SvgIcon component={GiftIcon} viewBox="0 0 24 24" />}>
+              {i18n.t('ExclusiveContent.Available')}
+            </Button>
+          )}
 
           {post.asset?.images && post.asset?.images.length > 0 && (
             <Gallery images={post.asset?.images} variant="vertical" />

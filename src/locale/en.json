@@ -1218,6 +1218,7 @@
     "Add" : "Add Exclusive Content",
     "Attach" : "Attach Exclusive Content",
     "Remove" : "Remove Exclusive Content",
+    "Available" : "Exclusive content available to unlock",
     "Label" : {
       "Attach" : "Attach",
       "ExclusiveContent" : "Exclusive Content",

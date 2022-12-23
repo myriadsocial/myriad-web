@@ -1,6 +1,10 @@
 import {ArrowLeftIcon, GiftIcon, TrashIcon} from '@heroicons/react/outline';
 
 import React, {useState} from 'react';
+import {useDispatch} from 'react-redux';
+
+import getConfig from 'next/config';
+import {useRouter} from 'next/router';
 
 import {Button, IconButton, SvgIcon, Typography} from '@material-ui/core';
 import Tab from '@material-ui/core/Tab';
@@ -17,12 +21,15 @@ import {menuOptions} from './default';
 import {serialize} from './formatter';
 
 import ExclusiveCreate from 'components/ExclusiveContentCreate/ExclusiveCreate';
+import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import {Editor} from 'components/common/Editor';
 import {getEditorSelectors} from 'components/common/Editor/store';
 import ShowIf from 'src/components/common/show-if.component';
+import {ExclusiveContentPost} from 'src/interfaces/exclusive';
 import {Post, PostVisibility} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
+import {createExclusiveContent} from 'src/reducers/timeline/actions';
 
 type PostCreateProps = {
   user: User;
@@ -45,6 +52,10 @@ const initialPost = {
 
 export const PostCreate: React.FC<PostCreateProps> = props => {
   const {open, user, isMobile, onClose, onSubmit, onSearchPeople} = props;
+  const dispatch = useDispatch();
+  const confirm = useConfirm();
+  const router = useRouter();
+  const {serverRuntimeConfig} = getConfig();
   const styles = useStyles();
 
   const [activeTab, setActiveTab] = useState<PostCreateType>('create');
@@ -53,7 +64,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
   const [importUrl, setImport] = useState<string | undefined>();
 
   const [showExclusive, setShowExclusive] = useState<boolean>(false);
-  const [exclusiveContent, setExclusiveContent] = useState<string | Partial<Post>>();
+  const [exclusiveContent, setExclusiveContent] = useState<ExclusiveContentPost | null>(null);
 
   const header: Record<PostCreateType, {title: string; subtitle: string}> = {
     create: {
@@ -100,12 +111,47 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
 
       const attributes = serialize(value);
 
-      onSubmit({
-        ...attributes,
-        selectedUserIds: post.selectedUserIds,
-        NSFWTag: post.NSFWTag,
-        visibility: post.visibility ?? PostVisibility.PUBLIC,
-      });
+      if (exclusiveContent) {
+        dispatch(
+          createExclusiveContent(
+            exclusiveContent,
+            [],
+            resp => {
+              onSubmit({
+                ...attributes,
+                asset: {
+                  exclusiveContents: [`${serverRuntimeConfig.myriadAPIURL}/${resp?.id}`],
+                },
+                selectedUserIds: post.selectedUserIds,
+                NSFWTag: post.NSFWTag,
+                visibility: post.visibility ?? PostVisibility.PUBLIC,
+              });
+            },
+            () => {
+              confirm({
+                title: i18n.t('LiteVersion.LimitTitlePost', {count: 0}),
+                description: i18n.t('LiteVersion.LimitDescPost'),
+                icon: 'warning',
+                confirmationText: i18n.t('LiteVersion.ConnectWallet'),
+                cancellationText: i18n.t('LiteVersion.MaybeLater'),
+                onConfirm: () => {
+                  router.push({pathname: '/wallet', query: {type: 'manage'}});
+                },
+                onCancel: () => {
+                  undefined;
+                },
+              });
+            },
+          ),
+        );
+      } else {
+        onSubmit({
+          ...attributes,
+          selectedUserIds: post.selectedUserIds,
+          NSFWTag: post.NSFWTag,
+          visibility: post.visibility ?? PostVisibility.PUBLIC,
+        });
+      }
     }
   };
 
@@ -122,10 +168,10 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
   };
 
   const handleExclusiveContent = (type: string) => {
-    type === 'Add' ? setShowExclusive(!showExclusive) : setExclusiveContent('');
+    type === 'Add' ? setShowExclusive(!showExclusive) : setExclusiveContent(null);
   };
 
-  const handleSubmitExclusiveContent = (content: string | Partial<Post>) => {
+  const handleSubmitExclusiveContent = (content: ExclusiveContentPost) => {
     setExclusiveContent(content);
     handleExclusiveContent('Add');
   };
@@ -175,7 +221,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
               onConfirm={handleConfirmNSFWTags}
             />
 
-            <ShowIf condition={!showExclusive}>
+            <ShowIf condition={!showExclusive && activeTab === 'create'}>
               {!exclusiveContent ? (
                 <>
                   <IconButton

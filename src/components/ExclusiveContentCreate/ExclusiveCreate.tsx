@@ -5,16 +5,15 @@ import {useSelector} from 'react-redux';
 
 import {Button, SvgIcon, Typography} from '@material-ui/core';
 
-import {BN, BN_ZERO} from '@polkadot/util';
-
 import CurrencyOption from './CurrencyOption';
 import {useStyles} from './ExclusiveCreate.styles';
+import {InputAmount} from './InputAmount';
 
 import {serialize} from 'components/PostCreate/formatter';
 import {checkEditor, Editor, getEditorSelectors} from 'components/common/Editor';
 import {TermOfService} from 'components/common/TermOfService';
-import {InputAmount} from 'components/common/Tipping/render/InputAmount';
 import {Currency} from 'src/interfaces/currency';
+import {ExclusiveContentPost} from 'src/interfaces/exclusive';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
@@ -26,18 +25,16 @@ type PostCreateProps = {
   isMobile?: boolean;
   onSearchPeople: (query: string) => void;
   onSubmit?: (
-    post: Partial<Post> | string,
+    post: ExclusiveContentPost,
     attributes?: Pick<Post, 'NSFWTag' | 'visibility'>,
   ) => void;
 };
-
-const INITIAL_AMOUNT = new BN(-1);
 
 export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
   const {user, isMobile, onSearchPeople, onSubmit} = props;
   const styles = useStyles();
   const [currency, setCurrency] = useState<Currency>();
-  const [amount, setAmount] = useState<BN>(INITIAL_AMOUNT);
+  const [amount, setAmount] = useState<string>('');
   const [agreementChecked, setAgreementChecked] = useState<boolean>(false);
   const [isDisabledButton, setIsDisabledButton] = useState<boolean>(true);
   const [isErrorEditor, setIsErrorEditor] = useState<boolean>(false);
@@ -63,7 +60,17 @@ export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
       const attributes = serialize(value);
 
       onSubmit({
-        ...attributes,
+        content: {
+          text: attributes.text,
+          rawText: attributes.rawText,
+        },
+
+        contentPrices: [
+          {
+            currencyId: currency.id,
+            amount: Number(amount),
+          },
+        ],
       });
     } else {
       setIsErrorEditor(true);
@@ -71,7 +78,7 @@ export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
   };
 
   useEffect(() => {
-    if (agreementChecked && currency && !amount.lte(BN_ZERO)) setIsDisabledButton(false);
+    if (agreementChecked && currency && amount !== '') setIsDisabledButton(false);
     else setIsDisabledButton(true);
   }, [agreementChecked, currency, amount]);
 
@@ -89,11 +96,7 @@ export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
         <div style={{width: 'calc(100% - 152px)'}}>
           <InputAmount
             type="exclusive"
-            defaultValue={amount}
             placeholder={i18n.t('ExclusiveContent.Label.ExclusiveContentPrice')}
-            decimal={currency?.decimal}
-            length={10}
-            currencyId={currency?.symbol}
             onChange={setAmount}
           />
           <Typography className={styles.usd}>1 USDT = 1 USD</Typography>
