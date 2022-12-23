@@ -1,3 +1,5 @@
+import * as Sentry from '@sentry/nextjs';
+
 import React from 'react';
 
 import {Session} from 'next-auth';
@@ -7,7 +9,9 @@ import Head from 'next/head';
 
 import {ExperienceEditContainer} from 'src/components/ExperiencePreview/ExperienceEdit.container';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
+import {User} from 'src/interfaces/user';
 import {initialize} from 'src/lib/api/base';
+import * as ExperienceAPI from 'src/lib/api/experience';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import {getServer} from 'src/lib/api/server';
 import i18n from 'src/locale';
@@ -44,7 +48,8 @@ const EditExperience: React.FC<EditExperiencePageProps> = props => {
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
-  const {req} = context;
+  const {params, req} = context;
+  const experienceId = params?.experienceId as string;
 
   const dispatch = store.dispatch as ThunkDispatchAction;
 
@@ -92,14 +97,30 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   await dispatch(fetchNetwork());
   await dispatch(fetchExchangeRates());
-  const data = await getServer();
 
-  return {
-    props: {
-      session,
-      logo: data.images.logo_banner,
-    },
-  };
+  try {
+    const experience = await ExperienceAPI.getExperienceDetail(experienceId);
+    const data = await getServer();
+    const user = (await dispatch(fetchUser())) as unknown as User;
+
+    if (experience?.createdBy !== user?.id)
+      return {
+        notFound: true,
+      };
+
+    return {
+      props: {
+        session,
+        logo: data.images.logo_banner,
+      },
+    };
+  } catch (error) {
+    Sentry.captureException(error);
+
+    return {
+      notFound: true,
+    };
+  }
 });
 
 export default EditExperience;
