@@ -1219,6 +1219,7 @@
     "Attach" : "Attach Exclusive Content",
     "Remove" : "Remove Exclusive Content",
     "Label" : {
+      "Attach" : "Attach",
       "ExclusiveContent" : "Exclusive Content",
       "ExclusiveContentPrice" : "Exclusive Content Price",
       "ChangeCurrency" : "Change Currency",

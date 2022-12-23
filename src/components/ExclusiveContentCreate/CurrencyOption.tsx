@@ -43,6 +43,10 @@ export const CurrencyOption: React.FC<CurrencyOptionProps> = ({
     setAnchorEl(null);
   };
 
+  const filterCurrency = balances.filter(balance => {
+    if (balance.networkId === 'myriad' || balance.networkId === 'debio') return balance;
+  });
+
   return (
     <>
       <Button
@@ -78,7 +82,7 @@ export const CurrencyOption: React.FC<CurrencyOptionProps> = ({
         transformOrigin={{vertical: 'top', horizontal: 'left'}}
         open={Boolean(anchorEl)}
         onClose={handleClose}>
-        {balances.map(balance => (
+        {filterCurrency.map(balance => (
           <MenuItem
             key={balance.id}
             onClick={() => {

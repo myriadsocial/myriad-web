@@ -126,7 +126,7 @@ export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
           size="small"
           fullWidth={isMobile}
           onClick={handleSubmit}>
-          {i18n.t('Post_Create.Confirm')}
+          {i18n.t('ExclusiveContent.Label.Attach')}
         </Button>
       </div>
     </>

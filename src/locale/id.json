@@ -1215,6 +1215,7 @@
     "Attach" : "Lampirkan Konten Eksklusif",
     "Remove" : "Hapus Konten Eksklusif",
     "Label" : {
+      "Attach" : "Lampirkan",
       "ExclusiveContent" : "Konten Eksklusif",
       "ExclusiveContentPrice" : "Harga Konten Eksklusif",
       "ChangeCurrency" : "Ubah Mata Uang",
