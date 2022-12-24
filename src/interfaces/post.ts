@@ -27,6 +27,7 @@ export interface TipsReceived {
 export type PostAsset = {
   images: string[] | Sizes[];
   videos: string[];
+  exclusiveContents?: string[];
 };
 
 export type PostMetric = {

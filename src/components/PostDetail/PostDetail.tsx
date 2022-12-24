@@ -48,6 +48,11 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   const isOriginOwner = post?.people?.userSocialMedia?.userId === user?.id;
   const showTipButton = (isInternalPost && !isPostCreator) || (isExternalPost && !isOriginOwner);
   const isPostOwner = isInternalPost ? isPostCreator : isOriginOwner;
+  const showEmbedded =
+    post?.asset?.images?.length === 0 &&
+    post?.asset?.videos?.length === 0 &&
+    post.embeddedURL &&
+    post.deletedAt;
 
   const handleHashtagClicked = useCallback((hashtag: string) => {
     router.push(`/topic/hashtag?tag=${hashtag.replace('#', '')}`, undefined, {
@@ -116,10 +121,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
             <Video url={post.asset.videos[0]} height={308} width={560} />
           )}
 
-          {post.asset?.images.length === 0 &&
-            post.asset.videos.length === 0 &&
-            post.embeddedURL &&
-            !post.deletedAt && <LinkPreview embed={post.embeddedURL} />}
+          {showEmbedded && <LinkPreview embed={post.embeddedURL} />}
         </ShowIf>
       </div>
 
