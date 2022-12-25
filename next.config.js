@@ -44,6 +44,7 @@ const moduleExports = {
     firebaseAppId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
     firebaseMeasurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
     nearTippingContractId: process.env.NEAR_TIPPING_CONTRACT_ID ?? 'myriadcore.testnet',
+    myriadAPIURL: process.env.MYRIAD_API_URL ?? 'http://localhost:3001',
   },
   sentry: {
     disableServerWebpackPlugin: true,

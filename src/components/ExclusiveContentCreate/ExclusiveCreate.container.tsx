@@ -9,6 +9,7 @@ import {useTheme} from '@material-ui/core/styles';
 import {useStyles} from './ExclusiveCreate.styles';
 
 import {Modal} from 'components/atoms/Modal';
+import {ExclusiveContentPost} from 'src/interfaces/exclusive';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
@@ -19,7 +20,7 @@ type PostCreateContainerType = {
   open: boolean;
   onClose: () => void;
   onSubmit?: (
-    post: Partial<Post> | string,
+    post: ExclusiveContentPost,
     attributes?: Pick<Post, 'NSFWTag' | 'visibility'>,
   ) => void;
 };

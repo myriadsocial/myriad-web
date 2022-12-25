@@ -4,7 +4,7 @@ import {PaperAirplaneIcon} from '@heroicons/react/outline';
 import {EmojiHappyIcon} from '@heroicons/react/outline';
 import {PaperClipIcon} from '@heroicons/react/outline';
 
-import React, {useState} from 'react';
+import React from 'react';
 
 import {
   ButtonGroup,
@@ -17,44 +17,38 @@ import {
 
 import {useStyles} from './CommentEditor.style';
 
-import ExclusiveCreateContainer from 'components/ExclusiveContentCreate/ExclusiveCreate.container';
 import {useEditorState} from 'components/common/Editor';
 import {EmojiPickerToolbarButton} from 'components/common/Editor/render/Toolbar/Button';
 import {formatToString} from 'components/common/NodeViewer/formatter';
 import ShowIf from 'components/common/show-if.component';
-import {Post} from 'src/interfaces/post';
+import {ExclusiveContentPost} from 'src/interfaces/exclusive';
 import i18n from 'src/locale';
 
 type CommentActionProps = {
   mobile?: boolean;
   expand: boolean;
   onSubmit: () => void;
+  exclusiveContent?: ExclusiveContentPost;
+  handleRemoveExclusiveContent: () => void;
+  handleOpenExclusiveContent: () => void;
 };
 
 export const CommentAction: React.FC<CommentActionProps> = props => {
-  const {expand, mobile, onSubmit} = props;
-  const [openExclusiveOpened, setOpenExclusiveOpened] = useState(false);
-  const [exclusiveContent, setExclusiveContent] = useState<string | Partial<Post>>();
+  const {
+    expand,
+    mobile,
+    onSubmit,
+    exclusiveContent,
+    handleRemoveExclusiveContent,
+    handleOpenExclusiveContent,
+  } = props;
 
   const styles = useStyles({mobile: false});
   const editor = useEditorState();
 
   const length = editor.children.map(element => formatToString(element)).join(' ').length;
 
-  const handleOpenExclusiveContent = () => {
-    setOpenExclusiveOpened(!openExclusiveOpened);
-  };
-
   if (!expand && length === 0) return null;
-
-  const handleSubmitExclusiveContent = (content: string | Partial<Post>) => {
-    setExclusiveContent(content);
-    handleOpenExclusiveContent();
-  };
-
-  const handleRemoveExclusiveContent = () => {
-    setExclusiveContent('');
-  };
 
   return (
     <>
@@ -111,11 +105,6 @@ export const CommentAction: React.FC<CommentActionProps> = props => {
           </IconButton>
         </ButtonGroup>
       </CardActions>
-      <ExclusiveCreateContainer
-        open={openExclusiveOpened}
-        onClose={handleOpenExclusiveContent}
-        onSubmit={handleSubmitExclusiveContent}
-      />
     </>
   );
 };

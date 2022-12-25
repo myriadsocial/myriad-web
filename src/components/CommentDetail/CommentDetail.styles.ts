@@ -77,5 +77,22 @@ export const useStyles = makeStyles<Theme, CommentDetailProps>(theme =>
         display: 'none',
       },
     },
+    buttonExclusive: {
+      padding: 10,
+      borderRadius: 4,
+      backgroundColor: '#6E3FC3',
+      color: '#FFF',
+      width: 'max-content',
+      marginTop: 20,
+      marginBottom: 10,
+      fontSize: 12,
+      height: 30,
+      [theme.breakpoints.down('xs')]: {
+        width: '100%',
+      },
+    },
+    giftIcon: {
+      width: 16,
+    },
   }),
 );

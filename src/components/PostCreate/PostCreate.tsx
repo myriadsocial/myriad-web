@@ -55,7 +55,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
   const dispatch = useDispatch();
   const confirm = useConfirm();
   const router = useRouter();
-  const {serverRuntimeConfig} = getConfig();
+  const {publicRuntimeConfig} = getConfig();
   const styles = useStyles();
 
   const [activeTab, setActiveTab] = useState<PostCreateType>('create');
@@ -120,7 +120,9 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
               onSubmit({
                 ...attributes,
                 asset: {
-                  exclusiveContents: [`${serverRuntimeConfig.myriadAPIURL}/${resp?.id}`],
+                  exclusiveContents: [
+                    `${publicRuntimeConfig.myriadAPIURL}/user/unlockable-contents/${resp?.id}`,
+                  ],
                 },
                 selectedUserIds: post.selectedUserIds,
                 NSFWTag: post.NSFWTag,
