@@ -14,10 +14,11 @@ type InputAmountProps = Omit<InputProps, 'onChange'> & {
   type?: string;
   onChange?: (value: string, valid: boolean) => void;
   placeholder: string;
+  decimal: number;
 };
 
 export const InputAmount: React.FC<InputAmountProps> = props => {
-  const {type = 'common', onChange, placeholder} = props;
+  const {type = 'common', onChange, placeholder, decimal} = props;
 
   const styles = useStyles();
 
@@ -57,7 +58,7 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
   };
 
   const validateInput = (amount: string): [string, boolean, string?] => {
-    const value = toBigNumber(amount, 1);
+    const value = toBigNumber(amount, decimal);
 
     if (value.lte(BN_ZERO)) {
       return [amount, false, i18n.t('Tipping.Modal_Main.Error_Digit')];

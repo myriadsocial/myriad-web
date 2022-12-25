@@ -98,6 +98,7 @@ export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
             type="exclusive"
             placeholder={i18n.t('ExclusiveContent.Label.ExclusiveContentPrice')}
             onChange={setAmount}
+            decimal={currency?.decimal}
           />
           <Typography className={styles.usd}>1 USDT = 1 USD</Typography>
         </div>
