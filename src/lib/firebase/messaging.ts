@@ -36,6 +36,7 @@ export const init = async (
               registration.showNotification(title, {
                 body,
                 icon: appUrl + '/images/logo.jpg',
+                data: {appUrl},
               });
             });
 

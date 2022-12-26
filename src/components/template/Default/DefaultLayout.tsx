@@ -10,7 +10,6 @@ import {Container} from '@material-ui/core';
 
 import useStyles from './DefaultLayout.styles';
 
-import BigTopBanner from 'src/components/BigTopBanner';
 import {withError, WithErrorProps} from 'src/components/Error';
 import {MenuContainer} from 'src/components/Menu';
 import {NotificationsContainer} from 'src/components/Notifications';
@@ -76,7 +75,6 @@ const Default: React.FC<DefaultLayoutProps> = props => {
 
   const [cookies] = useCookies([COOKIE_CONSENT_NAME]);
   const {user, anonymous, currentWallet, updateUserFcmToken} = useUserHook();
-  const isWeb2Users = !user?.wallets.length && !anonymous;
 
   const [showNotification, setShowNotification] = useState<boolean>(false);
   const [provider, setProvider] = useState<IProvider>(null);
@@ -169,7 +167,6 @@ const Default: React.FC<DefaultLayoutProps> = props => {
         sender={user}
         currentWallet={getWallet(currentWallet?.network?.blockchainPlatform)}
         currentNetwork={currentWallet?.networkId}>
-        {isWeb2Users && <BigTopBanner />}
         <Container maxWidth="lg" disableGutters>
           <div className={classes.root}>
             <div className={classes.firstCol}>
