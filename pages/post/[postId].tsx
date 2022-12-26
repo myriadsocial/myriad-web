@@ -78,7 +78,7 @@ const PostPage: React.FC<PostPageProps> = props => {
   );
 
   return (
-    <DefaultLayout isOnProfilePage={false} {...props}>
+    <>
       <Head>
         <title>{title}</title>
         <meta property="og:type" content="article" />
@@ -95,28 +95,29 @@ const PostPage: React.FC<PostPageProps> = props => {
         {image && <meta name="twitter:image" content={image} />}
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
+      <DefaultLayout isOnProfilePage={false} {...props}>
+        <ShowIf condition={!removed}>
+          <TopNavbarComponent
+            description={i18n.t('Post_Detail.Navbar.Title')}
+            sectionTitle={i18n.t('Section.Timeline')}
+          />
+        </ShowIf>
 
-      <ShowIf condition={!removed}>
-        <TopNavbarComponent
-          description={i18n.t('Post_Detail.Navbar.Title')}
-          sectionTitle={i18n.t('Section.Timeline')}
-        />
-      </ShowIf>
+        <ShowIf condition={removed}>
+          <TopNavbarComponent
+            description={i18n.t('Post_Detail.Navbar.Removed.Title')}
+            sectionTitle={i18n.t('Post_Detail.Navbar.Removed.Description')}
+          />
 
-      <ShowIf condition={removed}>
-        <TopNavbarComponent
-          description={i18n.t('Post_Detail.Navbar.Removed.Title')}
-          sectionTitle={i18n.t('Post_Detail.Navbar.Removed.Description')}
-        />
+          <ResourceDeleted />
+        </ShowIf>
 
-        <ResourceDeleted />
-      </ShowIf>
-
-      <ShowIf condition={!removed}>
-        <PostDetailContainer post={post} user={user} expand metric={post.metric} preview />
-      </ShowIf>
-      <TippingSuccess />
-    </DefaultLayout>
+        <ShowIf condition={!removed}>
+          <PostDetailContainer post={post} user={user} expand metric={post.metric} preview />
+        </ShowIf>
+        <TippingSuccess />
+      </DefaultLayout>
+    </>
   );
 };
 

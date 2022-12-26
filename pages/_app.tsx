@@ -19,7 +19,7 @@ import theme from 'src/themes/light-theme';
 
 const MyriadInstanceProvider = dynamic(
   () => import('src/components/common/Blockchain/MyriadInstance.provider'),
-  {ssr: false},
+  {ssr: true},
 );
 
 const {publicRuntimeConfig} = getConfig();
