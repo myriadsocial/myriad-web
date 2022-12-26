@@ -220,16 +220,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const data = await getServer();
 
-  // return {
-  //   props: {
-  //     title: 'AWKAOWKOWAKOAW',
-  //     description: 'ampas tapi dewa',
-  //     image: 'https://i.ytimg.com/vi/JWSrn389l2I/maxresdefault.jpg',
-  //     logo: 'https://img.freepik.com/free-vector/branding-identity-corporate-vector-logo-design_460848-8717.jpg?w=140',
-  //     removed: false,
-  //   },
-  // }
-
   return {
     props: {
       title,
