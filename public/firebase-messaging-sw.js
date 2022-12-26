@@ -33,7 +33,7 @@ self.addEventListener('notificationclick', event => {
     console.log('doneeeee', appUrl);
     // return the promise returned by openWindow, just in case.
     // Opening any origin only works in Chrome 43+.
-    return clients.openWindow(`${appUrl}notification`);
+    return clients.openWindow(`${appUrl}/notification`);
   });
 
   // Now wait for the promise to keep the permission alive.
