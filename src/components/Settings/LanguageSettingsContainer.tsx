@@ -44,7 +44,7 @@ export const LanguageSettingsContainer: React.FC = () => {
       title: 'Success!',
       description: 'New language setting applied',
       icon: 'success',
-      confirmationText: 'Back to Home',
+      confirmationText: 'Back Home',
       cancellationText: 'Setting',
       onConfirm: () => {
         router.push(

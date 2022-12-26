@@ -11,6 +11,7 @@ import {useRouter} from 'next/router';
 import {ExperiencePreviewContainer} from 'src/components/ExperiencePreview/ExperiencePreview.container';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {generateAnonymousUser} from 'src/helpers/auth';
+import {User} from 'src/interfaces/user';
 import {initialize} from 'src/lib/api/base';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import {healthcheck} from 'src/lib/api/healthcheck';
@@ -116,6 +117,27 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   try {
     const experience = await ExperienceAPI.getExperienceDetail(experienceId);
     const data = await getServer();
+
+    if (experience?.visibility === 'selected_user') {
+      if (anonymous)
+        return {
+          notFound: true,
+        };
+
+      const user = (await dispatch(fetchUser())) as unknown as User;
+      if (!experience?.selectedUserIds?.includes(user?.id) && experience?.createdBy !== user?.id)
+        return {
+          notFound: true,
+        };
+    }
+
+    if (experience?.visibility === 'private') {
+      const user = (await dispatch(fetchUser())) as unknown as User;
+      if (experience?.createdBy !== user?.id)
+        return {
+          notFound: true,
+        };
+    }
 
     return {
       props: {
