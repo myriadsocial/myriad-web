@@ -375,6 +375,7 @@
       "See": "Lihat Pos",
       "Comment": "Anda mengomentari “{{text}}...” yang diposting oleh {{name}}.",
       "Reply": "Anda membalas komentar di “{{text}}...” yang Diposting oleh {{name}}."
+      
     },
     "Experience": {
       "Empty": {
@@ -661,7 +662,8 @@
       "Error_Login": "Silahkan masuk untuk melanjutkan pembuatan laporan",
       "Toaster_Success": "Laporan postingan telah terkirim"
     },
-    "Load_More": "Lihat balasan lainnya"
+    "Load_More": "Lihat balasan lainnya",
+    "ExclusiveContent" : "{{Lampirkan}} Konten Eksklusif"
   },
   "Tipping": {
     "Modal_Main": {
@@ -1206,5 +1208,22 @@
     "Visibilities":{
     "PostVisibilities":"Pos Anda akan terlihat oleh Anda dan orang yang ditambahkan",
     "Custom":"Kustom"
+  },
+  "ExclusiveContent" : {
+    "Create" : "Buat Konten Eksklusif",
+    "Add" : "Tambah Konten Eksklusif",
+    "Attach" : "Lampirkan Konten Eksklusif",
+    "Remove" : "Hapus Konten Eksklusif",
+    "Available" : "Konten eksklusif tersedia untuk dibuka",
+    "Label" : {
+      "Attach" : "Lampirkan",
+      "ExclusiveContent" : "Konten Eksklusif",
+      "ExclusiveContentPrice" : "Harga Konten Eksklusif",
+      "ChangeCurrency" : "Ubah Mata Uang",
+      "Fee" : "5% biaya platform akan ditambahkan ke pembayaran Anda"
+    },
+    "Placeholder" : {
+      "AddPrice" : "Masukan Harga"
+    }
   }
 }

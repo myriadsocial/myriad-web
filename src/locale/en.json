@@ -665,7 +665,8 @@
       "Error_Login": "Please login to continue your report",
       "Toaster_Success": "Post report has been submitted"
     },
-    "Load_More": "View more replies"
+    "Load_More": "View more replies",
+    "ExclusiveContent" : "{{type}} Exclusive Content"
   },
   "Tipping": {
     "Modal_Main": {
@@ -1211,5 +1212,22 @@
    "Visibilities":{
     "PostVisibilities":"Your post will be visible to you and the added people",
     "Custom":"Custom"
+  },
+  "ExclusiveContent" : {
+    "Create" : "Create Exclusive Content",
+    "Add" : "Add Exclusive Content",
+    "Attach" : "Attach Exclusive Content",
+    "Remove" : "Remove Exclusive Content",
+    "Available" : "Exclusive content available to unlock",
+    "Label" : {
+      "Attach" : "Attach",
+      "ExclusiveContent" : "Exclusive Content",
+      "ExclusiveContentPrice" : "Exclusive Content Price",
+      "ChangeCurrency" : "Change Currency",
+      "Fee" : "5% platform fee will be added to your payment"
+    },
+    "Placeholder" : {
+      "AddPrice" : "Add Price"
+    }
   }
 }

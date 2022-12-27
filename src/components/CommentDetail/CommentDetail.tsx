@@ -1,4 +1,4 @@
-import {DotsVerticalIcon} from '@heroicons/react/outline';
+import {DotsVerticalIcon, GiftIcon} from '@heroicons/react/outline';
 
 import React, {useEffect, forwardRef} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
@@ -293,6 +293,21 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
               />
               <CardContent className={style.content}>
                 <NodeViewer id={comment.id} text={comment.text} />
+                {comment.asset?.exclusiveContents && comment.asset?.exclusiveContents.length > 0 && (
+                  <Button
+                    size="small"
+                    className={style.buttonExclusive}
+                    variant="contained"
+                    startIcon={
+                      <SvgIcon
+                        component={GiftIcon}
+                        viewBox="0 0 24 24"
+                        className={style.giftIcon}
+                      />
+                    }>
+                    {i18n.t('ExclusiveContent.Available')}
+                  </Button>
+                )}
               </CardContent>
               <CardActions disableSpacing>
                 <VotingComponent

@@ -3,41 +3,22 @@ import React, {useEffect, useState} from 'react';
 import {TextField} from '@material-ui/core';
 import type {InputProps} from '@material-ui/core';
 
-import {BN, BN_ZERO, isBn} from '@polkadot/util';
+import {BN_ZERO} from '@polkadot/util';
 
 import {useStyles} from './InputAmount.style';
 
-import {formatBalance} from 'src/helpers/balance';
 import {toBigNumber} from 'src/helpers/string';
-import {CurrencyId} from 'src/interfaces/currency';
 import i18n from 'src/locale';
 
 type InputAmountProps = Omit<InputProps, 'onChange'> & {
   type?: string;
-  defaultValue?: string | BN;
-  maxValue?: BN | number;
-  length?: number;
-  fee?: BN;
-  minBalance?: BN;
-  decimal: number;
-  currencyId: CurrencyId;
-  onChange?: (value: BN, valid: boolean) => void;
+  onChange?: (value: string, valid: boolean) => void;
   placeholder: string;
+  decimal: number;
 };
 
 export const InputAmount: React.FC<InputAmountProps> = props => {
-  const {
-    type = 'common',
-    defaultValue,
-    maxValue,
-    fee = BN_ZERO,
-    minBalance = BN_ZERO,
-    decimal,
-    length,
-    currencyId,
-    onChange,
-    placeholder,
-  } = props;
+  const {type = 'common', onChange, placeholder, decimal} = props;
 
   const styles = useStyles();
 
@@ -53,23 +34,6 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
       setError(undefined);
     };
   }, []);
-
-  // reset the input amount when changing currency
-  useEffect(() => {
-    setValid(true);
-
-    if (!defaultValue) return;
-
-    if (typeof defaultValue === 'string' && parseInt(defaultValue) > 0) {
-      setValue(defaultValue.toString());
-    } else if (isBn(defaultValue) && defaultValue.gt(BN_ZERO)) {
-      const formatted = formatBalance(defaultValue, decimal);
-
-      setValue(formatted.toString());
-    } else {
-      setValue('');
-    }
-  }, [currencyId]);
 
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -93,28 +57,14 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
     target.blur();
   };
 
-  const validateInput = (amount: string): [BN, boolean, string?] => {
+  const validateInput = (amount: string): [string, boolean, string?] => {
     const value = toBigNumber(amount, decimal);
-    const balance = isBn(maxValue) ? maxValue : toBigNumber(maxValue.toString(), decimal);
-    const maxTip = balance.sub(minBalance.gt(BN_ZERO) ? minBalance : fee);
-
-    if (length && amount.length > length) {
-      return [value, false, i18n.t('Tipping.Modal_Main.Error_Amount_Max', {length: length})];
-    }
 
     if (value.lte(BN_ZERO)) {
-      return [value, false, i18n.t('Tipping.Modal_Main.Error_Digit')];
+      return [amount, false, i18n.t('Tipping.Modal_Main.Error_Digit')];
     }
 
-    if (maxTip && maxTip.lten(0)) {
-      return [value, false, i18n.t('Tipping.Modal_Main.Error_Insufficient_Balance')];
-    }
-
-    if (maxTip && maxTip.gtn(0) && value.gt(maxTip)) {
-      return [value, false, i18n.t('Tipping.Modal_Main.Error_Insufficient_Balance')];
-    }
-
-    return [value, true];
+    return [amount, true];
   };
 
   return (

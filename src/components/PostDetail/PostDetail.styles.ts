@@ -31,5 +31,15 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       justifyContent: 'space-between',
     },
+    buttonExclusive: {
+      borderRadius: 4,
+      backgroundColor: '#6E3FC3',
+      color: '#FFF',
+      width: 'max-content',
+      marginTop: 20,
+      [theme.breakpoints.down('xs')]: {
+        width: '100%',
+      },
+    },
   }),
 );

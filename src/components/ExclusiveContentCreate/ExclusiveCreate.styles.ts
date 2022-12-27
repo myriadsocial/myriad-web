@@ -52,7 +52,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     option: {
       display: 'flex',
       alignItems: 'center',
-      columnGap: 4,
 
       [theme.breakpoints.down('xs')]: {
         marginLeft: 20,
@@ -60,12 +59,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     markdown: {
       width: 120,
-    },
-    fill: {
-      fill: 'currentColor',
-      '& .MuiSvgIcon-root': {
-        fill: 'currentColor',
-      },
     },
     removePeople: {
       '& .MuiSvgIcon-root': {
@@ -95,14 +88,70 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
       },
     },
-    giftIcon: {
-      width: 16,
-      marginRight: '10px !important',
-      color: '#7342CC',
+    header: {
+      boxSizing: 'border-box',
+      display: 'flex',
+      justifyContent: 'space-between',
+      width: '100%',
+      padding: '6px 16px',
     },
-    arrowLeftIcon: {
-      width: 24,
-      color: '#7342CC',
+    tokenColumn: {
+      display: 'flex',
+      alignItems: 'center',
+      width: '100%',
+    },
+    flex: {
+      display: 'flex',
+      justifyContent: 'space-around',
+      alignItems: 'center',
+      width: '100%',
+    },
+    text: {
+      fontWeight: 400,
+      fontSize: '12px',
+      marginRight: 10,
+    },
+    input: {
+      width: '160px',
+      height: '32px',
+      border: 'solid grey 1px',
+      borderRadius: '20px',
+      paddingLeft: theme.spacing(1),
+      paddingRight: theme.spacing(1),
+      marginTop: '6px',
+    },
+    hover: {
+      '&:hover': {
+        backgroundColor: 'rgba(255, 200, 87, 0.15)',
+      },
+    },
+    fill: {
+      fill: 'currentColor',
+    },
+    usd: {
+      color: '#404040',
+      fontSize: '12px',
+    },
+    icon: {
+      width: 17,
+      height: 17,
+      transform: 'rotate(180deg)',
+    },
+    currencyWrapper: {
+      display: 'flex',
+      width: '100%',
+      columnGap: 10,
+      marginBottom: 26,
+    },
+    feeWrapper: {
+      display: 'flex',
+      alignItems: 'center',
+      columnGap: 5,
+    },
+    buttonSubmit: {
+      [theme.breakpoints.down('xs')]: {
+        marginTop: 20,
+      },
     },
   }),
 );

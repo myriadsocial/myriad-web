@@ -52,5 +52,10 @@ export const useStyles = makeStyles<Theme, EditorStyleProps>(theme =>
       right: 8,
       bottom: 8,
     },
+    editorWrapper: {
+      borderWidth: 1,
+      borderStyle: 'solid',
+      borderRadius: 10,
+    },
   }),
 );

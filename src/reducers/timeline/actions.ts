@@ -6,6 +6,7 @@ import {TimelineFilters} from './reducer';
 import axios from 'axios';
 import {Action} from 'redux';
 import {Comment} from 'src/interfaces/comment';
+import {ExclusiveContentPost} from 'src/interfaces/exclusive';
 import {ReferenceType, SectionType, Vote} from 'src/interfaces/interaction';
 import {Post, PostMetric, PostProps, PostVisibility} from 'src/interfaces/post';
 import {TimelineFilterFields, TimelineOrderType, TimelineType} from 'src/interfaces/timeline';
@@ -660,5 +661,44 @@ export const checkNewTimeline: ThunkActionCreator<Actions, RootState> =
       return diffItemCount;
     } catch (err) {
       return err;
+    }
+  };
+
+export const createExclusiveContent: ThunkActionCreator<Actions, RootState> =
+  (
+    post: ExclusiveContentPost,
+    images: string[],
+    callback: (resp) => void,
+    failedCallback: () => void,
+  ) =>
+  async (dispatch, getState) => {
+    const {
+      userState: {user},
+    } = getState();
+
+    setLoading(true);
+
+    try {
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      const resp = await PostAPI.createExclusiveContent({
+        ...post,
+      });
+
+      callback(resp);
+    } catch (error) {
+      if (error.response.data.error.message === 'ActionLimitExceeded') {
+        failedCallback();
+      } else {
+        if (axios.isAxiosError(error) && error.response?.status === 413) {
+          dispatch(setError(new Error(i18n.t('Post_Create.Error.ImageTooLarge'))));
+        } else {
+          dispatch(setError(new Error(i18n.t('Post_Create.Error.Default'))));
+        }
+      }
+    } finally {
+      dispatch(setLoading(false));
     }
   };

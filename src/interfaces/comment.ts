@@ -28,6 +28,9 @@ export interface CommentProps {
   userId: string;
   mentions: MentionUserProps[];
   reportType?: ReportType;
+  asset?: {
+    exclusiveContents?: [string];
+  };
 }
 
 export interface Comment extends CommentProps, BaseModel {

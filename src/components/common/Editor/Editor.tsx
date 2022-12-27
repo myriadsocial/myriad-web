@@ -185,10 +185,11 @@ export type EditorProps = {
   userId: string;
   mobile?: boolean;
   onSearchMention: (query: string) => void;
+  isErrorEditor?: boolean;
 };
 
 export const Editor: React.FC<EditorProps> = props => {
-  const {userId, mobile, onSearchMention} = props;
+  const {userId, mobile, onSearchMention, isErrorEditor = false} = props;
 
   const styles = useStyles({mobile, counter: true});
   const ref = useRef(null);
@@ -262,7 +263,9 @@ export const Editor: React.FC<EditorProps> = props => {
   };
 
   return (
-    <div className={`${styles.root} ${styles.large}`}>
+    <div
+      className={`${styles.root} ${styles.large} ${styles.editorWrapper}`}
+      style={{borderColor: isErrorEditor ? '#FE3333' : '#E0E0E0'}}>
       <Toolbar className={styles.toolbar}>
         {!mobile && <ToolbarBasicButtons />}
         <ToolbarMarksButtons />

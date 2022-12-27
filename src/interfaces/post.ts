@@ -25,8 +25,8 @@ export interface TipsReceived {
 }
 
 export type PostAsset = {
-  images: string[] | Sizes[];
-  videos: string[];
+  images?: string[] | Sizes[];
+  videos?: string[];
   exclusiveContents?: string[];
 };
 
@@ -106,7 +106,6 @@ export type PostEmbedProps = {
   image?: EmbedMediaProps;
   video?: EmbedMediaProps;
 };
-
 export interface Post extends PostProps, PostCustomProps, BaseModel {
   user: User;
   people?: PeopleWithSocialMedaia;

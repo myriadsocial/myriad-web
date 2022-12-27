@@ -7,6 +7,7 @@ import {BaseErrorResponse} from './interfaces/error-response.interface';
 import {PaginationParams, FilterParams} from './interfaces/pagination-params.interface';
 
 import axios, {AxiosError} from 'axios';
+import {ExclusiveContentPost} from 'src/interfaces/exclusive';
 import {Post, PostProps, ImportPostProps, PostStatus, PostCustomProps} from 'src/interfaces/post';
 import {TimelineOrderType, TimelineType} from 'src/interfaces/timeline';
 import {WalletDetail} from 'src/interfaces/wallet';
@@ -307,6 +308,19 @@ export const getWalletAddress = async (postId: string): Promise<WalletDetail> =>
   const {data} = await MyriadAPI().request<WalletDetail>({
     url: `/walletaddress/post/${postId}`,
     method: 'GET',
+  });
+
+  return data;
+};
+
+export const createExclusiveContent = async (values: ExclusiveContentPost): Promise<Post> => {
+  console.log('values >>>', values);
+  const {data} = await MyriadAPI().request<Post>({
+    url: '/user/unlockable-contents',
+    method: 'POST',
+    data: {
+      ...values,
+    },
   });
 
   return data;
