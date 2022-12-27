@@ -18,7 +18,6 @@ type PostsExperienceList = BaseList<Post>;
 export const getExperiences = async (
   params: PaginationParams,
   isTrending?: boolean,
-  userId?: string,
   postId?: string,
 ): Promise<ExperienceList> => {
   const {orderField = 'createdAt', sort = 'DESC'} = params;
@@ -28,24 +27,10 @@ export const getExperiences = async (
 
   let paramGetExperience;
 
-  if (postId && userId) {
+  if (postId) {
     paramGetExperience = {
       pageLimit: params.limit ?? PAGINATION_LIMIT,
-      filter: {
-        where: {
-          createdBy: userId,
-        },
-        include: [
-          {
-            relation: 'posts',
-            scope: {
-              where: {
-                id: postId,
-              },
-            },
-          },
-        ],
-      },
+      postId: postId,
     };
   } else {
     paramGetExperience = {

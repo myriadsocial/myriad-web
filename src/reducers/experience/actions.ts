@@ -151,12 +151,7 @@ export const loadExperiencesPostList: ThunkActionCreator<Actions, RootState> =
         throw new Error('User not found');
       }
 
-      const {data: experiences} = await ExperienceAPI.getExperiences(
-        {page: 1},
-        false,
-        user.id,
-        postId,
-      );
+      const {data: experiences} = await ExperienceAPI.getExperiences({page: 1}, false, postId);
 
       callback(experiences);
     } catch (error) {
