@@ -12,6 +12,7 @@ const {publicRuntimeConfig} = getConfig();
 
 export interface ConfigState extends BaseState {
   availableCurrencies: Currency[];
+  filteredCurrencies: Currency[];
   layout: {
     mobile: boolean;
     focus: boolean;
@@ -22,6 +23,7 @@ export interface ConfigState extends BaseState {
 const initalState: ConfigState = {
   loading: false,
   availableCurrencies: [],
+  filteredCurrencies: [],
   layout: {
     mobile: false,
     focus: false,
@@ -48,6 +50,13 @@ export const ConfigReducer: Redux.Reducer<ConfigState, Actions> = (state = inita
       return {
         ...state,
         availableCurrencies: action.payload,
+      };
+    }
+
+    case constants.FETCH_FILTERED_TOKEN: {
+      return {
+        ...state,
+        filteredCurrencies: action.payload,
       };
     }
 
