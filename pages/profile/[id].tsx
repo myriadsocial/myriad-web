@@ -18,7 +18,11 @@ import {healthcheck} from 'src/lib/api/healthcheck';
 import {getServer} from 'src/lib/api/server';
 import * as UserAPI from 'src/lib/api/user';
 import i18n from 'src/locale';
-import {fetchAvailableToken, setPrivacySetting} from 'src/reducers/config/actions';
+import {
+  fetchAvailableToken,
+  fetchFilteredToken,
+  setPrivacySetting,
+} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
 import {fetchFriend} from 'src/reducers/friend/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
@@ -114,6 +118,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     await Promise.all([
       dispatch(fetchConnectedSocials()),
       dispatch(fetchAvailableToken()),
+      dispatch(fetchFilteredToken()),
       dispatch(countNewNotification()),
       dispatch(fetchFriend()),
       dispatch(fetchUserWallets()),

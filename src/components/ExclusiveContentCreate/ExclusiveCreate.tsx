@@ -39,7 +39,7 @@ export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
   const [isDisabledButton, setIsDisabledButton] = useState<boolean>(true);
   const [isErrorEditor, setIsErrorEditor] = useState<boolean>(false);
 
-  const {availableCurrencies: balances} = useSelector<RootState, ConfigState>(
+  const {filteredCurrencies: balances} = useSelector<RootState, ConfigState>(
     state => state.configState,
   );
 

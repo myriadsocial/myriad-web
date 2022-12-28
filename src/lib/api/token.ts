@@ -54,3 +54,17 @@ export const updateCurrencySet = async (
     data: {currencyIds},
   });
 };
+
+export const getFilteredTokens = async (filter, pageNumber, pageLimit): Promise<CurrencyList> => {
+  const {data} = await MyriadAPI().request<CurrencyList>({
+    url: '/currencies',
+    method: 'GET',
+    params: {
+      pageNumber,
+      pageLimit,
+      filter,
+    },
+  });
+
+  return data;
+};

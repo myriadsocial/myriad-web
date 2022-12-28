@@ -21,6 +21,11 @@ export interface FetchAvailableToken extends Action {
   payload: Currency[];
 }
 
+export interface FetchFilteredToken extends Action {
+  type: constants.FETCH_FILTERED_TOKEN;
+  payload: Currency[];
+}
+
 export interface LoadingConfig extends Action {
   type: constants.SET_LOADING_CONFIG;
   payload: boolean;
@@ -45,6 +50,7 @@ export interface SetLanguageSetting extends Action {
 
 export type Actions =
   | FetchAvailableToken
+  | FetchFilteredToken
   | FetchPrivacySetting
   | UpdateNotificationSetting
   | SetLanguageSetting
@@ -157,6 +163,29 @@ export const fetchAvailableToken: ThunkActionCreator<Actions, RootState> = () =>
 
     dispatch({
       type: constants.FETCH_AVAILABLE_TOKEN,
+      payload: currencies,
+    });
+  } catch (error) {
+    dispatch(setError(error));
+  } finally {
+    dispatch(setLoading(false));
+  }
+};
+
+export const fetchFilteredToken: ThunkActionCreator<Actions, RootState> = () => async dispatch => {
+  dispatch(setLoading(true));
+
+  try {
+    const filter = {
+      where: {
+        or: [{networkId: 'myriad'}, {networkId: 'debio'}],
+      },
+    };
+    const {data: currencies} = await TokenAPI.getFilteredTokens(filter, 1, 10);
+    console.log({currencies});
+
+    dispatch({
+      type: constants.FETCH_FILTERED_TOKEN,
       payload: currencies,
     });
   } catch (error) {
