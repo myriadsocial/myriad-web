@@ -23,6 +23,7 @@ type InputAmountProps = Omit<InputProps, 'onChange'> & {
   currencyId: CurrencyId;
   onChange?: (value: BN, valid: boolean) => void;
   placeholder: string;
+  minInput?: number;
 };
 
 export const InputAmount: React.FC<InputAmountProps> = props => {
@@ -37,6 +38,7 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
     currencyId,
     onChange,
     placeholder,
+    minInput,
   } = props;
 
   const styles = useStyles();
@@ -98,6 +100,8 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
     const balance = isBn(maxValue) ? maxValue : toBigNumber(maxValue.toString(), decimal);
     const maxTip = balance.sub(minBalance.gt(BN_ZERO) ? minBalance : fee);
 
+    console.log(Number(amount), minInput);
+
     if (length && amount.length > length) {
       return [value, false, i18n.t('Tipping.Modal_Main.Error_Amount_Max', {length: length})];
     }
@@ -111,6 +115,10 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
     }
 
     if (maxTip && maxTip.gtn(0) && value.gt(maxTip)) {
+      return [value, false, i18n.t('Tipping.Modal_Main.Error_Insufficient_Balance')];
+    }
+
+    if (Number(amount) < minInput) {
       return [value, false, i18n.t('Tipping.Modal_Main.Error_Insufficient_Balance')];
     }
 

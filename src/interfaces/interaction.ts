@@ -5,6 +5,7 @@ export enum ReferenceType {
   COMMENT = 'comment',
   USER = 'user',
   PEOPLE = 'people',
+  EXCLUSIVE_CONTENT = 'unlockable_content',
 }
 
 export enum SectionType {

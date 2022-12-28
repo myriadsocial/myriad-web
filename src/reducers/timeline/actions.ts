@@ -702,3 +702,27 @@ export const createExclusiveContent: ThunkActionCreator<Actions, RootState> =
       dispatch(setLoading(false));
     }
   };
+
+export const getPriceExclusiveContent: ThunkActionCreator<Actions, RootState> =
+  (url: string, images: string[], callback: (resp) => void, failedCallback: () => void) =>
+  async (dispatch, getState) => {
+    const {
+      userState: {user},
+    } = getState();
+
+    setLoading(true);
+
+    try {
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      const resp = await PostAPI.getPriceExclusiveContent(url);
+
+      callback(resp);
+    } catch (error) {
+      failedCallback();
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };

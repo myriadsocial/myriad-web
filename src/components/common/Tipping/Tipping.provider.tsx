@@ -14,6 +14,7 @@ import {ButtonNotify} from './render/ButtonNotify';
 import {Modal} from 'src/components/atoms/Modal';
 import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
 import {BalanceDetail} from 'src/interfaces/balance';
+import {ReferenceType} from 'src/interfaces/interaction';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
@@ -49,6 +50,8 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
     if (balances.length > 0) {
       setDefaultCurrency(balances[0]);
     }
+
+    console.log({balances});
   }, [balances, anonymous]);
 
   const tipping = useCallback<HandleSendTip>(
@@ -79,6 +82,10 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
     setTippingCurrency(undefined);
   }, []);
 
+  const isTipping = () => {
+    return options?.referenceType !== ReferenceType.EXCLUSIVE_CONTENT;
+  };
+
   return (
     <>
       <SendTipContext.Provider value={{currentWallet, enabled, loading, send: tipping}}>
@@ -91,8 +98,8 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
           open={tipFormOpened}
           style={{}}
           onClose={handleCloseTipForm}
-          title={i18n.t('Tipping.Modal_Main.Title')}
-          subtitle={i18n.t('Tipping.Modal_Main.Subtitle')}>
+          title={isTipping() ? i18n.t('Tipping.Modal_Main.Title') : 'Unlock Content'}
+          subtitle={isTipping() && i18n.t('Tipping.Modal_Main.Subtitle')}>
           <Tipping
             defaultCurrency={defaultCurrency}
             currentNetwork={currentNetwork}
