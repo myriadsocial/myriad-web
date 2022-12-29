@@ -146,7 +146,9 @@
     "Cancel": "Cancel",
     "Loading": "Loading",
     "See_More": "See More",
-    "Save": "Save"
+    "Save": "Save",
+    "Amount" : "Amount",
+    "Summary" : "Summary"
   },
   "Confirm": {
     "Title": "Are you sure?"
@@ -1224,10 +1226,20 @@
       "ExclusiveContent" : "Exclusive Content",
       "ExclusiveContentPrice" : "Exclusive Content Price",
       "ChangeCurrency" : "Change Currency",
-      "Fee" : "5% platform fee will be added to your payment"
+      "Fee" : "5% platform fee will be added to your payment",
+      "NetworkError" : "Network Error",
+      "Rethink" : "No, Let me rethink",
+      "SwitchNetwork" : "Switch Network",
+      "UnlockNow" : "Unlock Now"
     },
     "Placeholder" : {
       "AddPrice" : "Add Price"
+    },
+    "Text" : {
+      "NetworkError" : "Payment only available in {{accept}} now you are in {{current}}. Switch network to proceed"
+    },
+    "Prompt_Success" : {
+      "Title" : "Unlock Content Success"
     }
   }
 }

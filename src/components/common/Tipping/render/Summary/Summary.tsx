@@ -29,10 +29,19 @@ type SummaryProps = {
   currency: BalanceDetail;
   loadingFee: boolean;
   nativeSymbol: string;
+  isTipping?: boolean;
 };
 
 export const Summary: React.FC<SummaryProps> = props => {
-  const {amount, transactionFee, receiver, currency, loadingFee, nativeSymbol} = props;
+  const {
+    amount,
+    transactionFee,
+    receiver,
+    currency,
+    loadingFee,
+    nativeSymbol,
+    isTipping = true,
+  } = props;
   const {currentWallet} = useSelector<RootState, UserState>(state => state.userState);
 
   const styles = useStyles();
@@ -59,23 +68,25 @@ export const Summary: React.FC<SummaryProps> = props => {
           />
         </Typography>
       </div>
-      {receiver.walletDetail.referenceType !== 'wallet_address' && (
-        <div className={styles.warningNoNear}>
-          <div className={styles.wrapperIcon}>
-            <InfoIconYellow />
+      <ShowIf condition={isTipping}>
+        {receiver.walletDetail?.referenceType !== 'wallet_address' && (
+          <div className={styles.warningNoNear}>
+            <div className={styles.wrapperIcon}>
+              <InfoIconYellow />
+            </div>
+            <Typography className={styles.textWarning}>
+              The tip will be stored in Myriad Escrow because the user hasn’t connected the
+              {` ${currentWallet.networkId === 'near' ? 'NEAR Wallet' : 'polkadot{.js}'} `}
+              yet. Once they connect their{' '}
+              {` ${currentWallet.networkId === 'near' ? 'NEAR Wallet' : 'polkadot{.js}'}`}, they
+              will be able to claim their tip.
+            </Typography>
           </div>
-          <Typography className={styles.textWarning}>
-            The tip will be stored in Myriad Escrow because the user hasn’t connected the
-            {` ${currentWallet.networkId === 'near' ? 'NEAR Wallet' : 'polkadot{.js}'} `}
-            yet. Once they connect their{' '}
-            {` ${currentWallet.networkId === 'near' ? 'NEAR Wallet' : 'polkadot{.js}'}`}, they will
-            be able to claim their tip.
-          </Typography>
-        </div>
-      )}
+        )}
+      </ShowIf>
       <div className={styles.detail}>
         <Typography className={styles.bold} gutterBottom>
-          {i18n.t('Tipping.Modal_Main.Tip_Summary')}
+          {isTipping ? i18n.t('Tipping.Modal_Main.Tip_Summary') : i18n.t('General.Summary')}
         </Typography>
         <TableContainer>
           <Table size="small" aria-label="tip summary table">
@@ -83,7 +94,7 @@ export const Summary: React.FC<SummaryProps> = props => {
               <TableRow>
                 <TableCell component="th" scope="row" classes={{root: styles.table}}>
                   <Typography variant="subtitle2" color="textSecondary">
-                    {i18n.t('Tipping.Modal_Main.Tip_Label')}
+                    {isTipping ? i18n.t('Tipping.Modal_Main.Tip_Label') : i18n.t('General.Amount')}
                   </Typography>
                 </TableCell>
                 <TableCell align="right" classes={{root: styles.table}}>

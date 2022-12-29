@@ -51,6 +51,13 @@ export interface IProvider {
   disconnect: () => Promise<void>;
 
   assetMinBalance: (ftIdentifier?: string) => Promise<EstimateFeeResponseProps>;
+
+  payUnlockableContent?: (
+    walletDetail: string,
+    tipsBalanceInfo: TipsBalanceInfo,
+    amount: BN,
+    ...args: [InjectedAccountWithMeta, SignTransaction]
+  ) => Promise<string | null>;
 }
 
 export const MYRIAD_WALLET_KEY = '@Myriad_Wallet_Key';

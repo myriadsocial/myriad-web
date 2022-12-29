@@ -1,17 +1,16 @@
-import {GiftIcon} from '@heroicons/react/outline';
-
 import React, {useCallback} from 'react';
 
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 
-import {Button, SvgIcon, Typography, useMediaQuery, useTheme} from '@material-ui/core';
+import {SvgIcon, Typography, useMediaQuery, useTheme} from '@material-ui/core';
 
 import {PostDetailProps} from './PostDetail.interface';
 import {useStyles} from './PostDetail.styles';
 import {PostFooter} from './render/Footer';
 import {PostHeader} from './render/Header';
 
+import ButtonPayment from 'components/ExclusiveContentCreate/Payment/ButtonPayment';
 import {NodeViewer} from 'components/common/NodeViewer';
 import ShowIf from 'components/common/show-if.component';
 import {LinkPreview} from 'src/components/atoms/LinkPreview';
@@ -116,12 +115,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           </ShowIf>
 
           {post.asset?.exclusiveContents && post.asset?.exclusiveContents.length > 0 && (
-            <Button
-              className={styles.buttonExclusive}
-              variant="contained"
-              startIcon={<SvgIcon component={GiftIcon} viewBox="0 0 24 24" />}>
-              {i18n.t('ExclusiveContent.Available')}
-            </Button>
+            <ButtonPayment url={post.asset?.exclusiveContents[0]} />
           )}
 
           {post.asset?.images && post.asset?.images.length > 0 && (

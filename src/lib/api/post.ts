@@ -325,3 +325,43 @@ export const createExclusiveContent = async (values: ExclusiveContentPost): Prom
 
   return data;
 };
+
+export const getPriceExclusiveContent = async (url: string): Promise<Post> => {
+  const {data} = await MyriadAPI().request<Post>({
+    url: `${url}`,
+    method: 'GET',
+    params: {
+      filter: {
+        include: [
+          {relation: 'user'}, // kalo mau menampilkan user nya
+          {
+            relation: 'prices', // kalo mau meampilkan prices nya
+            scope: {
+              include: [
+                {
+                  relation: 'currency', // kalo mau menampilkan prices dan currency nya
+                  scope: {
+                    include: [
+                      {relation: 'network'}, // kalo mau menampilkan currency dan network nya
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  });
+
+  return data;
+};
+
+export const getWalletAddressExclusive = async (contentId: string): Promise<WalletDetail> => {
+  const {data} = await MyriadAPI().request<WalletDetail>({
+    url: `/walletaddress/unlockable-content/${contentId}`,
+    method: 'GET',
+  });
+
+  return data;
+};

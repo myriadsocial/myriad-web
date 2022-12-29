@@ -14,6 +14,7 @@ import {ButtonNotify} from './render/ButtonNotify';
 import {Modal} from 'src/components/atoms/Modal';
 import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
 import {BalanceDetail} from 'src/interfaces/balance';
+import {ReferenceType} from 'src/interfaces/interaction';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
@@ -49,6 +50,8 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
     if (balances.length > 0) {
       setDefaultCurrency(balances[0]);
     }
+
+    console.log({balances});
   }, [balances, anonymous]);
 
   const tipping = useCallback<HandleSendTip>(
@@ -79,6 +82,10 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
     setTippingCurrency(undefined);
   }, []);
 
+  const isTipping = () => {
+    return options?.referenceType !== ReferenceType.EXCLUSIVE_CONTENT;
+  };
+
   return (
     <>
       <SendTipContext.Provider value={{currentWallet, enabled, loading, send: tipping}}>
@@ -91,8 +98,8 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
           open={tipFormOpened}
           style={{}}
           onClose={handleCloseTipForm}
-          title={i18n.t('Tipping.Modal_Main.Title')}
-          subtitle={i18n.t('Tipping.Modal_Main.Subtitle')}>
+          title={isTipping() ? i18n.t('Tipping.Modal_Main.Title') : 'Unlock Content'}
+          subtitle={isTipping() && i18n.t('Tipping.Modal_Main.Subtitle')}>
           <Tipping
             defaultCurrency={defaultCurrency}
             currentNetwork={currentNetwork}
@@ -108,26 +115,35 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
         icon="success"
         open={Boolean(currencyTipped)}
         onCancel={resetTippingStatus}
-        title={i18n.t('Tipping.Prompt_Success.Title')}
+        title={
+          isTipping()
+            ? i18n.t('Tipping.Prompt_Success.Title')
+            : i18n.t('ExclusiveContent.Prompt_Success.Title')
+        }
         subtitle={
-          <Typography component="div">
-            {i18n.t('Tipping.Prompt_Success.Subtitle_1')}
-            <Box fontWeight={400} display="inline">
-              {options?.receiver.name ?? 'Unknown Myrian'}
-            </Box>
-            {i18n.t('Tipping.Prompt_Success.Subtitle_2')}
-          </Typography>
+          isTipping() ? (
+            <Typography component="div">
+              {i18n.t('Tipping.Prompt_Success.Subtitle_1')}
+              <Box fontWeight={400} display="inline">
+                {options?.receiver.name ?? 'Unknown Myrian'}
+              </Box>
+              {i18n.t('Tipping.Prompt_Success.Subtitle_2')}
+            </Typography>
+          ) : null
         }>
         <Grid container justifyContent="space-around">
-          <Button
-            href={transactionUrl ?? 'https://myriad.social'}
-            target="_blank"
-            rel="noopener noreferrer"
-            size="small"
-            variant="outlined"
-            color="secondary">
-            {i18n.t('Tipping.Prompt_Success.Btn_Trx_Detail')}
-          </Button>
+          {isTipping() && (
+            <Button
+              href={transactionUrl ?? 'https://myriad.social'}
+              target="_blank"
+              rel="noopener noreferrer"
+              size="small"
+              variant="outlined"
+              color="secondary">
+              {i18n.t('Tipping.Prompt_Success.Btn_Trx_Detail')}
+            </Button>
+          )}
+
           {currencyTipped &&
             (options &&
             'platform' in options.reference &&

@@ -145,7 +145,9 @@
     "Cancel": "Batalkan",
     "Loading": "Memuat",
     "See_More": "Selengkapnya",
-    "Save": "Simpan"
+    "Save": "Simpan",
+    "Amount" : "Jumlah",
+    "Summary" : "Ringkasan"
   },
   "Confirm": {
     "Title": "Apa kamu yakin?"
@@ -1220,10 +1222,20 @@
       "ExclusiveContent" : "Konten Eksklusif",
       "ExclusiveContentPrice" : "Harga Konten Eksklusif",
       "ChangeCurrency" : "Ubah Mata Uang",
-      "Fee" : "5% biaya platform akan ditambahkan ke pembayaran Anda"
+      "Fee" : "5% biaya platform akan ditambahkan ke pembayaran Anda",
+      "NetworkError" : "Jaringan Salah",
+      "Rethink" : "Tidak, saya pikirkan kembali",
+      "SwitchNetwork" : "Ubah Jaringan",
+      "UnlockNow" : "Buka Sekarang"
     },
     "Placeholder" : {
       "AddPrice" : "Masukan Harga"
+    },
+    "Text" : {
+      "NetworkError" : "Pembayaran hanya berlaku di jaringan {{accept}} saat ini anda berada di jaringan {{current}}. Ubah jaringan untuk memproses pembayaran"
+    },
+    "Prompt_Success" : {
+      "Title" : "Konten Berhasil Dibuka"
     }
   }
 }

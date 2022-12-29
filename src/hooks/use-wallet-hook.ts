@@ -8,6 +8,7 @@ import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {formatBalance} from 'src/helpers/balance';
 import {BalanceDetail} from 'src/interfaces/balance';
+import {TipsBalanceInfo} from 'src/interfaces/blockchain-interface';
 import {WalletDetail} from 'src/interfaces/wallet';
 import {storeTransaction} from 'src/lib/api/transaction';
 import i18n from 'src/locale';
@@ -99,11 +100,61 @@ export const useWallet = () => {
     }
   };
 
+  const payUnlockableContent = async (
+    walletAddress: string,
+    tipsBalanceInfo: TipsBalanceInfo,
+    amount: BN,
+    currency: BalanceDetail,
+    type?: string,
+    referenceId?: string,
+    callback?: (txHash: string) => void,
+  ) => {
+    setLoading(true);
+
+    try {
+      const from = provider.accountId;
+      const to = walletAddress;
+      const txHash = await provider.payUnlockableContent(
+        walletAddress,
+        tipsBalanceInfo,
+        amount,
+        undefined,
+        params => {
+          if (params?.signerOpened) {
+            setSignerLoading(true);
+          }
+        },
+      );
+
+      if (txHash) {
+        const finalAmount = formatBalance(amount, currency.decimal);
+        const txData = {hash: txHash, amount: finalAmount, from, to, currencyId: currency.id};
+
+        if (type) Object.assign(txData, {type});
+        if (referenceId) Object.assign(txData, {referenceId});
+
+        // Record the transaction
+        await storeTransaction(txData);
+
+        callback && callback(txHash);
+      }
+    } catch (error) {
+      const variant = error.message === 'Cancelled' ? 'warning' : 'error';
+      const message = variant === 'warning' ? i18n.t('Tipping.Toaster.Cancelled') : error.message;
+
+      enqueueSnackbar({variant, message});
+    } finally {
+      setLoading(false);
+      setSignerLoading(false);
+    }
+  };
+
   return {
     loading,
     isSignerLoading,
     isFetchingFee,
     sendTip,
+    payUnlockableContent,
     getEstimatedFee,
     server,
   };

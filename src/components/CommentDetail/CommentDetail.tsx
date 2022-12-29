@@ -1,4 +1,4 @@
-import {DotsVerticalIcon, GiftIcon} from '@heroicons/react/outline';
+import {DotsVerticalIcon} from '@heroicons/react/outline';
 
 import React, {useEffect, forwardRef} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
@@ -24,6 +24,7 @@ import {CommentDetailProps} from './CommentDetail.interface';
 import {useStyles} from './CommentDetail.styles';
 
 import CommentEditor from 'components/CommentEditor/CommentEditor.container';
+import ButtonPayment from 'components/ExclusiveContentCreate/Payment/ButtonPayment';
 import {NodeViewer} from 'components/common/NodeViewer';
 import ShowIf from 'src/components/common/show-if.component';
 import {useRepliesHook} from 'src/hooks/use-replies.hook';
@@ -293,21 +294,10 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
               />
               <CardContent className={style.content}>
                 <NodeViewer id={comment.id} text={comment.text} />
-                {comment.asset?.exclusiveContents && comment.asset?.exclusiveContents.length > 0 && (
-                  <Button
-                    size="small"
-                    className={style.buttonExclusive}
-                    variant="contained"
-                    startIcon={
-                      <SvgIcon
-                        component={GiftIcon}
-                        viewBox="0 0 24 24"
-                        className={style.giftIcon}
-                      />
-                    }>
-                    {i18n.t('ExclusiveContent.Available')}
-                  </Button>
-                )}
+                {comment.asset?.exclusiveContents &&
+                  comment.asset?.exclusiveContents.length > 0 && (
+                    <ButtonPayment url={comment.asset?.exclusiveContents[0]} />
+                  )}
               </CardContent>
               <CardActions disableSpacing>
                 <VotingComponent
