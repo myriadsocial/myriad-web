@@ -94,6 +94,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
   const totalVote = comment.metric.upvotes - comment.metric.downvotes;
   const isOwnComment = comment.userId === user?.id;
   const isHtmlComment = !isJson(comment.text);
+  const isExclusiveContent = comment?.asset?.exclusiveContents.length > 0;
 
   useEffect(() => {
     if (comment.metric.comments > 0 || comment.metric.deletedComments > 0) {
@@ -305,17 +306,17 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                   <NodeViewer id={comment.id} text={comment.text} />
                 </ShowIf>
 
-                {comment.asset?.exclusiveContents &&
-                  comment.asset?.exclusiveContents.length > 0 &&
-                  !exclusiveContent && (
-                    <ButtonPayment
-                      id={comment.asset?.exclusiveContents[0]}
-                      contentId={comment?.id}
-                      setExclusive={setExclusiveContent}
-                    />
-                  )}
+                <ShowIf condition={isExclusiveContent && !exclusiveContent}>
+                  <ButtonPayment
+                    id={comment.asset?.exclusiveContents[0]}
+                    setExclusive={setExclusiveContent}
+                    contentReferenceId={comment?.id}
+                  />
+                </ShowIf>
 
-                {exclusiveContent && <Reveal content={exclusiveContent} />}
+                <ShowIf condition={Boolean(exclusiveContent)}>
+                  <Reveal content={exclusiveContent} />
+                </ShowIf>
               </CardContent>
               <CardActions disableSpacing>
                 <VotingComponent

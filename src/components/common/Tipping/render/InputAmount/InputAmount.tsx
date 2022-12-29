@@ -38,7 +38,7 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
     currencyId,
     onChange,
     placeholder,
-    minInput,
+    minInput = 0,
   } = props;
 
   const styles = useStyles();

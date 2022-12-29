@@ -442,11 +442,8 @@ export class PolkadotJs implements IProvider {
   }
 
   async payUnlockableContent(
-    walletAddress: string | null,
-    instanceId: string,
-    tipsBalanceInfo: TipsBalanceInfo,
+    walletDetail: WalletDetail,
     amount: BN,
-    accountReference: string,
     ...args: [InjectedAccountWithMeta, SignTransaction]
   ): Promise<string | null> {
     const [account, callback] = args;
@@ -466,12 +463,26 @@ export class PolkadotJs implements IProvider {
       callback && callback({signerOpened: true});
 
       // here we use the api to create a balance transfer to some account of a value of 12345678
+      const [instanceId, unlockableContentId, userId, to] = walletDetail.referenceId.split('/') ?? [
+        ,
+        ,
+        ,
+        null,
+      ];
+
+      if (!instanceId || !unlockableContentId) {
+        callback && callback({signerOpened: false});
+        throw new Error('InstanceId/ExclusiveContentIdNotExists');
+      }
+
+      walletDetail.referenceId = unlockableContentId;
+
       const transferExtrinsic = api.tx.tipping.payContent(
-        walletAddress,
-        +instanceId,
-        tipsBalanceInfo,
+        to,
+        instanceId,
+        walletDetail,
         amount,
-        accountReference,
+        userId,
       );
 
       // passing the injected account address as the first argument of signAndSend

@@ -17,6 +17,7 @@ export enum WalletReferenceType {
   USER = 'user',
   PEOPLE = 'people',
   WALLET_ADDRESS = 'wallet_address',
+  UNLOCKABLE_CONTENT = 'unlockable_content',
 }
 
 export interface WalletDetail {

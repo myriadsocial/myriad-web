@@ -21,8 +21,7 @@ export type TippingOptions = {
   receiver: UserWithWalletDetail | PeopleWithWalletDetail;
   reference: Post | Comment | User | ExclusiveContentWithPrices;
   referenceType: ReferenceType;
-  currencyContent?: Currency;
-  referenceId?: string;
+  contentReferenceId?: string;
 };
 export interface TippingProviderProps {
   anonymous: boolean;
@@ -35,14 +34,13 @@ export type SendTipProps = {
   referenceType: ReferenceType;
   defaultCurrency: BalanceDetail;
   balances: BalanceDetail[];
-  currencyContent?: Currency;
+  contentReferenceId?: string;
   onSuccess: (
     currency: BalanceDetail,
     explorerURL: string,
     transactionHash: string,
     amount: BN,
   ) => Promise<void> | void;
-  referenceId?: string;
 };
 
 export interface ExclusiveContent {

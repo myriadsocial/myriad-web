@@ -24,7 +24,7 @@ import {Button, ButtonVariant} from 'src/components/atoms/Button';
 import {CurrencyOptionComponent} from 'src/components/atoms/CurrencyOption';
 import {ListItemComponent} from 'src/components/atoms/ListItem';
 import {formatBalance} from 'src/helpers/balance';
-import {toBigNumber, strToJson} from 'src/helpers/string';
+import {strToJson, toBigNumber} from 'src/helpers/string';
 import {useWallet} from 'src/hooks/use-wallet-hook';
 import {BalanceDetail} from 'src/interfaces/balance';
 import {ReferenceType} from 'src/interfaces/interaction';
@@ -41,11 +41,10 @@ export const Tipping: React.FC<SendTipProps> = props => {
     receiver,
     reference,
     referenceType,
-    referenceId,
     balances,
     defaultCurrency,
     onSuccess,
-    currencyContent,
+    contentReferenceId,
   } = props;
 
   const classes = useStyles();
@@ -56,6 +55,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
   const [amount, setAmount] = useState<BN>(INITIAL_AMOUNT);
   const [transactionFee, setTransactionFee] = useState<BN>(INITIAL_AMOUNT);
   const [assetMinBalance, setAssetMinBalance] = useState<BN>(BN_ZERO);
+  const [balanceList, setBalanceList] = useState<BalanceDetail[]>(balances);
 
   const [currency, setCurrency] = useState<BalanceDetail>(defaultCurrency);
   const [agreementChecked, setAgreementChecked] = useState(false);
@@ -65,12 +65,25 @@ export const Tipping: React.FC<SendTipProps> = props => {
 
   const walletType = session?.user?.walletType as WalletTypeEnum;
   const networkType = session?.user?.networkType as NetworkIdEnum;
+  const isTipping = referenceType !== ReferenceType.EXCLUSIVE_CONTENT;
 
   useEffect(() => {
-    if (isTipping()) return;
-    const exclusiveContentWithPrices = reference as ExclusiveContentWithPrices;
-    setMinInput(exclusiveContentWithPrices.prices[0].amount);
-  }, []);
+    if (isTipping) return setBalanceList(balances);
+    const contentPrice = reference as ExclusiveContentWithPrices;
+    const currencyIds: string[] = [];
+    const price = {amount: 0};
+
+    contentPrice.prices.forEach(e => {
+      currencyIds.push(e.currencyId);
+      if (e.currencyId === currency.id) {
+        price.amount = e.amount;
+      }
+    });
+
+    const filterBalances = balances.filter(e => currencyIds.includes(e.id));
+    setMinInput(price.amount);
+    setBalanceList(filterBalances);
+  }, [isTipping, currency, balances, reference]);
 
   const nativeSymbol = useMemo(() => {
     const nativeCurrency = currencies.find(e => e.native);
@@ -101,7 +114,8 @@ export const Tipping: React.FC<SendTipProps> = props => {
 
     setLoadingFee(false);
     setTransactionFee(estimatedFee);
-    if (isTipping()) setAssetMinBalance(minBalance);
+
+    if (isTipping) setAssetMinBalance(minBalance);
     else {
       const exclusiveContentWithPrices = reference as ExclusiveContentWithPrices;
       setAssetMinBalance(toBigNumber(exclusiveContentWithPrices.prices[0].amount.toString(), 10));
@@ -148,10 +162,10 @@ export const Tipping: React.FC<SendTipProps> = props => {
 
     const currentNetwork = strToJson<Network>(stringifyNetwork);
 
-    if (isTipping()) {
-      if (currency.native) receiver.walletDetail.ftIdentifier = 'native';
-      else receiver.walletDetail.ftIdentifier = currency.referenceId;
+    if (currency.native) receiver.walletDetail.ftIdentifier = 'native';
+    else receiver.walletDetail.ftIdentifier = currency.referenceId;
 
+    if (isTipping) {
       const attributes = {
         from: senderAddress,
         to: receiver.id,
@@ -194,24 +208,12 @@ export const Tipping: React.FC<SendTipProps> = props => {
         },
       );
     } else {
-      const [instanceId, unlockableContentId, userId, walletAddress] =
-        receiver?.walletDetail?.referenceId?.split('/') ?? [];
-      const tipsBalanceInfo = {
-        serverId: receiver?.walletDetail?.serverId,
-        referenceType: receiver?.walletDetail?.referenceType,
-        referenceId: unlockableContentId,
-        ftIdentifier: currencyContent.referenceId ?? 'native',
-      };
-
       payUnlockableContent(
-        walletAddress ?? null,
-        instanceId,
-        tipsBalanceInfo,
+        receiver.walletDetail,
         amount,
         currency,
-        userId,
         referenceType,
-        referenceId,
+        contentReferenceId,
         hash => {
           onSuccess(currency, currentNetwork?.explorerURL, hash, amount);
 
@@ -221,93 +223,6 @@ export const Tipping: React.FC<SendTipProps> = props => {
       );
     }
   };
-
-  const isTipping = () => {
-    return referenceType !== ReferenceType.EXCLUSIVE_CONTENT;
-  };
-
-  const currencyContentBalance = balances?.find(balance => {
-    return balance?.name === currencyContent?.name;
-  });
-
-  useEffect(() => {
-    calculateTransactionFee(currencyContentBalance);
-  }, [amount]);
-
-  if (isTipping()) {
-    return (
-      <Paper className={classes.root}>
-        <div className={classes.subHeaderSection}>
-          <Grid container spacing={1} alignItems="center">
-            <Grid item>
-              <Typography className={classes.subHeader}>
-                {i18n.t('Tipping.Modal_Main.Balance')}
-              </Typography>
-            </Grid>
-            <Grid item>
-              <ShowIf condition={isTipping()}>
-                <TippingInfo />
-              </ShowIf>
-            </Grid>
-          </Grid>
-          <ListItemComponent
-            avatar={currency.image}
-            title={currency.symbol}
-            subtitle={
-              +currency.freeBalance === 0 ? '0' : parseFloat(currency.freeBalance.toFixed(4))
-            }
-            action={
-              <CurrencyOptionComponent onSelect={handleChangeCurrency} balanceDetails={balances} />
-            }
-          />
-
-          <form className={classes.formRoot} autoComplete="off">
-            <InputAmount
-              defaultValue={amount}
-              placeholder={i18n.t('Tipping.Modal_Main.Tip_Amount')}
-              decimal={currency.decimal}
-              fee={transactionFee}
-              minBalance={assetMinBalance}
-              maxValue={+currency.freeBalance}
-              length={10}
-              currencyId={currency.symbol}
-              onChange={handleAmountChange}
-            />
-
-            <Summary
-              amount={amount}
-              transactionFee={transactionFee}
-              receiver={receiver}
-              currency={currency}
-              loadingFee={loadingFee}
-              nativeSymbol={nativeSymbol}
-              isTipping={isTipping()}
-            />
-
-            <div className={classes.formControls}>
-              <TermOfService
-                about={i18n.t('Tipping.Modal_Main.About')}
-                onChange={handleChangeAgreement}
-              />
-
-              <Button
-                isDisabled={
-                  !agreementChecked || amount.lte(BN_ZERO) || loadingFee || !tippingAmountValid
-                }
-                variant={ButtonVariant.CONTAINED}
-                onClick={signTransaction}>
-                {i18n.t('Tipping.Modal_Main.Btn_Send_Tip')}
-              </Button>
-            </div>
-          </form>
-        </div>
-
-        <Backdrop className={classes.backdrop} open={isSignerLoading}>
-          <CircularProgress color="primary" />
-        </Backdrop>
-      </Paper>
-    );
-  }
 
   return (
     <Paper className={classes.root}>
@@ -319,51 +234,52 @@ export const Tipping: React.FC<SendTipProps> = props => {
             </Typography>
           </Grid>
           <Grid item>
-            <ShowIf condition={isTipping()}>
+            <ShowIf condition={isTipping}>
               <TippingInfo />
             </ShowIf>
           </Grid>
         </Grid>
         <ListItemComponent
-          avatar={currencyContent.image}
-          title={currencyContent.symbol}
-          subtitle={
-            +currencyContentBalance?.freeBalance === 0
-              ? '0'
-              : parseFloat(currencyContentBalance?.freeBalance.toFixed(4))
+          avatar={currency.image}
+          title={currency.symbol}
+          subtitle={+currency.freeBalance === 0 ? '0' : parseFloat(currency.freeBalance.toFixed(4))}
+          action={
+            <CurrencyOptionComponent onSelect={handleChangeCurrency} balanceDetails={balanceList} />
           }
         />
 
         <form className={classes.formRoot} autoComplete="off">
           <InputAmount
             defaultValue={amount}
-            placeholder={i18n.t('General.Amount')}
-            decimal={currencyContentBalance.decimal}
+            placeholder={i18n.t('Tipping.Modal_Main.Tip_Amount')}
+            decimal={currency.decimal}
             fee={transactionFee}
             minBalance={assetMinBalance}
-            maxValue={+currencyContentBalance.freeBalance}
+            maxValue={+currency.freeBalance}
             length={10}
-            currencyId={currencyContentBalance.symbol}
+            currencyId={currency.symbol}
             onChange={handleAmountChange}
             minInput={minInput}
           />
-          <Typography variant="subtitle2" color="textSecondary">
-            Minimal Input : {minInput}
-          </Typography>
+          <ShowIf condition={!isTipping}>
+            <Typography variant="subtitle2" color="textSecondary">
+              Minimal Input : {minInput}
+            </Typography>
+          </ShowIf>
 
           <Summary
             amount={amount}
             transactionFee={transactionFee}
             receiver={receiver}
-            currency={currencyContentBalance}
+            currency={currency}
             loadingFee={loadingFee}
             nativeSymbol={nativeSymbol}
-            isTipping={isTipping()}
+            isTipping={isTipping}
           />
 
           <div className={classes.formControls}>
             <TermOfService
-              about={i18n.t('ExclusiveContent.Label.ExclusiveContent')}
+              about={i18n.t('Tipping.Modal_Main.About')}
               onChange={handleChangeAgreement}
             />
 
@@ -373,7 +289,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
               }
               variant={ButtonVariant.CONTAINED}
               onClick={signTransaction}>
-              {i18n.t('ExclusiveContent.Label.UnlockNow')}
+              {i18n.t('Tipping.Modal_Main.Btn_Send_Tip')}
             </Button>
           </div>
         </form>

@@ -63,6 +63,8 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     post.embeddedURL &&
     post.deletedAt;
   const isHtmlPost = isInternalPost && !isJson(post.text);
+  const isExlusiveContent =
+    post.asset?.exclusiveContents && post.asset?.exclusiveContents.length > 0;
 
   const handleHashtagClicked = useCallback((hashtag: string) => {
     router.push(`/topic/hashtag?tag=${hashtag.replace('#', '')}`, undefined, {
@@ -136,17 +138,17 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
             <Reddit title={post.title} text={post.text} onHashtagClicked={handleHashtagClicked} />
           </ShowIf>
 
-          {post.asset?.exclusiveContents &&
-            post.asset?.exclusiveContents.length > 0 &&
-            !exclusiveContent && (
-              <ButtonPayment
-                id={post.asset?.exclusiveContents[0]}
-                contentId={post?.id}
-                setExclusive={setExclusiveContent}
-              />
-            )}
+          <ShowIf condition={isExlusiveContent && !exclusiveContent}>
+            <ButtonPayment
+              id={post.asset?.exclusiveContents[0]}
+              contentReferenceId={post?.id}
+              setExclusive={setExclusiveContent}
+            />
+          </ShowIf>
 
-          {exclusiveContent && <Reveal content={exclusiveContent} />}
+          <ShowIf condition={Boolean(exclusiveContent)}>
+            <Reveal content={exclusiveContent} />
+          </ShowIf>
 
           {isAssetImageExist && <Gallery images={post.asset?.images} variant="vertical" />}
 

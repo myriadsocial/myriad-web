@@ -8,7 +8,6 @@ import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {formatBalance} from 'src/helpers/balance';
 import {BalanceDetail} from 'src/interfaces/balance';
-import {TipsBalanceInfo} from 'src/interfaces/blockchain-interface';
 import {WalletDetail} from 'src/interfaces/wallet';
 import {storeTransaction} from 'src/lib/api/transaction';
 import i18n from 'src/locale';
@@ -101,12 +100,9 @@ export const useWallet = () => {
   };
 
   const payUnlockableContent = async (
-    walletAddress: string | null,
-    instanceId: string,
-    tipsBalanceInfo: TipsBalanceInfo,
+    walletDetail: WalletDetail,
     amount: BN,
     currency: BalanceDetail,
-    accountReference: string,
     type?: string,
     referenceId?: string,
     callback?: (txHash: string) => void,
@@ -114,14 +110,12 @@ export const useWallet = () => {
     setLoading(true);
 
     try {
+      const [, , userId, walletAddress] = walletDetail.referenceId.split('/');
       const from = provider.accountId;
-      const to = walletAddress ?? accountReference;
+      const to = walletAddress ?? userId;
       const txHash = await provider.payUnlockableContent(
-        walletAddress,
-        instanceId,
-        tipsBalanceInfo,
+        walletDetail,
         amount,
-        accountReference,
         undefined,
         params => {
           if (params?.signerOpened) {
@@ -135,7 +129,7 @@ export const useWallet = () => {
         const txData = {hash: txHash, amount: finalAmount, from, to, currencyId: currency.id};
 
         if (type) Object.assign(txData, {type});
-        if (referenceId) Object.assign(txData, {referenceId});
+        if (referenceId) Object.assign(txData, {referenceId}); // kurang post id / comment id
 
         // Record the transaction
         await storeTransaction(txData);

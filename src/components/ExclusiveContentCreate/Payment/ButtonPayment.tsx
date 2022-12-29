@@ -3,6 +3,7 @@ import {GiftIcon} from '@heroicons/react/outline';
 import {Dispatch, SetStateAction, useEffect, useState} from 'react';
 import {shallowEqual, useSelector} from 'react-redux';
 
+import {useSession} from 'next-auth/react';
 import {useRouter} from 'next/router';
 
 import {Button, SvgIcon} from '@material-ui/core';
@@ -16,23 +17,21 @@ import useTipping from 'components/common/Tipping/use-tipping.hook';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {Currency} from 'src/interfaces/currency';
 import {ReferenceType} from 'src/interfaces/interaction';
-import {Network} from 'src/interfaces/network';
+import {Network, NetworkIdEnum} from 'src/interfaces/network';
 import {getExclusiveContent, getWalletAddressExclusive} from 'src/lib/api/post';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {ECState} from 'src/reducers/exclusive-content/reducer';
-import {UserState} from 'src/reducers/user/reducer';
 
-const ButtonPayment = ({
-  id,
-  contentId,
-  setExclusive,
-}: {
+type ButtonPaymentProps = {
   id: string;
-  contentId: string;
+  contentReferenceId: string;
   setExclusive: Dispatch<SetStateAction<ExclusiveContent>>;
-}) => {
-  const {currentWallet} = useSelector<RootState, UserState>(state => state.userState);
+};
+
+const ButtonPayment: React.FC<ButtonPaymentProps> = props => {
+  const {id, contentReferenceId, setExclusive} = props;
+  const {data: session} = useSession();
   const {paid, ecId} = useSelector<RootState, ECState>(state => state.ecState);
   const {user} = useUserHook();
   const {switchNetwork} = useBlockchain();
@@ -68,6 +67,8 @@ const ButtonPayment = ({
     router.push(`/wallet?type=manage`);
   };
 
+  const networkType = session?.user?.networkType as NetworkIdEnum;
+
   const handlePayExclusiveContent = async (id: string) => {
     if (anonymous) return setTipInfoOpened(true);
     if (isWeb2Users) return setPrompWeb2Users(true);
@@ -79,16 +80,18 @@ const ButtonPayment = ({
         setExclusive(exclusiveDetail);
       } else {
         setAcceptNetwork(exclusiveDetail.prices[0]?.currency);
-        if (currentWallet?.networkId !== exclusiveDetail.prices[0]?.currency?.networkId) {
+
+        if (networkType !== exclusiveDetail.prices[0]?.currency?.networkId) {
           return handleNetworkError();
         }
+
         const walletAddress = await getWalletAddressExclusive(exclusiveDetail?.id);
+
         tipping.send({
           receiver: {...exclusiveDetail?.user, walletDetail: walletAddress},
           reference: exclusiveDetail,
           referenceType: ReferenceType.EXCLUSIVE_CONTENT,
-          currencyContent: exclusiveDetail.prices[0]?.currency,
-          referenceId: `${exclusiveDetail?.id}/${contentId}`,
+          contentReferenceId: `$${exclusiveDetail.id}/${contentReferenceId}`,
         });
       }
     } catch (error) {
@@ -126,7 +129,7 @@ const ButtonPayment = ({
         title={i18n.t('ExclusiveContent.Label.NetworkError')}
         subtitle={i18n.t('ExclusiveContent.Text.NetworkError', {
           accept: acceptNetwork?.networkId,
-          current: currentWallet?.networkId,
+          current: networkType,
         })}
         open={openSwitchNetwork}
         onCancel={handleNetworkError}>

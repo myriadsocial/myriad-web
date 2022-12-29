@@ -52,11 +52,8 @@ export interface IProvider {
   assetMinBalance: (ftIdentifier?: string) => Promise<EstimateFeeResponseProps>;
 
   payUnlockableContent?: (
-    walletDetail: string | null,
-    instanceId: string,
-    tipsBalanceInfo: TipsBalanceInfo,
+    walletDetail: WalletDetail,
     amount: BN,
-    accountReference: string,
     ...args: [InjectedAccountWithMeta, SignTransaction]
   ) => Promise<string | null>;
 }
