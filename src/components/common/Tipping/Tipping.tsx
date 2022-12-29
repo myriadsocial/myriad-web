@@ -322,7 +322,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
         <form className={classes.formRoot} autoComplete="off">
           <InputAmount
             defaultValue={amount}
-            placeholder={i18n.t('Tipping.Modal_Main.Tip_Amount')}
+            placeholder={i18n.t('General.Amount')}
             decimal={currencyContentBalance.decimal}
             fee={transactionFee}
             minBalance={assetMinBalance}
@@ -348,7 +348,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
 
           <div className={classes.formControls}>
             <TermOfService
-              about={i18n.t('Tipping.Modal_Main.About')}
+              about={i18n.t('ExclusiveContent.Label.ExclusiveContent')}
               onChange={handleChangeAgreement}
             />
 
@@ -358,7 +358,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
               }
               variant={ButtonVariant.CONTAINED}
               onClick={signTransaction}>
-              {i18n.t('Tipping.Modal_Main.Btn_Send_Tip')}
+              {i18n.t('ExclusiveContent.Label.UnlockNow')}
             </Button>
           </div>
         </form>

@@ -86,7 +86,7 @@ export const Summary: React.FC<SummaryProps> = props => {
       </ShowIf>
       <div className={styles.detail}>
         <Typography className={styles.bold} gutterBottom>
-          {i18n.t('Tipping.Modal_Main.Tip_Summary')}
+          {isTipping ? i18n.t('Tipping.Modal_Main.Tip_Summary') : i18n.t('General.Summary')}
         </Typography>
         <TableContainer>
           <Table size="small" aria-label="tip summary table">
@@ -94,7 +94,7 @@ export const Summary: React.FC<SummaryProps> = props => {
               <TableRow>
                 <TableCell component="th" scope="row" classes={{root: styles.table}}>
                   <Typography variant="subtitle2" color="textSecondary">
-                    {i18n.t('Tipping.Modal_Main.Tip_Label')}
+                    {isTipping ? i18n.t('Tipping.Modal_Main.Tip_Label') : i18n.t('General.Amount')}
                   </Typography>
                 </TableCell>
                 <TableCell align="right" classes={{root: styles.table}}>
