@@ -115,26 +115,35 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
         icon="success"
         open={Boolean(currencyTipped)}
         onCancel={resetTippingStatus}
-        title={i18n.t('Tipping.Prompt_Success.Title')}
+        title={
+          isTipping()
+            ? i18n.t('Tipping.Prompt_Success.Title')
+            : i18n.t('ExclusiveContent.Prompt_Success.Title')
+        }
         subtitle={
-          <Typography component="div">
-            {i18n.t('Tipping.Prompt_Success.Subtitle_1')}
-            <Box fontWeight={400} display="inline">
-              {options?.receiver.name ?? 'Unknown Myrian'}
-            </Box>
-            {i18n.t('Tipping.Prompt_Success.Subtitle_2')}
-          </Typography>
+          isTipping() ? (
+            <Typography component="div">
+              {i18n.t('Tipping.Prompt_Success.Subtitle_1')}
+              <Box fontWeight={400} display="inline">
+                {options?.receiver.name ?? 'Unknown Myrian'}
+              </Box>
+              {i18n.t('Tipping.Prompt_Success.Subtitle_2')}
+            </Typography>
+          ) : null
         }>
         <Grid container justifyContent="space-around">
-          <Button
-            href={transactionUrl ?? 'https://myriad.social'}
-            target="_blank"
-            rel="noopener noreferrer"
-            size="small"
-            variant="outlined"
-            color="secondary">
-            {i18n.t('Tipping.Prompt_Success.Btn_Trx_Detail')}
-          </Button>
+          {isTipping() && (
+            <Button
+              href={transactionUrl ?? 'https://myriad.social'}
+              target="_blank"
+              rel="noopener noreferrer"
+              size="small"
+              variant="outlined"
+              color="secondary">
+              {i18n.t('Tipping.Prompt_Success.Btn_Trx_Detail')}
+            </Button>
+          )}
+
           {currencyTipped &&
             (options &&
             'platform' in options.reference &&

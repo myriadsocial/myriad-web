@@ -1237,7 +1237,9 @@
     },
     "Text" : {
       "NetworkError" : "Payment only available in {{accept}} now you are in {{current}}. Switch network to proceed"
+    },
+    "Prompt_Success" : {
+      "Title" : "Unlock Content Success"
     }
-    
   }
 }

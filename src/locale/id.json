@@ -1233,6 +1233,9 @@
     },
     "Text" : {
       "NetworkError" : "Pembayaran hanya berlaku di jaringan {{accept}} saat ini anda berada di jaringan {{current}}. Ubah jaringan untuk memproses pembayaran"
+    },
+    "Prompt_Success" : {
+      "Title" : "Konten Berhasil Dibuka"
     }
   }
 }
