@@ -848,7 +848,8 @@
         "User": "You have been banned for breaking our community rule"
       },
       "Connect_Socmed": "Your {{platform}} account @{{username}} successfully connected to Myriad",
-      "Disconnect_Socmed": "Your {{platform}} account @{{username}} successfully disconnected from @{{user}} Myriad account."
+      "Disconnect_Socmed": "Your {{platform}} account @{{username}} successfully disconnected from @{{user}} Myriad account.",
+      "UnlockedContent": "Unlocked your exclusive content."
     },
     "Footer": {
       "View": "View all notifications"

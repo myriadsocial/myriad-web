@@ -1,4 +1,5 @@
 import {BaseModel} from './base.interface';
+import {SectionType} from './interaction';
 import {User} from './user';
 
 export enum NotificationType {
@@ -24,6 +25,7 @@ export enum NotificationType {
   POST_REMOVED = 'post_removed',
   COMMENT_REMOVED = 'comment_removed',
   USER_BANNED = 'user_banned',
+  PAID_CONTENT = 'paid_content',
 }
 
 export type UserReference = {
@@ -50,11 +52,24 @@ export type SocialMediaReference = {
   username: string;
 };
 
+export type UnlockableContentReference = {
+  id: string;
+  comment?: {
+    id: string;
+    postId: string;
+    section: SectionType;
+  };
+  post?: {
+    id: string;
+  };
+};
+
 export interface AdditionalReferenceIdItem {
   comment?: CommentReference;
   user?: UserReference;
   post?: PostReference;
   people?: SocialMediaReference;
+  unlockableContent?: UnlockableContentReference;
 }
 
 export type NotificationProps = {

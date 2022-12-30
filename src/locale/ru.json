@@ -828,7 +828,8 @@
         "User": "Вы были заблокированы по причине нарушения правил"
       },
       "Connect_Socmed": "Ваш аккаунт {{platform}} @{{username}} успешно объединены в Myriad",
-      "Disconnect_Socmed": "Ваш аккаунт {{platform}} @{{username}} успешно отсоединены от Myriad пользователем @{{user}}"
+      "Disconnect_Socmed": "Ваш аккаунт {{platform}} @{{username}} успешно отсоединены от Myriad пользователем @{{user}}",
+      "UnlockedContent": "Unlocked your exclusive content."
     },
     "Footer": {
       "View": "Посмотреть все уведомления"
