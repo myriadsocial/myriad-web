@@ -16,7 +16,11 @@ import {SvgIcon} from '@material-ui/core';
 import {useStyles} from '../Notifications.styles';
 
 import {parseScientificNotatedNumber} from 'src/helpers/number';
-import {Notification, NotificationType} from 'src/interfaces/notification';
+import {
+  Notification,
+  NotificationType,
+  UnlockableContentReference,
+} from 'src/interfaces/notification';
 import {PostOrigin} from 'src/interfaces/timeline';
 import {PAGINATION_LIMIT} from 'src/lib/api/constants/pagination';
 import i18n from 'src/locale';
@@ -71,6 +75,18 @@ export const useNotificationList = (
   const style = useStyles({});
 
   const excludes = [NotificationType.POST_VOTE, NotificationType.COMMENT_VOTE].concat(exclude);
+
+  const getLockableContentLink = (reference: UnlockableContentReference): string => {
+    if ('post' in reference && reference.post?.id) {
+      return `/post/${reference.post.id}`;
+    }
+
+    if ('comment' in reference && reference.comment?.id) {
+      return `/post/${reference.comment?.postId}?comment=${reference?.comment?.id}&section=${reference.comment?.section}`;
+    }
+
+    return `/404`;
+  };
 
   return notifications
     .filter(notification => !excludes.includes(notification.type))
@@ -553,6 +569,30 @@ export const useNotificationList = (
             createdAt: notification.createdAt,
             platform: getPlatform(notification.message) as PostOrigin,
             href: `/socials`,
+          };
+
+        case NotificationType.PAID_CONTENT:
+          return {
+            id: notification.id,
+            type: NotificationType.PAID_CONTENT,
+            read: notification.read,
+            userId: notification.fromUserId.id,
+            user: notification.fromUserId.name,
+            avatar: notification.fromUserId.profilePictureURL,
+            description: i18n.t('Notification.Header.UnlockedContent'),
+            badge: (
+              <div className={style.circleSuccess}>
+                <SvgIcon
+                  component={ArrowCircleLeftIcon}
+                  viewBox="2 2 20 20"
+                  style={{fill: '#47B881', color: '#FFF'}}
+                />
+              </div>
+            ),
+            createdAt: notification.createdAt,
+            href: notification.additionalReferenceId
+              ? getLockableContentLink(notification.additionalReferenceId.unlockableContent)
+              : `/404`,
           };
 
         default:

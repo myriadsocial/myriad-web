@@ -377,7 +377,7 @@
       "See": "Lihat Pos",
       "Comment": "Anda mengomentari “{{text}}...” yang diposting oleh {{name}}.",
       "Reply": "Anda membalas komentar di “{{text}}...” yang Diposting oleh {{name}}."
-      
+
     },
     "Experience": {
       "Empty": {
@@ -847,7 +847,8 @@
         "User": "Anda telah dilarang karena melanggar aturan komunitas kami"
       },
       "Connect_Socmed": "Akun {{platform}} Anda @{{username}} berhasil terhubung ke Myriad",
-      "Disconnect_Socmed": "Akun {{platform}} Anda @{{username}} berhasil diputuskan dari Myriad oleh @{{user}}"
+      "Disconnect_Socmed": "Akun {{platform}} Anda @{{username}} berhasil diputuskan dari Myriad oleh @{{user}}",
+      "UnlockedContent": "Membuka kunci konten eksklusif Anda."
     },
     "Footer": {
       "View": "Lihat semua notifikasi"
