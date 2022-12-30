@@ -115,7 +115,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           </ShowIf>
 
           {post.asset?.exclusiveContents && post.asset?.exclusiveContents.length > 0 && (
-            <ButtonPayment url={post.asset?.exclusiveContents[0]} />
+            <ButtonPayment url={post.asset?.exclusiveContents[0]} contentId={post?.id} />
           )}
 
           {post.asset?.images && post.asset?.images.length > 0 && (

@@ -19,7 +19,7 @@ import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
 
-const ButtonPayment = ({url}: {url: string}) => {
+const ButtonPayment = ({url, contentId}: {url: string; contentId: string}) => {
   const {currentWallet, user} = useSelector<RootState, UserState>(state => state.userState);
   const {switchNetwork} = useBlockchain();
   const tipping = useTipping();
@@ -48,6 +48,7 @@ const ButtonPayment = ({url}: {url: string}) => {
         reference: detail,
         referenceType: ReferenceType.EXCLUSIVE_CONTENT,
         currencyContent: (detail as unknown as PriceUnlockableContent).prices[0]?.currency,
+        referenceId: `${detail?.id}/${contentId}`,
       });
     } catch (error) {
       console.log(error);

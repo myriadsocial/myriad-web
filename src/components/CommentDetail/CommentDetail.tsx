@@ -296,7 +296,10 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                 <NodeViewer id={comment.id} text={comment.text} />
                 {comment.asset?.exclusiveContents &&
                   comment.asset?.exclusiveContents.length > 0 && (
-                    <ButtonPayment url={comment.asset?.exclusiveContents[0]} />
+                    <ButtonPayment
+                      url={comment.asset?.exclusiveContents[0]}
+                      contentId={comment?.id}
+                    />
                   )}
               </CardContent>
               <CardActions disableSpacing>
