@@ -40,6 +40,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
     receiver,
     reference,
     referenceType,
+    referenceId,
     balances,
     defaultCurrency,
     currentNetwork,
@@ -196,7 +197,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
         amount,
         currency,
         referenceType,
-        receiver?.walletDetail?.referenceId,
+        referenceId,
         hash => {
           onSuccess(currency, currentWallet?.network?.explorerURL, hash, amount);
 

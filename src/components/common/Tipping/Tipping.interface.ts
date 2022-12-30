@@ -23,6 +23,7 @@ export type TippingOptions = {
   reference: Post | Comment | User;
   referenceType: ReferenceType;
   currencyContent?: Currency;
+  referenceId?: string;
 };
 export interface TippingProviderProps {
   anonymous: boolean;
@@ -46,6 +47,7 @@ export type SendTipProps = {
     transactionHash: string,
     amount: BN,
   ) => Promise<void> | void;
+  referenceId?: string;
 };
 
 export type PriceUnlockableContent = {
