@@ -24,7 +24,11 @@ type UserNonceProps = {
   nonce: number;
 };
 
-export const useAuthHook = () => {
+type UseAuthHooksArgs = {
+  redirect?: string | string[];
+};
+
+export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
   const {anonymous: anonymousUser, networks} = useSelector<RootState, UserState>(
     state => state.userState,
   );
@@ -77,7 +81,7 @@ export const useAuthHook = () => {
         networkId: networkId,
         nonce,
         anonymous: false,
-        callbackUrl: publicRuntimeConfig.appAuthURL,
+        callbackUrl: redirect || publicRuntimeConfig.appAuthURL,
       });
 
       window.localStorage.setItem(MYRIAD_WALLET_KEY, walletType);

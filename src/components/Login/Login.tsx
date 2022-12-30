@@ -49,7 +49,9 @@ export const Login: React.FC<LoginProps> = props => {
   const router = useRouter();
   const styles = useStyles();
 
-  const {fetchUserNonce, signInWithExternalAuth, clearNearCache} = useAuthHook();
+  const {redirect} = router.query;
+
+  const {fetchUserNonce, signInWithExternalAuth, clearNearCache} = useAuthHook({redirect});
   const {checkUsernameAvailable} = useProfileHook();
   const {connectToNear} = useNearApi();
 
