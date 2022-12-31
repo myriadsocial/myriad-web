@@ -16,6 +16,7 @@ import ShowIf from 'components/common/show-if.component';
 import {LinkPreview} from 'src/components/atoms/LinkPreview';
 import {NSFW} from 'src/components/atoms/NSFW/NSFW.component';
 import {SendTipButton} from 'src/components/common/SendTipButton/SendTipButton';
+import {isJson} from 'src/helpers/string';
 import {useToggle} from 'src/hooks/use-toggle.hook';
 import {IcInfoBlack} from 'src/images/Icons';
 import {ReferenceType} from 'src/interfaces/interaction';
@@ -54,6 +55,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     post?.asset?.videos?.length === 0 &&
     post.embeddedURL &&
     post.deletedAt;
+  const isHtmlPost = isInternalPost && !isJson(post.text);
 
   const handleHashtagClicked = useCallback((hashtag: string) => {
     router.push(`/topic/hashtag?tag=${hashtag.replace('#', '')}`, undefined, {
@@ -90,12 +92,16 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
         </ShowIf>
 
         <ShowIf condition={!hiddenContent}>
-          <ShowIf condition={['myriad'].includes(post.platform)}>
+          <ShowIf condition={['myriad'].includes(post.platform) && !isHtmlPost}>
             <NodeViewer
               id={`${post.id}-${preview ? 'preview' : ''}`}
               text={post.text}
               expand={expand}
             />
+          </ShowIf>
+
+          <ShowIf condition={['myriad'].includes(post.platform) && isHtmlPost}>
+            <div dangerouslySetInnerHTML={{__html: post.text}} />
           </ShowIf>
 
           <ShowIf condition={['twitter'].includes(post.platform) && post.text.length > 0}>

@@ -56,7 +56,7 @@ export const useProfileHook = () => {
       const url = await uploadImage(image);
       return url;
     } catch (error) {
-      console.log('[useProfileHook][updateProfileBanner][error]', error);
+      console.error('[useProfileHook][updateProfileBanner][error]', error);
       return false;
     } finally {
       setUploadingBanner(false);

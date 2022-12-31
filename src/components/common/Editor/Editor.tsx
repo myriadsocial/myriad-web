@@ -43,6 +43,7 @@ import ImageIcon from '@material-ui/icons/Image';
 import LinkIcon from '@material-ui/icons/Link';
 import OndemandVideoIcon from '@material-ui/icons/OndemandVideo';
 
+import {EditorProps} from '../CKEditor/Editor.interface';
 import {EditorValue, Mentionable, MentionDetail} from './Editor.interface';
 import {useStyles} from './Editor.style';
 import {
@@ -181,13 +182,6 @@ const corePlugins = createEditorPlugins([
   }),
 ]);
 
-export type EditorProps = {
-  userId: string;
-  mobile?: boolean;
-  onSearchMention: (query: string) => void;
-  isErrorEditor?: boolean;
-};
-
 export const Editor: React.FC<EditorProps> = props => {
   const {userId, mobile, onSearchMention, isErrorEditor = false} = props;
 
@@ -200,7 +194,7 @@ export const Editor: React.FC<EditorProps> = props => {
   const plugins = useMemo(() => {
     const handleFileUpload = async (dataURI: string | ArrayBuffer): Promise<string> => {
       if (dataURI instanceof ArrayBuffer) {
-        console.log('buffer');
+        // code
       }
 
       if (typeof dataURI === 'string') {
@@ -309,3 +303,5 @@ export const Editor: React.FC<EditorProps> = props => {
     </div>
   );
 };
+
+export default Editor;

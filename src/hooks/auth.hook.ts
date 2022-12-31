@@ -42,7 +42,7 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
 
       return data;
     } catch (error) {
-      console.log('[useAuthHook][getUserNonce][error]', {error});
+      console.error('[useAuthHook][getUserNonce][error]', {error});
       return {nonce: 0};
     }
   };

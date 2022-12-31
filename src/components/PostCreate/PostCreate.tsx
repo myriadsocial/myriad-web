@@ -1,9 +1,10 @@
 import {ArrowLeftIcon, GiftIcon, TrashIcon} from '@heroicons/react/outline';
 
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {useDispatch} from 'react-redux';
 
 import getConfig from 'next/config';
+import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 
 import {Button, IconButton, SvgIcon, Typography} from '@material-ui/core';
@@ -22,7 +23,6 @@ import {serialize} from './formatter';
 
 import ExclusiveCreate from 'components/ExclusiveContentCreate/ExclusiveCreate';
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
-import {Editor} from 'components/common/Editor';
 import {getEditorSelectors} from 'components/common/Editor/store';
 import ShowIf from 'src/components/common/show-if.component';
 import {ExclusiveContentPost} from 'src/interfaces/exclusive';
@@ -30,6 +30,13 @@ import {Post, PostVisibility} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
 import {createExclusiveContent} from 'src/reducers/timeline/actions';
+
+const CKEditor = dynamic(() => import('../common/CKEditor/Editor'), {
+  ssr: false,
+});
+const PlateEditor = dynamic(() => import('../common/Editor/Editor'), {
+  ssr: false,
+});
 
 type PostCreateProps = {
   user: User;
@@ -60,9 +67,13 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
 
   const [activeTab, setActiveTab] = useState<PostCreateType>('create');
   const [post, setPost] = useState<Partial<Post>>(initialPost);
+  const [loading, setLoading] = useState<boolean>(false);
+  const content = useRef('');
 
   const [importUrl, setImport] = useState<string | undefined>();
   const [exclusiveContent, setExclusiveContent] = useState<ExclusiveContentPost | null>(null);
+
+  const Editor = isMobile ? CKEditor : PlateEditor;
 
   const header: Record<PostCreateType, {title: string; subtitle: string}> = {
     create: {
@@ -105,7 +116,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
       setImport(undefined);
     }
 
-    if (activeTab === 'create') {
+    if (!isMobile && activeTab === 'create') {
       const store = getEditorSelectors(user.id);
       const value = store.value();
 
@@ -156,6 +167,16 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
         });
       }
     }
+
+    if (isMobile && activeTab === 'create') {
+      onSubmit({
+        text: content.current,
+        rawText: content.current,
+        selectedUserIds: post.selectedUserIds,
+        NSFWTag: post.NSFWTag,
+        visibility: post.visibility ?? PostVisibility.PUBLIC,
+      });
+    }
   };
 
   const handleClose = () => {
@@ -163,6 +184,11 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
     setImport(undefined);
 
     onClose();
+  };
+
+  const handleContentChange = (data, loading) => {
+    setLoading(loading);
+    content.current = data;
   };
 
   const handleErrorImport = () => {
@@ -199,7 +225,12 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
       </ShowIf>
 
       <TabPanel value={activeTab} index="create">
-        <Editor userId={user.id} mobile={isMobile} onSearchMention={onSearchPeople} />
+        <Editor
+          userId={user.id}
+          mobile={isMobile}
+          onSearchMention={onSearchPeople}
+          onChange={handleContentChange}
+        />
       </TabPanel>
 
       <TabPanel value={activeTab} index="import">
@@ -284,7 +315,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
         <ShowIf condition={activeTab !== 'exclusive'}>
           <ShowIf condition={post.visibility !== 'selected_user'}>
             <Button
-              disabled={false}
+              disabled={loading}
               variant="contained"
               color="primary"
               size="small"

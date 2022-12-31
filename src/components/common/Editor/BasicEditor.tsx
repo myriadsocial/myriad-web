@@ -109,10 +109,11 @@ export type BasicEditorProps = {
   placeholder?: string;
   onSearchMention: (query: string) => void;
   children?: React.ReactNode;
+  onChange?: (data: EditorValue) => void;
 };
 
 export const BasicEditor: React.FC<BasicEditorProps> = props => {
-  const {id, placeholder = 'Write a Reply ...', children, onSearchMention} = props;
+  const {id, placeholder = 'Write a Reply ...', children, onSearchMention, onChange} = props;
 
   const styles = useStyles({mobile: false});
   const containerRef = useRef(null);
@@ -146,7 +147,7 @@ export const BasicEditor: React.FC<BasicEditorProps> = props => {
   return (
     <div className={styles.root}>
       <div ref={containerRef} className={styles.editor}>
-        <Plate id={id} editableProps={editableProps} plugins={plugins}>
+        <Plate id={id} editableProps={editableProps} plugins={plugins} onChange={onChange}>
           <MentionCombobox<MentionDetail>
             onRenderItem={renderComboboxItem}
             onSearch={handleSearchMention}
@@ -167,3 +168,5 @@ export const BasicEditor: React.FC<BasicEditorProps> = props => {
     </div>
   );
 };
+
+export default BasicEditor;

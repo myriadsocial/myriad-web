@@ -53,5 +53,8 @@ export const useStyles = makeStyles<Theme, CommentEditorProps>(theme =>
     attachButton: {
       marginRight: '20px !important',
     },
+    mobile: {
+      padding: '0 12px 8px 12px',
+    },
   }),
 );

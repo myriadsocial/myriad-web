@@ -1,0 +1,7 @@
+:root {
+  ---ck-z-default: 9999;
+  --ck-color-mention-text: #7342cc;
+}
+.ck.ck-balloon-panel {
+  z-index: 9999 !important;
+}

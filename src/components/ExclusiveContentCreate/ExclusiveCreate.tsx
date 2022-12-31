@@ -1,7 +1,9 @@
 import {InformationCircleIcon} from '@heroicons/react/outline';
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
+
+import dynamic from 'next/dynamic';
 
 import {Button, SvgIcon, Typography} from '@material-ui/core';
 
@@ -10,7 +12,7 @@ import {useStyles} from './ExclusiveCreate.styles';
 import {InputAmount} from './InputAmount';
 
 import {serialize} from 'components/PostCreate/formatter';
-import {checkEditor, Editor, getEditorSelectors} from 'components/common/Editor';
+import {checkEditor, getEditorSelectors} from 'components/common/Editor';
 import {TermOfService} from 'components/common/TermOfService';
 import {Currency} from 'src/interfaces/currency';
 import {ExclusiveContentPost} from 'src/interfaces/exclusive';
@@ -19,6 +21,13 @@ import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {ConfigState} from 'src/reducers/config/reducer';
+
+const CKEditor = dynamic(() => import('../common/CKEditor/Editor'), {
+  ssr: false,
+});
+const PlateEditor = dynamic(() => import('../common/Editor/Editor'), {
+  ssr: false,
+});
 
 type PostCreateProps = {
   user: User;
@@ -38,6 +47,10 @@ export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
   const [agreementChecked, setAgreementChecked] = useState<boolean>(false);
   const [isDisabledButton, setIsDisabledButton] = useState<boolean>(true);
   const [isErrorEditor, setIsErrorEditor] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const content = useRef('');
+
+  const Editor = isMobile ? CKEditor : PlateEditor;
 
   const {filteredCurrencies: balances} = useSelector<RootState, ConfigState>(
     state => state.configState,
@@ -55,7 +68,7 @@ export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
     const store = getEditorSelectors(`exclusive-${user.id}`);
     const value = store.value();
 
-    if (checkEditor(value)) {
+    if (!isMobile && checkEditor(value)) {
       setIsErrorEditor(false);
       const attributes = serialize(value);
 
@@ -63,6 +76,20 @@ export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
         content: {
           text: attributes.text,
           rawText: attributes.rawText,
+        },
+
+        contentPrices: [
+          {
+            currencyId: currency.id,
+            amount: Number(amount),
+          },
+        ],
+      });
+    } else if (isMobile) {
+      onSubmit({
+        content: {
+          text: content.current,
+          rawText: content.current,
         },
 
         contentPrices: [
@@ -82,6 +109,12 @@ export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
     else setIsDisabledButton(true);
   }, [agreementChecked, currency, amount]);
 
+  const handleContentChange = (data, loading) => {
+    setLoading(loading);
+
+    content.current = data;
+  };
+
   return (
     <>
       <div style={{marginBottom: 20}}>
@@ -90,6 +123,8 @@ export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
           mobile={isMobile}
           onSearchMention={onSearchPeople}
           isErrorEditor={isErrorEditor}
+          //TODO: handle ckeditor value
+          onChange={handleContentChange}
         />
       </div>
       <div className={styles.currencyWrapper}>
@@ -124,7 +159,7 @@ export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
         />
         <Button
           className={styles.buttonSubmit}
-          disabled={isDisabledButton}
+          disabled={isDisabledButton && loading}
           variant="contained"
           color="primary"
           size="small"

@@ -1,19 +1,19 @@
-import React, {forwardRef, useState} from 'react';
+import React, {forwardRef, useRef, useState} from 'react';
 import {useDispatch} from 'react-redux';
 
 import getConfig from 'next/config';
+import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 
 import {Grid, useMediaQuery} from '@material-ui/core';
 
 import {Avatar, AvatarSize} from '../atoms/Avatar';
-import {CommentAction} from './CommentAction';
 import {useStyles} from './CommentEditor.style';
 import {serialize} from './formatter';
 
 import ExclusiveCreateContainer from 'components/ExclusiveContentCreate/ExclusiveCreate.container';
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
-import {BasicEditor, initial} from 'components/common/Editor';
+import {initial} from 'components/common/Editor';
 import {getEditorSelectors, usePlateEditorRef} from 'components/common/Editor/store';
 import {CommentProps} from 'src/interfaces/comment';
 import {ExclusiveContentPost} from 'src/interfaces/exclusive';
@@ -22,6 +22,19 @@ import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
 import {createExclusiveContent} from 'src/reducers/timeline/actions';
 import theme from 'src/themes/light-theme';
+
+const CKEditor = dynamic(() => import('../common/CKEditor/BasicEditor'), {
+  ssr: false,
+});
+const PlateEditor = dynamic(() => import('../common/Editor/BasicEditor'), {
+  ssr: false,
+});
+const CommentAction = dynamic(() => import('./CommentAction'), {
+  ssr: false,
+});
+const CommentActionMobile = dynamic(() => import('./CommentActionMobile'), {
+  ssr: false,
+});
 
 export type CommentEditorProps = {
   referenceId: string;
@@ -43,6 +56,9 @@ const CommentEditor = (props: CommentEditorProps, ref: React.ForwardedRef<HTMLDi
   const confirm = useConfirm();
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
+
+  const Editor = isMobile ? CKEditor : PlateEditor;
+  const Action = isMobile ? CommentActionMobile : CommentAction;
 
   const styles = useStyles({mobile: isMobile});
 
@@ -74,11 +90,14 @@ const CommentEditor = (props: CommentEditorProps, ref: React.ForwardedRef<HTMLDi
   // each comment section get a different editor
   const editorId = `${referenceId}-${section}`;
   const editorRef = usePlateEditorRef(editorId);
+  const ckEditorRef = useRef<any>();
+  const [content, setContent] = useState<string>('');
 
   const submitComment = () => {
-    const editor = getEditorSelectors(editorId);
-
-    const attributes = serialize(editor.value());
+    const comment: Partial<CommentProps> = {
+      referenceId,
+      type,
+    };
 
     if (exclusiveContent) {
       dispatch(
@@ -86,16 +105,24 @@ const CommentEditor = (props: CommentEditorProps, ref: React.ForwardedRef<HTMLDi
           exclusiveContent,
           [],
           resp => {
-            onSubmit({
-              ...attributes,
-              referenceId,
-              type,
-              asset: {
-                exclusiveContents: [
-                  `${publicRuntimeConfig.myriadAPIURL}/user/unlockable-contents/${resp?.id}`,
-                ],
-              },
-            });
+            comment.asset = {
+              exclusiveContents: [
+                `${publicRuntimeConfig.myriadAPIURL}/user/unlockable-contents/${resp?.id}`,
+              ],
+            };
+
+            if (isMobile) {
+              comment.text = content;
+              comment.mentions = [];
+            } else {
+              const editor = getEditorSelectors(editorId);
+              const attributes = serialize(editor.value());
+
+              comment.text = attributes.text;
+              comment.mentions = attributes.mentions;
+            }
+
+            onSubmit(comment);
           },
           () => {
             confirm({
@@ -115,16 +142,36 @@ const CommentEditor = (props: CommentEditorProps, ref: React.ForwardedRef<HTMLDi
         ),
       );
     } else {
-      onSubmit({
-        ...attributes,
-        referenceId,
-        type,
-      });
+      if (isMobile) {
+        comment.text = content;
+        comment.mentions = [];
+      } else {
+        const editor = getEditorSelectors(editorId);
+        const attributes = serialize(editor.value());
+
+        comment.text = attributes.text;
+        comment.mentions = attributes.mentions;
+      }
+
+      onSubmit(comment);
     }
 
     if (editorRef?.children) {
       editorRef.children = initial;
     }
+
+    if (ckEditorRef.current) {
+      setContent('');
+      ckEditorRef.current.setData('');
+    }
+  };
+
+  const handleEditorReady = editor => {
+    ckEditorRef.current = editor;
+  };
+
+  const handleContentChange = data => {
+    setContent(data);
   };
 
   return (
@@ -137,18 +184,25 @@ const CommentEditor = (props: CommentEditorProps, ref: React.ForwardedRef<HTMLDi
         />
 
         <div className={styles.editor} ref={ref}>
-          <BasicEditor id={editorId} placeholder={placeholder} onSearchMention={onSearchMention}>
-            <CommentAction
+          <Editor
+            id={editorId}
+            placeholder={placeholder}
+            onSearchMention={onSearchMention}
+            onReady={handleEditorReady}
+            onChange={handleContentChange}>
+            <Action
               expand={expand}
               mobile={isMobile}
+              length={content.length}
               onSubmit={submitComment}
               exclusiveContent={exclusiveContent}
               handleOpenExclusiveContent={handleOpenExclusiveContent}
               handleRemoveExclusiveContent={handleRemoveExclusiveContent}
             />
-          </BasicEditor>
+          </Editor>
         </div>
       </Grid>
+
       <ExclusiveCreateContainer
         open={openExclusiveContent}
         onClose={handleOpenExclusiveContent}

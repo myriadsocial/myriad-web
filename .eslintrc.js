@@ -1,6 +1,6 @@
 module.exports = {
   extends: ['next/core-web-vitals', 'plugin:@typescript-eslint/recommended', 'prettier'],
-  ignorePatterns: ['**/public/*.js', '**/plugins/*.js'],
+  ignorePatterns: ['**/public/*.js', '**/plugins/*.js', 'plugins/**/*.js'],
   rules: {
     'comma-dangle': ['error', 'always-multiline'],
     'no-useless-escape': ['warn'],

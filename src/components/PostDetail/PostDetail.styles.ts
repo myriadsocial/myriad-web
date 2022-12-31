@@ -14,6 +14,14 @@ export const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.down('xs')]: {
         minWidth: 0,
       },
+
+      '& .image': {
+        margin: 0,
+
+        '& img': {
+          width: '100%',
+        },
+      },
     },
     wrapper: {
       padding: 4,

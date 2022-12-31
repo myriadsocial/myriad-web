@@ -73,3 +73,13 @@ export const toBigNumber = (value: string, decimal: number): BN => {
 
   return result;
 };
+
+export const isJson = (value: string) => {
+  try {
+    JSON.parse(value);
+  } catch (e) {
+    return false;
+  }
+
+  return true;
+};

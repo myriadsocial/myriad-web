@@ -15,7 +15,6 @@ const PwaWrapper = () => {
   const install = usePWAInstall();
   const theme = useTheme();
   const isMobileAndTablet = useMediaQuery(theme.breakpoints.down('sm'));
-  console.log(isMobileAndTablet);
 
   const onInstall = () => {
     onClose();

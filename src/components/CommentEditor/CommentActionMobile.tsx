@@ -1,7 +1,6 @@
 import {PhotographIcon, TrashIcon} from '@heroicons/react/outline';
 import {FilmIcon} from '@heroicons/react/outline';
 import {PaperAirplaneIcon} from '@heroicons/react/outline';
-import {EmojiHappyIcon} from '@heroicons/react/outline';
 import {PaperClipIcon} from '@heroicons/react/outline';
 
 import React from 'react';
@@ -17,27 +16,23 @@ import {
 
 import {useStyles} from './CommentEditor.style';
 
-import {useEditorState} from 'components/common/Editor';
-import {EmojiPickerToolbarButton} from 'components/common/Editor/render/Toolbar/Button';
-import {formatToString} from 'components/common/NodeViewer/formatter';
-import ShowIf from 'components/common/show-if.component';
 import {ExclusiveContentPost} from 'src/interfaces/exclusive';
 import i18n from 'src/locale';
 
 type CommentActionProps = {
   mobile?: boolean;
   expand: boolean;
-  content?: string;
+  length?: number;
   onSubmit: () => void;
   exclusiveContent?: ExclusiveContentPost;
   handleRemoveExclusiveContent: () => void;
   handleOpenExclusiveContent: () => void;
 };
 
-export const CommentAction: React.FC<CommentActionProps> = props => {
+export const CommentActionMobile: React.FC<CommentActionProps> = props => {
   const {
     expand,
-    mobile,
+    length,
     onSubmit,
     exclusiveContent,
     handleRemoveExclusiveContent,
@@ -45,14 +40,11 @@ export const CommentAction: React.FC<CommentActionProps> = props => {
   } = props;
 
   const styles = useStyles({mobile: false});
-  const editor = useEditorState();
-
-  const length = editor.children.map(element => formatToString(element)).join(' ').length;
 
   if (!expand && length === 0) return null;
 
   return (
-    <>
+    <div className={styles.mobile}>
       <CardActions disableSpacing className={styles.action}>
         <ButtonGroup color="primary">
           <Tooltip title="Coming soon" arrow>
@@ -65,13 +57,6 @@ export const CommentAction: React.FC<CommentActionProps> = props => {
               <SvgIcon color="primary" component={FilmIcon} viewBox="0 0 24 24" />
             </IconButton>
           </Tooltip>
-          <ShowIf condition={!mobile}>
-            <IconButton aria-label="emoji">
-              <EmojiPickerToolbarButton
-                icon={<SvgIcon color="primary" component={EmojiHappyIcon} viewBox="0 0 24 24" />}
-              />
-            </IconButton>
-          </ShowIf>
         </ButtonGroup>
         <ButtonGroup color="primary">
           {!exclusiveContent ? (
@@ -87,7 +72,6 @@ export const CommentAction: React.FC<CommentActionProps> = props => {
           ) : (
             <IconButton
               onClick={handleRemoveExclusiveContent}
-              disabled={length === 0}
               className={styles.attachButton}
               style={{color: '#f44336'}}>
               <SvgIcon component={TrashIcon} viewBox="0 0 24 24" />
@@ -97,7 +81,7 @@ export const CommentAction: React.FC<CommentActionProps> = props => {
             </IconButton>
           )}
 
-          <IconButton aria-label="reply" onClick={onSubmit} disabled={length === 0}>
+          <IconButton aria-label="reply" onClick={onSubmit}>
             <SvgIcon
               className={length === 0 ? styles.disabled : styles.replyIcon}
               component={PaperAirplaneIcon}
@@ -106,8 +90,8 @@ export const CommentAction: React.FC<CommentActionProps> = props => {
           </IconButton>
         </ButtonGroup>
       </CardActions>
-    </>
+    </div>
   );
 };
 
-export default CommentAction;
+export default CommentActionMobile;
