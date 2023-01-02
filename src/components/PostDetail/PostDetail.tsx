@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
@@ -11,6 +11,7 @@ import {PostFooter} from './render/Footer';
 import {PostHeader} from './render/Header';
 
 import ButtonPayment from 'components/ExclusiveContentCreate/Payment/ButtonPayment';
+import Reveal from 'components/ExclusiveContentCreate/Reveal/Reveal';
 import {NodeViewer} from 'components/common/NodeViewer';
 import ShowIf from 'components/common/show-if.component';
 import {LinkPreview} from 'src/components/atoms/LinkPreview';
@@ -19,6 +20,7 @@ import {SendTipButton} from 'src/components/common/SendTipButton/SendTipButton';
 import {useToggle} from 'src/hooks/use-toggle.hook';
 import {IcInfoBlack} from 'src/images/Icons';
 import {ReferenceType} from 'src/interfaces/interaction';
+import {ExclusiveContentProps} from 'src/interfaces/post';
 import i18n from 'src/locale';
 
 const Reddit = dynamic(() => import('./render/Reddit'), {ssr: false});
@@ -35,6 +37,8 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
   const [hiddenContent, toggleHiddenContent] = useToggle(post.isNSFW);
+
+  const [exclusiveContent, setExclusiveContent] = useState<ExclusiveContentProps>();
 
   const downvoted = post.votes
     ? post.votes.filter(vote => vote.userId === user?.id && !vote.state).length > 0
@@ -114,9 +118,17 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
             <Reddit title={post.title} text={post.text} onHashtagClicked={handleHashtagClicked} />
           </ShowIf>
 
-          {post.asset?.exclusiveContents && post.asset?.exclusiveContents.length > 0 && (
-            <ButtonPayment url={post.asset?.exclusiveContents[0]} contentId={post?.id} />
-          )}
+          {post.asset?.exclusiveContents &&
+            post.asset?.exclusiveContents.length > 0 &&
+            !exclusiveContent && (
+              <ButtonPayment
+                url={post.asset?.exclusiveContents[0]}
+                contentId={post?.id}
+                setExclusive={setExclusiveContent}
+              />
+            )}
+
+          {exclusiveContent && <Reveal content={exclusiveContent?.content} />}
 
           {post.asset?.images && post.asset?.images.length > 0 && (
             <Gallery images={post.asset?.images} variant="vertical" />

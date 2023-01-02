@@ -127,3 +127,14 @@ export enum PostStatus {
   DRAFT = 'draft',
   PUBLISHED = 'published',
 }
+
+export interface ExclusiveContentProps {
+  content?: {
+    text: string;
+    rawText: string;
+  };
+  id: string;
+  createdBy: string;
+  createdAt: Date;
+  updatedAt: Date;
+}

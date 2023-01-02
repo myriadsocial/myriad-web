@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import dynamic from 'next/dynamic';
 
@@ -18,6 +18,10 @@ import {ReferenceType} from 'src/interfaces/interaction';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {BalanceState} from 'src/reducers/balance/reducer';
+import {
+  PAID_EXCLUSIVE_CONTENT,
+  SET_EXCLUSIVE_CONTENT_ID,
+} from 'src/reducers/exclusive-content/constants';
 
 const Tipping = dynamic(() => import('./Tipping'), {
   ssr: false,
@@ -32,6 +36,7 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
   currentWallet,
   currentNetwork,
 }) => {
+  const dispatch = useDispatch();
   const [tipFormOpened, setOpenTipForm] = useState(false);
   const [options, setOptions] = useState<TippingOptions>();
   const [enabled, setTippingEnabled] = useState(false);
@@ -50,8 +55,6 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
     if (balances.length > 0) {
       setDefaultCurrency(balances[0]);
     }
-
-    console.log({balances});
   }, [balances, anonymous]);
 
   const tipping = useCallback<HandleSendTip>(
@@ -80,7 +83,16 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
 
   const resetTippingStatus = useCallback(() => {
     setTippingCurrency(undefined);
+    dispatch({type: PAID_EXCLUSIVE_CONTENT, payload: false});
+    dispatch({type: SET_EXCLUSIVE_CONTENT_ID, payload: ''});
   }, []);
+
+  useEffect(() => {
+    if (currencyTipped) {
+      dispatch({type: PAID_EXCLUSIVE_CONTENT, payload: true});
+      dispatch({type: SET_EXCLUSIVE_CONTENT_ID, payload: options?.reference?.id});
+    }
+  }, [currencyTipped]);
 
   const isTipping = () => {
     return options?.referenceType !== ReferenceType.EXCLUSIVE_CONTENT;
