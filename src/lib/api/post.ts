@@ -363,3 +363,12 @@ export const getWalletAddressExclusive = async (contentId: string): Promise<Wall
 
   return data;
 };
+
+export const revealExclusiveContent = async (url: string): Promise<Post> => {
+  const {data} = await MyriadAPI().request<Post>({
+    url: `/user/unlockable-contents/${url.split('/').pop()}`,
+    method: 'GET',
+  });
+
+  return data;
+};

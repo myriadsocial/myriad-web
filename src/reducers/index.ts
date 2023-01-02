@@ -7,6 +7,7 @@ import {BlockReducer} from './block/reducer';
 import {CommentReducer} from './comment/reducer';
 import {ConfigReducer} from './config/reducer';
 import {ExchangeRateReducer} from './exchange-rate/reducer';
+import {ECReducer} from './exclusive-content/reducer';
 import {ExperienceReducer} from './experience/reducer';
 import {FriendRequestReducer} from './friend-request/reducer';
 import {FriendReducer} from './friend/reducer';
@@ -41,6 +42,7 @@ const reducers = {
   importersState: ImporterReducer,
   blockState: BlockReducer,
   searchState: SearchReducer,
+  ecState: ECReducer,
 };
 
 export const combinedReducers = combineReducers(reducers);

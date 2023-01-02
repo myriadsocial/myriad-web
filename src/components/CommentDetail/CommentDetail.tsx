@@ -25,6 +25,7 @@ import {useStyles} from './CommentDetail.styles';
 
 import CommentEditor from 'components/CommentEditor/CommentEditor.container';
 import ButtonPayment from 'components/ExclusiveContentCreate/Payment/ButtonPayment';
+import Reveal from 'components/ExclusiveContentCreate/Reveal/Reveal';
 import {NodeViewer} from 'components/common/NodeViewer';
 import ShowIf from 'src/components/common/show-if.component';
 import {isJson} from 'src/helpers/string';
@@ -32,7 +33,7 @@ import {useRepliesHook} from 'src/hooks/use-replies.hook';
 import {Comment} from 'src/interfaces/comment';
 import {CommentProps} from 'src/interfaces/comment';
 import {ReferenceType, Vote} from 'src/interfaces/interaction';
-import {Post} from 'src/interfaces/post';
+import {ExclusiveContentProps, Post} from 'src/interfaces/post';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {
@@ -87,6 +88,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
   const [menuAnchorElement, setMenuAnchorElement] = React.useState<null | HTMLElement>(null);
   const [isReplying, setIsReplying] = React.useState(false);
   const [isBlocked, setIsBlocked] = React.useState(blockedUserIds.includes(comment.userId));
+  const [exclusiveContent, setExclusiveContent] = React.useState<ExclusiveContentProps>();
   const banned = Boolean(user?.deletedAt);
   const totalVote = comment.metric.upvotes - comment.metric.downvotes;
   const isOwnComment = comment.userId === user?.id;
@@ -303,12 +305,16 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                 </ShowIf>
 
                 {comment.asset?.exclusiveContents &&
-                  comment.asset?.exclusiveContents.length > 0 && (
+                  comment.asset?.exclusiveContents.length > 0 &&
+                  !exclusiveContent && (
                     <ButtonPayment
                       url={comment.asset?.exclusiveContents[0]}
                       contentId={comment?.id}
+                      setExclusive={setExclusiveContent}
                     />
                   )}
+
+                {exclusiveContent && <Reveal content={exclusiveContent?.content} />}
               </CardContent>
               <CardActions disableSpacing>
                 <VotingComponent
