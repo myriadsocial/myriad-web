@@ -3,7 +3,7 @@ import {ELEMENT_MENTION} from '@udecode/plate';
 import {EditorValue} from 'components/common/Editor/Editor.interface';
 import {CommentProps} from 'src/interfaces/comment';
 
-type CommentSerializedProps = Pick<CommentProps, 'text' | 'mentions'>;
+export type CommentSerializedProps = Pick<CommentProps, 'text' | 'mentions'>;
 
 export const serialize = (nodes: EditorValue): CommentSerializedProps => {
   const comment: CommentSerializedProps = {

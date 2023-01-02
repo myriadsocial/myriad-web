@@ -200,7 +200,6 @@ export const findPosts = async (
 };
 
 export const createPost = async (values: PostProps): Promise<Post> => {
-  console.log('values >>>', values);
   const {data} = await MyriadAPI().request<Post>({
     url: '/user/posts',
     method: 'POST',
@@ -314,7 +313,6 @@ export const getWalletAddress = async (postId: string): Promise<WalletDetail> =>
 };
 
 export const createExclusiveContent = async (values: ExclusiveContentPost): Promise<Post> => {
-  console.log('values >>>', values);
   const {data} = await MyriadAPI().request<Post>({
     url: '/user/unlockable-contents',
     method: 'POST',

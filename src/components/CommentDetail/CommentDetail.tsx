@@ -27,6 +27,7 @@ import CommentEditor from 'components/CommentEditor/CommentEditor.container';
 import ButtonPayment from 'components/ExclusiveContentCreate/Payment/ButtonPayment';
 import {NodeViewer} from 'components/common/NodeViewer';
 import ShowIf from 'src/components/common/show-if.component';
+import {isJson} from 'src/helpers/string';
 import {useRepliesHook} from 'src/hooks/use-replies.hook';
 import {Comment} from 'src/interfaces/comment';
 import {CommentProps} from 'src/interfaces/comment';
@@ -89,6 +90,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
   const banned = Boolean(user?.deletedAt);
   const totalVote = comment.metric.upvotes - comment.metric.downvotes;
   const isOwnComment = comment.userId === user?.id;
+  const isHtmlComment = !isJson(comment.text);
 
   useEffect(() => {
     if (comment.metric.comments > 0 || comment.metric.deletedComments > 0) {
@@ -293,7 +295,13 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                 }
               />
               <CardContent className={style.content}>
-                <NodeViewer id={comment.id} text={comment.text} />
+                <ShowIf condition={isHtmlComment}>
+                  <div className={style.plain} dangerouslySetInnerHTML={{__html: comment.text}} />
+                </ShowIf>
+                <ShowIf condition={!isHtmlComment}>
+                  <NodeViewer id={comment.id} text={comment.text} />
+                </ShowIf>
+
                 {comment.asset?.exclusiveContents &&
                   comment.asset?.exclusiveContents.length > 0 && (
                     <ButtonPayment

@@ -175,7 +175,7 @@ export const Options: React.FC<OptionProps> = props => {
               wallet,
             );
         } else {
-          console.log('redirection to near auth page');
+          // redirection to near auth page
         }
 
         break;

@@ -94,5 +94,11 @@ export const useStyles = makeStyles<Theme, CommentDetailProps>(theme =>
     giftIcon: {
       width: 16,
     },
+    plain: {
+      '& p': {
+        marginBlockStart: 0,
+        marginBlockEnd: 0,
+      },
+    },
   }),
 );
