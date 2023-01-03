@@ -76,7 +76,9 @@ export const useNotificationList = (
 
   const excludes = [NotificationType.POST_VOTE, NotificationType.COMMENT_VOTE].concat(exclude);
 
-  const getLockableContentLink = (reference: UnlockableContentReference): string => {
+  const getLockableContentLink = (reference?: UnlockableContentReference): string => {
+    if (!reference) return `/404`;
+
     if ('post' in reference && reference.post?.id) {
       return `/post/${reference.post.id}`;
     }
@@ -579,7 +581,7 @@ export const useNotificationList = (
             userId: notification.fromUserId.id,
             user: notification.fromUserId.name,
             avatar: notification.fromUserId.profilePictureURL,
-            description: i18n.t('Notification.Header.UnlockedContent'),
+            description: i18n.t('Notification.Description.UnlockedContent'),
             badge: (
               <div className={style.circleSuccess}>
                 <SvgIcon
@@ -591,7 +593,7 @@ export const useNotificationList = (
             ),
             createdAt: notification.createdAt,
             href: notification.additionalReferenceId
-              ? getLockableContentLink(notification.additionalReferenceId.unlockableContent)
+              ? getLockableContentLink(notification.additionalReferenceId?.unlockableContent)
               : `/404`,
           };
 
