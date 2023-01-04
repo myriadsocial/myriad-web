@@ -14,5 +14,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontSize: 14,
       marginTop: 10,
     },
+    plain: {
+      '& p': {
+        marginBlockStart: 0,
+        marginBlockEnd: 0,
+      },
+    },
   }),
 );
