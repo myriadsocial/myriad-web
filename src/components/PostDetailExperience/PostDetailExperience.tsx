@@ -13,6 +13,7 @@ import {HeaderComponentExperience} from './PostDetailExperienceHeader';
 import {NodeViewer} from 'components/common/NodeViewer';
 import {LinkPreview} from 'src/components/atoms/LinkPreview';
 import ShowIf from 'src/components/common/show-if.component';
+import {isJson} from 'src/helpers/string';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 
@@ -39,6 +40,8 @@ export const PostDetailExperience: React.FC<PostDetailProps> = props => {
 
   const [maxLength, setMaxLength] = useState<number | undefined>(250);
   const [viewContent, setViewContent] = useState(!post.isNSFW);
+  const isInternalPost = post.platform === 'myriad';
+  const isHtmlPost = isInternalPost && !isJson(post.text);
 
   const onHashtagClicked = async (hashtag: string) => {
     await router.push(`/topic/hashtag?tag=${hashtag.replace('#', '')}`, undefined, {
@@ -73,8 +76,12 @@ export const PostDetailExperience: React.FC<PostDetailProps> = props => {
         </ShowIf>
 
         <ShowIf condition={viewContent}>
-          <ShowIf condition={['myriad'].includes(post.platform)}>
+          <ShowIf condition={['myriad'].includes(post.platform) && !isHtmlPost}>
             <NodeViewer id={`${post.id}-${type}`} text={post.text} expand={expanded} />
+          </ShowIf>
+
+          <ShowIf condition={['myriad'].includes(post.platform) && isHtmlPost}>
+            <div dangerouslySetInnerHTML={{__html: post.text}} />
           </ShowIf>
 
           <ShowIf condition={['twitter'].includes(post.platform)}>
