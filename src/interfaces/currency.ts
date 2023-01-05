@@ -21,6 +21,7 @@ export enum CurrencyId {
   NEAR = 'NEAR',
   KUSAMA = 'KSM',
   ROC = 'ROC',
+  DBIO = 'DBIO',
 }
 
 export type Currency = CurrencyProps &

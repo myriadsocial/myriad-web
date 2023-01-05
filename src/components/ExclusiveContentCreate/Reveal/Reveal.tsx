@@ -19,8 +19,6 @@ export const Reveal = ({content}) => {
       <ShowIf condition={!isHtmlContent}>
         <NodeViewer id={content?.id} text={content?.text} expand={true} />
       </ShowIf>
-
-      <div className={styles.textUnlock}>Unlocked</div>
     </div>
   );
 };

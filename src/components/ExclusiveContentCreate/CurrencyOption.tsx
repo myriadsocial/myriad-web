@@ -97,7 +97,10 @@ export const CurrencyOption: React.FC<CurrencyOptionProps> = ({
                 size={AvatarSize.TINY}
               />
             </ListItemIcon>
-            <ListItemText>{balance.symbol}</ListItemText>
+            <ListItemText>
+              {balance.symbol}
+              {balance.symbol === 'DBIO' && <small> ({balance.networkId})</small>}
+            </ListItemText>
           </MenuItem>
         ))}
       </Menu>
