@@ -75,7 +75,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
   const isOwnExperience = userExperience.experience.user.id === user?.id;
   const experienceId = userExperience.experience.id;
   const userExperienceId = userExperience.id;
-  const link = publicRuntimeConfig.appAuthURL + `/experience/${experienceId}`;
+  const link = publicRuntimeConfig.appAuthURL + `?type=experience&id=${experienceId}`;
   const {userExperiencesMeta} = useExperienceHook();
   const totalOwnedExperience = userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
 
@@ -165,6 +165,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
   };
 
   const openShareExperience = (event: React.MouseEvent<HTMLLIElement>) => {
+    console.log(event.currentTarget);
     handleCloseSettings();
 
     setShareAnchorElement(event.currentTarget);

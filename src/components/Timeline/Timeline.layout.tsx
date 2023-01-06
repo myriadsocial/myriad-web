@@ -1,6 +1,10 @@
 import React, {useEffect} from 'react';
 import {shallowEqual, useSelector} from 'react-redux';
 
+import getConfig from 'next/config';
+import Head from 'next/head';
+import {useRouter} from 'next/router';
+
 import {Grid} from '@material-ui/core';
 
 import {ExperienceCard} from './Render/ExperienceCard';
@@ -19,6 +23,8 @@ type TimelineContainerProps = {
 };
 
 export const Timeline: React.FC<TimelineContainerProps> = props => {
+  const {publicRuntimeConfig} = getConfig();
+  const router = useRouter();
   const {query} = useQueryParams();
   const styles = useStyles();
   const {
@@ -42,22 +48,40 @@ export const Timeline: React.FC<TimelineContainerProps> = props => {
   }, [query.id]);
 
   return (
-    <div className={styles.box}>
-      <Grid container justifyContent="space-between" alignItems="center">
-        <TimelineFilterContainer filterType="type" selectionType="order" />
-      </Grid>
+    <>
+      <Head>
+        <title>{experience?.name}</title>
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={publicRuntimeConfig.appAuthURL + router.asPath} />
+        <meta property="og:description" content={experience?.description} />
+        <meta property="og:title" content={experience?.name} />
+        <meta property="og:image" content={experience?.experienceImageURL} />
+        <meta property="og:image:width" content="2024" />
+        <meta property="og:image:height" content="1012" />
+        <meta property="og:image:secure_url" content={experience?.experienceImageURL} />
+        {/* Twitter Card tags */}
+        <meta name="twitter:title" content={experience?.name} />
+        <meta name="twitter:description" content={experience?.description} />
+        <meta name="twitter:image" content={experience?.experienceImageURL} />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Head>
+      <div className={styles.box}>
+        <Grid container justifyContent="space-between" alignItems="center">
+          <TimelineFilterContainer filterType="type" selectionType="order" />
+        </Grid>
 
-      <TimelineAutoReloader />
-      {query.type === 'experience' && experience && (
-        <ExperienceCard
-          experience={experience}
-          userExperiences={userExperiences}
-          user={user}
-          onSubscribe={subscribeExperience}
-          onUnsubscribe={unsubscribeExperience}
-        />
-      )}
-      <PostsListContainer query={query} user={user} />
-    </div>
+        <TimelineAutoReloader />
+        {query.type === 'experience' && experience && (
+          <ExperienceCard
+            experience={experience}
+            userExperiences={userExperiences}
+            user={user}
+            onSubscribe={subscribeExperience}
+            onUnsubscribe={unsubscribeExperience}
+          />
+        )}
+        <PostsListContainer query={query} user={user} />
+      </div>
+    </>
   );
 };
