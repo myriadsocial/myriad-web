@@ -50,7 +50,7 @@ type PostCreateProps = {
   ) => void;
 };
 
-type PostCreateType = 'create' | 'import' | 'exclusive';
+type PostCreateType = 'create' | 'import';
 
 const initialPost = {
   visibility: PostVisibility.PUBLIC,
@@ -72,6 +72,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
 
   const [importUrl, setImport] = useState<string | undefined>();
   const [exclusiveContent, setExclusiveContent] = useState<ExclusiveContentPost | null>(null);
+  const [showExclusive, setShowExclusive] = useState<boolean>(false);
 
   const Editor = isMobile ? CKEditor : PlateEditor;
 
@@ -83,10 +84,6 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
     import: {
       title: i18n.t('Post_Import.Title'),
       subtitle: i18n.t('Post_Import.Subtitle'),
-    },
-    exclusive: {
-      title: i18n.t('ExclusiveContent.Add'),
-      subtitle: '',
     },
   };
 
@@ -182,6 +179,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
   const handleClose = () => {
     setPost(initialPost);
     setImport(undefined);
+    setShowExclusive(false);
 
     onClose();
   };
@@ -195,6 +193,10 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
     setImport(undefined);
   };
 
+  const handleshowExclusive = () => {
+    setShowExclusive(!showExclusive);
+  };
+
   const handleRemoveExclusiveContent = () => {
     setExclusiveContent(null);
   };
@@ -204,16 +206,26 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
     handleTabChange(null, 'create');
   };
 
+  const handleTitleModal: () => {title: string; subtitle: string} = () => {
+    const title = !showExclusive ? header[activeTab].title : i18n.t('ExclusiveContent.Add');
+    const subtitle = !showExclusive ? header[activeTab].subtitle : '';
+
+    return {
+      title,
+      subtitle,
+    };
+  };
+
   return (
     <Modal
-      title={header[activeTab].title}
-      subtitle={header[activeTab].subtitle}
+      title={handleTitleModal().title}
+      subtitle={handleTitleModal().subtitle}
       onClose={handleClose}
       open={open}
       fullScreen={isMobile}
       maxWidth="md"
       className={styles.root}>
-      <ShowIf condition={activeTab !== 'exclusive'}>
+      <ShowIf condition={!showExclusive}>
         <Tabs
           value={activeTab}
           indicatorColor="secondary"
@@ -225,35 +237,38 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
       </ShowIf>
 
       <TabPanel value={activeTab} index="create">
-        <Editor
-          userId={user.id}
-          mobile={isMobile}
-          onSearchMention={onSearchPeople}
-          onChange={handleContentChange}
-        />
-      </TabPanel>
-
-      <TabPanel value={activeTab} index="import">
-        <PostImport value={importUrl} onChange={handlePostUrlChange} onError={handleErrorImport} />
-      </TabPanel>
-
-      <TabPanel value={activeTab} index="exclusive">
-        <IconButton aria-label="exclusive-content" onClick={e => handleTabChange(e, 'create')}>
-          <SvgIcon component={ArrowLeftIcon} viewBox="0 0 24 24" className={styles.arrowLeftIcon} />
-        </IconButton>
-        <ShowIf condition={activeTab === 'exclusive'}>
+        <div style={{display: showExclusive ? 'none' : 'block'}}>
+          <Editor
+            userId={user.id}
+            mobile={isMobile}
+            onSearchMention={onSearchPeople}
+            onChange={handleContentChange}
+          />
+        </div>
+        <div style={{display: showExclusive ? 'block' : 'none'}}>
+          <IconButton aria-label="exclusive-content" onClick={handleshowExclusive}>
+            <SvgIcon
+              component={ArrowLeftIcon}
+              viewBox="0 0 24 24"
+              className={styles.arrowLeftIcon}
+            />
+          </IconButton>
           <ExclusiveCreate
             user={user}
             onSearchPeople={onSearchPeople}
             isMobile={isMobile}
             onSubmit={handleSubmitExclusiveContent}
           />
-        </ShowIf>
+        </div>
+      </TabPanel>
+
+      <TabPanel value={activeTab} index="import">
+        <PostImport value={importUrl} onChange={handlePostUrlChange} onError={handleErrorImport} />
       </TabPanel>
 
       <div className={styles.action}>
         <div className={styles.option}>
-          <ShowIf condition={activeTab !== 'exclusive'}>
+          <ShowIf condition={!showExclusive}>
             <DropdownMenu<PostVisibility>
               title={i18n.t('Post_Create.Visibility.Label')}
               options={menuOptions}
@@ -268,12 +283,10 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
             />
           </ShowIf>
 
-          <ShowIf condition={activeTab === 'create'}>
+          <ShowIf condition={!showExclusive}>
             {!exclusiveContent ? (
               <>
-                <IconButton
-                  aria-label="exclusive-content"
-                  onClick={e => handleTabChange(e, 'exclusive')}>
+                <IconButton aria-label="exclusive-content" onClick={handleshowExclusive}>
                   <SvgIcon component={GiftIcon} viewBox="0 0 24 24" className={styles.giftIcon} />
                   <Typography
                     component="span"
@@ -312,7 +325,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
             </Button>
           </ShowIf>
         </div>
-        <ShowIf condition={activeTab !== 'exclusive'}>
+        <ShowIf condition={!showExclusive}>
           <ShowIf condition={post.visibility !== 'selected_user'}>
             <Button
               disabled={loading}
@@ -327,7 +340,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
         </ShowIf>
       </div>
 
-      <ShowIf condition={activeTab !== 'exclusive'}>
+      <ShowIf condition={!showExclusive}>
         <ShowIf condition={post.visibility === 'selected_user'}>
           <SettingVisibility setPost={setPost} />
           <div
