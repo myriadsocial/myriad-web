@@ -159,7 +159,7 @@ export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
         />
         <Button
           className={styles.buttonSubmit}
-          disabled={isDisabledButton && loading}
+          disabled={isDisabledButton || loading}
           variant="contained"
           color="primary"
           size="small"
