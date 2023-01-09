@@ -5,7 +5,6 @@ import {useDispatch} from 'react-redux';
 
 import getConfig from 'next/config';
 import dynamic from 'next/dynamic';
-import {useRouter} from 'next/router';
 
 import {Button, IconButton, SvgIcon, Typography} from '@material-ui/core';
 import Tab from '@material-ui/core/Tab';
@@ -61,7 +60,6 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
   const {open, user, isMobile, onClose, onSubmit, onSearchPeople} = props;
   const dispatch = useDispatch();
   const confirm = useConfirm();
-  const router = useRouter();
   const {publicRuntimeConfig} = getConfig();
   const styles = useStyles();
 
@@ -142,14 +140,15 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
                 title: i18n.t('LiteVersion.LimitTitlePost', {count: 0}),
                 description: i18n.t('LiteVersion.LimitDescPost'),
                 icon: 'warning',
-                confirmationText: i18n.t('LiteVersion.ConnectWallet'),
+                confirmationText: i18n.t('General.Got_It'),
                 cancellationText: i18n.t('LiteVersion.MaybeLater'),
                 onConfirm: () => {
-                  router.push({pathname: '/wallet', query: {type: 'manage'}});
+                  undefined;
                 },
                 onCancel: () => {
                   undefined;
                 },
+                hideCancel: true,
               });
             },
           ),

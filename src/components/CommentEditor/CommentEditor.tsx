@@ -3,7 +3,6 @@ import {useDispatch} from 'react-redux';
 
 import getConfig from 'next/config';
 import dynamic from 'next/dynamic';
-import {useRouter} from 'next/router';
 
 import {Grid, useMediaQuery} from '@material-ui/core';
 
@@ -54,7 +53,6 @@ const CommentEditor = (props: CommentEditorProps, ref: React.ForwardedRef<HTMLDi
   const dispatch = useDispatch();
   const {publicRuntimeConfig} = getConfig();
   const confirm = useConfirm();
-  const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
   const Editor = isMobile ? CKEditor : PlateEditor;
@@ -129,14 +127,15 @@ const CommentEditor = (props: CommentEditorProps, ref: React.ForwardedRef<HTMLDi
               title: i18n.t('LiteVersion.LimitTitlePost', {count: 0}),
               description: i18n.t('LiteVersion.LimitDescPost'),
               icon: 'warning',
-              confirmationText: i18n.t('LiteVersion.ConnectWallet'),
+              confirmationText: i18n.t('General.Got_It'),
               cancellationText: i18n.t('LiteVersion.MaybeLater'),
               onConfirm: () => {
-                router.push({pathname: '/wallet', query: {type: 'manage'}});
+                undefined;
               },
               onCancel: () => {
                 undefined;
               },
+              hideCancel: true,
             });
           },
         ),
