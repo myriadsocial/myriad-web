@@ -74,5 +74,12 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
             : '0 0 20px 0',
       },
     },
+    titleEC: {
+      backgroundColor: '#FFD24D',
+      width: 'max-content',
+      margin: 'auto',
+      padding: '0 10px',
+      borderRadius: '6px',
+    },
   }),
 );

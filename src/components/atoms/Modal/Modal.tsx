@@ -12,6 +12,7 @@ import {useStyles} from './Modal.styles';
 import {AllignTitle, TitleSize} from './Modal.types';
 
 import ShowIf from 'components/common/show-if.component';
+import i18n from 'src/locale';
 
 export type ModalProps = DialogProps & {
   title?: string | React.ReactNode;
@@ -53,7 +54,14 @@ export const Modal: React.FC<ModalProps> = props => {
       disableEnforceFocus>
       <ShowIf condition={!fullScreen}>
         <DialogTitle disableTypography className={[styles.title, className].join(' ')}>
-          <Typography variant={titleSize === 'small' ? 'h5' : 'h4'}>{title}</Typography>
+          {title === i18n.t('ExclusiveContent.Add') ? (
+            <div className={styles.titleEC}>
+              <Typography variant={titleSize === 'small' ? 'h5' : 'h4'}>{title}</Typography>
+            </div>
+          ) : (
+            <Typography variant={titleSize === 'small' ? 'h5' : 'h4'}>{title}</Typography>
+          )}
+
           {subtitle && (typeof subtitle === 'string' || subtitle instanceof String) ? (
             <Typography variant="subtitle1" display="block" className={styles.subtitle}>
               {subtitle}
