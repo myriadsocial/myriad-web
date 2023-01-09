@@ -59,19 +59,20 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   const _handlePostNotFullAccess = async () => {
     const response = await getCountPost();
     const count = response.count;
-    if (count) {
+    if (count === 0) {
       confirm({
         title: i18n.t('LiteVersion.LimitTitlePost', {count}),
         description: i18n.t('LiteVersion.LimitDescPost'),
         icon: 'warning',
-        confirmationText: i18n.t('LiteVersion.ConnectWallet'),
+        confirmationText: i18n.t('General.Got_It'),
         cancellationText: i18n.t('LiteVersion.MaybeLater'),
         onConfirm: () => {
-          router.push({pathname: '/wallet', query: {type: 'manage'}});
+          undefined;
         },
         onCancel: () => {
           undefined;
         },
+        hideCancel: true,
       });
     }
   };
@@ -88,14 +89,15 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
                   title: i18n.t('LiteVersion.LimitTitlePost', {count: 0}),
                   description: i18n.t('LiteVersion.LimitDescPost'),
                   icon: 'warning',
-                  confirmationText: i18n.t('LiteVersion.ConnectWallet'),
+                  confirmationText: i18n.t('General.Got_It'),
                   cancellationText: i18n.t('LiteVersion.MaybeLater'),
                   onConfirm: () => {
-                    router.push({pathname: '/wallet', query: {type: 'manage'}});
+                    undefined;
                   },
                   onCancel: () => {
                     undefined;
                   },
+                  hideCancel: true,
                 });
               }
               let message: string = error.message;
@@ -132,14 +134,15 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
                 title: i18n.t('LiteVersion.LimitTitlePost', {count: 0}),
                 description: i18n.t('LiteVersion.LimitDescPost'),
                 icon: 'warning',
-                confirmationText: i18n.t('LiteVersion.ConnectWallet'),
+                confirmationText: i18n.t('General.Got_It'),
                 cancellationText: i18n.t('LiteVersion.MaybeLater'),
                 onConfirm: () => {
-                  router.push({pathname: '/wallet', query: {type: 'manage'}});
+                  undefined;
                 },
                 onCancel: () => {
                   undefined;
                 },
+                hideCancel: true,
               });
             },
           ),

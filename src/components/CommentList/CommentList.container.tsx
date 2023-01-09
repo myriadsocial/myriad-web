@@ -2,7 +2,6 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 
 import dynamic from 'next/dynamic';
-import {useRouter} from 'next/router';
 
 import useConfirm from '../common/Confirm/use-confirm.hook';
 import {CommentList} from './CommentList';
@@ -39,7 +38,6 @@ type CommentListContainerProps = {
 
 export const CommentListContainer: React.FC<CommentListContainerProps> = props => {
   const {placeholder, referenceId, type, section, focus, expand, user, scrollToPost} = props;
-  const router = useRouter();
   const dispatch = useDispatch();
   const confirm = useConfirm();
   const {
@@ -73,19 +71,20 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
   const _handlePostNotFullAccess = async () => {
     const response = await getCountPost();
     const count = response.count;
-    if (count) {
+    if (count === 0) {
       confirm({
         title: i18n.t('LiteVersion.LimitTitlePost', {count}),
         description: i18n.t('LiteVersion.LimitDescPost'),
         icon: 'warning',
-        confirmationText: i18n.t('LiteVersion.ConnectWallet'),
+        confirmationText: i18n.t('General.Got_It'),
         cancellationText: i18n.t('LiteVersion.MaybeLater'),
         onConfirm: () => {
-          router.push({pathname: '/wallet', query: {type: 'manage'}});
+          undefined;
         },
         onCancel: () => {
           undefined;
         },
+        hideCancel: true,
       });
     }
   };
@@ -121,14 +120,15 @@ export const CommentListContainer: React.FC<CommentListContainerProps> = props =
             title: i18n.t('LiteVersion.LimitTitlePost', {count: 0}),
             description: i18n.t('LiteVersion.LimitDescPost'),
             icon: 'warning',
-            confirmationText: i18n.t('LiteVersion.ConnectWallet'),
+            confirmationText: i18n.t('General.Got_It'),
             cancellationText: i18n.t('LiteVersion.MaybeLater'),
             onConfirm: () => {
-              router.push({pathname: '/wallet', query: {type: 'manage'}});
+              undefined;
             },
             onCancel: () => {
               undefined;
             },
+            hideCancel: true,
           });
         },
       );

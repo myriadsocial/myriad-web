@@ -148,7 +148,8 @@
     "See_More": "See More",
     "Save": "Save",
     "Amount" : "Amount",
-    "Summary" : "Summary"
+    "Summary" : "Summary",
+    "Got_It" : "Got it!"
   },
   "Confirm": {
     "Title": "Are you sure?"
@@ -1209,8 +1210,8 @@
     "MaybeLater": "Maybe Later",
     "ConnectWallet":"Connect Web 3.0 Wallet",
     "DisclaimerEditProfile":"You are currently using lite version of Myriad. You can edit only the display name. Connect Web 3.0 Wallet to have all access in editing your profile",
-    "LimitTitlePost":"You have {{count}} the remaining posts",
-    "LimitDescPost":"You are currently using lite version of Myriad. You can post up to 6 times a day and will be reset every 00:00 UTC. Connect Web 3.0 Wallet to post without restriction."
+    "LimitTitlePost":"Wow! That's a lot of posting! ",
+    "LimitDescPost":"To prevent spam, we are temporarily limiting posts to 15 per day. You can still browse Myriad to your heart's content!"
   },
    "Visibilities":{
     "PostVisibilities":"Your post will be visible to you and the added people",
