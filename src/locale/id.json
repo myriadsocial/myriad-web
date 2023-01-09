@@ -1231,7 +1231,8 @@
       "UnlockNow" : "Buka Sekarang"
     },
     "Placeholder" : {
-      "AddPrice" : "Masukan Harga"
+      "AddPrice" : "Masukan Harga",
+      "Editor" : "Konten yang Anda tambahkan di sini akan dibuka kepada audiens anda setelah melakukan pembayaran."
     },
     "Text" : {
       "NetworkError" : "Pembayaran hanya berlaku di jaringan {{accept}} saat ini anda berada di jaringan {{current}}. Ubah jaringan untuk memproses pembayaran"

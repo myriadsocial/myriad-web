@@ -54,7 +54,7 @@ export const ExclusiveCreateContainer: React.FC<PostCreateContainerType> = props
   return (
     <>
       <Modal
-        title={i18n.t('ExclusiveContent.Create')}
+        title={i18n.t('ExclusiveContent.Add')}
         onClose={onClose}
         open={open}
         fullScreen={isMobile}

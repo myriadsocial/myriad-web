@@ -1235,7 +1235,8 @@
       "UnlockNow" : "Unlock Now"
     },
     "Placeholder" : {
-      "AddPrice" : "Add Price"
+      "AddPrice" : "Add Price",
+      "Editor" : "The content you add here will be revealed to your audience upon payment."
     },
     "Text" : {
       "NetworkError" : "Payment only available in {{accept}} now you are in {{current}}. Switch network to proceed"

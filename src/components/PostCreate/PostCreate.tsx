@@ -202,7 +202,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
 
   const handleSubmitExclusiveContent = (content: ExclusiveContentPost) => {
     setExclusiveContent(content);
-    handleTabChange(null, 'create');
+    handleshowExclusive();
   };
 
   const handleTitleModal: () => {title: string; subtitle: string} = () => {
