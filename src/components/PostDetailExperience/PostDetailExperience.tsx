@@ -98,17 +98,17 @@ export const PostDetailExperience: React.FC<PostDetailProps> = props => {
             />
           </ShowIf>
 
-          {post.asset?.images && post.asset?.images.length > 0 && (
+          {post?.asset?.images && post?.asset?.images?.length > 0 && (
             <Gallery images={post.asset?.images} variant="vertical" />
           )}
 
-          {post.asset?.videos && post.asset.videos.length > 0 && (
+          {post?.asset?.videos && post?.asset?.videos?.length > 0 && (
             <Video url={post.asset.videos[0]} width={560} />
           )}
         </ShowIf>
 
-        {post.asset?.images.length === 0 &&
-          post.asset.videos.length === 0 &&
+        {post?.asset?.images?.length === 0 &&
+          post?.asset?.videos?.length === 0 &&
           post.embeddedURL &&
           !post.deletedAt && <LinkPreview embed={post.embeddedURL} />}
       </div>
