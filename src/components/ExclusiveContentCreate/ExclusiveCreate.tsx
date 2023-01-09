@@ -125,6 +125,7 @@ export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
           isErrorEditor={isErrorEditor}
           //TODO: handle ckeditor value
           onChange={handleContentChange}
+          placeholder={i18n.t('ExclusiveContent.Placeholder.Editor')}
         />
       </div>
       <div className={styles.currencyWrapper}>

@@ -92,7 +92,6 @@ const editableProps: TEditableProps<EditorValue> = {
   spellCheck: false,
   autoFocus: true,
   readOnly: false,
-  placeholder: 'Type…',
 };
 
 const plateUI = createPlateUI({
@@ -183,7 +182,7 @@ const corePlugins = createEditorPlugins([
 ]);
 
 export const Editor: React.FC<EditorProps> = props => {
-  const {userId, mobile, onSearchMention, isErrorEditor = false} = props;
+  const {userId, mobile, onSearchMention, isErrorEditor = false, placeholder} = props;
 
   const styles = useStyles({mobile, counter: true});
   const ref = useRef(null);
@@ -272,7 +271,11 @@ export const Editor: React.FC<EditorProps> = props => {
       </Toolbar>
 
       <div ref={ref} className={styles.editor}>
-        <Plate id={userId} editableProps={editableProps} plugins={plugins} initialValue={initial}>
+        <Plate
+          id={userId}
+          editableProps={{...editableProps, placeholder: placeholder ?? 'Type...'}}
+          plugins={plugins}
+          initialValue={initial}>
           <MentionCombobox<MentionDetail>
             onRenderItem={renderComboboxItem}
             onSearch={handleSearchMention}

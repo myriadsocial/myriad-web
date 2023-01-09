@@ -10,7 +10,7 @@ import {CustomAdapterPlugin} from './adapters';
 import * as UserAPI from 'src/lib/api/user';
 
 export const Editor: React.FC<EditorProps> = props => {
-  const {mobile, onChange, isErrorEditor} = props;
+  const {mobile, onChange, isErrorEditor, placeholder} = props;
 
   const styles = useStyles({mobile, counter: true});
 
@@ -28,7 +28,7 @@ export const Editor: React.FC<EditorProps> = props => {
 
   const config = {
     licenseKey: '',
-    placeholder: 'Type',
+    placeholder: placeholder ?? 'Type...',
     extraPlugins: [CustomAdapterPlugin],
     toolbar: {
       items: [
