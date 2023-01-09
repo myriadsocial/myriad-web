@@ -54,6 +54,8 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   const isOriginOwner = post?.people?.userSocialMedia?.userId === user?.id;
   const showTipButton = (isInternalPost && !isPostCreator) || (isExternalPost && !isOriginOwner);
   const isPostOwner = isInternalPost ? isPostCreator : isOriginOwner;
+  const isAssetImageExist = post?.asset?.images && post?.asset?.images?.length > 0;
+  const isAssetVideoExist = post?.asset?.videos && post?.asset?.videos?.length > 0;
   const showEmbedded =
     post?.asset?.images?.length === 0 &&
     post?.asset?.videos?.length === 0 &&
@@ -136,13 +138,9 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
 
           {exclusiveContent && <Reveal content={exclusiveContent?.content} />}
 
-          {post.asset?.images && post.asset?.images.length > 0 && (
-            <Gallery images={post.asset?.images} variant="vertical" />
-          )}
+          {isAssetImageExist && <Gallery images={post.asset?.images} variant="vertical" />}
 
-          {post.asset?.videos && post.asset.videos.length > 0 && (
-            <Video url={post.asset.videos[0]} height={308} width={560} />
-          )}
+          {isAssetVideoExist && <Video url={post.asset.videos[0]} height={308} width={560} />}
 
           {showEmbedded && <LinkPreview embed={post.embeddedURL} />}
         </ShowIf>
