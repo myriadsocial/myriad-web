@@ -104,5 +104,14 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: 24,
       color: '#7342CC',
     },
+    previewEC: {
+      marginTop: '15px',
+    },
+    titleEC: {
+      backgroundColor: '#FFD24D',
+      width: 'max-content',
+      padding: '0 10px',
+      borderRadius: '6px',
+    },
   }),
 );

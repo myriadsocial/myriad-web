@@ -21,6 +21,7 @@ import {menuOptions} from './default';
 import {serialize} from './formatter';
 
 import ExclusiveCreate from 'components/ExclusiveContentCreate/ExclusiveCreate';
+import Reveal from 'components/ExclusiveContentCreate/Reveal/Reveal';
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import {getEditorSelectors} from 'components/common/Editor/store';
 import ShowIf from 'src/components/common/show-if.component';
@@ -179,6 +180,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
     setPost(initialPost);
     setImport(undefined);
     setShowExclusive(false);
+    setExclusiveContent(null);
 
     onClose();
   };
@@ -243,6 +245,22 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
             onSearchMention={onSearchPeople}
             onChange={handleContentChange}
           />
+          {exclusiveContent && (
+            <div className={styles.previewEC}>
+              <Typography variant="h5" className={styles.titleEC}>
+                {i18n.t('ExclusiveContent.Label.ExclusiveContent')}
+              </Typography>
+              <Reveal
+                content={exclusiveContent?.content}
+                customStyle={{
+                  maxWidth: '820px',
+                  width: '100%',
+                  maxHeight: '200px',
+                  overflowY: 'scroll',
+                }}
+              />
+            </div>
+          )}
         </div>
         <div style={{display: showExclusive ? 'block' : 'none'}}>
           <IconButton aria-label="exclusive-content" onClick={handleshowExclusive}>
