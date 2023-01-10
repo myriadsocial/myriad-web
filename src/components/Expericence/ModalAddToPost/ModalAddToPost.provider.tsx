@@ -119,11 +119,12 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
         setPostId(props.post.id);
         const tmpSelectedExperience: string[] = [];
         postsExperiences.map(item => {
-          if (item.posts && item.posts.length > 0) {
+          if (props.post.experiences.find(post => post.id === item.id)) {
             tmpSelectedExperience.push(item.id);
           }
         });
         setSelectedExperience(tmpSelectedExperience);
+        console.log(props.post);
       });
     },
     [userExperiences],
@@ -156,6 +157,7 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
       tmpSelectedExperience.push(propsSelectedExperience);
     }
     setSelectedExperience(tmpSelectedExperience);
+    console.log({tmpSelectedExperience});
   };
 
   const handleLoadNextPage = () => {
