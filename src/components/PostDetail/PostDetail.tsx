@@ -113,7 +113,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           <ShowIf condition={['twitter'].includes(post.platform) && post.text.length > 0}>
             <Twitter text={post.text} onHashtagClicked={handleHashtagClicked} />
           </ShowIf>
-          <ShowIf condition={post.visibility === 'selected_user'}>
+          <ShowIf condition={post.visibility === 'selected_user' && post.createdBy === user.id}>
             <div style={{display: 'flex', marginTop: 16}}>
               <SvgIcon component={IcInfoBlack} viewBox="0 0 24 24" />
               <Typography style={{fontSize: 12}}>
