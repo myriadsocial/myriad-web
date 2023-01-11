@@ -14,7 +14,6 @@ import {AppStatusBanner} from 'src/components/common/Banner';
 import {TippingSuccess} from 'src/components/common/Tipping/render/Tipping.success';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {generateAnonymousUser} from 'src/helpers/auth';
-import {ExperienceProps} from 'src/interfaces/experience';
 import {initialize} from 'src/lib/api/base';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import {healthcheck} from 'src/lib/api/healthcheck';
@@ -43,34 +42,29 @@ type HomePageProps = {
   title: string;
   description: string;
   image: string;
-  experience: ExperienceProps;
 };
 
 const Index: React.FC<HomePageProps> = props => {
-  const {title, description, image, experience} = props;
+  const {title, description, image} = props;
   const router = useRouter();
   return (
     <>
       <DefaultLayout isOnProfilePage={false} {...props}>
         <Head>
           <title>{i18n.t('Home.Title', {appname: publicRuntimeConfig.appName})}</title>
-          {experience && (
-            <>
-              <meta property="og:type" content="article" />
-              <meta property="og:url" content={publicRuntimeConfig.appAuthURL + router.asPath} />
-              <meta property="og:description" content={description} />
-              <meta property="og:title" content={title} />
-              <meta property="og:image" content={image} />
-              <meta property="og:image:width" content="2024" />
-              <meta property="og:image:height" content="1012" />
-              <meta property="og:image:secure_url" content={image} />
-              {/* Twitter Card tags */}
-              <meta name="twitter:title" content={title} />
-              <meta name="twitter:description" content={description} />
-              <meta name="twitter:image" content={image} />
-              <meta name="twitter:card" content="summary_large_image" />
-            </>
-          )}
+          <meta property="og:type" content="article" />
+          <meta property="og:url" content={publicRuntimeConfig.appAuthURL + router.asPath} />
+          <meta property="og:description" content={description} />
+          <meta property="og:title" content={title} />
+          <meta property="og:image" content={image} />
+          <meta property="og:image:width" content="2024" />
+          <meta property="og:image:height" content="1012" />
+          <meta property="og:image:secure_url" content={image} />
+          {/* Twitter Card tags */}
+          <meta name="twitter:title" content={title} />
+          <meta name="twitter:description" content={description} />
+          <meta name="twitter:image" content={image} />
+          <meta name="twitter:card" content="summary_large_image" />
         </Head>
 
         <NavbarComponent {...props} />
@@ -135,7 +129,11 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   await dispatch(fetchUserExperience());
 
-  let description, title, image, experience;
+  let description = 'Home Page',
+    title = 'Myriad - Home',
+    image =
+      'https://storage.googleapis.com/myriad-social-mainnet.appspot.com/assets/myriad_logo.svg',
+    experience = null;
 
   if (params.type && params.type === 'experience') {
     const exp = await ExperienceAPI.getExperienceDetail(params.id as string);
