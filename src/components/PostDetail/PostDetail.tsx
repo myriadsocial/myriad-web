@@ -136,7 +136,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
               />
             )}
 
-          {exclusiveContent && <Reveal content={exclusiveContent?.content} />}
+          {exclusiveContent && <Reveal content={exclusiveContent} />}
 
           {isAssetImageExist && <Gallery images={post.asset?.images} variant="vertical" />}
 
