@@ -4,6 +4,7 @@ import {Session} from 'next-auth';
 import {getSession} from 'next-auth/react';
 import getConfig from 'next/config';
 import Head from 'next/head';
+import {useRouter} from 'next/router';
 
 import {Timeline} from 'components/Timeline/Timeline.layout';
 import {SearchBoxContainer} from 'components/atoms/Search/SearchBoxContainer';
@@ -13,6 +14,7 @@ import {AppStatusBanner} from 'src/components/common/Banner';
 import {TippingSuccess} from 'src/components/common/Tipping/render/Tipping.success';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {generateAnonymousUser} from 'src/helpers/auth';
+import {useExperienceHook} from 'src/hooks/use-experience-hook';
 import {initialize} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import {getServer} from 'src/lib/api/server';
@@ -40,24 +42,47 @@ type HomePageProps = {
 };
 
 const Index: React.FC<HomePageProps> = props => {
+  const router = useRouter();
+  const {experience} = useExperienceHook();
   return (
-    <DefaultLayout isOnProfilePage={false} {...props}>
-      <Head>
-        <title>{i18n.t('Home.Title', {appname: publicRuntimeConfig.appName})}</title>
-      </Head>
+    <>
+      <DefaultLayout isOnProfilePage={false} {...props}>
+        <Head>
+          {experience ? (
+            <>
+              <title>{experience?.name}</title>
+              <meta property="og:type" content="article" />
+              <meta property="og:url" content={publicRuntimeConfig.appAuthURL + router.asPath} />
+              <meta property="og:description" content={experience?.description} />
+              <meta property="og:title" content={experience?.name} />
+              <meta property="og:image" content={experience?.experienceImageURL} />
+              <meta property="og:image:width" content="2024" />
+              <meta property="og:image:height" content="1012" />
+              <meta property="og:image:secure_url" content={experience?.experienceImageURL} />
+              {/* Twitter Card tags */}
+              <meta name="twitter:title" content={experience?.name} />
+              <meta name="twitter:description" content={experience?.description} />
+              <meta name="twitter:image" content={experience?.experienceImageURL} />
+              <meta name="twitter:card" content="summary_large_image" />
+            </>
+          ) : (
+            <title>{i18n.t('Home.Title', {appname: publicRuntimeConfig.appName})}</title>
+          )}
+        </Head>
 
-      <NavbarComponent {...props} />
+        <NavbarComponent {...props} />
 
-      <SearchBoxContainer hidden={true} />
+        <SearchBoxContainer hidden={true} />
 
-      <RichTextContainer />
+        <RichTextContainer />
 
-      <Timeline />
+        <Timeline />
 
-      <TippingSuccess />
+        <TippingSuccess />
 
-      <AppStatusBanner />
-    </DefaultLayout>
+        <AppStatusBanner />
+      </DefaultLayout>
+    </>
   );
 };
 
