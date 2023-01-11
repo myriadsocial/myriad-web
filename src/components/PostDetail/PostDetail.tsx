@@ -3,7 +3,7 @@ import React, {useCallback, useState} from 'react';
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 
-import {SvgIcon, Typography, useMediaQuery, useTheme} from '@material-ui/core';
+import {Typography, useMediaQuery, useTheme} from '@material-ui/core';
 
 import {PostDetailProps} from './PostDetail.interface';
 import {useStyles} from './PostDetail.styles';
@@ -19,7 +19,7 @@ import {NSFW} from 'src/components/atoms/NSFW/NSFW.component';
 import {SendTipButton} from 'src/components/common/SendTipButton/SendTipButton';
 import {isJson} from 'src/helpers/string';
 import {useToggle} from 'src/hooks/use-toggle.hook';
-import {IcInfoBlack} from 'src/images/Icons';
+import {InfoIconYellow} from 'src/images/Icons';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {ExclusiveContentProps} from 'src/interfaces/post';
 import i18n from 'src/locale';
@@ -98,6 +98,23 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
         </ShowIf>
 
         <ShowIf condition={!hiddenContent}>
+          <ShowIf condition={post.visibility === 'selected_user' && post.createdBy === user.id}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                marginBottom: 16,
+                backgroundColor: '#FFC85733',
+                padding: '6px 10px',
+                columnGap: '10px',
+              }}>
+              <InfoIconYellow />
+              <Typography style={{fontSize: 12, color: '#404040'}}>
+                {i18n.t('Visibilities.PostVisibilities')}
+              </Typography>
+            </div>
+          </ShowIf>
+
           <ShowIf condition={['myriad'].includes(post.platform) && !isHtmlPost}>
             <NodeViewer
               id={`${post.id}-${preview ? 'preview' : ''}`}
@@ -112,14 +129,6 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
 
           <ShowIf condition={['twitter'].includes(post.platform) && post.text.length > 0}>
             <Twitter text={post.text} onHashtagClicked={handleHashtagClicked} />
-          </ShowIf>
-          <ShowIf condition={post.visibility === 'selected_user' && post.createdBy === user.id}>
-            <div style={{display: 'flex', marginTop: 16}}>
-              <SvgIcon component={IcInfoBlack} viewBox="0 0 24 24" />
-              <Typography style={{fontSize: 12}}>
-                {i18n.t('Visibilities.PostVisibilities')}
-              </Typography>
-            </div>
           </ShowIf>
 
           <ShowIf condition={['reddit'].includes(post.platform)}>
