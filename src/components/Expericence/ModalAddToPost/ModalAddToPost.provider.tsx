@@ -101,6 +101,7 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
     userExperiencesMeta,
     loadNextUserExperience,
     loadExperiencePostList,
+    loadExperienceAdded,
     addPostsToExperience,
     loading,
   } = useExperienceHook();
@@ -113,25 +114,34 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
   const toolTipText = i18n.t('Experience.Modal_Add_Post.Tooltip_Text');
 
   const addPostToExperience = useCallback<HandleConfirmAddPostExperience>(
-    props => {
+    async props => {
       setOpen(true);
+      const tmpAddedExperience: string[] = [];
+      await loadExperienceAdded(props.post.id, postsExperiences => {
+        postsExperiences.map(item => {
+          tmpAddedExperience.push(item.id);
+        });
+      });
+
       loadExperiencePostList(props.post.id, postsExperiences => {
         setPostId(props.post.id);
         const tmpSelectedExperience: string[] = [];
         postsExperiences.map(item => {
-          if (props.post.experiences.find(post => post.id === item.id)) {
+          if (tmpAddedExperience.find(post => post === item.id)) {
             tmpSelectedExperience.push(item.id);
           }
         });
         setSelectedExperience(tmpSelectedExperience);
-        console.log(props.post);
       });
+
+      console.log({userExperiences});
     },
     [userExperiences],
   );
 
   const handleClose = useCallback(() => {
     setOpen(false);
+    setSelectedExperience([]);
   }, []);
 
   const handleSelectAllExperience = () => {
