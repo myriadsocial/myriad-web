@@ -14,8 +14,9 @@ import {AppStatusBanner} from 'src/components/common/Banner';
 import {TippingSuccess} from 'src/components/common/Tipping/render/Tipping.success';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {generateAnonymousUser} from 'src/helpers/auth';
-import {useExperienceHook} from 'src/hooks/use-experience-hook';
+import {ExperienceProps} from 'src/interfaces/experience';
 import {initialize} from 'src/lib/api/base';
+import * as ExperienceAPI from 'src/lib/api/experience';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import {getServer} from 'src/lib/api/server';
 import i18n from 'src/locale';
@@ -39,34 +40,36 @@ const {publicRuntimeConfig} = getConfig();
 type HomePageProps = {
   session: Session;
   logo: string;
+  title: string;
+  description: string;
+  image: string;
+  experience: ExperienceProps;
 };
 
 const Index: React.FC<HomePageProps> = props => {
+  const {title, description, image, experience} = props;
   const router = useRouter();
-  const {experience} = useExperienceHook();
   return (
     <>
       <DefaultLayout isOnProfilePage={false} {...props}>
         <Head>
-          {experience ? (
+          <title>{i18n.t('Home.Title', {appname: publicRuntimeConfig.appName})}</title>
+          {experience && (
             <>
-              <title>{experience?.name}</title>
               <meta property="og:type" content="article" />
               <meta property="og:url" content={publicRuntimeConfig.appAuthURL + router.asPath} />
-              <meta property="og:description" content={experience?.description} />
-              <meta property="og:title" content={experience?.name} />
-              <meta property="og:image" content={experience?.experienceImageURL} />
+              <meta property="og:description" content={description} />
+              <meta property="og:title" content={title} />
+              <meta property="og:image" content={image} />
               <meta property="og:image:width" content="2024" />
               <meta property="og:image:height" content="1012" />
-              <meta property="og:image:secure_url" content={experience?.experienceImageURL} />
+              <meta property="og:image:secure_url" content={image} />
               {/* Twitter Card tags */}
-              <meta name="twitter:title" content={experience?.name} />
-              <meta name="twitter:description" content={experience?.description} />
-              <meta name="twitter:image" content={experience?.experienceImageURL} />
+              <meta name="twitter:title" content={title} />
+              <meta name="twitter:description" content={description} />
+              <meta name="twitter:image" content={image} />
               <meta name="twitter:card" content="summary_large_image" />
             </>
-          ) : (
-            <title>{i18n.t('Home.Title', {appname: publicRuntimeConfig.appName})}</title>
           )}
         </Head>
 
@@ -88,7 +91,7 @@ const Index: React.FC<HomePageProps> = props => {
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
   const {req} = context;
-
+  const params = context.query;
   const dispatch = store.dispatch as ThunkDispatchAction;
 
   const available = await healthcheck();
@@ -131,12 +134,29 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   ]);
 
   await dispatch(fetchUserExperience());
+
+  let description, title, image, experience;
+
+  if (params.type && params.type === 'experience') {
+    const exp = await ExperienceAPI.getExperienceDetail(params.id as string);
+    experience = exp;
+    description =
+      exp?.description ??
+      'The owner might be changed their privacy settings, shared it for certain group of people or it’s been deleted';
+    title = exp ? exp?.name : 'We cannot find what you are looking for';
+    image = exp ? exp.experienceImageURL : null;
+  }
+
   const data = await getServer();
 
   return {
     props: {
       session,
       logo: data.images.logo_banner,
+      description,
+      title,
+      image,
+      experience,
     },
   };
 });
