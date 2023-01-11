@@ -96,6 +96,7 @@ const CommentEditor = (props: CommentEditorProps, ref: React.ForwardedRef<HTMLDi
       referenceId,
       type,
     };
+    handleRemoveExclusiveContent();
 
     if (exclusiveContent) {
       dispatch(
