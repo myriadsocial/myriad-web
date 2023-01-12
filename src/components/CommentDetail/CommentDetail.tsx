@@ -314,7 +314,7 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>((pro
                     />
                   )}
 
-                {exclusiveContent && <Reveal content={exclusiveContent?.content} />}
+                {exclusiveContent && <Reveal content={exclusiveContent} />}
               </CardContent>
               <CardActions disableSpacing>
                 <VotingComponent
