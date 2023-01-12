@@ -15,7 +15,6 @@ import {stringify} from 'components/PostCreate/formatter';
 import {PostDetailContainer} from 'components/PostDetail/PostDetail.container';
 import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {TippingSuccess} from 'src/components/common/Tipping/render/Tipping.success';
-import ShowIf from 'src/components/common/show-if.component';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {generateAnonymousUser} from 'src/helpers/auth';
 import {Post} from 'src/interfaces/post';
@@ -66,14 +65,16 @@ const PostPage: React.FC<PostPageProps> = props => {
   const router = useRouter();
   const user = useSelector<RootState, User>(state => state.userState.user, shallowEqual);
   const post = useSelector<RootState, Post>(state => state.timelineState.post, shallowEqual);
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const vote = useSelector<RootState, number>(
-    state => state.timelineState.post.metric.upvotes - state.timelineState.post.metric.downvotes,
+    state =>
+      state.timelineState.post?.metric?.upvotes - state.timelineState.post?.metric?.downvotes,
     shallowEqual,
   );
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const comments = useSelector<RootState, number>(
-    state => state.timelineState.post.metric.comments,
+    state => state.timelineState.post?.metric?.comments,
     shallowEqual,
   );
 
@@ -96,25 +97,16 @@ const PostPage: React.FC<PostPageProps> = props => {
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
       <DefaultLayout isOnProfilePage={false} {...props}>
-        <ShowIf condition={!removed}>
-          <TopNavbarComponent
-            description={i18n.t('Post_Detail.Navbar.Title')}
-            sectionTitle={i18n.t('Section.Timeline')}
-          />
-        </ShowIf>
-
-        <ShowIf condition={removed}>
-          <TopNavbarComponent
-            description={i18n.t('Post_Detail.Navbar.Removed.Title')}
-            sectionTitle={i18n.t('Post_Detail.Navbar.Removed.Description')}
-          />
-
+        <TopNavbarComponent
+          description={i18n.t('Post_Detail.Navbar.Title')}
+          sectionTitle={i18n.t('Section.Timeline')}
+        />
+        {removed ? (
           <ResourceDeleted />
-        </ShowIf>
-
-        <ShowIf condition={!removed}>
+        ) : (
           <PostDetailContainer post={post} user={user} expand metric={post.metric} preview />
-        </ShowIf>
+        )}
+
         <TippingSuccess />
       </DefaultLayout>
     </>
@@ -207,7 +199,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       : null
     : null;
 
-  if (post.platform === 'myriad') {
+  if (post?.platform === 'myriad') {
     const {text, image: imageData} = stringify(post);
     description = text;
     image = imageData;
