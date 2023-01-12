@@ -166,13 +166,53 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
     }
 
     if (isMobile && activeTab === 'create') {
-      onSubmit({
-        text: content.current,
-        rawText: content.current,
-        selectedUserIds: post.selectedUserIds,
-        NSFWTag: post.NSFWTag,
-        visibility: post.visibility ?? PostVisibility.PUBLIC,
-      });
+      if (exclusiveContent) {
+        dispatch(
+          createExclusiveContent(
+            exclusiveContent,
+            [],
+            resp => {
+              onSubmit({
+                text: content.current,
+                rawText: content.current,
+                asset: {
+                  exclusiveContents: [
+                    `${publicRuntimeConfig.myriadAPIURL}/user/unlockable-contents/${resp?.id}`,
+                  ],
+                },
+                selectedUserIds: post.selectedUserIds,
+                NSFWTag: post.NSFWTag,
+                visibility: post.visibility ?? PostVisibility.PUBLIC,
+              });
+            },
+            () => {
+              confirm({
+                title: i18n.t('LiteVersion.LimitTitlePost', {count: 0}),
+                description: i18n.t('LiteVersion.LimitDescPost'),
+                icon: 'warning',
+                confirmationText: i18n.t('General.Got_It'),
+                cancellationText: i18n.t('LiteVersion.MaybeLater'),
+                onConfirm: () => {
+                  undefined;
+                },
+                onCancel: () => {
+                  undefined;
+                },
+                hideCancel: true,
+              });
+            },
+          ),
+        );
+        setExclusiveContent(null);
+      } else {
+        onSubmit({
+          text: content.current,
+          rawText: content.current,
+          selectedUserIds: post.selectedUserIds,
+          NSFWTag: post.NSFWTag,
+          visibility: post.visibility ?? PostVisibility.PUBLIC,
+        });
+      }
     }
   };
 
@@ -251,7 +291,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
                 {i18n.t('ExclusiveContent.Label.ExclusiveContent')}
               </Typography>
               <Reveal
-                content={exclusiveContent?.content}
+                content={exclusiveContent}
                 customStyle={{
                   maxWidth: '820px',
                   width: '100%',
