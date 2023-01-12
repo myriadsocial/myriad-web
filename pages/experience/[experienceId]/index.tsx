@@ -8,6 +8,9 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 
+import axios from 'axios';
+import {TopNavbarComponent} from 'components/atoms/TopNavbar';
+import {ResourceDeleted} from 'components/common/ResourceDeleted';
 import {ExperiencePreviewContainer} from 'src/components/ExperiencePreview/ExperiencePreview.container';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {generateAnonymousUser} from 'src/helpers/auth';
@@ -16,6 +19,7 @@ import {initialize} from 'src/lib/api/base';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import {healthcheck} from 'src/lib/api/healthcheck';
 import {getServer} from 'src/lib/api/server';
+import i18n from 'src/locale';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
 import {fetchFriend} from 'src/reducers/friend/actions';
@@ -39,10 +43,11 @@ type ExperiencePageProps = {
   image: string | null;
   session: Session;
   logo: string;
+  hidden: boolean;
 };
 
 const PreviewExperience: React.FC<ExperiencePageProps> = props => {
-  const {title, image, description} = props;
+  const {title, image, description, hidden} = props;
 
   const router = useRouter();
 
@@ -63,7 +68,17 @@ const PreviewExperience: React.FC<ExperiencePageProps> = props => {
         <meta name="twitter:image" content={image ?? ''} />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
-      <ExperiencePreviewContainer />
+      {hidden ? (
+        <>
+          <TopNavbarComponent
+            description={i18n.t('TopNavbar.Title.Experience')}
+            sectionTitle={i18n.t('Section.Timeline')}
+          />
+          <ResourceDeleted />
+        </>
+      ) : (
+        <ExperiencePreviewContainer />
+      )}
     </DefaultLayout>
   );
 };
@@ -71,6 +86,11 @@ const PreviewExperience: React.FC<ExperiencePageProps> = props => {
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
   const {params, req} = context;
   const experienceId = params?.experienceId as string;
+  let hidden = false,
+    description = 'Timeline',
+    title = 'Myriad - Timeline',
+    image =
+      'https://storage.googleapis.com/myriad-social-mainnet.appspot.com/assets/myriad_logo.svg';
 
   const dispatch = store.dispatch as ThunkDispatchAction;
 
@@ -90,6 +110,37 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   const anonymous = Boolean(session?.user.anonymous) || !session;
 
   initialize({cookie: req.headers.cookie}, anonymous);
+
+  try {
+    const experience = await ExperienceAPI.getExperienceDetail(experienceId);
+
+    if (experience?.visibility === 'selected_user') {
+      if (anonymous) hidden = true;
+
+      const user = (await dispatch(fetchUser())) as unknown as User;
+      if (!experience?.selectedUserIds?.includes(user?.id) && experience?.createdBy !== user?.id)
+        hidden = true;
+    }
+
+    if (experience?.visibility === 'private') {
+      const user = (await dispatch(fetchUser())) as unknown as User;
+      if (experience?.createdBy !== user?.id) hidden = true;
+    }
+
+    description = experience?.description;
+    title = experience.name;
+    image = experience.experienceImageURL;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+      hidden = true;
+    } else {
+      Sentry.captureException(error);
+
+      return {
+        notFound: true,
+      };
+    }
+  }
 
   if (anonymous) {
     const username = generateAnonymousUser();
@@ -114,46 +165,17 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   await dispatch(fetchUserExperience());
 
-  try {
-    const experience = await ExperienceAPI.getExperienceDetail(experienceId);
-    const data = await getServer();
+  const data = await getServer();
 
-    if (experience?.visibility === 'selected_user') {
-      if (anonymous)
-        return {
-          notFound: true,
-        };
-
-      const user = (await dispatch(fetchUser())) as unknown as User;
-      if (!experience?.selectedUserIds?.includes(user?.id) && experience?.createdBy !== user?.id)
-        return {
-          notFound: true,
-        };
-    }
-
-    if (experience?.visibility === 'private') {
-      const user = (await dispatch(fetchUser())) as unknown as User;
-      if (experience?.createdBy !== user?.id)
-        return {
-          notFound: true,
-        };
-    }
-
-    return {
-      props: {
-        title: experience.name,
-        description: experience?.description ?? '',
-        image: experience.experienceImageURL,
-        logo: data.images.logo_banner,
-      },
-    };
-  } catch (error) {
-    Sentry.captureException(error);
-
-    return {
-      notFound: true,
-    };
-  }
+  return {
+    props: {
+      title: title,
+      description: description,
+      image: image,
+      logo: data.images.logo_banner,
+      hidden: hidden,
+    },
+  };
 });
 
 export default PreviewExperience;
