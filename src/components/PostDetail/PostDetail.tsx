@@ -98,7 +98,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
         </ShowIf>
 
         <ShowIf condition={!hiddenContent}>
-          <ShowIf condition={post.visibility === 'selected_user' && post.createdBy === user.id}>
+          <ShowIf condition={post.visibility === 'selected_user'}>
             <div
               style={{
                 display: 'flex',
