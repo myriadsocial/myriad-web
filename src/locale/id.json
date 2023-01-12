@@ -1209,9 +1209,11 @@
     "LimitTitlePost":"Wow! Sudah banyak postingannya!",
     "LimitDescPost":"Untuk mencegah spam, untuk sementara kami membatasi postingan hingga 15 posting per hari. Anda masih dapat menelusuri Myriad sepuasnya!"
   },
-    "Visibilities":{
+  "Visibilities":{
     "PostVisibilities":"Pos Anda dapat hanya dapat dilihat oleh Anda dan orang yang dipilih",
-    "Custom":"Kustom"
+    "Custom":"Kustom",
+    "Hidden" : "Pemilik mungkin mengubah setelan privasinya, membagikannya untuk sekelompok orang tertentu, atau telah dihapus",
+    "Back" : "Kembali ke Beranda"
   },
   "ExclusiveContent" : {
     "Create" : "Buat Konten Eksklusif",

@@ -1215,7 +1215,9 @@
   },
    "Visibilities":{
     "PostVisibilities":"Your post is visible to you and selected people",
-    "Custom":"Custom"
+    "Custom":"Custom",
+    "Hidden" : "The owner might be changed their privacy settings, shared it for certain group of people or it’s been deleted",
+    "Back" : "Back to Home"
   },
   "ExclusiveContent" : {
     "Create" : "Create Exclusive Content",
