@@ -148,7 +148,8 @@
     "Save": "Simpan",
     "Amount" : "Jumlah",
     "Summary" : "Ringkasan",
-    "Got_It" : "Mengerti!"
+    "Got_It" : "Mengerti!",
+    "ConnectWallet": "Hubungkan Dompet"
   },
   "Confirm": {
     "Title": "Apa kamu yakin?"
@@ -1237,7 +1238,9 @@
       "Editor" : "Konten yang Anda tambahkan di sini akan dibuka kepada audiens anda setelah melakukan pembayaran."
     },
     "Text" : {
-      "NetworkError" : "Pembayaran hanya berlaku di jaringan {{accept}} saat ini anda berada di jaringan {{current}}. Ubah jaringan untuk memproses pembayaran"
+      "NetworkError" : "Pembayaran hanya berlaku di jaringan {{accept}} saat ini anda berada di jaringan {{current}}. Ubah jaringan untuk memproses pembayaran",
+      "NotLogin" : "Ini adalah konten berbayar. Masuk dengan dompet kripto Anda untuk melihatnya.",
+      "Web2User" : "Anda tidak memiliki dompet yang terhubung ke akun Anda. Mari coba sambungkan dompet Anda untuk membuka konten eksklusif ini."
     },
     "Prompt_Success" : {
       "Title" : "Konten Berhasil Dibuka"
