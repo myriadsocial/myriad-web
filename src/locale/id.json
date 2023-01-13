@@ -1211,7 +1211,7 @@
     "LimitDescPost":"Untuk mencegah spam, untuk sementara kami membatasi postingan hingga 15 posting per hari. Anda masih dapat menelusuri Myriad sepuasnya!"
   },
   "Visibilities":{
-    "PostVisibilities":"Pos Anda dapat hanya dapat dilihat oleh Anda dan orang yang dipilih",
+    "PostVisibilities":"Pos ini hanya dapat dilihat oleh pembuatnya dan orang yang ditambahkan",
     "Custom":"Kustom",
     "Hidden" : "Pemilik mungkin mengubah setelan privasinya, membagikannya untuk sekelompok orang tertentu, atau telah dihapus",
     "Back" : "Kembali ke Beranda"

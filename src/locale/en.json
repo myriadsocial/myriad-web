@@ -1215,7 +1215,7 @@
     "LimitDescPost":"To prevent spam, we are temporarily limiting posts to 15 per day. You can still browse Myriad to your heart's content!"
   },
    "Visibilities":{
-    "PostVisibilities":"Your post is visible to you and selected people",
+    "PostVisibilities":"This post is only visible to its author and added people",
     "Custom":"Custom",
     "Hidden" : "The owner might be changed their privacy settings, shared it for certain group of people or it’s been deleted",
     "Back" : "Back to Home"
