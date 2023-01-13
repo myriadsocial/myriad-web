@@ -12,6 +12,9 @@ export const useStyles = makeStyles((theme: Theme) =>
         width: '100%',
       },
     },
+    wrapperButton: {
+      marginTop: 32,
+    },
     wrapperButtonFlex: {
       marginTop: 32,
       display: 'flex',
