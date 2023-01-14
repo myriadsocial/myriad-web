@@ -40,7 +40,7 @@ export const FriendListContainer: React.FC<FriendListContainerProps> = props => 
     sort: sortProfileFriend,
   } = useProfileFriend();
 
-  const {detail, friendStatus} = useSelector<RootState, ProfileState>(state => state.profileState);
+  const {detail} = useSelector<RootState, ProfileState>(state => state.profileState);
   const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
   const userLogin = useSelector<RootState, User | undefined>(state => state.userState.user);
   const userFriends = useSelector<RootState, Friend[]>(state => state.friendState.friends);
@@ -48,7 +48,7 @@ export const FriendListContainer: React.FC<FriendListContainerProps> = props => 
 
   const [isFiltered, setFiltered] = useState(false);
 
-  const isFriend = friendStatus?.status == 'approved';
+  const isFriend = detail?.friendInfo?.status == 'friends';
   const isOwner = detail?.id == userLogin?.id;
   const isPrivate = settings.privacy.accountPrivacy == 'private';
 
