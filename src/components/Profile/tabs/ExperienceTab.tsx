@@ -12,7 +12,6 @@ import {DropdownMenu} from 'src/components/atoms/DropdownMenu';
 import {Empty} from 'src/components/atoms/Empty';
 import {ExperienceOwner} from 'src/hooks/use-experience-hook';
 import {UserExperience, ExperienceType} from 'src/interfaces/experience';
-import {FriendStatus} from 'src/interfaces/friend';
 import {UserSettings} from 'src/interfaces/setting';
 import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
@@ -47,15 +46,13 @@ export const ProfileExperienceTab: React.FC<ProfileExperienceTabProps> = props =
   const experiences = useSelector<RootState, UserExperience[]>(
     state => state.profileState.experience.data,
   );
-  const {detail: profile, friendStatus} = useSelector<RootState, ProfileState>(
-    state => state.profileState,
-  );
+  const {detail: profile} = useSelector<RootState, ProfileState>(state => state.profileState);
   const {privacy} = useSelector<RootState, UserSettings>(state => state.configState.settings);
   const user = useSelector<RootState, User | undefined>(state => state.userState.user);
 
   const [isExperienceFiltered, setExperienceFiltered] = useState(false);
   const [selectedExperienceType, setSelectedExperienceType] = useState<ExperienceType>();
-  const isFriend = friendStatus?.status === FriendStatus.APPROVED;
+  const isFriend = profile?.friendInfo?.status === 'friends';
   const isProfileOwner = profile?.id == user?.id;
   const isPrivateProfile = privacy.accountPrivacy == 'private';
 

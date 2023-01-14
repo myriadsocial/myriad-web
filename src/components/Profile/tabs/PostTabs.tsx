@@ -9,7 +9,6 @@ import {PrivateProfile} from '../PrivateProfile';
 import {PostsListContainer} from 'components/PostList';
 import {TimelineFilterContainer} from 'components/TimelineFilter';
 import ShowIf from 'components/common/show-if.component';
-import {FriendStatus} from 'src/interfaces/friend';
 import {PrivacySettings} from 'src/interfaces/setting';
 import {TimelineFilterFields} from 'src/interfaces/timeline';
 import {User} from 'src/interfaces/user';
@@ -27,9 +26,7 @@ type ProfilePostsTabProps = {
 export const ProfilePostsTab: React.FC<ProfilePostsTabProps> = props => {
   const {filters, filterType, user} = props;
 
-  const {detail: profile, friendStatus} = useSelector<RootState, ProfileState>(
-    state => state.profileState,
-  );
+  const {detail: profile} = useSelector<RootState, ProfileState>(state => state.profileState);
   const privacy = useSelector<RootState, PrivacySettings>(
     state => state.configState.settings.privacy,
     shallowEqual,
@@ -39,7 +36,7 @@ export const ProfilePostsTab: React.FC<ProfilePostsTabProps> = props => {
     shallowEqual,
   );
 
-  const isFriend = friendStatus?.status === FriendStatus.APPROVED;
+  const isFriend = profile?.friendInfo?.status === 'friends';
   const isProfileOwner = profile?.id == user?.id;
   const isPrivateProfile = privacy.accountPrivacy == 'private';
 
