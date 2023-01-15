@@ -2,7 +2,7 @@ import {CheckCircleIcon} from '@heroicons/react/solid';
 import {SearchIcon} from '@heroicons/react/solid';
 
 import React, {useState, useEffect} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -21,24 +21,20 @@ import {Modal} from '../Modal';
 import {useStyles} from './AddCoin.style';
 import {Props} from './addCoin.interface';
 
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {Currency, CurrencyId} from 'src/interfaces/currency';
 import {RootState} from 'src/reducers';
 import {ConfigState} from 'src/reducers/config/reducer';
-import {addUserCurrency} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 export const AddCoin: React.FC<Props> = props => {
   const {open, onClose} = props;
   const style = useStyles();
-  const dispatch = useDispatch();
-  const enqueueSnackbar = useEnqueueSnackbar();
 
   const {availableCurrencies} = useSelector<RootState, ConfigState>(state => state.configState);
   const {currencies} = useSelector<RootState, UserState>(state => state.userState);
 
   const [searchedCurrencies, setSearchedCurrencies] = useState<Currency[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
   const [search, setSearch] = useState('');
   const [selectedAsset, setSelectedAsset] = useState<string | null>(null);
   const [myAsset, setMyAsset] = useState<CurrencyId[]>([]);
@@ -74,34 +70,6 @@ export const AddCoin: React.FC<Props> = props => {
   const isSelected = (code: string) => {
     if (selectedAsset === code) return style.selected;
     else return;
-  };
-
-  const filterSelectedCurrency = () => {
-    const result = availableCurrencies.filter(el => {
-      return el.id === selectedAsset;
-    });
-
-    return result[0];
-  };
-
-  const handleAddNewCurrency = () => {
-    if (selectedAsset) {
-      setLoading(true);
-
-      dispatch(
-        addUserCurrency(filterSelectedCurrency(), () => {
-          enqueueSnackbar({
-            message: 'Added successfully, please refresh browser!',
-            variant: 'success',
-          });
-          setLoading(false);
-        }),
-      );
-    }
-
-    onClose();
-    setLoading(false);
-    setSelectedAsset(null);
   };
 
   const LoadingComponent = () => {
@@ -184,7 +152,6 @@ export const AddCoin: React.FC<Props> = props => {
         </List>
         <Button
           disabled={selectedAsset === null}
-          onClick={handleAddNewCurrency}
           className={style.button}
           fullWidth
           variant="contained"

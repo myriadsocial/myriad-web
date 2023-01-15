@@ -36,8 +36,6 @@ import i18n from 'src/locale';
 type BalanceDetailListProps = {
   balanceDetails: BalanceDetail[];
   isLoading: boolean;
-  onClickRefresh: () => void;
-  onClickAddCoin: () => void;
 };
 
 export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
