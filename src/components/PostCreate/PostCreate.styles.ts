@@ -113,5 +113,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: '0 10px',
       borderRadius: '6px',
     },
+    giftIconGray: {
+      width: 16,
+      marginRight: '10px !important',
+      color: '#C2C2C2',
+    },
   }),
 );

@@ -107,6 +107,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [selectedVisibility, setSelectedVisibility] = useState<VisibilityItem>();
   const [selectedUserIds, setSelectedUserIds] = useState<User[]>([]);
+  const [pageUserIds, setPageUserIds] = React.useState<number>(1);
   const [isLoadingSelectedUser, setIsLoadingSelectedUser] = useState<boolean>(false);
   const [errors, setErrors] = useState({
     name: false,
@@ -466,11 +467,15 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
 
   const getSelectedIds = async (userIds: string[]) => {
     setIsLoadingSelectedUser(true);
-    const selectedUserIds = await UserAPI.getUserByIds(userIds);
-    setSelectedUserIds(selectedUserIds?.data as unknown as User[]);
+    const response = await UserAPI.getUserByIds(userIds, pageUserIds);
+    setSelectedUserIds([...selectedUserIds, ...(response?.data as unknown as User[])]);
     setIsLoadingSelectedUser(false);
+    if (pageUserIds < response.meta.totalPageCount) setPageUserIds(pageUserIds + 1);
   };
 
+  React.useEffect(() => {
+    getSelectedIds(experience?.selectedUserIds);
+  }, [experience, pageUserIds]);
   useEffect(() => {
     if (experience) {
       const visibility = visibilityList.find(option => option.id === experience?.visibility);
@@ -648,31 +653,33 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
               />
 
               <div className={styles.preview}>
-                <ShowIf condition={isLoadingSelectedUser}>
-                  <Loading />
-                </ShowIf>
-                {selectedUserIds
-                  .filter(people => !isEmpty(people.id))
-                  .map(people => (
-                    <ListItemPeopleComponent
-                      id="selected-experience-list-item"
-                      key={people.id}
-                      title={people.name}
-                      subtitle={<Typography variant="caption">@{people.username}</Typography>}
-                      avatar={people.profilePictureURL}
-                      platform={'myriad'}
-                      action={
-                        <IconButton onClick={removeVisibilityPeople(people)}>
-                          <SvgIcon
-                            classes={{root: styles.fill}}
-                            component={XCircleIcon}
-                            color="error"
-                            viewBox={'0 0 20 20'}
-                          />
-                        </IconButton>
-                      }
-                    />
-                  ))}
+                <div className={styles.customVisibility}>
+                  <ShowIf condition={isLoadingSelectedUser}>
+                    <Loading />
+                  </ShowIf>
+                  {selectedUserIds
+                    .filter(people => !isEmpty(people.id))
+                    .map(people => (
+                      <ListItemPeopleComponent
+                        id="selected-experience-list-item"
+                        key={people.id}
+                        title={people.name}
+                        subtitle={<Typography variant="caption">@{people.username}</Typography>}
+                        avatar={people.profilePictureURL}
+                        platform={'myriad'}
+                        action={
+                          <IconButton onClick={removeVisibilityPeople(people)}>
+                            <SvgIcon
+                              classes={{root: styles.fill}}
+                              component={XCircleIcon}
+                              color="error"
+                              viewBox={'0 0 20 20'}
+                            />
+                          </IconButton>
+                        }
+                      />
+                    ))}
+                </div>
               </div>
             </>
           )}

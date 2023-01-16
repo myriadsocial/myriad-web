@@ -189,5 +189,12 @@ export const useStyles = makeStyles((theme: Theme) =>
         marginTop: 32,
       },
     },
+    customVisibility: {
+      maxHeight: '300px',
+      overflowY: 'scroll',
+      border: '1px solid #FFD24D',
+      borderRadius: '4px',
+      padding: '0 10px',
+    },
   }),
 );

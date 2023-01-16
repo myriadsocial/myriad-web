@@ -1240,7 +1240,8 @@
     "Text" : {
       "NetworkError" : "Pembayaran hanya berlaku di jaringan {{accept}} saat ini anda berada di jaringan {{current}}. Ubah jaringan untuk memproses pembayaran",
       "NotLogin" : "Ini adalah konten berbayar. Masuk dengan dompet kripto Anda untuk melihatnya.",
-      "Web2User" : "Anda tidak memiliki dompet yang terhubung ke akun Anda. Mari coba sambungkan dompet Anda untuk membuka konten eksklusif ini."
+      "Web2User" : "Anda tidak memiliki dompet yang terhubung ke akun Anda. Mari coba sambungkan dompet Anda untuk membuka konten eksklusif ini.",
+      "Tooltip" : "Hubungkan dompet kripto Anda untuk menggunakan fitur ini."
     },
     "Prompt_Success" : {
       "Title" : "Konten Berhasil Dibuka"
