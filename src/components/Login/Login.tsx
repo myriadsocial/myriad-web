@@ -115,6 +115,7 @@ export const Login: React.FC<LoginProps> = props => {
       });
 
       setToken(token);
+      localStorage.removeItem('email');
       router.replace({pathname: '/login', query: {}}, undefined, {shallow: true});
     }
   }, [query, registeredEmail]);
@@ -243,6 +244,7 @@ export const Login: React.FC<LoginProps> = props => {
         default:
           break;
       }
+      localStorage.removeItem('email');
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [selectedAccount, walletType],
