@@ -129,7 +129,12 @@ export const getCountPost = async (): Promise<{count: number}> => {
   return data;
 };
 
-export const getUserByIds = async (userIds?: string[]): Promise<UserList> => {
+export const getUserByIds = async (
+  userIds?: string[],
+  page = 1,
+  limit = PAGINATION_LIMIT,
+  sort = 'DESC',
+): Promise<UserList> => {
   const params: Record<string, any> = {
     filter: {
       where: {
@@ -141,7 +146,7 @@ export const getUserByIds = async (userIds?: string[]): Promise<UserList> => {
   };
 
   const {data} = await MyriadAPI().request<UserList>({
-    url: '/users',
+    url: `/users?pageNumber=${page}&pageLimit=${limit}&sort=${sort}`,
     method: 'GET',
     params,
   });

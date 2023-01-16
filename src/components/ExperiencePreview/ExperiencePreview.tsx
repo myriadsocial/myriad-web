@@ -65,6 +65,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
   const [isExpandPeople, setIsExpandPeople] = React.useState(false);
   const [isExpandPost, setIsExpandPost] = React.useState(false);
   const [selectedUserIds, setSelectedUserIds] = React.useState<User[]>([]);
+  const [pageUserIds, setPageUserIds] = React.useState<number>(1);
   const [isLoadingSelectedUser, setIsLoadingSelectedUser] = React.useState<boolean>(false);
 
   React.useEffect(() => {
@@ -184,14 +185,15 @@ export const ExperiencePreview: React.FC<Props> = props => {
 
   const getSelectedIds = async (userIds: string[]) => {
     setIsLoadingSelectedUser(true);
-    const selectedUserIds = await UserAPI.getUserByIds(userIds);
-    setSelectedUserIds(selectedUserIds?.data as unknown as User[]);
+    const response = await UserAPI.getUserByIds(userIds, pageUserIds);
+    setSelectedUserIds([...selectedUserIds, ...(response?.data as unknown as User[])]);
     setIsLoadingSelectedUser(false);
+    if (pageUserIds < response.meta.totalPageCount) setPageUserIds(pageUserIds + 1);
   };
 
   React.useEffect(() => {
     getSelectedIds(experience?.selectedUserIds);
-  }, [experience]);
+  }, [experience, pageUserIds]);
 
   return (
     <div className={style.root}>
@@ -324,21 +326,23 @@ export const ExperiencePreview: React.FC<Props> = props => {
             {i18n.t('Experience.Preview.Subheader.Privacy')}
           </Typography>
           <Typography className={style.tagSection}>{checkVisibility()}</Typography>
-          {selectedUserIds.length > 0 &&
-            selectedUserIds.map(person => (
-              <ListItemPeopleComponent
-                key={person.id}
-                onClick={() => handleOpenProfile(person as unknown as People)}
-                id="selectable-experience-list-item"
-                title={person.name}
-                subtitle={<Typography variant="caption">@{person.username}</Typography>}
-                avatar={person.profilePictureURL}
-                platform={'myriad'}
-              />
-            ))}
-          <ShowIf condition={isLoadingSelectedUser}>
-            <Loading />
-          </ShowIf>
+          <div className={style.customVisibility}>
+            <ShowIf condition={isLoadingSelectedUser}>
+              <Loading />
+            </ShowIf>
+            {selectedUserIds.length > 0 &&
+              selectedUserIds.map(person => (
+                <ListItemPeopleComponent
+                  key={person.id}
+                  onClick={() => handleOpenProfile(person as unknown as People)}
+                  id="selectable-experience-list-item"
+                  title={person.name}
+                  subtitle={<Typography variant="caption">@{person.username}</Typography>}
+                  avatar={person.profilePictureURL}
+                  platform={'myriad'}
+                />
+              ))}
+          </div>
         </div>
       )}
       <div className={style.subtitleContainer}>
