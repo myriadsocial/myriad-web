@@ -101,10 +101,11 @@ export const useWallet = () => {
   };
 
   const payUnlockableContent = async (
-    walletAddress: string,
+    walletAddress: string | null,
     tipsBalanceInfo: TipsBalanceInfo,
     amount: BN,
     currency: BalanceDetail,
+    accountReference: string | null,
     type?: string,
     referenceId?: string,
     callback?: (txHash: string) => void,
@@ -118,6 +119,7 @@ export const useWallet = () => {
         walletAddress,
         tipsBalanceInfo,
         amount,
+        accountReference,
         undefined,
         params => {
           if (params?.signerOpened) {

@@ -443,9 +443,10 @@ export class PolkadotJs implements IProvider {
   }
 
   async payUnlockableContent(
-    walletAddress: string,
+    walletAddress: string | null,
     tipsBalanceInfo: TipsBalanceInfo,
     amount: BN,
+    accountReference: string | null,
     ...args: [InjectedAccountWithMeta, SignTransaction]
   ): Promise<string | null> {
     const [account, callback] = args;
@@ -465,7 +466,12 @@ export class PolkadotJs implements IProvider {
       callback && callback({signerOpened: true});
 
       // here we use the api to create a balance transfer to some account of a value of 12345678
-      const transferExtrinsic = api.tx.tipping.payContent(walletAddress, tipsBalanceInfo, amount);
+      const transferExtrinsic = api.tx.tipping.payContent(
+        walletAddress,
+        tipsBalanceInfo,
+        amount,
+        accountReference,
+      );
 
       // passing the injected account address as the first argument of signAndSend
       // will allow the api to retrieve the signer and the user will see the extension
