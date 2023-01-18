@@ -23,17 +23,13 @@ self.addEventListener('install', event => {
 self.addEventListener('notificationclick', event => {
   // Event actions derived from event.notification.data from data received
   console.log('Notification clicked', event.notification);
-  const {
-    data: {appUrl},
-  } = event.notification;
   event.notification.close();
   const promise = new Promise(function (resolve) {
     setTimeout(resolve, 500);
   }).then(function () {
-    console.log('doneeeee', appUrl);
     // return the promise returned by openWindow, just in case.
     // Opening any origin only works in Chrome 43+.
-    return clients.openWindow(`${appUrl}/notification`);
+    return clients.openWindow(`${NEXTAUTH_URL}/notification`);
   });
 
   // Now wait for the promise to keep the permission alive.
