@@ -65,6 +65,7 @@ export const ExclusiveCreateContainer: React.FC<PostCreateContainerType> = props
           onSearchPeople={handleSearchPeople}
           onSubmit={onSubmit}
           isMobile={isMobile}
+          autoFocus={true}
         />
       </Modal>
     </>

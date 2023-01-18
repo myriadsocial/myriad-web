@@ -90,7 +90,7 @@ const MAX_HASHTAG_CHAR_LENGTH = 160;
 
 const editableProps: TEditableProps<EditorValue> = {
   spellCheck: false,
-  autoFocus: true,
+  // autoFocus: true,
   readOnly: false,
 };
 
@@ -182,7 +182,14 @@ const corePlugins = createEditorPlugins([
 ]);
 
 export const Editor: React.FC<EditorProps> = props => {
-  const {userId, mobile, onSearchMention, isErrorEditor = false, placeholder} = props;
+  const {
+    userId,
+    mobile,
+    onSearchMention,
+    isErrorEditor = false,
+    placeholder,
+    autoFocus = false,
+  } = props;
 
   const styles = useStyles({mobile, counter: true});
   const ref = useRef(null);
@@ -273,7 +280,11 @@ export const Editor: React.FC<EditorProps> = props => {
       <div ref={ref} className={styles.editor}>
         <Plate
           id={userId}
-          editableProps={{...editableProps, placeholder: placeholder ?? 'Type...'}}
+          editableProps={{
+            ...editableProps,
+            placeholder: placeholder ?? 'Type...',
+            autoFocus: autoFocus,
+          }}
           plugins={plugins}
           initialValue={initial}>
           <MentionCombobox<MentionDetail>

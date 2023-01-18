@@ -37,10 +37,11 @@ type PostCreateProps = {
     post: ExclusiveContentPost,
     attributes?: Pick<Post, 'NSFWTag' | 'visibility'>,
   ) => void;
+  autoFocus?: boolean;
 };
 
 export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
-  const {user, isMobile, onSearchPeople, onSubmit} = props;
+  const {user, isMobile, onSearchPeople, onSubmit, autoFocus} = props;
   const styles = useStyles();
   const [currency, setCurrency] = useState<Currency>();
   const [amount, setAmount] = useState<string>('');
@@ -126,6 +127,7 @@ export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
           //TODO: handle ckeditor value
           onChange={handleContentChange}
           placeholder={i18n.t('ExclusiveContent.Placeholder.Editor')}
+          autoFocus={autoFocus}
         />
       </div>
       <div className={styles.currencyWrapper}>
