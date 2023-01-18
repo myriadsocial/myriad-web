@@ -3,7 +3,7 @@ import {XIcon} from '@heroicons/react/solid';
 
 import {useState, useMemo, useEffect} from 'react';
 
-import {useRouter} from 'next/router';
+import Image from 'next/image';
 
 import {
   Card,
@@ -30,7 +30,6 @@ import useMyriadInstance from 'src/components/common/Blockchain/use-myriad-insta
 import ShowIf from 'src/components/common/show-if.component';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useInstances} from 'src/hooks/use-instances.hooks';
-import MyriadCircle from 'src/images/Icons/myriad-circle.svg';
 import {ServerListProps} from 'src/interfaces/server-list';
 import i18n from 'src/locale';
 
@@ -44,8 +43,6 @@ const SelectServer = ({onServerSelect}: SelectServerProps) => {
 
   const {logout} = useAuthHook();
 
-  const {asPath} = useRouter();
-
   const [openCheckAccountModal, setOpenCheckAccountModal] = useState(false);
 
   const classes = useStyles();
@@ -57,11 +54,13 @@ const SelectServer = ({onServerSelect}: SelectServerProps) => {
   useEffect(() => {
     if (servers.length > 0) {
       setSelectedServerId(servers[0].id);
+      onServerSelect(servers[0]);
     }
   }, [servers]);
 
   const [open, setOpen] = useState(false);
   const [selectedServerId, setSelectedServerId] = useState<number | null>(null);
+  const [selectedServer, setSelectedServer] = useState<ServerListProps | null>(null);
 
   const selectedInstanceName = selectedServerId
     ? servers[selectedServerId].detail?.name
@@ -79,14 +78,19 @@ const SelectServer = ({onServerSelect}: SelectServerProps) => {
     setSelectedServerId(serverId);
     setOpen(false);
     //onServerSelect(servers[serverId]);
-    if (asPath !== '/login') {
-      setOpenCheckAccountModal(true);
-    }
+    // if (asPath !== '/login') {
+    //   setOpenCheckAccountModal(true);
+    // }
   };
 
   const handleCloseCheckAccountModal = () => {
     setOpenCheckAccountModal(false);
   };
+
+  useEffect(() => {
+    setSelectedServer(servers.find((server: ServerListProps) => server.id === selectedServerId));
+    onServerSelect(servers.find((server: ServerListProps) => server.id === selectedServerId));
+  }, [selectedServerId]);
 
   return (
     <>
@@ -109,7 +113,17 @@ const SelectServer = ({onServerSelect}: SelectServerProps) => {
               borderRadius: 40,
             }}
             onClick={handleOpen}>
-            <SvgIcon component={MyriadCircle} viewBox="0 0 30 30" />
+            {selectedServer && (
+              <Image
+                alt={selectedServer.detail?.name}
+                loader={() => (selectedServer ? selectedServer.detail.serverImageURL : '')}
+                src={selectedServer.detail?.serverImageURL ?? ''}
+                placeholder="empty"
+                height={30}
+                width={30}
+              />
+            )}
+
             <Box>
               {servers.find(server => server.id === selectedServerId)?.detail?.name ??
                 'Common Server'}

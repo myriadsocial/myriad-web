@@ -2,26 +2,36 @@ import React, {useEffect, useMemo, useState, useCallback} from 'react';
 import {useSelector} from 'react-redux';
 import {useNavigate} from 'react-router';
 
-import {Button, Grid, ListItem, Tooltip, Typography} from '@material-ui/core';
+import Link from 'next/link';
+import {useRouter} from 'next/router';
+
+import {
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  ListItem,
+  Typography,
+  Tooltip,
+} from '@material-ui/core';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import {useStyles} from './Options.style';
 
+import SelectServer from 'src/components/SelectServer';
+import {MyNearWalletIcon, MyriadFullIcon} from 'src/components/atoms/Icons';
 import {
-  CoinbaseWalletisabledIcon,
   EthereumNetworkIcon,
-  KusamaNetworkIcon,
-  DebioNetworkIcon,
-  MetamaskWalletDisabledIcon,
-  MyNearWalletIcon,
-  MyriadCircleIcon,
-  NearNetworkIcon,
   PolkadotNetworkIcon,
+  NearNetworkIcon,
   PolygonNetworkDisabledIcon,
   SenderWalletDisabledIcon,
+  CoinbaseWalletisabledIcon,
+  MetamaskWalletDisabledIcon,
   TrustWalletDisabledIcon,
-  NovaDisableIcon,
+  KusamaNetworkIcon,
+  MyriadCircleIcon,
 } from 'src/components/atoms/Icons';
 import {PromptComponent as Prompt} from 'src/components/atoms/Prompt/prompt.component';
 import {PolkadotLink} from 'src/components/common/PolkadotLink.component';
@@ -31,7 +41,8 @@ import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {NetworkIdEnum} from 'src/interfaces/network';
-import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
+import {ServerListProps} from 'src/interfaces/server-list';
+import {WalletTypeEnum} from 'src/interfaces/wallet';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
@@ -46,6 +57,7 @@ type OptionProps = {
     walletType: WalletTypeEnum,
   ) => void;
   isMobileSignIn?: boolean;
+  setSelectedInstance?: (server: ServerListProps) => void;
 };
 
 export const Options: React.FC<OptionProps> = props => {
@@ -55,15 +67,25 @@ export const Options: React.FC<OptionProps> = props => {
   const {query} = useQueryParams();
   const {network} = query;
 
-  const {onConnect, onConnectNear, isMobileSignIn} = props;
+  const {onConnect, onConnectNear, isMobileSignIn, setSelectedInstance} = props;
 
   const navigate = useNavigate();
   const {enablePolkadotExtension, getPolkadotAccounts} = usePolkadotExtension();
   const {connectToNear} = useNearApi();
 
-  const [blockchainPlatform, setBlockchainPlatform] = useState<BlockchainPlatform | null>(null);
+  const router = useRouter();
+
+  const [serverSelected, setServerSelected] = useState<null | ServerListProps>(null);
+
+  useEffect(() => {
+    if (serverSelected) {
+      router.push({query: {api: `${serverSelected.apiUrl}`}}, undefined, {shallow: true});
+    }
+  }, [serverSelected]);
+
   const [networkId, setNetworkId] = useState<NetworkIdEnum | null>(null);
   const [wallet, setWallet] = useState<WalletTypeEnum | null>(null);
+  const [termApproved, setTermApproved] = useState(false);
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
   const [extensionChecked, setExtensionChecked] = useState(false);
   const [extensionEnabled, setExtensionEnabled] = useState(false);
@@ -82,7 +104,6 @@ export const Options: React.FC<OptionProps> = props => {
       kusama: <KusamaNetworkIcon className={getMobileIconStyles} />,
       near: <NearNetworkIcon className={getMobileIconStyles} />,
       myriad: <MyriadCircleIcon className={getMobileIconStyles} />,
-      debio: <DebioNetworkIcon className={getMobileIconStyles} />,
     }),
     [],
   );
@@ -92,26 +113,32 @@ export const Options: React.FC<OptionProps> = props => {
       polkadot: <PolkadotNetworkIcon className={getMobileIconStyles} />,
       sender: <SenderWalletDisabledIcon className={getMobileIconStyles} />,
       near: <NearNetworkIcon className={getMobileIconStyles} />,
-      nova: <NovaDisableIcon className={getMobileIconStyles} />,
       'my-near': <MyNearWalletIcon className={getMobileIconStyles} />,
     }),
     [],
   );
 
-  const setSelectedNetwork =
-    (networkId: NetworkIdEnum, blockchainPlatform: BlockchainPlatform) => () => {
-      setNetworkId(networkId);
-      setBlockchainPlatform(blockchainPlatform);
+  const setSelectedNetwork = (networkId: NetworkIdEnum) => () => {
+    setNetworkId(networkId);
 
-      switch (blockchainPlatform) {
-        case BlockchainPlatform.SUBSTRATE:
-          return setSelectedWallet(WalletTypeEnum.POLKADOT)();
-        case BlockchainPlatform.NEAR:
-          return setSelectedWallet(WalletTypeEnum.NEAR)();
-        default:
-          return setWallet(null);
-      }
-    };
+    switch (networkId) {
+      case NetworkIdEnum.POLKADOT:
+        setSelectedWallet(WalletTypeEnum.POLKADOT)();
+        break;
+      case NetworkIdEnum.MYRIAD:
+        setSelectedWallet(WalletTypeEnum.POLKADOT)();
+        break;
+      case NetworkIdEnum.KUSAMA:
+        setSelectedWallet(WalletTypeEnum.POLKADOT)();
+        break;
+      case NetworkIdEnum.NEAR:
+        setSelectedWallet(WalletTypeEnum.NEAR)();
+        break;
+      default:
+        setWallet(null);
+        break;
+    }
+  };
 
   const setSelectedWallet = (value: WalletTypeEnum) => () => {
     switch (value) {
@@ -139,6 +166,10 @@ export const Options: React.FC<OptionProps> = props => {
     setExtensionEnabled(installed);
     setExtensionChecked(true);
     return installed;
+  };
+
+  const toggleTermApproved = () => {
+    setTermApproved(!termApproved);
   };
 
   const closeExtensionDisableModal = () => {
@@ -182,7 +213,7 @@ export const Options: React.FC<OptionProps> = props => {
               wallet,
             );
         } else {
-          // redirection to near auth page
+          console.log('redirection to near auth page');
         }
 
         break;
@@ -220,6 +251,11 @@ export const Options: React.FC<OptionProps> = props => {
     doSelectAccount();
   }, [handleConnect]);
 
+  const toggleSelected = (server: ServerListProps) => {
+    setServerSelected(server);
+    setSelectedInstance(server);
+  };
+
   return (
     <ShowIf condition={hideOptions}>
       <ShowIf condition={!isMobileSignIn}>
@@ -238,7 +274,7 @@ export const Options: React.FC<OptionProps> = props => {
                   <ListItem
                     disableGutters
                     selected={networkId === network.id}
-                    onClick={setSelectedNetwork(network.id, network.blockchainPlatform)}>
+                    onClick={setSelectedNetwork(network.id as NetworkIdEnum)}>
                     <div className={styles.card}>
                       {icons[network.id as keyof typeof icons]}
                       <Typography>{formatNetworkTitle(network)}</Typography>
@@ -290,7 +326,13 @@ export const Options: React.FC<OptionProps> = props => {
               justifyContent="flex-start"
               alignContent="center"
               classes={{root: styles.list}}>
-              <ShowIf condition={blockchainPlatform === BlockchainPlatform.SUBSTRATE}>
+              <ShowIf
+                condition={
+                  networkId === null ||
+                  networkId === NetworkIdEnum.POLKADOT ||
+                  networkId === NetworkIdEnum.KUSAMA ||
+                  networkId === NetworkIdEnum.MYRIAD
+                }>
                 <Grid item xs={3}>
                   <ListItem
                     component={'button'}
@@ -307,27 +349,8 @@ export const Options: React.FC<OptionProps> = props => {
                     </div>
                   </ListItem>
                 </Grid>
-                <Grid item xs={3}>
-                  <Tooltip
-                    title={
-                      <Typography component="span">
-                        {i18n.t('Login.Options.Tooltip_Wallet')}
-                      </Typography>
-                    }
-                    arrow>
-                    <ListItem
-                      disableGutters
-                      disabled
-                      onClick={setSelectedWallet(WalletTypeEnum.SENDER)}>
-                      <div className={styles.walletCard}>
-                        {walletIcons['nova']}
-                        <Typography style={{fontSize: 13}}>Nova Wallet</Typography>
-                      </div>
-                    </ListItem>
-                  </Tooltip>
-                </Grid>
               </ShowIf>
-              <ShowIf condition={blockchainPlatform === BlockchainPlatform.NEAR}>
+              <ShowIf condition={networkId === null || networkId === NetworkIdEnum.NEAR}>
                 {[WalletTypeEnum.NEAR, WalletTypeEnum.MYNEAR].map(e => {
                   return (
                     <Grid item xs={3} key={e}>
@@ -354,7 +377,7 @@ export const Options: React.FC<OptionProps> = props => {
                   );
                 })}
               </ShowIf>
-              <ShowIf condition={blockchainPlatform === BlockchainPlatform.NEAR}>
+              <ShowIf condition={networkId === null || networkId === NetworkIdEnum.NEAR}>
                 <Grid item xs={3}>
                   <Tooltip
                     title={
@@ -413,15 +436,37 @@ export const Options: React.FC<OptionProps> = props => {
               </Grid>
             </Grid>
           </div>
+          <Grid container direction="column" className={styles.condition}>
+            <FormControlLabel
+              className={styles.termControl}
+              onChange={toggleTermApproved}
+              control={<Checkbox name="term" color="primary" className={styles.checkbox} />}
+              label={
+                <Typography style={{color: '#0A0A0A'}}>
+                  {i18n.t('Login.Options.Text_Terms_1')}&nbsp;
+                  <Link href="/term-of-use" passHref>
+                    <Typography component={'a'} className={styles.term}>
+                      {i18n.t('Login.Options.Text_Terms_2')}
+                    </Typography>
+                  </Link>
+                  &nbsp;{i18n.t('Login.Options.Text_Terms_3')}&nbsp;
+                  <Link href="/privacy-policy" passHref>
+                    <Typography component={'a'} className={styles.term}>
+                      {i18n.t('Login.Options.Text_Terms_4')}
+                    </Typography>
+                  </Link>
+                </Typography>
+              }
+            />
+          </Grid>
 
-          <div className={styles.actionWrapper}>
-            <Button variant="outlined" color="secondary" onClick={() => navigate('/')}>
-              Back
-            </Button>
+          <SelectServer onServerSelect={server => toggleSelected(server)} />
+          <div>
             <Button
               variant="contained"
+              fullWidth
               color="primary"
-              disabled={!extensionChecked || wallet === null}
+              disabled={!termApproved || !extensionChecked || (wallet === null && !serverSelected)}
               onClick={handleConnect}>
               {i18n.t('Login.Options.Connect')}
             </Button>
@@ -470,6 +515,16 @@ export const Options: React.FC<OptionProps> = props => {
       </ShowIf>
       <ShowIf condition={isMobileSignIn}>
         <div className={styles.mobileRoot}>
+          <div className={styles.logoWrapper}>
+            <div className={styles.logo}>
+              <MyriadFullIcon />
+            </div>
+
+            <Typography variant="h5" component="h1" className={styles.title}>
+              {i18n.t('Login.Layout.Title_left')}{' '}
+              <span className={styles.titlePrimary}>{i18n.t('Login.Layout.Title_right')}</span>
+            </Typography>
+          </div>
           <div className={styles.mobileCard}>
             <div style={{marginBottom: 24}}>
               <div className={styles.title}>
@@ -496,7 +551,7 @@ export const Options: React.FC<OptionProps> = props => {
                       <ListItem
                         disableGutters
                         selected={networkId === network.id}
-                        onClick={setSelectedNetwork(network.id, network.blockchainPlatform)}>
+                        onClick={setSelectedNetwork(network.id)}>
                         <div className={styles.rowCard}>
                           {icons[network.id as keyof typeof icons]}
                           <Typography>{formatNetworkTitle(network)}</Typography>
@@ -518,7 +573,7 @@ export const Options: React.FC<OptionProps> = props => {
                 justifyContent="flex-start"
                 direction="column"
                 classes={{root: styles.list}}>
-                <ShowIf condition={blockchainPlatform === BlockchainPlatform.NEAR}>
+                <ShowIf condition={networkId === null || networkId === NetworkIdEnum.NEAR}>
                   {[WalletTypeEnum.NEAR, WalletTypeEnum.MYNEAR].map(e => {
                     return (
                       <Grid item xs={12} key={e}>
@@ -541,7 +596,7 @@ export const Options: React.FC<OptionProps> = props => {
                     );
                   })}
                 </ShowIf>
-                <ShowIf condition={blockchainPlatform === BlockchainPlatform.NEAR}>
+                <ShowIf condition={networkId === null || networkId === NetworkIdEnum.NEAR}>
                   <Grid item xs={12}>
                     <Tooltip
                       title={
@@ -562,7 +617,13 @@ export const Options: React.FC<OptionProps> = props => {
                     </Tooltip>
                   </Grid>
                 </ShowIf>
-                <ShowIf condition={blockchainPlatform === BlockchainPlatform.SUBSTRATE}>
+                <ShowIf
+                  condition={
+                    networkId === null ||
+                    networkId === NetworkIdEnum.POLKADOT ||
+                    networkId === NetworkIdEnum.KUSAMA ||
+                    networkId === NetworkIdEnum.MYRIAD
+                  }>
                   <Grid item xs={12}>
                     <ListItem
                       component={'button'}
@@ -583,15 +644,37 @@ export const Options: React.FC<OptionProps> = props => {
               </Grid>
             </div>
 
-            <div style={{display: 'flex', flexDirection: 'column', gap: 16}}>
-              <Button variant="outlined" color="secondary" onClick={() => navigate('/')}>
-                Back
-              </Button>
+            <Grid container direction="column" className={styles.condition}>
+              <FormControlLabel
+                className={styles.termControl}
+                onChange={toggleTermApproved}
+                control={<Checkbox name="term" color="primary" className={styles.checkbox} />}
+                label={
+                  <Typography className={styles.termCondition}>
+                    {i18n.t('Login.Options.Text_Terms_1')}&nbsp;
+                    <Link href="/term-of-use" passHref>
+                      <Typography component={'a'} className={styles.term}>
+                        {i18n.t('Login.Options.Text_Terms_2')}
+                      </Typography>
+                    </Link>
+                    &nbsp;{i18n.t('Login.Options.Text_Terms_3')}&nbsp;
+                    <Link href="/privacy-policy" passHref>
+                      <Typography component={'a'} className={styles.term}>
+                        {i18n.t('Login.Options.Text_Terms_4')}
+                      </Typography>
+                    </Link>
+                  </Typography>
+                }
+              />
+            </Grid>
+
+            <SelectServer onServerSelect={server => toggleSelected(server)} />
+            <div>
               <Button
                 variant="contained"
                 fullWidth
                 color="primary"
-                disabled={!extensionChecked || wallet === null}
+                disabled={!termApproved || !extensionChecked || wallet === null}
                 onClick={handleConnect}>
                 {i18n.t('Login.Options.Connect')}
               </Button>
