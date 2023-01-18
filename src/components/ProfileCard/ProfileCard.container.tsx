@@ -32,8 +32,9 @@ export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
     router.push(`/wallet?type=manage`);
   };
 
-  const handleSignOut = () => {
-    logout();
+  const handleSignOut = async () => {
+    await logout();
+    router.push('/');
   };
 
   const handleLoginOrCreateAccount = () => {

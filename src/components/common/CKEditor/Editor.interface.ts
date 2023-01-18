@@ -7,4 +7,5 @@ export type EditorProps = {
   onReady?: (editor: any) => void;
   onChange?: (data: any, loading: boolean) => void;
   children?: React.ReactNode;
+  autoFocus?: boolean;
 };

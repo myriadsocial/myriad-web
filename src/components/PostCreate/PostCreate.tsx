@@ -236,6 +236,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
 
   const handleshowExclusive = () => {
     setShowExclusive(!showExclusive);
+    // getPlateEditorRef(`exclusive-${user.id}`);
   };
 
   const handleRemoveExclusiveContent = () => {
@@ -284,6 +285,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
             mobile={isMobile}
             onSearchMention={onSearchPeople}
             onChange={handleContentChange}
+            autoFocus={!showExclusive}
           />
           {exclusiveContent && (
             <div className={styles.previewEC}>
@@ -315,6 +317,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
             onSearchPeople={onSearchPeople}
             isMobile={isMobile}
             onSubmit={handleSubmitExclusiveContent}
+            autoFocus={showExclusive}
           />
         </div>
       </TabPanel>
@@ -325,7 +328,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
 
       <div className={styles.action}>
         <div className={styles.option}>
-          <ShowIf condition={!showExclusive}>
+          <div style={{display: showExclusive ? 'none' : 'flex'}}>
             <DropdownMenu<PostVisibility>
               title={i18n.t('Post_Create.Visibility.Label')}
               options={menuOptions}
@@ -338,7 +341,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
               tags={post.NSFWTag?.split(',') || []}
               onConfirm={handleConfirmNSFWTags}
             />
-          </ShowIf>
+          </div>
 
           <ShowIf condition={!showExclusive}>
             {!exclusiveContent ? (
