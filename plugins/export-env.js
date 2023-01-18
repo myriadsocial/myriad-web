@@ -5,7 +5,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 let fileContent = Object.keys(process.env)
-  .filter(k => k.startsWith('NEXT_PUBLIC_'))
+  .filter(k => k.startsWith('NEXT'))
   .reduce((accum, currKey) => {
     const val = process.env[currKey];
     accum += `const ${currKey} = '${val}'\n`;
