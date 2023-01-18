@@ -87,7 +87,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     };
   }
 
-  const anonymous = Boolean(session?.user.anonymous);
+  const anonymous = Boolean(session?.user.anonymous) || !session;
 
   initialize({cookie: req.headers.cookie}, anonymous);
 
