@@ -183,12 +183,18 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = props => {
 
   return (
     <Paper className={style.paper}>
-      <Avatar
-        alt={experience.name}
-        src={experience.experienceImageURL}
-        variant="rounded"
-        style={{width: 48, height: 48}}
-      />
+      {experience.experienceImageURL ? (
+        <Avatar
+          alt={experience.name}
+          src={experience.experienceImageURL}
+          variant="rounded"
+          style={{width: 48, height: 48}}
+        />
+      ) : (
+        <Avatar alt={experience.name} variant="rounded">
+          {experience.name.charAt(0)}
+        </Avatar>
+      )}
       <div className={style.content}>
         <div>
           <Typography variant="h6">{experience.name}</Typography>
