@@ -127,7 +127,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       if (experience?.createdBy !== user?.id) hidden = true;
     }
 
-    description = experience?.description;
+    description = experience?.description ?? '-';
     title = experience.name;
     image = experience.experienceImageURL;
   } catch (error) {
