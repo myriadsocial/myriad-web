@@ -303,7 +303,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
 
   const validateExperience = (): boolean => {
     const validName = newExperience.name.length > 0;
-    const validPicture = Boolean(newExperience.experienceImageURL);
+    // const validPicture = Boolean(newExperience.experienceImageURL);
     const validTags = newExperience.allowedTags.length >= 0;
     const validPeople = newExperience.people.filter(people => !isEmpty(people.id)).length >= 0;
     const validSelectedUserIds =
@@ -314,21 +314,14 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
 
     setErrors({
       name: !validName,
-      picture: !validPicture,
+      picture: false,
       tags: !validTags,
       people: !validPeople,
       visibility: !validVisibility,
       selectedUserId: !validSelectedUserIds,
     });
 
-    return (
-      validName &&
-      validPicture &&
-      validTags &&
-      validPeople &&
-      validVisibility &&
-      validSelectedUserIds
-    );
+    return validName && validTags && validPeople && validVisibility && validSelectedUserIds;
   };
 
   const saveExperience = () => {

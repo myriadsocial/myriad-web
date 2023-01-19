@@ -198,12 +198,19 @@ export const ExperiencePreview: React.FC<Props> = props => {
   return (
     <div className={style.root}>
       <div className={style.experienceTopSummary}>
-        <Avatar
-          alt={experience.name}
-          src={experience.experienceImageURL}
-          variant="rounded"
-          className={style.avatar}
-        />
+        {experience.experienceImageURL ? (
+          <Avatar
+            alt={experience.name}
+            src={experience.experienceImageURL}
+            variant="rounded"
+            className={style.avatar}
+          />
+        ) : (
+          <Avatar alt={experience.name} variant="rounded" className={style.avatar}>
+            {experience.name.charAt(0)}
+          </Avatar>
+        )}
+
         <div className={style.experienceSummary}>
           <Typography className={style.experienceName}>{experience.name}</Typography>
           <div className={style.experienceCounterMetric}>
@@ -326,23 +333,25 @@ export const ExperiencePreview: React.FC<Props> = props => {
             {i18n.t('Experience.Preview.Subheader.Privacy')}
           </Typography>
           <Typography className={style.tagSection}>{checkVisibility()}</Typography>
-          <div className={style.customVisibility}>
-            <ShowIf condition={isLoadingSelectedUser}>
-              <Loading />
-            </ShowIf>
-            {selectedUserIds.length > 0 &&
-              selectedUserIds.map(person => (
-                <ListItemPeopleComponent
-                  key={person.id}
-                  onClick={() => handleOpenProfile(person as unknown as People)}
-                  id="selectable-experience-list-item"
-                  title={person.name}
-                  subtitle={<Typography variant="caption">@{person.username}</Typography>}
-                  avatar={person.profilePictureURL}
-                  platform={'myriad'}
-                />
-              ))}
-          </div>
+          {experience?.visibility === 'selected_user' && (
+            <div className={style.customVisibility}>
+              <ShowIf condition={isLoadingSelectedUser}>
+                <Loading />
+              </ShowIf>
+              {selectedUserIds.length > 0 &&
+                selectedUserIds.map(person => (
+                  <ListItemPeopleComponent
+                    key={person.id}
+                    onClick={() => handleOpenProfile(person as unknown as People)}
+                    id="selectable-experience-list-item"
+                    title={person.name}
+                    subtitle={<Typography variant="caption">@{person.username}</Typography>}
+                    avatar={person.profilePictureURL}
+                    platform={'myriad'}
+                  />
+                ))}
+            </div>
+          )}
         </div>
       )}
       <div className={style.subtitleContainer}>
