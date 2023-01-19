@@ -9,7 +9,7 @@ import NextImage from 'next/image';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 
-import {Grid} from '@material-ui/core';
+import {Avatar, Grid} from '@material-ui/core';
 import {TextField, InputAdornment} from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -193,17 +193,26 @@ export const Experience: React.FC<ExperienceProps> = props => {
       <Card className={styles.root}>
         <CardActionArea onClick={handleClickExperience} disableRipple component="div">
           <Grid container alignItems="center" justifyContent="space-between" wrap="nowrap">
-            <NextImage
-              alt={userExperience.experience.name}
-              src={userExperience.experience.experienceImageURL ?? DEFAULT_IMAGE}
-              placeholder="empty"
-              objectFit="cover"
-              objectPosition="center"
-              width={68}
-              height={68}
-              quality={90}
-              className={styles.image}
-            />
+            {userExperience.experience.experienceImageURL ? (
+              <NextImage
+                alt={userExperience.experience.name}
+                src={userExperience.experience.experienceImageURL ?? DEFAULT_IMAGE}
+                placeholder="empty"
+                objectFit="cover"
+                objectPosition="center"
+                width={68}
+                height={68}
+                quality={90}
+                className={styles.image}
+              />
+            ) : (
+              <Avatar
+                alt={userExperience.experience.name}
+                variant="rounded"
+                className={styles.image}>
+                {userExperience.experience.name.charAt(0)}
+              </Avatar>
+            )}
 
             <CardContent classes={{root: styles.cardContent}}>
               <Typography className={styles.title} variant="body1">
