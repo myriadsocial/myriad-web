@@ -182,7 +182,6 @@ export const fetchFilteredToken: ThunkActionCreator<Actions, RootState> = () => 
       },
     };
     const {data: currencies} = await TokenAPI.getFilteredTokens(filter, 1, 10);
-    console.log({currencies});
 
     dispatch({
       type: constants.FETCH_FILTERED_TOKEN,
