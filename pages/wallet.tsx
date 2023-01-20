@@ -89,7 +89,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     };
   }
 
-  const anonymous = Boolean(session?.user.anonymous);
+  const anonymous = !session || Boolean(session?.user.anonymous);
 
   initialize({cookie: req.headers.cookie}, anonymous);
 
@@ -101,17 +101,17 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     await dispatch(fetchUser());
 
     await Promise.all([
+      dispatch(fetchUserWallets()),
       dispatch(fetchConnectedSocials()),
       dispatch(countNewNotification()),
-      dispatch(fetchUserExperience()),
-      dispatch(fetchUserWallets()),
     ]);
   }
 
   await Promise.all([
-    dispatch(fetchAvailableToken()),
     dispatch(fetchNetwork()),
+    dispatch(fetchAvailableToken()),
     dispatch(fetchExchangeRates()),
+    dispatch(fetchUserExperience()),
   ]);
 
   const data = await getServer();

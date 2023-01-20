@@ -107,7 +107,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const session = await getSession(context);
 
-  const anonymous = Boolean(session?.user.anonymous) || !session;
+  const anonymous = !session || Boolean(session?.user.anonymous);
 
   initialize({cookie: req.headers.cookie}, anonymous);
 
@@ -150,20 +150,19 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     await dispatch(fetchUser());
 
     await Promise.all([
-      dispatch(fetchConnectedSocials()),
-      dispatch(countNewNotification()),
       dispatch(fetchUserWallets()),
+      dispatch(fetchConnectedSocials()),
       dispatch(fetchFriend()),
+      dispatch(countNewNotification()),
     ]);
   }
 
   await Promise.all([
-    dispatch(fetchAvailableToken()),
     dispatch(fetchNetwork()),
+    dispatch(fetchAvailableToken()),
     dispatch(fetchExchangeRates()),
+    dispatch(fetchUserExperience()),
   ]);
-
-  await dispatch(fetchUserExperience());
 
   const data = await getServer();
 

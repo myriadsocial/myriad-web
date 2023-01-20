@@ -12,6 +12,7 @@ import {useExperienceHook} from 'src/hooks/use-experience-hook';
 import {getServer} from 'src/lib/api/server';
 import i18n from 'src/locale';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
+import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
 import {
   setAnonymous,
@@ -68,7 +69,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     };
   }
 
-  const anonymous = Boolean(session?.user.anonymous);
+  const anonymous = !session || Boolean(session?.user.anonymous);
 
   if (anonymous) {
     const username = session?.user.name as string;
@@ -78,15 +79,19 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     await dispatch(fetchUser());
 
     await Promise.all([
-      dispatch(fetchConnectedSocials()),
-      dispatch(fetchAvailableToken()),
-      dispatch(countNewNotification()),
       dispatch(fetchUserWallets()),
+      dispatch(fetchConnectedSocials()),
+      dispatch(countNewNotification()),
     ]);
   }
 
-  await dispatch(fetchNetwork());
-  await dispatch(fetchUserExperience());
+  await Promise.all([
+    dispatch(fetchNetwork()),
+    dispatch(fetchAvailableToken()),
+    dispatch(fetchExchangeRates()),
+    dispatch(fetchUserExperience()),
+  ]);
+
   const data = await getServer();
 
   return {

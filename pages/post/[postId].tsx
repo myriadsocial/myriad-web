@@ -121,7 +121,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const session = await getSession(context);
 
-  const anonymous = session?.user.anonymous || !session ? true : false;
+  const anonymous = !session || Boolean(session?.user.anonymous);
 
   let userId: string | undefined = undefined;
   let post: Post | undefined = undefined;
@@ -169,21 +169,20 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     await dispatch(setAnonymous(username));
   } else {
     await Promise.all([
-      dispatch(fetchConnectedSocials()),
-      dispatch(countNewNotification()),
-      dispatch(fetchFriend()),
       dispatch(fetchUserWallets()),
+      dispatch(fetchConnectedSocials()),
+      dispatch(fetchFriend()),
+      dispatch(countNewNotification()),
     ]);
   }
 
   await Promise.all([
+    dispatch(fetchNetwork()),
     dispatch(fetchAvailableToken()),
     dispatch(fetchFilteredToken()),
-    dispatch(fetchNetwork()),
     dispatch(fetchExchangeRates()),
+    dispatch(fetchUserExperience()),
   ]);
-
-  await dispatch(fetchUserExperience());
 
   let description =
     post?.text ??

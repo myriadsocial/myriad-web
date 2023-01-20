@@ -84,7 +84,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     };
   }
 
-  const anonymous = Boolean(session?.user.anonymous);
+  const anonymous = !session || Boolean(session?.user.anonymous);
   const userId = session?.user.address as string;
   const token = session?.user.token;
 
@@ -98,17 +98,19 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     await dispatch(fetchUser());
 
     await Promise.all([
+      dispatch(fetchUserWallets()),
       dispatch(fetchConnectedSocials()),
       dispatch(countNewNotification()),
-      dispatch(fetchUserWallets()),
     ]);
   }
+
   await Promise.all([
-    dispatch(fetchAvailableToken()),
     dispatch(fetchNetwork()),
+    dispatch(fetchAvailableToken()),
     dispatch(fetchExchangeRates()),
     dispatch(fetchUserExperience()),
   ]);
+
   const data = await getServer();
 
   return {
