@@ -15,6 +15,7 @@ import {getServer} from 'src/lib/api/server';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
+import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
 import {NotificationState} from 'src/reducers/notification/reducer';
 import {
@@ -80,7 +81,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     };
   }
 
-  const anonymous = Boolean(session?.user.anonymous);
+  const anonymous = !session || Boolean(session?.user.anonymous);
 
   initialize({cookie: req.headers.cookie}, anonymous);
 
@@ -92,15 +93,19 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     await dispatch(fetchUser());
 
     await Promise.all([
-      dispatch(fetchConnectedSocials()),
-      dispatch(fetchAvailableToken()),
-      dispatch(countNewNotification()),
-      dispatch(fetchUserExperience()),
       dispatch(fetchUserWallets()),
+      dispatch(fetchConnectedSocials()),
+      dispatch(countNewNotification()),
     ]);
   }
 
-  await dispatch(fetchNetwork());
+  await Promise.all([
+    dispatch(fetchNetwork()),
+    dispatch(fetchAvailableToken()),
+    dispatch(fetchExchangeRates()),
+    dispatch(fetchUserExperience()),
+  ]);
+
   const data = await getServer();
 
   return {

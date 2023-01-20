@@ -100,7 +100,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const session = await getSession(context);
 
-  const anonymous = Boolean(session?.user.anonymous) || !session;
+  const anonymous = !session || Boolean(session?.user.anonymous);
 
   initialize({cookie: req.headers.cookie}, anonymous);
 
@@ -112,21 +112,20 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     await dispatch(fetchUser());
 
     await Promise.all([
-      dispatch(fetchConnectedSocials()),
       dispatch(fetchUserWallets()),
-      dispatch(countNewNotification()),
+      dispatch(fetchConnectedSocials()),
       dispatch(fetchFriend()),
+      dispatch(countNewNotification()),
     ]);
   }
 
   await Promise.all([
+    dispatch(fetchNetwork()),
     dispatch(fetchAvailableToken()),
     dispatch(fetchFilteredToken()),
-    dispatch(fetchNetwork()),
     dispatch(fetchExchangeRates()),
+    dispatch(fetchUserExperience()),
   ]);
-
-  await dispatch(fetchUserExperience());
 
   let description = 'Home Page',
     title = 'Myriad - Home',

@@ -53,6 +53,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   const {req} = context;
 
   const dispatch = store.dispatch as ThunkDispatchAction;
+
   const session = await getSession(context);
 
   if (!session) {
@@ -64,7 +65,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     };
   }
 
-  const anonymous = Boolean(session?.user.anonymous);
+  const anonymous = !session || Boolean(session?.user.anonymous);
 
   initialize({cookie: req.headers.cookie}, anonymous);
 
@@ -76,16 +77,18 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     await dispatch(fetchUser());
 
     await Promise.all([
-      dispatch(fetchConnectedSocials()),
-      dispatch(fetchAvailableToken()),
-      dispatch(countNewNotification()),
       dispatch(fetchUserWallets()),
+      dispatch(fetchConnectedSocials()),
+      dispatch(countNewNotification()),
     ]);
   }
 
-  await dispatch(fetchNetwork());
-  await dispatch(fetchExchangeRates());
-  await dispatch(fetchUserExperience());
+  await Promise.all([
+    dispatch(fetchNetwork()),
+    dispatch(fetchAvailableToken()),
+    dispatch(fetchExchangeRates()),
+    dispatch(fetchUserExperience()),
+  ]);
 
   const data = await getServer();
 

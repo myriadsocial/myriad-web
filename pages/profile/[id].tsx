@@ -100,7 +100,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const session = await getSession(context);
 
-  const anonymous = session?.user.anonymous || !session ? true : false;
+  const anonymous = !session || Boolean(session?.user.anonymous);
   const userId = session?.user.address as string;
   const profileId = params?.id as string;
   const userNameParams = params?.profileByUserName as string;
@@ -116,18 +116,20 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     await dispatch(fetchUser());
 
     await Promise.all([
-      dispatch(fetchConnectedSocials()),
-      dispatch(fetchAvailableToken()),
-      dispatch(fetchFilteredToken()),
-      dispatch(countNewNotification()),
-      dispatch(fetchFriend()),
       dispatch(fetchUserWallets()),
+      dispatch(fetchConnectedSocials()),
+      dispatch(fetchFriend()),
+      dispatch(countNewNotification()),
     ]);
   }
 
-  await dispatch(fetchNetwork());
-  await dispatch(fetchExchangeRates());
-  await dispatch(fetchUserExperience());
+  await Promise.all([
+    dispatch(fetchNetwork()),
+    dispatch(fetchAvailableToken()),
+    dispatch(fetchFilteredToken()),
+    dispatch(fetchExchangeRates()),
+    dispatch(fetchUserExperience()),
+  ]);
 
   try {
     const detail = await UserAPI.getUserDetail(usernameOrId, userId);

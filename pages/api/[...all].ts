@@ -28,29 +28,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       session.user.address &&
       session.user.address.length > 0
     ) {
-      const userToken = decryptMessage(session.user.token, session.user.address);
+      let key = session.user.address;
+      if (session.user.email) {
+        key = session.user.email.replace(/[^a-zA-Z0-9]/g, '');
+      }
+
+      const userToken = decryptMessage(session.user.token, key);
 
       headers = {
         Authorization: `Bearer ${userToken}`,
       };
     }
-
-    if (session && session.user && session.user.token && session.user.email) {
-      const parsedEmail = session.user.email.replace(/[^a-zA-Z0-9]/g, '');
-
-      const userToken = decryptMessage(session.user.token, parsedEmail);
-
-      headers = {
-        Authorization: `Bearer ${userToken}`,
-      };
-    }
-
-    console.log(
-      JSON.stringify({
-        headers,
-        url: req.url,
-      }),
-    );
 
     return httpProxyMiddleware(req, res, {
       // You can use the `http-proxy` option

@@ -36,7 +36,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const session = await getSession(context);
 
-  const anonymous = session ? false : true;
+  const anonymous = !session || Boolean(session?.user.anonymous);
   const userId = session?.user.address as string;
 
   if (anonymous || !userId) {
