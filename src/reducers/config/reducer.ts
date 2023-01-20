@@ -81,7 +81,6 @@ export const ConfigReducer: Redux.Reducer<ConfigState, Actions> = (state = inita
     }
 
     case constants.SET_LANGUAGE_SETTING: {
-      console.log(action);
       return {
         ...state,
         settings: {
