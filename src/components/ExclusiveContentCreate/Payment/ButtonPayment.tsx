@@ -11,31 +11,26 @@ import {useStyles} from './Payment.style';
 
 import {PromptComponent} from 'components/atoms/Prompt/prompt.component';
 import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
-import {PriceUnlockableContent} from 'components/common/Tipping/Tipping.interface';
+import {ExclusiveContent} from 'components/common/Tipping/Tipping.interface';
 import useTipping from 'components/common/Tipping/use-tipping.hook';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {Currency} from 'src/interfaces/currency';
 import {ReferenceType} from 'src/interfaces/interaction';
 import {Network} from 'src/interfaces/network';
-import {ExclusiveContentProps} from 'src/interfaces/post';
-import {
-  getPriceExclusiveContent,
-  getWalletAddressExclusive,
-  revealExclusiveContent,
-} from 'src/lib/api/post';
+import {getExclusiveContent, getWalletAddressExclusive} from 'src/lib/api/post';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {ECState} from 'src/reducers/exclusive-content/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 
 const ButtonPayment = ({
-  url,
+  id,
   contentId,
   setExclusive,
 }: {
-  url: string;
+  id: string;
   contentId: string;
-  setExclusive: Dispatch<SetStateAction<ExclusiveContentProps>>;
+  setExclusive: Dispatch<SetStateAction<ExclusiveContent>>;
 }) => {
   const {currentWallet} = useSelector<RootState, UserState>(state => state.userState);
   const {paid, ecId} = useSelector<RootState, ECState>(state => state.ecState);
@@ -73,37 +68,27 @@ const ButtonPayment = ({
     router.push(`/wallet?type=manage`);
   };
 
-  const handlePayExclusiveContent = async (url: string) => {
-    if (anonymous) {
-      setTipInfoOpened(true);
-      return;
-    }
+  const handlePayExclusiveContent = async (id: string) => {
+    if (anonymous) return setTipInfoOpened(true);
+    if (isWeb2Users) return setPrompWeb2Users(true);
 
-    if (isWeb2Users) {
-      setPrompWeb2Users(true);
-      return;
-    }
     try {
-      const fetchDetail: ExclusiveContentProps = await revealExclusiveContent(url);
-      if (fetchDetail?.content) {
-        setExclusive(fetchDetail);
+      const exclusiveDetail = await getExclusiveContent(id, true);
+
+      if (exclusiveDetail?.content) {
+        setExclusive(exclusiveDetail);
       } else {
-        const detail = await getPriceExclusiveContent(url);
-        setAcceptNetwork((detail as unknown as PriceUnlockableContent).prices[0]?.currency);
-        if (
-          currentWallet?.networkId !==
-          (detail as unknown as PriceUnlockableContent).prices[0]?.currency?.networkId
-        ) {
-          handleNetworkError();
-          return;
+        setAcceptNetwork(exclusiveDetail.prices[0]?.currency);
+        if (currentWallet?.networkId !== exclusiveDetail.prices[0]?.currency?.networkId) {
+          return handleNetworkError();
         }
-        const walletAddress = await getWalletAddressExclusive(detail?.id);
+        const walletAddress = await getWalletAddressExclusive(exclusiveDetail?.id);
         tipping.send({
-          receiver: {...detail?.user, walletDetail: walletAddress},
-          reference: detail,
+          receiver: {...exclusiveDetail?.user, walletDetail: walletAddress},
+          reference: exclusiveDetail,
           referenceType: ReferenceType.EXCLUSIVE_CONTENT,
-          currencyContent: (detail as unknown as PriceUnlockableContent).prices[0]?.currency,
-          referenceId: `${detail?.id}/${contentId}`,
+          currencyContent: exclusiveDetail.prices[0]?.currency,
+          referenceId: `${exclusiveDetail?.id}/${contentId}`,
         });
       }
     } catch (error) {
@@ -121,8 +106,8 @@ const ButtonPayment = ({
   };
 
   useEffect(() => {
-    if (paid && ecId === url.split('/').pop()) {
-      handlePayExclusiveContent(url);
+    if (paid && ecId === id) {
+      handlePayExclusiveContent(id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paid]);
@@ -133,7 +118,7 @@ const ButtonPayment = ({
         className={styles.buttonPayment}
         variant="contained"
         startIcon={<SvgIcon component={GiftIcon} viewBox="0 0 24 24" />}
-        onClick={() => handlePayExclusiveContent(url)}>
+        onClick={() => handlePayExclusiveContent(id)}>
         {i18n.t('ExclusiveContent.Available')}
       </Button>
       <PromptComponent

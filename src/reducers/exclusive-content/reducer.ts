@@ -1,11 +1,11 @@
 import {Actions} from './actions';
 import * as constants from './constants';
 
+import {ExclusiveContent} from 'components/common/Tipping/Tipping.interface';
 import * as Redux from 'redux';
-import {ExclusiveContentProps} from 'src/interfaces/post';
 
 export interface ECState {
-  content: ExclusiveContentProps | null;
+  content: ExclusiveContent | null;
   paid: boolean;
   ecId: string;
 }
@@ -18,13 +18,6 @@ const initalState: ECState = {
 
 export const ECReducer: Redux.Reducer<ECState, Actions> = (state = initalState, action) => {
   switch (action.type) {
-    case constants.FETCH_EXCLUSIVE_CONTENT: {
-      return {
-        ...state,
-        content: action.payload,
-      };
-    }
-
     case constants.PAID_EXCLUSIVE_CONTENT: {
       return {
         ...state,

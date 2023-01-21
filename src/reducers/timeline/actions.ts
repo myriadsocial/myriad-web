@@ -4,6 +4,7 @@ import * as constants from './constants';
 import {TimelineFilters} from './reducer';
 
 import axios from 'axios';
+import {ExclusiveContent} from 'components/common/Tipping/Tipping.interface';
 import {Action} from 'redux';
 import {Comment} from 'src/interfaces/comment';
 import {ExclusiveContentPost} from 'src/interfaces/exclusive';
@@ -668,7 +669,7 @@ export const createExclusiveContent: ThunkActionCreator<Actions, RootState> =
   (
     post: ExclusiveContentPost,
     images: string[],
-    callback: (resp) => void,
+    callback: (resp?: ExclusiveContent) => void,
     failedCallback: () => void,
   ) =>
   async (dispatch, getState) => {
@@ -698,30 +699,6 @@ export const createExclusiveContent: ThunkActionCreator<Actions, RootState> =
           dispatch(setError(new Error(i18n.t('Post_Create.Error.Default'))));
         }
       }
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
-
-export const getPriceExclusiveContent: ThunkActionCreator<Actions, RootState> =
-  (url: string, images: string[], callback: (resp) => void, failedCallback: () => void) =>
-  async (dispatch, getState) => {
-    const {
-      userState: {user},
-    } = getState();
-
-    setLoading(true);
-
-    try {
-      if (!user) {
-        throw new Error('User not found');
-      }
-
-      const resp = await PostAPI.getPriceExclusiveContent(url);
-
-      callback(resp);
-    } catch (error) {
-      failedCallback();
     } finally {
       dispatch(setLoading(false));
     }

@@ -13,6 +13,7 @@ import {PostHeader} from './render/Header';
 import ButtonPayment from 'components/ExclusiveContentCreate/Payment/ButtonPayment';
 import Reveal from 'components/ExclusiveContentCreate/Reveal/Reveal';
 import {NodeViewer} from 'components/common/NodeViewer';
+import {ExclusiveContent} from 'components/common/Tipping/Tipping.interface';
 import ShowIf from 'components/common/show-if.component';
 import {LinkPreview} from 'src/components/atoms/LinkPreview';
 import {NSFW} from 'src/components/atoms/NSFW/NSFW.component';
@@ -21,7 +22,6 @@ import {isJson} from 'src/helpers/string';
 import {useToggle} from 'src/hooks/use-toggle.hook';
 import {InfoIconYellow} from 'src/images/Icons';
 import {ReferenceType} from 'src/interfaces/interaction';
-import {ExclusiveContentProps} from 'src/interfaces/post';
 import i18n from 'src/locale';
 
 const Reddit = dynamic(() => import('./render/Reddit'), {ssr: false});
@@ -39,7 +39,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
 
   const [hiddenContent, toggleHiddenContent] = useToggle(post.isNSFW);
 
-  const [exclusiveContent, setExclusiveContent] = useState<ExclusiveContentProps>();
+  const [exclusiveContent, setExclusiveContent] = useState<ExclusiveContent>();
 
   const downvoted = post.votes
     ? post.votes.filter(vote => vote.userId === user?.id && !vote.state).length > 0
@@ -139,7 +139,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
             post.asset?.exclusiveContents.length > 0 &&
             !exclusiveContent && (
               <ButtonPayment
-                url={post.asset?.exclusiveContents[0]}
+                id={post.asset?.exclusiveContents[0]}
                 contentId={post?.id}
                 setExclusive={setExclusiveContent}
               />

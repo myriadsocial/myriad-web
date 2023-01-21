@@ -7,6 +7,10 @@ import {BaseErrorResponse} from './interfaces/error-response.interface';
 import {PaginationParams, FilterParams} from './interfaces/pagination-params.interface';
 
 import axios, {AxiosError} from 'axios';
+import {
+  ExclusiveContent,
+  ExclusiveContentWithPrices,
+} from 'components/common/Tipping/Tipping.interface';
 import {ExclusiveContentPost} from 'src/interfaces/exclusive';
 import {Post, PostProps, ImportPostProps, PostStatus, PostCustomProps} from 'src/interfaces/post';
 import {TimelineOrderType, TimelineType} from 'src/interfaces/timeline';
@@ -312,43 +316,14 @@ export const getWalletAddress = async (postId: string): Promise<WalletDetail> =>
   return data;
 };
 
-export const createExclusiveContent = async (values: ExclusiveContentPost): Promise<Post> => {
-  const {data} = await MyriadAPI().request<Post>({
+export const createExclusiveContent = async (
+  values: ExclusiveContentPost,
+): Promise<ExclusiveContent> => {
+  const {data} = await MyriadAPI().request<ExclusiveContent>({
     url: '/user/unlockable-contents',
     method: 'POST',
     data: {
       ...values,
-    },
-  });
-
-  return data;
-};
-
-export const getPriceExclusiveContent = async (url: string): Promise<Post> => {
-  const {data} = await MyriadAPI().request<Post>({
-    url: `${url}`,
-    method: 'GET',
-    params: {
-      filter: {
-        include: [
-          {relation: 'user'}, // kalo mau menampilkan user nya
-          {
-            relation: 'prices', // kalo mau meampilkan prices nya
-            scope: {
-              include: [
-                {
-                  relation: 'currency', // kalo mau menampilkan prices dan currency nya
-                  scope: {
-                    include: [
-                      {relation: 'network'}, // kalo mau menampilkan currency dan network nya
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
     },
   });
 
@@ -364,10 +339,39 @@ export const getWalletAddressExclusive = async (contentId: string): Promise<Wall
   return data;
 };
 
-export const revealExclusiveContent = async (url: string): Promise<Post> => {
-  const {data} = await MyriadAPI().request<Post>({
-    url: `/user/unlockable-contents/${url.split('/').pop()}`,
+export const getExclusiveContent = async (
+  contentId: string,
+  withPriceDetail = false,
+): Promise<ExclusiveContentWithPrices> => {
+  const params = !withPriceDetail
+    ? {}
+    : {
+        filter: {
+          include: [
+            {relation: 'user'}, // showing user detail
+            {
+              relation: 'prices', // showing prices detail
+              scope: {
+                include: [
+                  {
+                    relation: 'currency', // showing currency detail
+                    scope: {
+                      include: [
+                        {relation: 'network'}, // showing network detail
+                      ],
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      };
+
+  const {data} = await MyriadAPI().request<ExclusiveContentWithPrices>({
+    url: `/user/unlockable-contents/${contentId}`,
     method: 'GET',
+    params,
   });
 
   return data;

@@ -20,7 +20,7 @@ export interface PeopleWithWalletDetail extends People {
 
 export type TippingOptions = {
   receiver: UserWithWalletDetail | PeopleWithWalletDetail;
-  reference: Post | Comment | User;
+  reference: Post | Comment | User | ExclusiveContentWithPrices;
   referenceType: ReferenceType;
   currencyContent?: Currency;
   referenceId?: string;
@@ -35,7 +35,7 @@ export interface TippingProviderProps {
 export type SendTipProps = {
   sender: User;
   receiver: UserWithWalletDetail | PeopleWithWalletDetail;
-  reference: Post | Comment | User;
+  reference: Post | Comment | User | ExclusiveContentWithPrices;
   referenceType: ReferenceType;
   defaultCurrency: BalanceDetail;
   balances: BalanceDetail[];
@@ -50,12 +50,26 @@ export type SendTipProps = {
   referenceId?: string;
 };
 
-export type PriceUnlockableContent = {
-  prices: Array<{
-    id: string;
-    amount: number;
-    currencyId: string;
-    unlockableContentId: string;
-    currency: Currency;
-  }>;
+export interface ExclusiveContent {
+  content?: {
+    text: string;
+    rawText: string;
+  };
+  id: string;
+  createdBy: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface ExclusiveContentPrice {
+  id: string;
+  amount: number;
+  currencyId: string;
+  unlockableContentId: string;
+  currency: Currency;
+}
+
+export type ExclusiveContentWithPrices = ExclusiveContent & {
+  user?: User;
+  prices?: ExclusiveContentPrice[];
 };

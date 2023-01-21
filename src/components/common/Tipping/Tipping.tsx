@@ -10,7 +10,7 @@ import {BN, BN_ZERO} from '@polkadot/util';
 
 import {TermOfService} from '../TermOfService';
 import ShowIf from '../show-if.component';
-import {PriceUnlockableContent, SendTipProps} from './Tipping.interface';
+import {ExclusiveContentWithPrices, SendTipProps} from './Tipping.interface';
 import {useStyles} from './Tipping.style';
 import {TippingInfo} from './render/Info';
 import {InputAmount} from './render/InputAmount';
@@ -63,8 +63,9 @@ export const Tipping: React.FC<SendTipProps> = props => {
   const [minInput, setMinInput] = useState<number>(0);
 
   useEffect(() => {
-    if (!isTipping())
-      setMinInput((reference as unknown as PriceUnlockableContent).prices[0].amount);
+    if (isTipping()) return;
+    const exclusiveContentWithPrices = reference as ExclusiveContentWithPrices;
+    setMinInput(exclusiveContentWithPrices.prices[0].amount);
   }, []);
 
   const nativeSymbol = useMemo(() => {
@@ -90,8 +91,6 @@ export const Tipping: React.FC<SendTipProps> = props => {
   const calculateTransactionFee = async (selected: BalanceDetail) => {
     const senderAddress = getAddressByUser(sender);
 
-    console.log({receiver});
-
     if (!receiver.walletDetail || !senderAddress) return;
 
     setLoadingFee(true);
@@ -101,13 +100,10 @@ export const Tipping: React.FC<SendTipProps> = props => {
     setLoadingFee(false);
     setTransactionFee(estimatedFee);
     if (isTipping()) setAssetMinBalance(minBalance);
-    else
-      setAssetMinBalance(
-        toBigNumber(
-          (reference as unknown as PriceUnlockableContent).prices[0].amount.toString(),
-          10,
-        ),
-      );
+    else {
+      const exclusiveContentWithPrices = reference as ExclusiveContentWithPrices;
+      setAssetMinBalance(toBigNumber(exclusiveContentWithPrices.prices[0].amount.toString(), 10));
+    }
   };
 
   const handleChangeCurrency = async (selected: BalanceDetail) => {
