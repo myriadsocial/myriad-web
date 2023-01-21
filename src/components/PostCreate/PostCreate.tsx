@@ -3,7 +3,6 @@ import {ArrowLeftIcon, GiftIcon, TrashIcon} from '@heroicons/react/outline';
 import React, {useRef, useState} from 'react';
 import {useDispatch} from 'react-redux';
 
-import getConfig from 'next/config';
 import dynamic from 'next/dynamic';
 
 import {Button, IconButton, SvgIcon, Tooltip, Typography} from '@material-ui/core';
@@ -24,6 +23,7 @@ import ExclusiveCreate from 'components/ExclusiveContentCreate/ExclusiveCreate';
 import Reveal from 'components/ExclusiveContentCreate/Reveal/Reveal';
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import {getEditorSelectors} from 'components/common/Editor/store';
+import {ExclusiveContent} from 'components/common/Tipping/Tipping.interface';
 import ShowIf from 'src/components/common/show-if.component';
 import {ExclusiveContentPost} from 'src/interfaces/exclusive';
 import {Post, PostVisibility} from 'src/interfaces/post';
@@ -61,7 +61,6 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
   const {open, user, isMobile, onClose, onSubmit, onSearchPeople} = props;
   const dispatch = useDispatch();
   const confirm = useConfirm();
-  const {publicRuntimeConfig} = getConfig();
   const styles = useStyles();
 
   const [activeTab, setActiveTab] = useState<PostCreateType>('create');
@@ -123,18 +122,22 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
           createExclusiveContent(
             exclusiveContent,
             [],
-            resp => {
-              onSubmit({
+            (resp: ExclusiveContent) => {
+              const data = {
                 ...attributes,
                 asset: {
-                  exclusiveContents: [
-                    `${publicRuntimeConfig.myriadAPIURL}/user/unlockable-contents/${resp?.id}`,
-                  ],
+                  exclusiveContents: [resp?.id],
                 },
                 selectedUserIds: post.selectedUserIds,
                 NSFWTag: post.NSFWTag,
                 visibility: post.visibility ?? PostVisibility.PUBLIC,
-              });
+              };
+
+              if (resp?.id) {
+                Object.assign(data, {asset: {exclusiveContents: [resp.id]}});
+              }
+
+              onSubmit(data);
             },
             () => {
               confirm({
@@ -171,19 +174,20 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
           createExclusiveContent(
             exclusiveContent,
             [],
-            resp => {
-              onSubmit({
+            (resp: ExclusiveContent) => {
+              const data = {
                 text: content.current,
                 rawText: content.current,
-                asset: {
-                  exclusiveContents: [
-                    `${publicRuntimeConfig.myriadAPIURL}/user/unlockable-contents/${resp?.id}`,
-                  ],
-                },
                 selectedUserIds: post.selectedUserIds,
                 NSFWTag: post.NSFWTag,
                 visibility: post.visibility ?? PostVisibility.PUBLIC,
-              });
+              };
+
+              if (resp?.id) {
+                Object.assign(data, {asset: {exclusiveContents: [resp.id]}});
+              }
+
+              onSubmit(data);
             },
             () => {
               confirm({

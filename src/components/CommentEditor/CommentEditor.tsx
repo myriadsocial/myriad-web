@@ -1,7 +1,6 @@
 import React, {forwardRef, useRef, useState} from 'react';
 import {useDispatch} from 'react-redux';
 
-import getConfig from 'next/config';
 import dynamic from 'next/dynamic';
 
 import {Grid, useMediaQuery} from '@material-ui/core';
@@ -14,6 +13,7 @@ import ExclusiveCreateContainer from 'components/ExclusiveContentCreate/Exclusiv
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import {initial} from 'components/common/Editor';
 import {getEditorSelectors, usePlateEditorRef} from 'components/common/Editor/store';
+import {ExclusiveContent} from 'components/common/Tipping/Tipping.interface';
 import {CommentProps} from 'src/interfaces/comment';
 import {ExclusiveContentPost} from 'src/interfaces/exclusive';
 import {ReferenceType, SectionType} from 'src/interfaces/interaction';
@@ -51,7 +51,7 @@ export type CommentEditorProps = {
 
 const CommentEditor = (props: CommentEditorProps, ref: React.ForwardedRef<HTMLDivElement>) => {
   const dispatch = useDispatch();
-  const {publicRuntimeConfig} = getConfig();
+
   const confirm = useConfirm();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
@@ -102,12 +102,12 @@ const CommentEditor = (props: CommentEditorProps, ref: React.ForwardedRef<HTMLDi
         createExclusiveContent(
           exclusiveContent,
           [],
-          resp => {
-            comment.asset = {
-              exclusiveContents: [
-                `${publicRuntimeConfig.myriadAPIURL}/user/unlockable-contents/${resp?.id}`,
-              ],
-            };
+          (resp: ExclusiveContent) => {
+            if (resp.id) {
+              comment.asset = {
+                exclusiveContents: [resp?.id],
+              };
+            }
 
             if (isMobile) {
               comment.text = content;
