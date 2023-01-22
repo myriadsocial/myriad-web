@@ -86,10 +86,12 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const session = await getSession(context);
 
+  const {redirect} = query;
+
   if (session) {
     return {
       redirect: {
-        destination: '/',
+        destination: redirect || '/',
         permanent: false,
       },
     };
