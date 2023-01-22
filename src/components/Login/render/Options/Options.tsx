@@ -138,7 +138,7 @@ export const Options: React.FC<OptionProps> = props => {
     const installed = await enablePolkadotExtension();
     setExtensionEnabled(installed);
     setExtensionChecked(true);
-    return installed
+    return installed;
   };
 
   const closeExtensionDisableModal = () => {
@@ -200,7 +200,7 @@ export const Options: React.FC<OptionProps> = props => {
     const doSelectAccount = async () => {
       if (walletType) {
         if (walletType === NetworkIdEnum.POLKADOT) {
-          const installed = await checkPolkdostExtensionInstalled()
+          const installed = await checkPolkdostExtensionInstalled();
           if (!installed) {
             setHideOptions(true);
             return;
