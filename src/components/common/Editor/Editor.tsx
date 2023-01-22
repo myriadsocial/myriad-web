@@ -247,7 +247,13 @@ export const Editor: React.FC<EditorProps> = props => {
   );
 
   const renderComboboxItem = useCallback(({item}) => {
-    return <ListItemComponent title={item.data.name} avatar={item.data.avatar} />;
+    return (
+      <ListItemComponent
+        title={item.data.name}
+        subtitle={`@${item.data.username}`}
+        avatar={item.data.avatar}
+      />
+    );
   }, []);
 
   const formatLabel = (people: User): TComboboxItem<MentionDetail> => {
