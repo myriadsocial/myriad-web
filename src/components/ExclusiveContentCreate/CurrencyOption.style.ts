@@ -30,5 +30,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontSize: '12px !important',
       color: '#616161',
     },
+    network: {
+      color: '#757575',
+      fontSize: '10px',
+    },
   }),
 );
