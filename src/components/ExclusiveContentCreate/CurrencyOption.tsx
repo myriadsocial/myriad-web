@@ -85,11 +85,16 @@ export const CurrencyOption: React.FC<CurrencyOptionProps> = ({
         {filterCurrency.map(balance => (
           <MenuItem
             key={balance.id}
-            onClick={() => {
-              handleClose();
-              handleSelect(balance);
-            }}>
-            <ListItemIcon>
+            style={{filter: balance.networkId !== 'myriad' ? 'grayscale(1)' : 'grayscale(0)'}}
+            onClick={
+              balance.networkId === 'myriad'
+                ? () => {
+                    handleClose();
+                    handleSelect(balance);
+                  }
+                : null
+            }>
+            <ListItemIcon style={{minWidth: '36px'}}>
               <Avatar
                 name={balance.id}
                 alt={balance.id}
@@ -99,7 +104,7 @@ export const CurrencyOption: React.FC<CurrencyOptionProps> = ({
             </ListItemIcon>
             <ListItemText>
               {balance.symbol}
-              {balance.symbol === 'DBIO' && <small> ({balance.networkId})</small>}
+              <div className={styles.network}>{balance.networkId} network</div>
             </ListItemText>
           </MenuItem>
         ))}
