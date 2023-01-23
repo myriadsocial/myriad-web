@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState, useCallback} from 'react';
 import {useSelector} from 'react-redux';
 import {useNavigate} from 'react-router';
 
@@ -29,6 +29,7 @@ import ShowIf from 'src/components/common/show-if.component';
 import {formatNetworkTitle} from 'src/helpers/wallet';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
+import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {NetworkIdEnum} from 'src/interfaces/network';
 import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
 import i18n from 'src/locale';
@@ -51,6 +52,9 @@ export const Options: React.FC<OptionProps> = props => {
   const {networks} = useSelector<RootState, UserState>(state => state.userState);
   const styles = useStyles();
 
+  const {query} = useQueryParams();
+  const {walletType} = query;
+
   const {onConnect, onConnectNear, isMobileSignIn} = props;
 
   const navigate = useNavigate();
@@ -64,6 +68,7 @@ export const Options: React.FC<OptionProps> = props => {
   const [extensionChecked, setExtensionChecked] = useState(false);
   const [extensionEnabled, setExtensionEnabled] = useState(false);
   const [connectAttempted, setConnectAttempted] = useState(false);
+  const [hideOptions, setHideOptions] = useState(false);
 
   const networksOnMobile = networks.filter(
     network => network.id === NetworkIdEnum.POLKADOT || network.id === NetworkIdEnum.NEAR,
@@ -131,18 +136,17 @@ export const Options: React.FC<OptionProps> = props => {
 
   const checkPolkdostExtensionInstalled = async () => {
     const installed = await enablePolkadotExtension();
-
     setExtensionEnabled(installed);
     setExtensionChecked(true);
+    return installed;
   };
 
   const closeExtensionDisableModal = () => {
     setConnectAttempted(false);
   };
 
-  const handleConnect = async () => {
+  const handleConnect = useCallback(async () => {
     const accounts: InjectedAccountWithMeta[] = [];
-
     switch (wallet) {
       case WalletTypeEnum.POLKADOT:
         const polkadotAccounts = await getPolkadotAccounts();
@@ -156,6 +160,9 @@ export const Options: React.FC<OptionProps> = props => {
           navigate('/account');
         } else {
           setWallet(null);
+          if (walletType) {
+            setHideOptions(true);
+          }
         }
 
         break;
@@ -187,10 +194,34 @@ export const Options: React.FC<OptionProps> = props => {
     }
 
     setConnectAttempted(true);
-  };
+  }, [wallet, networkId]);
+
+  useEffect(() => {
+    const doSelectAccount = async () => {
+      if (walletType) {
+        if (walletType === NetworkIdEnum.POLKADOT) {
+          const installed = await checkPolkdostExtensionInstalled();
+          if (!installed) {
+            setHideOptions(true);
+            return;
+          }
+          setSelectedNetwork(NetworkIdEnum.POLKADOT, BlockchainPlatform.SUBSTRATE)();
+          setSelectedWallet(WalletTypeEnum.POLKADOT)();
+          setTimeout(() => {
+            handleConnect();
+          }, 100);
+          return;
+        }
+        setHideOptions(true);
+        return;
+      }
+      setHideOptions(true);
+    };
+    doSelectAccount();
+  }, [handleConnect]);
 
   return (
-    <>
+    <ShowIf condition={hideOptions}>
       <ShowIf condition={!isMobileSignIn}>
         <div className={styles.root}>
           <div className={styles.wrapper}>
@@ -610,6 +641,6 @@ export const Options: React.FC<OptionProps> = props => {
           </Prompt>
         </div>
       </ShowIf>
-    </>
+    </ShowIf>
   );
 };
