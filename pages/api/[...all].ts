@@ -21,11 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const session = await getSession({req});
 
-    if (
-      session &&
-      session.user &&
-      session.user.token
-    ) {
+    if (session && session.user && session.user.token) {
       let key = '';
 
       if (session.user.address && session.user.address.length > 0) {
