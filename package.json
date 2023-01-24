@@ -123,7 +123,7 @@
     "slate-hyperscript": "^0.77.0",
     "slate-react": "^0.81.0",
     "styled-components": "^5.3.5",
-    "ua-parser-js": "^1.0.2",
+    "ua-parser-js": "^1.0.33",
     "unique-names-generator": "^4.7.1",
     "uuid": "^8.3.2",
     "validator": "^13.7.0",
