@@ -1231,7 +1231,7 @@
       "ExclusiveContent" : "Exclusive Content",
       "ExclusiveContentPrice" : "Exclusive Content Price",
       "ChangeCurrency" : "Change Currency",
-      "Fee" : "5% platform fee will be added to your payment",
+      "Fee" : "5% platform fee will be deducted from your payment",
       "NetworkError" : "Network Error",
       "Rethink" : "No, Let me rethink",
       "SwitchNetwork" : "Switch Network",
