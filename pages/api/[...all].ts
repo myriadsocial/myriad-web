@@ -24,20 +24,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (
       session &&
       session.user &&
-      session.user.token &&
-      session.user.address &&
-      session.user.address.length > 0
+      session.user.token
     ) {
-      let key = session.user.address;
-      if (session.user.email) {
+      let key = '';
+
+      if (session.user.address && session.user.address.length > 0) {
+        key = session.user.address;
+      }
+
+      if (session.user.email && session.user.email.length > 0) {
         key = session.user.email.replace(/[^a-zA-Z0-9]/g, '');
       }
 
-      const userToken = decryptMessage(session.user.token, key);
+      if (key && key.length > 0) {
+        const userToken = decryptMessage(session.user.token, key);
 
-      headers = {
-        Authorization: `Bearer ${userToken}`,
-      };
+        headers = {
+          Authorization: `Bearer ${userToken}`,
+        };
+      }
     }
 
     return httpProxyMiddleware(req, res, {
