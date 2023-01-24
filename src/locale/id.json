@@ -134,7 +134,8 @@
       "Card_Own": "(anda)",
       "Empty_Title": "Uh-oh",
       "Empty_Subtitle": "Anda belum membuat pengalaman apa pun.",
-      "Btn_Confirm": "Konfirmasi"
+      "Btn_Confirm": "Konfirmasi",
+      "Success_Msg" :"Berhasil menambahkan postingan ke timeline"
     }
   },
   "General": {

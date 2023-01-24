@@ -1,20 +1,19 @@
 import {InformationCircleIcon} from '@heroicons/react/outline';
 
-import React, {useCallback, useState, useEffect} from 'react';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 
 import {
+  Button,
+  CardActionArea,
+  CardContent,
+  CardMedia,
   Checkbox,
-  Typography,
-  Tooltip,
+  Grid,
   IconButton,
   SvgIcon,
-  CardActionArea,
-  Grid,
-  CardMedia,
-  CardContent,
-  Button,
+  Tooltip,
+  Typography,
 } from '@material-ui/core';
 
 import ModalAddToPostContext, {HandleConfirmAddPostExperience} from './ModalAddToPost.context';
@@ -22,11 +21,13 @@ import {ModalAddPostExperienceProps} from './ModalAddToPost.interface';
 import {useStyles} from './ModalAddToPost.styles';
 
 import {Empty} from 'components/atoms/Empty';
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import ShowIf from 'components/common/show-if.component';
 import {Skeleton} from 'src/components/Expericence';
 import {Modal} from 'src/components/atoms/Modal';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
-import {WrappedExperience} from 'src/interfaces/experience';
+import {UserExperience, WrappedExperience} from 'src/interfaces/experience';
+import * as ExperienceAPI from 'src/lib/api/experience';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
@@ -96,46 +97,48 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
 }) => {
   const styles = useStyles();
   const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const {
-    userExperiences,
-    userExperiencesMeta,
-    loadNextUserExperience,
-    loadExperiencePostList,
-    addPostsToExperience,
-    loading,
-  } = useExperienceHook();
-
-  useEffect(() => {
-    if (Boolean(user) && userExperiencesMeta.currentPage < userExperiencesMeta.totalPageCount)
-      loadNextUserExperience();
-  }, [user, userExperiencesMeta]);
+  const {loadExperiencePostList, loadExperienceAdded, addPostsToExperience} = useExperienceHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
 
   const [postId, setPostId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [isSelectAll, setIsSelectAll] = useState(false);
   const [selectedExperience, setSelectedExperience] = useState<string[]>([]);
+  const [userExperiences, setUserExperiences] = useState<UserExperience[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const toolTipText = i18n.t('Experience.Modal_Add_Post.Tooltip_Text');
 
   const addPostToExperience = useCallback<HandleConfirmAddPostExperience>(
-    props => {
+    async props => {
       setOpen(true);
+      const tmpAddedExperience: string[] = [];
+      await loadExperienceAdded(props.post.id, postsExperiences => {
+        postsExperiences.map(item => {
+          tmpAddedExperience.push(item.id);
+        });
+      });
+
       loadExperiencePostList(props.post.id, postsExperiences => {
         setPostId(props.post.id);
         const tmpSelectedExperience: string[] = [];
         postsExperiences.map(item => {
-          if (item.posts && item.posts.length > 0) {
+          if (tmpAddedExperience.find(post => post === item.id)) {
             tmpSelectedExperience.push(item.id);
           }
         });
         setSelectedExperience(tmpSelectedExperience);
       });
+
+      console.log({userExperiences});
     },
     [userExperiences],
   );
 
   const handleClose = useCallback(() => {
     setOpen(false);
+    setSelectedExperience([]);
   }, []);
 
   const handleSelectAllExperience = () => {
@@ -161,19 +164,43 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
       tmpSelectedExperience.push(propsSelectedExperience);
     }
     setSelectedExperience(tmpSelectedExperience);
-  };
-
-  const handleLoadNextPage = () => {
-    loadNextUserExperience();
+    console.log({tmpSelectedExperience});
   };
 
   const handleConfirm = () => {
     if (postId) {
       addPostsToExperience(postId, selectedExperience, () => {
         setOpen(false);
+        enqueueSnackbar({
+          message: i18n.t('Experience.Modal_Add_Post.Success_Msg'),
+          variant: 'success',
+        });
       });
     }
   };
+
+  const fetchUserExperiences = async () => {
+    setLoading(true);
+    const {meta, data: experiences} = await ExperienceAPI.getUserExperiences(
+      user.id,
+      undefined,
+      page,
+    );
+
+    setUserExperiences([...userExperiences, ...experiences]);
+    setLoading(false);
+    if (meta.currentPage < meta.totalPageCount) setPage(page + 1);
+  };
+
+  const resetExperiences = () => {
+    setPage(1);
+    setUserExperiences([]);
+  };
+
+  useEffect(() => {
+    if (open) fetchUserExperiences();
+    else resetExperiences();
+  }, [open, page]);
 
   return (
     <>
@@ -207,6 +234,7 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
                 onChange={handleSelectAllExperience}
                 inputProps={{'aria-label': 'controlled'}}
                 classes={{root: styles.fill}}
+                disabled={loading}
               />
               <Typography component="span" color="textPrimary" className={styles.selected}>
                 {i18n.t('Experience.Modal_Add_Post.Select_All')}
@@ -217,33 +245,24 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
         </div>
 
         <div id="selectable-experience-list" className={styles.experienceList}>
-          <InfiniteScroll
-            scrollableTarget="selectable-experience-list"
-            dataLength={
-              userExperiences.filter(ar => ar.userId === user?.id && ar.subscribed === false).length
-            }
-            hasMore={
-              Boolean(user)
-                ? userExperiencesMeta.currentPage < userExperiencesMeta.totalPageCount
-                : false
-            }
-            next={handleLoadNextPage}
-            loader={<Skeleton />}>
-            {userExperiences
-              .filter(ar => ar.userId === user?.id && ar.subscribed === false)
-              .map(item => {
-                return (
-                  <ExperienceItem
-                    key={item.id}
-                    item={item}
-                    selectedExperience={selectedExperience}
-                    handleSelectExperience={handleSelectExperience}
-                  />
-                );
-              })}
-          </InfiniteScroll>
+          {userExperiences
+            .filter(ar => ar.userId === user?.id && ar.subscribed === false)
+            .map(item => {
+              return (
+                <ExperienceItem
+                  key={item.id}
+                  item={item}
+                  selectedExperience={selectedExperience}
+                  handleSelectExperience={handleSelectExperience}
+                />
+              );
+            })}
+          {loading && <Skeleton />}
 
-          <ShowIf condition={userExperiences.filter(ar => ar.userId === user?.id).length === 0}>
+          <ShowIf
+            condition={
+              userExperiences.filter(ar => ar.userId === user?.id).length === 0 && !loading
+            }>
             <div className={styles.containerEmpty}>
               <Empty
                 title={i18n.t('Experience.Modal_Add_Post.Empty_Title')}

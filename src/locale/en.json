@@ -135,7 +135,8 @@
       "Card_Own": "(you)",
       "Empty_Title": "Uh-oh",
       "Empty_Subtitle": "You haven't created any timeline yet.",
-      "Btn_Confirm": "Confirm"
+      "Btn_Confirm": "Confirm",
+      "Success_Msg" :"Successfully added post to timeline"
     }
   },
   "General": {
