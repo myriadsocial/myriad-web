@@ -34,7 +34,9 @@ export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
 
   const handleSignOut = async () => {
     await logout();
-    router.push('/');
+    // router.push('/');
+    router.replace('/friends');
+    router.reload();
   };
 
   const handleLoginOrCreateAccount = () => {
