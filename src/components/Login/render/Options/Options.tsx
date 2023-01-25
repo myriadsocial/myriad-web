@@ -53,7 +53,7 @@ export const Options: React.FC<OptionProps> = props => {
   const styles = useStyles();
 
   const {query} = useQueryParams();
-  const {walletType} = query;
+  const {network} = query;
 
   const {onConnect, onConnectNear, isMobileSignIn} = props;
 
@@ -160,7 +160,7 @@ export const Options: React.FC<OptionProps> = props => {
           navigate('/account');
         } else {
           setWallet(null);
-          if (walletType) {
+          if (network) {
             setHideOptions(true);
           }
         }
@@ -198,14 +198,14 @@ export const Options: React.FC<OptionProps> = props => {
 
   useEffect(() => {
     const doSelectAccount = async () => {
-      if (walletType) {
-        if (walletType === NetworkIdEnum.POLKADOT) {
+      if (network) {
+        if (network === NetworkIdEnum.DEBIO) {
           const installed = await checkPolkdostExtensionInstalled();
           if (!installed) {
             setHideOptions(true);
             return;
           }
-          setSelectedNetwork(NetworkIdEnum.POLKADOT, BlockchainPlatform.SUBSTRATE)();
+          setSelectedNetwork(NetworkIdEnum.DEBIO, BlockchainPlatform.SUBSTRATE)();
           setSelectedWallet(WalletTypeEnum.POLKADOT)();
           setTimeout(() => {
             handleConnect();
