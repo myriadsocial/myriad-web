@@ -51,3 +51,6 @@ export type CLEAR_USER = typeof CLEAR_USER;
 
 export const SET_FULLACCESS = 'SET_FULLACCESS';
 export type SET_FULLACCESS = typeof SET_FULLACCESS;
+
+export const DESTROY_SESSION = 'DESTROY_SESSION';
+export type DESTROY_SESSION = typeof DESTROY_SESSION;
