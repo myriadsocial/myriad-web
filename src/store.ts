@@ -1,6 +1,7 @@
 import {createWrapper, HYDRATE} from 'next-redux-wrapper';
 
 import {combinedReducers, RootState} from './reducers';
+import {DESTROY_SESSION} from './reducers/user/constants';
 
 import {applyMiddleware, Store, createStore, AnyAction, Reducer} from 'redux';
 import {composeWithDevTools} from 'redux-devtools-extension';
@@ -14,7 +15,8 @@ const reducer: Reducer<RootState, AnyAction> = (state, action) => {
     };
 
     return nextState;
-  } else {
+  } else if (action.type === DESTROY_SESSION) return (state = undefined);
+  else {
     return combinedReducers(state, action);
   }
 };
