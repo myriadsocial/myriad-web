@@ -15,7 +15,7 @@ const reducer: Reducer<RootState, AnyAction> = (state, action) => {
     };
 
     return nextState;
-  } else if (action.type === DESTROY_SESSION) return (state = undefined);
+  } else if (action.type === DESTROY_SESSION) return (state = state);
   else {
     return combinedReducers(state, action);
   }
