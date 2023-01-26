@@ -78,7 +78,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const session = await getSession(context);
 
-  if (!session) {
+  if (!session || JSON.stringify(session) === null) {
     return {
       redirect: {
         destination: '/',

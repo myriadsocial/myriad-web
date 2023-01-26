@@ -1,4 +1,4 @@
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import {signIn, signOut} from 'next-auth/react';
 import getConfig from 'next/config';
@@ -17,7 +17,6 @@ import * as FirebaseMessaging from 'src/lib/firebase/messaging';
 import {Near} from 'src/lib/services/near-api-js';
 import {PolkadotJs} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
-import {DESTROY_SESSION} from 'src/reducers/user/constants';
 import {UserState} from 'src/reducers/user/reducer';
 import {uniqueNamesGenerator, adjectives, colors} from 'unique-names-generator';
 
@@ -36,7 +35,6 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
   const {getPolkadotAccounts} = usePolkadotExtension();
   const {publicRuntimeConfig} = getConfig();
   const {provider} = useBlockchain();
-  const dispatch = useDispatch();
 
   const fetchUserNonce = async (address: string): Promise<UserNonceProps> => {
     try {
@@ -192,7 +190,6 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
     }
 
     await Promise.all(promises);
-    dispatch({type: DESTROY_SESSION});
   };
 
   return {
