@@ -1,4 +1,4 @@
-import NextAuth, {Session} from 'next-auth';
+import NextAuth, {NextAuthOptions, Session} from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import getConfig from 'next/config';
 
@@ -13,9 +13,7 @@ import {credentialToSession, emailCredentialToSession} from 'src/lib/serializers
 
 const {serverRuntimeConfig} = getConfig();
 
-// For more information on each option (and a full list of options) go to
-// https://next-auth.js.org/configuration/options
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
   // used when session strategy is database
   adapter: APIAdapter(),
   // https://next-auth.js.org/configuration/providers
@@ -151,7 +149,7 @@ export default NextAuth({
   // https://next-auth.js.org/configuration/pages
   pages: {
     signIn: '/login', // Displays signin buttons
-    signOut: '/logout', // Displays form with sign out button
+    signOut: '/login', // Displays form with sign out button
     error: '/', // Error code passed in query string as ?error=
     // verifyRequest: '/auth/verify-request', // Used for check email page
     // newUser: null // If set, new users will be directed here on first sign in
@@ -203,4 +201,8 @@ export default NextAuth({
       console.log(code, message);
     },
   },
-});
+};
+
+// For more information on each option (and a full list of options) go to
+// https://next-auth.js.org/configuration/options
+export default NextAuth(authOptions);
