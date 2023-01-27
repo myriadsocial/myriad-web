@@ -1,10 +1,12 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 
-import {Session} from 'next-auth';
-import {getSession} from 'next-auth/react';
+import {Session, unstable_getServerSession} from 'next-auth';
+// import {getSession} from 'next-auth/react';
 import getConfig from 'next/config';
 import Head from 'next/head';
+
+import {authOptions} from './api/auth/[...nextauth]';
 
 import {FriendMenuComponent} from 'src/components/FriendsMenu/FriendMenu';
 import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
@@ -76,9 +78,9 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     };
   }
 
-  const session = await getSession(context);
+  const session = await unstable_getServerSession(context.req, context.res, authOptions);
 
-  if (!session || JSON.stringify(session) === null) {
+  if (!session) {
     return {
       redirect: {
         destination: '/',
