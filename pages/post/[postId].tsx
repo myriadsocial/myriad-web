@@ -200,8 +200,13 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   if (post?.platform === 'myriad') {
     const {text, image: imageData} = stringify(post);
+    title = post?.title ?? `${post.user.name} on ${publicRuntimeConfig.appName}`;
     description = text;
     image = imageData;
+  }
+
+  if (post?.platform !== 'myriad') {
+    title = `${post.people.name} (imported by on ${post.user.name} ${publicRuntimeConfig.appName})`;
   }
 
   if (post?.deletedAt || post?.isNSFW || post?.NSFWTag) {
