@@ -206,7 +206,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   if (post?.platform !== 'myriad') {
-    title = `${post.people.name} (imported by on ${post.user.name} ${publicRuntimeConfig.appName})`;
+    title = `${post.people.name} (imported by ${post.user.name} on ${publicRuntimeConfig.appName})`;
   }
 
   if (post?.deletedAt || post?.isNSFW || post?.NSFWTag) {
