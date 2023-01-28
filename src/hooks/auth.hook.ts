@@ -1,6 +1,7 @@
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {signIn, signOut} from 'next-auth/react';
+import {HYDRATE} from 'next-redux-wrapper';
 import getConfig from 'next/config';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
@@ -35,6 +36,7 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
   const {getPolkadotAccounts} = usePolkadotExtension();
   const {publicRuntimeConfig} = getConfig();
   const {provider} = useBlockchain();
+  const dispatch = useDispatch();
 
   const fetchUserNonce = async (address: string): Promise<UserNonceProps> => {
     try {
@@ -177,6 +179,7 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
   const logout = async () => {
     window.localStorage.removeItem(MYRIAD_WALLET_KEY);
     window.localStorage.removeItem('email');
+    dispatch({type: HYDRATE});
 
     const promises: Promise<void | undefined>[] = [
       signOut({
