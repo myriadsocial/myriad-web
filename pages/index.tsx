@@ -1,12 +1,10 @@
 import React from 'react';
 
-import {Session, unstable_getServerSession} from 'next-auth';
-// import {getSession} from 'next-auth/react';
+import {Session} from 'next-auth';
+import {getSession} from 'next-auth/react';
 import getConfig from 'next/config';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
-
-import {authOptions} from './api/auth/[...nextauth]';
 
 import {Timeline} from 'components/Timeline/Timeline.layout';
 import {SearchBoxContainer} from 'components/atoms/Search/SearchBoxContainer';
@@ -100,7 +98,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     };
   }
 
-  const session = await unstable_getServerSession(context.req, context.res, authOptions);
+  const session = await getSession(context);
 
   const anonymous = !session || Boolean(session?.user.anonymous);
 
