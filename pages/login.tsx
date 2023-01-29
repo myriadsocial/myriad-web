@@ -90,14 +90,13 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   const {redirect} = query;
 
   if (session) {
+    await dispatch({type: DESTROY_SESSION});
     return {
       redirect: {
         destination: (redirect as string) || '/',
         permanent: false,
       },
     };
-  } else {
-    await dispatch({type: DESTROY_SESSION});
   }
 
   initialize();
