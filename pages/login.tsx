@@ -11,6 +11,7 @@ import {WalletTypeEnum} from 'src/interfaces/wallet';
 import {initialize} from 'src/lib/api/base';
 import i18n from 'src/locale';
 import {fetchNetwork} from 'src/reducers/user/actions';
+import {DESTROY_SESSION} from 'src/reducers/user/constants';
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
@@ -95,6 +96,8 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
         permanent: false,
       },
     };
+  } else {
+    await dispatch({type: DESTROY_SESSION});
   }
 
   initialize();
