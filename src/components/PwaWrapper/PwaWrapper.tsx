@@ -1,6 +1,7 @@
 import {XIcon} from '@heroicons/react/solid';
 
 import {useState} from 'react';
+import {useCookies} from 'react-cookie';
 import {usePWAInstall} from 'react-use-pwa-install';
 
 import Image from 'next/image';
@@ -10,7 +11,10 @@ import Box from '@material-ui/core/Box';
 import Snackbar from '@material-ui/core/Snackbar';
 import Typography from '@material-ui/core/Typography';
 
+export const HIDE_PWA_INSTALL_POPUP_COOKIE_KEY = 'hide-pwa-install-popup';
+
 const PwaWrapper = () => {
+  const [cookies, setCookie] = useCookies([HIDE_PWA_INSTALL_POPUP_COOKIE_KEY]);
   const [isOpen, setOpen] = useState(true);
   const install = usePWAInstall();
   const theme = useTheme();
@@ -23,10 +27,10 @@ const PwaWrapper = () => {
 
   const onClose = () => {
     setOpen(false);
-    localStorage.setItem('hide_pwa_install_popup', 'true');
+    setCookie(HIDE_PWA_INSTALL_POPUP_COOKIE_KEY, true);
   };
 
-  if (!isMobileAndTablet || localStorage.getItem('hide_pwa_install_popup') === 'true' || !install)
+  if (!isMobileAndTablet || Boolean(cookies[HIDE_PWA_INSTALL_POPUP_COOKIE_KEY]) || !install)
     return null;
 
   return (
