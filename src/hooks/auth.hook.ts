@@ -177,6 +177,7 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
   const logout = async () => {
     window.localStorage.removeItem(MYRIAD_WALLET_KEY);
     window.localStorage.removeItem('email');
+    window.localStorage.removeItem('hide_pwa_install_popup');
 
     const promises: Promise<void | undefined>[] = [
       signOut({
