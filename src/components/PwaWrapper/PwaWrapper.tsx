@@ -21,15 +21,19 @@ const PwaWrapper = () => {
     install();
   };
 
-  const onClose = () => setOpen(false);
+  const onClose = () => {
+    setOpen(false);
+    localStorage.setItem('hide_pwa_install_popup', 'true');
+  };
 
-  if (!install || !isMobileAndTablet) return null;
+  if (!isMobileAndTablet || localStorage.getItem('hide_pwa_install_popup') === 'true' || !install)
+    return null;
 
   return (
     <Snackbar
       anchorOrigin={{horizontal: 'center', vertical: 'top'}}
       open={isOpen}
-      onClose={() => setOpen(false)}>
+      onClose={onClose}>
       <Box
         sx={{
           bgcolor: '#201c1c',
