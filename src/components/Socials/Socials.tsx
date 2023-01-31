@@ -26,7 +26,7 @@ type SocialsProps = {
   address: string;
   anonymous?: boolean;
   verifying?: boolean;
-  onVerifySocialMedia: (social: SocialsEnum, profileUrl: string) => void;
+  onVerifySocialMedia: (social: SocialsEnum, profileUrl: string, socialHash: string) => void;
   onDisconnectSocial: (people: SocialMedia) => void;
   onSetAsPrimary: (people: SocialMedia) => void;
 };
@@ -113,8 +113,7 @@ export const Socials: React.FC<SocialsProps> = props => {
   };
 
   const verifySocialMedia = (social: SocialsEnum, profileUrl: string) => {
-    onVerifySocialMedia(social, profileUrl);
-    closeAddSocialMedia();
+    onVerifySocialMedia(social, profileUrl, addSocialHash);
   };
 
   const confirmDisconnectSocial = (social: SocialMedia): void => {

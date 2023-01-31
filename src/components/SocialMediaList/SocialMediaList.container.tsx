@@ -47,7 +47,7 @@ export const SocialMediaListContainer: React.FC = () => {
   };
 
   const verifySocialMedia = (social: SocialsEnum, profileUrl: string) => {
-    verifyPublicKeyShared(social, profileUrl, address, () => {
+    verifyPublicKeyShared(social, profileUrl, addSocialHash, () => {
       setSelectedSocial(null);
       enqueueSnackbar({
         message: i18n.t('SocialMedia.Alert.Verify', {social: social}),
