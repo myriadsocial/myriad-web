@@ -69,7 +69,7 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
 
   useEffect(() => {
     return clear();
-  }, []);
+  }, [open]);
 
   const onSharedAttempt = () => {
     setShared(true);
@@ -97,7 +97,6 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
     verify(social, profileUrl);
 
     if (onDrawer) clear();
-    else handleClose();
   };
 
   const handleClose = () => {
@@ -268,7 +267,7 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
         </div>
         <Button
           onClick={handleShared}
-          disabled={!shared || !termApproved || profileUrl.length === 0}
+          disabled={!shared || !termApproved || profileUrl.length === 0 || verifying}
           fullWidth
           variant="contained"
           color="primary">

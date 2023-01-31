@@ -29,8 +29,8 @@ export const SocialsContainer: React.FC = () => {
     dispatch(deleteSocial(people.id));
   };
 
-  const handleVerifySocial = async (social: SocialsEnum, profileUrl: string) => {
-    verifyPublicKeyShared(social, profileUrl, address, () => {
+  const handleVerifySocial = async (social: SocialsEnum, profileUrl: string, hash: string) => {
+    verifyPublicKeyShared(social, profileUrl, hash, () => {
       resetVerification();
 
       enqueueSnackbar({
