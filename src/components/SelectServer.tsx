@@ -105,7 +105,11 @@ const SelectServer = ({onServerSelect}: SelectServerProps) => {
   return (
     <>
       <div className={classes.root}>
-        <Box style={{marginBottom: 8}}>{i18n.t('Login.Options.Prompt_Select_Instance.Title')}</Box>
+        <div className={classes.title}>
+          <Typography variant="h5">
+            {i18n.t('Login.Options.Prompt_Select_Instance.Title')}
+          </Typography>
+        </div>
         {!servers.length ? (
           <Skeleton>
             <Button />

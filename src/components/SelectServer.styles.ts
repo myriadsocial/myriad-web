@@ -26,6 +26,17 @@ const useStyles = makeStyles((theme: Theme) =>
       right: 10,
       cursor: 'pointer',
     },
+    title: {
+      marginTop: 8,
+      marginBottom: 8,
+      '& .MuiTypography-h5': {
+        fontWeight: 600,
+        color: '#0A0A0A',
+      },
+      [theme.breakpoints.down('md')]: {
+        marginBottom: 4,
+      },
+    },
   }),
 );
 
