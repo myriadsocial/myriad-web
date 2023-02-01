@@ -1,12 +1,12 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
 import {getSession} from 'next-auth/react';
 import httpProxyMiddleware from 'next-http-proxy-middleware';
+import getConfig from 'next/config';
 
-// import getConfig from 'next/config';
 import {isErrorWithMessage} from 'src/helpers/error';
 import {decryptMessage} from 'src/lib/crypto';
 
-// const {serverRuntimeConfig} = getConfig();
+const {serverRuntimeConfig} = getConfig();
 
 export const config = {
   api: {
@@ -45,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return httpProxyMiddleware(req, res, {
       // You can use the `http-proxy` option
       // target: serverRuntimeConfig.myriadAPIURL,
-      target: cookies['instance'],
+      target: cookies['instance'] ?? serverRuntimeConfig.myriadAPIURL,
       // In addition, you can use the `pathRewrite` option provided by `next-http-proxy`
       pathRewrite: [
         {

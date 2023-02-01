@@ -4,6 +4,7 @@ import {XIcon} from '@heroicons/react/solid';
 import {useState, useMemo, useEffect} from 'react';
 
 import Image from 'next/image';
+import {useRouter} from 'next/router';
 
 import {
   Card,
@@ -26,6 +27,7 @@ import InstanceCard from './InstanceCard';
 import useStyles from './SelectServer.styles';
 
 import clsx from 'clsx';
+import Cookies from 'js-cookie';
 import useMyriadInstance from 'src/components/common/Blockchain/use-myriad-instance.hooks';
 import ShowIf from 'src/components/common/show-if.component';
 import {useAuthHook} from 'src/hooks/auth.hook';
@@ -38,6 +40,7 @@ type SelectServerProps = {
 };
 
 const SelectServer = ({onServerSelect}: SelectServerProps) => {
+  const router = useRouter();
   const {provider} = useMyriadInstance();
   const {servers, getAllInstances} = useInstances();
 
@@ -53,9 +56,16 @@ const SelectServer = ({onServerSelect}: SelectServerProps) => {
 
   useEffect(() => {
     if (servers.length > 0) {
-      setSelectedServerId(servers[0].id);
-      onServerSelect(servers[0]);
+      if (Cookies.get('instance') || router.query.rpc) {
+        const apiUrl = Cookies.get('instance') ?? router.query.rpc;
+        setSelectedServer(servers.find((server: ServerListProps) => server.apiUrl === apiUrl));
+        onServerSelect(servers.find((server: ServerListProps) => server.apiUrl === apiUrl));
+      } else {
+        setSelectedServerId(servers[0].id);
+        onServerSelect(servers[0]);
+      }
     }
+    console.log({servers});
   }, [servers]);
 
   const [open, setOpen] = useState(false);
@@ -63,7 +73,7 @@ const SelectServer = ({onServerSelect}: SelectServerProps) => {
   const [selectedServer, setSelectedServer] = useState<ServerListProps | null>(null);
 
   const selectedInstanceName = selectedServerId
-    ? servers[selectedServerId].detail?.name
+    ? servers[selectedServerId]?.detail?.name
     : 'Unknown Instance';
 
   const handleOpen = () => {
@@ -116,18 +126,15 @@ const SelectServer = ({onServerSelect}: SelectServerProps) => {
             {selectedServer && (
               <Image
                 alt={selectedServer.detail?.name}
-                loader={() => (selectedServer ? selectedServer.detail.serverImageURL : '')}
-                src={selectedServer.detail?.serverImageURL ?? ''}
+                loader={() => (selectedServer ? selectedServer?.detail?.serverImageURL : '')}
+                src={selectedServer?.detail?.serverImageURL ?? 'tes.png'}
                 placeholder="empty"
                 height={30}
                 width={30}
               />
             )}
 
-            <Box>
-              {servers.find(server => server.id === selectedServerId)?.detail?.name ??
-                'Common Server'}
-            </Box>
+            <Box>{selectedServer?.detail?.name ?? 'Common Server'}</Box>
             <SvgIcon
               style={{marginLeft: 'auto'}}
               component={ChevronDownIcon}

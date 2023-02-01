@@ -19,6 +19,7 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import {useStyles} from './Options.style';
 
+import Cookies from 'js-cookie';
 import SelectServer from 'src/components/SelectServer';
 import {MyNearWalletIcon, MyriadFullIcon} from 'src/components/atoms/Icons';
 import {
@@ -79,7 +80,8 @@ export const Options: React.FC<OptionProps> = props => {
 
   useEffect(() => {
     if (serverSelected) {
-      router.push({query: {api: `${serverSelected.apiUrl}`}}, undefined, {shallow: true});
+      router.push({query: {rpc: `${serverSelected.apiUrl}`}}, undefined, {shallow: true});
+      Cookies.set('instance', serverSelected.apiUrl);
     }
   }, [serverSelected]);
 
