@@ -67,6 +67,10 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   const {headers} = req;
   const dispatch = store.dispatch as ThunkDispatchAction;
 
+  if (query.rpc) {
+    context.res.setHeader('set-cookie', [`instance=${query.rpc}`]);
+  }
+
   let mobile = false;
   let redirectAuth: string | null = null;
 

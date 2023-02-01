@@ -20,6 +20,8 @@ import i18n from 'src/locale';
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
+      width: '100%',
+      position: 'relative',
       '&:hover': {
         backgroundColor: alpha('#FFC857', 0.15),
         '& .MuiCardActionArea-focusHighlight': {
@@ -55,13 +57,16 @@ const InstanceCard = ({server, onSelect, selected}: InstanceCardProps) => {
 
   return (
     <ListItem key={server.id}>
-      <Card className={styles.root}>
+      <Card
+        className={styles.root}
+        style={{background: selected ? theme.palette.secondary.main : 'transparent'}}>
         <CardActionArea
           style={{
             display: 'flex',
+            width: '100%',
             justifyContent: 'center',
             alignItems: 'center',
-            background: selected ? theme.palette.secondary.main : 'transparent',
+            paddingBottom: '10px',
           }}
           onClick={handleSelect}>
           <CardMedia style={{padding: 16}}>
@@ -75,24 +80,32 @@ const InstanceCard = ({server, onSelect, selected}: InstanceCardProps) => {
               />
             )}
           </CardMedia>
-          <CardContent>
+          <CardContent style={{width: '100%'}}>
             <Typography style={{fontWeight: 600, fontSize: 16}}>{server.detail?.name}</Typography>
             <Typography style={{maxWidth: 368, fontWeight: 400, fontSize: 12}}>
               {text.split(' ').length > 10 && !expanded
                 ? `${text.split(' ').slice(0, 10).join(' ')}...`
                 : text}
             </Typography>
-            <Box
-              fontSize={10}
-              fontWeight="fontWeightBold"
-              style={{color: '#6E3FC3', textAlign: 'end'}}
-              onClick={handleExpand}>
-              {!expanded
-                ? i18n.t('Login.Options.Prompt_Select_Instance.See_More')
-                : i18n.t('Login.Options.Prompt_Select_Instance.See_Less')}
-            </Box>
           </CardContent>
         </CardActionArea>
+        <Box
+          fontSize={10}
+          fontWeight="fontWeightBold"
+          style={{
+            color: '#6E3FC3',
+            position: 'absolute',
+            right: 0,
+            bottom: 0,
+            padding: '10px',
+            cursor: 'pointer',
+            width: 'max-content',
+          }}
+          onClick={handleExpand}>
+          {!expanded
+            ? i18n.t('Login.Options.Prompt_Select_Instance.See_More')
+            : i18n.t('Login.Options.Prompt_Select_Instance.See_Less')}
+        </Box>
       </Card>
     </ListItem>
   );

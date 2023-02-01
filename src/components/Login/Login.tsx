@@ -29,6 +29,7 @@ import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {useProfileHook} from 'src/hooks/use-profile.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {NetworkIdEnum} from 'src/interfaces/network';
+import {ServerListProps} from 'src/interfaces/server-list';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
 import {getCheckEmail} from 'src/lib/api/user';
 import {toHexPublicKey} from 'src/lib/crypto';
@@ -72,6 +73,7 @@ export const Login: React.FC<LoginProps> = props => {
   ]);
   const [email, setEmail] = useState<string>('');
   const [disableSignIn, setDisableSignIn] = useState<boolean>(false);
+  const [selectedInstance, setSelectedInstance] = useState<ServerListProps | null>(null);
 
   useEffect(() => {
     if (redirectAuth === WalletTypeEnum.NEAR || redirectAuth === WalletTypeEnum.MYNEAR) {
@@ -312,6 +314,7 @@ export const Login: React.FC<LoginProps> = props => {
                 onConnect={handleOnconnect}
                 onConnectNear={handleOnConnectNear}
                 isMobileSignIn={isMobileSignIn}
+                setSelectedInstance={setSelectedInstance}
               />
             }
           />
@@ -340,6 +343,7 @@ export const Login: React.FC<LoginProps> = props => {
                 account={selectedAccount}
                 checkUsernameAvailability={checkUsernameAvailable}
                 isMobileSignIn={isMobileSignIn}
+                selectedInstance={selectedInstance}
               />
             }
           />

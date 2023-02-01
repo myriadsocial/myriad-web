@@ -3,6 +3,7 @@ import {XIcon} from '@heroicons/react/solid';
 
 import {useState, useMemo, useEffect} from 'react';
 
+import Image from 'next/image';
 import {useRouter} from 'next/router';
 
 import {
@@ -26,11 +27,11 @@ import InstanceCard from './InstanceCard';
 import useStyles from './SelectServer.styles';
 
 import clsx from 'clsx';
+import Cookies from 'js-cookie';
 import useMyriadInstance from 'src/components/common/Blockchain/use-myriad-instance.hooks';
 import ShowIf from 'src/components/common/show-if.component';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useInstances} from 'src/hooks/use-instances.hooks';
-import MyriadCircle from 'src/images/Icons/myriad-circle.svg';
 import {ServerListProps} from 'src/interfaces/server-list';
 import i18n from 'src/locale';
 
@@ -39,12 +40,11 @@ type SelectServerProps = {
 };
 
 const SelectServer = ({onServerSelect}: SelectServerProps) => {
+  const router = useRouter();
   const {provider} = useMyriadInstance();
   const {servers, getAllInstances} = useInstances();
 
   const {logout} = useAuthHook();
-
-  const {asPath} = useRouter();
 
   const [openCheckAccountModal, setOpenCheckAccountModal] = useState(false);
 
@@ -56,15 +56,24 @@ const SelectServer = ({onServerSelect}: SelectServerProps) => {
 
   useEffect(() => {
     if (servers.length > 0) {
-      setSelectedServerId(servers[0].id);
+      if (Cookies.get('instance') || router.query.rpc) {
+        const apiUrl = Cookies.get('instance') ?? router.query.rpc;
+        setSelectedServer(servers.find((server: ServerListProps) => server.apiUrl === apiUrl));
+        onServerSelect(servers.find((server: ServerListProps) => server.apiUrl === apiUrl));
+      } else {
+        setSelectedServerId(servers[0].id);
+        onServerSelect(servers[0]);
+      }
     }
+    console.log({servers});
   }, [servers]);
 
   const [open, setOpen] = useState(false);
   const [selectedServerId, setSelectedServerId] = useState<number | null>(null);
+  const [selectedServer, setSelectedServer] = useState<ServerListProps | null>(null);
 
   const selectedInstanceName = selectedServerId
-    ? servers[selectedServerId].detail?.name
+    ? servers[selectedServerId]?.detail?.name
     : 'Unknown Instance';
 
   const handleOpen = () => {
@@ -79,19 +88,28 @@ const SelectServer = ({onServerSelect}: SelectServerProps) => {
     setSelectedServerId(serverId);
     setOpen(false);
     //onServerSelect(servers[serverId]);
-    if (asPath !== '/login') {
-      setOpenCheckAccountModal(true);
-    }
+    // if (asPath !== '/login') {
+    //   setOpenCheckAccountModal(true);
+    // }
   };
 
   const handleCloseCheckAccountModal = () => {
     setOpenCheckAccountModal(false);
   };
 
+  useEffect(() => {
+    setSelectedServer(servers.find((server: ServerListProps) => server.id === selectedServerId));
+    onServerSelect(servers.find((server: ServerListProps) => server.id === selectedServerId));
+  }, [selectedServerId]);
+
   return (
     <>
       <div className={classes.root}>
-        <Box style={{marginBottom: 8}}>{i18n.t('Login.Options.Prompt_Select_Instance.Title')}</Box>
+        <div className={classes.title}>
+          <Typography variant="h5">
+            {i18n.t('Login.Options.Prompt_Select_Instance.Title')}
+          </Typography>
+        </div>
         {!servers.length ? (
           <Skeleton>
             <Button />
@@ -109,11 +127,18 @@ const SelectServer = ({onServerSelect}: SelectServerProps) => {
               borderRadius: 40,
             }}
             onClick={handleOpen}>
-            <SvgIcon component={MyriadCircle} viewBox="0 0 30 30" />
-            <Box>
-              {servers.find(server => server.id === selectedServerId)?.detail?.name ??
-                'Common Server'}
-            </Box>
+            {selectedServer && (
+              <Image
+                alt={selectedServer.detail?.name}
+                loader={() => (selectedServer ? selectedServer?.detail?.serverImageURL : '')}
+                src={selectedServer?.detail?.serverImageURL ?? 'tes.png'}
+                placeholder="empty"
+                height={30}
+                width={30}
+              />
+            )}
+
+            <Box>{selectedServer?.detail?.name ?? 'Common Server'}</Box>
             <SvgIcon
               style={{marginLeft: 'auto'}}
               component={ChevronDownIcon}

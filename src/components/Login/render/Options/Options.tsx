@@ -2,12 +2,16 @@ import React, {useEffect, useMemo, useState, useCallback} from 'react';
 import {useSelector} from 'react-redux';
 import {useNavigate} from 'react-router';
 
+import {useRouter} from 'next/router';
+
 import {Button, Grid, ListItem, Tooltip, Typography} from '@material-ui/core';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import {useStyles} from './Options.style';
 
+import SelectServer from 'components/SelectServer';
+import Cookies from 'js-cookie';
 import {
   CoinbaseWalletisabledIcon,
   EthereumNetworkIcon,
@@ -31,6 +35,7 @@ import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {NetworkIdEnum} from 'src/interfaces/network';
+import {ServerListProps} from 'src/interfaces/server-list';
 import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
@@ -46,6 +51,7 @@ type OptionProps = {
     walletType: WalletTypeEnum,
   ) => void;
   isMobileSignIn?: boolean;
+  setSelectedInstance?: (server: ServerListProps) => void;
 };
 
 export const Options: React.FC<OptionProps> = props => {
@@ -54,8 +60,11 @@ export const Options: React.FC<OptionProps> = props => {
 
   const {query} = useQueryParams();
   const {network} = query;
+  const router = useRouter();
 
-  const {onConnect, onConnectNear, isMobileSignIn} = props;
+  const [serverSelected, setServerSelected] = useState<null | ServerListProps>(null);
+
+  const {onConnect, onConnectNear, isMobileSignIn, setSelectedInstance} = props;
 
   const navigate = useNavigate();
   const {enablePolkadotExtension, getPolkadotAccounts} = usePolkadotExtension();
@@ -219,6 +228,18 @@ export const Options: React.FC<OptionProps> = props => {
     };
     doSelectAccount();
   }, [handleConnect]);
+
+  useEffect(() => {
+    if (serverSelected) {
+      router.push({query: {rpc: `${serverSelected.apiUrl}`}}, undefined, {shallow: true});
+      Cookies.set('instance', serverSelected.apiUrl);
+    }
+  }, [serverSelected]);
+
+  const toggleSelected = (server: ServerListProps) => {
+    setServerSelected(server);
+    setSelectedInstance(server);
+  };
 
   return (
     <ShowIf condition={hideOptions}>
@@ -414,6 +435,7 @@ export const Options: React.FC<OptionProps> = props => {
             </Grid>
           </div>
 
+          <SelectServer onServerSelect={server => toggleSelected(server)} />
           <div className={styles.actionWrapper}>
             <Button variant="outlined" color="secondary" onClick={() => navigate('/')}>
               Back
@@ -582,6 +604,8 @@ export const Options: React.FC<OptionProps> = props => {
                 </ShowIf>
               </Grid>
             </div>
+
+            <SelectServer onServerSelect={server => toggleSelected(server)} />
 
             <div style={{display: 'flex', flexDirection: 'column', gap: 16}}>
               <Button variant="outlined" color="secondary" onClick={() => navigate('/')}>

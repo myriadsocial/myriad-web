@@ -17,6 +17,7 @@ export const config = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   let headers = {};
+  const cookies = req.cookies;
 
   try {
     const session = await getSession({req});
@@ -43,7 +44,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     return httpProxyMiddleware(req, res, {
       // You can use the `http-proxy` option
-      target: serverRuntimeConfig.myriadAPIURL,
+      // target: serverRuntimeConfig.myriadAPIURL,
+      target: cookies['instance'] ?? serverRuntimeConfig.myriadAPIURL,
       // In addition, you can use the `pathRewrite` option provided by `next-http-proxy`
       pathRewrite: [
         {

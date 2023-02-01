@@ -2,6 +2,7 @@ import React, {useEffect, useCallback, useState, useMemo} from 'react';
 import {useSelector} from 'react-redux';
 import {useNavigate} from 'react-router';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 
@@ -24,12 +25,12 @@ import {
   NearNetworkIcon,
   SenderWalletDisabledIcon,
   MyNearWalletIcon,
-  MyriadCircleIcon,
 } from 'src/components/atoms/Icons';
 import useConfirm from 'src/components/common/Confirm/use-confirm.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {NetworkIdEnum} from 'src/interfaces/network';
+import {ServerListProps} from 'src/interfaces/server-list';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
 import {toHexPublicKey} from 'src/lib/crypto';
 import {BlockchainProvider} from 'src/lib/services/blockchain-provider';
@@ -45,6 +46,7 @@ type ProfileProps = {
   account?: InjectedAccountWithMeta | null;
   publicAddress?: string;
   isMobileSignIn?: boolean;
+  selectedInstance?: ServerListProps;
 };
 
 const USERNAME_MAX_LENGTH = 16;
@@ -59,8 +61,15 @@ const USERNAME_HELPER_TEXT = i18n.t('Login.Profile.Helper_Text_Username', {
 });
 
 export const Profile: React.FC<ProfileProps> = props => {
-  const {walletType, checkUsernameAvailability, account, publicAddress, networkId, isMobileSignIn} =
-    props;
+  const {
+    walletType,
+    checkUsernameAvailability,
+    account,
+    publicAddress,
+    networkId,
+    isMobileSignIn,
+    selectedInstance,
+  } = props;
   const {networks} = useSelector<RootState, UserState>(state => state.userState);
   const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
   const [termApproved, setTermApproved] = useState(false);
@@ -83,9 +92,6 @@ export const Profile: React.FC<ProfileProps> = props => {
       helper: USERNAME_HELPER_TEXT,
     },
   });
-
-  const TEXT =
-    'Decentralized metasocial network, pulling content from mainstream social media and turning every post into a tipping wallet.';
 
   useEffect(() => {
     let nameHelper = i18n.t('Login.Profile.Helper_Text_Name', {
@@ -131,13 +137,6 @@ export const Profile: React.FC<ProfileProps> = props => {
       sender: <SenderWalletDisabledIcon />,
       near: <NearNetworkIcon />,
       'my-near': <MyNearWalletIcon />,
-    }),
-    [],
-  );
-
-  const icons = useMemo(
-    () => ({
-      myriad: <MyriadCircleIcon />,
     }),
     [],
   );
@@ -345,15 +344,18 @@ export const Profile: React.FC<ProfileProps> = props => {
     });
   }, [handleSubmit]);
 
-  // const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
-  // const handleExpand = () => {
-  //   setExpanded(!expanded);
-  // };
+  const handleExpand = () => {
+    setExpanded(!expanded);
+  };
 
   const toggleTermApproved = () => {
     setTermApproved(!termApproved);
   };
+
+  const instance = selectedInstance?.detail;
+  const isDescriptionLong = instance.description.split(' ').length > 10;
 
   return (
     <>
@@ -390,7 +392,7 @@ export const Profile: React.FC<ProfileProps> = props => {
                 </div>
               </div>
             </div>
-            <div>
+            <div style={{position: 'relative'}}>
               <Typography variant="h5" style={{fontWeight: 600}}>
                 {i18n.t('Login.Profile.Instance')}
               </Typography>
@@ -398,34 +400,54 @@ export const Profile: React.FC<ProfileProps> = props => {
                 id="unselectable-gray-box-instance"
                 style={{
                   display: 'flex',
-                  alignItems: 'center',
+                  alignItems: 'start',
                   paddingLeft: 8,
                   paddingTop: 8,
-                  paddingBottom: 8,
+                  paddingBottom: isDescriptionLong ? 30 : 8,
                   background: '#F5F5F5',
                   borderRadius: 4,
                   gap: 8,
                 }}>
-                {icons['myriad']}
+                <Image
+                  alt={instance.id}
+                  src={instance.serverImageURL ?? ''}
+                  placeholder="empty"
+                  height={30}
+                  width={30}
+                />
                 <div style={{width: '100%', paddingRight: 8}}>
                   <Box
                     fontSize={14}
                     fontWeight="fontWeightRegular"
                     style={{color: 'rgba(115, 66, 204, 1)'}}>
-                    Myriad Official
+                    {instance.name}
                   </Box>
                   <Box fontSize={12} fontWeight="fontWeightRegular" style={{color: '#0A0A0A'}}>
-                    {TEXT}
+                    {isDescriptionLong && !expanded
+                      ? `${instance.description.split(' ').slice(0, 10).join(' ')}...`
+                      : instance.description}
                   </Box>
-                  {/* <Box
-                    fontSize={10}
-                    fontWeight="fontWeightBold"
-                    style={{color: '#6E3FC3', textAlign: 'end', cursor: 'pointer'}}
-                    onClick={handleExpand}>
-                    {expanded ? 'Less' : 'More'}
-                  </Box> */}
                 </div>
               </div>
+              <ShowIf condition={isDescriptionLong}>
+                <Box
+                  fontSize={10}
+                  fontWeight="fontWeightBold"
+                  style={{
+                    color: '#6E3FC3',
+                    position: 'absolute',
+                    right: 0,
+                    bottom: 0,
+                    padding: '10px',
+                    cursor: 'pointer',
+                    width: 'max-content',
+                  }}
+                  onClick={handleExpand}>
+                  {!expanded
+                    ? i18n.t('Login.Options.Prompt_Select_Instance.See_More')
+                    : i18n.t('Login.Options.Prompt_Select_Instance.See_Less')}
+                </Box>
+              </ShowIf>
             </div>
           </div>
           <div style={{marginBottom: 33}}>
