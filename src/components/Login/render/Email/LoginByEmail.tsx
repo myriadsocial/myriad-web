@@ -1,11 +1,16 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router';
+
+import {useRouter} from 'next/router';
 
 import {Button, TextField, Typography} from '@material-ui/core';
 
 import {useStyles} from './LoginByEmail.style';
 
+import SelectServer from 'components/SelectServer';
+import Cookies from 'js-cookie';
 import {useAuthLinkHook} from 'src/hooks/auth-link.hook';
+import {ServerListProps} from 'src/interfaces/server-list';
 import i18n from 'src/locale';
 import validator from 'validator';
 
@@ -16,12 +21,14 @@ type LoginByEmailProps = {
 const LoginByEmail = ({onNext}: LoginByEmailProps) => {
   const styles = useStyles();
   const {requestLink} = useAuthLinkHook();
+  const router = useRouter();
 
   const [email, setEmail] = useState('');
   const [error, setError] = useState({
     isError: false,
     message: '',
   });
+  const [serverSelected, setServerSelected] = useState<null | ServerListProps>(null);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const input = event.target.value;
@@ -61,6 +68,17 @@ const LoginByEmail = ({onNext}: LoginByEmailProps) => {
     navigate('/');
   };
 
+  const toggleSelected = (server: ServerListProps) => {
+    setServerSelected(server);
+  };
+
+  useEffect(() => {
+    if (serverSelected) {
+      router.push({query: {rpc: `${serverSelected.apiUrl}`}}, undefined, {shallow: true});
+      Cookies.set('instance', serverSelected.apiUrl);
+    }
+  }, [serverSelected]);
+
   return (
     <div className={styles.root}>
       <div>
@@ -80,6 +98,7 @@ const LoginByEmail = ({onNext}: LoginByEmailProps) => {
         error={error.isError}
         helperText={error.isError ? error.message : ''}
       />
+      <SelectServer onServerSelect={server => toggleSelected(server)} />
       <div className={styles.actionWrapper}>
         <Button variant="outlined" color="primary" onClick={handleBack}>
           {i18n.t('Login.Email.LoginByEmail.Back')}

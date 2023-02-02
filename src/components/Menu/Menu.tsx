@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {useRouter} from 'next/router';
 
@@ -6,6 +6,11 @@ import {BoxComponent} from '../atoms/Box';
 import {ListItemComponent} from '../atoms/ListItem';
 import {useStyles} from './Menu.styles';
 import {useMenuList, MenuDetail, MenuId} from './use-menu-list';
+
+import SelectServer from 'components/SelectServer';
+import Cookies from 'js-cookie';
+import {ServerListProps} from 'src/interfaces/server-list';
+import i18n from 'src/locale';
 
 type MenuProps = {
   selected: MenuId;
@@ -21,6 +26,8 @@ export const Menu: React.FC<MenuProps> = props => {
 
   const menu = useMenuList(selected);
 
+  const [serverSelected, setServerSelected] = useState<null | ServerListProps>(null);
+
   const gotoHome = () => {
     if (router.pathname === '/') return;
     router.push('/', undefined, {shallow: true});
@@ -31,11 +38,34 @@ export const Menu: React.FC<MenuProps> = props => {
     onChange(item.url);
   };
 
+  const toggleSelected = (server: ServerListProps) => {
+    setServerSelected(server);
+  };
+
+  useEffect(() => {
+    if (serverSelected) {
+      if (serverSelected.apiUrl !== Cookies.get('instance')) {
+        router.push({query: {rpc: `${serverSelected.apiUrl}`}}, undefined, {
+          shallow: true,
+        });
+        Cookies.set('instance', serverSelected.apiUrl);
+        router.reload();
+      }
+    }
+  }, [serverSelected]);
+
   return (
     <div className={styles.root} data-testid={'menu-test'}>
       <BoxComponent paddingLeft={0} paddingRight={0}>
         <div className={styles.head} onClick={gotoHome} aria-hidden="true">
           <img src={logo} width={220} height={48} />
+        </div>
+
+        <div className={styles.instance}>
+          <SelectServer
+            title={i18n.t('Login.Options.Prompt_Select_Instance.Switch')}
+            onServerSelect={server => toggleSelected(server)}
+          />
         </div>
 
         {menu

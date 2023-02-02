@@ -36,10 +36,11 @@ import {ServerListProps} from 'src/interfaces/server-list';
 import i18n from 'src/locale';
 
 type SelectServerProps = {
+  title?: string;
   onServerSelect?: (server: ServerListProps) => void;
 };
 
-const SelectServer = ({onServerSelect}: SelectServerProps) => {
+const SelectServer = ({onServerSelect, title}: SelectServerProps) => {
   const router = useRouter();
   const {provider} = useMyriadInstance();
   const {servers, getAllInstances} = useInstances();
@@ -88,7 +89,7 @@ const SelectServer = ({onServerSelect}: SelectServerProps) => {
     setSelectedServerId(serverId);
     setOpen(false);
     //onServerSelect(servers[serverId]);
-    // if (asPath !== '/login') {
+    // if (router.asPath !== '/login') {
     //   setOpenCheckAccountModal(true);
     // }
   };
@@ -107,7 +108,7 @@ const SelectServer = ({onServerSelect}: SelectServerProps) => {
       <div className={classes.root}>
         <div className={classes.title}>
           <Typography variant="h5">
-            {i18n.t('Login.Options.Prompt_Select_Instance.Title')}
+            {title ?? i18n.t('Login.Options.Prompt_Select_Instance.Title')}
           </Typography>
         </div>
         {!servers.length ? (

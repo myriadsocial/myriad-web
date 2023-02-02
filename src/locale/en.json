@@ -230,7 +230,8 @@
         "See_Less": "See less",
         "No_Account_Description": "You don't seem to have an account on {{instance_name}}. Do you wish to create a new account on {{instance_name}}?",
         "No_Account_Cancel": "No, Select Others",
-        "No_Account_Confirm": "Sign Out"
+        "No_Account_Confirm": "Sign Out",
+        "Switch" : "Switch Instance"
       }
     },
     "Profile": {

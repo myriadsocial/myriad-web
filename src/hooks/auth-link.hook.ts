@@ -3,6 +3,7 @@
 //2. Use it with loginWithEmail
 import getConfig from 'next/config';
 
+import Cookies from 'js-cookie';
 import * as AuthLinkAPI from 'src/lib/api/auth-link';
 
 //3. When clicking on link, parse the query on /login
@@ -10,13 +11,14 @@ import * as AuthLinkAPI from 'src/lib/api/auth-link';
 //5. Call signIn with otp and email, check if it exists and no signature is required, and then call the api call in #4
 
 const {publicRuntimeConfig} = getConfig();
+const instance = Cookies.get('instance');
 
 export const useAuthLinkHook = () => {
   const requestLink = async (email: string): Promise<string> => {
     try {
       const message = await AuthLinkAPI.getLinkWithEmail({
         email,
-        callbackURL: publicRuntimeConfig.appAuthURL + '/login',
+        callbackURL: (instance ?? publicRuntimeConfig.appAuthURL) + '/login',
       });
 
       return message;
