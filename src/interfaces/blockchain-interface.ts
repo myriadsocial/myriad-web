@@ -54,6 +54,7 @@ export interface IProvider {
 
   payUnlockableContent?: (
     walletDetail: string | null,
+    instanceId: string,
     tipsBalanceInfo: TipsBalanceInfo,
     amount: BN,
     accountReference: string | null,

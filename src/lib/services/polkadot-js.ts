@@ -444,6 +444,7 @@ export class PolkadotJs implements IProvider {
 
   async payUnlockableContent(
     walletAddress: string | null,
+    instanceId: string,
     tipsBalanceInfo: TipsBalanceInfo,
     amount: BN,
     accountReference: string | null,
@@ -468,6 +469,7 @@ export class PolkadotJs implements IProvider {
       // here we use the api to create a balance transfer to some account of a value of 12345678
       const transferExtrinsic = api.tx.tipping.payContent(
         walletAddress,
+        +instanceId,
         tipsBalanceInfo,
         amount,
         accountReference,
