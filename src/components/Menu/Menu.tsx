@@ -48,7 +48,7 @@ export const Menu: React.FC<MenuProps> = props => {
         router.push({query: {rpc: `${serverSelected.apiUrl}`}}, undefined, {
           shallow: true,
         });
-        Cookies.set('instance', serverSelected.apiUrl);
+        localStorage.setItem('instance', serverSelected.apiUrl);
         router.reload();
       }
     }

@@ -34,6 +34,7 @@ export const authOptions: NextAuthOptions = {
         walletType: {label: 'Wallet Type', type: 'text'},
         networkId: {label: 'Network ID', type: 'text'},
         publicAddress: {label: 'Public Address', type: 'text'},
+        callbackUrl: {label: 'Callback Url', type: 'text'},
       },
       async authorize(credentials) {
         if (credentials.anonymous === 'true') {
@@ -45,13 +46,16 @@ export const authOptions: NextAuthOptions = {
         } else {
           if (!credentials?.signature) throw Error('no signature!');
 
-          const data = await AuthAPI.login({
-            nonce: Number(credentials.nonce),
-            publicAddress: credentials.publicAddress,
-            signature: credentials.signature,
-            walletType: credentials.walletType as WalletTypeEnum,
-            networkType: credentials.networkId as NetworkIdEnum,
-          });
+          const data = await AuthAPI.login(
+            {
+              nonce: Number(credentials.nonce),
+              publicAddress: credentials.publicAddress,
+              signature: credentials.signature,
+              walletType: credentials.walletType as WalletTypeEnum,
+              networkType: credentials.networkId as NetworkIdEnum,
+            },
+            credentials.callbackUrl,
+          );
 
           if (!data?.accessToken) throw Error('Failed to authorize user!');
 
@@ -78,11 +82,12 @@ export const authOptions: NextAuthOptions = {
         username: {label: 'Username', type: 'text'},
         email: {label: 'Email', type: 'text'},
         token: {label: 'Token', type: 'text'},
+        callbackUrl: {label: 'Callback Url', type: 'text'},
       },
       async authorize(credentials) {
         if (!credentials?.token) throw Error('no token!');
 
-        const data = await AuthLinkAPI.loginWithLink(credentials.token);
+        const data = await AuthLinkAPI.loginWithLink(credentials.token, credentials.callbackUrl);
 
         if (!data?.accessToken) throw Error('Failed to authorize user!');
 

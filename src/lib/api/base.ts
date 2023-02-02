@@ -3,7 +3,6 @@ import * as Sentry from '@sentry/nextjs';
 import getConfig from 'next/config';
 
 import axios, {AxiosInstance} from 'axios';
-import Cookies from 'js-cookie';
 
 type MyriadAPIParams = {
   apiURL?: string;
@@ -13,11 +12,10 @@ type MyriadAPIParams = {
 let API: AxiosInstance;
 
 const {publicRuntimeConfig} = getConfig();
-const instance = Cookies.get('instance');
 
 const setupAPIClient = () => {
   API = axios.create({
-    baseURL: instance ?? publicRuntimeConfig.appAuthURL + '/api',
+    baseURL: publicRuntimeConfig.appAuthURL + '/api',
   });
 
   API.interceptors.response.use(
@@ -45,7 +43,7 @@ const setupAPIClient = () => {
 
 const setupFederatedAPIClient = (apiURL: string) => {
   API = axios.create({
-    baseURL: instance ?? apiURL,
+    baseURL: apiURL,
   });
 
   API.interceptors.response.use(
@@ -80,6 +78,8 @@ export const initialize = (params?: MyriadAPIParams, anonymous?: boolean): Axios
   if (params?.cookie || !API || anonymous) {
     setupAPIClient();
   }
+
+  console.log('initApi', params?.cookie);
 
   // add auth header
   if (params?.cookie) {
