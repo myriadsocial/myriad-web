@@ -49,9 +49,11 @@ export const Tipping: React.FC<SendTipProps> = props => {
   } = props;
 
   const classes = useStyles();
-  const {isSignerLoading, sendTip, payUnlockableContent, getEstimatedFee} = useWallet();
+  const {isSignerLoading, sendTip, payUnlockableContent} = useWallet();
 
-  const {currentWallet, currencies} = useSelector<RootState, UserState>(state => state.userState);
+  const {user, currentWallet, currencies} = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
   const [amount, setAmount] = useState<BN>(INITIAL_AMOUNT);
   const [transactionFee, setTransactionFee] = useState<BN>(INITIAL_AMOUNT);
   const [assetMinBalance, setAssetMinBalance] = useState<BN>(BN_ZERO);
@@ -95,7 +97,11 @@ export const Tipping: React.FC<SendTipProps> = props => {
 
     setLoadingFee(true);
 
-    const {estimatedFee, minBalance} = await getEstimatedFee(receiver.walletDetail, selected);
+    const estimatedFee = new BN((0.0142 * Math.pow(10, 18)).toString());
+    const minBalance = new BN((0.01 * Math.pow(10, 18)).toString());
+
+    // TODO: Fixed estimated fee
+    // const {estimatedFee, minBalance} = await getEstimatedFee(receiver.walletDetail, selected);
 
     setLoadingFee(false);
     setTransactionFee(estimatedFee);
@@ -180,18 +186,22 @@ export const Tipping: React.FC<SendTipProps> = props => {
         },
       );
     } else {
+      const [instanceId, unlockableContentId, walletAddress] =
+        receiver?.walletDetail?.referenceId?.split('/') ?? [];
       const TipsBalance: TipsBalanceInfo = {
         serverId: receiver?.walletDetail?.serverId,
         referenceType: receiver?.walletDetail?.referenceType,
-        referenceId: receiver?.walletDetail?.referenceId.split('/')[0],
+        referenceId: unlockableContentId,
         ftIdentifier: currencyContent.referenceId ?? 'native',
       };
 
       payUnlockableContent(
-        receiver?.walletDetail?.referenceId.split('/')[1],
+        walletAddress ?? null,
+        instanceId,
         TipsBalance,
         amount,
         currency,
+        user.id,
         referenceType,
         referenceId,
         hash => {

@@ -100,8 +100,6 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
     const balance = isBn(maxValue) ? maxValue : toBigNumber(maxValue.toString(), decimal);
     const maxTip = balance.sub(minBalance.gt(BN_ZERO) ? minBalance : fee);
 
-    console.log(Number(amount), minInput);
-
     if (length && amount.length > length) {
       return [value, false, i18n.t('Tipping.Modal_Main.Error_Amount_Max', {length: length})];
     }

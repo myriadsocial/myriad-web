@@ -101,10 +101,12 @@ export const useWallet = () => {
   };
 
   const payUnlockableContent = async (
-    walletAddress: string,
+    walletAddress: string | null,
+    instanceId: string,
     tipsBalanceInfo: TipsBalanceInfo,
     amount: BN,
     currency: BalanceDetail,
+    accountReference: string | null,
     type?: string,
     referenceId?: string,
     callback?: (txHash: string) => void,
@@ -116,8 +118,10 @@ export const useWallet = () => {
       const to = walletAddress;
       const txHash = await provider.payUnlockableContent(
         walletAddress,
+        instanceId,
         tipsBalanceInfo,
         amount,
+        accountReference,
         undefined,
         params => {
           if (params?.signerOpened) {
