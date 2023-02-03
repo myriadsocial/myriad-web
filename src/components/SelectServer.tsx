@@ -1,10 +1,10 @@
 import {ChevronDownIcon} from '@heroicons/react/outline';
 import {XIcon} from '@heroicons/react/solid';
 
-import {useState, useMemo, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 
 import Image from 'next/image';
-import {useRouter} from 'next/router';
 
 import {
   Card,
@@ -12,7 +12,6 @@ import {
   CardContent,
   Box,
   ButtonBase,
-  Button,
   SvgIcon,
   Dialog,
   DialogTitle,
@@ -27,13 +26,14 @@ import InstanceCard from './InstanceCard';
 import useStyles from './SelectServer.styles';
 
 import clsx from 'clsx';
-import Cookies from 'js-cookie';
-import useMyriadInstance from 'src/components/common/Blockchain/use-myriad-instance.hooks';
+import {unionBy} from 'lodash';
 import ShowIf from 'src/components/common/show-if.component';
-import {useAuthHook} from 'src/hooks/auth.hook';
 import {useInstances} from 'src/hooks/use-instances.hooks';
 import {ServerListProps} from 'src/interfaces/server-list';
 import i18n from 'src/locale';
+import {RootState} from 'src/reducers';
+import {setServer} from 'src/reducers/server/actions';
+import {ServerState} from 'src/reducers/server/reducer';
 
 type SelectServerProps = {
   title?: string;
@@ -42,37 +42,23 @@ type SelectServerProps = {
   setRegister?: (value: boolean) => void;
 };
 
-const SelectServer = ({onServerSelect, title, register, setRegister}: SelectServerProps) => {
-  const router = useRouter();
-  const {provider} = useMyriadInstance();
-  const {servers, getAllInstances} = useInstances();
+const SelectServer = ({title, onServerSelect}: SelectServerProps) => {
+  const dispatch = useDispatch();
 
-  const {logout} = useAuthHook();
+  const {server, apiURL} = useSelector<RootState, ServerState>(state => state.serverState);
+
+  const {servers, getAllInstances, loading} = useInstances();
+
+  // const {logout} = useAuthHook();
+
+  // const [openCheckAccountModal, setOpenCheckAccountModal] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const classes = useStyles();
 
-  useMemo(() => {
-    getAllInstances(provider);
-  }, [provider]);
-
   useEffect(() => {
-    if (servers.length > 0) {
-      if (Cookies.get('instance') || router.query.rpc) {
-        const apiUrl = Cookies.get('instance') ?? router.query.rpc;
-        setSelectedServer(servers.find((server: ServerListProps) => server.apiUrl === apiUrl));
-        onServerSelect(servers.find((server: ServerListProps) => server.apiUrl === apiUrl));
-        setSelectedServerId(servers.find((server: ServerListProps) => server.apiUrl === apiUrl).id);
-      } else {
-        setSelectedServerId(servers[0].id);
-        onServerSelect(servers[0]);
-        Cookies.set('instance', servers[0].apiUrl);
-      }
-    }
-  }, [servers, Cookies.get('instance')]);
-
-  const [open, setOpen] = useState(false);
-  const [selectedServerId, setSelectedServerId] = useState<number | null>(null);
-  const [selectedServer, setSelectedServer] = useState<ServerListProps | null>(null);
+    getAllInstances();
+  }, [getAllInstances]);
 
   const handleOpen = () => {
     setOpen(!open);
@@ -82,69 +68,53 @@ const SelectServer = ({onServerSelect, title, register, setRegister}: SelectServ
     setOpen(false);
   };
 
-  const handleSelect = (serverId: number) => {
-    setSelectedServerId(serverId);
+  const handleSelect = (server: ServerListProps) => {
+    dispatch(setServer(server.detail, server.apiUrl));
+    onServerSelect(server);
     setOpen(false);
   };
 
-  const handleCloseCheckAccountModal = () => {
-    setRegister(false);
-    const apiUrl = Cookies.get('currentInstance');
-    if (apiUrl) {
-      Cookies.set('instance', apiUrl);
-      setSelectedServerId(servers.find((server: ServerListProps) => server.apiUrl === apiUrl).id);
-      Cookies.remove('currentInstance');
-    }
-  };
-
-  useEffect(() => {
-    setSelectedServer(servers.find((server: ServerListProps) => server.id === selectedServerId));
-    onServerSelect(servers.find((server: ServerListProps) => server.id === selectedServerId));
-  }, [selectedServerId]);
+  // const handleCloseCheckAccountModal = () => {
+  //   setOpenCheckAccountModal(false);
+  // };
 
   return (
-    <>
+    <React.Fragment>
       <div className={classes.root}>
         <div className={classes.title}>
           <Typography variant="h5">
             {title ?? i18n.t('Login.Options.Prompt_Select_Instance.Title')}
           </Typography>
         </div>
-        {!servers.length ? (
-          <ButtonBase> Loading ...</ButtonBase>
-        ) : (
-          <ButtonBase
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
-              background: '#F6F7FC',
-              padding: `8px 12px`,
-              gap: 8,
-              borderRadius: 40,
-            }}
-            onClick={handleOpen}>
-            {selectedServer && (
-              <Image
-                alt={selectedServer.detail?.name}
-                loader={() => (selectedServer ? selectedServer?.detail?.serverImageURL : '')}
-                src={selectedServer?.detail?.serverImageURL ?? 'tes.png'}
-                placeholder="empty"
-                height={30}
-                width={30}
-              />
-            )}
+        <ButtonBase
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            background: '#F6F7FC',
+            padding: `8px 12px`,
+            gap: 8,
+            borderRadius: 40,
+          }}
+          onClick={handleOpen}>
+          <Image
+            alt={server?.name ?? 'Error Image'}
+            loader={() => server?.serverImageURL ?? ''}
+            src={server?.serverImageURL ?? ''}
+            placeholder="empty"
+            height={30}
+            width={30}
+          />
 
-            <Box>{selectedServer?.detail?.name ?? 'Loading...'}</Box>
-            <SvgIcon
-              style={{marginLeft: 'auto'}}
-              component={ChevronDownIcon}
-              fontSize="small"
-              color={'primary'}
-            />
-          </ButtonBase>
-        )}
+          <Box>{server?.name ?? 'Unknown Instance'}</Box>
+          <SvgIcon
+            style={{marginLeft: 'auto'}}
+            component={ChevronDownIcon}
+            fontSize="small"
+            color={'primary'}
+          />
+        </ButtonBase>
       </div>
 
       <Dialog
@@ -180,7 +150,7 @@ const SelectServer = ({onServerSelect, title, register, setRegister}: SelectServ
         </DialogTitle>
         <DialogContent>
           <List>
-            <ShowIf condition={servers.length === 0}>
+            <ShowIf condition={loading}>
               <ListItem>
                 <Card>
                   <CardActionArea>
@@ -191,23 +161,24 @@ const SelectServer = ({onServerSelect, title, register, setRegister}: SelectServ
                 </Card>
               </ListItem>
             </ShowIf>
-            <ShowIf condition={servers.length > 0}>
-              {servers
-                .filter(server => server.detail)
-                .map(server => (
+            <ShowIf condition={!loading}>
+              {unionBy(servers, 'apiUrl').map(server => {
+                if (!server?.detail) return <React.Fragment />;
+                return (
                   <InstanceCard
-                    key={server.id}
+                    key={server.apiUrl.concat('-').concat(server.id.toString())}
                     server={server}
-                    onSelect={() => handleSelect(server.id)}
-                    selected={server.id === selectedServerId}
+                    onSelect={() => handleSelect(server)}
+                    selected={server.apiUrl === apiURL}
                   />
-                ))}
+                );
+              })}
             </ShowIf>
           </List>
         </DialogContent>
       </Dialog>
 
-      <Dialog
+      {/* <Dialog
         id="selected-server-dialog"
         open={register}
         onClose={handleCloseCheckAccountModal}
@@ -296,8 +267,8 @@ const SelectServer = ({onServerSelect, title, register, setRegister}: SelectServ
             </ShowIf>
           </List>
         </DialogContent>
-      </Dialog>
-    </>
+      </Dialog> */}
+    </React.Fragment>
   );
 };
 

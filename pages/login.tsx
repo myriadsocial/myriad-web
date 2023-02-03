@@ -10,6 +10,7 @@ import {MobileLayout} from 'src/components/template/Login';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
 import {initialize} from 'src/lib/api/base';
 import i18n from 'src/locale';
+import {fetchServer} from 'src/reducers/server/actions';
 import {fetchNetwork} from 'src/reducers/user/actions';
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
@@ -24,7 +25,7 @@ const OnBoardingContainer = dynamic(
   },
 );
 
-const {publicRuntimeConfig} = getConfig();
+const {publicRuntimeConfig, serverRuntimeConfig} = getConfig();
 
 const description = i18n.t('Login.Description');
 
@@ -66,10 +67,9 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   const {req, query} = context;
   const {headers} = req;
   const dispatch = store.dispatch as ThunkDispatchAction;
+  const apiURL = query.rpc ?? serverRuntimeConfig.myriadAPIURL;
 
-  if (query.rpc) {
-    context.res.setHeader('set-cookie', [`instance=${query.rpc}`]);
-  }
+  context.res.setHeader('set-cookie', [`instance=${apiURL}`]);
 
   let mobile = false;
   let redirectAuth: string | null = null;
@@ -103,6 +103,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   initialize({cookie: req.headers.cookie});
   await dispatch(fetchNetwork());
+  await dispatch(fetchServer(apiURL));
 
   return {
     props: {

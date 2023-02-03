@@ -58,6 +58,7 @@ type OptionProps = {
 
 export const Options: React.FC<OptionProps> = props => {
   const {networks} = useSelector<RootState, UserState>(state => state.userState);
+
   const styles = useStyles();
   const dispatch = useDispatch();
 
