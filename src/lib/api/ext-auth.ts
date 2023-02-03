@@ -26,9 +26,12 @@ type LoginResponseProps = {
   accessToken: string;
 };
 
-export const login = async (values: LoginProps): Promise<LoginResponseProps | null> => {
+export const login = async (
+  values: LoginProps,
+  url?: string,
+): Promise<LoginResponseProps | null> => {
   try {
-    const {data} = await MyriadAPI().request({
+    const {data} = await MyriadAPI({apiURL: url}).request({
       url: '/authentication/login/wallet',
       method: 'POST',
       data: values,
@@ -40,9 +43,12 @@ export const login = async (values: LoginProps): Promise<LoginResponseProps | nu
   }
 };
 
-export const signUp = async (values: SignUpProps): Promise<SignUpResponseProps | null> => {
+export const signUp = async (
+  values: SignUpProps,
+  url?: string,
+): Promise<SignUpResponseProps | null> => {
   try {
-    const {data} = await MyriadAPI().request({
+    const {data} = await MyriadAPI({apiURL: url}).request({
       url: '/authentication/signup/wallet',
       method: 'POST',
       data: values,

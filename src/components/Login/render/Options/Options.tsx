@@ -451,7 +451,7 @@ export const Options: React.FC<OptionProps> = props => {
             <Button
               variant="contained"
               color="primary"
-              disabled={!extensionChecked || wallet === null}
+              disabled={!extensionChecked || wallet === null || !serverSelected}
               onClick={handleConnect}>
               {i18n.t('Login.Options.Connect')}
             </Button>

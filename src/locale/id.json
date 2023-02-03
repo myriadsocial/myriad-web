@@ -236,7 +236,8 @@
         "See_More": "Selengkapnya",
         "No_Account_Description": "Anda tidak memiliki akun di {{instance_name}}. Buat akun baru di {{instance_name}}?",
         "No_Account_Cancel": "Tidak, Pilih Lainnya",
-        "No_Account_Confirm": "Keluar"
+        "No_Account_Confirm": "Keluar",
+        "Switch" : "Ubah Server"
       }
     },
     "Profile": {

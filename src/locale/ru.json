@@ -221,7 +221,16 @@
         "Title": "Аккаунт не найден",
         "Subtitle": "Для выбранного электронного кошелька, аккаунтов нет."
       },
-      "Tooltip_Wallet": "Скоро появится"
+      "Tooltip_Wallet": "Скоро появится",
+       "Prompt_Select_Instance": {
+        "Title": "Выберите экземпляр",
+        "See_More": "Узнать больше",
+        "See_Less": "Увидеть меньше",
+        "No_Account_Description": "Похоже, у вас нет учетной записи на {{instance_name}}. Вы хотите создать новую учетную запись на {{instance_name}}?",
+        "No_Account_Cancel": "Нет, выберите другие",
+        "No_Account_Confirm": "Выход",
+        "Switch" : "Переключить экземпляр"
+      }
     },
     "Profile": {
       "Title": "Создать новый аккаунт",
