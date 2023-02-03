@@ -210,9 +210,9 @@ export const Menu: React.FC<MenuProps> = props => {
           Cookies.set('instance', serverSelected.apiUrl);
           router.reload();
         } else {
+          Cookies.set('instance', serverSelected.apiUrl);
+          Cookies.set('currentInstance', Cookies.get('instance'));
           if (user.wallets.length > 0) {
-            Cookies.set('currentInstance', Cookies.get('instance'));
-            Cookies.set('instance', serverSelected.apiUrl);
             checkAccountRegistered(
               () => {
                 // setWalletLoading(false);
