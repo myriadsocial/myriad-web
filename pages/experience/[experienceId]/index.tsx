@@ -18,12 +18,12 @@ import {User} from 'src/interfaces/user';
 import {initialize} from 'src/lib/api/base';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import {healthcheck} from 'src/lib/api/healthcheck';
-import {getServer} from 'src/lib/api/server';
 import i18n from 'src/locale';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
 import {fetchFriend} from 'src/reducers/friend/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
+import {fetchServer} from 'src/reducers/server/actions';
 import {
   setAnonymous,
   fetchConnectedSocials,
@@ -35,14 +35,13 @@ import {
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
-const {publicRuntimeConfig} = getConfig();
+const {publicRuntimeConfig, serverRuntimeConfig} = getConfig();
 
 type ExperiencePageProps = {
   title: string;
   description: string | null;
   image: string | null;
   session: Session;
-  logo: string;
   hidden: boolean;
 };
 
@@ -84,7 +83,9 @@ const PreviewExperience: React.FC<ExperiencePageProps> = props => {
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
-  const {params, req} = context;
+  const {params, req, query, res} = context;
+  const {cookies} = req;
+
   const experienceId = params?.experienceId as string;
   let hidden = false,
     description = 'Timeline',
@@ -142,8 +143,18 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     }
   }
 
+  const sessionInstanceURL = session?.user?.instanceURL;
+  const cookiesInstanceURL = cookies['instance'];
+  const defaultInstanceURL = serverRuntimeConfig.myriadAPIURL;
+
+  let apiURL = sessionInstanceURL ?? cookiesInstanceURL ?? defaultInstanceURL;
+
   if (anonymous) {
-    const username = generateAnonymousUser();
+    const username = session?.user?.name ?? generateAnonymousUser();
+    const queryInstanceURL = query.rpc;
+
+    apiURL = queryInstanceURL ?? cookiesInstanceURL ?? defaultInstanceURL;
+    res.setHeader('set-cookie', [`instance=${apiURL}`]);
 
     await dispatch(setAnonymous(username));
   } else {
@@ -158,20 +169,18 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   await Promise.all([
+    dispatch(fetchServer(apiURL)),
     dispatch(fetchNetwork()),
     dispatch(fetchAvailableToken()),
     dispatch(fetchExchangeRates()),
     dispatch(fetchUserExperience()),
   ]);
 
-  const data = await getServer();
-
   return {
     props: {
       title: title,
       description: description,
       image: image,
-      logo: data.images.logo_banner,
       hidden: hidden,
     },
   };

@@ -21,13 +21,13 @@ import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 import {initialize} from 'src/lib/api/base';
 import * as PostAPI from 'src/lib/api/post';
-import {getServer} from 'src/lib/api/server';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {fetchAvailableToken, fetchFilteredToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
 import {fetchFriend} from 'src/reducers/friend/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
+import {fetchServer} from 'src/reducers/server/actions';
 import {setPost} from 'src/reducers/timeline/actions';
 import {
   setAnonymous,
@@ -40,7 +40,7 @@ import {
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
-const {publicRuntimeConfig} = getConfig();
+const {publicRuntimeConfig, serverRuntimeConfig} = getConfig();
 
 const ResourceDeleted = dynamic(
   () => import('src/components/common/ResourceDeleted/ResourceDeleted'),
@@ -52,7 +52,6 @@ type PostPageProps = {
   description: string;
   image: string | null;
   session: Session;
-  logo: string;
 };
 
 type PostPageParams = {
@@ -114,14 +113,16 @@ const PostPage: React.FC<PostPageProps> = props => {
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
-  const {req} = context;
+  const {req, res, query} = context;
+  const {cookies} = req;
+
   const dispatch = store.dispatch as ThunkDispatchAction;
   const params = context.params as PostPageParams;
   let showAsDeleted = false;
 
   const session = await getSession(context);
 
-  const anonymous = !session || Boolean(session?.user.anonymous);
+  const anonymous = !session || Boolean(session?.user?.anonymous);
 
   let userId: string | undefined = undefined;
   let post: Post | undefined = undefined;
@@ -163,8 +164,18 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     }
   }
 
+  const sessionInstanceURL = session?.user?.instanceURL;
+  const cookiesInstanceURL = cookies['instance'];
+  const defaultInstanceURL = serverRuntimeConfig.myriadAPIURL;
+
+  let apiURL = sessionInstanceURL ?? cookiesInstanceURL ?? defaultInstanceURL;
+
   if (anonymous) {
     const username = generateAnonymousUser();
+    const queryInstanceURL = query.rpc;
+
+    apiURL = queryInstanceURL ?? cookiesInstanceURL ?? defaultInstanceURL;
+    res.setHeader('set-cookie', [`instance=${apiURL}`]);
 
     await dispatch(setAnonymous(username));
   } else {
@@ -177,6 +188,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   await Promise.all([
+    dispatch(fetchServer(apiURL)),
     dispatch(fetchNetwork()),
     dispatch(fetchAvailableToken()),
     dispatch(fetchFilteredToken()),
@@ -215,15 +227,12 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     image = null;
   }
 
-  const data = await getServer();
-
   return {
     props: {
       title,
       description,
       image,
       removed: showAsDeleted,
-      logo: data.images.logo_banner,
     },
   };
 });

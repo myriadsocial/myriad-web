@@ -1,7 +1,6 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 
-// import {useRouter} from 'next/router';
 import {Typography} from '@material-ui/core';
 
 import {WalletBalances as WalletBalancesComponent} from '.';

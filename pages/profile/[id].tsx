@@ -15,7 +15,6 @@ import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {generateAnonymousUser} from 'src/helpers/auth';
 import {initialize} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
-import {getServer} from 'src/lib/api/server';
 import * as UserAPI from 'src/lib/api/user';
 import i18n from 'src/locale';
 import {
@@ -27,6 +26,7 @@ import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
 import {fetchFriend} from 'src/reducers/friend/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
 import {setProfile} from 'src/reducers/profile/actions';
+import {fetchServer} from 'src/reducers/server/actions';
 import {
   setAnonymous,
   fetchConnectedSocials,
@@ -44,10 +44,9 @@ type ProfilePageProps = {
   description: string;
   image: string | null;
   isBanned: boolean;
-  logo: string;
 };
 
-const {publicRuntimeConfig} = getConfig();
+const {publicRuntimeConfig, serverRuntimeConfig} = getConfig();
 
 const ProfilePageComponent: React.FC<ProfilePageProps> = props => {
   const {title, description, image, isBanned} = props;
@@ -83,7 +82,8 @@ const ProfilePageComponent: React.FC<ProfilePageProps> = props => {
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
-  const {params, req} = context;
+  const {params, req, query, res} = context;
+  const {cookies} = req;
 
   const dispatch = store.dispatch as ThunkDispatchAction;
 
@@ -100,16 +100,27 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const session = await getSession(context);
 
+  const sessionInstanceURL = session?.user?.instanceURL;
+  const cookiesInstanceURL = cookies['instance'];
+  const defaultInstanceURL = serverRuntimeConfig.myriadAPIURL;
+
+  let apiURL = sessionInstanceURL ?? cookiesInstanceURL ?? defaultInstanceURL;
+
   const anonymous = !session || Boolean(session?.user.anonymous);
+
   const userId = session?.user.address as string;
   const profileId = params?.id as string;
-  const userNameParams = params?.profileByUserName as string;
-  const usernameOrId = profileId || userNameParams;
+  const usernameParams = params?.profileByUserName as string;
+  const usernameOrId = profileId || usernameParams;
 
   initialize({cookie: req.headers.cookie}, anonymous);
 
   if (anonymous) {
     const username = generateAnonymousUser();
+    const queryInstanceURL = query.rpc;
+
+    apiURL = queryInstanceURL ?? cookiesInstanceURL ?? defaultInstanceURL;
+    res.setHeader('set-cookie', [`instance=${apiURL}`]);
 
     await dispatch(setAnonymous(username));
   } else {
@@ -124,6 +135,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   await Promise.all([
+    dispatch(fetchServer(apiURL)),
     dispatch(fetchNetwork()),
     dispatch(fetchAvailableToken()),
     dispatch(fetchFilteredToken()),
@@ -141,7 +153,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     await dispatch(setProfile(detail));
     await dispatch(setPrivacySetting(privacySetting));
 
-    const data = await getServer();
     return {
       props: {
         session,
@@ -149,7 +160,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
         description: detail?.bio ?? null,
         image: detail?.profilePictureURL ?? null,
         isBanned: Boolean(detail?.deletedAt),
-        logo: data.images.logo_banner,
       },
     };
   } catch (error) {

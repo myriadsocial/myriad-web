@@ -20,21 +20,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const session = await getSession({req});
-    const instanceURL = session?.user?.instanceURL;
+    const instanceURL = session?.user?.instanceURL ?? req.cookies['instance'];
 
-    if (session && session.user && session.user.token) {
+    if (session && session?.user && session?.user.token) {
       let key = '';
 
-      if (session.user.address && session.user.address.length > 0) {
-        key = session.user.address;
+      if (session?.user.address && session?.user.address.length > 0) {
+        key = session?.user.address;
       }
 
-      if (session.user.email && session.user.email.length > 0) {
-        key = session.user.email.replace(/[^a-zA-Z0-9]/g, '');
+      if (session?.user.email && session?.user.email.length > 0) {
+        key = session?.user.email.replace(/[^a-zA-Z0-9]/g, '');
       }
 
       if (key && key.length > 0) {
-        const userToken = decryptMessage(session.user.token, key);
+        const userToken = decryptMessage(session?.user.token, key);
 
         headers = {
           Authorization: `Bearer ${userToken}`,

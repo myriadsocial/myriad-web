@@ -13,15 +13,14 @@ import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {UserMetric} from 'src/interfaces/user';
 import {initialize} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
-import {getServer} from 'src/lib/api/server';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
 import {fetchFriend} from 'src/reducers/friend/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
+import {fetchServer} from 'src/reducers/server/actions';
 import {
-  setAnonymous,
   fetchConnectedSocials,
   fetchUser,
   fetchUserExperience,
@@ -31,11 +30,10 @@ import {
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
-const {publicRuntimeConfig} = getConfig();
+const {publicRuntimeConfig, serverRuntimeConfig} = getConfig();
 
 type FriendsPageProps = {
   session: Session;
-  logo: string;
 };
 
 const Friends: React.FC<FriendsPageProps> = props => {
@@ -62,6 +60,7 @@ const Friends: React.FC<FriendsPageProps> = props => {
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
   const {req} = context;
+  const {cookies} = req;
 
   const dispatch = store.dispatch as ThunkDispatchAction;
 
@@ -78,7 +77,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const session = await getSession(context);
 
-  if (!session) {
+  if (!session?.user || session?.user?.anonymous) {
     return {
       redirect: {
         destination: '/',
@@ -87,38 +86,29 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     };
   }
 
-  const anonymous = !session || Boolean(session?.user.anonymous);
+  const sessionInstanceURL = session?.user?.instanceURL;
+  const cookiesInstanceURL = cookies['instance'];
+  const defaultInstanceURL = serverRuntimeConfig.myriadAPIURL;
+  const apiURL = sessionInstanceURL ?? cookiesInstanceURL ?? defaultInstanceURL;
 
-  initialize({cookie: req.headers.cookie}, anonymous);
+  initialize({cookie: req.headers.cookie});
 
-  if (anonymous) {
-    const username = session?.user.name as string;
-
-    await dispatch(setAnonymous(username));
-  } else {
-    await dispatch(fetchUser());
-
-    await Promise.all([
-      dispatch(fetchUserWallets()),
-      dispatch(fetchConnectedSocials()),
-      dispatch(fetchFriend()),
-      dispatch(countNewNotification()),
-    ]);
-  }
-
+  await dispatch(fetchUser());
   await Promise.all([
+    dispatch(fetchServer(apiURL)),
     dispatch(fetchNetwork()),
     dispatch(fetchAvailableToken()),
     dispatch(fetchExchangeRates()),
     dispatch(fetchUserExperience()),
+    dispatch(fetchUserWallets()),
+    dispatch(fetchConnectedSocials()),
+    dispatch(fetchFriend()),
+    dispatch(countNewNotification()),
   ]);
-
-  const data = await getServer();
 
   return {
     props: {
       session,
-      logo: data.images.logo_banner,
     },
   };
 });

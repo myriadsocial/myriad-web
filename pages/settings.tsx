@@ -11,13 +11,12 @@ import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {initialize} from 'src/lib/api/base';
 import {healthcheck} from 'src/lib/api/healthcheck';
-import {getServer} from 'src/lib/api/server';
 import i18n from 'src/locale';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
+import {fetchServer} from 'src/reducers/server/actions';
 import {
-  setAnonymous,
   fetchConnectedSocials,
   fetchUser,
   fetchUserExperience,
@@ -27,11 +26,10 @@ import {
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
-const {publicRuntimeConfig} = getConfig();
+const {publicRuntimeConfig, serverRuntimeConfig} = getConfig();
 
 type SettingPageProps = {
   session: Session;
-  logo: string;
 };
 
 const Settings: React.FC<SettingPageProps> = props => {
@@ -59,6 +57,7 @@ const Settings: React.FC<SettingPageProps> = props => {
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
   const {req} = context;
+  const {cookies} = req;
 
   const dispatch = store.dispatch as ThunkDispatchAction;
 
@@ -75,7 +74,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const session = await getSession(context);
 
-  if (!session) {
+  if (!session?.user || session?.user?.anonymous) {
     return {
       redirect: {
         destination: '/',
@@ -84,39 +83,28 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     };
   }
 
-  const anonymous = !session || Boolean(session?.user.anonymous);
-  const userId = session?.user.address as string;
-  const token = session?.user.token;
+  const sessionInstanceURL = session?.user?.instanceURL;
+  const cookiesInstanceURL = cookies['instance'];
+  const defaultInstanceURL = serverRuntimeConfig.myriadAPIURL;
+  const apiURL = sessionInstanceURL ?? cookiesInstanceURL ?? defaultInstanceURL;
 
-  initialize({cookie: req.headers.cookie}, anonymous);
+  initialize({cookie: req.headers.cookie});
 
-  if (anonymous || (!userId && !token)) {
-    const username = session?.user.name as string;
-
-    await dispatch(setAnonymous(username));
-  } else {
-    await dispatch(fetchUser());
-
-    await Promise.all([
-      dispatch(fetchUserWallets()),
-      dispatch(fetchConnectedSocials()),
-      dispatch(countNewNotification()),
-    ]);
-  }
-
+  await dispatch(fetchUser());
   await Promise.all([
+    dispatch(fetchServer(apiURL)),
     dispatch(fetchNetwork()),
     dispatch(fetchAvailableToken()),
     dispatch(fetchExchangeRates()),
     dispatch(fetchUserExperience()),
+    dispatch(fetchUserWallets()),
+    dispatch(fetchConnectedSocials()),
+    dispatch(countNewNotification()),
   ]);
-
-  const data = await getServer();
 
   return {
     props: {
       session,
-      logo: data.images.logo_banner,
     },
   };
 });
