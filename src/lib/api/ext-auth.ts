@@ -26,12 +26,9 @@ type LoginResponseProps = {
   accessToken: string;
 };
 
-export const login = async (
-  values: LoginProps,
-  url?: string,
-): Promise<LoginResponseProps | null> => {
+export const login = async (values: LoginProps): Promise<LoginResponseProps | null> => {
   try {
-    const {data} = await MyriadAPI({apiURL: url}).request({
+    const {data} = await MyriadAPI().request({
       url: '/authentication/login/wallet',
       method: 'POST',
       data: values,

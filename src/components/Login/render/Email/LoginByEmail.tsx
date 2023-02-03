@@ -1,14 +1,11 @@
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import {useNavigate} from 'react-router';
-
-import {useRouter} from 'next/router';
 
 import {Button, TextField, Typography} from '@material-ui/core';
 
 import {useStyles} from './LoginByEmail.style';
 
 import SelectServer from 'components/SelectServer';
-import Cookies from 'js-cookie';
 import {useAuthLinkHook} from 'src/hooks/auth-link.hook';
 import {ServerListProps} from 'src/interfaces/server-list';
 import i18n from 'src/locale';
@@ -22,14 +19,12 @@ type LoginByEmailProps = {
 const LoginByEmail = ({onNext, setSelectedInstance}: LoginByEmailProps) => {
   const styles = useStyles();
   const {requestLink} = useAuthLinkHook();
-  const router = useRouter();
 
   const [email, setEmail] = useState('');
   const [error, setError] = useState({
     isError: false,
     message: '',
   });
-  const [serverSelected, setServerSelected] = useState<null | ServerListProps>(null);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const input = event.target.value;
@@ -69,15 +64,7 @@ const LoginByEmail = ({onNext, setSelectedInstance}: LoginByEmailProps) => {
     navigate('/');
   };
 
-  useEffect(() => {
-    if (serverSelected) {
-      router.push({query: {rpc: `${serverSelected.apiUrl}`}}, undefined, {shallow: true});
-      Cookies.set('instance', serverSelected.apiUrl);
-    }
-  }, [serverSelected]);
-
   const toggleSelected = (server: ServerListProps) => {
-    setServerSelected(server);
     setSelectedInstance(server);
   };
 
@@ -108,7 +95,7 @@ const LoginByEmail = ({onNext, setSelectedInstance}: LoginByEmailProps) => {
         <Button
           variant="contained"
           color="primary"
-          disabled={!email.length || error.isError || !serverSelected}
+          disabled={!email.length || error.isError}
           onClick={handleNext}>
           {i18n.t('Login.Email.LoginByEmail.Next')}
         </Button>

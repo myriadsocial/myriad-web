@@ -79,7 +79,7 @@ export default function CreateAccounts(props: ProfileProps) {
   };
 
   const _handleRegister = async () => {
-    const response = await signUpWithEmail(payload, selectedInstance.apiUrl);
+    const response = await signUpWithEmail(payload);
     if (response) {
       navigate('/magiclink');
     }

@@ -18,11 +18,11 @@ import {RightMenuBar} from 'src/components/RightMenuBar/RightMenuBar';
 import {CookieConsent, COOKIE_CONSENT_NAME} from 'src/components/common/CookieConsent';
 import {TippingProvider} from 'src/components/common/Tipping/Tipping.provider';
 import ShowIf from 'src/components/common/show-if.component';
+import {useInstances} from 'src/hooks/use-instances.hooks';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {IProvider, MYRIAD_WALLET_KEY} from 'src/interfaces/blockchain-interface';
 import {NotificationProps} from 'src/interfaces/notification';
 import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
-import {Server} from 'src/lib/api/server';
 import * as FirebaseAnalytic from 'src/lib/firebase/analytic';
 import * as FirebaseMessaging from 'src/lib/firebase/messaging';
 import {BlockchainProvider} from 'src/lib/services/blockchain-provider';
@@ -61,20 +61,20 @@ const BlockchainProviderComponent = dynamic(
 type DefaultLayoutProps = WithErrorProps & {
   isOnProfilePage: boolean;
   children: React.ReactNode;
-  logo: string;
   session: Session;
-  server?: Server;
 };
 
 const Default: React.FC<DefaultLayoutProps> = props => {
-  const {children, logo, server} = props;
+  const {children} = props;
 
   const classes = useStyles();
   const dispatch = useDispatch();
   const router = useRouter();
 
   const [cookies] = useCookies([COOKIE_CONSENT_NAME]);
+
   const {user, anonymous, currentWallet, updateUserFcmToken} = useUserHook();
+  const {instance} = useInstances();
 
   const [showNotification, setShowNotification] = useState<boolean>(false);
   const [provider, setProvider] = useState<IProvider>(null);
@@ -157,7 +157,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
 
   return (
     <BlockchainProviderComponent
-      server={server}
+      server={instance}
       provider={provider}
       currentWallet={currentWallet}
       onChangeProvider={reinitializeBlockchain}
@@ -172,7 +172,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
             <div className={classes.firstCol}>
               <div className={classes.innerFirstColWrapper}>
                 <div>
-                  <MenuContainer logo={logo} anonymous={anonymous} />
+                  <MenuContainer logo={instance?.images?.logo_banner ?? ''} anonymous={anonymous} />
                 </div>
                 <div>
                   <SocialMediaListContainer />

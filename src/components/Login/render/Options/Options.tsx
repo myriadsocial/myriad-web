@@ -1,8 +1,6 @@
 import React, {useEffect, useMemo, useState, useCallback} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {useNavigate} from 'react-router';
-
-import {useRouter} from 'next/router';
 
 import {Button, Grid, ListItem, Tooltip, Typography} from '@material-ui/core';
 
@@ -11,7 +9,6 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {useStyles} from './Options.style';
 
 import SelectServer from 'components/SelectServer';
-import Cookies from 'js-cookie';
 import {
   CoinbaseWalletisabledIcon,
   EthereumNetworkIcon,
@@ -37,10 +34,8 @@ import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {NetworkIdEnum} from 'src/interfaces/network';
 import {ServerListProps} from 'src/interfaces/server-list';
 import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
-import initialize from 'src/lib/api/base';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
-import {fetchNetwork} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 type OptionProps = {
@@ -60,13 +55,9 @@ export const Options: React.FC<OptionProps> = props => {
   const {networks} = useSelector<RootState, UserState>(state => state.userState);
 
   const styles = useStyles();
-  const dispatch = useDispatch();
 
   const {query} = useQueryParams();
   const {network} = query;
-  const router = useRouter();
-
-  const [serverSelected, setServerSelected] = useState<null | ServerListProps>(null);
 
   const {onConnect, onConnectNear, isMobileSignIn, setSelectedInstance} = props;
 
@@ -233,20 +224,10 @@ export const Options: React.FC<OptionProps> = props => {
     doSelectAccount();
   }, [handleConnect]);
 
-  useEffect(() => {
-    if (serverSelected) {
-      router.push({query: {rpc: `${serverSelected.apiUrl}`}}, undefined, {shallow: true});
-      Cookies.set('instance', serverSelected.apiUrl);
-      setWallet(null);
-      setNetworkId(null);
-      setBlockchainPlatform(null);
-      initialize({apiURL: serverSelected.apiUrl});
-      dispatch(fetchNetwork());
-    }
-  }, [serverSelected]);
-
   const toggleSelected = (server: ServerListProps) => {
-    setServerSelected(server);
+    setWallet(null);
+    setNetworkId(null);
+    setBlockchainPlatform(null);
     setSelectedInstance(server);
   };
 
@@ -452,7 +433,7 @@ export const Options: React.FC<OptionProps> = props => {
             <Button
               variant="contained"
               color="primary"
-              disabled={!extensionChecked || wallet === null || !serverSelected}
+              disabled={!extensionChecked || wallet === null}
               onClick={handleConnect}>
               {i18n.t('Login.Options.Connect')}
             </Button>

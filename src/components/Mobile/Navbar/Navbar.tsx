@@ -11,6 +11,7 @@ import {SvgIcon, Grid} from '@material-ui/core';
 import {useStyles} from 'src/components/Mobile/Navbar/navbar.style';
 import {SearchBoxContainer} from 'src/components/atoms/Search/SearchBoxContainer';
 import ShowIf from 'src/components/common/show-if.component';
+import {useInstances} from 'src/hooks/use-instances.hooks';
 
 const MenuDrawerComponent = dynamic(() => import('src/components/Mobile/MenuDrawer/MenuDrawer'), {
   ssr: false,
@@ -20,13 +21,16 @@ type SearchBoxContainerProps = {
   iconPosition?: 'start' | 'end';
   outlined?: boolean;
   searched?: boolean;
-  logo: string;
 };
 
 export const NavbarComponent: React.FC<SearchBoxContainerProps> = props => {
-  const {searched = false, logo} = props;
+  const {searched = false} = props;
+
   const style = useStyles();
   const router = useRouter();
+
+  const {instance} = useInstances();
+
   const [isSearch, setIsSearch] = React.useState(searched);
 
   const toggleOpenSearch = () => {
@@ -63,7 +67,7 @@ export const NavbarComponent: React.FC<SearchBoxContainerProps> = props => {
       className={style.root}>
       <ShowIf condition={!isSearch}>
         <MenuDrawerComponent />
-        <img src={logo} width={105} height={25} />
+        <img src={instance?.images?.logo_banner ?? ''} width={105} height={25} />
         <SvgIcon
           classes={{root: style.fill}}
           component={SearchIcon}

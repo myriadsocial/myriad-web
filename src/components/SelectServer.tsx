@@ -5,6 +5,7 @@ import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import Image from 'next/image';
+import {useRouter} from 'next/router';
 
 import {
   Card,
@@ -19,6 +20,7 @@ import {
   List,
   ListItem,
   Typography,
+  Button,
 } from '@material-ui/core';
 import {Skeleton} from '@material-ui/lab';
 
@@ -26,32 +28,44 @@ import InstanceCard from './InstanceCard';
 import useStyles from './SelectServer.styles';
 
 import clsx from 'clsx';
+import Cookies from 'js-cookie';
 import {unionBy} from 'lodash';
 import ShowIf from 'src/components/common/show-if.component';
+import {useAuthHook} from 'src/hooks/auth.hook';
 import {useInstances} from 'src/hooks/use-instances.hooks';
 import {ServerListProps} from 'src/interfaces/server-list';
+import initialize from 'src/lib/api/base';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {setServer} from 'src/reducers/server/actions';
 import {ServerState} from 'src/reducers/server/reducer';
+import {fetchNetwork} from 'src/reducers/user/actions';
 
 type SelectServerProps = {
   title?: string;
   onServerSelect?: (server: ServerListProps) => void;
   register?: boolean;
   setRegister?: (value: boolean) => void;
+  componentType?: string;
 };
 
-const SelectServer = ({title, onServerSelect}: SelectServerProps) => {
+const SelectServer = ({
+  title,
+  onServerSelect,
+  register,
+  setRegister,
+  componentType,
+}: SelectServerProps) => {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const {server, apiURL} = useSelector<RootState, ServerState>(state => state.serverState);
 
   const {servers, getAllInstances, loading} = useInstances();
+  const [selectedServer, setSelectedServer] = useState<ServerListProps | null>(null);
 
-  // const {logout} = useAuthHook();
+  const {logout} = useAuthHook();
 
-  // const [openCheckAccountModal, setOpenCheckAccountModal] = useState(false);
   const [open, setOpen] = useState(false);
 
   const classes = useStyles();
@@ -69,14 +83,28 @@ const SelectServer = ({title, onServerSelect}: SelectServerProps) => {
   };
 
   const handleSelect = (server: ServerListProps) => {
-    dispatch(setServer(server.detail, server.apiUrl));
+    if (componentType !== 'menu') {
+      router.push({query: {rpc: `${server.apiUrl}`}}, undefined, {shallow: true});
+
+      Cookies.set('instance', server.apiUrl);
+
+      initialize({apiURL: server.apiUrl});
+      dispatch(setServer(server.detail, server.apiUrl));
+      dispatch(fetchNetwork());
+    }
+
     onServerSelect(server);
+    setSelectedServer(server);
     setOpen(false);
   };
 
-  // const handleCloseCheckAccountModal = () => {
-  //   setOpenCheckAccountModal(false);
-  // };
+  const handleCloseCheckAccountModal = () => {
+    setRegister(false);
+    if (Cookies.get('currentInstance')) {
+      Cookies.set('instance', Cookies.get('currentInstance'));
+      Cookies.remove('currentInstance');
+    }
+  };
 
   return (
     <React.Fragment>
@@ -178,7 +206,7 @@ const SelectServer = ({title, onServerSelect}: SelectServerProps) => {
         </DialogContent>
       </Dialog>
 
-      {/* <Dialog
+      <Dialog
         id="selected-server-dialog"
         open={register}
         onClose={handleCloseCheckAccountModal}
@@ -211,63 +239,45 @@ const SelectServer = ({title, onServerSelect}: SelectServerProps) => {
         </DialogTitle>
         <DialogContent>
           <List>
-            <ShowIf condition={!Boolean(selectedServerId)}>
-              <ListItem>
-                <Card>
-                  <CardActionArea>
-                    <CardContent>
-                      <Skeleton />
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              </ListItem>
-            </ShowIf>
-            <ShowIf condition={Boolean(selectedServerId)}>
-              <InstanceCard
-                key={selectedServerId}
-                server={selectedServer}
-                onSelect={() => console.log(`serverId: ${selectedServerId}`)}
-                selected={true}
-              />
-              <ListItem
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  maxWidth: 'fit-content',
-                }}>
-                <Typography style={{whiteSpace: 'pre-line'}}>
-                  {i18n.t('Login.Options.Prompt_Select_Instance.No_Account_Description', {
-                    instance_name: selectedServer?.detail?.name ?? '',
-                  })}
-                </Typography>
-              </ListItem>
-              <ListItem
-                style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                <Button
-                  onClick={() => {
-                    handleCloseCheckAccountModal();
-                    handleOpen();
-                  }}
-                  size="small"
-                  variant="outlined"
-                  color="secondary">
-                  {i18n.t('Login.Options.Prompt_Select_Instance.No_Account_Cancel')}
-                </Button>
-                <Button
-                  onClick={async () => {
-                    await logout('/login');
-                  }}
-                  size="small"
-                  variant="contained"
-                  color="primary">
-                  {i18n.t('Login.Options.Prompt_Select_Instance.No_Account_Confirm')}
-                </Button>
-              </ListItem>
-            </ShowIf>
+            <InstanceCard server={selectedServer} selected={true} />
+            <ListItem
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                maxWidth: 'fit-content',
+              }}>
+              <Typography style={{whiteSpace: 'pre-line'}}>
+                {i18n.t('Login.Options.Prompt_Select_Instance.No_Account_Description', {
+                  instance_name: selectedServer?.detail?.name ?? '',
+                })}
+              </Typography>
+            </ListItem>
+            <ListItem
+              style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+              <Button
+                onClick={() => {
+                  handleCloseCheckAccountModal();
+                  handleOpen();
+                }}
+                size="small"
+                variant="outlined"
+                color="secondary">
+                {i18n.t('Login.Options.Prompt_Select_Instance.No_Account_Cancel')}
+              </Button>
+              <Button
+                onClick={async () => {
+                  await logout('/login');
+                }}
+                size="small"
+                variant="contained"
+                color="primary">
+                {i18n.t('Login.Options.Prompt_Select_Instance.No_Account_Confirm')}
+              </Button>
+            </ListItem>
           </List>
         </DialogContent>
-      </Dialog> */}
+      </Dialog>
     </React.Fragment>
   );
 };
