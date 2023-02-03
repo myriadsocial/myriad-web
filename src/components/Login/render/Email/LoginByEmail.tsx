@@ -108,7 +108,7 @@ const LoginByEmail = ({onNext, setSelectedInstance}: LoginByEmailProps) => {
         <Button
           variant="contained"
           color="primary"
-          disabled={!email.length || error.isError}
+          disabled={!email.length || error.isError || !serverSelected}
           onClick={handleNext}>
           {i18n.t('Login.Email.LoginByEmail.Next')}
         </Button>

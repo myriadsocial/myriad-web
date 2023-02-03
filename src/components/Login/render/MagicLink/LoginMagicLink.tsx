@@ -78,6 +78,10 @@ const LoginMagicLink = ({email = ''}: LoginMagicLinkProps) => {
     }
   };
 
+  useEffect(() => {
+    localStorage.setItem('email', userEmail);
+  }, []);
+
   return (
     <div className={classes.root}>
       <div className={classes.wrapper}>

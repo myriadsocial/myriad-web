@@ -38,7 +38,7 @@ export const Menu: React.FC<MenuProps> = props => {
   const styles = useStyles();
   const router = useRouter();
   const {redirect} = router.query;
-  const {fetchUserNonce, signInWithExternalAuth, getRegisteredAccounts, clearNearCache} =
+  const {fetchUserNonce, signInWithExternalAuth, getRegisteredAccounts, clearNearCache, logout} =
     useAuthHook({redirect});
   const {enablePolkadotExtension} = usePolkadotExtension();
   const {userWalletAddress, currentWallet, user} = useUserHook();
@@ -225,13 +225,15 @@ export const Menu: React.FC<MenuProps> = props => {
           } else {
             checkEmailRegistered(
               () => {
-                // setWalletLoading(false);
-                setRegister(true);
+                Cookies.set('instance', serverSelected.apiUrl);
+                requestLink(user.email);
+                setTimeout(() => {
+                  logout(`/login?switchInstance=true&email=${user.email}`);
+                }, 1000);
               },
               () => {
-                Cookies.remove('next-auth.session-token');
-                requestLink(user.email);
-                router.push('/magiclink');
+                // setWalletLoading(false);
+                setRegister(true);
               },
               user.email,
             );
