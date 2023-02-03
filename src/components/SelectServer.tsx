@@ -111,9 +111,7 @@ const SelectServer = ({onServerSelect, title, register, setRegister}: SelectServ
           </Typography>
         </div>
         {!servers.length ? (
-          <Skeleton>
-            <Button />
-          </Skeleton>
+          <ButtonBase> Loading ...</ButtonBase>
         ) : (
           <ButtonBase
             style={{
@@ -138,7 +136,7 @@ const SelectServer = ({onServerSelect, title, register, setRegister}: SelectServ
               />
             )}
 
-            <Box>{selectedServer?.detail?.name ?? 'Common Server'}</Box>
+            <Box>{selectedServer?.detail?.name ?? 'Loading...'}</Box>
             <SvgIcon
               style={{marginLeft: 'auto'}}
               component={ChevronDownIcon}
