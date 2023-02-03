@@ -17,6 +17,7 @@ import {last} from 'lodash';
 import {convertToPolkadotAddress} from 'src/helpers/extension';
 import {useAuthLinkHook} from 'src/hooks/auth-link.hook';
 import {useAuthHook} from 'src/hooks/auth.hook';
+import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {ServerListProps} from 'src/interfaces/server-list';
@@ -36,11 +37,13 @@ export const Menu: React.FC<MenuProps> = props => {
 
   const styles = useStyles();
   const router = useRouter();
-  const {fetchUserNonce, signInWithExternalAuth, getRegisteredAccounts} = useAuthHook();
+  const {redirect} = router.query;
+  const {fetchUserNonce, signInWithExternalAuth, getRegisteredAccounts, clearNearCache} =
+    useAuthHook({redirect});
   const {enablePolkadotExtension} = usePolkadotExtension();
-
   const {userWalletAddress, currentWallet, user} = useUserHook();
   const {requestLink} = useAuthLinkHook();
+  const {connectToNear} = useNearApi();
 
   const menu = useMenuList(selected);
 
@@ -176,6 +179,22 @@ export const Menu: React.FC<MenuProps> = props => {
     [],
   );
 
+  const checkWalletRegistered = useCallback(async (wallet: WalletTypeEnum) => {
+    const data = await connectToNear(undefined, undefined, wallet, 'login near');
+
+    if (!data) return;
+
+    checkAccountRegistered(
+      () => {
+        setWalletLoading(false);
+      },
+      undefined,
+      data.publicAddress,
+      wallet,
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const toggleSelected = (server: ServerListProps) => {
     setServerSelected(server);
   };
@@ -230,7 +249,6 @@ export const Menu: React.FC<MenuProps> = props => {
     if (accounts.length) {
       getWallet();
     }
-    console.log({user});
   }, [accounts]);
 
   useEffect(() => {
@@ -243,6 +261,15 @@ export const Menu: React.FC<MenuProps> = props => {
       setLoading(false);
     }
   }, [signatureCancelled]);
+
+  useEffect(() => {
+    if (redirect === WalletTypeEnum.NEAR || redirect === WalletTypeEnum.MYNEAR) {
+      checkWalletRegistered(redirect);
+    } else {
+      clearNearCache();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [redirect]);
 
   return (
     <div className={styles.root} data-testid={'menu-test'}>
