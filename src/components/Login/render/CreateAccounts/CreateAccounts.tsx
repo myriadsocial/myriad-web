@@ -3,14 +3,25 @@ import {useSelector} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
 
 import getConfig from 'next/config';
+import Image from 'next/image';
 
-import {Button, Checkbox, FormControlLabel, Grid, TextField, Typography} from '@material-ui/core';
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  TextField,
+  Typography,
+} from '@material-ui/core';
 
 import {useStyles} from './CreateAccounts.style';
 
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
+import ShowIf from 'components/common/show-if.component';
 import useMobileDetect from 'src/hooks/use-is-mobile-detect';
-import {IcEmail, LogoMyriadCircle} from 'src/images/Icons';
+import {IcEmail} from 'src/images/Icons';
+import {ServerListProps} from 'src/interfaces/server-list';
 import {signUpWithEmail} from 'src/lib/api/auth-link';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
@@ -31,12 +42,13 @@ const {publicRuntimeConfig} = getConfig();
 type ProfileProps = {
   checkUsernameAvailability: (username: string, callback: (available: boolean) => void) => void;
   email: string;
+  selectedInstance?: ServerListProps;
 };
 export default function CreateAccounts(props: ProfileProps) {
   const detect = useMobileDetect();
 
   const styles = useStyles(detect.isMobile())();
-  const {checkUsernameAvailability, email} = props;
+  const {checkUsernameAvailability, email, selectedInstance} = props;
   const confirm = useConfirm();
   const navigate = useNavigate();
   const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
@@ -67,7 +79,7 @@ export default function CreateAccounts(props: ProfileProps) {
   };
 
   const _handleRegister = async () => {
-    const response = await signUpWithEmail(payload);
+    const response = await signUpWithEmail(payload, selectedInstance.apiUrl);
     if (response) {
       navigate('/magiclink');
     }
@@ -274,6 +286,15 @@ export default function CreateAccounts(props: ProfileProps) {
     return validName && validUsername;
   };
 
+  const [expanded, setExpanded] = useState(false);
+
+  const handleExpand = () => {
+    setExpanded(!expanded);
+  };
+
+  const instance = selectedInstance?.detail;
+  const isDescriptionLong = instance?.description.split(' ').length > 10;
+
   return (
     <div className={styles.root}>
       <Typography className={styles.textTitle}>Email Used</Typography>
@@ -281,16 +302,62 @@ export default function CreateAccounts(props: ProfileProps) {
         <IcEmail />
         <Typography className={styles.textEmail}>{email}</Typography>
       </div>
-      <Typography className={styles.textTitle}>Selected Federated Instance</Typography>
-      <div className={styles.wrapperInstance}>
-        <LogoMyriadCircle />
-        <div className={styles.wrapperTextInstance}>
-          <Typography className={styles.nameInstance}>Myriad Official</Typography>
-          <Typography className={styles.desc}>
-            Decentralized metasocial network, pulling content from mainstream social media and
-            turning every post into a tipping wallet.
-          </Typography>
+      <div style={{position: 'relative', marginBottom: '15px'}}>
+        <Typography variant="h5" className={styles.textTitle}>
+          {i18n.t('Login.Profile.Instance')}
+        </Typography>
+        <div
+          id="unselectable-gray-box-instance"
+          style={{
+            display: 'flex',
+            alignItems: 'start',
+            paddingLeft: 8,
+            paddingTop: 8,
+            paddingBottom: isDescriptionLong ? 30 : 8,
+            background: '#F5F5F5',
+            borderRadius: 4,
+            gap: 8,
+          }}>
+          <Image
+            alt={instance?.id}
+            src={instance?.serverImageURL ?? ''}
+            placeholder="empty"
+            height={30}
+            width={30}
+          />
+          <div style={{width: '100%', paddingRight: 8}}>
+            <Box
+              fontSize={14}
+              fontWeight="fontWeightRegular"
+              style={{color: 'rgba(115, 66, 204, 1)'}}>
+              {instance?.name}
+            </Box>
+            <Box fontSize={12} fontWeight="fontWeightRegular" style={{color: '#0A0A0A'}}>
+              {isDescriptionLong && !expanded
+                ? `${instance?.description.split(' ').slice(0, 10).join(' ')}...`
+                : instance?.description}
+            </Box>
+          </div>
         </div>
+        <ShowIf condition={isDescriptionLong}>
+          <Box
+            fontSize={10}
+            fontWeight="fontWeightBold"
+            style={{
+              color: '#6E3FC3',
+              position: 'absolute',
+              right: 0,
+              bottom: 0,
+              padding: '10px',
+              cursor: 'pointer',
+              width: 'max-content',
+            }}
+            onClick={handleExpand}>
+            {!expanded
+              ? i18n.t('Login.Options.Prompt_Select_Instance.See_More')
+              : i18n.t('Login.Options.Prompt_Select_Instance.See_Less')}
+          </Box>
+        </ShowIf>
       </div>
       <Typography className={styles.textTitle}>Create New Account</Typography>
       <Typography className={styles.textSetUsername}>

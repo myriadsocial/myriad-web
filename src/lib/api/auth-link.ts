@@ -42,8 +42,8 @@ export const loginWithLink = async (token: string, url?: string) => {
   return data;
 };
 
-export const signUpWithEmail = async (values: SignupWithEmailProps) => {
-  const {data} = await MyriadAPI().request({
+export const signUpWithEmail = async (values: SignupWithEmailProps, apiUrl?: string) => {
+  const {data} = await MyriadAPI({apiURL: apiUrl}).request({
     url: '/authentication/signup/email',
     method: 'POST',
     data: {

@@ -172,7 +172,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
             <div className={classes.firstCol}>
               <div className={classes.innerFirstColWrapper}>
                 <div>
-                  <MenuContainer logo={logo} />
+                  <MenuContainer logo={logo} anonymous={anonymous} />
                 </div>
                 <div>
                   <SocialMediaListContainer />

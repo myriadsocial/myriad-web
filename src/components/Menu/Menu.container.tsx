@@ -7,6 +7,7 @@ import {MenuId} from './use-menu-list';
 
 type MenuProps = {
   logo: string;
+  anonymous?: boolean;
 };
 
 export const MenuContainer: React.FC<MenuProps> = props => {

@@ -16,9 +16,10 @@ import validator from 'validator';
 
 type LoginByEmailProps = {
   onNext: (successCallback: () => void, failedCallback: () => void, email: string) => Promise<void>;
+  setSelectedInstance?: (server: ServerListProps) => void;
 };
 
-const LoginByEmail = ({onNext}: LoginByEmailProps) => {
+const LoginByEmail = ({onNext, setSelectedInstance}: LoginByEmailProps) => {
   const styles = useStyles();
   const {requestLink} = useAuthLinkHook();
   const router = useRouter();
@@ -68,16 +69,17 @@ const LoginByEmail = ({onNext}: LoginByEmailProps) => {
     navigate('/');
   };
 
-  const toggleSelected = (server: ServerListProps) => {
-    setServerSelected(server);
-  };
-
   useEffect(() => {
     if (serverSelected) {
       router.push({query: {rpc: `${serverSelected.apiUrl}`}}, undefined, {shallow: true});
       Cookies.set('instance', serverSelected.apiUrl);
     }
   }, [serverSelected]);
+
+  const toggleSelected = (server: ServerListProps) => {
+    setServerSelected(server);
+    setSelectedInstance(server);
+  };
 
   return (
     <div className={styles.root}>

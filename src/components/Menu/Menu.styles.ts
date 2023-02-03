@@ -52,5 +52,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: '10px',
       padding: '0 30px',
     },
+    backdrop: {
+      zIndex: theme.zIndex.drawer + 1,
+      color: '#fff',
+    },
   }),
 );

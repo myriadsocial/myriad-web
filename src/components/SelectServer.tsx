@@ -38,16 +38,16 @@ import i18n from 'src/locale';
 type SelectServerProps = {
   title?: string;
   onServerSelect?: (server: ServerListProps) => void;
+  register?: boolean;
+  setRegister?: (value: boolean) => void;
 };
 
-const SelectServer = ({onServerSelect, title}: SelectServerProps) => {
+const SelectServer = ({onServerSelect, title, register, setRegister}: SelectServerProps) => {
   const router = useRouter();
   const {provider} = useMyriadInstance();
   const {servers, getAllInstances} = useInstances();
 
   const {logout} = useAuthHook();
-
-  const [openCheckAccountModal, setOpenCheckAccountModal] = useState(false);
 
   const classes = useStyles();
 
@@ -64,18 +64,14 @@ const SelectServer = ({onServerSelect, title}: SelectServerProps) => {
       } else {
         setSelectedServerId(servers[0].id);
         onServerSelect(servers[0]);
+        Cookies.set('instance', servers[0].apiUrl);
       }
     }
-    console.log({servers});
-  }, [servers]);
+  }, [servers, Cookies.get('instance')]);
 
   const [open, setOpen] = useState(false);
   const [selectedServerId, setSelectedServerId] = useState<number | null>(null);
   const [selectedServer, setSelectedServer] = useState<ServerListProps | null>(null);
-
-  const selectedInstanceName = selectedServerId
-    ? servers[selectedServerId]?.detail?.name
-    : 'Unknown Instance';
 
   const handleOpen = () => {
     setOpen(!open);
@@ -88,14 +84,17 @@ const SelectServer = ({onServerSelect, title}: SelectServerProps) => {
   const handleSelect = (serverId: number) => {
     setSelectedServerId(serverId);
     setOpen(false);
-    //onServerSelect(servers[serverId]);
-    // if (router.asPath !== '/login') {
-    //   setOpenCheckAccountModal(true);
-    // }
   };
 
   const handleCloseCheckAccountModal = () => {
-    setOpenCheckAccountModal(false);
+    setRegister(false);
+    if (Cookies.get('currentInstance')) {
+      Cookies.set('instance', Cookies.get('currentInstance'));
+      Cookies.remove('currentInstance');
+    }
+
+    const apiUrl = Cookies.get('instance');
+    setSelectedServerId(servers.find((server: ServerListProps) => server.apiUrl === apiUrl)?.id);
   };
 
   useEffect(() => {
@@ -212,7 +211,7 @@ const SelectServer = ({onServerSelect, title}: SelectServerProps) => {
 
       <Dialog
         id="selected-server-dialog"
-        open={openCheckAccountModal}
+        open={register}
         onClose={handleCloseCheckAccountModal}
         aria-labelledby="selected-server-dialog">
         <DialogTitle
@@ -257,7 +256,7 @@ const SelectServer = ({onServerSelect, title}: SelectServerProps) => {
             <ShowIf condition={Boolean(selectedServerId)}>
               <InstanceCard
                 key={selectedServerId}
-                server={servers[selectedServerId]}
+                server={selectedServer}
                 onSelect={() => console.log(`serverId: ${selectedServerId}`)}
                 selected={true}
               />
@@ -270,7 +269,7 @@ const SelectServer = ({onServerSelect, title}: SelectServerProps) => {
                 }}>
                 <Typography style={{whiteSpace: 'pre-line'}}>
                   {i18n.t('Login.Options.Prompt_Select_Instance.No_Account_Description', {
-                    instance_name: selectedInstanceName,
+                    instance_name: selectedServer?.detail?.name ?? '',
                   })}
                 </Typography>
               </ListItem>
@@ -286,7 +285,13 @@ const SelectServer = ({onServerSelect, title}: SelectServerProps) => {
                   color="secondary">
                   {i18n.t('Login.Options.Prompt_Select_Instance.No_Account_Cancel')}
                 </Button>
-                <Button onClick={() => logout()} size="small" variant="contained" color="primary">
+                <Button
+                  onClick={async () => {
+                    await logout('/login');
+                  }}
+                  size="small"
+                  variant="contained"
+                  color="primary">
                   {i18n.t('Login.Options.Prompt_Select_Instance.No_Account_Confirm')}
                 </Button>
               </ListItem>

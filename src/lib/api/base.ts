@@ -79,8 +79,6 @@ export const initialize = (params?: MyriadAPIParams, anonymous?: boolean): Axios
     setupAPIClient();
   }
 
-  console.log('initApi', params?.cookie);
-
   // add auth header
   if (params?.cookie) {
     API.interceptors.request.use(config => {
