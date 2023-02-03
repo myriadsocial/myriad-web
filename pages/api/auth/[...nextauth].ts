@@ -87,7 +87,7 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials?.token) throw Error('no token!');
 
-        const data = await AuthLinkAPI.loginWithLink(credentials.token);
+        const data = await AuthLinkAPI.loginWithLink(credentials.token, credentials.callbackUrl);
 
         if (!data?.accessToken) throw Error('Failed to authorize user!');
 

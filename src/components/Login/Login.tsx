@@ -3,6 +3,7 @@ import {useSelector} from 'react-redux';
 import {MemoryRouter as Router, Routes, Route} from 'react-router-dom';
 
 import {signIn} from 'next-auth/react';
+import getConfig from 'next/config';
 import {useRouter} from 'next/router';
 
 import {Typography} from '@material-ui/core';
@@ -20,6 +21,7 @@ import {Profile} from './render/Profile';
 import SigninMethod from './render/SignInMethod/SigninMethod';
 
 import {MyriadFullIcon} from 'components/atoms/Icons';
+import Cookies from 'js-cookie';
 import last from 'lodash/last';
 import LoginMagicLink from 'src/components/Login/render/MagicLink/LoginMagicLink';
 import {useAuthHook} from 'src/hooks/auth.hook';
@@ -49,6 +51,7 @@ export const Login: React.FC<LoginProps> = props => {
 
   const router = useRouter();
   const styles = useStyles();
+  const {publicRuntimeConfig} = getConfig();
 
   const {redirect} = router.query;
 
@@ -102,6 +105,7 @@ export const Login: React.FC<LoginProps> = props => {
         email: registeredEmail,
         token,
         redirect: false,
+        callbackUrl: Cookies.get('instance') ?? publicRuntimeConfig.appAuthURL,
       }).then(response => {
         if (response.ok) {
           router.reload();
