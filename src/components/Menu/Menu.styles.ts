@@ -48,5 +48,13 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: 32,
       cursor: 'pointer',
     },
+    instance: {
+      marginBottom: '10px',
+      padding: '0 30px',
+    },
+    backdrop: {
+      zIndex: theme.zIndex.drawer + 1,
+      color: '#fff',
+    },
   }),
 );

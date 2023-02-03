@@ -6,6 +6,7 @@ import getConfig from 'next/config';
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
+import Cookies from 'js-cookie';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {MYRIAD_WALLET_KEY} from 'src/interfaces/blockchain-interface';
 import {NetworkIdEnum} from 'src/interfaces/network';
@@ -35,6 +36,7 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
   const {getPolkadotAccounts} = usePolkadotExtension();
   const {publicRuntimeConfig} = getConfig();
   const {provider} = useBlockchain();
+  const instance = Cookies.get('instance');
 
   const fetchUserNonce = async (address: string): Promise<UserNonceProps> => {
     try {
@@ -81,7 +83,7 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
         networkId: networkId,
         nonce,
         anonymous: false,
-        callbackUrl: redirect || publicRuntimeConfig.appAuthURL,
+        callbackUrl: instance || redirect || publicRuntimeConfig.appAuthURL,
       });
 
       window.localStorage.setItem(MYRIAD_WALLET_KEY, walletType);
@@ -115,7 +117,7 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
           networkId: NetworkIdEnum.NEAR,
           nonce,
           anonymous: false,
-          callbackUrl: publicRuntimeConfig.appAuthURL,
+          callbackUrl: instance || publicRuntimeConfig.appAuthURL,
         });
 
         window.localStorage.setItem(MYRIAD_WALLET_KEY, walletType);
@@ -161,7 +163,7 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
       address: null,
       name: name.replace(regex, 'gray'),
       anonymous: true,
-      callbackUrl: publicRuntimeConfig.appAuthURL,
+      callbackUrl: instance || publicRuntimeConfig.appAuthURL,
     });
   };
 
@@ -174,13 +176,13 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
     }
   };
 
-  const logout = async () => {
+  const logout = async (url?: string) => {
     window.localStorage.removeItem(MYRIAD_WALLET_KEY);
     window.localStorage.removeItem('email');
 
     const promises: Promise<void | undefined>[] = [
       signOut({
-        callbackUrl: publicRuntimeConfig.appAuthURL,
+        callbackUrl: url || instance || publicRuntimeConfig.appAuthURL,
         redirect: true,
       }),
     ];
