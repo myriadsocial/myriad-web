@@ -73,7 +73,6 @@ export const Menu: React.FC<MenuProps> = props => {
 
   const getWallet = () => {
     const currentAddress = convertToPolkadotAddress(userWalletAddress, currentWallet);
-    console.log({currentAddress});
 
     setAccount(accounts.find(item => item.address === currentAddress));
   };
@@ -102,7 +101,10 @@ export const Menu: React.FC<MenuProps> = props => {
                   account,
                   undefined,
                   walletType,
+                  serverSelected.apiUrl,
                 );
+
+                console.log({success});
 
                 if (!success) {
                   setSignatureCancelled(true);
@@ -139,6 +141,7 @@ export const Menu: React.FC<MenuProps> = props => {
                 undefined,
                 nearId,
                 walletType,
+                serverSelected.apiUrl,
               );
 
               if (!success) {
@@ -210,8 +213,8 @@ export const Menu: React.FC<MenuProps> = props => {
           Cookies.set('instance', serverSelected.apiUrl);
           router.reload();
         } else {
-          Cookies.set('instance', serverSelected.apiUrl);
           Cookies.set('currentInstance', Cookies.get('instance'));
+          Cookies.set('instance', serverSelected.apiUrl);
           if (user.wallets.length > 0) {
             checkAccountRegistered(
               () => {
@@ -241,7 +244,7 @@ export const Menu: React.FC<MenuProps> = props => {
         }
       }
     }
-  }, [serverSelected, Cookies.get('instance')]);
+  }, [serverSelected]);
 
   useEffect(() => {
     fetchAccounts();
