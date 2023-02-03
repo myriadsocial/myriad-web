@@ -11,6 +11,7 @@ declare module 'next-auth' {
     address: string;
     token: string;
     nonce: number;
+    instanceURL: string;
   }
 
   interface Session {

@@ -8,6 +8,7 @@ export interface SignInCredential {
   anonymous: 'false' | 'true';
   address: string;
   publicAddress: string;
+  instanceURL: string;
   networkId: NetworkIdEnum;
   walletType: WalletTypeEnum;
 }
@@ -17,4 +18,5 @@ export interface SignInWithEmailCredential {
   username: string;
   email: string;
   loginToken: string;
+  instanceURL: string;
 }

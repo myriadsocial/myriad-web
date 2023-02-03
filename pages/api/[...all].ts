@@ -17,10 +17,10 @@ export const config = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   let headers = {};
-  const instance = req.cookies['instance'];
 
   try {
     const session = await getSession({req});
+    const instanceURL = session?.user?.instanceURL;
 
     if (session && session.user && session.user.token) {
       let key = '';
@@ -45,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return httpProxyMiddleware(req, res, {
       // You can use the `http-proxy` option
       // target: serverRuntimeConfig.myriadAPIURL,
-      target: instance ?? serverRuntimeConfig.myriadAPIURL,
+      target: instanceURL ?? serverRuntimeConfig.myriadAPIURL,
       // In addition, you can use the `pathRewrite` option provided by `next-http-proxy`
       pathRewrite: [
         {
