@@ -41,7 +41,7 @@ import {UserState} from 'src/reducers/user/reducer';
 
 type ProfileProps = {
   checkUsernameAvailability: (username: string, callback: (available: boolean) => void) => void;
-  walletType: WalletTypeEnum | null;
+  walletType: WalletTypeEnum | string | null;
   networkId: NetworkIdEnum | null;
   account?: InjectedAccountWithMeta | null;
   publicAddress?: string;
@@ -326,7 +326,7 @@ export const Profile: React.FC<ProfileProps> = props => {
       profile.username.value,
       networkId,
       substrateAccount,
-      walletType,
+      walletType as WalletTypeEnum,
     );
 
     if (!registered) {

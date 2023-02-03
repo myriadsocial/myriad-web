@@ -72,7 +72,7 @@ export const Login: React.FC<LoginProps> = props => {
   const [loading, setLoading] = useState(false);
   const [walletLoading, setWalletLoading] = useState(Boolean(redirectAuth));
   const [initialEntries, setInitialEntries] = useState<string[]>([
-    query.network ? '/options' : '/',
+    query.network ? '/options' : query.switchInstance ? '/magiclink' : '/',
   ]);
   const [email, setEmail] = useState<string>('');
   const [disableSignIn, setDisableSignIn] = useState<boolean>(false);
@@ -294,7 +294,11 @@ export const Login: React.FC<LoginProps> = props => {
         <Routes>
           <Route index={false} path="/" element={<SigninMethod disableSignIn={disableSignIn} />} />
 
-          <Route index={false} path="/magiclink" element={<LoginMagicLink email={email} />} />
+          <Route
+            index={false}
+            path="/magiclink"
+            element={<LoginMagicLink email={(query.email as string) ?? email} />}
+          />
 
           <Route
             index={false}
