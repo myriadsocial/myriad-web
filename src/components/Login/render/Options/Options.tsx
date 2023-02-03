@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState, useCallback} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {useNavigate} from 'react-router';
 
 import {useRouter} from 'next/router';
@@ -37,8 +37,10 @@ import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {NetworkIdEnum} from 'src/interfaces/network';
 import {ServerListProps} from 'src/interfaces/server-list';
 import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
+import initialize from 'src/lib/api/base';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
+import {fetchNetwork} from 'src/reducers/user/actions';
 import {UserState} from 'src/reducers/user/reducer';
 
 type OptionProps = {
@@ -57,6 +59,7 @@ type OptionProps = {
 export const Options: React.FC<OptionProps> = props => {
   const {networks} = useSelector<RootState, UserState>(state => state.userState);
   const styles = useStyles();
+  const dispatch = useDispatch();
 
   const {query} = useQueryParams();
   const {network} = query;
@@ -233,6 +236,11 @@ export const Options: React.FC<OptionProps> = props => {
     if (serverSelected) {
       router.push({query: {rpc: `${serverSelected.apiUrl}`}}, undefined, {shallow: true});
       Cookies.set('instance', serverSelected.apiUrl);
+      setWallet(null);
+      setNetworkId(null);
+      setBlockchainPlatform(null);
+      initialize({apiURL: serverSelected.apiUrl});
+      dispatch(fetchNetwork());
     }
   }, [serverSelected]);
 
