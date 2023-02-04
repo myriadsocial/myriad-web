@@ -182,7 +182,7 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
     }
   };
 
-  const logout = async (url?: string) => {
+  const logout = async (url?: string, selectedApiURL?: string) => {
     window.localStorage.removeItem(MYRIAD_WALLET_KEY);
     window.localStorage.removeItem('email');
 
@@ -199,7 +199,7 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
 
     await Promise.all(promises);
 
-    Cookies.set('instance', apiURL);
+    Cookies.set('instance', selectedApiURL ?? apiURL);
   };
 
   return {

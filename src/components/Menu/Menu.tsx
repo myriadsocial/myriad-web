@@ -30,12 +30,7 @@ export const Menu: React.FC<MenuProps> = props => {
   const styles = useStyles();
   const router = useRouter();
 
-  // TODO: switch instance by email
-  // TODO: switch instance with NEAR when wallet not sign in
-
   const {switchInstance, loadingSwitch, onLoadingSwitch} = useInstances();
-  // const {requestLink} = useAuthLinkHook();
-  // const {connectToNear} = useNearApi();
 
   const menu = useMenuList(selected);
 
@@ -52,22 +47,6 @@ export const Menu: React.FC<MenuProps> = props => {
     if (router.pathname === item.url) return;
     onChange(item.url);
   };
-
-  // const checkEmailRegistered = useCallback(
-  //   async (successCallback: () => void, failedCallback: () => void, email: string) => {
-  //     setLoading(true);
-  //     const isEmailRegistered = await getCheckEmail(email);
-  //     localStorage.setItem('email', email);
-  //     setLoading(false);
-
-  //     if (isEmailRegistered) {
-  //       successCallback();
-  //     } else {
-  //       failedCallback();
-  //     }
-  //   },
-  //   [],
-  // );
 
   const toggleSelected = async (server: ServerListProps) => {
     try {
