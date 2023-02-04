@@ -8,9 +8,6 @@ import Image from 'next/image';
 import {useRouter} from 'next/router';
 
 import {
-  Card,
-  CardActionArea,
-  CardContent,
   Box,
   ButtonBase,
   SvgIcon,
@@ -22,9 +19,9 @@ import {
   Typography,
   Button,
 } from '@material-ui/core';
-import {Skeleton} from '@material-ui/lab';
 
 import InstanceCard from './InstanceCard';
+import {InstanceCardSkeleton} from './InstanceCardSkeleton';
 import useStyles from './SelectServer.styles';
 
 import clsx from 'clsx';
@@ -103,8 +100,6 @@ const SelectServer = ({
     setRegister(false);
   };
 
-  // TODO: skeleton when loading switch instance
-
   return (
     <React.Fragment>
       <div className={classes.root}>
@@ -178,15 +173,7 @@ const SelectServer = ({
         <DialogContent>
           <List>
             <ShowIf condition={loading}>
-              <ListItem>
-                <Card>
-                  <CardActionArea>
-                    <CardContent>
-                      <Skeleton />
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              </ListItem>
+              <InstanceCardSkeleton />
             </ShowIf>
             <ShowIf condition={!loading}>
               {unionBy(servers, 'apiUrl').map(server => {
