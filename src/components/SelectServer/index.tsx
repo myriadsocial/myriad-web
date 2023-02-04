@@ -46,7 +46,7 @@ type SelectServerProps = {
   onServerSelect?: (server: ServerListProps) => void;
   register?: boolean;
   setRegister?: (value: boolean) => void;
-  componentType?: string;
+  page?: string;
 };
 
 const SelectServer = ({
@@ -54,7 +54,7 @@ const SelectServer = ({
   onServerSelect,
   register,
   setRegister,
-  componentType,
+  page = 'login',
 }: SelectServerProps) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -83,7 +83,10 @@ const SelectServer = ({
   };
 
   const handleSelect = (server: ServerListProps) => {
-    if (componentType !== 'menu') {
+    setSelectedServer(server);
+    onServerSelect(server);
+
+    if (page === 'login') {
       router.push({query: {rpc: `${server.apiUrl}`}}, undefined, {shallow: true});
 
       Cookies.set('instance', server.apiUrl);
@@ -93,18 +96,14 @@ const SelectServer = ({
       dispatch(fetchNetwork());
     }
 
-    onServerSelect(server);
-    setSelectedServer(server);
     setOpen(false);
   };
 
   const handleCloseCheckAccountModal = () => {
     setRegister(false);
-    if (Cookies.get('currentInstance')) {
-      Cookies.set('instance', Cookies.get('currentInstance'));
-      Cookies.remove('currentInstance');
-    }
   };
+
+  // TODO: skeleton when loading switch instance
 
   return (
     <React.Fragment>

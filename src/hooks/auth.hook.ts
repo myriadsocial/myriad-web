@@ -71,7 +71,6 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
     account?: InjectedAccountWithMeta,
     nearAddress?: string,
     walletType?: WalletTypeEnum,
-    callbackUrl?: string,
   ) => {
     if (account) {
       const signature = await PolkadotJs.signWithWallet(account, nonce);
@@ -88,7 +87,7 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
         nonce,
         anonymous: false,
         instanceURL,
-        callbackUrl: callbackUrl || redirect || publicRuntimeConfig.appAuthURL,
+        callbackUrl: redirect || publicRuntimeConfig.appAuthURL,
       });
 
       window.localStorage.setItem(MYRIAD_WALLET_KEY, walletType);

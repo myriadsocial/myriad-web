@@ -5,7 +5,7 @@ import {Button, TextField, Typography} from '@material-ui/core';
 
 import {useStyles} from './LoginByEmail.style';
 
-import SelectServer from 'components/SelectServer';
+import SelectServer from 'src/components/SelectServer';
 import {useAuthLinkHook} from 'src/hooks/auth-link.hook';
 import {ServerListProps} from 'src/interfaces/server-list';
 import i18n from 'src/locale';
@@ -87,7 +87,7 @@ const LoginByEmail = ({onNext, setSelectedInstance}: LoginByEmailProps) => {
         error={error.isError}
         helperText={error.isError ? error.message : ''}
       />
-      <SelectServer onServerSelect={server => toggleSelected(server)} />
+      <SelectServer onServerSelect={server => toggleSelected(server)} page="login" />
       <div className={styles.actionWrapper}>
         <Button variant="outlined" color="primary" onClick={handleBack}>
           {i18n.t('Login.Email.LoginByEmail.Back')}

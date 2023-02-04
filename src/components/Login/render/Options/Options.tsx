@@ -8,7 +8,7 @@ import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
 import {useStyles} from './Options.style';
 
-import SelectServer from 'components/SelectServer';
+import SelectServer from 'src/components/SelectServer';
 import {
   CoinbaseWalletisabledIcon,
   EthereumNetworkIcon,
@@ -425,7 +425,7 @@ export const Options: React.FC<OptionProps> = props => {
             </Grid>
           </div>
 
-          <SelectServer onServerSelect={server => toggleSelected(server)} />
+          <SelectServer onServerSelect={server => toggleSelected(server)} page="login" />
           <div className={styles.actionWrapper}>
             <Button variant="outlined" color="secondary" onClick={() => navigate('/')}>
               Back
@@ -595,7 +595,7 @@ export const Options: React.FC<OptionProps> = props => {
               </Grid>
             </div>
 
-            <SelectServer onServerSelect={server => toggleSelected(server)} />
+            <SelectServer onServerSelect={server => toggleSelected(server)} page="login" />
 
             <div style={{display: 'flex', flexDirection: 'column', gap: 16}}>
               <Button variant="outlined" color="secondary" onClick={() => navigate('/')}>

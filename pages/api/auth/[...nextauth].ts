@@ -40,6 +40,7 @@ const createOptions = (req: NextApiRequest) => ({
         instanceURL: {label: 'Instance url', type: 'text'},
       },
       async authorize(credentials) {
+        // Initialize instance api url
         initialize({apiURL: credentials.instanceURL});
 
         if (credentials.anonymous === 'true') {
@@ -69,6 +70,9 @@ const createOptions = (req: NextApiRequest) => ({
             const payload = encryptMessage(data.accessToken, credentials.address);
             return credentialToSession(credentials as unknown as SignInCredential, payload);
           } catch (error) {
+            // If failed, use instance url from session
+            initialize({cookie: req.headers.cookie});
+
             console.log('[api][Auth]', error);
             return null;
           }
@@ -92,6 +96,7 @@ const createOptions = (req: NextApiRequest) => ({
       async authorize(credentials) {
         if (!credentials?.token) throw Error('no token!');
 
+        // Initialize instance api url
         initialize({apiURL: credentials.instanceURL});
 
         const data = await AuthLinkAPI.loginWithLink(credentials.token);
@@ -109,6 +114,9 @@ const createOptions = (req: NextApiRequest) => ({
             payload,
           );
         } catch (error) {
+          // If failed, use instance url from session
+          initialize({cookie: req.headers.cookie});
+
           console.log('[api][Auth]', error);
           return null;
         }
@@ -191,6 +199,7 @@ const createOptions = (req: NextApiRequest) => ({
           nonce: user.nonce,
           token: user.token,
           email: user.email,
+          instanceURL: user.instanceURL,
         };
       }
 
