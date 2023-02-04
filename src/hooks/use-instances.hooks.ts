@@ -1,12 +1,13 @@
 import {useState, useCallback} from 'react';
 import {useSelector} from 'react-redux';
 
-import {signIn} from 'next-auth/react';
+import {signIn, useSession} from 'next-auth/react';
 import {useRouter} from 'next/router';
 
 import {numberToHex} from '@polkadot/util/number';
 import {u8aToHex} from '@polkadot/util/u8a';
 
+import {useAuthLinkHook} from './auth-link.hook';
 import {useAuthHook} from './auth.hook';
 import {usePolkadotExtension} from './use-polkadot-app.hook';
 import {useUserHook} from './use-user.hook';
@@ -18,6 +19,7 @@ import {ServerListProps} from 'src/interfaces/server-list';
 import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
 import initialize from 'src/lib/api/base';
 import * as NetworkAPI from 'src/lib/api/network';
+import {getCheckEmail} from 'src/lib/api/user';
 import {toHexPublicKey} from 'src/lib/crypto';
 import {Near} from 'src/lib/services/near-api-js';
 import {PolkadotJs} from 'src/lib/services/polkadot-js';
@@ -27,8 +29,10 @@ import {ServerState} from 'src/reducers/server/reducer';
 export const useInstances = () => {
   const router = useRouter();
 
+  const {data: session} = useSession();
   const {provider} = useMyriadInstance();
-  const {fetchUserNonce, getRegisteredAccounts} = useAuthHook();
+  const {fetchUserNonce, getRegisteredAccounts, logout} = useAuthHook();
+  const {requestLink} = useAuthLinkHook();
   const {anonymous, currentWallet} = useUserHook();
   const {enablePolkadotExtension} = usePolkadotExtension();
   const {server: currentServer, apiURL: currentApiURL} = useSelector<RootState, ServerState>(
@@ -88,6 +92,9 @@ export const useInstances = () => {
 
     initialize({apiURL: server.apiUrl});
 
+    const email = session?.user?.email;
+    if (email) return loginWithEmail(server.apiUrl, email);
+
     const {nonce} = await fetchUserNonce(currentWallet.id);
     const network = await NetworkAPI.getNetwork(currentWallet.networkId);
 
@@ -132,6 +139,7 @@ export const useInstances = () => {
         break;
       }
 
+      // TODO: switch instance with NEAR when wallet not sign in
       case BlockchainPlatform.NEAR: {
         walletType = walletType ?? WalletTypeEnum.MYNEAR;
 
@@ -170,6 +178,16 @@ export const useInstances = () => {
     window.localStorage.setItem(MYRIAD_WALLET_KEY, walletType);
     router.reload();
     setLoadingSwitch(false);
+  };
+
+  const loginWithEmail = async (apiURL: string, email: string) => {
+    const registered = await getCheckEmail(email);
+    if (!registered) throw new Error('AccountNotFound');
+
+    await requestLink(email);
+    setTimeout(() => {
+      logout(`/login?switchInstance=true&email=${email}`, apiURL);
+    }, 1000);
   };
 
   return {
