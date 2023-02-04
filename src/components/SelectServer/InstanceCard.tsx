@@ -34,7 +34,7 @@ const useStyles = makeStyles(() =>
 
 type InstanceCardProps = {
   server: ServerListProps;
-  onSelect: (serverId: number) => void;
+  onSelect?: (server: ServerListProps) => void;
   selected: boolean;
 };
 
@@ -52,7 +52,8 @@ const InstanceCard = ({server, onSelect, selected}: InstanceCardProps) => {
   };
 
   const handleSelect = () => {
-    onSelect(server.id);
+    if (!onSelect) return;
+    onSelect(server);
   };
 
   return (

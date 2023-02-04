@@ -13,13 +13,12 @@ import {User} from 'src/interfaces/user';
 import {initialize} from 'src/lib/api/base';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import {healthcheck} from 'src/lib/api/healthcheck';
-import {getServer} from 'src/lib/api/server';
 import i18n from 'src/locale';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
+import {fetchServer} from 'src/reducers/server/actions';
 import {
-  setAnonymous,
   fetchConnectedSocials,
   fetchUser,
   fetchUserExperience,
@@ -29,11 +28,10 @@ import {
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
-const {publicRuntimeConfig} = getConfig();
+const {publicRuntimeConfig, serverRuntimeConfig} = getConfig();
 
 type CloneExperiencePageProps = {
   session: Session;
-  logo: string;
 };
 
 const CloneExperience: React.FC<CloneExperiencePageProps> = props => {
@@ -49,6 +47,8 @@ const CloneExperience: React.FC<CloneExperiencePageProps> = props => {
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
   const {params, req} = context;
+  const {cookies} = req;
+
   const experienceId = params?.experienceId as string;
 
   const dispatch = store.dispatch as ThunkDispatchAction;
@@ -66,50 +66,37 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const session = await getSession(context);
 
-  if (!session) {
+  if (!session?.user || session?.user?.anonymous) {
     return {
       redirect: {
-        destination: '/',
+        destination: '/login',
         permanent: false,
       },
     };
   }
 
-  const anonymous = !session || Boolean(session?.user.anonymous);
+  const sessionInstanceURL = session?.user?.instanceURL;
+  const cookiesInstanceURL = cookies['instance'];
+  const defaultInstanceURL = serverRuntimeConfig.myriadAPIURL;
+  const apiURL = sessionInstanceURL ?? cookiesInstanceURL ?? defaultInstanceURL;
 
-  initialize({cookie: req.headers.cookie}, anonymous);
-
-  if (anonymous) {
-    const username = session?.user.name as string;
-
-    await dispatch(setAnonymous(username));
-  } else {
-    await dispatch(fetchUser());
-
-    await Promise.all([
-      dispatch(fetchUserWallets()),
-      dispatch(fetchConnectedSocials()),
-      dispatch(countNewNotification()),
-    ]);
-  }
+  initialize({cookie: req.headers.cookie});
 
   await Promise.all([
+    dispatch(fetchServer(apiURL)),
     dispatch(fetchNetwork()),
     dispatch(fetchAvailableToken()),
     dispatch(fetchExchangeRates()),
     dispatch(fetchUserExperience()),
+    dispatch(fetchUserWallets()),
+    dispatch(fetchConnectedSocials()),
+    dispatch(countNewNotification()),
   ]);
 
   try {
     const experience = await ExperienceAPI.getExperienceDetail(experienceId);
-    const data = await getServer();
 
     if (experience?.visibility === 'selected_user') {
-      if (anonymous)
-        return {
-          notFound: true,
-        };
-
       const user = (await dispatch(fetchUser())) as unknown as User;
       if (!experience?.selectedUserIds?.includes(user?.id) && experience?.createdBy !== user?.id)
         return {
@@ -130,7 +117,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
         title: experience.name,
         description: experience?.description ?? '',
         image: experience.experienceImageURL,
-        logo: data.images.logo_banner,
       },
     };
   } catch (error) {

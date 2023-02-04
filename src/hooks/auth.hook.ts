@@ -18,6 +18,7 @@ import * as FirebaseMessaging from 'src/lib/firebase/messaging';
 import {Near} from 'src/lib/services/near-api-js';
 import {PolkadotJs} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
+import {ServerState} from 'src/reducers/server/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 import {uniqueNamesGenerator, adjectives, colors} from 'unique-names-generator';
 
@@ -33,10 +34,12 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
   const {anonymous: anonymousUser, networks} = useSelector<RootState, UserState>(
     state => state.userState,
   );
+  const {apiURL} = useSelector<RootState, ServerState>(state => state.serverState);
   const {getPolkadotAccounts} = usePolkadotExtension();
   const {publicRuntimeConfig} = getConfig();
   const {provider} = useBlockchain();
-  const instance = Cookies.get('instance');
+
+  const instanceURL = Cookies.get('instance');
 
   const fetchUserNonce = async (address: string): Promise<UserNonceProps> => {
     try {
@@ -68,7 +71,6 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
     account?: InjectedAccountWithMeta,
     nearAddress?: string,
     walletType?: WalletTypeEnum,
-    callbackUrl?: string,
   ) => {
     if (account) {
       const signature = await PolkadotJs.signWithWallet(account, nonce);
@@ -84,7 +86,8 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
         networkId: networkId,
         nonce,
         anonymous: false,
-        callbackUrl: callbackUrl || instance || redirect || publicRuntimeConfig.appAuthURL,
+        instanceURL,
+        callbackUrl: redirect || publicRuntimeConfig.appAuthURL,
       });
 
       window.localStorage.setItem(MYRIAD_WALLET_KEY, walletType);
@@ -118,7 +121,8 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
           networkId: NetworkIdEnum.NEAR,
           nonce,
           anonymous: false,
-          callbackUrl: instance || publicRuntimeConfig.appAuthURL,
+          instanceURL,
+          callbackUrl: publicRuntimeConfig.appAuthURL,
         });
 
         window.localStorage.setItem(MYRIAD_WALLET_KEY, walletType);
@@ -164,7 +168,8 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
       address: null,
       name: name.replace(regex, 'gray'),
       anonymous: true,
-      callbackUrl: instance || publicRuntimeConfig.appAuthURL,
+      instanceURL,
+      callbackUrl: publicRuntimeConfig.appAuthURL,
     });
   };
 
@@ -183,7 +188,7 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
 
     const promises: Promise<void | undefined>[] = [
       signOut({
-        callbackUrl: url || instance || publicRuntimeConfig.appAuthURL,
+        callbackUrl: url || publicRuntimeConfig.appAuthURL,
         redirect: true,
       }),
     ];
@@ -193,6 +198,8 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
     }
 
     await Promise.all(promises);
+
+    Cookies.set('instance', apiURL);
   };
 
   return {

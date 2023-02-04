@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useMemo} from 'react';
 import {shallowEqual, useSelector} from 'react-redux';
 
+import {Session} from 'next-auth';
 import {useRouter} from 'next/router';
 
 import Typography from '@material-ui/core/Typography';
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 type SearchResultContainerProps = {
-  logo: string;
+  session: Session;
 };
 
 export const SearchResultContainer: React.FC<SearchResultContainerProps> = props => {

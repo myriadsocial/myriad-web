@@ -15,6 +15,7 @@ export const credentialToSession = (
     address: credential.address,
     token: encryption.encryptedMessage,
     nonce: credential.nonce,
+    instanceURL: credential.instanceURL,
   };
 
   return session;
@@ -31,6 +32,7 @@ export const emailCredentialToSession = (
     email: emailCredential.email,
     loginToken: emailCredential.loginToken,
     token: encryption.encryptedMessage,
+    instanceURL: emailCredential.instanceURL,
     anonymous: false,
     address: '',
     nonce: null,

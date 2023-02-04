@@ -104,10 +104,6 @@ export class Near implements IProvider {
     try {
       if (!wallet.isSignedIn()) throw 'RequestSignIn';
       const address = wallet.getAccountId();
-
-      console.log(`[${action}][keystore][signature]`, JSON.stringify(keyStore));
-      console.log(`[${action}][walletaddress]`, address, wallet._networkId);
-
       const keyPair = await keyStore.getKey(wallet._networkId, address);
       const userId = signNearData?.userId;
 
@@ -133,8 +129,6 @@ export class Near implements IProvider {
 
       return {nonce, publicAddress, signature};
     } catch {
-      console.log(`[${action}][keystore][requestSignIn]`, JSON.stringify(keyStore));
-
       if (wallet.isSignedIn()) wallet.signOut();
       const successUrl = callbackURL?.successCallbackURL;
       const failureUrl = callbackURL?.failedCallbackURL;

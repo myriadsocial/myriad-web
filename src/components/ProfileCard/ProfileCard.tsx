@@ -61,13 +61,13 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
               Sign in or Create an Account
             </Button>
           </ShowIf>
-          <ShowIf condition={!anonymous && !wallets.length}>
+          <ShowIf condition={!anonymous && !user?.fullAccess}>
             <Button variant="contained" color="primary" onClick={handleConnectWeb3Wallet}>
               <CommonWalletIcon viewBox="1 -3.5 20 20" />
               <span style={{paddingLeft: '5px'}}>Connect Web 3.0 wallet</span>
             </Button>
           </ShowIf>
-          <ShowIf condition={!anonymous && !!wallets.length}>
+          <ShowIf condition={!anonymous && user?.fullAccess}>
             <ShowIf condition={Boolean(currentWallet)}>
               <NetworkOption currentWallet={currentWallet} wallets={wallets} networks={networks} />
               <Typography component="div" className={classes.address}>

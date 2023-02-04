@@ -1,19 +1,22 @@
-import NextAuth, {NextAuthOptions, Session} from 'next-auth';
+import {NextApiRequest, NextApiResponse} from 'next';
+import NextAuth, {Session} from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import getConfig from 'next/config';
 
 import APIAdapter from 'adapters/api';
+import Cookies from 'js-cookie';
 import {NetworkIdEnum} from 'src/interfaces/network';
 import {SignInCredential, SignInWithEmailCredential} from 'src/interfaces/session';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
 import * as AuthLinkAPI from 'src/lib/api/auth-link';
+import initialize from 'src/lib/api/base';
 import * as AuthAPI from 'src/lib/api/ext-auth';
 import {encryptMessage} from 'src/lib/crypto';
 import {credentialToSession, emailCredentialToSession} from 'src/lib/serializers/session';
 
 const {serverRuntimeConfig} = getConfig();
 
-export const authOptions: NextAuthOptions = {
+const createOptions = (req: NextApiRequest) => ({
   // used when session strategy is database
   adapter: APIAdapter(),
   // https://next-auth.js.org/configuration/providers
@@ -34,10 +37,14 @@ export const authOptions: NextAuthOptions = {
         walletType: {label: 'Wallet Type', type: 'text'},
         networkId: {label: 'Network ID', type: 'text'},
         publicAddress: {label: 'Public Address', type: 'text'},
-        callbackUrl: {label: 'Callback Url', type: 'text'},
+        instanceURL: {label: 'Instance url', type: 'text'},
       },
       async authorize(credentials) {
+        // Initialize instance api url
+        initialize({apiURL: credentials.instanceURL});
+
         if (credentials.anonymous === 'true') {
+          Cookies.remove('instance');
           // Any object returned will be saved in `user` property of the JWT
           return {
             ...credentials,
@@ -46,24 +53,26 @@ export const authOptions: NextAuthOptions = {
         } else {
           if (!credentials?.signature) throw Error('no signature!');
 
-          const data = await AuthAPI.login(
-            {
-              nonce: Number(credentials.nonce),
-              publicAddress: credentials.publicAddress,
-              signature: credentials.signature,
-              walletType: credentials.walletType as WalletTypeEnum,
-              networkType: credentials.networkId as NetworkIdEnum,
-            },
-            credentials.callbackUrl,
-          );
+          const data = await AuthAPI.login({
+            nonce: Number(credentials.nonce),
+            publicAddress: credentials.publicAddress,
+            signature: credentials.signature,
+            walletType: credentials.walletType as WalletTypeEnum,
+            networkType: credentials.networkId as NetworkIdEnum,
+          });
 
           if (!data?.accessToken) throw Error('Failed to authorize user!');
+
+          Cookies.remove('instance');
 
           try {
             // Any object returned will be saved in `user` property of the JWT
             const payload = encryptMessage(data.accessToken, credentials.address);
             return credentialToSession(credentials as unknown as SignInCredential, payload);
           } catch (error) {
+            // If failed, use instance url from session
+            initialize({cookie: req.headers.cookie});
+
             console.log('[api][Auth]', error);
             return null;
           }
@@ -82,14 +91,19 @@ export const authOptions: NextAuthOptions = {
         username: {label: 'Username', type: 'text'},
         email: {label: 'Email', type: 'text'},
         token: {label: 'Token', type: 'text'},
-        callbackUrl: {label: 'Callback Url', type: 'text'},
+        instanceURL: {label: 'Instance url', type: 'text'},
       },
       async authorize(credentials) {
         if (!credentials?.token) throw Error('no token!');
 
-        const data = await AuthLinkAPI.loginWithLink(credentials.token, credentials.callbackUrl);
+        // Initialize instance api url
+        initialize({apiURL: credentials.instanceURL});
+
+        const data = await AuthLinkAPI.loginWithLink(credentials.token);
 
         if (!data?.accessToken) throw Error('Failed to authorize user!');
+
+        Cookies.remove('instance');
 
         try {
           const parsedEmail = credentials.email.replace(/[^a-zA-Z0-9]/g, '');
@@ -100,6 +114,9 @@ export const authOptions: NextAuthOptions = {
             payload,
           );
         } catch (error) {
+          // If failed, use instance url from session
+          initialize({cookie: req.headers.cookie});
+
           console.log('[api][Auth]', error);
           return null;
         }
@@ -122,7 +139,7 @@ export const authOptions: NextAuthOptions = {
     // Use JSON Web Tokens for session instead of database sessions.
     // This option can be used with or without a database for users/accounts.
     // Note: `strategy` should be set to 'jwt' if no database is used.
-    strategy: 'jwt',
+    strategy: 'jwt' as const,
 
     // Seconds - How long until an idle session expires and is no longer valid.
     // maxAge: 30 * 24 * 60 * 60, // 30 days
@@ -182,6 +199,7 @@ export const authOptions: NextAuthOptions = {
           nonce: user.nonce,
           token: user.token,
           email: user.email,
+          instanceURL: user.instanceURL,
         };
       }
 
@@ -206,8 +224,10 @@ export const authOptions: NextAuthOptions = {
       console.log(code, message);
     },
   },
+});
+
+const auth = async (req: NextApiRequest, res: NextApiResponse) => {
+  return NextAuth(req, res, createOptions(req));
 };
 
-// For more information on each option (and a full list of options) go to
-// https://next-auth.js.org/configuration/options
-export default NextAuth(authOptions);
+export default auth;

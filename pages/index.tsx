@@ -17,12 +17,12 @@ import {generateAnonymousUser} from 'src/helpers/auth';
 import {initialize} from 'src/lib/api/base';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import {healthcheck} from 'src/lib/api/healthcheck';
-import {getServer} from 'src/lib/api/server';
 import i18n from 'src/locale';
 import {fetchAvailableToken, fetchFilteredToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
 import {fetchFriend} from 'src/reducers/friend/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
+import {fetchServer} from 'src/reducers/server/actions';
 import {
   setAnonymous,
   fetchConnectedSocials,
@@ -34,11 +34,10 @@ import {
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
-const {publicRuntimeConfig} = getConfig();
+const {publicRuntimeConfig, serverRuntimeConfig} = getConfig();
 
 type HomePageProps = {
   session: Session;
-  logo: string;
   title: string;
   description: string;
   image: string;
@@ -83,7 +82,9 @@ const Index: React.FC<HomePageProps> = props => {
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
-  const {req} = context;
+  const {req, query, res} = context;
+  const {cookies} = req;
+
   const params = context.query;
   const dispatch = store.dispatch as ThunkDispatchAction;
 
@@ -100,12 +101,22 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const session = await getSession(context);
 
-  const anonymous = !session || Boolean(session?.user.anonymous);
+  const sessionInstanceURL = session?.user?.instanceURL;
+  const cookiesInstanceURL = cookies['instance'];
+  const defaultInstanceURL = serverRuntimeConfig.myriadAPIURL;
+
+  let apiURL = sessionInstanceURL ?? cookiesInstanceURL ?? defaultInstanceURL;
+
+  const anonymous = !session || Boolean(session?.user?.anonymous);
 
   initialize({cookie: req.headers.cookie}, anonymous);
 
   if (anonymous) {
     const username = generateAnonymousUser();
+    const queryInstanceURL = query.rpc;
+
+    apiURL = queryInstanceURL ?? cookiesInstanceURL ?? defaultInstanceURL;
+    res.setHeader('set-cookie', [`instance=${apiURL}`]);
 
     await dispatch(setAnonymous(username));
   } else {
@@ -120,6 +131,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   await Promise.all([
+    dispatch(fetchServer(apiURL)),
     dispatch(fetchNetwork()),
     dispatch(fetchAvailableToken()),
     dispatch(fetchFilteredToken()),
@@ -143,12 +155,9 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     image = exp ? exp.experienceImageURL : null;
   }
 
-  const data = await getServer();
-
   return {
     props: {
       session,
-      logo: data.images.logo_banner,
       description,
       title,
       image,

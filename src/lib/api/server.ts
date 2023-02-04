@@ -12,6 +12,7 @@ export interface Server {
   id: string;
   name: string;
   description: string;
+  serverImageURL: string;
   metric: ServerMetric;
   categories: string[];
   accountId: AccountId;
@@ -32,6 +33,7 @@ export const getServer = async (): Promise<Server> => {
     return {
       id: '',
       name: '',
+      serverImageURL: '',
       description: '',
       metric: {},
       categories: [],

@@ -17,17 +17,16 @@ import {People} from 'src/interfaces/people';
 import {User} from 'src/interfaces/user';
 import {initialize} from 'src/lib/api/base';
 import * as ExperienceAPI from 'src/lib/api/experience';
-import {getServer} from 'src/lib/api/server';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {fetchAvailableToken, fetchFilteredToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
 import {fetchFriend} from 'src/reducers/friend/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
+import {fetchServer} from 'src/reducers/server/actions';
 import {fetchPopularTopic} from 'src/reducers/tag/actions';
 import {updateFilter} from 'src/reducers/timeline/actions';
 import {
-  setAnonymous,
   fetchConnectedSocials,
   fetchUser,
   fetchUserExperience,
@@ -37,12 +36,11 @@ import {
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
-const {publicRuntimeConfig} = getConfig();
+const {publicRuntimeConfig, serverRuntimeConfig} = getConfig();
 
 type TopicPageProps = {
   experience: Experience | null;
   session: Session;
-  logo: string;
 };
 
 type TopicsQueryProps = {
@@ -78,6 +76,8 @@ const Topic: React.FC<TopicPageProps> = props => {
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
   const {query, req} = context;
+  const {cookies} = req;
+
   const dispatch = store.dispatch as ThunkDispatchAction;
 
   if (!['experience', 'hashtag'].includes(query.type as string)) {
@@ -88,34 +88,23 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const session = await getSession(context);
 
-  if (!session) {
+  if (!session?.user || session?.user?.anonymous) {
     return {
       redirect: {
-        destination: '/',
+        destination: '/login',
         permanent: false,
       },
     };
   }
 
-  const anonymous = !session || Boolean(session?.user.anonymous);
+  const sessionInstanceURL = session?.user?.instanceURL;
+  const cookiesInstanceURL = cookies['instance'];
+  const defaultInstanceURL = serverRuntimeConfig.myriadAPIURL;
+  const apiURL = sessionInstanceURL ?? cookiesInstanceURL ?? defaultInstanceURL;
 
-  initialize({cookie: req.headers.cookie}, anonymous);
+  initialize({cookie: req.headers.cookie});
 
-  if (anonymous) {
-    const username = session?.user.name as string;
-
-    await dispatch(setAnonymous(username));
-  } else {
-    await dispatch(fetchUser());
-
-    await Promise.all([
-      dispatch(fetchUserWallets()),
-      dispatch(fetchConnectedSocials()),
-      dispatch(fetchFriend()),
-      dispatch(countNewNotification()),
-    ]);
-  }
-
+  await dispatch(fetchUser());
   await Promise.all([
     dispatch(fetchNetwork()),
     dispatch(fetchAvailableToken()),
@@ -123,13 +112,16 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     dispatch(fetchExchangeRates()),
     dispatch(fetchUserExperience()),
     dispatch(fetchPopularTopic()),
+    dispatch(fetchUserWallets()),
+    dispatch(fetchConnectedSocials()),
+    dispatch(fetchFriend()),
+    dispatch(countNewNotification()),
   ]);
 
+  await dispatch(fetchServer(apiURL));
   await dispatch(fetchNetwork());
   await dispatch(fetchExchangeRates());
   await dispatch(fetchUserExperience());
-
-  const data = await getServer();
 
   let experience: Experience | null = null;
 
@@ -172,7 +164,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     props: {
       session,
       experience,
-      logo: data.images.logo_banner,
     },
   };
 });

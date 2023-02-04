@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {useCookies} from 'react-cookie';
 import {useDispatch} from 'react-redux';
 
@@ -18,11 +18,11 @@ import {RightMenuBar} from 'src/components/RightMenuBar/RightMenuBar';
 import {CookieConsent, COOKIE_CONSENT_NAME} from 'src/components/common/CookieConsent';
 import {TippingProvider} from 'src/components/common/Tipping/Tipping.provider';
 import ShowIf from 'src/components/common/show-if.component';
+import {useInstances} from 'src/hooks/use-instances.hooks';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {IProvider, MYRIAD_WALLET_KEY} from 'src/interfaces/blockchain-interface';
 import {NotificationProps} from 'src/interfaces/notification';
 import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
-import {Server} from 'src/lib/api/server';
 import * as FirebaseAnalytic from 'src/lib/firebase/analytic';
 import * as FirebaseMessaging from 'src/lib/firebase/messaging';
 import {BlockchainProvider} from 'src/lib/services/blockchain-provider';
@@ -61,20 +61,20 @@ const BlockchainProviderComponent = dynamic(
 type DefaultLayoutProps = WithErrorProps & {
   isOnProfilePage: boolean;
   children: React.ReactNode;
-  logo: string;
   session: Session;
-  server?: Server;
 };
 
 const Default: React.FC<DefaultLayoutProps> = props => {
-  const {children, logo, server} = props;
+  const {children} = props;
 
   const classes = useStyles();
   const dispatch = useDispatch();
   const router = useRouter();
 
   const [cookies] = useCookies([COOKIE_CONSENT_NAME]);
+
   const {user, anonymous, currentWallet, updateUserFcmToken} = useUserHook();
+  const {instance} = useInstances();
 
   const [showNotification, setShowNotification] = useState<boolean>(false);
   const [provider, setProvider] = useState<IProvider>(null);
@@ -82,35 +82,37 @@ const Default: React.FC<DefaultLayoutProps> = props => {
 
   const loadingNear = router.query.loading as string | null;
 
-  useEffect(() => {
+  const initializeProvider = useCallback(async () => {
     if (anonymous) return;
+    if (!initialize) return;
     if (loadingNear) dispatch(clearBalances());
+    dispatch(clearBalances());
 
-    if (currentWallet?.network && initialize && !provider && !loadingNear) {
-      dispatch(clearBalances());
-      const walletType = window.localStorage.getItem(MYRIAD_WALLET_KEY);
-      BlockchainProvider.connect(currentWallet.network, walletType as WalletTypeEnum).then(
-        blockchain => {
-          initializeBlockchain(blockchain?.provider, currentWallet.id);
-        },
-      );
-    }
-  }, [currentWallet, initialize, provider, loadingNear]);
+    const walletType = window.localStorage.getItem(MYRIAD_WALLET_KEY);
+    const blockchain = await BlockchainProvider.connect(
+      currentWallet.network,
+      walletType as WalletTypeEnum,
+    );
+    const provider = blockchain?.provider;
+
+    if (provider) provider.accountId = currentWallet.id;
+
+    setProvider(provider);
+    dispatch(loadBalances(provider, true));
+    dispatch(fetchUserWalletAddress(provider, currentWallet.id));
+    setInitialize(false);
+    /* eslint-disable react-hooks/exhaustive-deps*/
+  }, [anonymous, initialize, currentWallet, loadingNear]);
+
+  useEffect(() => {
+    initializeProvider();
+  }, [initializeProvider]);
 
   useEffect(() => {
     if (user) {
       initializeFirebase();
     }
   }, [user]);
-
-  const initializeBlockchain = (provider: IProvider, walletId: string) => {
-    if (provider) provider.accountId = walletId;
-
-    setProvider(provider);
-    dispatch(loadBalances(provider, true));
-    dispatch(fetchUserWalletAddress(provider, walletId));
-    setInitialize(false);
-  };
 
   const processMessages = (payload?: NotificationProps) => {
     dispatch(countNewNotification());
@@ -136,9 +138,9 @@ const Default: React.FC<DefaultLayoutProps> = props => {
     setShowNotification(!showNotification);
   };
 
-  const reinitializeBlockchain = async () => {
-    if (provider?.constructor.name === 'PolkadotJs') await provider.disconnect();
+  const onInitializeBlockchain = async () => {
     setInitialize(true);
+    if (provider?.constructor.name === 'PolkadotJs') await provider.disconnect();
     setProvider(null);
   };
 
@@ -157,10 +159,10 @@ const Default: React.FC<DefaultLayoutProps> = props => {
 
   return (
     <BlockchainProviderComponent
-      server={server}
+      server={instance}
       provider={provider}
       currentWallet={currentWallet}
-      onChangeProvider={reinitializeBlockchain}
+      onChangeProvider={onInitializeBlockchain}
       loadingBlockchain={initialize}>
       <TippingProvider
         anonymous={anonymous}
@@ -172,7 +174,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
             <div className={classes.firstCol}>
               <div className={classes.innerFirstColWrapper}>
                 <div>
-                  <MenuContainer logo={logo} anonymous={anonymous} />
+                  <MenuContainer logo={instance?.images?.logo_banner ?? ''} anonymous={anonymous} />
                 </div>
                 <div>
                   <SocialMediaListContainer />

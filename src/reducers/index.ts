@@ -16,6 +16,7 @@ import {NotificationReducer} from './notification/reducer';
 import {PeopleReducer} from './people/reducer';
 import {ProfileReducer} from './profile/reducer';
 import {SearchReducer} from './search/reducer';
+import {ServerReducer} from './server/reducer';
 import {TagReducer} from './tag/reducer';
 import {TimelineReducer} from './timeline/reducer';
 import {TipSummaryReducer} from './tip-summary/reducer';
@@ -43,6 +44,7 @@ const reducers = {
   blockState: BlockReducer,
   searchState: SearchReducer,
   ecState: ECReducer,
+  serverState: ServerReducer,
 };
 
 export const combinedReducers = combineReducers(reducers);
