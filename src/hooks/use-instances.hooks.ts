@@ -17,7 +17,6 @@ import * as nearAPI from 'near-api-js';
 import {MYRIAD_WALLET_KEY} from 'src/interfaces/blockchain-interface';
 import {ServerListProps} from 'src/interfaces/server-list';
 import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
-import initialize from 'src/lib/api/base';
 import * as NetworkAPI from 'src/lib/api/network';
 import {getCheckEmail} from 'src/lib/api/user';
 import {toHexPublicKey} from 'src/lib/crypto';
@@ -90,13 +89,11 @@ export const useInstances = () => {
 
     if (anonymous) return router.reload();
 
-    initialize({apiURL: server.apiUrl});
-
     const email = session?.user?.email;
     if (email) return loginWithEmail(server.apiUrl, email);
 
-    const {nonce} = await fetchUserNonce(currentWallet.id);
-    const network = await NetworkAPI.getNetwork(currentWallet.networkId);
+    const {nonce} = await fetchUserNonce(currentWallet.id, server.apiUrl);
+    const network = await NetworkAPI.getNetwork(currentWallet.networkId, server.apiUrl);
 
     if (!network) throw new Error('NetworkNotExist');
     if (nonce <= 0) throw new Error('AccountNotFound');
@@ -181,10 +178,10 @@ export const useInstances = () => {
   };
 
   const loginWithEmail = async (apiURL: string, email: string) => {
-    const registered = await getCheckEmail(email);
+    const registered = await getCheckEmail(email, apiURL);
     if (!registered) throw new Error('AccountNotFound');
 
-    await requestLink(email);
+    await requestLink(email, apiURL);
     setTimeout(() => {
       logout(`/login?switchInstance=true&email=${email}`, apiURL);
     }, 1000);

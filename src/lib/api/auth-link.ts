@@ -1,5 +1,7 @@
 import MyriadAPI from './base';
 
+import axios from 'axios';
+
 type GetLinkWithEmailProps = {
   email: string;
   callbackURL: string;
@@ -12,7 +14,24 @@ export type SignupWithEmailProps = {
   callbackURL: string;
 };
 
-export const getLinkWithEmail = async (values: GetLinkWithEmailProps): Promise<string> => {
+export const getLinkWithEmail = async (
+  values: GetLinkWithEmailProps,
+  apiURL?: string,
+): Promise<string> => {
+  if (apiURL) {
+    const {data} = await axios({
+      url: `${apiURL}/authentication/otp/email`,
+      method: 'POST',
+      data: {
+        ...values,
+      },
+    });
+
+    const {message} = data;
+
+    return message;
+  }
+
   const {data} = await MyriadAPI().request({
     url: '/authentication/otp/email',
     method: 'POST',

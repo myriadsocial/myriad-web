@@ -41,9 +41,9 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
 
   const instanceURL = Cookies.get('instance');
 
-  const fetchUserNonce = async (address: string): Promise<UserNonceProps> => {
+  const fetchUserNonce = async (address: string, apiURL?: string): Promise<UserNonceProps> => {
     try {
-      const data = await WalletAPI.getUserNonce(address);
+      const data = await WalletAPI.getUserNonce(address, apiURL);
 
       return data;
     } catch (error) {
