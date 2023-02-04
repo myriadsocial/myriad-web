@@ -61,6 +61,7 @@ const SelectServer = ({onServerSelect, title, register, setRegister}: SelectServ
         const apiUrl = Cookies.get('instance') ?? router.query.rpc;
         setSelectedServer(servers.find((server: ServerListProps) => server.apiUrl === apiUrl));
         onServerSelect(servers.find((server: ServerListProps) => server.apiUrl === apiUrl));
+        setSelectedServerId(servers.find((server: ServerListProps) => server.apiUrl === apiUrl).id);
       } else {
         setSelectedServerId(servers[0].id);
         onServerSelect(servers[0]);
@@ -88,13 +89,12 @@ const SelectServer = ({onServerSelect, title, register, setRegister}: SelectServ
 
   const handleCloseCheckAccountModal = () => {
     setRegister(false);
-    if (Cookies.get('currentInstance')) {
-      Cookies.set('instance', Cookies.get('currentInstance'));
+    const apiUrl = Cookies.get('currentInstance');
+    if (apiUrl) {
+      Cookies.set('instance', apiUrl);
+      setSelectedServerId(servers.find((server: ServerListProps) => server.apiUrl === apiUrl).id);
       Cookies.remove('currentInstance');
     }
-
-    const apiUrl = Cookies.get('instance');
-    setSelectedServerId(servers.find((server: ServerListProps) => server.apiUrl === apiUrl)?.id);
   };
 
   useEffect(() => {
