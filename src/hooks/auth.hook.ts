@@ -1,12 +1,13 @@
+import {useCookies} from 'react-cookie';
 import {useSelector} from 'react-redux';
 
-import {signIn, signOut} from 'next-auth/react';
+import {signIn, signOut, SignOutResponse} from 'next-auth/react';
 import getConfig from 'next/config';
 
 import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 
+import {COOKIE_INSTANCE_URL} from 'components/SelectServer';
 import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
-import Cookies from 'js-cookie';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {MYRIAD_WALLET_KEY} from 'src/interfaces/blockchain-interface';
 import {NetworkIdEnum} from 'src/interfaces/network';
@@ -18,7 +19,6 @@ import * as FirebaseMessaging from 'src/lib/firebase/messaging';
 import {Near} from 'src/lib/services/near-api-js';
 import {PolkadotJs} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
-import {ServerState} from 'src/reducers/server/reducer';
 import {UserState} from 'src/reducers/user/reducer';
 import {uniqueNamesGenerator, adjectives, colors} from 'unique-names-generator';
 
@@ -34,12 +34,11 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
   const {anonymous: anonymousUser, networks} = useSelector<RootState, UserState>(
     state => state.userState,
   );
-  const {apiURL} = useSelector<RootState, ServerState>(state => state.serverState);
   const {getPolkadotAccounts} = usePolkadotExtension();
   const {publicRuntimeConfig} = getConfig();
   const {provider} = useBlockchain();
 
-  const instanceURL = Cookies.get('instance');
+  const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
 
   const fetchUserNonce = async (address: string, apiURL?: string): Promise<UserNonceProps> => {
     try {
@@ -86,7 +85,7 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
         networkId: networkId,
         nonce,
         anonymous: false,
-        instanceURL,
+        instanceURL: cookies[COOKIE_INSTANCE_URL],
         callbackUrl: redirect || publicRuntimeConfig.appAuthURL,
       });
 
@@ -121,7 +120,7 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
           networkId: NetworkIdEnum.NEAR,
           nonce,
           anonymous: false,
-          instanceURL,
+          instanceURL: cookies[COOKIE_INSTANCE_URL],
           callbackUrl: publicRuntimeConfig.appAuthURL,
         });
 
@@ -168,7 +167,7 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
       address: null,
       name: name.replace(regex, 'gray'),
       anonymous: true,
-      instanceURL,
+      instanceURL: cookies[COOKIE_INSTANCE_URL],
       callbackUrl: publicRuntimeConfig.appAuthURL,
     });
   };
@@ -182,11 +181,11 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
     }
   };
 
-  const logout = async (url?: string, selectedApiURL?: string) => {
+  const logout = async (url?: string) => {
     window.localStorage.removeItem(MYRIAD_WALLET_KEY);
     window.localStorage.removeItem('email');
 
-    const promises: Promise<void | undefined>[] = [
+    const promises: Promise<SignOutResponse | void>[] = [
       signOut({
         callbackUrl: url || publicRuntimeConfig.appAuthURL,
         redirect: true,
@@ -198,8 +197,6 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
     }
 
     await Promise.all(promises);
-
-    Cookies.set('instance', selectedApiURL ?? apiURL);
   };
 
   return {

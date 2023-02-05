@@ -1,4 +1,5 @@
 import React, {useState, useCallback, useEffect} from 'react';
+import {useCookies} from 'react-cookie';
 import {useSelector} from 'react-redux';
 import {MemoryRouter as Router, Routes, Route} from 'react-router-dom';
 
@@ -20,8 +21,8 @@ import {Options} from './render/Options';
 import {Profile} from './render/Profile';
 import SigninMethod from './render/SignInMethod/SigninMethod';
 
+import {COOKIE_INSTANCE_URL} from 'components/SelectServer';
 import {MyriadFullIcon} from 'components/atoms/Icons';
-import Cookies from 'js-cookie';
 import last from 'lodash/last';
 import LoginMagicLink from 'src/components/Login/render/MagicLink/LoginMagicLink';
 import {useAuthHook} from 'src/hooks/auth.hook';
@@ -63,6 +64,7 @@ export const Login: React.FC<LoginProps> = props => {
   const {showAlert} = useAlertHook();
 
   const [, setToken] = useState('');
+  const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
   const [walletType, setWalletType] = useState<WalletTypeEnum | null>(redirectAuth);
   const [networkId, setNetworkId] = useState<NetworkIdEnum | null>(null);
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
@@ -104,8 +106,9 @@ export const Login: React.FC<LoginProps> = props => {
         username: '',
         email: registeredEmail,
         token,
+        instanceURL: cookies[COOKIE_INSTANCE_URL],
         redirect: false,
-        callbackUrl: Cookies.get('instance') ?? publicRuntimeConfig.appAuthURL,
+        callbackUrl: publicRuntimeConfig.appAuthURL,
       }).then(response => {
         if (response.ok) {
           router.reload();

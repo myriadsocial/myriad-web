@@ -1,5 +1,6 @@
 import {useState, useCallback} from 'react';
-import {useSelector} from 'react-redux';
+import {useCookies} from 'react-cookie';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {signIn, useSession} from 'next-auth/react';
 import {useRouter} from 'next/router';
@@ -12,6 +13,7 @@ import {useAuthHook} from './auth.hook';
 import {usePolkadotExtension} from './use-polkadot-app.hook';
 import {useUserHook} from './use-user.hook';
 
+import {COOKIE_INSTANCE_URL} from 'components/SelectServer';
 import useMyriadInstance from 'components/common/Blockchain/use-myriad-instance.hooks';
 import * as nearAPI from 'near-api-js';
 import {MYRIAD_WALLET_KEY} from 'src/interfaces/blockchain-interface';
@@ -23,10 +25,12 @@ import {toHexPublicKey} from 'src/lib/crypto';
 import {Near} from 'src/lib/services/near-api-js';
 import {PolkadotJs} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
+import {setServer} from 'src/reducers/server/actions';
 import {ServerState} from 'src/reducers/server/reducer';
 
 export const useInstances = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const {data: session} = useSession();
   const {provider} = useMyriadInstance();
@@ -38,6 +42,7 @@ export const useInstances = () => {
     state => state.serverState,
   );
 
+  const [cookies, setCookies] = useCookies([COOKIE_INSTANCE_URL]);
   const [serverList, setServerList] = useState<ServerListProps[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingSwitch, setLoadingSwitch] = useState<boolean>(false);
@@ -86,8 +91,7 @@ export const useInstances = () => {
 
   const switchInstance = async (server: ServerListProps) => {
     if (server.apiUrl === currentApiURL) return;
-
-    if (anonymous) return router.reload();
+    if (anonymous) return switchInstanceAsAnonymous(server);
 
     const email = session?.user?.email;
     if (email) return loginWithEmail(server.apiUrl, email);
@@ -177,14 +181,33 @@ export const useInstances = () => {
     setLoadingSwitch(false);
   };
 
+  const switchInstanceAsAnonymous = async (server: ServerListProps) => {
+    setCookies(COOKIE_INSTANCE_URL, server.apiUrl);
+
+    const pathname = router.pathname;
+    const query = router.query;
+
+    Object.assign(query, {rpc: server.apiUrl});
+
+    await router.replace({pathname, query: {rpc: `${server.apiUrl}`}});
+    await dispatch(setServer(server.detail, server.apiUrl));
+    return;
+  };
+
   const loginWithEmail = async (apiURL: string, email: string) => {
     const registered = await getCheckEmail(email, apiURL);
     if (!registered) throw new Error('AccountNotFound');
 
     await requestLink(email, apiURL);
-    setTimeout(() => {
-      logout(`/login?switchInstance=true&email=${email}`, apiURL);
-    }, 1000);
+    await logout();
+    router.push({
+      pathname: '/login',
+      query: {
+        rpc: cookies[COOKIE_INSTANCE_URL],
+        switchInstance: 'true',
+        email,
+      },
+    });
   };
 
   return {

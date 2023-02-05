@@ -2,6 +2,7 @@ import {ChevronDownIcon} from '@heroicons/react/outline';
 import {XIcon} from '@heroicons/react/solid';
 
 import React, {useState, useEffect} from 'react';
+import {useCookies} from 'react-cookie';
 import {useDispatch, useSelector} from 'react-redux';
 
 import Image from 'next/image';
@@ -25,7 +26,6 @@ import {InstanceCardSkeleton} from './InstanceCardSkeleton';
 import useStyles from './SelectServer.styles';
 
 import clsx from 'clsx';
-import Cookies from 'js-cookie';
 import {unionBy} from 'lodash';
 import ShowIf from 'src/components/common/show-if.component';
 import {useAuthHook} from 'src/hooks/auth.hook';
@@ -46,6 +46,8 @@ type SelectServerProps = {
   page?: string;
 };
 
+export const COOKIE_INSTANCE_URL = 'cookie-instance-url';
+
 const SelectServer = ({
   title,
   onServerSelect,
@@ -59,10 +61,10 @@ const SelectServer = ({
   const {server, apiURL} = useSelector<RootState, ServerState>(state => state.serverState);
 
   const {servers, getAllInstances, loading} = useInstances();
-  const [selectedServer, setSelectedServer] = useState<ServerListProps | null>(null);
-
   const {logout} = useAuthHook();
 
+  const [cookies, setCookies] = useCookies([COOKIE_INSTANCE_URL]);
+  const [selectedServer, setSelectedServer] = useState<ServerListProps | null>(null);
   const [open, setOpen] = useState(false);
 
   const classes = useStyles();
@@ -84,9 +86,8 @@ const SelectServer = ({
     onServerSelect(server);
 
     if (page === 'login') {
-      router.push({query: {rpc: `${server.apiUrl}`}}, undefined, {shallow: true});
-
-      Cookies.set('instance', server.apiUrl);
+      router.replace({query: {rpc: `${server.apiUrl}`}}, undefined, {shallow: true});
+      setCookies(COOKIE_INSTANCE_URL, server.apiUrl);
 
       initialize({apiURL: server.apiUrl});
       dispatch(setServer(server.detail, server.apiUrl));
@@ -98,6 +99,11 @@ const SelectServer = ({
 
   const handleCloseCheckAccountModal = () => {
     setRegister(false);
+  };
+
+  const onLogout = async () => {
+    await logout();
+    router.push(`/?${cookies[COOKIE_INSTANCE_URL]}`);
   };
 
   return (
@@ -251,13 +257,7 @@ const SelectServer = ({
                 color="secondary">
                 {i18n.t('Login.Options.Prompt_Select_Instance.No_Account_Cancel')}
               </Button>
-              <Button
-                onClick={async () => {
-                  await logout('/login');
-                }}
-                size="small"
-                variant="contained"
-                color="primary">
+              <Button onClick={onLogout} size="small" variant="contained" color="primary">
                 {i18n.t('Login.Options.Prompt_Select_Instance.No_Account_Confirm')}
               </Button>
             </ListItem>

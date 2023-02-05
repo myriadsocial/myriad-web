@@ -3,6 +3,7 @@ import {useCookies} from 'react-cookie';
 import {useDispatch} from 'react-redux';
 
 import {Session} from 'next-auth';
+import {useSession} from 'next-auth/react';
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 
@@ -10,6 +11,7 @@ import {Container} from '@material-ui/core';
 
 import useStyles from './DefaultLayout.styles';
 
+import {COOKIE_INSTANCE_URL} from 'components/SelectServer';
 import {withError, WithErrorProps} from 'src/components/Error';
 import {MenuContainer} from 'src/components/Menu';
 import {NotificationsContainer} from 'src/components/Notifications';
@@ -71,10 +73,11 @@ const Default: React.FC<DefaultLayoutProps> = props => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const [cookies] = useCookies([COOKIE_CONSENT_NAME]);
+  const [cookies] = useCookies([COOKIE_CONSENT_NAME, COOKIE_INSTANCE_URL]);
 
   const {user, anonymous, currentWallet, updateUserFcmToken} = useUserHook();
   const {instance} = useInstances();
+  const {data: session} = useSession();
 
   const [showNotification, setShowNotification] = useState<boolean>(false);
   const [provider, setProvider] = useState<IProvider>(null);
@@ -113,6 +116,20 @@ const Default: React.FC<DefaultLayoutProps> = props => {
       initializeFirebase();
     }
   }, [user]);
+
+  useEffect(() => {
+    const sessionInstanceURL = session?.user?.instanceURL;
+    const cookiesInstanceURL = cookies[COOKIE_INSTANCE_URL];
+    const rpc = sessionInstanceURL ?? cookiesInstanceURL ?? '';
+
+    const query = router.query;
+
+    if (query?.rpc?.toString() === rpc) return;
+
+    Object.assign(query, {rpc});
+
+    router.replace({pathname: router.pathname, query}, undefined, {shallow: true});
+  }, [cookies[COOKIE_INSTANCE_URL], router.query.rpc]);
 
   const processMessages = (payload?: NotificationProps) => {
     dispatch(countNewNotification());

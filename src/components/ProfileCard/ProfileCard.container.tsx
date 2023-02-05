@@ -1,10 +1,12 @@
 import React from 'react';
+import {useCookies} from 'react-cookie';
 import {useSelector} from 'react-redux';
 
 import {useRouter} from 'next/router';
 
 import {ProfileCard} from './ProfileCard';
 
+import {COOKIE_INSTANCE_URL} from 'components/SelectServer';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {RootState} from 'src/reducers';
@@ -17,6 +19,8 @@ export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
   const total = useSelector<RootState, number>(state => state.notificationState.total);
 
   const router = useRouter();
+
+  const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
 
   const {user, anonymous, alias, currentWallet, wallets, networks, userWalletAddress} =
     useUserHook();
@@ -34,11 +38,11 @@ export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
 
   const handleSignOut = async () => {
     await logout();
-    router.push('/');
+    router.push({pathname: '/', query: {rpc: cookies[COOKIE_INSTANCE_URL]}});
   };
 
   const handleLoginOrCreateAccount = () => {
-    router.push('/login');
+    router.push({pathname: '/login', query: {rpc: cookies[COOKIE_INSTANCE_URL]}});
   };
 
   const handleShowNotificationList = () => {
