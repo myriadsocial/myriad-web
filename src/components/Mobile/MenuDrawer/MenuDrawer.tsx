@@ -108,8 +108,7 @@ export const MenuDrawerComponent: React.FC = () => {
   };
 
   const handleSignOut = async () => {
-    await logout();
-    router.push({pathname: '/', query: {rpc: cookies[COOKIE_INSTANCE_URL]}});
+    await logout(`/?rpc=${cookies[COOKIE_INSTANCE_URL]}`);
   };
 
   const handleLoginOrCreateAccount = () => {

@@ -42,7 +42,7 @@ export const useInstances = () => {
     state => state.serverState,
   );
 
-  const [cookies, setCookies] = useCookies([COOKIE_INSTANCE_URL]);
+  const [, setCookies] = useCookies([COOKIE_INSTANCE_URL]);
   const [serverList, setServerList] = useState<ServerListProps[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingSwitch, setLoadingSwitch] = useState<boolean>(false);
@@ -197,19 +197,13 @@ export const useInstances = () => {
   };
 
   const loginWithEmail = async (apiURL: string, email: string) => {
+    setCookies(COOKIE_INSTANCE_URL, apiURL);
+
     const registered = await getCheckEmail(email, apiURL);
     if (!registered) throw new Error('AccountNotFound');
 
     await requestLink(email, apiURL);
-    await logout();
-    router.push({
-      pathname: '/login',
-      query: {
-        rpc: cookies[COOKIE_INSTANCE_URL],
-        switchInstance: 'true',
-        email,
-      },
-    });
+    await logout(`/login?rpc=${apiURL}&switchInstance=true&email=${email}`);
   };
 
   return {

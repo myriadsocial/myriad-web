@@ -10,7 +10,6 @@ import {useStyles} from './experience.style';
 import {COOKIE_INSTANCE_URL} from 'components/SelectServer';
 import {PromptComponent as PromptMobile} from 'src/components/Mobile/PromptDrawer/Prompt';
 import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
-import {useAuthHook} from 'src/hooks/auth.hook';
 
 export type ExperienceSignInProps = {
   open: boolean;
@@ -23,15 +22,13 @@ export const ExperienceSignIn: React.FC<ExperienceSignInProps> = props => {
   const router = useRouter();
   const style = useStyles();
 
-  const {logout} = useAuthHook();
-
   const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
 
   const handleSignIn = async () => {
     onClose();
-    await logout();
-    router.push(`/?rpc=${cookies[COOKIE_INSTANCE_URL]}`);
+    router.push(`/login?rpc=${cookies[COOKIE_INSTANCE_URL]}`);
   };
+
   return (
     <>
       <PromptMobile

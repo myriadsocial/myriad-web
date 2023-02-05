@@ -40,7 +40,6 @@ import {fetchNetwork} from 'src/reducers/user/actions';
 
 type SelectServerProps = {
   title?: string;
-  onServerSelect?: (server: ServerListProps) => void;
   register?: boolean;
   setRegister?: (value: boolean) => void;
   page?: string;
@@ -50,7 +49,6 @@ export const COOKIE_INSTANCE_URL = 'cookie-instance-url';
 
 const SelectServer = ({
   title,
-  onServerSelect,
   register,
   setRegister,
   page = 'login',
@@ -63,7 +61,7 @@ const SelectServer = ({
   const {servers, getAllInstances, loading} = useInstances();
   const {logout} = useAuthHook();
 
-  const [cookies, setCookies] = useCookies([COOKIE_INSTANCE_URL]);
+  const [, setCookies] = useCookies([COOKIE_INSTANCE_URL]);
   const [selectedServer, setSelectedServer] = useState<ServerListProps | null>(null);
   const [open, setOpen] = useState(false);
 
@@ -83,7 +81,6 @@ const SelectServer = ({
 
   const handleSelect = async (server: ServerListProps) => {
     setSelectedServer(server);
-    onServerSelect(server);
 
     if (page === 'login') {
       await router.replace({query: {rpc: `${server.apiUrl}`}}, undefined, {shallow: true});
@@ -101,9 +98,9 @@ const SelectServer = ({
     setRegister(false);
   };
 
-  const onLogout = async () => {
-    await logout();
-    router.push(`/?${cookies[COOKIE_INSTANCE_URL]}`);
+  const onLogout = async (server: ServerListProps) => {
+    setCookies(COOKIE_INSTANCE_URL, server.apiUrl);
+    await logout(`/login?rpc=${server.apiUrl}`);
   };
 
   return (
@@ -257,7 +254,11 @@ const SelectServer = ({
                 color="secondary">
                 {i18n.t('Login.Options.Prompt_Select_Instance.No_Account_Cancel')}
               </Button>
-              <Button onClick={onLogout} size="small" variant="contained" color="primary">
+              <Button
+                onClick={() => onLogout(selectedServer)}
+                size="small"
+                variant="contained"
+                color="primary">
                 {i18n.t('Login.Options.Prompt_Select_Instance.No_Account_Confirm')}
               </Button>
             </ListItem>
