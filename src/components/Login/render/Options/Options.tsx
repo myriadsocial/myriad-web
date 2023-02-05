@@ -32,7 +32,6 @@ import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {NetworkIdEnum} from 'src/interfaces/network';
-import {ServerListProps} from 'src/interfaces/server-list';
 import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
@@ -48,7 +47,6 @@ type OptionProps = {
     walletType: WalletTypeEnum,
   ) => void;
   isMobileSignIn?: boolean;
-  setSelectedInstance?: (server: ServerListProps) => void;
 };
 
 export const Options: React.FC<OptionProps> = props => {
@@ -59,7 +57,7 @@ export const Options: React.FC<OptionProps> = props => {
   const {query} = useQueryParams();
   const {network} = query;
 
-  const {onConnect, onConnectNear, isMobileSignIn, setSelectedInstance} = props;
+  const {onConnect, onConnectNear, isMobileSignIn} = props;
 
   const navigate = useNavigate();
   const {enablePolkadotExtension, getPolkadotAccounts} = usePolkadotExtension();
@@ -223,13 +221,6 @@ export const Options: React.FC<OptionProps> = props => {
     };
     doSelectAccount();
   }, [handleConnect]);
-
-  const toggleSelected = (server: ServerListProps) => {
-    setWallet(null);
-    setNetworkId(null);
-    setBlockchainPlatform(null);
-    setSelectedInstance(server);
-  };
 
   return (
     <ShowIf condition={hideOptions}>
@@ -425,7 +416,7 @@ export const Options: React.FC<OptionProps> = props => {
             </Grid>
           </div>
 
-          <SelectServer onServerSelect={server => toggleSelected(server)} page="login" />
+          <SelectServer page="login" />
           <div className={styles.actionWrapper}>
             <Button variant="outlined" color="secondary" onClick={() => navigate('/')}>
               Back
@@ -595,7 +586,7 @@ export const Options: React.FC<OptionProps> = props => {
               </Grid>
             </div>
 
-            <SelectServer onServerSelect={server => toggleSelected(server)} page="login" />
+            <SelectServer page="login" />
 
             <div style={{display: 'flex', flexDirection: 'column', gap: 16}}>
               <Button variant="outlined" color="secondary" onClick={() => navigate('/')}>

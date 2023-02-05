@@ -41,6 +41,7 @@ import {fetchNetwork} from 'src/reducers/user/actions';
 type SelectServerProps = {
   title?: string;
   register?: boolean;
+  onSwitchInstance: (server: ServerListProps, callback?: () => void) => void;
   setRegister?: (value: boolean) => void;
   page?: string;
 };
@@ -51,6 +52,7 @@ const SelectServer = ({
   title,
   register,
   setRegister,
+  onSwitchInstance,
   page = 'login',
 }: SelectServerProps) => {
   const dispatch = useDispatch();
@@ -89,9 +91,14 @@ const SelectServer = ({
       initialize({apiURL: server.apiUrl});
       dispatch(setServer(server.detail, server.apiUrl));
       dispatch(fetchNetwork());
-    }
 
-    setOpen(false);
+      setOpen(false);
+    } else {
+      onSwitchInstance(server, () => {
+        setOpen(false);
+        setRegister(false);
+      });
+    }
   };
 
   const handleCloseCheckAccountModal = () => {
@@ -228,7 +235,7 @@ const SelectServer = ({
         </DialogTitle>
         <DialogContent>
           <List>
-            <InstanceCard server={selectedServer} selected={true} />
+            <InstanceCard server={selectedServer} selected={true} onSelect={console.log} />
             <ListItem
               style={{
                 display: 'flex',

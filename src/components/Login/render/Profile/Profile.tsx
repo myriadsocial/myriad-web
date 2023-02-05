@@ -30,8 +30,8 @@ import useConfirm from 'src/components/common/Confirm/use-confirm.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {NetworkIdEnum} from 'src/interfaces/network';
-import {ServerListProps} from 'src/interfaces/server-list';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
+import {Server} from 'src/lib/api/server';
 import {toHexPublicKey} from 'src/lib/crypto';
 import {BlockchainProvider} from 'src/lib/services/blockchain-provider';
 import i18n from 'src/locale';
@@ -43,10 +43,10 @@ type ProfileProps = {
   checkUsernameAvailability: (username: string, callback: (available: boolean) => void) => void;
   walletType: WalletTypeEnum | string | null;
   networkId: NetworkIdEnum | null;
+  instance: Server;
   account?: InjectedAccountWithMeta | null;
   publicAddress?: string;
   isMobileSignIn?: boolean;
-  selectedInstance?: ServerListProps;
 };
 
 const USERNAME_MAX_LENGTH = 16;
@@ -68,8 +68,9 @@ export const Profile: React.FC<ProfileProps> = props => {
     publicAddress,
     networkId,
     isMobileSignIn,
-    selectedInstance,
+    instance,
   } = props;
+
   const {networks} = useSelector<RootState, UserState>(state => state.userState);
   const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
   const [termApproved, setTermApproved] = useState(false);
@@ -354,7 +355,6 @@ export const Profile: React.FC<ProfileProps> = props => {
     setTermApproved(!termApproved);
   };
 
-  const instance = selectedInstance?.detail;
   const isDescriptionLong = instance?.description?.split(' ').length > 10;
 
   return (

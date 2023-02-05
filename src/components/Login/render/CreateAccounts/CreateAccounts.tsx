@@ -21,8 +21,8 @@ import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import ShowIf from 'components/common/show-if.component';
 import useMobileDetect from 'src/hooks/use-is-mobile-detect';
 import {IcEmail} from 'src/images/Icons';
-import {ServerListProps} from 'src/interfaces/server-list';
 import {signUpWithEmail} from 'src/lib/api/auth-link';
+import {Server} from 'src/lib/api/server';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {ConfigState} from 'src/reducers/config/reducer';
@@ -42,13 +42,13 @@ const {publicRuntimeConfig} = getConfig();
 type ProfileProps = {
   checkUsernameAvailability: (username: string, callback: (available: boolean) => void) => void;
   email: string;
-  selectedInstance?: ServerListProps;
+  instance: Server;
 };
 export default function CreateAccounts(props: ProfileProps) {
   const detect = useMobileDetect();
 
   const styles = useStyles(detect.isMobile())();
-  const {checkUsernameAvailability, email, selectedInstance} = props;
+  const {checkUsernameAvailability, email, instance} = props;
   const confirm = useConfirm();
   const navigate = useNavigate();
   const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
@@ -292,8 +292,7 @@ export default function CreateAccounts(props: ProfileProps) {
     setExpanded(!expanded);
   };
 
-  const instance = selectedInstance?.detail;
-  const isDescriptionLong = instance?.description.split(' ').length > 10;
+  const isDescriptionLong = instance?.description?.split(' ')?.length > 10;
 
   return (
     <div className={styles.root}>

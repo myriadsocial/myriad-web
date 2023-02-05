@@ -30,6 +30,7 @@ export const Menu: React.FC<MenuProps> = props => {
   const router = useRouter();
 
   const enqueueSnackbar = useEnqueueSnackbar();
+
   const {switchInstance, loadingSwitch, onLoadingSwitch} = useInstances();
 
   const menu = useMenuList(selected);
@@ -46,7 +47,7 @@ export const Menu: React.FC<MenuProps> = props => {
     onChange(item.url);
   };
 
-  const toggleSelected = async (server: ServerListProps) => {
+  const handleSwitchInstance = async (server: ServerListProps, callback?: () => void) => {
     try {
       await switchInstance(server);
     } catch (err) {
@@ -57,6 +58,8 @@ export const Menu: React.FC<MenuProps> = props => {
       }
 
       onLoadingSwitch(false);
+    } finally {
+      callback && callback();
     }
   };
 
@@ -70,7 +73,7 @@ export const Menu: React.FC<MenuProps> = props => {
         <div className={styles.instance}>
           <SelectServer
             title={i18n.t('Login.Options.Prompt_Select_Instance.Switch')}
-            onServerSelect={server => toggleSelected(server)}
+            onSwitchInstance={handleSwitchInstance}
             register={register}
             setRegister={value => setRegister(value)}
             page="layout"

@@ -34,7 +34,7 @@ const useStyles = makeStyles(() =>
 
 type InstanceCardProps = {
   server: ServerListProps;
-  onSelect?: (server: ServerListProps) => void;
+  onSelect: () => void;
   selected: boolean;
 };
 
@@ -51,11 +51,6 @@ const InstanceCard = ({server, onSelect, selected}: InstanceCardProps) => {
     setExpanded(!expanded);
   };
 
-  const handleSelect = () => {
-    if (!onSelect) return;
-    onSelect(server);
-  };
-
   return (
     <ListItem key={server.id}>
       <Card
@@ -69,7 +64,7 @@ const InstanceCard = ({server, onSelect, selected}: InstanceCardProps) => {
             alignItems: 'center',
             paddingBottom: '10px',
           }}
-          onClick={handleSelect}>
+          onClick={onSelect}>
           <CardMedia style={{padding: 16}}>
             {server.detail?.serverImageURL && (
               <Image
