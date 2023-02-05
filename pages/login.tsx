@@ -1,8 +1,10 @@
+import {Session} from 'next-auth';
 import {getSession} from 'next-auth/react';
 import getConfig from 'next/config';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 
+import {COOKIE_INSTANCE_URL} from 'components/SelectServer';
 import AlertComponent from 'src/components/atoms/Alert/Alert.component';
 import ShowIf from 'src/components/common/show-if.component';
 import {LoginLayout} from 'src/components/template/Login';
@@ -69,12 +71,12 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const dispatch = store.dispatch as ThunkDispatchAction;
 
-  const cookiesInstanceURL = cookies['instance'];
   const queryInstanceURL = query.rpc;
+  const cookiesInstanceURL = cookies[COOKIE_INSTANCE_URL];
   const defaultInstanceURL = serverRuntimeConfig.myriadAPIURL;
   const apiURL = queryInstanceURL ?? cookiesInstanceURL ?? defaultInstanceURL;
 
-  res.setHeader('set-cookie', [`instance=${apiURL}`]);
+  res.setHeader('set-cookie', [`${COOKIE_INSTANCE_URL}=${apiURL}`]);
 
   let mobile = false;
   let redirectAuth: string | null = null;
@@ -93,7 +95,13 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     }
   }
 
-  const session = await getSession(context);
+  let session: Session | null = null;
+
+  try {
+    session = await getSession(context);
+  } catch {
+    // ignore
+  }
 
   const {redirect} = query;
 

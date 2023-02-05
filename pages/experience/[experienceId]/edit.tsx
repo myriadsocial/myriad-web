@@ -28,7 +28,7 @@ import {
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
-const {publicRuntimeConfig, serverRuntimeConfig} = getConfig();
+const {publicRuntimeConfig} = getConfig();
 
 type EditExperiencePageProps = {
   session: Session;
@@ -48,7 +48,6 @@ const EditExperience: React.FC<EditExperiencePageProps> = props => {
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
   const {params, req} = context;
-  const {cookies} = req;
 
   const experienceId = params?.experienceId as string;
 
@@ -65,7 +64,13 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     };
   }
 
-  const session = await getSession(context);
+  let session: Session | null = null;
+
+  try {
+    session = await getSession(context);
+  } catch {
+    // ignore
+  }
 
   if (!session?.user || session?.user?.anonymous) {
     return {
@@ -77,14 +82,11 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   const sessionInstanceURL = session?.user?.instanceURL;
-  const cookiesInstanceURL = cookies['instance'];
-  const defaultInstanceURL = serverRuntimeConfig.myriadAPIURL;
-  const apiURL = sessionInstanceURL ?? cookiesInstanceURL ?? defaultInstanceURL;
 
   initialize({cookie: req.headers.cookie});
 
   await Promise.all([
-    dispatch(fetchServer(apiURL)),
+    dispatch(fetchServer(sessionInstanceURL)),
     dispatch(fetchNetwork()),
     dispatch(fetchAvailableToken()),
     dispatch(fetchExchangeRates()),

@@ -100,7 +100,13 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     };
   }
 
-  const session = await getSession(context);
+  let session: Session | null = null;
+
+  try {
+    session = await getSession(context);
+  } catch {
+    // ignore
+  }
 
   const sessionInstanceURL = session?.user?.instanceURL;
   const cookiesInstanceURL = cookies[COOKIE_INSTANCE_URL];

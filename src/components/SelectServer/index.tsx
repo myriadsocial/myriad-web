@@ -81,12 +81,12 @@ const SelectServer = ({
     setOpen(false);
   };
 
-  const handleSelect = (server: ServerListProps) => {
+  const handleSelect = async (server: ServerListProps) => {
     setSelectedServer(server);
     onServerSelect(server);
 
     if (page === 'login') {
-      router.replace({query: {rpc: `${server.apiUrl}`}}, undefined, {shallow: true});
+      await router.replace({query: {rpc: `${server.apiUrl}`}}, undefined, {shallow: true});
       setCookies(COOKIE_INSTANCE_URL, server.apiUrl);
 
       initialize({apiURL: server.apiUrl});
