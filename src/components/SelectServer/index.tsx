@@ -2,6 +2,7 @@ import {ChevronDownIcon} from '@heroicons/react/outline';
 import {XIcon} from '@heroicons/react/solid';
 
 import React, {useState, useEffect} from 'react';
+import {useCookies} from 'react-cookie';
 import {useDispatch, useSelector} from 'react-redux';
 
 import Image from 'next/image';
@@ -25,7 +26,6 @@ import {InstanceCardSkeleton} from './InstanceCardSkeleton';
 import useStyles from './SelectServer.styles';
 
 import clsx from 'clsx';
-import Cookies from 'js-cookie';
 import {unionBy} from 'lodash';
 import ShowIf from 'src/components/common/show-if.component';
 import {useAuthHook} from 'src/hooks/auth.hook';
@@ -40,17 +40,19 @@ import {fetchNetwork} from 'src/reducers/user/actions';
 
 type SelectServerProps = {
   title?: string;
-  onServerSelect?: (server: ServerListProps) => void;
   register?: boolean;
+  onSwitchInstance?: (server: ServerListProps, callback?: () => void) => void;
   setRegister?: (value: boolean) => void;
   page?: string;
 };
 
+export const COOKIE_INSTANCE_URL = 'cookie-instance-url';
+
 const SelectServer = ({
   title,
-  onServerSelect,
   register,
   setRegister,
+  onSwitchInstance,
   page = 'login',
 }: SelectServerProps) => {
   const dispatch = useDispatch();
@@ -59,10 +61,10 @@ const SelectServer = ({
   const {server, apiURL} = useSelector<RootState, ServerState>(state => state.serverState);
 
   const {servers, getAllInstances, loading} = useInstances();
-  const [selectedServer, setSelectedServer] = useState<ServerListProps | null>(null);
-
   const {logout} = useAuthHook();
 
+  const [, setCookies] = useCookies([COOKIE_INSTANCE_URL]);
+  const [selectedServer, setSelectedServer] = useState<ServerListProps | null>(null);
   const [open, setOpen] = useState(false);
 
   const classes = useStyles();
@@ -79,25 +81,34 @@ const SelectServer = ({
     setOpen(false);
   };
 
-  const handleSelect = (server: ServerListProps) => {
+  const handleSelect = async (server: ServerListProps) => {
     setSelectedServer(server);
-    onServerSelect(server);
 
     if (page === 'login') {
-      router.push({query: {rpc: `${server.apiUrl}`}}, undefined, {shallow: true});
-
-      Cookies.set('instance', server.apiUrl);
+      await router.replace({query: {rpc: `${server.apiUrl}`}}, undefined, {shallow: true});
+      setCookies(COOKIE_INSTANCE_URL, server.apiUrl);
 
       initialize({apiURL: server.apiUrl});
       dispatch(setServer(server.detail, server.apiUrl));
       dispatch(fetchNetwork());
-    }
 
-    setOpen(false);
+      setOpen(false);
+    } else {
+      if (!onSwitchInstance) return;
+      onSwitchInstance(server, () => {
+        setOpen(false);
+        setRegister(false);
+      });
+    }
   };
 
   const handleCloseCheckAccountModal = () => {
     setRegister(false);
+  };
+
+  const onLogout = async (server: ServerListProps) => {
+    setCookies(COOKIE_INSTANCE_URL, server.apiUrl);
+    await logout(`/login?rpc=${server.apiUrl}`);
   };
 
   return (
@@ -225,7 +236,7 @@ const SelectServer = ({
         </DialogTitle>
         <DialogContent>
           <List>
-            <InstanceCard server={selectedServer} selected={true} />
+            <InstanceCard server={selectedServer} selected={true} onSelect={console.log} />
             <ListItem
               style={{
                 display: 'flex',
@@ -252,9 +263,7 @@ const SelectServer = ({
                 {i18n.t('Login.Options.Prompt_Select_Instance.No_Account_Cancel')}
               </Button>
               <Button
-                onClick={async () => {
-                  await logout('/login');
-                }}
+                onClick={() => onLogout(selectedServer)}
                 size="small"
                 variant="contained"
                 color="primary">

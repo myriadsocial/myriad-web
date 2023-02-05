@@ -1,4 +1,5 @@
 import React, {useState, useCallback, useEffect} from 'react';
+import {useCookies} from 'react-cookie';
 import {useSelector} from 'react-redux';
 import {MemoryRouter as Router, Routes, Route} from 'react-router-dom';
 
@@ -20,18 +21,18 @@ import {Options} from './render/Options';
 import {Profile} from './render/Profile';
 import SigninMethod from './render/SignInMethod/SigninMethod';
 
+import {COOKIE_INSTANCE_URL} from 'components/SelectServer';
 import {MyriadFullIcon} from 'components/atoms/Icons';
-import Cookies from 'js-cookie';
 import last from 'lodash/last';
 import LoginMagicLink from 'src/components/Login/render/MagicLink/LoginMagicLink';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useAlertHook} from 'src/hooks/use-alert.hook';
+import {useInstances} from 'src/hooks/use-instances.hooks';
 import useMobileDetect from 'src/hooks/use-is-mobile-detect';
 import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {useProfileHook} from 'src/hooks/use-profile.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {NetworkIdEnum} from 'src/interfaces/network';
-import {ServerListProps} from 'src/interfaces/server-list';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
 import {getCheckEmail} from 'src/lib/api/user';
 import {toHexPublicKey} from 'src/lib/crypto';
@@ -61,8 +62,10 @@ export const Login: React.FC<LoginProps> = props => {
 
   const {query} = useQueryParams();
   const {showAlert} = useAlertHook();
+  const {instance} = useInstances();
 
   const [, setToken] = useState('');
+  const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
   const [walletType, setWalletType] = useState<WalletTypeEnum | null>(redirectAuth);
   const [networkId, setNetworkId] = useState<NetworkIdEnum | null>(null);
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
@@ -76,7 +79,6 @@ export const Login: React.FC<LoginProps> = props => {
   ]);
   const [email, setEmail] = useState<string>('');
   const [disableSignIn, setDisableSignIn] = useState<boolean>(false);
-  const [selectedInstance, setSelectedInstance] = useState<ServerListProps | null>(null);
 
   useEffect(() => {
     if (redirectAuth === WalletTypeEnum.NEAR || redirectAuth === WalletTypeEnum.MYNEAR) {
@@ -104,8 +106,9 @@ export const Login: React.FC<LoginProps> = props => {
         username: '',
         email: registeredEmail,
         token,
+        instanceURL: cookies[COOKIE_INSTANCE_URL],
         redirect: false,
-        callbackUrl: Cookies.get('instance') ?? publicRuntimeConfig.appAuthURL,
+        callbackUrl: publicRuntimeConfig.appAuthURL,
       }).then(response => {
         if (response.ok) {
           router.reload();
@@ -303,12 +306,7 @@ export const Login: React.FC<LoginProps> = props => {
           <Route
             index={false}
             path="/email"
-            element={
-              <LoginByEmail
-                onNext={checkEmailRegistered}
-                setSelectedInstance={setSelectedInstance}
-              />
-            }
+            element={<LoginByEmail onNext={checkEmailRegistered} />}
           />
 
           <Route
@@ -318,7 +316,7 @@ export const Login: React.FC<LoginProps> = props => {
               <CreateAccounts
                 email={email}
                 checkUsernameAvailability={checkUsernameAvailable}
-                selectedInstance={selectedInstance}
+                instance={instance}
               />
             }
           />
@@ -331,7 +329,6 @@ export const Login: React.FC<LoginProps> = props => {
                 onConnect={handleOnconnect}
                 onConnectNear={handleOnConnectNear}
                 isMobileSignIn={isMobileSignIn}
-                setSelectedInstance={setSelectedInstance}
               />
             }
           />
@@ -360,7 +357,7 @@ export const Login: React.FC<LoginProps> = props => {
                 account={selectedAccount}
                 checkUsernameAvailability={checkUsernameAvailable}
                 isMobileSignIn={isMobileSignIn}
-                selectedInstance={selectedInstance}
+                instance={instance}
               />
             }
           />

@@ -7,16 +7,14 @@ import {useStyles} from './LoginByEmail.style';
 
 import SelectServer from 'src/components/SelectServer';
 import {useAuthLinkHook} from 'src/hooks/auth-link.hook';
-import {ServerListProps} from 'src/interfaces/server-list';
 import i18n from 'src/locale';
 import validator from 'validator';
 
 type LoginByEmailProps = {
   onNext: (successCallback: () => void, failedCallback: () => void, email: string) => Promise<void>;
-  setSelectedInstance?: (server: ServerListProps) => void;
 };
 
-const LoginByEmail = ({onNext, setSelectedInstance}: LoginByEmailProps) => {
+const LoginByEmail = ({onNext}: LoginByEmailProps) => {
   const styles = useStyles();
   const {requestLink} = useAuthLinkHook();
 
@@ -64,10 +62,6 @@ const LoginByEmail = ({onNext, setSelectedInstance}: LoginByEmailProps) => {
     navigate('/');
   };
 
-  const toggleSelected = (server: ServerListProps) => {
-    setSelectedInstance(server);
-  };
-
   return (
     <div className={styles.root}>
       <div>
@@ -87,7 +81,7 @@ const LoginByEmail = ({onNext, setSelectedInstance}: LoginByEmailProps) => {
         error={error.isError}
         helperText={error.isError ? error.message : ''}
       />
-      <SelectServer onServerSelect={server => toggleSelected(server)} page="login" />
+      <SelectServer page="login" />
       <div className={styles.actionWrapper}>
         <Button variant="outlined" color="primary" onClick={handleBack}>
           {i18n.t('Login.Email.LoginByEmail.Back')}

@@ -257,6 +257,7 @@ export const BlockchainProvider: React.ComponentType<BlockchainProviderProps> = 
           server,
           provider,
           switchNetwork: shiftNetwork,
+          switchInstance: onChangeProvider,
           loadingBlockchain,
           loadingSwitch,
         }}>

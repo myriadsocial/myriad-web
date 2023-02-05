@@ -4,7 +4,6 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import getConfig from 'next/config';
 
 import APIAdapter from 'adapters/api';
-import Cookies from 'js-cookie';
 import {NetworkIdEnum} from 'src/interfaces/network';
 import {SignInCredential, SignInWithEmailCredential} from 'src/interfaces/session';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
@@ -44,7 +43,6 @@ const createOptions = (req: NextApiRequest) => ({
         initialize({apiURL: credentials.instanceURL});
 
         if (credentials.anonymous === 'true') {
-          Cookies.remove('instance');
           // Any object returned will be saved in `user` property of the JWT
           return {
             ...credentials,
@@ -62,8 +60,6 @@ const createOptions = (req: NextApiRequest) => ({
           });
 
           if (!data?.accessToken) throw Error('Failed to authorize user!');
-
-          Cookies.remove('instance');
 
           try {
             // Any object returned will be saved in `user` property of the JWT
@@ -102,8 +98,6 @@ const createOptions = (req: NextApiRequest) => ({
         const data = await AuthLinkAPI.loginWithLink(credentials.token);
 
         if (!data?.accessToken) throw Error('Failed to authorize user!');
-
-        Cookies.remove('instance');
 
         try {
           const parsedEmail = credentials.email.replace(/[^a-zA-Z0-9]/g, '');

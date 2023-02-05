@@ -1,5 +1,6 @@
 import {useState, useCallback} from 'react';
-import {useSelector} from 'react-redux';
+import {useCookies} from 'react-cookie';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {signIn, useSession} from 'next-auth/react';
 import {useRouter} from 'next/router';
@@ -12,24 +13,28 @@ import {useAuthHook} from './auth.hook';
 import {usePolkadotExtension} from './use-polkadot-app.hook';
 import {useUserHook} from './use-user.hook';
 
+import {COOKIE_INSTANCE_URL} from 'components/SelectServer';
+import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
 import useMyriadInstance from 'components/common/Blockchain/use-myriad-instance.hooks';
 import * as nearAPI from 'near-api-js';
 import {MYRIAD_WALLET_KEY} from 'src/interfaces/blockchain-interface';
 import {ServerListProps} from 'src/interfaces/server-list';
 import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
-import initialize from 'src/lib/api/base';
 import * as NetworkAPI from 'src/lib/api/network';
 import {getCheckEmail} from 'src/lib/api/user';
 import {toHexPublicKey} from 'src/lib/crypto';
 import {Near} from 'src/lib/services/near-api-js';
 import {PolkadotJs} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
+import {setServer} from 'src/reducers/server/actions';
 import {ServerState} from 'src/reducers/server/reducer';
 
 export const useInstances = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const {data: session} = useSession();
+  const {switchInstance: onChangeInstance} = useBlockchain();
   const {provider} = useMyriadInstance();
   const {fetchUserNonce, getRegisteredAccounts, logout} = useAuthHook();
   const {requestLink} = useAuthLinkHook();
@@ -39,6 +44,7 @@ export const useInstances = () => {
     state => state.serverState,
   );
 
+  const [, setCookies] = useCookies([COOKIE_INSTANCE_URL]);
   const [serverList, setServerList] = useState<ServerListProps[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingSwitch, setLoadingSwitch] = useState<boolean>(false);
@@ -87,16 +93,13 @@ export const useInstances = () => {
 
   const switchInstance = async (server: ServerListProps) => {
     if (server.apiUrl === currentApiURL) return;
-
-    if (anonymous) return router.reload();
-
-    initialize({apiURL: server.apiUrl});
+    if (anonymous) return switchInstanceAsAnonymous(server);
 
     const email = session?.user?.email;
     if (email) return loginWithEmail(server.apiUrl, email);
 
-    const {nonce} = await fetchUserNonce(currentWallet.id);
-    const network = await NetworkAPI.getNetwork(currentWallet.networkId);
+    const {nonce} = await fetchUserNonce(currentWallet.id, server.apiUrl);
+    const network = await NetworkAPI.getNetwork(currentWallet.networkId, server.apiUrl);
 
     if (!network) throw new Error('NetworkNotExist');
     if (nonce <= 0) throw new Error('AccountNotFound');
@@ -139,7 +142,7 @@ export const useInstances = () => {
         break;
       }
 
-      // TODO: switch instance with NEAR when wallet not sign in
+      // TODO: switch instance with NEAR when wallet is cleared manually on local storage
       case BlockchainPlatform.NEAR: {
         walletType = walletType ?? WalletTypeEnum.MYNEAR;
 
@@ -175,19 +178,36 @@ export const useInstances = () => {
         throw new Error('BlockchainPlatformNotFound');
     }
 
+    setCookies(COOKIE_INSTANCE_URL, server.apiUrl);
     window.localStorage.setItem(MYRIAD_WALLET_KEY, walletType);
-    router.reload();
+    const pathname = router.pathname;
+    const query = router.query;
+    await router.replace({pathname, query: {...query, rpc: server.apiUrl}});
+    onChangeInstance();
     setLoadingSwitch(false);
   };
 
+  const switchInstanceAsAnonymous = async (server: ServerListProps) => {
+    setCookies(COOKIE_INSTANCE_URL, server.apiUrl);
+
+    const pathname = router.pathname;
+    const query = router.query;
+
+    Object.assign(query, {rpc: server.apiUrl});
+
+    await router.replace({pathname, query: {rpc: `${server.apiUrl}`}});
+    await dispatch(setServer(server.detail, server.apiUrl));
+    return;
+  };
+
   const loginWithEmail = async (apiURL: string, email: string) => {
-    const registered = await getCheckEmail(email);
+    setCookies(COOKIE_INSTANCE_URL, apiURL);
+
+    const registered = await getCheckEmail(email, apiURL);
     if (!registered) throw new Error('AccountNotFound');
 
-    await requestLink(email);
-    setTimeout(() => {
-      logout(`/login?switchInstance=true&email=${email}`, apiURL);
-    }, 1000);
+    await requestLink(email, apiURL);
+    await logout(`/login?rpc=${apiURL}&switchInstance=true&email=${email}`);
   };
 
   return {

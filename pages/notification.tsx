@@ -28,7 +28,7 @@ import {
 import {wrapper} from 'src/store';
 import {ThunkDispatchAction} from 'src/types/thunk';
 
-const {publicRuntimeConfig, serverRuntimeConfig} = getConfig();
+const {publicRuntimeConfig} = getConfig();
 
 type NotificationPageProps = {
   session: Session;
@@ -54,7 +54,6 @@ const Notification: React.FC<NotificationPageProps> = props => {
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
   const {req} = context;
-  const {cookies} = req;
 
   const dispatch = store.dispatch as ThunkDispatchAction;
 
@@ -69,7 +68,13 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     };
   }
 
-  const session = await getSession(context);
+  let session: Session | null = null;
+
+  try {
+    session = await getSession(context);
+  } catch {
+    // ignore
+  }
 
   if (!session?.user || session?.user?.anonymous) {
     return {
@@ -81,15 +86,12 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   const sessionInstanceURL = session?.user?.instanceURL;
-  const cookiesInstanceURL = cookies['instance'];
-  const defaultInstanceURL = serverRuntimeConfig.myriadAPIURL;
-  const apiURL = sessionInstanceURL ?? cookiesInstanceURL ?? defaultInstanceURL;
 
   initialize({cookie: req.headers.cookie});
 
   await dispatch(fetchUser());
   await Promise.all([
-    dispatch(fetchServer(apiURL)),
+    dispatch(fetchServer(sessionInstanceURL)),
     dispatch(fetchNetwork()),
     dispatch(fetchAvailableToken()),
     dispatch(fetchExchangeRates()),

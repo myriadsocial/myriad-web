@@ -2,6 +2,7 @@ import MyriadAPI from './base';
 import {PAGINATION_LIMIT} from './constants/pagination';
 import {BaseList} from './interfaces/base-list.interface';
 
+import axios from 'axios';
 import {User, ActivityLog, FriendStatusProps} from 'src/interfaces/user';
 import {WalletDetail} from 'src/interfaces/wallet';
 
@@ -113,7 +114,15 @@ export const getWalletAddress = async (userId: string): Promise<WalletDetail> =>
   return data;
 };
 
-export const getCheckEmail = async (email: string): Promise<boolean> => {
+export const getCheckEmail = async (email: string, apiURL?: string): Promise<boolean> => {
+  if (apiURL) {
+    const {data} = await axios({
+      url: `/users/email/${email}`,
+      method: 'GET',
+    });
+    return data.status;
+  }
+
   const {data} = await MyriadAPI().request<{status: boolean}>({
     url: `/users/email/${email}`,
     method: 'GET',

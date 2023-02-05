@@ -3,19 +3,18 @@ import React, {useState} from 'react';
 import Image from 'next/image';
 import {useRouter} from 'next/router';
 
-import {Backdrop, CircularProgress, Typography} from '@material-ui/core';
+import {Backdrop, CircularProgress} from '@material-ui/core';
 
 import {BoxComponent} from '../atoms/Box';
 import {ListItemComponent} from '../atoms/ListItem';
 import {useStyles} from './Menu.styles';
 import {useMenuList, MenuDetail, MenuId} from './use-menu-list';
 
-import {PolkadotLink} from 'components/common/PolkadotLink.component';
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import SelectServer from 'src/components/SelectServer';
 import {useInstances} from 'src/hooks/use-instances.hooks';
 import {ServerListProps} from 'src/interfaces/server-list';
 import i18n from 'src/locale';
-import {Prompt} from 'src/stories/Prompt.stories';
 
 type MenuProps = {
   selected: MenuId;
@@ -30,13 +29,13 @@ export const Menu: React.FC<MenuProps> = props => {
   const styles = useStyles();
   const router = useRouter();
 
+  const enqueueSnackbar = useEnqueueSnackbar();
+
   const {switchInstance, loadingSwitch, onLoadingSwitch} = useInstances();
 
   const menu = useMenuList(selected);
 
   const [register, setRegister] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [openError, setOpenError] = useState(false);
 
   const gotoHome = () => {
     if (router.pathname === '/') return;
@@ -48,24 +47,20 @@ export const Menu: React.FC<MenuProps> = props => {
     onChange(item.url);
   };
 
-  const toggleSelected = async (server: ServerListProps) => {
+  const handleSwitchInstance = async (server: ServerListProps, callback?: () => void) => {
     try {
       await switchInstance(server);
     } catch (err) {
       if (err.message === 'AccountNotFound') {
         setRegister(true);
       } else {
-        setOpenError(true);
-        setErrorMessage(err.message);
+        enqueueSnackbar({message: err.message, variant: 'error'});
       }
 
       onLoadingSwitch(false);
+    } finally {
+      callback && callback();
     }
-  };
-
-  const onCancelError = () => {
-    setErrorMessage('');
-    setOpenError(false);
   };
 
   return (
@@ -78,7 +73,7 @@ export const Menu: React.FC<MenuProps> = props => {
         <div className={styles.instance}>
           <SelectServer
             title={i18n.t('Login.Options.Prompt_Select_Instance.Switch')}
-            onServerSelect={server => toggleSelected(server)}
+            onSwitchInstance={handleSwitchInstance}
             register={register}
             setRegister={value => setRegister(value)}
             page="layout"
@@ -104,22 +99,6 @@ export const Menu: React.FC<MenuProps> = props => {
       <Backdrop className={styles.backdrop} open={loadingSwitch}>
         <CircularProgress color="primary" />
       </Backdrop>
-      <Prompt
-        title={errorMessage}
-        icon="danger"
-        open={openError}
-        onCancel={onCancelError}
-        subtitle={
-          errorMessage === 'ExtensionNotInstalled' ? (
-            <Typography>
-              {i18n.t('Login.Options.Prompt_Extension.Subtitle_1')}&nbsp;
-              <PolkadotLink />
-              &nbsp;{i18n.t('Login.Options.Prompt_Extension.Subtitle_2')}
-            </Typography>
-          ) : (
-            <React.Fragment />
-          )
-        }></Prompt>
     </div>
   );
 };

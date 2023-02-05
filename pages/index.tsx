@@ -6,6 +6,7 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 
+import {COOKIE_INSTANCE_URL} from 'components/SelectServer';
 import {Timeline} from 'components/Timeline/Timeline.layout';
 import {SearchBoxContainer} from 'components/atoms/Search/SearchBoxContainer';
 import {NavbarComponent} from 'src/components/Mobile/Navbar/Navbar';
@@ -99,13 +100,19 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     };
   }
 
-  const session = await getSession(context);
+  let session: Session | null = null;
+
+  try {
+    session = await getSession(context);
+  } catch {
+    // ignore
+  }
 
   const sessionInstanceURL = session?.user?.instanceURL;
-  const cookiesInstanceURL = cookies['instance'];
+  const cookiesInstanceURL = cookies[COOKIE_INSTANCE_URL];
   const defaultInstanceURL = serverRuntimeConfig.myriadAPIURL;
 
-  let apiURL = sessionInstanceURL ?? cookiesInstanceURL ?? defaultInstanceURL;
+  let apiURL = sessionInstanceURL;
 
   const anonymous = !session || Boolean(session?.user?.anonymous);
 
@@ -116,7 +123,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     const queryInstanceURL = query.rpc;
 
     apiURL = queryInstanceURL ?? cookiesInstanceURL ?? defaultInstanceURL;
-    res.setHeader('set-cookie', [`instance=${apiURL}`]);
+    res.setHeader('set-cookie', [`${COOKIE_INSTANCE_URL}=${apiURL}`]);
 
     await dispatch(setAnonymous(username));
   } else {

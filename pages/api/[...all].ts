@@ -3,6 +3,7 @@ import {getSession} from 'next-auth/react';
 import httpProxyMiddleware from 'next-http-proxy-middleware';
 import getConfig from 'next/config';
 
+import {COOKIE_INSTANCE_URL} from 'components/SelectServer';
 import {isErrorWithMessage} from 'src/helpers/error';
 import {decryptMessage} from 'src/lib/crypto';
 
@@ -20,7 +21,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const session = await getSession({req});
-    const instanceURL = session?.user?.instanceURL ?? req.cookies['instance'];
+    const sessionInstanceURL = session?.user?.instanceURL;
+    const cookiesInstanceURL = req.cookies[COOKIE_INSTANCE_URL];
+    const instanceURL = sessionInstanceURL ?? cookiesInstanceURL;
 
     if (session && session?.user && session?.user.token) {
       let key = '';

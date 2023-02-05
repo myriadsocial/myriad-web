@@ -2,6 +2,7 @@ import {LogoutIcon} from '@heroicons/react/outline';
 import {MenuIcon} from '@heroicons/react/solid';
 
 import React from 'react';
+import {useCookies} from 'react-cookie';
 import {useSelector} from 'react-redux';
 
 import {useRouter} from 'next/router';
@@ -18,6 +19,7 @@ import {
 } from '@material-ui/core';
 
 import {NetworkOption} from 'components/ProfileCard/NetworkOption/NetworkOption';
+import {COOKIE_INSTANCE_URL} from 'components/SelectServer';
 import {CommonWalletIcon} from 'components/atoms/Icons';
 import ShowIf from 'components/common/show-if.component';
 import {useMenuList, MenuId, MenuDetail} from 'src/components/Menu/use-menu-list';
@@ -34,9 +36,11 @@ import {NotificationState} from 'src/reducers/notification/reducer';
 
 export const MenuDrawerComponent: React.FC = () => {
   const {total} = useSelector<RootState, NotificationState>(state => state.notificationState);
+
   const [selected, setSelected] = React.useState<MenuId>('home');
   const [openDrawer, setOpenDrawer] = React.useState(false);
   const [openPromptDrawer, setOpenPromptDrawer] = React.useState(false);
+  const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
 
   const {logout} = useAuthHook();
   const {user, alias, anonymous, userWalletAddress, networks, currentWallet, wallets} =
@@ -104,11 +108,11 @@ export const MenuDrawerComponent: React.FC = () => {
   };
 
   const handleSignOut = async () => {
-    logout();
+    await logout(`/?rpc=${cookies[COOKIE_INSTANCE_URL]}`);
   };
 
   const handleLoginOrCreateAccount = () => {
-    router.push('/login');
+    router.push({pathname: '/login', query: {rpc: cookies[COOKIE_INSTANCE_URL]}});
   };
 
   const openMenu = (item: MenuDetail) => () => {
