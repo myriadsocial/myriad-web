@@ -88,6 +88,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
   const initializeProvider = useCallback(async () => {
     if (anonymous) return;
     if (!initialize) return;
+    if (!currentWallet) return;
     if (loadingNear) dispatch(clearBalances());
     dispatch(clearBalances());
 

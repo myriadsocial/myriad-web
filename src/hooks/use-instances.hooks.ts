@@ -14,6 +14,7 @@ import {usePolkadotExtension} from './use-polkadot-app.hook';
 import {useUserHook} from './use-user.hook';
 
 import {COOKIE_INSTANCE_URL} from 'components/SelectServer';
+import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
 import useMyriadInstance from 'components/common/Blockchain/use-myriad-instance.hooks';
 import * as nearAPI from 'near-api-js';
 import {MYRIAD_WALLET_KEY} from 'src/interfaces/blockchain-interface';
@@ -33,6 +34,7 @@ export const useInstances = () => {
   const dispatch = useDispatch();
 
   const {data: session} = useSession();
+  const {switchInstance: onChangeInstance} = useBlockchain();
   const {provider} = useMyriadInstance();
   const {fetchUserNonce, getRegisteredAccounts, logout} = useAuthHook();
   const {requestLink} = useAuthLinkHook();
@@ -176,10 +178,12 @@ export const useInstances = () => {
         throw new Error('BlockchainPlatformNotFound');
     }
 
-    // TODO: Improvement load only props without loading page
     setCookies(COOKIE_INSTANCE_URL, server.apiUrl);
     window.localStorage.setItem(MYRIAD_WALLET_KEY, walletType);
-    router.reload();
+    const pathname = router.pathname;
+    const query = router.query;
+    await router.replace({pathname, query: {...query, rpc: server.apiUrl}});
+    onChangeInstance();
     setLoadingSwitch(false);
   };
 

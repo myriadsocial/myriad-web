@@ -41,7 +41,7 @@ import {fetchNetwork} from 'src/reducers/user/actions';
 type SelectServerProps = {
   title?: string;
   register?: boolean;
-  onSwitchInstance: (server: ServerListProps, callback?: () => void) => void;
+  onSwitchInstance?: (server: ServerListProps, callback?: () => void) => void;
   setRegister?: (value: boolean) => void;
   page?: string;
 };
@@ -94,6 +94,7 @@ const SelectServer = ({
 
       setOpen(false);
     } else {
+      if (!onSwitchInstance) return;
       onSwitchInstance(server, () => {
         setOpen(false);
         setRegister(false);
