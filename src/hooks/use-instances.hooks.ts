@@ -140,7 +140,7 @@ export const useInstances = () => {
         break;
       }
 
-      // TODO: switch instance with NEAR when wallet not sign in
+      // TODO: switch instance with NEAR when wallet is cleared manually on local storage
       case BlockchainPlatform.NEAR: {
         walletType = walletType ?? WalletTypeEnum.MYNEAR;
 
@@ -176,6 +176,8 @@ export const useInstances = () => {
         throw new Error('BlockchainPlatformNotFound');
     }
 
+    // TODO: Improvement load only props without loading page
+    setCookies(COOKIE_INSTANCE_URL, server.apiUrl);
     window.localStorage.setItem(MYRIAD_WALLET_KEY, walletType);
     router.reload();
     setLoadingSwitch(false);

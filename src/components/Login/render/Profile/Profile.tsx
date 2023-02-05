@@ -355,7 +355,7 @@ export const Profile: React.FC<ProfileProps> = props => {
   };
 
   const instance = selectedInstance?.detail;
-  const isDescriptionLong = instance.description.split(' ').length > 10;
+  const isDescriptionLong = instance?.description?.split(' ').length > 10;
 
   return (
     <>
