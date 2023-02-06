@@ -5,6 +5,8 @@ import React, {useState, useEffect} from 'react';
 import {useCookies} from 'react-cookie';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {useSession} from 'next-auth/react';
+import getConfig from 'next/config';
 import Image from 'next/image';
 import {useRouter} from 'next/router';
 
@@ -30,7 +32,9 @@ import {unionBy} from 'lodash';
 import ShowIf from 'src/components/common/show-if.component';
 import {useAuthHook} from 'src/hooks/auth.hook';
 import {useInstances} from 'src/hooks/use-instances.hooks';
+import {useUserHook} from 'src/hooks/use-user.hook';
 import {ServerListProps} from 'src/interfaces/server-list';
+import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
 import initialize from 'src/lib/api/base';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
@@ -46,7 +50,11 @@ type SelectServerProps = {
   page?: string;
 };
 
-export const COOKIE_INSTANCE_URL = 'cookie-instance-url';
+const {publicRuntimeConfig} = getConfig();
+
+export const COOKIE_INSTANCE_URL = 'cookie-instance-url-'.concat(
+  publicRuntimeConfig.appEnvironment,
+);
 
 const SelectServer = ({
   title,
@@ -60,8 +68,10 @@ const SelectServer = ({
 
   const {server, apiURL} = useSelector<RootState, ServerState>(state => state.serverState);
 
+  const {data: session} = useSession();
   const {servers, getAllInstances, loading} = useInstances();
   const {logout} = useAuthHook();
+  const {currentWallet} = useUserHook();
 
   const [, setCookies] = useCookies([COOKIE_INSTANCE_URL]);
   const [selectedServer, setSelectedServer] = useState<ServerListProps | null>(null);
@@ -85,7 +95,8 @@ const SelectServer = ({
     setSelectedServer(server);
 
     if (page === 'login') {
-      await router.replace({query: {rpc: `${server.apiUrl}`}}, undefined, {shallow: true});
+      const query = {...router.query, rpc: server.apiUrl};
+      await router.replace({query}, undefined, {shallow: true});
       setCookies(COOKIE_INSTANCE_URL, server.apiUrl);
 
       initialize({apiURL: server.apiUrl});
@@ -108,7 +119,17 @@ const SelectServer = ({
 
   const onLogout = async (server: ServerListProps) => {
     setCookies(COOKIE_INSTANCE_URL, server.apiUrl);
-    await logout(`/login?rpc=${server.apiUrl}`);
+    if (session?.user?.email) {
+      await logout(`/login?rpc=${server.apiUrl}&email=${session.user.email}`);
+    } else {
+      const walletType =
+        currentWallet.blockchainPlatform === BlockchainPlatform.NEAR
+          ? WalletTypeEnum.MYNEAR
+          : WalletTypeEnum.POLKADOT;
+
+      const query = `&network=${currentWallet.networkId}&platform=${currentWallet.blockchainPlatform}&walletType=${walletType}`;
+      await logout(`/login?rpc=${server.apiUrl}${query}`);
+    }
   };
 
   return (

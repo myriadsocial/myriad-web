@@ -50,6 +50,8 @@ export const Menu: React.FC<MenuProps> = props => {
   const handleSwitchInstance = async (server: ServerListProps, callback?: () => void) => {
     try {
       await switchInstance(server);
+
+      callback && callback();
     } catch (err) {
       if (err.message === 'AccountNotFound') {
         setRegister(true);
@@ -58,8 +60,6 @@ export const Menu: React.FC<MenuProps> = props => {
       }
 
       onLoadingSwitch(false);
-    } finally {
-      callback && callback();
     }
   };
 
