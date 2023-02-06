@@ -21,6 +21,7 @@ import {
   ListItem,
   Typography,
   Button,
+  useMediaQuery,
 } from '@material-ui/core';
 
 import InstanceCard from './InstanceCard';
@@ -40,6 +41,7 @@ import {RootState} from 'src/reducers';
 import {setServer} from 'src/reducers/server/actions';
 import {ServerState} from 'src/reducers/server/reducer';
 import {fetchNetwork} from 'src/reducers/user/actions';
+import theme from 'src/themes/default';
 
 type SelectServerProps = {
   title?: string;
@@ -125,6 +127,8 @@ const SelectServer = ({
     await logout(`/login?rpc=${server.apiUrl}${query}`);
   };
 
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
+
   return (
     <React.Fragment>
       <div className={classes.root}>
@@ -139,7 +143,7 @@ const SelectServer = ({
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'flex-start',
-            background: '#F6F7FC',
+            background: isMobile ? '#FFF' : '#F6F7FC',
             padding: `8px 12px`,
             gap: 8,
             borderRadius: 40,

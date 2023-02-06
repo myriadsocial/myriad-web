@@ -1,7 +1,7 @@
 import {LogoutIcon} from '@heroicons/react/outline';
 import {MenuIcon} from '@heroicons/react/solid';
 
-import React from 'react';
+import React, {useState} from 'react';
 import {useCookies} from 'react-cookie';
 import {useSelector} from 'react-redux';
 
@@ -16,11 +16,14 @@ import {
   Grid,
   SvgIcon,
   Typography,
+  Backdrop,
+  CircularProgress,
 } from '@material-ui/core';
 
 import {NetworkOption} from 'components/ProfileCard/NetworkOption/NetworkOption';
-import {COOKIE_INSTANCE_URL} from 'components/SelectServer';
+import SelectServer, {COOKIE_INSTANCE_URL} from 'components/SelectServer';
 import {CommonWalletIcon} from 'components/atoms/Icons';
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import ShowIf from 'components/common/show-if.component';
 import {useMenuList, MenuId, MenuDetail} from 'src/components/Menu/use-menu-list';
 import {Metric} from 'src/components/Metric';
@@ -30,7 +33,10 @@ import {ProfileContent} from 'src/components/ProfileCard';
 import {ListItemComponent} from 'src/components/atoms/ListItem';
 import {formatAddress} from 'src/helpers/wallet';
 import {useAuthHook} from 'src/hooks/auth.hook';
+import {useInstances} from 'src/hooks/use-instances.hooks';
 import {useUserHook} from 'src/hooks/use-user.hook';
+import {ServerListProps} from 'src/interfaces/server-list';
+import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {NotificationState} from 'src/reducers/notification/reducer';
 
@@ -41,14 +47,18 @@ export const MenuDrawerComponent: React.FC = () => {
   const [openDrawer, setOpenDrawer] = React.useState(false);
   const [openPromptDrawer, setOpenPromptDrawer] = React.useState(false);
   const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
+  const {switchInstance, loadingSwitch, onLoadingSwitch} = useInstances();
 
   const {logout} = useAuthHook();
   const {user, alias, anonymous, userWalletAddress, networks, currentWallet, wallets} =
     useUserHook();
+  const enqueueSnackbar = useEnqueueSnackbar();
 
   const router = useRouter();
   const menu = useMenuList(selected);
   const style = useStyles();
+
+  const [register, setRegister] = useState(false);
 
   const iconStyles = [style.icon];
 
@@ -133,6 +143,22 @@ export const MenuDrawerComponent: React.FC = () => {
     }
   };
 
+  const handleSwitchInstance = async (server: ServerListProps, callback?: () => void) => {
+    try {
+      await switchInstance(server);
+
+      callback && callback();
+    } catch (err) {
+      if (err.message === 'AccountNotFound') {
+        setRegister(true);
+      } else {
+        enqueueSnackbar({message: err.message, variant: 'error'});
+      }
+
+      onLoadingSwitch(false);
+    }
+  };
+
   return (
     <>
       <SvgIcon
@@ -194,6 +220,16 @@ export const MenuDrawerComponent: React.FC = () => {
               {/* metric */}
               <Metric official={false} data={user?.metric} anonymous={anonymous} />
             </div>
+
+            <div className={style.instance}>
+              <SelectServer
+                title={i18n.t('Login.Options.Prompt_Select_Instance.Switch')}
+                onSwitchInstance={handleSwitchInstance}
+                register={register}
+                setRegister={value => setRegister(value)}
+                page="layout"
+              />
+            </div>
             {/* Menu list */}
             <div className={style.menu}>
               {menu.map(item => (
@@ -241,6 +277,9 @@ export const MenuDrawerComponent: React.FC = () => {
           onCancel={handleCancel}
         />
       </Drawer>
+      <Backdrop className={style.backdrop} open={loadingSwitch}>
+        <CircularProgress color="primary" />
+      </Backdrop>
     </>
   );
 };
