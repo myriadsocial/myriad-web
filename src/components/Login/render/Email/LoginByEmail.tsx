@@ -1,5 +1,7 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {useNavigate} from 'react-router';
+
+import {useRouter} from 'next/router';
 
 import {Button, TextField, Typography} from '@material-ui/core';
 
@@ -16,6 +18,8 @@ type LoginByEmailProps = {
 
 const LoginByEmail = ({onNext}: LoginByEmailProps) => {
   const styles = useStyles();
+  const router = useRouter();
+
   const {requestLink} = useAuthLinkHook();
 
   const [email, setEmail] = useState('');
@@ -23,6 +27,19 @@ const LoginByEmail = ({onNext}: LoginByEmailProps) => {
     isError: false,
     message: '',
   });
+
+  useEffect(() => {
+    const email = router?.query?.email?.toString() ?? '';
+
+    if (!validator.isEmail(email)) {
+      setError({
+        isError: true,
+        message: 'Please enter a valid email!',
+      });
+    }
+
+    setEmail(email);
+  }, [router.query.email]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const input = event.target.value;

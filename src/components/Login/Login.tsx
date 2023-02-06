@@ -75,7 +75,7 @@ export const Login: React.FC<LoginProps> = props => {
   const [loading, setLoading] = useState(false);
   const [walletLoading, setWalletLoading] = useState(Boolean(redirectAuth));
   const [initialEntries, setInitialEntries] = useState<string[]>([
-    query.network ? '/options' : query.switchInstance ? '/magiclink' : '/',
+    query.network ? '/options' : query.switchInstance ? '/magiclink' : query.email ? '/email' : '/',
   ]);
   const [email, setEmail] = useState<string>('');
   const [disableSignIn, setDisableSignIn] = useState<boolean>(false);

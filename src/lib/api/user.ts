@@ -117,7 +117,7 @@ export const getWalletAddress = async (userId: string): Promise<WalletDetail> =>
 export const getCheckEmail = async (email: string, apiURL?: string): Promise<boolean> => {
   if (apiURL) {
     const {data} = await axios({
-      url: `/users/email/${email}`,
+      url: `${apiURL}/users/email/${email}`,
       method: 'GET',
     });
     return data.status;

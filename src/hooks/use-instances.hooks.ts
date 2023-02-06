@@ -201,12 +201,11 @@ export const useInstances = () => {
   };
 
   const loginWithEmail = async (apiURL: string, email: string) => {
-    setCookies(COOKIE_INSTANCE_URL, apiURL);
-
     const registered = await getCheckEmail(email, apiURL);
     if (!registered) throw new Error('AccountNotFound');
 
     await requestLink(email, apiURL);
+    setCookies(COOKIE_INSTANCE_URL, apiURL);
     await logout(`/login?rpc=${apiURL}&switchInstance=true&email=${email}`);
   };
 
