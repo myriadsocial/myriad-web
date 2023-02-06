@@ -34,7 +34,6 @@ import {useAuthHook} from 'src/hooks/auth.hook';
 import {useInstances} from 'src/hooks/use-instances.hooks';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {ServerListProps} from 'src/interfaces/server-list';
-import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
 import initialize from 'src/lib/api/base';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
@@ -119,17 +118,11 @@ const SelectServer = ({
 
   const onLogout = async (server: ServerListProps) => {
     setCookies(COOKIE_INSTANCE_URL, server.apiUrl);
-    if (session?.user?.email) {
-      await logout(`/login?rpc=${server.apiUrl}&email=${session.user.email}`);
-    } else {
-      const walletType =
-        currentWallet.blockchainPlatform === BlockchainPlatform.NEAR
-          ? WalletTypeEnum.MYNEAR
-          : WalletTypeEnum.POLKADOT;
 
-      const query = `&network=${currentWallet.networkId}&platform=${currentWallet.blockchainPlatform}&walletType=${walletType}`;
-      await logout(`/login?rpc=${server.apiUrl}${query}`);
-    }
+    const query = session?.user?.email
+      ? `&email=${session.user.email}`
+      : `&network=${currentWallet.networkId}`;
+    await logout(`/login?rpc=${server.apiUrl}${query}`);
   };
 
   return (

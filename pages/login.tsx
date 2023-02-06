@@ -114,7 +114,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     };
   }
 
-  initialize({cookie: req.headers.cookie});
+  initialize({apiURL});
 
   await dispatch(fetchNetwork());
   await dispatch(fetchServer(apiURL));
