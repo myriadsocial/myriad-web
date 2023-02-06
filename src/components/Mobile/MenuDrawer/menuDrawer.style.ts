@@ -67,5 +67,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       fill: 'currentColor',
       color: '#404040',
     },
+    backdrop: {
+      zIndex: theme.zIndex.drawer + 1 + 100,
+      color: '#fff',
+    },
+    instance: {
+      padding: '0 20px',
+    },
   }),
 );
