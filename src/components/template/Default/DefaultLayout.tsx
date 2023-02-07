@@ -125,12 +125,12 @@ const Default: React.FC<DefaultLayoutProps> = props => {
 
     const query = router.query;
 
-    if (query?.rpc?.toString() === rpc) return;
+    if (query?.instance?.toString() === rpc) return;
 
-    Object.assign(query, {rpc});
+    Object.assign(query, {instance: rpc});
 
     router.replace({pathname: router.pathname, query}, undefined, {shallow: true});
-  }, [cookies[COOKIE_INSTANCE_URL], router.query.rpc]);
+  }, [cookies[COOKIE_INSTANCE_URL], router.query.instance]);
 
   const processMessages = (payload?: NotificationProps) => {
     dispatch(countNewNotification());

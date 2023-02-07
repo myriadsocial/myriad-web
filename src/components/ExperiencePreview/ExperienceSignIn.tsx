@@ -26,7 +26,7 @@ export const ExperienceSignIn: React.FC<ExperienceSignInProps> = props => {
 
   const handleSignIn = async () => {
     onClose();
-    router.push(`/login?rpc=${cookies[COOKIE_INSTANCE_URL]}`);
+    router.push(`/login?instance=${cookies[COOKIE_INSTANCE_URL]}`);
   };
 
   return (

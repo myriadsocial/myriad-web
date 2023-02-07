@@ -37,11 +37,11 @@ export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
   };
 
   const handleSignOut = async () => {
-    await logout(`/?rpc=${cookies[COOKIE_INSTANCE_URL]}`);
+    await logout(`/?instance=${cookies[COOKIE_INSTANCE_URL]}`);
   };
 
   const handleLoginOrCreateAccount = () => {
-    router.push({pathname: '/login', query: {rpc: cookies[COOKIE_INSTANCE_URL]}});
+    router.push({pathname: '/login', query: {instance: cookies[COOKIE_INSTANCE_URL]}});
   };
 
   const handleShowNotificationList = () => {

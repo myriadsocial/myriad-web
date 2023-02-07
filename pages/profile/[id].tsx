@@ -124,7 +124,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   if (anonymous) {
     const username = generateAnonymousUser();
-    const queryInstanceURL = query.rpc;
+    const queryInstanceURL = query.instance;
 
     apiURL = queryInstanceURL ?? cookiesInstanceURL ?? defaultInstanceURL;
     res.setHeader('set-cookie', [`${COOKIE_INSTANCE_URL}=${apiURL}`]);
