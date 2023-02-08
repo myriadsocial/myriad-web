@@ -9,14 +9,11 @@ services:
       dockerfile: .maintain/docker/Dockerfile
     env_file:
       - ../../.env
-    environment:
-      - HOST=0.0.0.0
-      - PORT=3000
     ports:
-      - 3002:3000
+      - 3004:3000
     networks:
       myriad:
-        ipv4_address: 172.27.1.4
+        ipv4_address: 172.27.4.1
         aliases:
           - myriad-web
 
