@@ -74,7 +74,7 @@
     "express": "^4.17.3",
     "firebase": "^8.6.2",
     "global": "^4.4.0",
-    "html-react-parser": "^1.4.9",
+    "html-react-parser": "^3.0.8",
     "http-proxy-middleware": "^2.0.4",
     "i18next": "^21.6.7",
     "i18next-browser-languagedetector": "^6.1.2",

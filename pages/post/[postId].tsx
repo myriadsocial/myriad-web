@@ -14,10 +14,12 @@ import axios from 'axios';
 import {stringify} from 'components/PostCreate/formatter';
 import {PostDetailContainer} from 'components/PostDetail/PostDetail.container';
 import {COOKIE_INSTANCE_URL} from 'components/SelectServer';
+import parse from 'html-react-parser';
 import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
 import {TippingSuccess} from 'src/components/common/Tipping/render/Tipping.success';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import {generateAnonymousUser} from 'src/helpers/auth';
+import {htmlToJson, isJson} from 'src/helpers/string';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 import {initialize} from 'src/lib/api/base';
@@ -219,9 +221,16 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   if (post?.platform === 'myriad') {
     const {text, image: imageData} = stringify(post);
+    const isHtmlContent = !isJson(text);
+    if (isHtmlContent) {
+      description = htmlToJson(parse(post.text)).text;
+      image = htmlToJson(parse(post.text)).img[0] ?? '';
+    } else {
+      description = text;
+      image = imageData;
+    }
+
     title = post?.title ?? `${post.user.name} on ${publicRuntimeConfig.appName}`;
-    description = text;
-    image = imageData;
   }
 
   if (post?.platform !== 'myriad') {
