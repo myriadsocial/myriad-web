@@ -4,7 +4,7 @@
   "description": "myriad-web",
   "private": true,
   "license": "AGPL-3.0",
-  "author": "Myriad Dev Team <myriad.dev@blocksphere.id>",
+  "author": "Myriad Dev Team <dev@myriad.social>",
   "homepage": "https://myriad.social",
   "repository": {
     "type": "git",
