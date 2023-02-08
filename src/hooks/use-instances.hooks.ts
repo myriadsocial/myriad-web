@@ -182,7 +182,7 @@ export const useInstances = () => {
     window.localStorage.setItem(MYRIAD_WALLET_KEY, walletType);
     const pathname = router.pathname;
     const query = router.query;
-    await router.replace({pathname, query: {...query, rpc: server.apiUrl}});
+    await router.replace({pathname, query: {...query, instance: server.apiUrl}});
     onChangeInstance();
     setLoadingSwitch(false);
   };
@@ -193,9 +193,9 @@ export const useInstances = () => {
     const pathname = router.pathname;
     const query = router.query;
 
-    Object.assign(query, {rpc: server.apiUrl});
+    Object.assign(query, {instance: server.apiUrl});
 
-    await router.replace({pathname, query: {rpc: `${server.apiUrl}`}});
+    await router.replace({pathname, query: {instance: `${server.apiUrl}`}});
     await dispatch(setServer(server.detail, server.apiUrl));
     return;
   };
@@ -206,7 +206,7 @@ export const useInstances = () => {
 
     await requestLink(email, apiURL);
     setCookies(COOKIE_INSTANCE_URL, apiURL);
-    await logout(`/login?rpc=${apiURL}&switchInstance=true&email=${email}`);
+    await logout(`/login?instance=${apiURL}&switchInstance=true&email=${email}`);
   };
 
   return {

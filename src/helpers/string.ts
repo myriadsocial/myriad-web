@@ -83,3 +83,68 @@ export const isJson = (value: string) => {
 
   return true;
 };
+
+export const htmlToJson = (html: any) => {
+  const img: string[] = [];
+  let text = '';
+
+  if (Array.isArray(html)) {
+    html.map(item => {
+      if (item.type === 'figure') {
+        if (item.props.children.type === 'img') {
+          const imgs = item.props.children.props.src;
+          img.push(imgs);
+        }
+      } else {
+        if (Array.isArray(item.props.children)) {
+          item.props.children.map(child => {
+            if (child.type === 'img') {
+              const imgs = child.props.src;
+              img.push(imgs);
+            } else {
+              if (typeof child === 'string') text += child;
+              else text += child.props.children;
+            }
+          });
+        } else {
+          if (item.type === 'img') {
+            const imgs = item.props.children.src;
+            img.push(imgs);
+          } else {
+            if (typeof item.props.children === 'string') text += item.props.children;
+            else text += item.props.children.props.children;
+          }
+        }
+      }
+    });
+  } else {
+    if (html.type === 'figure') {
+      if (html.props.children.type === 'img') {
+        const imgs = html.props.children.props.src;
+        img.push(imgs);
+      }
+    } else {
+      if (Array.isArray(html.props.children)) {
+        html.props.children.map(child => {
+          if (child.type === 'img') {
+            const imgs = child.props.src;
+            img.push(imgs);
+          } else {
+            if (typeof child === 'string') text += child;
+            else text += child.props.children;
+          }
+        });
+      } else {
+        if (html.type === 'img') {
+          const imgs = html.props.children.src;
+          img.push(imgs);
+        } else {
+          if (typeof html.props.children === 'string') text += html.props.children;
+          else text += html.props.children.props.children;
+        }
+      }
+    }
+  }
+
+  return {img, text};
+};

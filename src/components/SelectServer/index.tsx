@@ -96,7 +96,7 @@ const SelectServer = ({
     setSelectedServer(server);
 
     if (page === 'login') {
-      const query = {...router.query, rpc: server.apiUrl};
+      const query = {...router.query, instance: server.apiUrl};
       await router.replace({query}, undefined, {shallow: true});
       setCookies(COOKIE_INSTANCE_URL, server.apiUrl);
 
@@ -124,7 +124,7 @@ const SelectServer = ({
     const query = session?.user?.email
       ? `&email=${session.user.email}`
       : `&network=${currentWallet.networkId}`;
-    await logout(`/login?rpc=${server.apiUrl}${query}`);
+    await logout(`/login?instance=${server.apiUrl}${query}`);
   };
 
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
