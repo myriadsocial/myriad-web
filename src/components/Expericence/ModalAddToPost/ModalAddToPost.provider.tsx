@@ -1,7 +1,7 @@
 import {InformationCircleIcon} from '@heroicons/react/outline';
 
 import React, {useCallback, useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {
   Button,
@@ -20,28 +20,32 @@ import ModalAddToPostContext, {HandleConfirmAddPostExperience} from './ModalAddT
 import {ModalAddPostExperienceProps} from './ModalAddToPost.interface';
 import {useStyles} from './ModalAddToPost.styles';
 
+import {useTimelineFilter} from 'components/PostList/hooks/use-timeline-filter.hook';
 import {Empty} from 'components/atoms/Empty';
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import ShowIf from 'components/common/show-if.component';
 import {Skeleton} from 'src/components/Expericence';
 import {Modal} from 'src/components/atoms/Modal';
 import {useExperienceHook} from 'src/hooks/use-experience-hook';
-import {UserExperience, WrappedExperience} from 'src/interfaces/experience';
+import {Experience, UserExperience, WrappedExperience} from 'src/interfaces/experience';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
+import * as constants from 'src/reducers/timeline/constants';
 import {UserState} from 'src/reducers/user/reducer';
 
 type ExperienceItemProps = {
   item: WrappedExperience;
   selectedExperience: string[];
   handleSelectExperience: (propsSelectedExperience: string) => void;
+  handleSelectExperienceItem: (propsSelectedExperienceItem: Experience) => void;
 };
 
 const ExperienceItem = ({
   item,
   selectedExperience,
   handleSelectExperience,
+  handleSelectExperienceItem,
 }: ExperienceItemProps) => {
   const styles = useStyles();
 
@@ -57,7 +61,10 @@ const ExperienceItem = ({
             : false
         }
         onChange={() => {
-          item.experience.id && handleSelectExperience(item.experience.id);
+          item.experience.id
+            ? (handleSelectExperience(item.experience.id),
+              handleSelectExperienceItem(item.experience))
+            : null;
         }}
         color="primary"
         inputProps={{'aria-label': 'controlled'}}
@@ -65,7 +72,10 @@ const ExperienceItem = ({
       />
       <CardActionArea
         onClick={() => {
-          item.experience.id && handleSelectExperience(item.experience.id);
+          item.experience.id
+            ? (handleSelectExperience(item.experience.id),
+              handleSelectExperienceItem(item.experience))
+            : null;
         }}
         disableRipple
         component="div">
@@ -98,12 +108,15 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
   const styles = useStyles();
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const {loadExperiencePostList, loadExperienceAdded, addPostsToExperience} = useExperienceHook();
+  const {posts} = useTimelineFilter();
   const enqueueSnackbar = useEnqueueSnackbar();
+  const dispatch = useDispatch();
 
   const [postId, setPostId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [isSelectAll, setIsSelectAll] = useState(false);
   const [selectedExperience, setSelectedExperience] = useState<string[]>([]);
+  const [selectedExperienceItem, setSelectedExperienceItem] = useState<Experience[]>([]);
   const [userExperiences, setUserExperiences] = useState<UserExperience[]>([]);
   const [page, setPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(true);
@@ -123,12 +136,15 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
       loadExperiencePostList(props.post.id, postsExperiences => {
         setPostId(props.post.id);
         const tmpSelectedExperience: string[] = [];
+        const tmpSelectedExperienceItem: Experience[] = [];
         postsExperiences.map(item => {
           if (tmpAddedExperience.find(post => post === item.id)) {
             tmpSelectedExperience.push(item.id);
+            tmpSelectedExperienceItem.push(item);
           }
         });
         setSelectedExperience(tmpSelectedExperience);
+        setSelectedExperienceItem(tmpSelectedExperienceItem);
       });
 
       console.log({userExperiences});
@@ -144,14 +160,18 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
   const handleSelectAllExperience = () => {
     const tmpUserExperience = [...userExperiences].filter(ar => ar.userId === user?.id);
     let tmpSelectedExperience: string[] = [];
+    let tmpSelectedExperienceItem: Experience[] = [];
     if (!isSelectAll) {
       tmpUserExperience.map(item => {
         tmpSelectedExperience.push(item.experience.id);
+        tmpSelectedExperienceItem.push(item.experience);
       });
     } else {
       tmpSelectedExperience = [];
+      tmpSelectedExperienceItem = [];
     }
     setSelectedExperience(tmpSelectedExperience);
+    setSelectedExperienceItem(tmpSelectedExperienceItem);
     setIsSelectAll(!isSelectAll);
   };
 
@@ -167,14 +187,67 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
     console.log({tmpSelectedExperience});
   };
 
+  const handleSelectExperienceItem = (propsSelectedExperienceItem: Experience) => {
+    const tmpSelectedExperienceItem = [...selectedExperienceItem];
+    if (
+      tmpSelectedExperienceItem.filter(ar => ar.id === propsSelectedExperienceItem.id).length > 0
+    ) {
+      const indexRemovedExperienceItem = tmpSelectedExperienceItem.indexOf(
+        propsSelectedExperienceItem,
+      );
+      tmpSelectedExperienceItem.splice(indexRemovedExperienceItem, 1);
+    } else {
+      tmpSelectedExperienceItem.push(propsSelectedExperienceItem);
+    }
+    setSelectedExperienceItem(tmpSelectedExperienceItem);
+    console.log({tmpSelectedExperienceItem});
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  const movePosts = (input, from, to) => {
+    const element = input[from];
+    input.splice(from, 1);
+    input.splice(to, 0, element);
+
+    return input;
+  };
+
+  const updatePosts = () => {
+    const updated = posts.map(post => {
+      if (post.id === postId) {
+        post.experiences = selectedExperienceItem;
+        post.totalExperience = selectedExperience.length;
+      }
+
+      return post;
+    });
+
+    const index = updated.findIndex(post => post.id === postId);
+
+    const result = movePosts(updated, index, 0);
+    return result;
+  };
+
   const handleConfirm = () => {
     if (postId) {
+      console.log(updatePosts(), posts);
       addPostsToExperience(postId, selectedExperience, () => {
         setOpen(false);
         enqueueSnackbar({
           message: i18n.t('Experience.Modal_Add_Post.Success_Msg'),
           variant: 'success',
         });
+        dispatch({
+          type: constants.ADD_POSTS_TO_TIMELINE,
+          posts: updatePosts(),
+        });
+        scrollToTop();
       });
     }
   };
@@ -254,6 +327,7 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
                   item={item}
                   selectedExperience={selectedExperience}
                   handleSelectExperience={handleSelectExperience}
+                  handleSelectExperienceItem={handleSelectExperienceItem}
                 />
               );
             })}

@@ -457,6 +457,12 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
       });
     }
 
+    case constants.ADD_POSTS_TO_TIMELINE: {
+      return update(state, {
+        posts: {$set: action.posts},
+      });
+    }
+
     default: {
       return state;
     }
