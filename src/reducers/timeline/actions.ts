@@ -132,6 +132,11 @@ export interface SetTimelineSort extends Action {
   sort?: SortType;
 }
 
+export interface AddPostsToTimeline extends Action {
+  type: constants.ADD_POSTS_TO_TIMELINE;
+  posts: Post[];
+}
+
 /**
  * Union Action Types
  */
@@ -156,7 +161,8 @@ export type Actions =
   | ResetDownvoting
   | TimelineLoading
   | SetTimelineSort
-  | BaseAction;
+  | BaseAction
+  | AddPostsToTimeline;
 
 export const updateFilter = (filter: TimelineFilterFields): UpdateTimelineFilter => ({
   type: constants.UPDATE_TIMELINE_FILTER,
