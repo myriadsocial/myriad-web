@@ -124,7 +124,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           </ShowIf>
 
           <ShowIf condition={['myriad'].includes(post.platform) && isHtmlPost}>
-            <div dangerouslySetInnerHTML={{__html: post.text}} />
+            <div className="html-content" dangerouslySetInnerHTML={{__html: post.text}} />
           </ShowIf>
 
           <ShowIf condition={['twitter'].includes(post.platform) && post.text.length > 0}>

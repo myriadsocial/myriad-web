@@ -5,3 +5,7 @@
 .ck.ck-balloon-panel {
   z-index: 9999 !important;
 }
+
+.html-content img {
+  max-width: 100%;
+}

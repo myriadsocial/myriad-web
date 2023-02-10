@@ -19,6 +19,9 @@ export const useStyles = makeStyles((theme: Theme) =>
         marginBlockStart: 0,
         marginBlockEnd: 0,
       },
+      '& img': {
+        maxWidth: '100%',
+      },
     },
   }),
 );
