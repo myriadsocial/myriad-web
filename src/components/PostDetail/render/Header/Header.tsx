@@ -19,7 +19,6 @@ import {useStyles} from './Header.style';
 import useTipHistory from 'components/TipHistory/use-tip-history.hook';
 import {AvatarSize} from 'components/atoms/Avatar';
 import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorizeAction';
-import useModalAddToPost from 'src/components/Expericence/ModalAddToPost/useModalAddToPost.hook';
 import {SocialAvatar} from 'src/components/atoms/SocialAvatar';
 import ShowIf from 'src/components/common/show-if.component';
 import {SocialsEnum} from 'src/interfaces/social';
@@ -34,7 +33,6 @@ export const PostHeader: React.FC<PostHeaderProps> = props => {
   const style = useStyles();
   const router = useRouter();
   const tipHistory = useTipHistory();
-  const addPostToExperience = useModalAddToPost();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -110,14 +108,6 @@ export const PostHeader: React.FC<PostHeaderProps> = props => {
     handleClosePostSetting();
 
     tipHistory.open(post);
-  };
-
-  const handleOpenAddPostToExperience = () => {
-    handleClosePostSetting();
-    const propsAddToPost = {
-      post: post,
-    };
-    addPostToExperience(propsAddToPost);
   };
 
   return (
@@ -229,11 +219,11 @@ export const PostHeader: React.FC<PostHeaderProps> = props => {
             </MenuItem>
           </ShowIf>
 
-          <ShowIf condition={!!user}>
+          {/* <ShowIf condition={!!user}>
             <MenuItem onClick={handleOpenAddPostToExperience} fallback={handleClosePostSetting}>
               {i18n.t('Post_Detail.Post_Options.Add_Post_To_Experience')}
             </MenuItem>
-          </ShowIf>
+          </ShowIf> */}
 
           <ShowIf condition={!owned && !!user}>
             <MenuItem
