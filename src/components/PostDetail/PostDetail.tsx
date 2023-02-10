@@ -7,6 +7,7 @@ import {Typography, useMediaQuery, useTheme} from '@material-ui/core';
 
 import {PostDetailProps} from './PostDetail.interface';
 import {useStyles} from './PostDetail.styles';
+import {ButtonAddToTimeline} from './render/AddToTimeline/AddToTimeline';
 import {PostFooter} from './render/Footer';
 import {PostHeader} from './render/Header';
 
@@ -152,6 +153,10 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           {isAssetVideoExist && <Video url={post.asset.videos[0]} height={308} width={560} />}
 
           {showEmbedded && <LinkPreview embed={post.embeddedURL} />}
+
+          <ShowIf condition={!!user && isMobile}>
+            <ButtonAddToTimeline post={post} mobile={isMobile} />
+          </ShowIf>
         </ShowIf>
       </div>
 
@@ -166,6 +171,10 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           onUpvote={handleUpvote}
           onShowComments={onToggleShowComment}
         />
+
+        <ShowIf condition={!!user && !isMobile}>
+          <ButtonAddToTimeline post={post} mobile={isMobile} />
+        </ShowIf>
 
         <ShowIf condition={showTipButton}>
           <SendTipButton

@@ -1,24 +1,26 @@
-import {PropTypes} from '@material-ui/core';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
-type SendTipButtonProps = {
+type AddToTimelineButtonProps = {
   mobile: boolean;
-  color?: PropTypes.Color;
 };
 
-export const useStyles = makeStyles<Theme, SendTipButtonProps>(theme =>
+export const useStyles = makeStyles<Theme, AddToTimelineButtonProps>(theme =>
   createStyles({
     root: {},
     button: {
-      '&.MuiButton-sizeSmall': {
-        width: props => (props.mobile ? 92 : 180),
+      '&.MuiButtonBase-root': {
+        width: '100%',
         maxWidth: 'fit-content',
-      },
-      '& .MuiButton-label': {
-        color: props => (props.mobile && props.color === 'secondary' ? '#404040' : 'inherit'),
+        marginRight: 10,
       },
       '& .MuiButton-startIcon': {
         color: props => (props.mobile ? '#FFD24D' : '#404040'),
+      },
+      [theme.breakpoints.down('xs')]: {
+        '&.MuiButtonBase-root': {
+          maxWidth: '100%',
+          marginTop: 20,
+        },
       },
     },
     loading: {
