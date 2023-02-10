@@ -86,6 +86,7 @@ const SelectServer = ({
 
   const handleOpen = () => {
     setOpen(!open);
+    console.log({servers});
   };
 
   const handleClose = () => {
