@@ -1,7 +1,5 @@
 import {useState} from 'react';
 
-import Image from 'next/image';
-
 import {
   Box,
   Typography,
@@ -67,7 +65,7 @@ const InstanceCard = ({server, onSelect, selected}: InstanceCardProps) => {
           onClick={onSelect}>
           <CardMedia style={{padding: 16}}>
             {server.detail?.serverImageURL && (
-              <Image
+              <img
                 alt={server.detail?.id}
                 src={server.detail?.serverImageURL ?? ''}
                 placeholder="empty"
