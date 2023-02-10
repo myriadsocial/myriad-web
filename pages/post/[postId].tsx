@@ -221,7 +221,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   if (post?.platform === 'myriad') {
     const {text, image: imageData} = stringify(post);
-    const isHtmlContent = !isJson(text);
+    const isHtmlContent = !isJson(post.text);
     if (isHtmlContent) {
       description = htmlToJson(parse(post.text)).text;
       image = htmlToJson(parse(post.text)).img[0] ?? '';
