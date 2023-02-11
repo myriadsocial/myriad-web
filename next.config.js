@@ -87,6 +87,19 @@ const withPwaWrapper = () => {
     dest: 'public',
     register: true,
     skipWaiting: true,
+    runtimeCaching: [
+      {
+        urlPattern: /\/_next\/data\/.+$/i,
+        handler: 'NetworkFirst',
+        options: {
+          cacheName: 'server-side-data',
+          expiration: {
+            maxEntries: 32,
+            maxAgeSeconds: 24 * 60 * 60, // 24 hours
+          },
+        },
+      },
+    ],
   });
 
   return withPWA(moduleExports);
