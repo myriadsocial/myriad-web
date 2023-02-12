@@ -447,7 +447,7 @@ export class PolkadotJs implements IProvider {
     instanceId: string,
     tipsBalanceInfo: TipsBalanceInfo,
     amount: BN,
-    accountReference: string | null,
+    accountReference: string,
     ...args: [InjectedAccountWithMeta, SignTransaction]
   ): Promise<string | null> {
     const [account, callback] = args;
