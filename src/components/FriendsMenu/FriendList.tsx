@@ -232,7 +232,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   };
 
   if (friends.length === 0 && !isFiltered) {
-    if (user.fullAccess)
+    if (user?.fullAccess)
       return (
         <Empty
           title={i18n.t('Friends.Empty.Friend_List.Title')}

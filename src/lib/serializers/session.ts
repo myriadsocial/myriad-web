@@ -2,40 +2,33 @@ import {User} from 'next-auth';
 
 import {EncryptionPayload} from '../crypto';
 
-import {SignInCredential, SignInWithEmailCredential} from 'src/interfaces/session';
+import {SignInCredential} from 'src/interfaces/session';
 
 export const credentialToSession = (
   credential: SignInCredential,
   encryption: EncryptionPayload,
 ): User => {
   const session: User = {
-    id: null,
-    name: credential.name,
-    anonymous: credential.anonymous === 'true',
+    id: credential.address,
     address: credential.address,
     token: encryption.encryptedMessage,
-    nonce: credential.nonce,
     instanceURL: credential.instanceURL,
+    loginType: credential.loginType,
   };
 
   return session;
 };
 
 export const emailCredentialToSession = (
-  emailCredential: SignInWithEmailCredential,
+  credential: SignInCredential,
   encryption: EncryptionPayload,
 ): User => {
   const session: User = {
-    id: null,
-    name: emailCredential.name,
-    username: emailCredential.username,
-    email: emailCredential.email,
-    loginToken: emailCredential.loginToken,
+    id: credential.address,
     token: encryption.encryptedMessage,
-    instanceURL: emailCredential.instanceURL,
-    anonymous: false,
-    address: '',
-    nonce: null,
+    address: credential.address,
+    instanceURL: credential.instanceURL,
+    loginType: credential.loginType,
   };
 
   return session;

@@ -17,6 +17,7 @@ import {People} from 'src/interfaces/people';
 import {User} from 'src/interfaces/user';
 import {initialize} from 'src/lib/api/base';
 import * as ExperienceAPI from 'src/lib/api/experience';
+import {healthcheck} from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
 import {fetchAvailableToken, fetchFilteredToken} from 'src/reducers/config/actions';
@@ -93,7 +94,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     // ignore
   }
 
-  if (!session?.user || session?.user?.anonymous) {
+  if (!session?.user) {
     return {
       redirect: {
         destination: '/login',
@@ -103,6 +104,17 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   const sessionInstanceURL = session?.user?.instanceURL;
+
+  const available = await healthcheck(sessionInstanceURL);
+
+  if (!available) {
+    return {
+      redirect: {
+        destination: '/maintenance',
+        permanent: false,
+      },
+    };
+  }
 
   initialize({cookie: req.headers.cookie});
 

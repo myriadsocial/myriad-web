@@ -32,6 +32,7 @@ import {useNearApi} from 'src/hooks/use-near-api.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {useQueryParams} from 'src/hooks/use-query-params.hooks';
 import {NetworkIdEnum} from 'src/interfaces/network';
+import {ServerListProps} from 'src/interfaces/server-list';
 import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
@@ -109,6 +110,7 @@ export const Options: React.FC<OptionProps> = props => {
         case BlockchainPlatform.SUBSTRATE:
           return setSelectedWallet(WalletTypeEnum.POLKADOT)();
         case BlockchainPlatform.NEAR:
+          console.log('test');
           return setSelectedWallet(WalletTypeEnum.NEAR)();
         default:
           return setWallet(null);
@@ -124,8 +126,6 @@ export const Options: React.FC<OptionProps> = props => {
 
       case WalletTypeEnum.MYNEAR:
       case WalletTypeEnum.NEAR:
-        if (!networkId) break;
-
         setWallet(value);
         setExtensionChecked(true);
         setExtensionEnabled(true);
@@ -219,6 +219,16 @@ export const Options: React.FC<OptionProps> = props => {
     doSelectAccount();
   }, [handleConnect]);
 
+  const handleSwitchInstance = (server: ServerListProps, callback?: () => void) => {
+    setWallet(null);
+    setNetworkId(null);
+    setBlockchainPlatform(null);
+
+    callback && callback();
+  };
+
+  console.log(wallet);
+
   return (
     <ShowIf condition={hideOptions}>
       <ShowIf condition={!isMobileSignIn}>
@@ -281,9 +291,11 @@ export const Options: React.FC<OptionProps> = props => {
           </div>
           {/* WALLET LIST */}
           <div className={styles.wrapper}>
-            <div className={styles.title}>
-              <Typography variant="h5">{i18n.t('Login.Options.Wallet')}</Typography>
-            </div>
+            <ShowIf condition={Boolean(wallet)}>
+              <div className={styles.title}>
+                <Typography variant="h5">{i18n.t('Login.Options.Wallet')}</Typography>
+              </div>
+            </ShowIf>
             <Grid
               container
               justifyContent="flex-start"
@@ -413,7 +425,7 @@ export const Options: React.FC<OptionProps> = props => {
             </Grid>
           </div>
 
-          <SelectServer page="login" />
+          <SelectServer page="login" onSwitchInstance={handleSwitchInstance} />
           <div className={styles.actionWrapper}>
             <Button variant="outlined" color="secondary" onClick={() => navigate('/')}>
               Back
@@ -510,9 +522,11 @@ export const Options: React.FC<OptionProps> = props => {
 
             {/* WALLET LIST */}
             <div>
-              <div className={styles.title}>
-                <Typography variant="h5">{i18n.t('Login.Options.Wallet')}</Typography>
-              </div>
+              <ShowIf condition={Boolean(wallet)}>
+                <div className={styles.title}>
+                  <Typography variant="h5">{i18n.t('Login.Options.Wallet')}</Typography>
+                </div>
+              </ShowIf>
               <Grid
                 container
                 justifyContent="flex-start"
@@ -583,7 +597,7 @@ export const Options: React.FC<OptionProps> = props => {
               </Grid>
             </div>
 
-            <SelectServer page="login" />
+            <SelectServer page="login" onSwitchInstance={handleSwitchInstance} />
 
             <div style={{display: 'flex', flexDirection: 'column', gap: 16}}>
               <Button variant="outlined" color="secondary" onClick={() => navigate('/')}>

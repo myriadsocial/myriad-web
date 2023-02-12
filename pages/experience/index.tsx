@@ -9,6 +9,7 @@ import {ExperienceTab} from 'src/components/RightMenuBar/tabs/ExperienceTab';
 import {TopNavbarComponent, SectionTitle} from 'src/components/atoms/TopNavbar';
 import {DefaultLayout} from 'src/components/template/Default/DefaultLayout';
 import initialize from 'src/lib/api/base';
+import {healthcheck} from 'src/lib/api/healthcheck';
 import {fetchAvailableToken} from 'src/reducers/config/actions';
 import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
 import {countNewNotification} from 'src/reducers/notification/actions';
@@ -60,7 +61,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     // ignore
   }
 
-  if (!session?.user || session?.user?.anonymous) {
+  if (!session?.user) {
     return {
       redirect: {
         destination: '/login',
@@ -70,6 +71,17 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   const sessionInstanceURL = session?.user?.instanceURL;
+
+  const available = await healthcheck(sessionInstanceURL);
+
+  if (!available) {
+    return {
+      redirect: {
+        destination: '/maintenance',
+        permanent: false,
+      },
+    };
+  }
 
   initialize({cookie: req.headers.cookie});
 

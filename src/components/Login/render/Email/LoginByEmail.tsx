@@ -9,6 +9,7 @@ import {useStyles} from './LoginByEmail.style';
 
 import SelectServer from 'src/components/SelectServer';
 import {useAuthLinkHook} from 'src/hooks/auth-link.hook';
+import {ServerListProps} from 'src/interfaces/server-list';
 import i18n from 'src/locale';
 import validator from 'validator';
 
@@ -30,23 +31,18 @@ const LoginByEmail = ({onNext}: LoginByEmailProps) => {
 
   useEffect(() => {
     const email = router?.query?.email?.toString() ?? '';
-
-    if (!validator.isEmail(email)) {
-      setError({
-        isError: true,
-        message: 'Please enter a valid email!',
-      });
-    }
-
-    setEmail(email);
+    emailValidation(email);
   }, [router.query.email]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const input = event.target.value;
+    emailValidation(input);
+  };
 
-    if (!input.length) {
+  const emailValidation = (email: string) => {
+    if (!email.length) {
       setError({isError: false, message: ''});
-    } else if (!validator.isEmail(input)) {
+    } else if (!validator.isEmail(email)) {
       setError({
         isError: true,
         message: 'Please enter a valid email!',
@@ -57,7 +53,7 @@ const LoginByEmail = ({onNext}: LoginByEmailProps) => {
         message: '',
       });
     }
-    setEmail(event.target.value);
+    setEmail(email);
   };
 
   const navigate = useNavigate();
@@ -79,6 +75,10 @@ const LoginByEmail = ({onNext}: LoginByEmailProps) => {
     navigate('/');
   };
 
+  const handleSwitchInstance = (server: ServerListProps, callback?: () => void) => {
+    callback && callback();
+  };
+
   return (
     <div className={styles.root}>
       <div>
@@ -98,7 +98,7 @@ const LoginByEmail = ({onNext}: LoginByEmailProps) => {
         error={error.isError}
         helperText={error.isError ? error.message : ''}
       />
-      <SelectServer page="login" />
+      <SelectServer page="login" onSwitchInstance={handleSwitchInstance} />
       <div className={styles.actionWrapper}>
         <Button variant="outlined" color="primary" onClick={handleBack}>
           {i18n.t('Login.Email.LoginByEmail.Back')}

@@ -20,7 +20,6 @@ import {Near} from 'src/lib/services/near-api-js';
 import {PolkadotJs} from 'src/lib/services/polkadot-js';
 import {RootState} from 'src/reducers';
 import {UserState} from 'src/reducers/user/reducer';
-import {uniqueNamesGenerator, adjectives, colors} from 'unique-names-generator';
 
 type UserNonceProps = {
   nonce: number;
@@ -77,14 +76,12 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
       if (!signature) return false;
 
       signIn('credentials', {
-        name: account.meta.name,
         address: toHexPublicKey(account),
         publicAddress: toHexPublicKey(account),
         signature,
         walletType: WalletTypeEnum.POLKADOT,
         networkId: networkId,
         nonce,
-        anonymous: false,
         instanceURL: cookies[COOKIE_INSTANCE_URL],
         callbackUrl: redirect || publicRuntimeConfig.appAuthURL,
       });
@@ -119,7 +116,6 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
           walletType: WalletTypeEnum.NEAR,
           networkId: NetworkIdEnum.NEAR,
           nonce,
-          anonymous: false,
           instanceURL: cookies[COOKIE_INSTANCE_URL],
           callbackUrl: publicRuntimeConfig.appAuthURL,
         });
@@ -156,22 +152,6 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
     return signInWithExternalAuth(networkId, nonce, account, id, walletType);
   };
 
-  const anonymous = async (): Promise<void> => {
-    const name: string = uniqueNamesGenerator({
-      dictionaries: [adjectives, colors],
-      separator: ' ',
-    });
-    const regex = /black|white/gi;
-
-    await signIn('credentials', {
-      address: null,
-      name: name.replace(regex, 'gray'),
-      anonymous: true,
-      instanceURL: cookies[COOKIE_INSTANCE_URL],
-      callbackUrl: publicRuntimeConfig.appAuthURL,
-    });
-  };
-
   const clearNearCache = async (): Promise<void> => {
     const nearNetwork = networks.find(network => network.id === NetworkIdEnum.NEAR);
 
@@ -200,7 +180,6 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
   };
 
   return {
-    anonymous,
     logout,
     clearNearCache,
     getRegisteredAccounts,

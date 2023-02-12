@@ -23,6 +23,7 @@ import {htmlToJson, isJson} from 'src/helpers/string';
 import {Post} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
 import {initialize} from 'src/lib/api/base';
+import {healthcheck} from 'src/lib/api/healthcheck';
 import * as PostAPI from 'src/lib/api/post';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
@@ -131,10 +132,30 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     // ignore
   }
 
-  const anonymous = !session || Boolean(session?.user?.anonymous);
+  const queryInstanceURL = query.instance;
+  const sessionInstanceURL = session?.user?.instanceURL;
+  const cookiesInstanceURL = cookies[COOKIE_INSTANCE_URL];
+  const defaultInstanceURL = serverRuntimeConfig.myriadAPIURL;
+
+  const apiURL = sessionInstanceURL ?? queryInstanceURL ?? cookiesInstanceURL ?? defaultInstanceURL;
+
+  const available = await healthcheck(apiURL);
+
+  if (!available) {
+    return {
+      redirect: {
+        destination: '/maintenance',
+        permanent: false,
+      },
+    };
+  }
+
+  const anonymous = !session?.user;
 
   let userId: string | undefined = undefined;
   let post: Post | undefined = undefined;
+
+  res.setHeader('set-cookie', [`${COOKIE_INSTANCE_URL}=${apiURL}`]);
 
   initialize({cookie: req.headers.cookie}, anonymous);
 
@@ -173,19 +194,8 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     }
   }
 
-  const sessionInstanceURL = session?.user?.instanceURL;
-  const cookiesInstanceURL = cookies[COOKIE_INSTANCE_URL];
-  const defaultInstanceURL = serverRuntimeConfig.myriadAPIURL;
-
-  let apiURL = sessionInstanceURL;
-
   if (anonymous) {
     const username = generateAnonymousUser();
-    const queryInstanceURL = query.instance;
-
-    apiURL = queryInstanceURL ?? cookiesInstanceURL ?? defaultInstanceURL;
-    res.setHeader('set-cookie', [`${COOKIE_INSTANCE_URL}=${apiURL}`]);
-
     await dispatch(setAnonymous(username));
   } else {
     await Promise.all([

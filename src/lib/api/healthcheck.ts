@@ -1,10 +1,10 @@
-export const healthcheck = async (): Promise<boolean> => {
+export const healthcheck = async (apiURL: string): Promise<boolean> => {
   try {
-    await fetch(`${process.env.MYRIAD_API_URL}/health`, {
-      method: 'GET',
-    });
+    const result = await fetch(`${apiURL}/health`);
+    const data = await result.json();
 
-    return true;
+    if (data?.status === 'UP') return true;
+    return false;
   } catch (error) {
     return false;
   }
