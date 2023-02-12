@@ -35,6 +35,7 @@ import {useAuthHook} from 'src/hooks/auth.hook';
 import {useInstances} from 'src/hooks/use-instances.hooks';
 import {useUserHook} from 'src/hooks/use-user.hook';
 import {ServerListProps} from 'src/interfaces/server-list';
+import {LoginType} from 'src/interfaces/session';
 import initialize from 'src/lib/api/base';
 import i18n from 'src/locale';
 import {RootState} from 'src/reducers';
@@ -46,7 +47,7 @@ import theme from 'src/themes/default';
 type SelectServerProps = {
   title?: string;
   register?: boolean;
-  onSwitchInstance?: (server: ServerListProps, callback?: () => void) => void;
+  onSwitchInstance: (server: ServerListProps, callback?: () => void) => void;
   setRegister?: (value: boolean) => void;
   page?: string;
 };
@@ -104,15 +105,13 @@ const SelectServer = ({
       initialize({apiURL: server.apiUrl});
       dispatch(setServer(server.detail, server.apiUrl));
       dispatch(fetchNetwork());
-
-      setOpen(false);
-    } else {
-      if (!onSwitchInstance) return;
-      onSwitchInstance(server, () => {
-        setOpen(false);
-        setRegister(false);
-      });
     }
+
+    onSwitchInstance(server, () => {
+      setOpen(false);
+      if (!setRegister) return;
+      setRegister(false);
+    });
   };
 
   const handleCloseCheckAccountModal = () => {
@@ -122,9 +121,10 @@ const SelectServer = ({
   const onLogout = async (server: ServerListProps) => {
     setCookies(COOKIE_INSTANCE_URL, server.apiUrl);
 
-    const query = session?.user?.email
-      ? `&email=${session.user.email}`
-      : `&network=${currentWallet.networkId}`;
+    const query =
+      session?.user?.loginType === LoginType.EMAIL
+        ? `&email=${session.user.address}`
+        : `&network=${currentWallet.networkId}`;
     await logout(`/login?instance=${server.apiUrl}${query}`);
   };
 
