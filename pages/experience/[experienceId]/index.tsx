@@ -104,7 +104,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     // ignore
   }
 
-  const queryInstanceURL = query.rpc;
+  const queryInstanceURL = query.instance;
   const sessionInstanceURL = session?.user?.instanceURL;
   const cookiesInstanceURL = cookies[COOKIE_INSTANCE_URL];
   const defaultInstanceURL = serverRuntimeConfig.myriadAPIURL;
