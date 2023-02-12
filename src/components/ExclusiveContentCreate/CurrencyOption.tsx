@@ -22,7 +22,7 @@ export type CurrencyOptionProps = {
   currentCurrency: Currency;
   balances: Currency[];
   isMobile?: boolean;
-  handleSelect: (Currency) => void;
+  handleSelect: (currency: Currency) => void;
 };
 
 export const CurrencyOption: React.FC<CurrencyOptionProps> = ({
@@ -46,6 +46,11 @@ export const CurrencyOption: React.FC<CurrencyOptionProps> = ({
   const filterCurrency = balances.filter(balance => {
     if (balance.networkId === 'myriad' || balance.networkId === 'debio') return balance;
   });
+
+  const onSelectBalance = (currency: Currency) => {
+    handleClose();
+    handleSelect(currency);
+  };
 
   return (
     <>
@@ -85,15 +90,8 @@ export const CurrencyOption: React.FC<CurrencyOptionProps> = ({
         {filterCurrency.map(balance => (
           <MenuItem
             key={balance.id}
-            style={{filter: balance.networkId !== 'myriad' ? 'grayscale(1)' : 'grayscale(0)'}}
-            onClick={
-              balance.networkId === 'myriad'
-                ? () => {
-                    handleClose();
-                    handleSelect(balance);
-                  }
-                : null
-            }>
+            style={{filter: 'grayscale(0)'}}
+            onClick={() => onSelectBalance(balance)}>
             <ListItemIcon style={{minWidth: '36px'}}>
               <Avatar
                 name={balance.id}
