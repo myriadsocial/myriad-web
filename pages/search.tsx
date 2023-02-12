@@ -58,17 +58,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const dispatch = store.dispatch as ThunkDispatchAction;
 
-  const available = await healthcheck();
-
-  if (!available) {
-    return {
-      redirect: {
-        destination: '/maintenance',
-        permanent: false,
-      },
-    };
-  }
-
   let session: Session | null = null;
 
   try {
@@ -77,7 +66,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     // ignore
   }
 
-  if (!session?.user || session?.user?.anonymous) {
+  if (!session?.user) {
     return {
       redirect: {
         destination: '/',
@@ -87,6 +76,17 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
   }
 
   const sessionInstanceURL = session?.user?.instanceURL;
+
+  const available = await healthcheck(sessionInstanceURL);
+
+  if (!available) {
+    return {
+      redirect: {
+        destination: '/maintenance',
+        permanent: false,
+      },
+    };
+  }
 
   initialize({cookie: req.headers.cookie});
 

@@ -96,7 +96,22 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const dispatch = store.dispatch as ThunkDispatchAction;
 
-  const available = await healthcheck();
+  let session: Session | null = null;
+
+  try {
+    session = await getSession(context);
+  } catch {
+    // ignore
+  }
+
+  const queryInstanceURL = query.rpc;
+  const sessionInstanceURL = session?.user?.instanceURL;
+  const cookiesInstanceURL = cookies[COOKIE_INSTANCE_URL];
+  const defaultInstanceURL = serverRuntimeConfig.myriadAPIURL;
+
+  const apiURL = sessionInstanceURL ?? queryInstanceURL ?? cookiesInstanceURL ?? defaultInstanceURL;
+
+  const available = await healthcheck(apiURL);
 
   if (!available) {
     return {
@@ -107,15 +122,9 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     };
   }
 
-  let session: Session | null = null;
+  res.setHeader('set-cookie', [`${COOKIE_INSTANCE_URL}=${apiURL}`]);
 
-  try {
-    session = await getSession(context);
-  } catch {
-    // ignore
-  }
-
-  const anonymous = !session || Boolean(session?.user.anonymous);
+  const anonymous = !session?.user;
 
   initialize({cookie: req.headers.cookie}, anonymous);
 
@@ -150,23 +159,11 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     }
   }
 
-  const sessionInstanceURL = session?.user?.instanceURL;
-  const cookiesInstanceURL = cookies[COOKIE_INSTANCE_URL];
-  const defaultInstanceURL = serverRuntimeConfig.myriadAPIURL;
-
-  let apiURL = sessionInstanceURL;
-
   if (anonymous) {
-    const username = session?.user?.name ?? generateAnonymousUser();
-    const queryInstanceURL = query.instance;
-
-    apiURL = queryInstanceURL ?? cookiesInstanceURL ?? defaultInstanceURL;
-    res.setHeader('set-cookie', [`${COOKIE_INSTANCE_URL}=${apiURL}`]);
-
+    const username = generateAnonymousUser();
     await dispatch(setAnonymous(username));
   } else {
     await dispatch(fetchUser());
-
     await Promise.all([
       dispatch(fetchUserWallets()),
       dispatch(fetchConnectedSocials()),

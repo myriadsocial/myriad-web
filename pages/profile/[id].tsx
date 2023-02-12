@@ -88,7 +88,22 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const dispatch = store.dispatch as ThunkDispatchAction;
 
-  const available = await healthcheck();
+  let session: Session | null = null;
+
+  try {
+    session = await getSession(context);
+  } catch {
+    // ignore
+  }
+
+  const queryInstanceURL = query.rpc;
+  const sessionInstanceURL = session?.user?.instanceURL;
+  const cookiesInstanceURL = cookies[COOKIE_INSTANCE_URL];
+  const defaultInstanceURL = serverRuntimeConfig.myriadAPIURL;
+
+  const apiURL = sessionInstanceURL ?? queryInstanceURL ?? cookiesInstanceURL ?? defaultInstanceURL;
+
+  const available = await healthcheck(apiURL);
 
   if (!available) {
     return {
@@ -99,21 +114,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
     };
   }
 
-  let session: Session | null = null;
-
-  try {
-    session = await getSession(context);
-  } catch {
-    // ignore
-  }
-
-  const sessionInstanceURL = session?.user?.instanceURL;
-  const cookiesInstanceURL = cookies[COOKIE_INSTANCE_URL];
-  const defaultInstanceURL = serverRuntimeConfig.myriadAPIURL;
-
-  let apiURL = sessionInstanceURL;
-
-  const anonymous = !session || Boolean(session?.user.anonymous);
+  const anonymous = !session?.user;
 
   const userId = session?.user.address as string;
   const profileId = params?.id as string;
@@ -122,17 +123,13 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   initialize({cookie: req.headers.cookie}, anonymous);
 
+  res.setHeader('set-cookie', [`${COOKIE_INSTANCE_URL}=${apiURL}`]);
+
   if (anonymous) {
     const username = generateAnonymousUser();
-    const queryInstanceURL = query.instance;
-
-    apiURL = queryInstanceURL ?? cookiesInstanceURL ?? defaultInstanceURL;
-    res.setHeader('set-cookie', [`${COOKIE_INSTANCE_URL}=${apiURL}`]);
-
     await dispatch(setAnonymous(username));
   } else {
     await dispatch(fetchUser());
-
     await Promise.all([
       dispatch(fetchUserWallets()),
       dispatch(fetchConnectedSocials()),

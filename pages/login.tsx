@@ -11,6 +11,7 @@ import {LoginLayout} from 'src/components/template/Login';
 import {MobileLayout} from 'src/components/template/Login';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
 import {initialize} from 'src/lib/api/base';
+import {healthcheck} from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
 import {fetchServer} from 'src/reducers/server/actions';
 import {fetchNetwork} from 'src/reducers/user/actions';
@@ -71,13 +72,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const dispatch = store.dispatch as ThunkDispatchAction;
 
-  const queryInstanceURL = query.instance;
-  const cookiesInstanceURL = cookies[COOKIE_INSTANCE_URL];
-  const defaultInstanceURL = serverRuntimeConfig.myriadAPIURL;
-  const apiURL = queryInstanceURL ?? cookiesInstanceURL ?? defaultInstanceURL;
-
-  res.setHeader('set-cookie', [`${COOKIE_INSTANCE_URL}=${apiURL}`]);
-
   let mobile = false;
   let redirectAuth: string | null = null;
 
@@ -105,7 +99,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
   const {redirect} = query;
 
-  if (session?.user && !session?.user?.anonymous) {
+  if (session?.user) {
     return {
       redirect: {
         destination: (redirect as string) || '/',
@@ -113,6 +107,24 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
       },
     };
   }
+
+  const queryInstanceURL = query.rpc;
+  const cookiesInstanceURL = cookies[COOKIE_INSTANCE_URL];
+  const defaultInstanceURL = serverRuntimeConfig.myriadAPIURL;
+  const apiURL = queryInstanceURL ?? cookiesInstanceURL ?? defaultInstanceURL;
+
+  const available = await healthcheck(apiURL);
+
+  if (!available) {
+    return {
+      redirect: {
+        destination: '/maintenance',
+        permanent: false,
+      },
+    };
+  }
+
+  res.setHeader('set-cookie', [`${COOKIE_INSTANCE_URL}=${apiURL}`]);
 
   initialize({apiURL});
 
