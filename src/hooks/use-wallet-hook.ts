@@ -106,7 +106,7 @@ export const useWallet = () => {
     tipsBalanceInfo: TipsBalanceInfo,
     amount: BN,
     currency: BalanceDetail,
-    accountReference: string | null,
+    accountReference: string,
     type?: string,
     referenceId?: string,
     callback?: (txHash: string) => void,

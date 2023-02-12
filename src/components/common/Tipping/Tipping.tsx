@@ -51,9 +51,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
   const classes = useStyles();
   const {isSignerLoading, sendTip, payUnlockableContent} = useWallet();
 
-  const {user, currentWallet, currencies} = useSelector<RootState, UserState>(
-    state => state.userState,
-  );
+  const {currentWallet, currencies} = useSelector<RootState, UserState>(state => state.userState);
   const [amount, setAmount] = useState<BN>(INITIAL_AMOUNT);
   const [transactionFee, setTransactionFee] = useState<BN>(INITIAL_AMOUNT);
   const [assetMinBalance, setAssetMinBalance] = useState<BN>(BN_ZERO);
@@ -186,9 +184,9 @@ export const Tipping: React.FC<SendTipProps> = props => {
         },
       );
     } else {
-      const [instanceId, unlockableContentId, walletAddress] =
+      const [instanceId, unlockableContentId, userId, walletAddress] =
         receiver?.walletDetail?.referenceId?.split('/') ?? [];
-      const TipsBalance: TipsBalanceInfo = {
+      const tipsBalanceInfo: TipsBalanceInfo = {
         serverId: receiver?.walletDetail?.serverId,
         referenceType: receiver?.walletDetail?.referenceType,
         referenceId: unlockableContentId,
@@ -198,10 +196,10 @@ export const Tipping: React.FC<SendTipProps> = props => {
       payUnlockableContent(
         walletAddress ?? null,
         instanceId,
-        TipsBalance,
+        tipsBalanceInfo,
         amount,
         currency,
-        user.id,
+        userId,
         referenceType,
         referenceId,
         hash => {
