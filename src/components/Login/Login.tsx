@@ -102,8 +102,6 @@ export const Login: React.FC<LoginProps> = props => {
       setDisableSignIn(true);
 
       signIn('emailCredentials', {
-        name: '',
-        username: '',
         email: registeredEmail,
         token,
         instanceURL: cookies[COOKIE_INSTANCE_URL],

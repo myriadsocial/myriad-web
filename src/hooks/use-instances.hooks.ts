@@ -19,6 +19,7 @@ import useMyriadInstance from 'components/common/Blockchain/use-myriad-instance.
 import * as nearAPI from 'near-api-js';
 import {MYRIAD_WALLET_KEY} from 'src/interfaces/blockchain-interface';
 import {ServerListProps} from 'src/interfaces/server-list';
+import {LoginType} from 'src/interfaces/session';
 import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
 import * as NetworkAPI from 'src/lib/api/network';
 import {getCheckEmail} from 'src/lib/api/user';
@@ -95,8 +96,9 @@ export const useInstances = () => {
     if (server.apiUrl === currentApiURL) return;
     if (anonymous) return switchInstanceAsAnonymous(server);
 
-    const email = session?.user?.email;
-    if (email) return loginWithEmail(server.apiUrl, email);
+    const email = session?.user?.address;
+    const withEmail = session?.user?.loginType === LoginType.EMAIL;
+    if (withEmail) return loginWithEmail(server.apiUrl, email);
 
     const {nonce} = await fetchUserNonce(currentWallet.id, server.apiUrl);
     const network = await NetworkAPI.getNetwork(currentWallet.networkId, server.apiUrl);
@@ -126,14 +128,12 @@ export const useInstances = () => {
         if (!signature) throw new Error('FailedSignature');
 
         const result = await signIn('credentials', {
-          name: account.meta.name,
           address: toHexPublicKey(account),
           publicAddress: toHexPublicKey(account),
           signature,
           walletType,
           networkId: network.id,
           nonce,
-          anonymous: false,
           instanceURL: server.apiUrl,
           redirect: false,
         });
@@ -165,7 +165,6 @@ export const useInstances = () => {
           walletType,
           networkId: network.id,
           nonce,
-          anonymous: false,
           instanceURL: server.apiUrl,
           redirect: false,
         });

@@ -6,12 +6,10 @@ import {WalletTypeEnum} from 'src/interfaces/wallet';
 
 declare module 'next-auth' {
   interface User {
-    name: string;
-    anonymous: boolean;
-    address: string;
     token: string;
-    nonce: number;
+    address: string;
     instanceURL: string;
+    loginType: string;
   }
 
   interface Session {

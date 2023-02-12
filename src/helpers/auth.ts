@@ -5,6 +5,5 @@ export const generateAnonymousUser = (): string => {
     dictionaries: [adjectives, colors],
     separator: ' ',
   });
-
-  return name;
+  return name.replace(/black|white/gi, 'gray');
 };

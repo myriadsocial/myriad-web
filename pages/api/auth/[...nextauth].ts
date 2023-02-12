@@ -5,7 +5,7 @@ import getConfig from 'next/config';
 
 import APIAdapter from 'adapters/api';
 import {NetworkIdEnum} from 'src/interfaces/network';
-import {SignInCredential, SignInWithEmailCredential} from 'src/interfaces/session';
+import {LoginType} from 'src/interfaces/session';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
 import * as AuthLinkAPI from 'src/lib/api/auth-link';
 import initialize from 'src/lib/api/base';
@@ -28,8 +28,6 @@ const createOptions = (req: NextApiRequest) => ({
       // You can specify whatever fields you are expecting to be submitted.
       // e.g. domain, username, password, 2FA token, etc.
       credentials: {
-        name: {label: 'Name', type: 'text'},
-        anonymous: {label: 'Anonymous', type: 'text'},
         address: {label: 'Address', type: 'text'},
         signature: {label: 'Wallet Signature', type: 'text'},
         nonce: {label: 'Nonce', type: 'text'},
@@ -42,36 +40,33 @@ const createOptions = (req: NextApiRequest) => ({
         // Initialize instance api url
         initialize({apiURL: credentials.instanceURL});
 
-        if (credentials.anonymous === 'true') {
+        if (!credentials?.signature) throw Error('no signature!');
+
+        const data = await AuthAPI.login({
+          nonce: Number(credentials.nonce),
+          signature: credentials.signature,
+          publicAddress: credentials.publicAddress,
+          walletType: credentials.walletType as WalletTypeEnum,
+          networkType: credentials.networkId as NetworkIdEnum,
+        });
+
+        if (!data?.accessToken) throw Error('Failed to authorize user!');
+
+        try {
           // Any object returned will be saved in `user` property of the JWT
-          return {
-            ...credentials,
-            anonymous: true,
+          const payload = encryptMessage(data.accessToken, credentials.address);
+          const signInCredential = {
+            address: credentials.address,
+            instanceURL: credentials.instanceURL,
+            loginType: LoginType.WALLET,
           };
-        } else {
-          if (!credentials?.signature) throw Error('no signature!');
+          return credentialToSession(signInCredential, payload);
+        } catch (error) {
+          // If failed, use instance url from session
+          initialize({cookie: req.headers.cookie});
 
-          const data = await AuthAPI.login({
-            nonce: Number(credentials.nonce),
-            publicAddress: credentials.publicAddress,
-            signature: credentials.signature,
-            walletType: credentials.walletType as WalletTypeEnum,
-            networkType: credentials.networkId as NetworkIdEnum,
-          });
-
-          if (!data?.accessToken) throw Error('Failed to authorize user!');
-
-          try {
-            // Any object returned will be saved in `user` property of the JWT
-            const payload = encryptMessage(data.accessToken, credentials.address);
-            return credentialToSession(credentials as unknown as SignInCredential, payload);
-          } catch (error) {
-            // If failed, use instance url from session
-            initialize({cookie: req.headers.cookie});
-
-            console.log('[api][Auth]', error);
-            return null;
-          }
+          console.log('[api][Auth]', error);
+          return null;
         }
       },
     }),
@@ -83,8 +78,6 @@ const createOptions = (req: NextApiRequest) => ({
       // You can specify whatever fields you are expecting to be submitted.
       // e.g. domain, username, password, 2FA token, etc.
       credentials: {
-        name: {label: 'Name', type: 'text'},
-        username: {label: 'Username', type: 'text'},
         email: {label: 'Email', type: 'text'},
         token: {label: 'Token', type: 'text'},
         instanceURL: {label: 'Instance url', type: 'text'},
@@ -102,11 +95,13 @@ const createOptions = (req: NextApiRequest) => ({
         try {
           const parsedEmail = credentials.email.replace(/[^a-zA-Z0-9]/g, '');
           const payload = encryptMessage(data.accessToken, parsedEmail);
+          const signInCredential = {
+            address: credentials.email,
+            instanceURL: credentials.instanceURL,
+            loginType: LoginType.EMAIL,
+          };
           // Any object returned will be saved in `user` property of the JWT
-          return emailCredentialToSession(
-            credentials as unknown as SignInWithEmailCredential,
-            payload,
-          );
+          return emailCredentialToSession(signInCredential, payload);
         } catch (error) {
           // If failed, use instance url from session
           initialize({cookie: req.headers.cookie});
@@ -188,12 +183,10 @@ const createOptions = (req: NextApiRequest) => ({
       if (user) {
         token = {
           ...token,
-          anonymous: user.anonymous,
-          address: user.address,
-          nonce: user.nonce,
           token: user.token,
-          email: user.email,
+          address: user.address,
           instanceURL: user.instanceURL,
+          loginType: user.loginType,
         };
       }
 
