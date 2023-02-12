@@ -115,7 +115,7 @@ export const useWallet = () => {
 
     try {
       const from = provider.accountId;
-      const to = walletAddress;
+      const to = walletAddress ?? accountReference;
       const txHash = await provider.payUnlockableContent(
         walletAddress,
         instanceId,
