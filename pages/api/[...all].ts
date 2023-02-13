@@ -25,24 +25,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const cookiesInstanceURL = req.cookies[COOKIE_INSTANCE_URL];
     const instanceURL = sessionInstanceURL ?? cookiesInstanceURL;
 
-    if (session && session?.user && session?.user.token) {
-      let key = '';
+    if (session?.user?.token) {
+      const key = session.user.username.replace(/[^a-zA-Z0-9]/g, '');
+      const userToken = decryptMessage(session.user.token, key);
 
-      if (session?.user.address && session?.user.address.length > 0) {
-        key = session?.user.address;
-      }
-
-      if (session?.user.email && session?.user.email.length > 0) {
-        key = session?.user.email.replace(/[^a-zA-Z0-9]/g, '');
-      }
-
-      if (key && key.length > 0) {
-        const userToken = decryptMessage(session?.user.token, key);
-
-        headers = {
-          Authorization: `Bearer ${userToken}`,
-        };
-      }
+      headers = {
+        Authorization: `Bearer ${userToken}`,
+      };
     }
 
     return httpProxyMiddleware(req, res, {
