@@ -56,19 +56,23 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
     toggleDownvotePost(null);
   }, []);
 
-  const handleVisibilityChange = useCallback((visibility: Visibility) => {
-    toggleVisibility();
+  const handleVisibilityChange = useCallback(
+    (visibility: Visibility, selectedUserIds?: string[]) => {
+      toggleVisibility();
 
-    const payload: Partial<Post> = {
-      visibility,
-    };
+      const payload: Partial<Post> = {
+        visibility,
+        selectedUserIds,
+      };
 
-    if (visibility === Visibility.PRIVATE) {
-      confirmChangeToPrivate(payload);
-    } else {
-      handleUpdatePost(payload);
-    }
-  }, []);
+      if (visibility === Visibility.PRIVATE) {
+        confirmChangeToPrivate(payload);
+      } else {
+        handleUpdatePost(payload);
+      }
+    },
+    [],
+  );
 
   const confirmChangeToPrivate = (payload: Partial<Post>) => {
     confirm({

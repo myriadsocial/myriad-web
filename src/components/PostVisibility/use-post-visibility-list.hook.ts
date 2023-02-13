@@ -19,6 +19,10 @@ export const usePostVisibilityList = (): TagOptions[] => {
         id: PostVisibility.PRIVATE,
         title: i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Only_Me'),
       },
+      {
+        id: PostVisibility.CUSTOM,
+        title: i18n.t('Visibilities.Custom'),
+      },
     ],
     [],
   );
