@@ -17,13 +17,17 @@ import {Modal} from '../atoms/Modal';
 import {useStyles} from './postVisibility.styles';
 import {usePostVisibilityList} from './use-post-visibility-list.hook';
 
+import SettingVisibility from 'components/PostCreate/SettingVisibility';
+import ShowIf from 'components/common/show-if.component';
 import {Post, PostVisibility as Visibility} from 'src/interfaces/post';
+import {User} from 'src/interfaces/user';
+import * as UserAPI from 'src/lib/api/user';
 import i18n from 'src/locale';
 
 type ReportProps = {
   open: boolean;
   reference: Post;
-  onVisibilityChanged: (type: string) => void;
+  onVisibilityChanged: (type: string, selectedUserIds: string[]) => void;
   onClose: () => void;
 };
 
@@ -33,6 +37,9 @@ export const PostVisibility: React.FC<ReportProps> = props => {
 
   const list = usePostVisibilityList();
   const [type, setType] = useState<Visibility | null>(null);
+  const [selectedUserIds, setSelectedUserIds] = useState<User[]>([]);
+  const [pageUserIds, setPageUserIds] = React.useState<number>(1);
+  const [isLoadingSelectedUser, setIsLoadingSelectedUser] = useState<boolean>(false);
 
   useEffect(() => {
     reference.visibility && setType(reference.visibility);
@@ -50,9 +57,29 @@ export const PostVisibility: React.FC<ReportProps> = props => {
 
   const handlePostVisibility = () => {
     if (type) {
-      onVisibilityChanged(type);
+      onVisibilityChanged(
+        type,
+        selectedUserIds.map(item => item.id),
+      );
     }
   };
+
+  const getSelectedIds = async (userIds: string[]) => {
+    setIsLoadingSelectedUser(true);
+    const response = await UserAPI.getUserByIds(userIds, pageUserIds);
+    setSelectedUserIds([...selectedUserIds, ...(response?.data as unknown as User[])]);
+    setIsLoadingSelectedUser(false);
+    if (pageUserIds < response.meta.totalPageCount) setPageUserIds(pageUserIds + 1);
+  };
+
+  useEffect(() => {
+    getSelectedIds(reference.selectedUserIds);
+  }, [pageUserIds]);
+
+  const disabledSubmit =
+    type !== 'selected_user'
+      ? reference.visibility === type
+      : selectedUserIds.length < 1 && !isLoadingSelectedUser;
 
   return (
     <Modal
@@ -89,6 +116,10 @@ export const PostVisibility: React.FC<ReportProps> = props => {
         ))}
       </List>
 
+      <ShowIf condition={type === 'selected_user'}>
+        <SettingVisibility setPost={setSelectedUserIds} values={selectedUserIds} page={'edit'} />
+      </ShowIf>
+
       <div className={styles.info}>
         <Typography variant="subtitle1" color="textSecondary" className={styles.fontSize}>
           {i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Tipping_Warning')}
@@ -105,7 +136,7 @@ export const PostVisibility: React.FC<ReportProps> = props => {
           color="primary"
           size="small"
           onClick={handlePostVisibility}
-          disabled={reference.visibility === type}>
+          disabled={disabledSubmit}>
           {i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm')}
         </Button>
       </div>

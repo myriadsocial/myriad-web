@@ -19,12 +19,14 @@ import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
 
 interface SettingVisibilityInterface {
-  setPost: (value) => void;
+  page?: string;
+  setPost?: (value) => void;
+  values?: User[];
 }
 export default function SettingVisibility(props: SettingVisibilityInterface) {
-  const {setPost} = props;
+  const {setPost, values, page = 'create'} = props;
   const styles = useStyles();
-  const [userSelected, setUserSelected] = useState([]);
+  const [userSelected, setUserSelected] = useState(values ?? []);
   const {searchUsers, users, clearUsers} = useSearchHook();
   const handlePeopleChange = (
     // eslint-disable-next-line @typescript-eslint/ban-types
@@ -34,12 +36,16 @@ export default function SettingVisibility(props: SettingVisibilityInterface) {
   ) => {
     if (reason === 'select-option') {
       setUserSelected(value);
-      setPost(prevPost => ({
-        ...prevPost,
-        selectedUserIds: value.map(item => {
-          return item.id;
-        }),
-      }));
+      if (page === 'create') {
+        setPost(prevPost => ({
+          ...prevPost,
+          selectedUserIds: value.map(item => {
+            return item.id;
+          }),
+        }));
+      } else {
+        setPost(value);
+      }
       clearSearchedUser();
     }
   };
@@ -60,8 +66,11 @@ export default function SettingVisibility(props: SettingVisibilityInterface) {
     debounceSubmit();
   };
 
-  const removeSelectedUser = (selected: People) => () => {
+  const removeSelectedUser = (selected: People | User) => () => {
     setUserSelected(userSelected.filter(people => people.id != selected.id));
+    if (page === 'edit') {
+      setPost(userSelected.filter(people => people.id != selected.id));
+    }
   };
 
   return (
@@ -109,7 +118,6 @@ export default function SettingVisibility(props: SettingVisibilityInterface) {
                 title={option.name}
                 subtitle={<Typography variant="caption">@{option.username}</Typography>}
                 avatar={option.profilePictureURL}
-                platform={option.platform}
                 action={
                   <IconButton className={styles.removePeople}>
                     {state.selected ? (
@@ -143,7 +151,6 @@ export default function SettingVisibility(props: SettingVisibilityInterface) {
               title={user.name}
               subtitle={<Typography variant="caption">@{user.username}</Typography>}
               avatar={user.profilePictureURL}
-              platform={user.platform}
               action={
                 <IconButton onClick={removeSelectedUser(user)}>
                   <SvgIcon
