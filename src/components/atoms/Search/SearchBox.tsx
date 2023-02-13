@@ -68,12 +68,13 @@ const SearchBox: React.FC<SearchBoxProps> = ({
         <SearchIcon />
       </IconButton>
       <InputBase
-        onKeyUp={submitSearch}
+        onKeyDown={submitSearch}
         className={classes.input}
         value={input}
         onChange={handleChange}
         placeholder={textPlaceholder}
         inputProps={{'aria-label': ariaLabel}}
+        type='search'
         {...props}
       />
     </Grid>
