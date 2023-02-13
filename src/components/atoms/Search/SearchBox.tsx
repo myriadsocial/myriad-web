@@ -74,7 +74,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
         onChange={handleChange}
         placeholder={textPlaceholder}
         inputProps={{'aria-label': ariaLabel}}
-        type='search'
+        type="search"
         {...props}
       />
     </Grid>
