@@ -11,7 +11,7 @@ import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
 import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
 import {MYRIAD_WALLET_KEY} from 'src/interfaces/blockchain-interface';
 import {NetworkIdEnum} from 'src/interfaces/network';
-import {WalletTypeEnum} from 'src/interfaces/wallet';
+import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
 import * as AuthAPI from 'src/lib/api/ext-auth';
 import * as WalletAPI from 'src/lib/api/wallet';
 import {toHexPublicKey} from 'src/lib/crypto';
@@ -70,6 +70,9 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
     nearAddress?: string,
     walletType?: WalletTypeEnum,
   ) => {
+    const blockchainPlatform =
+      networkId === NetworkIdEnum.NEAR ? BlockchainPlatform.NEAR : BlockchainPlatform.SUBSTRATE;
+
     if (account) {
       const signature = await PolkadotJs.signWithWallet(account, nonce);
 
@@ -80,9 +83,10 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
         publicAddress: toHexPublicKey(account),
         signature,
         walletType: WalletTypeEnum.POLKADOT,
-        networkId: networkId,
+        networkType: networkId,
         nonce,
         instanceURL: cookies[COOKIE_INSTANCE_URL],
+        blockchainPlatform,
         callbackUrl: redirect || publicRuntimeConfig.appAuthURL,
       });
 
@@ -114,9 +118,10 @@ export const useAuthHook = ({redirect}: UseAuthHooksArgs = {}) => {
           publicAddress: data.publicAddress,
           signature: data.signature,
           walletType: WalletTypeEnum.NEAR,
-          networkId: NetworkIdEnum.NEAR,
+          networkType: NetworkIdEnum.NEAR,
           nonce,
           instanceURL: cookies[COOKIE_INSTANCE_URL],
+          blockchainPlatform,
           callbackUrl: publicRuntimeConfig.appAuthURL,
         });
 

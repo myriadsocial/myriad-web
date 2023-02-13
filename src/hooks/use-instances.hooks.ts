@@ -107,6 +107,14 @@ export const useInstances = () => {
     if (nonce <= 0) throw new Error('AccountNotFound');
 
     let walletType = window.localStorage.getItem(MYRIAD_WALLET_KEY);
+    let credentials = {
+      walletType,
+      nonce,
+      instanceURL: server.apiUrl,
+      networkType: network.id,
+      blockchainPlatform: network.blockchainPlatform,
+      redirect: false,
+    };
 
     switch (currentWallet.blockchainPlatform) {
       case BlockchainPlatform.SUBSTRATE: {
@@ -126,19 +134,9 @@ export const useInstances = () => {
         });
 
         if (!signature) throw new Error('FailedSignature');
-
-        const result = await signIn('credentials', {
-          address: toHexPublicKey(account),
-          publicAddress: toHexPublicKey(account),
-          signature,
-          walletType,
-          networkId: network.id,
-          nonce,
-          instanceURL: server.apiUrl,
-          redirect: false,
-        });
-
-        if (!result.ok) throw new Error('FailedSwitchInstance');
+        const address = toHexPublicKey(account);
+        const data = {address, publicAddress: address, signature, walletType};
+        credentials = {...credentials, ...data};
         break;
       }
 
@@ -157,19 +155,8 @@ export const useInstances = () => {
         const userSignature = keyPair.sign(Buffer.from(numberToHex(nonce)));
         const publicAddress = u8aToHex(userSignature.publicKey.data);
         const signature = u8aToHex(userSignature.signature);
-
-        const result = await signIn('credentials', {
-          address,
-          publicAddress,
-          signature,
-          walletType,
-          networkId: network.id,
-          nonce,
-          instanceURL: server.apiUrl,
-          redirect: false,
-        });
-
-        if (!result.ok) throw new Error('FailedSwitchInstance');
+        const data = {address, publicAddress, signature, walletType};
+        credentials = {...credentials, ...data};
         break;
       }
 
@@ -177,8 +164,12 @@ export const useInstances = () => {
         throw new Error('BlockchainPlatformNotFound');
     }
 
+    const result = await signIn('credentials', credentials);
+    if (!result.ok) throw new Error('FailedSwitchInstance');
+
     setCookies(COOKIE_INSTANCE_URL, server.apiUrl);
     window.localStorage.setItem(MYRIAD_WALLET_KEY, walletType);
+
     const pathname = router.pathname;
     const query = router.query;
     await router.replace({pathname, query: {...query, instance: server.apiUrl}});

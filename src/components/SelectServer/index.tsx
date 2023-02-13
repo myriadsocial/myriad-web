@@ -123,7 +123,7 @@ const SelectServer = ({
 
     const query =
       session?.user?.loginType === LoginType.EMAIL
-        ? `&email=${session.user.address}`
+        ? `&email=${session.user.email}`
         : `&network=${currentWallet.networkId}`;
     await logout(`/login?instance=${server.apiUrl}${query}`);
   };
