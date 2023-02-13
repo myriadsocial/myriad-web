@@ -17,6 +17,8 @@ describe('Social Media List Container', () => {
         nonce: 123,
         id: 'sample-id-user',
         instanceURL: 'https://api.testnet.myriad.com',
+        username: 'jest',
+        loginType: '',
       },
     };
     (useSession as jest.Mock).mockReturnValue([mockSession, false]);
