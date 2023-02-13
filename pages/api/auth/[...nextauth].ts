@@ -1,3 +1,5 @@
+import {AnyObject} from '@udecode/plate';
+
 import {NextApiRequest, NextApiResponse} from 'next';
 import NextAuth, {Session} from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
@@ -32,9 +34,10 @@ const createOptions = (req: NextApiRequest) => ({
         signature: {label: 'Wallet Signature', type: 'text'},
         nonce: {label: 'Nonce', type: 'text'},
         walletType: {label: 'Wallet Type', type: 'text'},
-        networkId: {label: 'Network ID', type: 'text'},
+        networkType: {label: 'Network ID', type: 'text'},
         publicAddress: {label: 'Public Address', type: 'text'},
         instanceURL: {label: 'Instance url', type: 'text'},
+        blockchainPlatform: {label: 'Blockchain Platform', type: 'text'},
       },
       async authorize(credentials) {
         // Initialize instance api url
@@ -47,7 +50,7 @@ const createOptions = (req: NextApiRequest) => ({
           signature: credentials.signature,
           publicAddress: credentials.publicAddress,
           walletType: credentials.walletType as WalletTypeEnum,
-          networkType: credentials.networkId as NetworkIdEnum,
+          networkType: credentials.networkType as NetworkIdEnum,
         });
 
         if (!data?.token?.accessToken) throw Error('Failed to authorize user!');
@@ -57,7 +60,7 @@ const createOptions = (req: NextApiRequest) => ({
           const user = data.user;
           const accessToken = data.token.accessToken;
           const payload = encryptMessage(accessToken, user.username);
-          const signInCredential = parseCredential(user, credentials.instanceURL, LoginType.WALLET);
+          const signInCredential = parseCredential(user, credentials, LoginType.WALLET);
 
           return credentialToSession(signInCredential, payload);
         } catch (error) {
@@ -95,7 +98,7 @@ const createOptions = (req: NextApiRequest) => ({
           const user = data.user;
           const accessToken = data.token.accessToken;
           const payload = encryptMessage(accessToken, user.username);
-          const signInCredential = parseCredential(user, credentials.instanceURL, LoginType.EMAIL);
+          const signInCredential = parseCredential(user, credentials, LoginType.EMAIL);
 
           // Any object returned will be saved in `user` property of the JWT
           return credentialToSession(signInCredential, payload);
@@ -180,13 +183,21 @@ const createOptions = (req: NextApiRequest) => ({
       if (user) {
         token = {
           ...token,
+          // User detail
           id: user.id,
           username: user.username,
           email: user.email,
           address: user.address,
+
+          // Login detail
           token: user.token,
           instanceURL: user.instanceURL,
           loginType: user.loginType,
+
+          // Blockchain detail
+          walletType: user.walletType,
+          networkType: user.networkType,
+          blockchainPlatform: user.blockchainPlatform,
         };
       }
 
@@ -221,15 +232,23 @@ export default auth;
 
 export function parseCredential(
   user: Partial<AuthAPI.User>,
-  instance: string,
+  credentials: AnyObject,
   loginType: LoginType,
 ): SignInCredential {
   return {
+    // User detail
     id: user.id,
     username: user.username,
     email: user.email,
     address: user.address,
-    instanceURL: instance,
+
+    // Login detail
+    instanceURL: credentials.instanceURL,
     loginType,
+
+    // Blockchain detail
+    walletType: credentials?.walletType ?? '',
+    networkType: credentials?.networkType ?? '',
+    blockchainPlatform: credentials?.blockchainPlatform ?? '',
   };
 }
