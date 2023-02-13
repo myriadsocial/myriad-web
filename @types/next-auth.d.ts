@@ -7,6 +7,7 @@ import {WalletTypeEnum} from 'src/interfaces/wallet';
 declare module 'next-auth' {
   interface User {
     token: string;
+    username: string;
     address: string;
     instanceURL: string;
     loginType: string;

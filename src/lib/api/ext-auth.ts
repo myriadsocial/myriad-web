@@ -22,8 +22,20 @@ type SignUpResponseProps = {
   nonce: number;
 };
 
-type LoginResponseProps = {
+export type User = {
+  id: string;
+  email: string;
+  username: string;
+  address: string;
+};
+
+type TokenObject = {
   accessToken: string;
+};
+
+export type LoginResponseProps = {
+  user: Partial<User>;
+  token: TokenObject;
 };
 
 export const login = async (values: LoginProps): Promise<LoginResponseProps | null> => {

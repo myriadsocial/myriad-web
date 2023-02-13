@@ -96,7 +96,7 @@ export const useInstances = () => {
     if (server.apiUrl === currentApiURL) return;
     if (anonymous) return switchInstanceAsAnonymous(server);
 
-    const email = session?.user?.address;
+    const email = session?.user?.email;
     const withEmail = session?.user?.loginType === LoginType.EMAIL;
     if (withEmail) return loginWithEmail(server.apiUrl, email);
 

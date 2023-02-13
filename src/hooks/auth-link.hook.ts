@@ -28,18 +28,7 @@ export const useAuthLinkHook = () => {
     }
   };
 
-  const loginWithLink = async (token: string): Promise<string> => {
-    try {
-      const accessToken = await AuthLinkAPI.loginWithLink(token);
-
-      return accessToken;
-    } catch (error) {
-      console.log({error});
-    }
-  };
-
   return {
     requestLink,
-    loginWithLink,
   };
 };

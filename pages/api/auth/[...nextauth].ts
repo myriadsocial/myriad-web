@@ -5,13 +5,13 @@ import getConfig from 'next/config';
 
 import APIAdapter from 'adapters/api';
 import {NetworkIdEnum} from 'src/interfaces/network';
-import {LoginType} from 'src/interfaces/session';
+import {LoginType, SignInCredential} from 'src/interfaces/session';
 import {WalletTypeEnum} from 'src/interfaces/wallet';
 import * as AuthLinkAPI from 'src/lib/api/auth-link';
 import initialize from 'src/lib/api/base';
 import * as AuthAPI from 'src/lib/api/ext-auth';
 import {encryptMessage} from 'src/lib/crypto';
-import {credentialToSession, emailCredentialToSession} from 'src/lib/serializers/session';
+import {credentialToSession} from 'src/lib/serializers/session';
 
 const {serverRuntimeConfig} = getConfig();
 
@@ -50,16 +50,15 @@ const createOptions = (req: NextApiRequest) => ({
           networkType: credentials.networkId as NetworkIdEnum,
         });
 
-        if (!data?.accessToken) throw Error('Failed to authorize user!');
+        if (!data?.token?.accessToken) throw Error('Failed to authorize user!');
 
         try {
           // Any object returned will be saved in `user` property of the JWT
-          const payload = encryptMessage(data.accessToken, credentials.address);
-          const signInCredential = {
-            address: credentials.address,
-            instanceURL: credentials.instanceURL,
-            loginType: LoginType.WALLET,
-          };
+          const user = data.user;
+          const accessToken = data.token.accessToken;
+          const payload = encryptMessage(accessToken, user.username);
+          const signInCredential = parseCredential(user, credentials.instanceURL, LoginType.WALLET);
+
           return credentialToSession(signInCredential, payload);
         } catch (error) {
           // If failed, use instance url from session
@@ -90,18 +89,16 @@ const createOptions = (req: NextApiRequest) => ({
 
         const data = await AuthLinkAPI.loginWithLink(credentials.token);
 
-        if (!data?.accessToken) throw Error('Failed to authorize user!');
+        if (!data?.token?.accessToken) throw Error('Failed to authorize user!');
 
         try {
-          const parsedEmail = credentials.email.replace(/[^a-zA-Z0-9]/g, '');
-          const payload = encryptMessage(data.accessToken, parsedEmail);
-          const signInCredential = {
-            address: credentials.email,
-            instanceURL: credentials.instanceURL,
-            loginType: LoginType.EMAIL,
-          };
+          const user = data.user;
+          const accessToken = data.token.accessToken;
+          const payload = encryptMessage(accessToken, user.username);
+          const signInCredential = parseCredential(user, credentials.instanceURL, LoginType.EMAIL);
+
           // Any object returned will be saved in `user` property of the JWT
-          return emailCredentialToSession(signInCredential, payload);
+          return credentialToSession(signInCredential, payload);
         } catch (error) {
           // If failed, use instance url from session
           initialize({cookie: req.headers.cookie});
@@ -183,8 +180,11 @@ const createOptions = (req: NextApiRequest) => ({
       if (user) {
         token = {
           ...token,
-          token: user.token,
+          id: user.id,
+          username: user.username,
+          email: user.email,
           address: user.address,
+          token: user.token,
           instanceURL: user.instanceURL,
           loginType: user.loginType,
         };
@@ -218,3 +218,18 @@ const auth = async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 export default auth;
+
+export function parseCredential(
+  user: Partial<AuthAPI.User>,
+  instance: string,
+  loginType: LoginType,
+): SignInCredential {
+  return {
+    id: user.id,
+    username: user.username,
+    email: user.email,
+    address: user.address,
+    instanceURL: instance,
+    loginType,
+  };
+}

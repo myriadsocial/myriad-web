@@ -9,24 +9,11 @@ export const credentialToSession = (
   encryption: EncryptionPayload,
 ): User => {
   const session: User = {
-    id: credential.address,
+    id: credential.id,
+    username: credential.username,
+    email: credential.email,
     address: credential.address,
     token: encryption.encryptedMessage,
-    instanceURL: credential.instanceURL,
-    loginType: credential.loginType,
-  };
-
-  return session;
-};
-
-export const emailCredentialToSession = (
-  credential: SignInCredential,
-  encryption: EncryptionPayload,
-): User => {
-  const session: User = {
-    id: credential.address,
-    token: encryption.encryptedMessage,
-    address: credential.address,
     instanceURL: credential.instanceURL,
     loginType: credential.loginType,
   };
