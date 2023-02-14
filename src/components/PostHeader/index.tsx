@@ -177,7 +177,7 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
         subheader={
           <PostSubHeader
             postId={post.id}
-            date={post.createdAt}
+            date={post.originCreatedAt}
             importers={post.importers}
             platform={post.platform}
             url={post.url}
