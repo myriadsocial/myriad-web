@@ -111,7 +111,7 @@ export const HeaderComponentExperience: React.FC<PostHeaderExperienceProps> = pr
         subheader={
           <PostSubHeader
             postId={post.id}
-            date={post.createdAt}
+            date={post.originCreatedAt}
             importers={post.importers}
             platform={post.platform}
             url={post.url}
