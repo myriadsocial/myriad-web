@@ -188,17 +188,31 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = props => {
           alt={experience.name}
           src={experience.experienceImageURL}
           variant="rounded"
-          style={{width: 48, height: 48}}
+          style={{width: 48, height: 48, cursor: 'pointer'}}
+          onClick={() => router.push(`profile/${experience.user.id}`)}
         />
       ) : (
-        <Avatar alt={experience.name} variant="rounded">
+        <Avatar
+          alt={experience.name}
+          variant="rounded"
+          style={{cursor: 'pointer'}}
+          onClick={() => router.push(`profile/${experience.user.id}`)}>
           {experience.name.charAt(0)}
         </Avatar>
       )}
       <div className={style.content}>
         <div>
-          <Typography variant="h6">{experience.name}</Typography>
-          <Typography color="primary" variant="subtitle2">
+          <Typography
+            variant="h6"
+            className={style.title}
+            onClick={() => router.push(`profile/${experience.user.id}`)}>
+            {experience.name}
+          </Typography>
+          <Typography
+            color="primary"
+            variant="subtitle2"
+            className={style.title}
+            onClick={() => router.push(`profile/${experience.id}`)}>
             {experience.user.name}
           </Typography>
           <Typography color="textSecondary">{experience.description}</Typography>

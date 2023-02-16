@@ -5,6 +5,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import {useSelector} from 'react-redux';
 
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import {useRouter} from 'next/router';
 
 import {IconButton, SvgIcon, Typography} from '@material-ui/core';
@@ -304,14 +305,27 @@ export const ExperiencePreview: React.FC<Props> = props => {
           {i18n.t('Experience.Preview.Subheader.Author')}
         </Typography>
         <div className={style.flex}>
-          <Avatar
-            alt={experience.user.name}
-            src={experience.user.profilePictureURL}
-            variant="circular"
-            className={style.photo}>
-            {acronym(experience.user.name)}
-          </Avatar>
-          <Typography className={style.user}>{experience.user.name}</Typography>
+          <Link
+            href={`profile/${experience.user.id}`}
+            as={`/profile/${experience.user.id}`}
+            passHref>
+            <Avatar
+              alt={experience.user.name}
+              src={experience.user.profilePictureURL}
+              variant="circular"
+              style={{cursor: 'pointer'}}
+              className={style.photo}>
+              {acronym(experience.user.name)}
+            </Avatar>
+          </Link>
+          <Link
+            href={`profile/${experience.user.id}`}
+            as={`/profile/${experience.user.id}`}
+            passHref>
+            <Typography className={style.user} style={{cursor: 'pointer'}}>
+              {experience.user.name}
+            </Typography>
+          </Link>
         </div>
       </div>
       <div className={style.mb30}>

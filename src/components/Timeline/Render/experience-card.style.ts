@@ -45,6 +45,12 @@ export const useStyles = makeStyles((theme: Theme) =>
         width: '100%',
       },
     },
+    title: {
+      cursor: 'pointer',
+      [theme.breakpoints.down('xs')]: {
+        fontWeight: 500,
+      },
+    },
     copy: {},
   }),
 );
