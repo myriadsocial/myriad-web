@@ -500,6 +500,7 @@
         "Public": "Public",
         "Friend_Only": "Friend Only",
         "Only_Me": "Only Me",
+        "Custom" : "Custom",
         "Tipping_Warning": "By limiting audience exposure to this post, the number of users who can tip you will also get smaller.",
         "Cancel": "Cancel",
         "Confirm": "Confirm",
