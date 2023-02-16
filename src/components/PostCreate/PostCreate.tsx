@@ -5,7 +5,7 @@ import {useDispatch} from 'react-redux';
 
 import dynamic from 'next/dynamic';
 
-import {Button, IconButton, SvgIcon, Tooltip, Typography} from '@material-ui/core';
+import {Button, IconButton, SvgIcon, Typography} from '@material-ui/core';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 
@@ -350,7 +350,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
           <ShowIf condition={!showExclusive}>
             {!exclusiveContent ? (
               <>
-                {user.fullAccess ? (
+                {(
                   <IconButton aria-label="exclusive-content" onClick={handleshowExclusive}>
                     <SvgIcon component={GiftIcon} viewBox="0 0 24 24" className={styles.giftIcon} />
                     <Typography
@@ -361,25 +361,6 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
                       {i18n.t('ExclusiveContent.Add')}
                     </Typography>
                   </IconButton>
-                ) : (
-                  <Tooltip
-                    title={<Typography>{i18n.t('ExclusiveContent.Text.Tooltip')}</Typography>}
-                    aria-label="exclusive-content">
-                    <IconButton aria-label="exclusive-content" onClick={null}>
-                      <SvgIcon
-                        component={GiftIcon}
-                        viewBox="0 0 24 24"
-                        className={styles.giftIconGray}
-                      />
-                      <Typography
-                        component="span"
-                        color={'#C2C2C2' as never}
-                        variant="body1"
-                        style={{lineHeight: 1.8}}>
-                        {i18n.t('ExclusiveContent.Add')}
-                      </Typography>
-                    </IconButton>
-                  </Tooltip>
                 )}
               </>
             ) : (
