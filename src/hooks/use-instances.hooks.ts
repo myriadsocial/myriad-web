@@ -17,9 +17,10 @@ import {COOKIE_INSTANCE_URL} from 'components/SelectServer';
 import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
 import useMyriadInstance from 'components/common/Blockchain/use-myriad-instance.hooks';
 import * as nearAPI from 'near-api-js';
+import {NetworkIdEnum} from 'src/interfaces/network';
 import {ServerListProps} from 'src/interfaces/server-list';
 import {LoginType} from 'src/interfaces/session';
-import {BlockchainPlatform} from 'src/interfaces/wallet';
+import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
 import * as NetworkAPI from 'src/lib/api/network';
 import {getCheckEmail} from 'src/lib/api/user';
 import {toHexPublicKey} from 'src/lib/crypto';
@@ -49,6 +50,8 @@ export const useInstances = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingSwitch, setLoadingSwitch] = useState<boolean>(false);
 
+  const walletType = session?.user?.walletType as WalletTypeEnum;
+  const networkType = session?.user?.networkType as NetworkIdEnum;
   const address = session?.user?.address;
 
   const getAllInstances = useCallback(async () => {
@@ -102,7 +105,7 @@ export const useInstances = () => {
     if (withEmail) return loginWithEmail(server.apiUrl, email);
 
     const {nonce} = await fetchUserNonce(address, server.apiUrl);
-    const network = await NetworkAPI.getNetwork(session.user.networkType, server.apiUrl);
+    const network = await NetworkAPI.getNetwork(networkType, server.apiUrl);
 
     if (!network) throw new Error('NetworkNotExist');
     if (nonce <= 0) throw new Error('AccountNotFound');
@@ -116,7 +119,7 @@ export const useInstances = () => {
       redirect: false,
     };
 
-    switch (session.user.blockchainPlatform) {
+    switch (network.blockchainPlatform) {
       case BlockchainPlatform.SUBSTRATE: {
         const installed = await enablePolkadotExtension();
 
@@ -140,7 +143,7 @@ export const useInstances = () => {
 
       // TODO: switch instance with NEAR when wallet is cleared manually on local storage
       case BlockchainPlatform.NEAR: {
-        const near = await Near.connect(network, session.user.walletType);
+        const near = await Near.connect(network, walletType as WalletTypeEnum);
         const wallet = near?.provider?.wallet;
 
         if (!wallet.isSignedIn) throw new Error('NearAccountNotSignIn');

@@ -8,6 +8,7 @@ import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
 import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {formatBalance} from 'src/helpers/balance';
 import {BalanceDetail} from 'src/interfaces/balance';
+import {ReferenceType} from 'src/interfaces/interaction';
 import {WalletDetail} from 'src/interfaces/wallet';
 import {storeTransaction} from 'src/lib/api/transaction';
 import i18n from 'src/locale';
@@ -103,7 +104,6 @@ export const useWallet = () => {
     walletDetail: WalletDetail,
     amount: BN,
     currency: BalanceDetail,
-    type?: string,
     referenceId?: string,
     callback?: (txHash: string) => void,
   ) => {
@@ -128,11 +128,15 @@ export const useWallet = () => {
         const finalAmount = formatBalance(amount, currency.decimal);
         const txData = {hash: txHash, amount: finalAmount, from, to, currencyId: currency.id};
 
-        if (type) Object.assign(txData, {type});
-        if (referenceId) Object.assign(txData, {referenceId}); // kurang post id / comment id
+        if (referenceId) {
+          Object.assign(txData, {
+            referenceId,
+            type: ReferenceType.EXCLUSIVE_CONTENT,
+          });
 
-        // Record the transaction
-        await storeTransaction(txData);
+          // Record the transaction
+          await storeTransaction(txData);
+        }
 
         callback && callback(txHash);
       }

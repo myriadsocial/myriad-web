@@ -45,10 +45,10 @@ const EmailSetting = () => {
   const [countDown, setCountDown] = useState(0);
   const [isWeb3AddEmailAddress, setIsWeb3AddEmailAddress] = useState(false);
 
-  const {user, wallets} = useUserHook();
+  const {user} = useUserHook();
   const {email} = user;
-  const isWeb2users = !wallets.length;
-  const isWeb3UsersAndDontHaveEmail = wallets.length && !email;
+  const isWeb2users = !user?.fullAccess;
+  const isWeb3UsersAndDontHaveEmail = user?.fullAccess && !email;
 
   const {token, isDelete} = query;
 

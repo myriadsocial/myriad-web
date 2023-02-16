@@ -131,11 +131,8 @@ const createOptions = (req: NextApiRequest) => ({
         blockchainPlatform: {label: 'Blockchain platform', type: 'text'},
       },
       async authorize(credentials) {
-        const session = await getSession({req});
-        const anonymous = Boolean(session?.user.anonymous) || !session;
-
         try {
-          initialize({cookie: req.headers.cookie}, anonymous);
+          initialize({cookie: req.headers.cookie});
 
           const data = await WalletAPI.switchNetwork({
             nonce: Number(credentials.nonce),
@@ -176,11 +173,8 @@ const createOptions = (req: NextApiRequest) => ({
         blockchainPlatform: {label: 'Blockchain platform', type: 'text'},
       },
       async authorize(credentials) {
-        const session = await getSession({req});
-        const anonymous = Boolean(session?.user.anonymous) || !session;
-
         try {
-          initialize({cookie: req.headers.cookie}, anonymous);
+          initialize({cookie: req.headers.cookie});
 
           const data = await WalletAPI.connectWallet({
             nonce: Number(credentials.nonce),
@@ -190,7 +184,11 @@ const createOptions = (req: NextApiRequest) => ({
             networkType: credentials.networkType as NetworkIdEnum,
           });
 
-          if (!data) return session.user;
+          if (!data) {
+            const session = await getSession({req});
+            return session.user;
+          }
+
           if (!data?.token?.accessToken) throw Error('Failed to authorize user!');
 
           const user = data.user;

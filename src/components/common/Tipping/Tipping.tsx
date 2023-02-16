@@ -208,19 +208,12 @@ export const Tipping: React.FC<SendTipProps> = props => {
         },
       );
     } else {
-      payUnlockableContent(
-        receiver.walletDetail,
-        amount,
-        currency,
-        referenceType,
-        contentReferenceId,
-        hash => {
-          onSuccess(currency, currentNetwork?.explorerURL, hash, amount);
+      payUnlockableContent(receiver.walletDetail, amount, currency, contentReferenceId, hash => {
+        onSuccess(currency, currentNetwork?.explorerURL, hash, amount);
 
-          setAmount(INITIAL_AMOUNT);
-          setTransactionFee(INITIAL_AMOUNT);
-        },
-      );
+        setAmount(INITIAL_AMOUNT);
+        setTransactionFee(INITIAL_AMOUNT);
+      });
     }
   };
 

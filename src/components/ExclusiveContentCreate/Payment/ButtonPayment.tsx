@@ -48,8 +48,7 @@ const ButtonPayment: React.FC<ButtonPaymentProps> = props => {
     state => state.userState.anonymous,
     shallowEqual,
   );
-  const {wallets} = user || {wallets: []};
-  const isWeb2Users = !wallets.length && !anonymous;
+  const isWeb2Users = !user?.fullAccess && !anonymous;
 
   const handleCloseTipInfo = () => {
     setTipInfoOpened(false);
