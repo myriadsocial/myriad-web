@@ -107,14 +107,18 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
         <Typography>
           {updatedVisibility === Visibility.FRIEND
             ? i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Description', {
-                visibility: 'Friend Only',
+                visibility: i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Friend_Only'),
               })
             : updatedVisibility === Visibility.PRIVATE
             ? i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Description', {
-                visibility: 'Only Me',
+                visibility: i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Only_Me'),
+              })
+            : updatedVisibility === Visibility.CUSTOM
+            ? i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Description', {
+                visibility: i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Custom'),
               })
             : i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Description', {
-                visibility: updatedVisibility,
+                visibility: i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Public'),
               })}
         </Typography>
       ),
