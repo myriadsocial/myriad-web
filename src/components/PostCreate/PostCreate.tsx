@@ -350,18 +350,16 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
           <ShowIf condition={!showExclusive}>
             {!exclusiveContent ? (
               <>
-                {(
-                  <IconButton aria-label="exclusive-content" onClick={handleshowExclusive}>
-                    <SvgIcon component={GiftIcon} viewBox="0 0 24 24" className={styles.giftIcon} />
-                    <Typography
-                      component="span"
-                      color="primary"
-                      variant="body1"
-                      style={{lineHeight: 1.8}}>
-                      {i18n.t('ExclusiveContent.Add')}
-                    </Typography>
-                  </IconButton>
-                )}
+                <IconButton aria-label="exclusive-content" onClick={handleshowExclusive}>
+                  <SvgIcon component={GiftIcon} viewBox="0 0 24 24" className={styles.giftIcon} />
+                  <Typography
+                    component="span"
+                    color="primary"
+                    variant="body1"
+                    style={{lineHeight: 1.8}}>
+                    {i18n.t('ExclusiveContent.Add')}
+                  </Typography>
+                </IconButton>
               </>
             ) : (
               <>
