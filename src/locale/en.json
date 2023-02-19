@@ -501,6 +501,7 @@
         "Friend_Only": "Friend Only",
         "Only_Me": "Only Me",
         "Custom" : "Custom",
+        "Timeline" : "My Timeline",
         "Tipping_Warning": "By limiting audience exposure to this post, the number of users who can tip you will also get smaller.",
         "Cancel": "Cancel",
         "Confirm": "Confirm",
@@ -543,7 +544,11 @@
       "Label": "Visibility",
       "Public": "Public",
       "Friend_Only": "Friend Only",
-      "Only_Me": "Only Me"
+      "Only_Me": "Only Me",
+      "Timeline" : "My Timeline",
+      "Custom" : "Custom",
+      "AlertTimeline" : "Only people you added to this timeline will be able to see this post",
+      "SelectedTimeline" : "Selected Timeline"
     },
     "NSFW": {
       "Label": "NSFW",
