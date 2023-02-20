@@ -116,6 +116,12 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
       const value = store.value();
 
       const attributes = serialize(value);
+      console.log(
+        attributes.rawText,
+        'ini attributesnya coyy',
+        value[0].children[0].text,
+        'ini valuenya',
+      );
 
       if (exclusiveContent) {
         dispatch(
@@ -232,6 +238,8 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
   const handleContentChange = (data, loading) => {
     setLoading(loading);
     content.current = data;
+
+    console.log(content.current, 'ini harusnya keluar pas typing');
   };
 
   const handleErrorImport = () => {
@@ -412,6 +420,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
         </div>
         <ShowIf condition={!showExclusive}>
           <ShowIf condition={post.visibility !== 'selected_user'}>
+            {/* validations */}
             <Button
               disabled={loading}
               variant="contained"
