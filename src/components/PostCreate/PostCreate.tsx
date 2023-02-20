@@ -5,7 +5,7 @@ import {useDispatch} from 'react-redux';
 
 import dynamic from 'next/dynamic';
 
-import {Button, IconButton, SvgIcon, Tooltip, Typography} from '@material-ui/core';
+import {Button, IconButton, SvgIcon, Typography} from '@material-ui/core';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 
@@ -16,6 +16,7 @@ import {Modal} from '../atoms/Modal';
 import {TabPanel} from '../atoms/TabPanel';
 import {useStyles} from './PostCreate.styles';
 import SettingVisibility from './SettingVisibility';
+import TimelineVisibility from './TimelineVisibility';
 import {menuOptions} from './default';
 import {serialize} from './formatter';
 
@@ -131,6 +132,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
                 selectedUserIds: post.selectedUserIds,
                 NSFWTag: post.NSFWTag,
                 visibility: post.visibility ?? PostVisibility.PUBLIC,
+                selectedTimelineIds: post.selectedTimelineIds,
               };
 
               if (resp?.id) {
@@ -164,6 +166,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
           selectedUserIds: post.selectedUserIds,
           NSFWTag: post.NSFWTag,
           visibility: post.visibility ?? PostVisibility.PUBLIC,
+          selectedTimelineIds: post.selectedTimelineIds,
         });
       }
     }
@@ -181,6 +184,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
                 selectedUserIds: post.selectedUserIds,
                 NSFWTag: post.NSFWTag,
                 visibility: post.visibility ?? PostVisibility.PUBLIC,
+                selectedTimelineIds: post.selectedTimelineIds,
               };
 
               if (resp?.id) {
@@ -215,9 +219,12 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
           selectedUserIds: post.selectedUserIds,
           NSFWTag: post.NSFWTag,
           visibility: post.visibility ?? PostVisibility.PUBLIC,
+          selectedTimelineIds: post.selectedTimelineIds,
         });
       }
     }
+
+    handleClose();
   };
 
   const handleClose = () => {
@@ -350,37 +357,16 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
           <ShowIf condition={!showExclusive}>
             {!exclusiveContent ? (
               <>
-                {user.fullAccess ? (
-                  <IconButton aria-label="exclusive-content" onClick={handleshowExclusive}>
-                    <SvgIcon component={GiftIcon} viewBox="0 0 24 24" className={styles.giftIcon} />
-                    <Typography
-                      component="span"
-                      color="primary"
-                      variant="body1"
-                      style={{lineHeight: 1.8}}>
-                      {i18n.t('ExclusiveContent.Add')}
-                    </Typography>
-                  </IconButton>
-                ) : (
-                  <Tooltip
-                    title={<Typography>{i18n.t('ExclusiveContent.Text.Tooltip')}</Typography>}
-                    aria-label="exclusive-content">
-                    <IconButton aria-label="exclusive-content" onClick={null}>
-                      <SvgIcon
-                        component={GiftIcon}
-                        viewBox="0 0 24 24"
-                        className={styles.giftIconGray}
-                      />
-                      <Typography
-                        component="span"
-                        color={'#C2C2C2' as never}
-                        variant="body1"
-                        style={{lineHeight: 1.8}}>
-                        {i18n.t('ExclusiveContent.Add')}
-                      </Typography>
-                    </IconButton>
-                  </Tooltip>
-                )}
+                <IconButton aria-label="exclusive-content" onClick={handleshowExclusive}>
+                  <SvgIcon component={GiftIcon} viewBox="0 0 24 24" className={styles.giftIcon} />
+                  <Typography
+                    component="span"
+                    color="primary"
+                    variant="body1"
+                    style={{lineHeight: 1.8}}>
+                    {i18n.t('ExclusiveContent.Add')}
+                  </Typography>
+                </IconButton>
               </>
             ) : (
               <>
@@ -411,7 +397,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
           </ShowIf>
         </div>
         <ShowIf condition={!showExclusive}>
-          <ShowIf condition={post.visibility !== 'selected_user'}>
+          <ShowIf condition={post.visibility !== 'selected_user' && post.visibility !== 'timeline'}>
             <Button
               disabled={loading}
               variant="contained"
@@ -426,7 +412,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
       </div>
 
       <ShowIf condition={!showExclusive}>
-        <ShowIf condition={post.visibility === 'selected_user'}>
+        <ShowIf condition={post.visibility === PostVisibility.CUSTOM}>
           <SettingVisibility setPost={setPost} />
           <div
             style={{
@@ -436,6 +422,20 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
             }}>
             <Button
               disabled={false}
+              variant="contained"
+              color="primary"
+              size="small"
+              fullWidth={isMobile}
+              onClick={handleSubmit}>
+              {i18n.t('Post_Create.Confirm')}
+            </Button>
+          </div>
+        </ShowIf>
+        <ShowIf condition={post.visibility === PostVisibility.TIMELINE}>
+          <TimelineVisibility setPost={setPost} pageType="create" />
+          <div style={{textAlign: 'right'}}>
+            <Button
+              disabled={loading || !post.selectedTimelineIds}
               variant="contained"
               color="primary"
               size="small"

@@ -48,4 +48,8 @@ export const menuOptions: MenuOptions<PostVisibility>[] = [
     id: PostVisibility.CUSTOM,
     title: i18n.t('Visibilities.Custom'),
   },
+  {
+    id: PostVisibility.TIMELINE,
+    title: i18n.t('Post_Create.Visibility.Timeline'),
+  },
 ];

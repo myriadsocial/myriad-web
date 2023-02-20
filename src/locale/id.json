@@ -498,6 +498,7 @@
         "Friend_Only": "Teman saja",
         "Only_Me": "Hanya saya",
         "Custom" : "Kustom",
+        "Timeline" : "Linimasa Saya",
         "Tipping_Warning": "Dengan membatasi paparan pengguna terhadap postingan ini, jumlah pengguna yang dapat memberikan tip juga akan berkurang.",
         "Cancel": "Batal",
         "Confirm": "Konfirmasi",
@@ -540,7 +541,11 @@
       "Label": "Visibilitas",
       "Public": "Publik",
       "Friend_Only": "Hanya teman",
-      "Only_Me": "Hanya saya"
+      "Only_Me": "Hanya saya",
+      "Timeline" : "Linimasa Saya",
+       "Custom" : "Kustom",
+       "AlertTimeline" : "Hanya orang yang Anda tambahkan ke linimasa ini yang dapat melihat postingan ini",
+       "SelectedTimeline" : "Linimasa Terpilih"
     },
     "NSFW": {
       "Label": "NSFW",
