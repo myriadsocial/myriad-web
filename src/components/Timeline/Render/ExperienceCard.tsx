@@ -218,7 +218,7 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = props => {
             color="primary"
             variant="subtitle2"
             className={style.title}
-            onClick={() => router.push(`profile/${experience.id}`)}>
+            onClick={() => router.push(`profile/${experience.user.id}`)}>
             {experience.user.name}
           </Typography>
           <Typography color="textSecondary">{experience.description}</Typography>
