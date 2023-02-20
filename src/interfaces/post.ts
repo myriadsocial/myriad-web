@@ -46,6 +46,7 @@ export enum PostVisibility {
   FRIEND = 'friend',
   PRIVATE = 'private',
   CUSTOM = 'selected_user',
+  TIMELINE = 'timeline',
 }
 
 export type PostProps = {
@@ -70,6 +71,7 @@ export type PostProps = {
   totalExperience: number;
   experiences?: Experience[];
   selectedUserIds?: Array<string>;
+  selectedTimelineIds: Array<string>;
 };
 
 // props not parsed from BE, percalculate for display purpose

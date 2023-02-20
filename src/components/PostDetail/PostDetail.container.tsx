@@ -117,6 +117,10 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
             ? i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Description', {
                 visibility: i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Custom'),
               })
+            : updatedVisibility === Visibility.TIMELINE
+            ? i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Description', {
+                visibility: i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Timeline'),
+              })
             : i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Description', {
                 visibility: i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Public'),
               })}
