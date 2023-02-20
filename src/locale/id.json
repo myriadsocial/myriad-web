@@ -582,7 +582,8 @@
     },
     "Error": {
       "Default": "Gagal membuat postingan, coba lagi nanti",
-      "ImageTooLarge": "Gagal membuat postingan, ukuran foto terlalu besar"
+      "ImageTooLarge": "Gagal membuat postingan, ukuran foto terlalu besar",
+      "Empty" : "Gagal membuat postingan, tidak boleh kosong"
     }
   },
   "Post_Delete": {

@@ -573,7 +573,8 @@
     },
     "Error": {
       "Default": "Не удалось создать запись, попробуйте позже",
-      "ImageTooLarge": "Failed to create post, image too large"
+      "ImageTooLarge": "Failed to create post, image too large",
+      "Empty": "не удалось создать запись, не может быть пустым"
     }
   },
   "Post_Delete": {

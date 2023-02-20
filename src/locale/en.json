@@ -585,7 +585,8 @@
     },
     "Error": {
       "Default": "Failed to create post, try again later",
-      "ImageTooLarge": "Failed to create post, image too large"
+      "ImageTooLarge": "Failed to create post, image too large",
+      "Empty" : "Failed to create post, cannot be empty"
     }
   },
   "Post_Delete": {
