@@ -23,6 +23,10 @@ export const usePostVisibilityList = (): TagOptions[] => {
         id: PostVisibility.CUSTOM,
         title: i18n.t('Visibilities.Custom'),
       },
+      {
+        id: PostVisibility.TIMELINE,
+        title: i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Timeline'),
+      },
     ],
     [],
   );

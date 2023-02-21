@@ -93,13 +93,13 @@ const ExperienceCardVisibility: React.FC<ExperienceProps> = props => {
 };
 
 const TimelineVisibility = props => {
-  const {setPost, pageType} = props;
+  const {setPost, pageType, values} = props;
   const styles = useStyles();
   const {user} = useSelector<RootState, UserState>(state => state.userState);
   const [userExperiences, setUserExperiences] = useState<UserExperience[]>([]);
   const [page, setPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(true);
-  const [selectedTimeline, setSelectedTimeline] = useState<Experience>();
+  const [selectedTimeline, setSelectedTimeline] = useState<Experience | null>(values ?? null);
 
   const handleSelectedTimeline = (value: Experience) => {
     setSelectedTimeline(value);

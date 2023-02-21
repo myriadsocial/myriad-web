@@ -57,12 +57,13 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
   }, []);
 
   const handleVisibilityChange = useCallback(
-    (visibility: Visibility, selectedUserIds?: string[]) => {
+    (visibility: Visibility, selectedUserIds?: string[], selectedTimelineIds?: string[]) => {
       toggleVisibility();
 
       const payload: Partial<Post> = {
         visibility,
         selectedUserIds,
+        selectedTimelineIds,
       };
 
       if (visibility === Visibility.PRIVATE) {
