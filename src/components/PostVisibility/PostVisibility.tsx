@@ -18,16 +18,23 @@ import {useStyles} from './postVisibility.styles';
 import {usePostVisibilityList} from './use-post-visibility-list.hook';
 
 import SettingVisibility from 'components/PostCreate/SettingVisibility';
+import TimelineVisibility from 'components/PostCreate/TimelineVisibility';
 import ShowIf from 'components/common/show-if.component';
+import {Experience} from 'src/interfaces/experience';
 import {Post, PostVisibility as Visibility} from 'src/interfaces/post';
 import {User} from 'src/interfaces/user';
+import * as TimelineAPI from 'src/lib/api/experience';
 import * as UserAPI from 'src/lib/api/user';
 import i18n from 'src/locale';
 
 type ReportProps = {
   open: boolean;
   reference: Post;
-  onVisibilityChanged: (type: string, selectedUserIds: string[]) => void;
+  onVisibilityChanged: (
+    type: string,
+    selectedUserIds: string[],
+    selectedTimelineIds: string[],
+  ) => void;
   onClose: () => void;
 };
 
@@ -38,6 +45,7 @@ export const PostVisibility: React.FC<ReportProps> = props => {
   const list = usePostVisibilityList();
   const [type, setType] = useState<Visibility | null>(null);
   const [selectedUserIds, setSelectedUserIds] = useState<User[]>([]);
+  const [selectedTimeline, setSelectedTimeline] = useState<Experience | null>(null);
   const [pageUserIds, setPageUserIds] = React.useState<number>(1);
   const [isLoadingSelectedUser, setIsLoadingSelectedUser] = useState<boolean>(false);
 
@@ -60,6 +68,7 @@ export const PostVisibility: React.FC<ReportProps> = props => {
       onVisibilityChanged(
         type,
         selectedUserIds.map(item => item.id),
+        [selectedTimeline.id],
       );
     }
   };
@@ -72,12 +81,29 @@ export const PostVisibility: React.FC<ReportProps> = props => {
     if (pageUserIds < response.meta.totalPageCount) setPageUserIds(pageUserIds + 1);
   };
 
+  const getSelectedTimeline = async (timelineIds: string[]) => {
+    setIsLoadingSelectedUser(true);
+    const response = await TimelineAPI.getExperienceDetail(timelineIds[0]);
+    setSelectedTimeline(response);
+    setIsLoadingSelectedUser(false);
+  };
+
   useEffect(() => {
     getSelectedIds(reference.selectedUserIds);
   }, [pageUserIds]);
 
+  useEffect(() => {
+    if (reference.selectedTimelineIds) getSelectedTimeline(reference.selectedTimelineIds);
+  }, [reference]);
+
+  useEffect(() => {
+    console.log({selectedTimeline});
+  }, [selectedTimeline]);
+
   const disabledSubmit =
-    type !== 'selected_user'
+    type === Visibility.TIMELINE
+      ? !selectedTimeline
+      : type !== Visibility.CUSTOM
       ? reference.visibility === type
       : selectedUserIds.length < 1 && !isLoadingSelectedUser;
 
@@ -116,8 +142,12 @@ export const PostVisibility: React.FC<ReportProps> = props => {
         ))}
       </List>
 
-      <ShowIf condition={type === 'selected_user'}>
+      <ShowIf condition={type === Visibility.CUSTOM}>
         <SettingVisibility setPost={setSelectedUserIds} values={selectedUserIds} page={'edit'} />
+      </ShowIf>
+
+      <ShowIf condition={type === Visibility.TIMELINE}>
+        <TimelineVisibility setPost={setSelectedTimeline} values={selectedTimeline} page={'edit'} />
       </ShowIf>
 
       <div className={styles.info}>
