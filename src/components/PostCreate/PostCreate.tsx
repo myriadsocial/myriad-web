@@ -24,6 +24,7 @@ import ExclusiveCreate from 'components/ExclusiveContentCreate/ExclusiveCreate';
 import Reveal from 'components/ExclusiveContentCreate/Reveal/Reveal';
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import {getEditorSelectors} from 'components/common/Editor/store';
+import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {ExclusiveContent} from 'components/common/Tipping/Tipping.interface';
 import ShowIf from 'src/components/common/show-if.component';
 import {ExclusiveContentPost} from 'src/interfaces/exclusive';
@@ -63,6 +64,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
   const dispatch = useDispatch();
   const confirm = useConfirm();
   const styles = useStyles();
+  const enqueueSnackbar = useEnqueueSnackbar();
 
   const [activeTab, setActiveTab] = useState<PostCreateType>('create');
   const [post, setPost] = useState<Partial<Post>>(initialPost);
@@ -118,7 +120,12 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
 
       const attributes = serialize(value);
 
-      if (exclusiveContent) {
+      if (!attributes.rawText && !value[0].children[0].text) {
+        enqueueSnackbar({
+          message: i18n.t('Post_Create.Error.Empty'),
+          variant: 'warning',
+        });
+      } else if (exclusiveContent) {
         dispatch(
           createExclusiveContent(
             exclusiveContent,
@@ -397,7 +404,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
           </ShowIf>
         </div>
         <ShowIf condition={!showExclusive}>
-          <ShowIf condition={post.visibility !== 'selected_user' && post.visibility !== 'timeline'}>
+          <ShowIf condition={post.visibility !== 'selected_user'}>
             <Button
               disabled={loading}
               variant="contained"

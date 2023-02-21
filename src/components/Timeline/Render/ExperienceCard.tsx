@@ -61,7 +61,7 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = props => {
   const [menuAnchorElement, setMenuAnchorElement] = useState<null | HTMLElement>(null);
   const [shareAnchorElement, setShareAnchorElement] = useState<null | HTMLElement>(null);
   const {userExperiencesMeta, removeExperience, loadExperience} = useExperienceHook();
-  const link = publicRuntimeConfig.appAuthURL + `/experience/${experience.id}`;
+  const link = publicRuntimeConfig.appAuthURL + `?type=experience&id=${experience.id}`;
   const isOwnExperience = experience?.createdBy === user?.id;
   const isHidden = () => {
     if (experience.private && !experience.friend) return true;
@@ -161,6 +161,12 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = props => {
       }
     }
   };
+  const handleExperienceLinkCopied = () => {
+    enqueueSnackbar({
+      message: i18n.t('Experience.List.Copy'),
+      variant: 'success',
+    });
+  };
 
   const confirmDeleteExperience = () => {
     handleCloseSettings();
@@ -212,7 +218,7 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = props => {
             color="primary"
             variant="subtitle2"
             className={style.title}
-            onClick={() => router.push(`profile/${experience.id}`)}>
+            onClick={() => router.push(`profile/${experience.user.id}`)}>
             {experience.user.name}
           </Typography>
           <Typography color="textSecondary">{experience.description}</Typography>
@@ -336,9 +342,7 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = props => {
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <CopyToClipboard
-                    text={link}
-                    onCopy={() => console.log('handleExperienceLinkCopied')}>
+                  <CopyToClipboard text={link} onCopy={handleExperienceLinkCopied}>
                     <IconButton aria-label="copy-post-link" style={{padding: 0}}>
                       <SvgIcon component={DuplicateIcon} color="primary" />
                     </IconButton>
