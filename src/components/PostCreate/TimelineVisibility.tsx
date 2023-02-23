@@ -1,22 +1,32 @@
-import React, {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import NextImage from 'next/image';
 
-import {Card, CardActionArea, CardContent, Grid, Typography} from '@material-ui/core';
+import {
+  Card,
+  CardActionArea,
+  CardContent,
+  Grid,
+  Typography,
+} from '@material-ui/core';
 
-import {useStyles} from './TimelineVisibility.styles';
+import { useStyles } from './TimelineVisibility.styles';
 
-import {Skeleton} from 'components/Expericence';
-import {Avatar} from 'components/atoms/Avatar';
-import {InfoIconYellow} from 'src/images/Icons';
-import {Experience, UserExperience, WrappedExperience} from 'src/interfaces/experience';
-import {PostVisibility} from 'src/interfaces/post';
-import {User} from 'src/interfaces/user';
+import { Skeleton } from 'components/Expericence';
+import { Avatar } from 'components/atoms/Avatar';
+import { InfoIconYellow } from 'src/images/Icons';
+import {
+  Experience,
+  UserExperience,
+  WrappedExperience,
+} from 'src/interfaces/experience';
+import { PostVisibility } from 'src/interfaces/post';
+import { User } from 'src/interfaces/user';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {UserState} from 'src/reducers/user/reducer';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
 type ExperienceProps = {
   user?: User;
@@ -29,14 +39,17 @@ const DEFAULT_IMAGE =
   'https://pbs.twimg.com/profile_images/1407599051579617281/-jHXi6y5_400x400.jpg';
 
 const ExperienceCardVisibility: React.FC<ExperienceProps> = props => {
-  const {userExperience, user, selectTimeline, selectedTimeline} = props;
+  const { userExperience, user, selectTimeline, selectedTimeline } = props;
   const styles = useStyles();
 
   const isOwnExperience = userExperience.experience.user.id === user?.id;
-  const isSelected = selectedTimeline && selectedTimeline.id === userExperience.experience.id;
+  const isSelected =
+    selectedTimeline && selectedTimeline.id === userExperience.experience.id;
 
   return (
-    <Card className={styles.root} style={{border: isSelected ? '1px solid #6E3FC3' : ''}}>
+    <Card
+      className={styles.root}
+      style={{ border: isSelected ? '1px solid #6E3FC3' : '' }}>
       {isSelected ? <div className={styles.cardActive}></div> : null}
 
       <CardActionArea
@@ -44,11 +57,17 @@ const ExperienceCardVisibility: React.FC<ExperienceProps> = props => {
         disableRipple
         component="div"
         className={styles.cardAction}>
-        <Grid container alignItems="center" justifyContent="space-between" wrap="nowrap">
+        <Grid
+          container
+          alignItems="center"
+          justifyContent="space-between"
+          wrap="nowrap">
           {userExperience.experience.experienceImageURL ? (
             <NextImage
               alt={userExperience.experience.name}
-              src={userExperience.experience.experienceImageURL ?? DEFAULT_IMAGE}
+              src={
+                userExperience.experience.experienceImageURL ?? DEFAULT_IMAGE
+              }
               placeholder="empty"
               objectFit="cover"
               objectPosition="center"
@@ -58,16 +77,22 @@ const ExperienceCardVisibility: React.FC<ExperienceProps> = props => {
               className={styles.image}
             />
           ) : (
-            <Avatar alt={userExperience.experience.name} variant="rounded" className={styles.image}>
+            <Avatar
+              alt={userExperience.experience.name}
+              variant="rounded"
+              className={styles.image}>
               {userExperience.experience.name.charAt(0)}
             </Avatar>
           )}
 
-          <CardContent classes={{root: styles.cardContent}}>
+          <CardContent classes={{ root: styles.cardContent }}>
             <Typography className={styles.title} variant="body1">
               {userExperience.experience.name}
             </Typography>
-            <Typography variant="subtitle2" color="primary" className={styles.subtitle}>
+            <Typography
+              variant="subtitle2"
+              color="primary"
+              className={styles.subtitle}>
               {userExperience.experience.user.name}{' '}
               <Typography variant="caption" color="textSecondary">
                 {isOwnExperience ? ` ${i18n.t('Experience.List.You')}` : ''}
@@ -77,11 +102,13 @@ const ExperienceCardVisibility: React.FC<ExperienceProps> = props => {
               {`${i18n.t('Post_Create.Visibility.Label')} : `}
               {userExperience.experience.visibility === PostVisibility.FRIEND
                 ? i18n.t('Post_Create.Visibility.Friend_Only')
-                : userExperience.experience.visibility === PostVisibility.TIMELINE
+                : userExperience.experience.visibility ===
+                  PostVisibility.TIMELINE
                 ? i18n.t('Post_Create.Visibility.Only_Me')
                 : userExperience.experience.visibility === PostVisibility.CUSTOM
                 ? i18n.t('Post_Create.Visibility.Custom')
-                : userExperience.experience.visibility === PostVisibility.TIMELINE
+                : userExperience.experience.visibility ===
+                  PostVisibility.TIMELINE
                 ? i18n.t('Post_Create.Visibility.Timeline')
                 : i18n.t('Post_Create.Visibility.Public')}
             </Typography>
@@ -93,13 +120,15 @@ const ExperienceCardVisibility: React.FC<ExperienceProps> = props => {
 };
 
 const TimelineVisibility = props => {
-  const {setPost, pageType, values} = props;
+  const { setPost, pageType, values } = props;
   const styles = useStyles();
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const { user } = useSelector<RootState, UserState>(state => state.userState);
   const [userExperiences, setUserExperiences] = useState<UserExperience[]>([]);
   const [page, setPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(true);
-  const [selectedTimeline, setSelectedTimeline] = useState<Experience | null>(values ?? null);
+  const [selectedTimeline, setSelectedTimeline] = useState<Experience | null>(
+    values ?? null,
+  );
 
   const handleSelectedTimeline = (value: Experience) => {
     setSelectedTimeline(value);
@@ -115,7 +144,7 @@ const TimelineVisibility = props => {
 
   const fetchUserExperiences = async () => {
     setLoading(true);
-    const {meta, data: experiences} = await ExperienceAPI.getUserExperiences(
+    const { meta, data: experiences } = await ExperienceAPI.getUserExperiences(
       user.id,
       undefined,
       page,
@@ -146,7 +175,7 @@ const TimelineVisibility = props => {
           columnGap: '10px',
         }}>
         <InfoIconYellow />
-        <Typography style={{fontSize: 12, color: '#404040'}}>
+        <Typography style={{ fontSize: 12, color: '#404040' }}>
           {i18n.t('Post_Create.Visibility.AlertTimeline')}
         </Typography>
       </div>

@@ -1,9 +1,9 @@
-import {BaseModel} from './base.interface';
-import {Currency} from './currency';
-import {NetworkIdEnum, Network, NetworkProps} from './network';
-import {People} from './people';
-import {PrivacySettings} from './setting';
-import {TransactionDetail} from './transaction';
+import { BaseModel } from './base.interface';
+import { Currency } from './currency';
+import { NetworkIdEnum, Network, NetworkProps } from './network';
+import { People } from './people';
+import { PrivacySettings } from './setting';
+import { TransactionDetail } from './transaction';
 
 export interface UserSocialMedia {
   id: string;

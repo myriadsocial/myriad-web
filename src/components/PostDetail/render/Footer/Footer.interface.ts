@@ -1,5 +1,5 @@
-import {VoteActionProps} from 'components/atoms/Voting/voting.interface';
-import {PostMetric} from 'src/interfaces/post';
+import { VoteActionProps } from 'components/atoms/Voting/voting.interface';
+import { PostMetric } from 'src/interfaces/post';
 
 export type PostFooterActionProps = VoteActionProps & {
   onShowComments: () => void;

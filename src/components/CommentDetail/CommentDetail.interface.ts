@@ -1,6 +1,6 @@
-import {Comment} from 'src/interfaces/comment';
-import {SectionType, Vote} from 'src/interfaces/interaction';
-import {User} from 'src/interfaces/user';
+import { Comment } from 'src/interfaces/comment';
+import { SectionType, Vote } from 'src/interfaces/interaction';
+import { User } from 'src/interfaces/user';
 
 export interface CommentDetailProps {
   section: SectionType;

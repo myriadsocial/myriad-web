@@ -1,12 +1,16 @@
-import {Actions as BaseAction, PaginationAction, setError} from '../base/actions';
-import {RootState} from '../index';
+import {
+  Actions as BaseAction,
+  PaginationAction,
+  setError,
+} from '../base/actions';
+import { RootState } from '../index';
 import * as constants from './constants';
 
-import {Action} from 'redux';
-import {Transaction, TransactionOrderType} from 'src/interfaces/transaction';
-import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
+import { Action } from 'redux';
+import { Transaction, TransactionOrderType } from 'src/interfaces/transaction';
+import { SortType } from 'src/lib/api/interfaces/pagination-params.interface';
 import * as TransactionAPI from 'src/lib/api/transaction';
-import {ThunkActionCreator} from 'src/types/thunk';
+import { ThunkActionCreator } from 'src/types/thunk';
 
 export type TransactionFilterProps = {
   from?: string;
@@ -54,12 +58,16 @@ export type Actions =
  *
  * Actions
  */
-export const setTransactionFilter = (filter: TransactionFilterProps): SetTransactionFilter => ({
+export const setTransactionFilter = (
+  filter: TransactionFilterProps,
+): SetTransactionFilter => ({
   type: constants.SET_TRANSACTION_FILTER,
   filter,
 });
 
-export const setTransactionLoading = (loading: boolean): TransactionLoading => ({
+export const setTransactionLoading = (
+  loading: boolean,
+): TransactionLoading => ({
   type: constants.SET_TRANSACTION_LOADING,
   loading,
 });
@@ -101,18 +109,21 @@ export const fetchTransactions: ThunkActionCreator<Actions, RootState> =
 
     try {
       const {
-        userState: {user},
-        transactionState: {filter, pagination},
+        userState: { user },
+        transactionState: { filter, pagination },
       } = getState();
 
       if (!user) {
         throw new Error('User not found');
       }
 
-      const {data: transactions, meta} = await TransactionAPI.getTransactions(filter, {
-        ...pagination,
-        page,
-      });
+      const { data: transactions, meta } = await TransactionAPI.getTransactions(
+        filter,
+        {
+          ...pagination,
+          page,
+        },
+      );
 
       dispatch({
         type: constants.FETCH_TRANSACTIONS,

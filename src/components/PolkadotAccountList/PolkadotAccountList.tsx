@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Typography} from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -8,14 +8,14 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import YouTubeIcon from '@material-ui/icons/YouTube';
 
-import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
+import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 import Identicon from '@polkadot/react-identicon';
 
-import {Modal} from '../atoms/Modal';
-import {AllignTitle} from '../atoms/Modal/Modal.types';
-import {PolkadotLink} from '../common/PolkadotLink.component';
+import { Modal } from '../atoms/Modal';
+import { AllignTitle } from '../atoms/Modal/Modal.types';
+import { PolkadotLink } from '../common/PolkadotLink.component';
 import ShowIf from '../common/show-if.component';
-import {useStyles} from './PolkadotAccountList.styles';
+import { useStyles } from './PolkadotAccountList.styles';
 
 type PolkadotAccountListProps = {
   isOpen: boolean;
@@ -47,7 +47,8 @@ const PolkadotAccountList: React.FC<PolkadotAccountListProps> = ({
           <Typography className={styles.help}>
             Please open your&nbsp;
             <PolkadotLink />
-            &nbsp;extension and create new account or import existing.Then reload this page.
+            &nbsp;extension and create new account or import existing.Then
+            reload this page.
           </Typography>
 
           <div className={styles.buttonGroup}>
@@ -72,7 +73,11 @@ const PolkadotAccountList: React.FC<PolkadotAccountListProps> = ({
                   className={styles.list}
                   button>
                   <ListItemAvatar>
-                    <Identicon value={account.address} size={48} theme="polkadot" />
+                    <Identicon
+                      value={account.address}
+                      size={48}
+                      theme="polkadot"
+                    />
                   </ListItemAvatar>
                   <ListItemText
                     primary={account.meta.name}

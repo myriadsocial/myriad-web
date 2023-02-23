@@ -1,4 +1,4 @@
-import {VariantType} from 'notistack';
+import { VariantType } from 'notistack';
 
 export interface SnackbarProps {
   variant: VariantType;

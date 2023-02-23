@@ -1,4 +1,4 @@
-import {BaseErrorData} from '../interfaces/error-response.interface';
+import { BaseErrorData } from '../interfaces/error-response.interface';
 
 export class BaseError extends Error {
   protected readonly error: BaseErrorData;

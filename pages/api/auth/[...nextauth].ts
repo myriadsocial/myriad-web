@@ -1,21 +1,21 @@
-import {AnyObject} from '@udecode/plate';
+import { AnyObject } from '@udecode/plate';
 
-import {NextApiRequest, NextApiResponse} from 'next';
-import NextAuth, {Session} from 'next-auth';
+import { NextApiRequest, NextApiResponse } from 'next';
+import NextAuth, { Session } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import getConfig from 'next/config';
 
 import APIAdapter from 'adapters/api';
-import {NetworkIdEnum} from 'src/interfaces/network';
-import {LoginType, SignInCredential} from 'src/interfaces/session';
-import {WalletTypeEnum} from 'src/interfaces/wallet';
+import { NetworkIdEnum } from 'src/interfaces/network';
+import { LoginType, SignInCredential } from 'src/interfaces/session';
+import { WalletTypeEnum } from 'src/interfaces/wallet';
 import * as AuthLinkAPI from 'src/lib/api/auth-link';
 import initialize from 'src/lib/api/base';
 import * as AuthAPI from 'src/lib/api/ext-auth';
-import {encryptMessage} from 'src/lib/crypto';
-import {credentialToSession} from 'src/lib/serializers/session';
+import { encryptMessage } from 'src/lib/crypto';
+import { credentialToSession } from 'src/lib/serializers/session';
 
-const {serverRuntimeConfig} = getConfig();
+const { serverRuntimeConfig } = getConfig();
 
 const createOptions = (req: NextApiRequest) => ({
   // used when session strategy is database
@@ -30,18 +30,18 @@ const createOptions = (req: NextApiRequest) => ({
       // You can specify whatever fields you are expecting to be submitted.
       // e.g. domain, username, password, 2FA token, etc.
       credentials: {
-        address: {label: 'Address', type: 'text'},
-        signature: {label: 'Wallet Signature', type: 'text'},
-        nonce: {label: 'Nonce', type: 'text'},
-        walletType: {label: 'Wallet Type', type: 'text'},
-        networkType: {label: 'Network ID', type: 'text'},
-        publicAddress: {label: 'Public Address', type: 'text'},
-        instanceURL: {label: 'Instance url', type: 'text'},
-        blockchainPlatform: {label: 'Blockchain Platform', type: 'text'},
+        address: { label: 'Address', type: 'text' },
+        signature: { label: 'Wallet Signature', type: 'text' },
+        nonce: { label: 'Nonce', type: 'text' },
+        walletType: { label: 'Wallet Type', type: 'text' },
+        networkType: { label: 'Network ID', type: 'text' },
+        publicAddress: { label: 'Public Address', type: 'text' },
+        instanceURL: { label: 'Instance url', type: 'text' },
+        blockchainPlatform: { label: 'Blockchain Platform', type: 'text' },
       },
       async authorize(credentials) {
         // Initialize instance api url
-        initialize({apiURL: credentials.instanceURL});
+        initialize({ apiURL: credentials.instanceURL });
 
         if (!credentials?.signature) throw Error('no signature!');
 
@@ -60,12 +60,16 @@ const createOptions = (req: NextApiRequest) => ({
           const user = data.user;
           const accessToken = data.token.accessToken;
           const payload = encryptMessage(accessToken, user.username);
-          const signInCredential = parseCredential(user, credentials, LoginType.WALLET);
+          const signInCredential = parseCredential(
+            user,
+            credentials,
+            LoginType.WALLET,
+          );
 
           return credentialToSession(signInCredential, payload);
         } catch (error) {
           // If failed, use instance url from session
-          initialize({cookie: req.headers.cookie});
+          initialize({ cookie: req.headers.cookie });
 
           console.log('[api][Auth]', error);
           return null;
@@ -80,15 +84,15 @@ const createOptions = (req: NextApiRequest) => ({
       // You can specify whatever fields you are expecting to be submitted.
       // e.g. domain, username, password, 2FA token, etc.
       credentials: {
-        email: {label: 'Email', type: 'text'},
-        token: {label: 'Token', type: 'text'},
-        instanceURL: {label: 'Instance url', type: 'text'},
+        email: { label: 'Email', type: 'text' },
+        token: { label: 'Token', type: 'text' },
+        instanceURL: { label: 'Instance url', type: 'text' },
       },
       async authorize(credentials) {
         if (!credentials?.token) throw Error('no token!');
 
         // Initialize instance api url
-        initialize({apiURL: credentials.instanceURL});
+        initialize({ apiURL: credentials.instanceURL });
 
         const data = await AuthLinkAPI.loginWithLink(credentials.token);
 
@@ -98,13 +102,17 @@ const createOptions = (req: NextApiRequest) => ({
           const user = data.user;
           const accessToken = data.token.accessToken;
           const payload = encryptMessage(accessToken, user.username);
-          const signInCredential = parseCredential(user, credentials, LoginType.EMAIL);
+          const signInCredential = parseCredential(
+            user,
+            credentials,
+            LoginType.EMAIL,
+          );
 
           // Any object returned will be saved in `user` property of the JWT
           return credentialToSession(signInCredential, payload);
         } catch (error) {
           // If failed, use instance url from session
-          initialize({cookie: req.headers.cookie});
+          initialize({ cookie: req.headers.cookie });
 
           console.log('[api][Auth]', error);
           return null;
@@ -172,14 +180,14 @@ const createOptions = (req: NextApiRequest) => ({
   callbacks: {
     // async signIn(user, account, profile) { return true },
     // async redirect(url, baseUrl) { return baseUrl },
-    async session({session, user, token}) {
+    async session({ session, user, token }) {
       // The return type will match the one returned in `useSession()`
       return {
         ...session,
         user: token,
       } as Session;
     },
-    async jwt({token, user, account, profile, isNewUser}) {
+    async jwt({ token, user, account, profile, isNewUser }) {
       if (user) {
         token = {
           ...token,

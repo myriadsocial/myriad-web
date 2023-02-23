@@ -23,7 +23,7 @@ export interface Server {
 
 export const getServer = async (): Promise<Server> => {
   try {
-    const {data} = await MyriadAPI().request<Server>({
+    const { data } = await MyriadAPI().request<Server>({
       url: `/server`,
       method: 'GET',
     });

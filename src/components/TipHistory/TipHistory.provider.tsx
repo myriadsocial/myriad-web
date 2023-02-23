@@ -1,21 +1,23 @@
-import React, {useCallback, useState} from 'react';
+import React, { useCallback, useState } from 'react';
 
 import dynamic from 'next/dynamic';
 
-import {TipHistoryContext} from './TipHistory.context';
+import { TipHistoryContext } from './TipHistory.context';
 
-import {Comment} from 'src/interfaces/comment';
-import {ReferenceType} from 'src/interfaces/interaction';
-import {Post} from 'src/interfaces/post';
-import {User} from 'src/interfaces/user';
+import { Comment } from 'src/interfaces/comment';
+import { ReferenceType } from 'src/interfaces/interaction';
+import { Post } from 'src/interfaces/post';
+import { User } from 'src/interfaces/user';
 
 const TipHistoryContainer = dynamic(() => import('./TipHistory.container'), {
   ssr: false,
 });
 
-export const TipHistoryProvider: React.ComponentType = ({children}) => {
+export const TipHistoryProvider: React.ComponentType = ({ children }) => {
   const [reference, setReference] = useState<Post | Comment | User>(null);
-  const [referenceType, setReferenceType] = useState<ReferenceType>(ReferenceType.POST);
+  const [referenceType, setReferenceType] = useState<ReferenceType>(
+    ReferenceType.POST,
+  );
 
   const openTipHistory = useCallback((reference: Post | Comment | User) => {
     setReference(reference);
@@ -34,7 +36,7 @@ export const TipHistoryProvider: React.ComponentType = ({children}) => {
 
   return (
     <>
-      <TipHistoryContext.Provider value={{reference, open: openTipHistory}}>
+      <TipHistoryContext.Provider value={{ reference, open: openTipHistory }}>
         {children}
       </TipHistoryContext.Provider>
 

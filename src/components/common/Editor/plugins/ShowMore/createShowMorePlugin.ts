@@ -1,7 +1,7 @@
-import {createPluginFactory} from '@udecode/plate-core';
+import { createPluginFactory } from '@udecode/plate-core';
 
-import {ShowMoreElement} from '../../render/Element/ShowMore';
-import {ShowMorePlugin} from './type';
+import { ShowMoreElement } from '../../render/Element/ShowMore';
+import { ShowMorePlugin } from './type';
 
 export const ELEMENT_SHOW_MORE = 'show-more';
 

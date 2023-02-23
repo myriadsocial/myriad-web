@@ -2,18 +2,18 @@ import React from 'react';
 
 import Link from 'next/link';
 
-import {Typography} from '@material-ui/core';
-import {AvatarProps} from '@material-ui/core/Avatar';
-import ListItem, {ListItemProps} from '@material-ui/core/ListItem';
+import { Typography } from '@material-ui/core';
+import { AvatarProps } from '@material-ui/core/Avatar';
+import ListItem, { ListItemProps } from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
-import {Avatar, AvatarSize} from '../atoms/Avatar';
-import {useStyles} from './UsersList.styles';
+import { Avatar, AvatarSize } from '../atoms/Avatar';
+import { useStyles } from './UsersList.styles';
 
-import {User} from 'src/interfaces/user';
+import { User } from 'src/interfaces/user';
 
 type UsersListItemProps = ListItemProps & {
   user: User;
@@ -24,7 +24,13 @@ type UsersListItemProps = ListItemProps & {
 };
 
 export const UsersListItem: React.FC<UsersListItemProps> = props => {
-  const {user, icon, variant = 'circular', size = AvatarSize.MEDIUM, url = ''} = props;
+  const {
+    user,
+    icon,
+    variant = 'circular',
+    size = AvatarSize.MEDIUM,
+    url = '',
+  } = props;
   const styles = useStyles();
 
   const iconSyles = [styles.icon];
@@ -63,7 +69,10 @@ export const UsersListItem: React.FC<UsersListItemProps> = props => {
               </Typography>
             }
             secondary={
-              <Typography component="span" variant="caption" color="textSecondary">
+              <Typography
+                component="span"
+                variant="caption"
+                color="textSecondary">
                 {user.username ? `@${user.username}` : '@anonymous'}
               </Typography>
             }

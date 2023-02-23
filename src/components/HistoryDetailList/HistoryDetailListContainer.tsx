@@ -1,15 +1,15 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import {BoxComponent} from '../atoms/Box';
-import {HistoryDetailList} from './HistoryDetailList';
+import { BoxComponent } from '../atoms/Box';
+import { HistoryDetailList } from './HistoryDetailList';
 
-import {useTransaction} from 'src/hooks/use-transaction.hooks';
-import {RootState} from 'src/reducers';
-import {UserState} from 'src/reducers/user/reducer';
+import { useTransaction } from 'src/hooks/use-transaction.hooks';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
 export const HistoryDetailListContainer: React.FC = () => {
-  const {user, currentWallet, currencies} = useSelector<RootState, UserState>(
+  const { user, currentWallet, currencies } = useSelector<RootState, UserState>(
     state => state.userState,
   );
   const {

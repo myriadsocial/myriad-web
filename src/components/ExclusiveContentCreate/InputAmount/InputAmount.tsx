@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
-import {TextField} from '@material-ui/core';
-import type {InputProps} from '@material-ui/core';
+import { TextField } from '@material-ui/core';
+import type { InputProps } from '@material-ui/core';
 
-import {BN_ZERO} from '@polkadot/util';
+import { BN_ZERO } from '@polkadot/util';
 
-import {useStyles} from './InputAmount.style';
+import { useStyles } from './InputAmount.style';
 
-import {toBigNumber} from 'src/helpers/string';
+import { toBigNumber } from 'src/helpers/string';
 import i18n from 'src/locale';
 
 type InputAmountProps = Omit<InputProps, 'onChange'> & {
@@ -18,7 +18,7 @@ type InputAmountProps = Omit<InputProps, 'onChange'> & {
 };
 
 export const InputAmount: React.FC<InputAmountProps> = props => {
-  const {type = 'common', onChange, placeholder, decimal} = props;
+  const { type = 'common', onChange, placeholder, decimal } = props;
 
   const styles = useStyles();
 
@@ -71,12 +71,14 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
     <>
       <TextField
         id="input-amount"
-        classes={{root: type === 'common' ? styles.input : styles.inputExclusiveAmount}}
+        classes={{
+          root: type === 'common' ? styles.input : styles.inputExclusiveAmount,
+        }}
         label={placeholder}
         type="number"
         variant="outlined"
-        InputLabelProps={{shrink: dirty}}
-        inputProps={{min: 0}}
+        InputLabelProps={{ shrink: dirty }}
+        inputProps={{ min: 0 }}
         value={value}
         error={!valid}
         onChange={handleAmountChange}

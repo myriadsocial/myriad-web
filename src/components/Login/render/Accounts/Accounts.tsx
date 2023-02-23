@@ -1,15 +1,22 @@
-import React, {useState, useEffect} from 'react';
-import {useNavigate} from 'react-router';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
 
-import {Button, Grid, List, ListItem, ListItemAvatar, ListItemText} from '@material-ui/core';
+import {
+  Button,
+  Grid,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+} from '@material-ui/core';
 
-import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
+import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 import Identicon from '@polkadot/react-identicon';
 
-import {useStyles} from './Accounts.style';
+import { useStyles } from './Accounts.style';
 
 import useMobileDetect from 'src/hooks/use-is-mobile-detect';
-import {WalletTypeEnum} from 'src/interfaces/wallet';
+import { WalletTypeEnum } from 'src/interfaces/wallet';
 import i18n from 'src/locale';
 
 type AccountListProps = {
@@ -30,9 +37,10 @@ export const Accounts: React.FC<AccountListProps> = props => {
   const styles = useStyles(detect.isMobile())();
   const navigate = useNavigate();
 
-  const {accounts, onSelect, onNext, signature} = props;
+  const { accounts, onSelect, onNext, signature } = props;
 
-  const [selectedAccount, setSelectedAccount] = useState<InjectedAccountWithMeta | null>(null);
+  const [selectedAccount, setSelectedAccount] =
+    useState<InjectedAccountWithMeta | null>(null);
 
   const [submitted, setSubmitted] = useState(false);
 
@@ -90,7 +98,7 @@ export const Accounts: React.FC<AccountListProps> = props => {
         })}
       </List>
 
-      <Grid container justifyContent="space-between" style={{marginTop: 24}}>
+      <Grid container justifyContent="space-between" style={{ marginTop: 24 }}>
         <Button
           disabled={submitted}
           variant="outlined"

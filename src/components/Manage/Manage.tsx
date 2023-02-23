@@ -1,10 +1,10 @@
-import {DuplicateIcon} from '@heroicons/react/outline';
+import { DuplicateIcon } from '@heroicons/react/outline';
 
 import React from 'react';
-import {CopyToClipboard} from 'react-copy-to-clipboard';
-import {isMobile} from 'react-device-detect';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { isMobile } from 'react-device-detect';
 
-import {TextField, InputAdornment} from '@material-ui/core';
+import { TextField, InputAdornment } from '@material-ui/core';
 import BaseButton from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import ListItem from '@material-ui/core/ListItem';
@@ -13,13 +13,13 @@ import ListItemText from '@material-ui/core/ListItemText';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
-import {useStyles} from './manage.style';
-import {useWalletList, WalletOption} from './use-wallet-list.hook';
+import { useStyles } from './manage.style';
+import { useWalletList, WalletOption } from './use-wallet-list.hook';
 
-import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorizeAction';
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import { WithAuthorizeAction } from 'components/common/Authorization/WithAuthorizeAction';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import ShowIf from 'src/components/common/show-if.component';
-import {UserWallet} from 'src/interfaces/user';
+import { UserWallet } from 'src/interfaces/user';
 import i18n from 'src/locale';
 
 export type ManageProps = {
@@ -30,10 +30,14 @@ export type ManageProps = {
 
 const Button = WithAuthorizeAction(BaseButton);
 
-export const Manage: React.FC<ManageProps> = ({currentWallet, wallets, onConnectDisconnect}) => {
+export const Manage: React.FC<ManageProps> = ({
+  currentWallet,
+  wallets,
+  onConnectDisconnect,
+}) => {
   const style = useStyles();
   const enqueueSnackbar = useEnqueueSnackbar();
-  const {walletList} = useWalletList(wallets);
+  const { walletList } = useWalletList(wallets);
 
   const handleLinkCopied = () => {
     enqueueSnackbar({
@@ -43,17 +47,25 @@ export const Manage: React.FC<ManageProps> = ({currentWallet, wallets, onConnect
   };
 
   const disableWallet = (option: WalletOption) => {
-    return option.blockchainPlatform === currentWallet?.network?.blockchainPlatform;
+    return (
+      option.blockchainPlatform === currentWallet?.network?.blockchainPlatform
+    );
   };
 
   return (
     <>
       <div>
         {walletList.map(option => (
-          <ListItem alignItems={option.isConnect ? 'flex-start' : 'center'} key={option.id}>
+          <ListItem
+            alignItems={option.isConnect ? 'flex-start' : 'center'}
+            key={option.id}>
             <ListItemAvatar>{option.icons}</ListItemAvatar>
             <ListItemText>
-              <Typography variant="h5" component="div" color="textPrimary" className={style.name}>
+              <Typography
+                variant="h5"
+                component="div"
+                color="textPrimary"
+                className={style.name}>
                 <div className={style.secondaryAction}>
                   <span>{option.title}</span>
                   <ShowIf condition={option.isConnect}>
@@ -63,7 +75,9 @@ export const Manage: React.FC<ManageProps> = ({currentWallet, wallets, onConnect
                       color="primary"
                       disabled={disableWallet(option)}
                       className={style.button}
-                      onClick={() => onConnectDisconnect(option.id, option.walletId)}>
+                      onClick={() =>
+                        onConnectDisconnect(option.id, option.walletId)
+                      }>
                       {i18n.t('Wallet.Manage.Btn_Disconnect')}
                     </Button>
                   </ShowIf>
@@ -81,9 +95,16 @@ export const Manage: React.FC<ManageProps> = ({currentWallet, wallets, onConnect
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
-                        <CopyToClipboard text={option.walletId} onCopy={handleLinkCopied}>
-                          <IconButton aria-label="copy-post-link" style={{padding: 0}}>
-                            <SvgIcon component={DuplicateIcon} color="primary" />
+                        <CopyToClipboard
+                          text={option.walletId}
+                          onCopy={handleLinkCopied}>
+                          <IconButton
+                            aria-label="copy-post-link"
+                            style={{ padding: 0 }}>
+                            <SvgIcon
+                              component={DuplicateIcon}
+                              color="primary"
+                            />
                           </IconButton>
                         </CopyToClipboard>
                       </InputAdornment>

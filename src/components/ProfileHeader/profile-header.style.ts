@@ -1,4 +1,4 @@
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,7 +25,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       top: 0,
       left: 0,
       position: 'absolute',
-      background: 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%)',
+      background:
+        'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%)',
     },
     root: {
       zIndex: 0,

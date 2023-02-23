@@ -1,23 +1,23 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import dynamic from 'next/dynamic';
 
-import {Box, Button, Grid, Typography} from '@material-ui/core';
+import { Box, Button, Grid, Typography } from '@material-ui/core';
 
-import {BN} from '@polkadot/util';
+import { BN } from '@polkadot/util';
 
-import SendTipContext, {HandleSendTip} from './Tipping.context';
-import {TippingProviderProps, TippingOptions} from './Tipping.interface';
-import {ButtonNotify} from './render/ButtonNotify';
+import SendTipContext, { HandleSendTip } from './Tipping.context';
+import { TippingProviderProps, TippingOptions } from './Tipping.interface';
+import { ButtonNotify } from './render/ButtonNotify';
 
-import {Modal} from 'src/components/atoms/Modal';
-import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
-import {BalanceDetail} from 'src/interfaces/balance';
-import {ReferenceType} from 'src/interfaces/interaction';
+import { Modal } from 'src/components/atoms/Modal';
+import { PromptComponent } from 'src/components/atoms/Prompt/prompt.component';
+import { BalanceDetail } from 'src/interfaces/balance';
+import { ReferenceType } from 'src/interfaces/interaction';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {BalanceState} from 'src/reducers/balance/reducer';
+import { RootState } from 'src/reducers';
+import { BalanceState } from 'src/reducers/balance/reducer';
 import {
   PAID_EXCLUSIVE_CONTENT,
   SET_EXCLUSIVE_CONTENT_ID,
@@ -45,9 +45,10 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
   const [transactionUrl, setTransactionUrl] = useState<string>();
   const [amount, setAmount] = useState<BN>(INITIAL_AMOUNT);
 
-  const {balanceDetails: balances, loading} = useSelector<RootState, BalanceState>(
-    state => state.balanceState,
-  );
+  const { balanceDetails: balances, loading } = useSelector<
+    RootState,
+    BalanceState
+  >(state => state.balanceState);
 
   useEffect(() => {
     setTippingEnabled(balances.length > 0 || anonymous);
@@ -72,7 +73,12 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
   }, [options]);
 
   const handleSuccessTipping = useCallback(
-    (currency: BalanceDetail, explorerURL: string, transactionHash: string, tipAmount: BN) => {
+    (
+      currency: BalanceDetail,
+      explorerURL: string,
+      transactionHash: string,
+      tipAmount: BN,
+    ) => {
       setTransactionUrl(`${explorerURL}/${transactionHash}`);
       setAmount(tipAmount);
       setTippingCurrency(currency);
@@ -83,14 +89,17 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
 
   const resetTippingStatus = useCallback(() => {
     setTippingCurrency(undefined);
-    dispatch({type: PAID_EXCLUSIVE_CONTENT, payload: false});
-    dispatch({type: SET_EXCLUSIVE_CONTENT_ID, payload: ''});
+    dispatch({ type: PAID_EXCLUSIVE_CONTENT, payload: false });
+    dispatch({ type: SET_EXCLUSIVE_CONTENT_ID, payload: '' });
   }, []);
 
   useEffect(() => {
     if (currencyTipped) {
-      dispatch({type: PAID_EXCLUSIVE_CONTENT, payload: true});
-      dispatch({type: SET_EXCLUSIVE_CONTENT_ID, payload: options?.reference?.id});
+      dispatch({ type: PAID_EXCLUSIVE_CONTENT, payload: true });
+      dispatch({
+        type: SET_EXCLUSIVE_CONTENT_ID,
+        payload: options?.reference?.id,
+      });
     }
   }, [currencyTipped]);
 
@@ -100,7 +109,8 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
 
   return (
     <>
-      <SendTipContext.Provider value={{currentWallet, enabled, loading, send: tipping}}>
+      <SendTipContext.Provider
+        value={{ currentWallet, enabled, loading, send: tipping }}>
         {children}
       </SendTipContext.Provider>
 
@@ -110,7 +120,9 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
           open={tipFormOpened}
           style={{}}
           onClose={handleCloseTipForm}
-          title={isTipping() ? i18n.t('Tipping.Modal_Main.Title') : 'Unlock Content'}
+          title={
+            isTipping() ? i18n.t('Tipping.Modal_Main.Title') : 'Unlock Content'
+          }
           subtitle={isTipping() && i18n.t('Tipping.Modal_Main.Subtitle')}>
           <Tipping
             defaultCurrency={defaultCurrency}
@@ -167,7 +179,11 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
                 receiver={options.receiver}
               />
             ) : (
-              <Button size="small" variant="contained" color="primary" onClick={resetTippingStatus}>
+              <Button
+                size="small"
+                variant="contained"
+                color="primary"
+                onClick={resetTippingStatus}>
                 {i18n.t('Tipping.Prompt_Success.Btn_Return')}
               </Button>
             ))}

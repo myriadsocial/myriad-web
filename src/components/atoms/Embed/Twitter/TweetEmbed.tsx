@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import Script from 'next/script';
 
@@ -11,7 +11,7 @@ export interface TwitterTweetEmbedProps {
 }
 
 export const TweetEmbed: React.FC<TwitterTweetEmbedProps> = props => {
-  const {tweetId, onLoad, onError} = props;
+  const { tweetId, onLoad, onError } = props;
 
   const ref = useRef<HTMLDivElement | null>(null);
 
@@ -47,27 +47,35 @@ export const TweetEmbed: React.FC<TwitterTweetEmbedProps> = props => {
     if (!twitter.widgets.createTweet) {
       setLoading(false);
       setError(true);
-      console.error(`Method createTweet is not present anymore in twttr.widget api`);
+      console.error(
+        `Method createTweet is not present anymore in twttr.widget api`,
+      );
       return;
     }
 
-    twitter.widgets.createTweet(tweetId, ref?.current, options).then((element: any) => {
-      setLoading(false);
+    twitter.widgets
+      .createTweet(tweetId, ref?.current, options)
+      .then((element: any) => {
+        setLoading(false);
 
-      if (!element) {
-        ref?.current.children.length > 0 && ref?.current.removeChild(ref?.current.children[0]);
+        if (!element) {
+          ref?.current.children.length > 0 &&
+            ref?.current.removeChild(ref?.current.children[0]);
 
-        setError(true);
-        onError && onError();
-      } else {
-        onLoad && onLoad(element);
-      }
-    });
+          setError(true);
+          onError && onError();
+        } else {
+          onLoad && onLoad(element);
+        }
+      });
   };
 
   return (
     <React.Fragment>
-      <Script src="https://platform.twitter.com/widgets.js" onLoad={setWidgetInitialized} />
+      <Script
+        src="https://platform.twitter.com/widgets.js"
+        onLoad={setWidgetInitialized}
+      />
 
       {loading && <React.Fragment>{props.placeholder}</React.Fragment>}
       {error && <React.Fragment>Could not load tweet!</React.Fragment>}

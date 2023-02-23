@@ -1,16 +1,16 @@
-import {HYDRATE} from 'next-redux-wrapper';
+import { HYDRATE } from 'next-redux-wrapper';
 
-import {State as BaseState} from '../base/state';
-import {Actions} from './actions';
+import { State as BaseState } from '../base/state';
+import { Actions } from './actions';
 import * as constants from './constants';
 
 import * as Redux from 'redux';
-import {Currency} from 'src/interfaces/currency';
-import {WrappedExperience} from 'src/interfaces/experience';
-import {Network} from 'src/interfaces/network';
-import {SocialMedia} from 'src/interfaces/social';
-import {User, UserTransactionDetail, UserWallet} from 'src/interfaces/user';
-import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
+import { Currency } from 'src/interfaces/currency';
+import { WrappedExperience } from 'src/interfaces/experience';
+import { Network } from 'src/interfaces/network';
+import { SocialMedia } from 'src/interfaces/social';
+import { User, UserTransactionDetail, UserWallet } from 'src/interfaces/user';
+import { ListMeta } from 'src/lib/api/interfaces/base-list.interface';
 
 export interface UserState extends BaseState {
   user?: User;
@@ -58,7 +58,10 @@ const initalState: UserState = {
   verifying: false,
 };
 
-export const UserReducer: Redux.Reducer<UserState, Actions> = (state = initalState, action) => {
+export const UserReducer: Redux.Reducer<UserState, Actions> = (
+  state = initalState,
+  action,
+) => {
   switch (action.type) {
     case HYDRATE: {
       return action.payload.userState;

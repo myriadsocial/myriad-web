@@ -1,8 +1,8 @@
 import React from 'react';
 
-import {createStyles, makeStyles, Theme} from '@material-ui/core';
+import { createStyles, makeStyles, Theme } from '@material-ui/core';
 
-import {Empty} from '../atoms/Empty';
+import { Empty } from '../atoms/Empty';
 import ShowIf from '../common/show-if.component';
 
 import i18n from 'src/locale';
@@ -30,7 +30,7 @@ export const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export const EmptyProfilePost: React.FC<EmptyPostProps> = ({owner}) => {
+export const EmptyProfilePost: React.FC<EmptyPostProps> = ({ owner }) => {
   const style = useStyles();
 
   return (
@@ -43,7 +43,10 @@ export const EmptyProfilePost: React.FC<EmptyPostProps> = ({owner}) => {
       </ShowIf>
 
       <ShowIf condition={!owner}>
-        <Empty title={i18n.t('Profile.Empty.Title')} subtitle={i18n.t('Profile.Empty.Subtitle')} />
+        <Empty
+          title={i18n.t('Profile.Empty.Title')}
+          subtitle={i18n.t('Profile.Empty.Subtitle')}
+        />
       </ShowIf>
     </div>
   );

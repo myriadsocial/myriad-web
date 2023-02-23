@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
-import {Typography} from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 
 import ShowIf from 'components/common/show-if.component';
-import {detect} from 'detect-browser';
+import { detect } from 'detect-browser';
 import muxjs from 'mux.js';
 import i18n from 'src/locale';
 
@@ -12,7 +12,7 @@ type PreviewVideoProps = {
 };
 
 export const Video: React.FC<PreviewVideoProps> = props => {
-  const {files} = props;
+  const { files } = props;
 
   const [previews, setPreviews] = useState<
     Array<{
@@ -23,7 +23,8 @@ export const Video: React.FC<PreviewVideoProps> = props => {
   >([]);
 
   const codecSupported =
-    previews.filter(preview => preview.codecSupported).length === previews.length;
+    previews.filter(preview => preview.codecSupported).length ===
+    previews.length;
 
   useEffect(() => {
     validateFiles();
@@ -34,7 +35,7 @@ export const Video: React.FC<PreviewVideoProps> = props => {
       const codecSupported = await checkCodec(file);
       const url = URL.createObjectURL(file);
 
-      setPreviews([{codecSupported, url, name: file.name}]);
+      setPreviews([{ codecSupported, url, name: file.name }]);
     }
   };
 
@@ -50,7 +51,8 @@ export const Video: React.FC<PreviewVideoProps> = props => {
       // browser codec name for HEVC (H.265)
       if (video?.codec === 'hvc1') {
         const browser = detect();
-        supported = browser !== null && !['firefox', 'chrome'].includes(browser.name);
+        supported =
+          browser !== null && !['firefox', 'chrome'].includes(browser.name);
       } else {
         supported = true;
       }
@@ -65,7 +67,9 @@ export const Video: React.FC<PreviewVideoProps> = props => {
       const reader = new FileReader();
 
       // Register event listeners
-      reader.addEventListener('loadend', e => resolve(e.target?.result || null));
+      reader.addEventListener('loadend', e =>
+        resolve(e.target?.result || null),
+      );
       reader.addEventListener('error', reject);
 
       // Read file
@@ -80,7 +84,7 @@ export const Video: React.FC<PreviewVideoProps> = props => {
       </ShowIf>
       <ShowIf condition={codecSupported}>
         {previews.map((item, i) => (
-          <video key={item.name} controls style={{width: '100%'}}>
+          <video key={item.name} controls style={{ width: '100%' }}>
             <track kind="captions" />
             <source src={item.url} type="video/mp4" />
             <div>{i18n.t('Dropzone.Video.Not_Support')}</div>

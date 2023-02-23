@@ -1,7 +1,7 @@
-import {useState} from 'react';
+import { useState } from 'react';
 
-import {User} from 'src/interfaces/user';
-import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
+import { User } from 'src/interfaces/user';
+import { ListMeta } from 'src/lib/api/interfaces/base-list.interface';
 import * as LeaderboardAPI from 'src/lib/api/leaderboard';
 
 export const useLeaderboard = () => {
@@ -19,7 +19,7 @@ export const useLeaderboard = () => {
     if (_meta.currentPage === 0) setLoading(true);
 
     try {
-      const {data, meta} = await LeaderboardAPI.fetchLeaderboard(page);
+      const { data, meta } = await LeaderboardAPI.fetchLeaderboard(page);
 
       setMeta(meta);
 

@@ -1,4 +1,4 @@
-import {SuccessResponse} from './success-response.interface';
+import { SuccessResponse } from './success-response.interface';
 
 export interface ListMeta {
   currentPage: number;

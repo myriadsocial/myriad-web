@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Grid} from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 
 import BounceLoader from 'react-spinners/BounceLoader';
 
@@ -11,7 +11,7 @@ type LoadingProps = {
 const color = '#7342CC';
 
 export const Loading: React.FC<LoadingProps> = props => {
-  const {width = 40} = props;
+  const { width = 40 } = props;
 
   return (
     <Grid container justifyContent="center">

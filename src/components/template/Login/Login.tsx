@@ -1,35 +1,35 @@
 import React from 'react';
-import Carousel, {CarouselProps} from 'react-material-ui-carousel';
+import Carousel, { CarouselProps } from 'react-material-ui-carousel';
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
-import {useStyles} from './Login.styles';
+import { useStyles } from './Login.styles';
 
-import {settingLanguageOptions} from 'src/components/Settings/default';
-import {DropdownMenu} from 'src/components/atoms/DropdownMenu';
-import {MyriadFullIcon} from 'src/components/atoms/Icons';
-import {CookieConsent} from 'src/components/common/CookieConsent';
-import {useLanguage} from 'src/hooks/use-language.hook';
+import { settingLanguageOptions } from 'src/components/Settings/default';
+import { DropdownMenu } from 'src/components/atoms/DropdownMenu';
+import { MyriadFullIcon } from 'src/components/atoms/Icons';
+import { CookieConsent } from 'src/components/common/CookieConsent';
+import { useLanguage } from 'src/hooks/use-language.hook';
 import Purple from 'src/images/illustration/Bank_note_Isometric_1.svg';
 import Yellow from 'src/images/illustration/Conversation__Isometric_1.svg';
-import {LanguageSettingType} from 'src/interfaces/setting';
+import { LanguageSettingType } from 'src/interfaces/setting';
 import i18n from 'src/locale';
 
 type LoginProps = {
   children: React.ReactNode;
 };
 
-export const LoginLayout: React.FC<LoginProps> = ({children}) => {
+export const LoginLayout: React.FC<LoginProps> = ({ children }) => {
   const style = useStyles();
-  const {language, changeLanguage} = useLanguage();
+  const { language, changeLanguage } = useLanguage();
 
   const settingsCarousel: CarouselProps = {
     autoPlay: true,
     animation: 'slide',
     timeout: 500,
     navButtonsAlwaysInvisible: true,
-    indicatorContainerProps: {style: {textAlign: 'left', marginTop: 50}},
+    indicatorContainerProps: { style: { textAlign: 'left', marginTop: 50 } },
     swipe: true,
   };
 
@@ -44,7 +44,9 @@ export const LoginLayout: React.FC<LoginProps> = ({children}) => {
 
             <Typography variant="h5" component="h1" className={style.title}>
               {i18n.t('Login.Layout.Title_left')}{' '}
-              <span className={style.titlePrimary}>{i18n.t('Login.Layout.Title_right')}</span>
+              <span className={style.titlePrimary}>
+                {i18n.t('Login.Layout.Title_right')}
+              </span>
             </Typography>
             {children}
             <div>

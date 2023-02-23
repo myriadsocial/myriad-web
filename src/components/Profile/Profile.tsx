@@ -1,37 +1,37 @@
-import React, {useEffect} from 'react';
-import {useDispatch} from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 import dynamic from 'next/dynamic';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {Grid} from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 
-import {ProfileNotFound} from '../ProfileNotFound/ProfileNotFound';
-import {useStyles} from './Profile.style';
+import { ProfileNotFound } from '../ProfileNotFound/ProfileNotFound';
+import { useStyles } from './Profile.style';
 
-import {ProfileHeaderContainer} from 'src/components/ProfileHeader/ProfileHeaderContainer';
-import {UserMenuContainer} from 'src/components/UserMenu';
+import { ProfileHeaderContainer } from 'src/components/ProfileHeader/ProfileHeaderContainer';
+import { UserMenuContainer } from 'src/components/UserMenu';
 import ShowIf from 'src/components/common/show-if.component';
-import {FriendStatus} from 'src/interfaces/friend';
-import {FriendStatusProps, User} from 'src/interfaces/user';
+import { FriendStatus } from 'src/interfaces/friend';
+import { FriendStatusProps, User } from 'src/interfaces/user';
 import i18n from 'src/locale';
-import {fetchProfileFriend} from 'src/reducers/profile/actions';
+import { fetchProfileFriend } from 'src/reducers/profile/actions';
 
 const ProfileEditContainer = dynamic(
   () => import('src/components/ProfileEdit/ProfileEditContainer'),
-  {ssr: false},
+  { ssr: false },
 );
 
 type ProfileProps = {
   loading: boolean;
   user: User;
-  person: User & {friendInfo: FriendStatusProps};
+  person: User & { friendInfo: FriendStatusProps };
   anonymous: boolean;
 };
 
 export const Profile: React.FC<ProfileProps> = props => {
-  const {user, person, anonymous} = props;
+  const { user, person, anonymous } = props;
 
   const style = useStyles();
   const dispatch = useDispatch();
@@ -50,10 +50,10 @@ export const Profile: React.FC<ProfileProps> = props => {
     router.push(
       {
         pathname: `/profile/${person?.id}`,
-        query: {edit: 'edit'},
+        query: { edit: 'edit' },
       },
       undefined,
-      {shallow: true},
+      { shallow: true },
     );
   };
 
@@ -63,7 +63,7 @@ export const Profile: React.FC<ProfileProps> = props => {
         pathname: `/profile/${person?.id}`,
       },
       undefined,
-      {shallow: true},
+      { shallow: true },
     );
   };
 
@@ -79,11 +79,15 @@ export const Profile: React.FC<ProfileProps> = props => {
         <ShowIf condition={!isEditing}>
           <ProfileHeaderContainer edit={handleOpenEdit} />
 
-          <ShowIf condition={person?.friendInfo?.status !== FriendStatus.BLOCKED}>
-            <UserMenuContainer isMyriad={person.username === 'myriad_official'} />
+          <ShowIf
+            condition={person?.friendInfo?.status !== FriendStatus.BLOCKED}>
+            <UserMenuContainer
+              isMyriad={person.username === 'myriad_official'}
+            />
           </ShowIf>
 
-          <ShowIf condition={person?.friendInfo?.status === FriendStatus.BLOCKED}>
+          <ShowIf
+            condition={person?.friendInfo?.status === FriendStatus.BLOCKED}>
             <Grid
               container
               direction="column"

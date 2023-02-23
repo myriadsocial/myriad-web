@@ -1,15 +1,17 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
-import {Gallery as GalleryComponent} from '.';
+import { Gallery as GalleryComponent } from '.';
 
 export default {
   title: 'UI Revamp v2.0/atoms/Gallery',
   component: GalleryComponent,
 } as ComponentMeta<typeof GalleryComponent>;
 
-const Template: ComponentStory<typeof GalleryComponent> = args => <GalleryComponent {...args} />;
+const Template: ComponentStory<typeof GalleryComponent> = args => (
+  <GalleryComponent {...args} />
+);
 
 export const DefaultGallery = Template.bind({});
 DefaultGallery.args = {

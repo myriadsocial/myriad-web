@@ -1,7 +1,7 @@
-import {InformationCircleIcon} from '@heroicons/react/outline';
-import {CheckCircleIcon} from '@heroicons/react/solid';
+import { InformationCircleIcon } from '@heroicons/react/outline';
+import { CheckCircleIcon } from '@heroicons/react/solid';
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 import {
   Button,
@@ -19,13 +19,13 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import {Modal} from '../atoms/Modal';
+import { Modal } from '../atoms/Modal';
 import ShowIf from '../common/show-if.component';
-import {useStyles} from './Report.styles';
-import {usePostReportList} from './use-post-report-list.hook';
+import { useStyles } from './Report.styles';
+import { usePostReportList } from './use-post-report-list.hook';
 
-import {Comment} from 'src/interfaces/comment';
-import {Post} from 'src/interfaces/post';
+import { Comment } from 'src/interfaces/comment';
+import { Post } from 'src/interfaces/post';
 import i18n from 'src/locale';
 
 type ReportProps = {
@@ -36,7 +36,7 @@ type ReportProps = {
 };
 
 export const Report: React.FC<ReportProps> = props => {
-  const {open, onClose, onConfirm} = props;
+  const { open, onClose, onConfirm } = props;
   const styles = useStyles();
 
   const list = usePostReportList();
@@ -49,13 +49,14 @@ export const Report: React.FC<ReportProps> = props => {
     setDescription(event.target.value);
   };
 
-  const handleSelectItem = (value: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      setType(value);
-    } else {
-      setType(null);
-    }
-  };
+  const handleSelectItem =
+    (value: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (event.target.checked) {
+        setType(value);
+      } else {
+        setType(null);
+      }
+    };
 
   React.useEffect(() => {
     if (isErrorValidation) {
@@ -81,8 +82,12 @@ export const Report: React.FC<ReportProps> = props => {
       open={open}
       onClose={onClose}
       className={styles.root}>
-      <Typography variant="h5">{i18n.t('Post_Comment.Modal_Report.Subtitle_1')}</Typography>
-      <Typography variant="subtitle1">{i18n.t('Post_Comment.Modal_Report.Subtitle_2')}</Typography>
+      <Typography variant="h5">
+        {i18n.t('Post_Comment.Modal_Report.Subtitle_1')}
+      </Typography>
+      <Typography variant="subtitle1">
+        {i18n.t('Post_Comment.Modal_Report.Subtitle_2')}
+      </Typography>
 
       <List dense={false} className={styles.list}>
         {list.map(option => (
@@ -98,8 +103,10 @@ export const Report: React.FC<ReportProps> = props => {
                 color="primary"
                 onChange={handleSelectItem(option.id)}
                 checked={type === option.id}
-                checkedIcon={<SvgIcon component={CheckCircleIcon} viewBox="0 0 20 20" />}
-                inputProps={{'aria-labelledby': option.id}}
+                checkedIcon={
+                  <SvgIcon component={CheckCircleIcon} viewBox="0 0 20 20" />
+                }
+                inputProps={{ 'aria-labelledby': option.id }}
               />
             </ListItemSecondaryAction>
           </ListItem>
@@ -146,7 +153,11 @@ export const Report: React.FC<ReportProps> = props => {
       </Card>
 
       <div className={styles.action}>
-        <Button variant="outlined" color="secondary" size="small" onClick={onClose}>
+        <Button
+          variant="outlined"
+          color="secondary"
+          size="small"
+          onClick={onClose}>
           {i18n.t('General.Cancel')}
         </Button>
 

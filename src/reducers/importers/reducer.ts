@@ -1,11 +1,11 @@
 import * as BaseConstants from '../base/constants';
-import {PaginationState as BasePaginationState} from '../base/state';
-import {Actions} from './actions';
+import { PaginationState as BasePaginationState } from '../base/state';
+import { Actions } from './actions';
 import * as constants from './constants';
 
 import update from 'immutability-helper';
 import * as Redux from 'redux';
-import {Importer} from 'src/interfaces/user';
+import { Importer } from 'src/interfaces/user';
 
 export interface ImporterState extends BasePaginationState {
   importers: Importer[];
@@ -47,7 +47,7 @@ export const ImporterReducer: Redux.Reducer<ImporterState, Actions> = (
 
     case BaseConstants.ACTION_LOADING: {
       return update(state, {
-        loading: {$set: action.loading},
+        loading: { $set: action.loading },
       });
     }
 

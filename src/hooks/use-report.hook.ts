@@ -1,23 +1,27 @@
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {Comment} from 'src/interfaces/comment';
-import {ReferenceType} from 'src/interfaces/interaction';
-import {Post} from 'src/interfaces/post';
-import {ReportProps} from 'src/interfaces/report';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import { Comment } from 'src/interfaces/comment';
+import { ReferenceType } from 'src/interfaces/interaction';
+import { Post } from 'src/interfaces/post';
+import { ReportProps } from 'src/interfaces/report';
 import * as InteractionAPI from 'src/lib/api/interaction';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {setError} from 'src/reducers/base/actions';
-import {UserState} from 'src/reducers/user/reducer';
+import { RootState } from 'src/reducers';
+import { setError } from 'src/reducers/base/actions';
+import { UserState } from 'src/reducers/user/reducer';
 
 export const useReport = () => {
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const { user } = useSelector<RootState, UserState>(state => state.userState);
   const dispatch = useDispatch();
 
   const enqueueSnackbar = useEnqueueSnackbar();
 
-  const sendReport = async (reference: Post | Comment, type: string, description: string) => {
+  const sendReport = async (
+    reference: Post | Comment,
+    type: string,
+    description: string,
+  ) => {
     try {
       if (!user) {
         throw new Error(i18n.t('Post_Comment.Modal_Report.Error_Login'));
@@ -25,7 +29,8 @@ export const useReport = () => {
 
       const attributes = {
         referenceId: reference.id,
-        referenceType: 'platform' in reference ? ReferenceType.POST : ReferenceType.COMMENT,
+        referenceType:
+          'platform' in reference ? ReferenceType.POST : ReferenceType.COMMENT,
         type,
         description,
       };

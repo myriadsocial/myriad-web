@@ -5,12 +5,12 @@ import Image from 'next/image';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-import {useStyles} from './ResourceDeleted.style';
+import { useStyles } from './ResourceDeleted.style';
 
 import i18n from 'src/locale';
 
 export const ResourceDeleted: React.FC = () => {
-  const style = useStyles({disableBorder: true});
+  const style = useStyles({ disableBorder: true });
 
   return (
     <div className={style.root}>
@@ -24,8 +24,10 @@ export const ResourceDeleted: React.FC = () => {
         />
       </div>
 
-      <div style={{paddingLeft: 20, paddingRight: 20}}>
-        <Typography className={style.subtitle}>{i18n.t('Visibilities.Hidden')}</Typography>
+      <div style={{ paddingLeft: 20, paddingRight: 20 }}>
+        <Typography className={style.subtitle}>
+          {i18n.t('Visibilities.Hidden')}
+        </Typography>
       </div>
 
       <Button
@@ -33,7 +35,7 @@ export const ResourceDeleted: React.FC = () => {
         href="/"
         variant="contained"
         color="primary"
-        style={{maxWidth: 'max-content'}}>
+        style={{ maxWidth: 'max-content' }}>
         {i18n.t('Visibilities.Back')}
       </Button>
     </div>

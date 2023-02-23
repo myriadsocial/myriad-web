@@ -20,20 +20,22 @@ import {
   TableRow,
 } from '@material-ui/core';
 
-import {MyriadFullBlackIcon} from '../atoms/Icons';
-import {useStyles} from './leaderboard.styles';
-import {useLeaderboard} from './use-leaderboard-hook';
+import { MyriadFullBlackIcon } from '../atoms/Icons';
+import { useStyles } from './leaderboard.styles';
+import { useLeaderboard } from './use-leaderboard-hook';
 
-import {LoadMore} from 'src/components/atoms/Loading';
+import { LoadMore } from 'src/components/atoms/Loading';
 import ShowIf from 'src/components/common/show-if.component';
-import {acronym} from 'src/helpers/string';
+import { acronym } from 'src/helpers/string';
 
 export const LeaderBoardComponent: React.FC = () => {
-  const {leaderboard, fetchLeaderboard, loading, meta, limit} = useLeaderboard();
+  const { leaderboard, fetchLeaderboard, loading, meta, limit } =
+    useLeaderboard();
   const style = useStyles();
-  const {publicRuntimeConfig} = getConfig();
+  const { publicRuntimeConfig } = getConfig();
 
-  const hasMore = leaderboard.length < meta.totalItemCount && meta.currentPage < limit;
+  const hasMore =
+    leaderboard.length < meta.totalItemCount && meta.currentPage < limit;
 
   React.useEffect(() => {
     fetchLeaderboard();
@@ -86,13 +88,19 @@ export const LeaderBoardComponent: React.FC = () => {
         <ShowIf condition={!loading}>
           <div className={style.content}>
             <Grid container spacing={0} className={style.tableHeader}>
-              <Grid item xs={1} style={{textAlign: 'center'}}>
+              <Grid item xs={1} style={{ textAlign: 'center' }}>
                 <Typography className={style.th}>Rank</Typography>
               </Grid>
-              <Grid item xs={9} style={{textAlign: 'left', paddingLeft: '20px'}}>
+              <Grid
+                item
+                xs={9}
+                style={{ textAlign: 'left', paddingLeft: '20px' }}>
                 <Typography className={style.th}>Name</Typography>
               </Grid>
-              <Grid item xs={2} style={{textAlign: 'right', paddingRight: '5px'}}>
+              <Grid
+                item
+                xs={2}
+                style={{ textAlign: 'right', paddingRight: '5px' }}>
                 <Typography className={style.th}>Kudos</Typography>
               </Grid>
             </Grid>
@@ -107,17 +115,26 @@ export const LeaderBoardComponent: React.FC = () => {
                   <TableBody>
                     {leaderboard.map((user, i) => (
                       <TableRow key={user.id + i}>
-                        <TableCell align="center" style={{width: '10%'}} className={style.number}>
+                        <TableCell
+                          align="center"
+                          style={{ width: '10%' }}
+                          className={style.number}>
                           {i + 1}
                         </TableCell>
-                        <TableCell classes={{root: style.p}} style={{width: '80%'}}>
+                        <TableCell
+                          classes={{ root: style.p }}
+                          style={{ width: '80%' }}>
                           <ListItem>
                             <ListItemAvatar>
-                              <Avatar src={user.profilePictureURL}>{acronym(user.name)}</Avatar>
+                              <Avatar src={user.profilePictureURL}>
+                                {acronym(user.name)}
+                              </Avatar>
                             </ListItemAvatar>
                             <ListItemText
                               primary={
-                                <Typography className={style.number}>{user.name}</Typography>
+                                <Typography className={style.number}>
+                                  {user.name}
+                                </Typography>
                               }
                               secondary={
                                 <Typography className={style.secondary}>
@@ -127,7 +144,7 @@ export const LeaderBoardComponent: React.FC = () => {
                             />
                           </ListItem>
                         </TableCell>
-                        <TableCell align="center" style={{width: '10%'}}>
+                        <TableCell align="center" style={{ width: '10%' }}>
                           <Typography color="primary" className={style.number}>
                             {user.metric?.totalKudos}
                           </Typography>

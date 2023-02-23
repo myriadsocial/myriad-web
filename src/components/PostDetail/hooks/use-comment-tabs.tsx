@@ -1,18 +1,18 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import dynamic from 'next/dynamic';
 
-import {TabItems, TabHookProps} from 'src/components/atoms/Tabs';
-import {formatCount} from 'src/helpers/number';
-import {useQueryParams} from 'src/hooks/use-query-params.hooks';
-import {ReferenceType, SectionType} from 'src/interfaces/interaction';
-import {Post} from 'src/interfaces/post';
-import {User} from 'src/interfaces/user';
+import { TabItems, TabHookProps } from 'src/components/atoms/Tabs';
+import { formatCount } from 'src/helpers/number';
+import { useQueryParams } from 'src/hooks/use-query-params.hooks';
+import { ReferenceType, SectionType } from 'src/interfaces/interaction';
+import { Post } from 'src/interfaces/post';
+import { User } from 'src/interfaces/user';
 import i18n from 'src/locale';
 
 const CommentListContainer = dynamic(
   () => import('src/components/CommentList/CommentList.container'),
-  {ssr: false},
+  { ssr: false },
 );
 
 export const useCommentTabs = (
@@ -21,7 +21,7 @@ export const useCommentTabs = (
   user?: User,
   expand?: boolean,
 ): TabHookProps<SectionType> => {
-  const {query} = useQueryParams();
+  const { query } = useQueryParams();
 
   const [selected, setSelected] = useState<SectionType | null>(null);
 
@@ -69,7 +69,9 @@ export const useCommentTabs = (
     },
     {
       id: SectionType.DEBATE,
-      title: `${i18n.t('Post_Detail.Debate.Title')} (${formatCount(post.metric.debates || 0)})`,
+      title: `${i18n.t('Post_Detail.Debate.Title')} (${formatCount(
+        post.metric.debates || 0,
+      )})`,
       icon: '😡 ',
       component: selected ? (
         <CommentListContainer

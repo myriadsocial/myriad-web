@@ -1,4 +1,4 @@
-import {UploadAdapter} from './upload';
+import { UploadAdapter } from './upload';
 
 export const CustomAdapterPlugin = editor => {
   editor.plugins.get('FileRepository').createUploadAdapter = loader => {

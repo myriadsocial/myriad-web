@@ -1,6 +1,6 @@
-import {useContext} from 'react';
+import { useContext } from 'react';
 
-import BlockchainContext, {HandleBlockchain} from './Blockchain.context';
+import BlockchainContext, { HandleBlockchain } from './Blockchain.context';
 
 const useBlockchain = (): HandleBlockchain => {
   const blockchain = useContext(BlockchainContext);

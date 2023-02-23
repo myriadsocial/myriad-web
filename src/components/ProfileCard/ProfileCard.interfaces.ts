@@ -1,6 +1,6 @@
-import {User, UserWallet} from '../../interfaces/user';
+import { User, UserWallet } from '../../interfaces/user';
 
-import {Network} from 'src/interfaces/network';
+import { Network } from 'src/interfaces/network';
 
 export type ProfileCardProps = {
   user?: User;

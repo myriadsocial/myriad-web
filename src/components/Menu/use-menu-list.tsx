@@ -12,7 +12,7 @@ import {
   CreditCardIcon,
 } from '@heroicons/react/outline';
 
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 
 import i18n from 'src/locale';
 

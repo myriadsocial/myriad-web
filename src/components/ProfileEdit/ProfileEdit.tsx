@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
-import {FormControl, OutlinedInput, Typography} from '@material-ui/core';
+import { FormControl, OutlinedInput, Typography } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -8,13 +8,13 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import InputLabel from '@material-ui/core/InputLabel';
 
 import useConfirm from '../common/Confirm/use-confirm.hook';
-import {IconButtonUpload} from './IconButtonUpload.component';
-import {ImageButton} from './ImageButton.component';
-import {useStyles} from './profile-edit.style';
+import { IconButtonUpload } from './IconButtonUpload.component';
+import { ImageButton } from './ImageButton.component';
+import { useStyles } from './profile-edit.style';
 
 import debounce from 'lodash/debounce';
-import {acronym} from 'src/helpers/string';
-import {User} from 'src/interfaces/user';
+import { acronym } from 'src/helpers/string';
+import { User } from 'src/interfaces/user';
 import i18n from 'src/locale';
 
 export type Props = {
@@ -66,14 +66,17 @@ export const ProfileEditComponent: React.FC<Props> = props => {
     handleChanges();
     nameValidation();
     if (
-      (user?.bio === undefined && newUser?.bio !== '' && newUser?.bio !== undefined) ||
+      (user?.bio === undefined &&
+        newUser?.bio !== '' &&
+        newUser?.bio !== undefined) ||
       (user?.bio !== undefined && user?.bio !== newUser?.bio) ||
       user?.name !== newUser.name ||
       (user?.websiteURL === undefined &&
         newUser?.websiteURL !== '' &&
         newUser?.websiteURL !== undefined) ||
       imageProfile instanceof File ||
-      (user?.websiteURL !== undefined && user?.websiteURL !== newUser?.websiteURL) ||
+      (user?.websiteURL !== undefined &&
+        user?.websiteURL !== newUser?.websiteURL) ||
       imageProfile !== user?.profilePictureURL ||
       imageBanner !== user?.bannerImageURL
     ) {
@@ -83,12 +86,13 @@ export const ProfileEditComponent: React.FC<Props> = props => {
     }
   }, [newUser, imageProfile, imageBanner]);
 
-  const handleChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewUser(prevUser => ({
-      ...prevUser,
-      [field]: event.target.value,
-    }));
-  };
+  const handleChange =
+    (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+      setNewUser(prevUser => ({
+        ...prevUser,
+        [field]: event.target.value,
+      }));
+    };
 
   const saveUser = async () => {
     if (!isChanged && isAvailable) {
@@ -161,10 +165,19 @@ export const ProfileEditComponent: React.FC<Props> = props => {
 
   return (
     <div className={style.root}>
-      <Typography className={style.title}>{i18n.t('Profile.Edit.Title')}</Typography>
+      <Typography className={style.title}>
+        {i18n.t('Profile.Edit.Title')}
+      </Typography>
 
-      <FormControl classes={{root: style.mb}} fullWidth variant="outlined" focused>
-        <InputLabel htmlFor="profile-picture" shrink={true} className={style.label}>
+      <FormControl
+        classes={{ root: style.mb }}
+        fullWidth
+        variant="outlined"
+        focused>
+        <InputLabel
+          htmlFor="profile-picture"
+          shrink={true}
+          className={style.label}>
           {i18n.t('Profile.Edit.Subtitle_1')}
         </InputLabel>
         <div className={style.pictureBox}>
@@ -195,12 +208,23 @@ export const ProfileEditComponent: React.FC<Props> = props => {
         </div>
       </FormControl>
 
-      <FormControl classes={{root: style.mb}} fullWidth variant="outlined" focused>
-        <InputLabel htmlFor="background-images" shrink={true} className={style.label}>
+      <FormControl
+        classes={{ root: style.mb }}
+        fullWidth
+        variant="outlined"
+        focused>
+        <InputLabel
+          htmlFor="background-images"
+          shrink={true}
+          className={style.label}>
           {i18n.t('Profile.Edit.Subtitle_2')}
         </InputLabel>
         <div className={style.bgBox}>
-          <CardMedia className={style.media} image={imageBanner} title={user.name} />
+          <CardMedia
+            className={style.media}
+            image={imageBanner}
+            title={user.name}
+          />
           <IconButtonUpload
             user={user}
             title="Edit Banner Image"
@@ -211,8 +235,10 @@ export const ProfileEditComponent: React.FC<Props> = props => {
         </div>
       </FormControl>
 
-      <FormControl classes={{root: style.mb}} fullWidth variant="outlined">
-        <InputLabel htmlFor="username">{i18n.t('Profile.Edit.Subtitle_3')}</InputLabel>
+      <FormControl classes={{ root: style.mb }} fullWidth variant="outlined">
+        <InputLabel htmlFor="username">
+          {i18n.t('Profile.Edit.Subtitle_3')}
+        </InputLabel>
         <OutlinedInput
           error={handleError()}
           disabled
@@ -221,50 +247,57 @@ export const ProfileEditComponent: React.FC<Props> = props => {
           value={user.username}
           labelWidth={70}
           startAdornment={'@'}
-          inputProps={{maxLength: 16}}
+          inputProps={{ maxLength: 16 }}
         />
       </FormControl>
 
-      <FormControl classes={{root: style.mb}} fullWidth variant="outlined">
-        <InputLabel htmlFor="display-name">{i18n.t('Profile.Edit.Subtitle_4')}</InputLabel>
+      <FormControl classes={{ root: style.mb }} fullWidth variant="outlined">
+        <InputLabel htmlFor="display-name">
+          {i18n.t('Profile.Edit.Subtitle_4')}
+        </InputLabel>
         <OutlinedInput
           id="display-name"
           placeholder="Display Name"
           value={newUser?.name}
           onChange={handleChange('name')}
           labelWidth={93}
-          inputProps={{maxLength: 22}}
+          inputProps={{ maxLength: 22 }}
           error={isError}
         />
       </FormControl>
 
       {isError && (
-        <Typography className={`${style.available} ${style.red} ${style.validation}`}>
+        <Typography
+          className={`${style.available} ${style.red} ${style.validation}`}>
           {i18n.t('Profile.Edit.Required')}
         </Typography>
       )}
 
-      <FormControl classes={{root: style.mb}} fullWidth variant="outlined">
-        <InputLabel htmlFor="bio">{i18n.t('Profile.Edit.Subtitle_5')}</InputLabel>
+      <FormControl classes={{ root: style.mb }} fullWidth variant="outlined">
+        <InputLabel htmlFor="bio">
+          {i18n.t('Profile.Edit.Subtitle_5')}
+        </InputLabel>
         <OutlinedInput
           id="bio"
           placeholder="Bio"
           value={newUser?.bio}
           onChange={handleChange('bio')}
           labelWidth={23}
-          inputProps={{maxLength: 160}}
+          inputProps={{ maxLength: 160 }}
           multiline
         />
       </FormControl>
 
-      <FormControl classes={{root: style.mb}} fullWidth variant="outlined">
-        <InputLabel htmlFor="website">{i18n.t('Profile.Edit.Subtitle_6')}</InputLabel>
+      <FormControl classes={{ root: style.mb }} fullWidth variant="outlined">
+        <InputLabel htmlFor="website">
+          {i18n.t('Profile.Edit.Subtitle_6')}
+        </InputLabel>
         <OutlinedInput
           id="website"
           placeholder="mysite.url"
           value={newUser?.websiteURL}
           onChange={handleChange('websiteURL')}
-          inputProps={{maxLength: 40}}
+          inputProps={{ maxLength: 40 }}
           labelWidth={58}
         />
       </FormControl>
@@ -275,7 +308,7 @@ export const ProfileEditComponent: React.FC<Props> = props => {
           color="secondary"
           disableElevation
           onClick={handleCancel}
-          classes={{root: style.width}}
+          classes={{ root: style.width }}
           className={style.hideOnMobile}>
           {i18n.t('General.Cancel')}
         </Button>
@@ -285,12 +318,18 @@ export const ProfileEditComponent: React.FC<Props> = props => {
           color="primary"
           disableElevation
           onClick={saveConfirmation}
-          disabled={isError || handleError() || updatingProfile || !isUpdateProfile}
+          disabled={
+            isError || handleError() || updatingProfile || !isUpdateProfile
+          }
           className={style.width}>
           {i18n.t('Profile.Edit.Btn_Save')}
 
           {updatingProfile && (
-            <CircularProgress size={24} color="primary" className={style.buttonProgress} />
+            <CircularProgress
+              size={24}
+              color="primary"
+              className={style.buttonProgress}
+            />
           )}
         </Button>
       </div>

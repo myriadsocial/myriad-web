@@ -1,6 +1,6 @@
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-import {ProfileCardProps} from './ProfileCard.interfaces';
+import { ProfileCardProps } from './ProfileCard.interfaces';
 
 export const useStyles = makeStyles<Theme, ProfileCardProps>(theme =>
   createStyles({

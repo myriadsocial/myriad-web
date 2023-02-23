@@ -1,27 +1,32 @@
-import React, {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import dynamic from 'next/dynamic';
 
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
-import {TabsComponent} from '../atoms/Tabs/Tabs';
-import {useStyles} from './FriendMenu.style';
+import { TabsComponent } from '../atoms/Tabs/Tabs';
+import { useStyles } from './FriendMenu.style';
 
-import {useQueryParams} from 'src/hooks/use-query-params.hooks';
+import { useQueryParams } from 'src/hooks/use-query-params.hooks';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {UserState} from 'src/reducers/user/reducer';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
-const FriendListContainer = dynamic(() => import('./FriendList.container'), {ssr: true});
-const FriendRequestListContainer = dynamic(() => import('./FriendRequest.container'), {ssr: true});
+const FriendListContainer = dynamic(() => import('./FriendList.container'), {
+  ssr: true,
+});
+const FriendRequestListContainer = dynamic(
+  () => import('./FriendRequest.container'),
+  { ssr: true },
+);
 
 export const FriendMenuComponent: React.FC = () => {
   const style = useStyles();
-  const {query} = useQueryParams();
+  const { query } = useQueryParams();
 
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const { user } = useSelector<RootState, UserState>(state => state.userState);
   const [activeTab, setActiveTab] = useState<string>('0');
 
   const tabs = [

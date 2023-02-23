@@ -1,16 +1,18 @@
 import React from 'react';
 
-import Typography, {TypographyProps} from '@material-ui/core/Typography';
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import Typography, { TypographyProps } from '@material-ui/core/Typography';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-import {Trans} from 'react-i18next';
+import { Trans } from 'react-i18next';
 
 type TextProps = TypographyProps & {
   component?: React.ElementType;
   locale: string;
   weight?: 'default' | 'semi-bold' | 'bold';
   values?: Record<string, string>;
-  components?: readonly React.ReactNode[] | {readonly [tagName: string]: React.ReactNode};
+  components?:
+    | readonly React.ReactNode[]
+    | { readonly [tagName: string]: React.ReactNode };
 };
 
 export const useStyles = makeStyles<Theme, TextProps>(theme =>
@@ -28,12 +30,12 @@ export const useStyles = makeStyles<Theme, TextProps>(theme =>
 );
 
 export const Text: React.FC<TextProps> = props => {
-  const {locale, components, values, ...restProps} = props;
+  const { locale, components, values, ...restProps } = props;
 
   const styles = useStyles(props);
 
   return (
-    <Typography {...restProps} classes={{root: styles.root}}>
+    <Typography {...restProps} classes={{ root: styles.root }}>
       <Trans
         i18nKey={locale}
         // eslint-disable-next-line react/jsx-key

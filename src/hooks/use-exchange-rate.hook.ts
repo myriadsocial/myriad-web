@@ -1,14 +1,14 @@
-import {useState} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
-import {isErrorWithMessage, ErrorWithMessage} from 'src/helpers/error';
-import {RootState} from 'src/reducers';
-import {fetchExchangeRates} from 'src/reducers/exchange-rate/actions';
-import {ExchangeRateState} from 'src/reducers/exchange-rate/reducer';
+import { isErrorWithMessage, ErrorWithMessage } from 'src/helpers/error';
+import { RootState } from 'src/reducers';
+import { fetchExchangeRates } from 'src/reducers/exchange-rate/actions';
+import { ExchangeRateState } from 'src/reducers/exchange-rate/reducer';
 
 export const useExchangeRate = () => {
   const dispatch = useDispatch();
-  const {exchangeRates} = useSelector<RootState, ExchangeRateState>(
+  const { exchangeRates } = useSelector<RootState, ExchangeRateState>(
     state => state.exchangeRateState,
   );
   const [loading, setLoading] = useState(false);

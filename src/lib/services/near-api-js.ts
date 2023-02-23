@@ -1,9 +1,9 @@
 import getConfig from 'next/config';
 
-import {isHex} from '@polkadot/util';
-import {BN, BN_ZERO} from '@polkadot/util/bn';
-import {numberToHex} from '@polkadot/util/number';
-import {u8aToHex} from '@polkadot/util/u8a';
+import { isHex } from '@polkadot/util';
+import { BN, BN_ZERO } from '@polkadot/util/bn';
+import { numberToHex } from '@polkadot/util/number';
+import { u8aToHex } from '@polkadot/util/u8a';
 
 import {
   BalanceProps,
@@ -20,13 +20,17 @@ import {
 
 import assign from 'lodash/assign';
 import * as nearAPI from 'near-api-js';
-import type {Signature} from 'near-api-js/lib/utils/key_pair';
-import {formatBalance} from 'src/helpers/balance';
-import {Network} from 'src/interfaces/network';
-import {WalletDetail, WalletReferenceType, WalletTypeEnum} from 'src/interfaces/wallet';
+import type { Signature } from 'near-api-js/lib/utils/key_pair';
+import { formatBalance } from 'src/helpers/balance';
+import { Network } from 'src/interfaces/network';
+import {
+  WalletDetail,
+  WalletReferenceType,
+  WalletTypeEnum,
+} from 'src/interfaces/wallet';
 import * as WalletAPI from 'src/lib/api/wallet';
 
-const {publicRuntimeConfig} = getConfig();
+const { publicRuntimeConfig } = getConfig();
 
 type SignNearData = {
   userId?: string;
@@ -64,15 +68,20 @@ export class Near implements IProvider {
     this._accountId = address;
   }
 
-  static async connect(network?: Network, walletType = WalletTypeEnum.NEAR): Promise<Near> {
+  static async connect(
+    network?: Network,
+    walletType = WalletTypeEnum.NEAR,
+  ): Promise<Near> {
     if (!network) return new Near();
     try {
-      const {keyStores, connect, WalletConnection} = nearAPI;
+      const { keyStores, connect, WalletConnection } = nearAPI;
       // creates keyStore using private key in local storage
       // *** REQUIRES SignIn using walletConnection.requestSignIn() ***
       const keyStore = new keyStores.BrowserLocalStorageKeyStore();
       const walletURL =
-        walletType === WalletTypeEnum.MYNEAR ? network.additionalWalletURL : network.walletURL;
+        walletType === WalletTypeEnum.MYNEAR
+          ? network.additionalWalletURL
+          : network.walletURL;
 
       // set config for near network
       const config: nearAPI.ConnectConfig = {
@@ -84,9 +93,9 @@ export class Near implements IProvider {
         headers: {},
       };
 
-      const near = await connect(assign({deps: {keyStore}}, config));
+      const near = await connect(assign({ deps: { keyStore } }, config));
       const wallet = new WalletConnection(near, 'myriad-social');
-      return new Near({near, wallet}, network);
+      return new Near({ near, wallet }, network);
     } catch (error) {
       console.log(error);
       return null;
@@ -110,12 +119,14 @@ export class Near implements IProvider {
       let nonce = signNearData?.nonce;
 
       if (!nonce) {
-        ({nonce} = await (userId
+        ({ nonce } = await (userId
           ? WalletAPI.getUserNonceByUserId(userId)
           : WalletAPI.getUserNonce(address)));
       }
 
-      const userSignature: Signature = keyPair.sign(Buffer.from(numberToHex(nonce)));
+      const userSignature: Signature = keyPair.sign(
+        Buffer.from(numberToHex(nonce)),
+      );
       const publicKey = u8aToHex(userSignature.publicKey.data);
 
       console.log(`[${action}][publicKey]`, publicKey);
@@ -127,7 +138,7 @@ export class Near implements IProvider {
 
       console.log(`[${action}][signature]`, signature);
 
-      return {nonce, publicAddress, signature};
+      return { nonce, publicAddress, signature };
     } catch {
       if (wallet.isSignedIn()) wallet.signOut();
       const successUrl = callbackURL?.successCallbackURL;
@@ -137,11 +148,15 @@ export class Near implements IProvider {
       const signInOptions = {
         contractId: publicRuntimeConfig.nearTippingContractId,
         methodNames: ['claim_tip', 'batch_claim_tips'],
-        successUrl: successUrl ?? `${publicRuntimeConfig.appAuthURL}/login/?auth=${auth}`,
+        successUrl:
+          successUrl ?? `${publicRuntimeConfig.appAuthURL}/login/?auth=${auth}`,
         failureUrl: failureUrl ?? `${publicRuntimeConfig.appAuthURL}`,
       };
 
-      await Promise.all([keyStore.clear(), wallet.requestSignIn(signInOptions)]);
+      await Promise.all([
+        keyStore.clear(),
+        wallet.requestSignIn(signInOptions),
+      ]);
       return null;
     }
   }
@@ -153,7 +168,7 @@ export class Near implements IProvider {
     referenceIds: string[],
     pageSize = 10,
   ): Promise<TipsNearResult[]> {
-    const provider = new nearAPI.providers.JsonRpcProvider({url: rpcURL});
+    const provider = new nearAPI.providers.JsonRpcProvider({ url: rpcURL });
     const tippingContractId = publicRuntimeConfig.nearTippingContractId;
 
     try {
@@ -191,8 +206,10 @@ export class Near implements IProvider {
 
   static async claimReferenceFee(rpcURL: string): Promise<BN> {
     try {
-      const rpcProvider = new nearAPI.providers.JsonRpcProvider({url: rpcURL});
-      const {gas_price} = await rpcProvider.gasPrice(null);
+      const rpcProvider = new nearAPI.providers.JsonRpcProvider({
+        url: rpcURL,
+      });
+      const { gas_price } = await rpcProvider.gasPrice(null);
 
       return new BN(gas_price).mul(new BN('300000000000000'));
     } catch {
@@ -206,7 +223,7 @@ export class Near implements IProvider {
   }
 
   async signer(): Promise<nearAPI.ConnectedWalletAccount> {
-    const {wallet} = this.provider;
+    const { wallet } = this.provider;
     return wallet.account();
   }
 
@@ -215,16 +232,25 @@ export class Near implements IProvider {
   }
 
   async balances(decimal: number, referenceId?: string): Promise<BalanceProps> {
-    const accountId = isHex(this.accountId) ? this.accountId.substring(2) : this.accountId;
+    const accountId = isHex(this.accountId)
+      ? this.accountId.substring(2)
+      : this.accountId;
 
-    if (!accountId) return {balance: '0'};
+    if (!accountId) return { balance: '0' };
     if (referenceId && decimal) {
-      const contract = await this.contractInitialize(referenceId, 'ft_balance_of');
-      const contractBalance = await contract.ft_balance_of({account_id: accountId});
-      return {balance: formatBalance(new BN(contractBalance), decimal).toString()};
+      const contract = await this.contractInitialize(
+        referenceId,
+        'ft_balance_of',
+      );
+      const contractBalance = await contract.ft_balance_of({
+        account_id: accountId,
+      });
+      return {
+        balance: formatBalance(new BN(contractBalance), decimal).toString(),
+      };
     }
 
-    const {near} = this.provider;
+    const { near } = this.provider;
     const account = await near.account(accountId);
     const balance = await account.getAccountBalance();
     const reservedForTransaction = nearAPI.utils.format.parseNearAmount('0.05');
@@ -233,7 +259,9 @@ export class Near implements IProvider {
         ? '0'
         : new BN(balance.available).sub(new BN(reservedForTransaction));
 
-    return {balance: nearAPI.utils.format.formatNearAmount(finalBalance.toString())};
+    return {
+      balance: nearAPI.utils.format.formatNearAmount(finalBalance.toString()),
+    };
   }
 
   async signTippingTransaction(
@@ -247,7 +275,8 @@ export class Near implements IProvider {
         ? walletDetail.referenceId
         : undefined;
 
-    if (receiver) return this.sendAmountToMyriadUser(receiver, amount, referenceId);
+    if (receiver)
+      return this.sendAmountToMyriadUser(receiver, amount, referenceId);
     return this.sendAmountToNonMyriadUser(walletDetail, amount, referenceId);
   }
 
@@ -297,7 +326,8 @@ export class Near implements IProvider {
     trxFee: string,
     nativeBalance?: string,
   ): Promise<string> {
-    const {serverId, referenceType, referenceId, ftIdentifier} = tipsBalanceInfo;
+    const { serverId, referenceType, referenceId, ftIdentifier } =
+      tipsBalanceInfo;
 
     const tippingContractId = publicRuntimeConfig.nearTippingContractId;
     const data = JSON.stringify({
@@ -312,7 +342,12 @@ export class Near implements IProvider {
     //inisialisasi near wallet
     const signer = await this.signer();
     const actions = [
-      nearAPI.transactions.functionCall('send_tip', Buffer.from(data), this.GAS, new BN(trxFee)),
+      nearAPI.transactions.functionCall(
+        'send_tip',
+        Buffer.from(data),
+        this.GAS,
+        new BN(trxFee),
+      ),
     ];
     const appAuthURL = publicRuntimeConfig.appAuthURL;
     const url = `${appAuthURL}/wallet?type=tip&txFee=${trxFee}&balance=${nativeBalance}`;
@@ -328,18 +363,20 @@ export class Near implements IProvider {
 
   async estimateFee(): Promise<EstimateFeeResponseProps> {
     try {
-      const {near} = this.provider;
+      const { near } = this.provider;
       const blockStatus = await near.connection.provider.status();
-      const gas = await near.connection.provider.gasPrice(blockStatus.sync_info.latest_block_hash);
+      const gas = await near.connection.provider.gasPrice(
+        blockStatus.sync_info.latest_block_hash,
+      );
 
-      return {partialFee: new BN(gas.gas_price)};
+      return { partialFee: new BN(gas.gas_price) };
     } catch {
-      return {partialFee: null};
+      return { partialFee: null };
     }
   }
 
   async disconnect(): Promise<void> {
-    const {wallet} = this.provider;
+    const { wallet } = this.provider;
 
     await Near.clearLocalStorage();
 
@@ -349,7 +386,7 @@ export class Near implements IProvider {
   }
 
   async assetMinBalance(): Promise<EstimateFeeResponseProps> {
-    return {partialFee: BN_ZERO};
+    return { partialFee: BN_ZERO };
   }
 
   private async contractInitialize(
@@ -358,7 +395,7 @@ export class Near implements IProvider {
     changeMethod?: string,
   ): Promise<ContractProps> {
     try {
-      const {wallet} = this.provider;
+      const { wallet } = this.provider;
       const contract = new nearAPI.Contract(wallet.account(), contractId, {
         viewMethods: [viewMethod],
         changeMethods: [changeMethod],
@@ -366,7 +403,7 @@ export class Near implements IProvider {
       //TODO: fix type for return all of the contract
       return contract as unknown as ContractProps;
     } catch (error) {
-      console.log({error});
+      console.log({ error });
       throw error;
     }
   }
@@ -398,7 +435,7 @@ export class Near implements IProvider {
       actions.push(
         nearAPI.transactions.functionCall(
           'storage_deposit',
-          Buffer.from(JSON.stringify({account_id: receiverId})),
+          Buffer.from(JSON.stringify({ account_id: receiverId })),
           this.GAS,
           this.ATTACHED_AMOUNT,
         ),
@@ -408,7 +445,12 @@ export class Near implements IProvider {
     actions.push(
       nearAPI.transactions.functionCall(
         'ft_transfer',
-        Buffer.from(JSON.stringify({receiver_id: receiverId, amount: amount.toString()})),
+        Buffer.from(
+          JSON.stringify({
+            receiver_id: receiverId,
+            amount: amount.toString(),
+          }),
+        ),
         this.GAS,
         this.ONE_YOCTO,
       ),
@@ -416,7 +458,10 @@ export class Near implements IProvider {
 
     //TODO: fix error protected class for multiple sign and send transactions
     // @ts-ignore: protected class
-    await signer.signAndSendTransaction({receiverId: tokenContractId, actions});
+    await signer.signAndSendTransaction({
+      receiverId: tokenContractId,
+      actions,
+    });
 
     return;
   }
@@ -437,7 +482,7 @@ export class Near implements IProvider {
 
     let receiverId = tippingContractId;
     let method = 'send_tip';
-    let data = JSON.stringify({tips_balance_info: tipsBalanceInfo});
+    let data = JSON.stringify({ tips_balance_info: tipsBalanceInfo });
     let attachedAmount = amount;
     let initActions: nearAPI.transactions.Action[] = [];
 
@@ -454,7 +499,7 @@ export class Near implements IProvider {
         initActions = [
           nearAPI.transactions.functionCall(
             'storage_deposit',
-            Buffer.from(JSON.stringify({account_id: tippingContractId})),
+            Buffer.from(JSON.stringify({ account_id: tippingContractId })),
             this.GAS,
             this.ATTACHED_AMOUNT,
           ),
@@ -473,12 +518,17 @@ export class Near implements IProvider {
 
     const actions = [
       ...initActions,
-      nearAPI.transactions.functionCall(method, Buffer.from(data), this.GAS, attachedAmount),
+      nearAPI.transactions.functionCall(
+        method,
+        Buffer.from(data),
+        this.GAS,
+        attachedAmount,
+      ),
     ];
 
     //TODO: fix error protected class for multiple sign and send transactions
     // @ts-ignore: protected class
-    await signer.signAndSendTransaction({receiverId, actions});
+    await signer.signAndSendTransaction({ receiverId, actions });
 
     return;
   }
@@ -490,10 +540,10 @@ export const getNearBalanceV2 = async (
   contractId?: string,
   decimal?: number,
 ): Promise<BalanceProps> => {
-  const provider = new nearAPI.providers.JsonRpcProvider({url: rpcURL});
+  const provider = new nearAPI.providers.JsonRpcProvider({ url: rpcURL });
   try {
     if (contractId && decimal) {
-      const data = JSON.stringify({account_id: accountId});
+      const data = JSON.stringify({ account_id: accountId });
       const buff = Buffer.from(data);
       const base64data = buff.toString('base64');
       const result = await provider.query({
@@ -504,9 +554,11 @@ export const getNearBalanceV2 = async (
         finality: 'final',
       });
 
-      const balance: string = JSON.parse(Buffer.from((result as any).result).toString());
+      const balance: string = JSON.parse(
+        Buffer.from((result as any).result).toString(),
+      );
 
-      return {balance: formatBalance(new BN(balance), decimal).toString()};
+      return { balance: formatBalance(new BN(balance), decimal).toString() };
     }
 
     const nearAccount = await provider.query({
@@ -521,7 +573,7 @@ export const getNearBalanceV2 = async (
     const result = new BN(amount).sub(new BN(storage)).sub(new BN(trxFee));
     const finalBalance = result.lte(new BN(storage)) ? '0' : result.toString();
 
-    return {balance: nearAPI.utils.format.formatNearAmount(finalBalance)};
+    return { balance: nearAPI.utils.format.formatNearAmount(finalBalance) };
   } catch (err) {
     console.log(err);
     throw err;

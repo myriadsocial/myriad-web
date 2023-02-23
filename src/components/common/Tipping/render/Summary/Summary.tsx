@@ -1,5 +1,5 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,19 +8,22 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 
-import {BN, BN_ZERO} from '@polkadot/util';
+import { BN, BN_ZERO } from '@polkadot/util';
 
-import {PeopleWithWalletDetail, UserWithWalletDetail} from '../../Tipping.interface';
-import {FormatCurrency} from '../FormatCurrency';
-import {useStyles} from './Summary.style';
+import {
+  PeopleWithWalletDetail,
+  UserWithWalletDetail,
+} from '../../Tipping.interface';
+import { FormatCurrency } from '../FormatCurrency';
+import { useStyles } from './Summary.style';
 
-import {Avatar, AvatarSize} from 'src/components/atoms/Avatar';
+import { Avatar, AvatarSize } from 'src/components/atoms/Avatar';
 import ShowIf from 'src/components/common/show-if.component';
 import InfoIconYellow from 'src/images/Icons/InfoIconYellow.svg';
-import {BalanceDetail} from 'src/interfaces/balance';
+import { BalanceDetail } from 'src/interfaces/balance';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {UserState} from 'src/reducers/user/reducer';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
 type SummaryProps = {
   amount: BN;
@@ -42,7 +45,9 @@ export const Summary: React.FC<SummaryProps> = props => {
     nativeSymbol,
     isTipping = true,
   } = props;
-  const {currentWallet} = useSelector<RootState, UserState>(state => state.userState);
+  const { currentWallet } = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
 
   const styles = useStyles();
 
@@ -55,9 +60,18 @@ export const Summary: React.FC<SummaryProps> = props => {
   return (
     <>
       <div className={styles.summary}>
-        <Avatar src={receiver.profilePictureURL} name={receiver.name} size={AvatarSize.TINY} />
-        <Typography variant="subtitle2" color="textPrimary" className={styles.description}>
-          {`${receiver.name ?? 'Unnamed Myrian'} ${i18n.t('Tipping.Modal_Main.Will_Receive')} `}
+        <Avatar
+          src={receiver.profilePictureURL}
+          name={receiver.name}
+          size={AvatarSize.TINY}
+        />
+        <Typography
+          variant="subtitle2"
+          color="textPrimary"
+          className={styles.description}>
+          {`${receiver.name ?? 'Unnamed Myrian'} ${i18n.t(
+            'Tipping.Modal_Main.Will_Receive',
+          )} `}
           <FormatCurrency
             variant="subtitle2"
             color="primary"
@@ -75,29 +89,45 @@ export const Summary: React.FC<SummaryProps> = props => {
               <InfoIconYellow />
             </div>
             <Typography className={styles.textWarning}>
-              The tip will be stored in Myriad Escrow because the user hasn’t connected the
-              {` ${currentWallet.networkId === 'near' ? 'NEAR Wallet' : 'polkadot{.js}'} `}
+              The tip will be stored in Myriad Escrow because the user hasn’t
+              connected the
+              {` ${
+                currentWallet.networkId === 'near'
+                  ? 'NEAR Wallet'
+                  : 'polkadot{.js}'
+              } `}
               yet. Once they connect their{' '}
-              {` ${currentWallet.networkId === 'near' ? 'NEAR Wallet' : 'polkadot{.js}'}`}, they
-              will be able to claim their tip.
+              {` ${
+                currentWallet.networkId === 'near'
+                  ? 'NEAR Wallet'
+                  : 'polkadot{.js}'
+              }`}
+              , they will be able to claim their tip.
             </Typography>
           </div>
         )}
       </ShowIf>
       <div className={styles.detail}>
         <Typography className={styles.bold} gutterBottom>
-          {isTipping ? i18n.t('Tipping.Modal_Main.Tip_Summary') : i18n.t('General.Summary')}
+          {isTipping
+            ? i18n.t('Tipping.Modal_Main.Tip_Summary')
+            : i18n.t('General.Summary')}
         </Typography>
         <TableContainer>
           <Table size="small" aria-label="tip summary table">
             <TableBody>
               <TableRow>
-                <TableCell component="th" scope="row" classes={{root: styles.table}}>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  classes={{ root: styles.table }}>
                   <Typography variant="subtitle2" color="textSecondary">
-                    {isTipping ? i18n.t('Tipping.Modal_Main.Tip_Label') : i18n.t('General.Amount')}
+                    {isTipping
+                      ? i18n.t('Tipping.Modal_Main.Tip_Label')
+                      : i18n.t('General.Amount')}
                   </Typography>
                 </TableCell>
-                <TableCell align="right" classes={{root: styles.table}}>
+                <TableCell align="right" classes={{ root: styles.table }}>
                   <FormatCurrency
                     variant="subtitle2"
                     color="textSecondary"
@@ -108,12 +138,15 @@ export const Summary: React.FC<SummaryProps> = props => {
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell component="th" scope="row" classes={{root: styles.table}}>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  classes={{ root: styles.table }}>
                   <Typography variant="subtitle2" color="textSecondary">
                     {i18n.t('Tipping.Modal_Main.Estimated_Gas_Fee')}
                   </Typography>
                 </TableCell>
-                <TableCell align="right" classes={{root: styles.table}}>
+                <TableCell align="right" classes={{ root: styles.table }}>
                   <ShowIf condition={!loadingFee}>
                     <FormatCurrency
                       variant="subtitle2"
@@ -132,12 +165,18 @@ export const Summary: React.FC<SummaryProps> = props => {
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell component="th" scope="row" classes={{root: styles.table}}>
-                  <Typography component="span" variant="subtitle2" color="textPrimary">
+                <TableCell
+                  component="th"
+                  scope="row"
+                  classes={{ root: styles.table }}>
+                  <Typography
+                    component="span"
+                    variant="subtitle2"
+                    color="textPrimary">
                     {i18n.t('Tipping.Modal_Main.Total')}
                   </Typography>
                 </TableCell>
-                <TableCell align="right" classes={{root: styles.table}}>
+                <TableCell align="right" classes={{ root: styles.table }}>
                   <ShowIf condition={!loadingFee}>
                     <FormatCurrency
                       className={styles.bold}
@@ -149,7 +188,10 @@ export const Summary: React.FC<SummaryProps> = props => {
                     />
                   </ShowIf>
                   <ShowIf condition={loadingFee}>
-                    <Typography component="span" variant="subtitle2" color="textSecondary">
+                    <Typography
+                      component="span"
+                      variant="subtitle2"
+                      color="textSecondary">
                       {i18n.t('General.Loading')}
                     </Typography>
                   </ShowIf>

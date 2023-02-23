@@ -1,8 +1,8 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
-import {UserMenu as UserMenuComponent} from './UserMenu';
+import { UserMenu as UserMenuComponent } from './UserMenu';
 
 export default {
   title: 'UI Revamp v2.0/components/User Menu',
@@ -10,7 +10,9 @@ export default {
   argTypes: {},
 } as ComponentMeta<typeof UserMenuComponent>;
 
-const Template: ComponentStory<typeof UserMenuComponent> = args => <UserMenuComponent {...args} />;
+const Template: ComponentStory<typeof UserMenuComponent> = args => (
+  <UserMenuComponent {...args} />
+);
 
 export const UserMenu = Template.bind({});
 UserMenu.args = {

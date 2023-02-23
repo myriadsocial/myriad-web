@@ -1,14 +1,14 @@
-import React, {useCallback, useState} from 'react';
+import React, { useCallback, useState } from 'react';
 
-import {Button, Grid} from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 
 import ShowIf from '../show-if.component';
-import ConfirmContext, {HandleConfirm} from './Confirm.context';
-import {ConfirmProviderProps, ConfirmOptions} from './Confirm.interface';
-import {useStyles} from './Confirm.style';
+import ConfirmContext, { HandleConfirm } from './Confirm.context';
+import { ConfirmProviderProps, ConfirmOptions } from './Confirm.interface';
+import { useStyles } from './Confirm.style';
 
 import clsx from 'clsx';
-import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
+import { PromptComponent } from 'src/components/atoms/Prompt/prompt.component';
 import i18n from 'src/locale';
 
 const DEFAULT_OPTIONS: ConfirmOptions = {
@@ -20,7 +20,9 @@ const DEFAULT_OPTIONS: ConfirmOptions = {
   hideCancel: false,
 };
 
-export const ConfirmProvider: React.ComponentType<ConfirmProviderProps> = ({children}) => {
+export const ConfirmProvider: React.ComponentType<ConfirmProviderProps> = ({
+  children,
+}) => {
   const styles = useStyles();
 
   const [open, setOpen] = useState(false);
@@ -39,7 +41,7 @@ export const ConfirmProvider: React.ComponentType<ConfirmProviderProps> = ({chil
   }, []);
 
   const handleCancel = useCallback(() => {
-    const {onCancel} = options;
+    const { onCancel } = options;
 
     onCancel && onCancel();
 
@@ -47,7 +49,7 @@ export const ConfirmProvider: React.ComponentType<ConfirmProviderProps> = ({chil
   }, [options, handleClose]);
 
   const handleConfirm = useCallback(() => {
-    const {onConfirm} = options;
+    const { onConfirm } = options;
 
     onConfirm && onConfirm();
 
@@ -56,7 +58,9 @@ export const ConfirmProvider: React.ComponentType<ConfirmProviderProps> = ({chil
 
   return (
     <>
-      <ConfirmContext.Provider value={confirm}>{children}</ConfirmContext.Provider>
+      <ConfirmContext.Provider value={confirm}>
+        {children}
+      </ConfirmContext.Provider>
       <PromptComponent
         open={open}
         title={options?.title}
@@ -65,7 +69,11 @@ export const ConfirmProvider: React.ComponentType<ConfirmProviderProps> = ({chil
         onCancel={handleClose}>
         <Grid container justifyContent="space-around" className={styles.action}>
           <ShowIf condition={!options?.hideCancel}>
-            <Button size="small" variant="outlined" color="secondary" onClick={handleCancel}>
+            <Button
+              size="small"
+              variant="outlined"
+              color="secondary"
+              onClick={handleCancel}>
               {options?.cancellationText}
             </Button>
           </ShowIf>

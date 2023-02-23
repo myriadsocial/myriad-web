@@ -1,15 +1,17 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
 import MyriadInstanceContext from './MyriadInstance.context';
-import {useIsMountedRef} from './use-mounted-ref.hooks';
+import { useIsMountedRef } from './use-mounted-ref.hooks';
 
-import {IProvider, MyriadProvider} from 'src/lib/services/myriad-provider';
+import { IProvider, MyriadProvider } from 'src/lib/services/myriad-provider';
 
 type BlockchainProviderProps = {
   children: React.ReactNode;
 };
 
-const MyriadInstanceProvider: React.ComponentType<BlockchainProviderProps> = ({children}) => {
+const MyriadInstanceProvider: React.ComponentType<BlockchainProviderProps> = ({
+  children,
+}) => {
   const [provider, setProvider] = useState<IProvider | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
@@ -33,7 +35,7 @@ const MyriadInstanceProvider: React.ComponentType<BlockchainProviderProps> = ({c
   };
 
   return (
-    <MyriadInstanceContext.Provider value={{provider, loading, error}}>
+    <MyriadInstanceContext.Provider value={{ provider, loading, error }}>
       {children}
     </MyriadInstanceContext.Provider>
   );

@@ -1,13 +1,13 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import {XIcon} from '@heroicons/react/outline';
+import { XIcon } from '@heroicons/react/outline';
 
-import {useState, useEffect, useRef} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import getConfig from 'next/config';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
 import {
   Button,
@@ -19,22 +19,28 @@ import {
   CircularProgress,
 } from '@material-ui/core';
 
-import {useStyles} from './Settings.styles';
+import { useStyles } from './Settings.styles';
 
-import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
-import {useUserHook} from 'src/hooks/use-user.hook';
-import {RootState} from 'src/reducers';
-import {sendVerificationEmail, updateEmail, deleteEmail} from 'src/reducers/config/actions';
+import { PromptComponent } from 'src/components/atoms/Prompt/prompt.component';
+import { useUserHook } from 'src/hooks/use-user.hook';
+import { RootState } from 'src/reducers';
+import {
+  sendVerificationEmail,
+  updateEmail,
+  deleteEmail,
+} from 'src/reducers/config/actions';
 import validator from 'validator';
 
-const {publicRuntimeConfig} = getConfig();
+const { publicRuntimeConfig } = getConfig();
 const countDownTime = 60;
 
 const EmailSetting = () => {
   const styles = useStyles();
-  const {query, push} = useRouter();
+  const { query, push } = useRouter();
   const dispatch = useDispatch();
-  const loading = useSelector<RootState>(({configState: {loading}}) => loading);
+  const loading = useSelector<RootState>(
+    ({ configState: { loading } }) => loading,
+  );
   const timeOutCountDown = useRef(null);
   const [emailValue, setEmail] = useState('');
   const [error, setError] = useState({
@@ -45,12 +51,12 @@ const EmailSetting = () => {
   const [countDown, setCountDown] = useState(0);
   const [isWeb3AddEmailAddress, setIsWeb3AddEmailAddress] = useState(false);
 
-  const {user, wallets} = useUserHook();
-  const {email} = user;
+  const { user, wallets } = useUserHook();
+  const { email } = user;
   const isWeb2users = !wallets.length;
   const isWeb3UsersAndDontHaveEmail = wallets.length && !email;
 
-  const {token, isDelete} = query;
+  const { token, isDelete } = query;
 
   useEffect(() => {
     setEmail(email);
@@ -88,7 +94,7 @@ const EmailSetting = () => {
     const input = event.target.value;
 
     if (!input.length) {
-      setError({isError: false, message: ''});
+      setError({ isError: false, message: '' });
     } else if (!validator.isEmail(input)) {
       setError({
         isError: true,
@@ -123,7 +129,8 @@ const EmailSetting = () => {
       sendVerificationEmail(
         {
           email: emailValue,
-          callbackURL: publicRuntimeConfig.appAuthURL + `/settings?section=email`,
+          callbackURL:
+            publicRuntimeConfig.appAuthURL + `/settings?section=email`,
         },
         openPromptDialogAndStartCountDown,
       ),
@@ -135,7 +142,9 @@ const EmailSetting = () => {
       sendVerificationEmail(
         {
           email: emailValue,
-          callbackURL: publicRuntimeConfig.appAuthURL + `/settings?section=email&isDelete=true`,
+          callbackURL:
+            publicRuntimeConfig.appAuthURL +
+            `/settings?section=email&isDelete=true`,
         },
         openPromptDialogAndStartCountDown,
       ),
@@ -184,20 +193,35 @@ Don’t forget to check your spam folder!`}
               variant="outlined"
               color="primary"
               disabled={countDown !== 0}
-              onClick={isWeb3UsersAndDontHaveEmail ? onClickSendVerificationEMail : onDeleteEmail}>
+              onClick={
+                isWeb3UsersAndDontHaveEmail
+                  ? onClickSendVerificationEMail
+                  : onDeleteEmail
+              }>
               Resend verification email
             </Button>
-            <span>You can send your verification link again in {countDown}s</span>
+            <span>
+              You can send your verification link again in {countDown}s
+            </span>
           </div>
         </>
       </PromptComponent>
       <div
         className={styles.option}
-        style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
         {isWeb3UsersAndDontHaveEmail && !isWeb3AddEmailAddress ? (
           <span
             role="button"
-            style={{fontSize: '14px', fontWeight: '600', color: '#6E3FC3', cursor: 'pointer'}}
+            style={{
+              fontSize: '14px',
+              fontWeight: '600',
+              color: '#6E3FC3',
+              cursor: 'pointer',
+            }}
             onClick={web3UserAddEmailAddress}>
             Add Email Address
           </span>
@@ -209,7 +233,7 @@ Don’t forget to check your spam folder!`}
               label="Email Address"
               placeholder="Add Email Address"
               value={emailValue}
-              style={{marginBottom: 'unset'}}
+              style={{ marginBottom: 'unset' }}
               onChange={onChangeEmail}
               disabled={isWeb2users || !isWeb3UsersAndDontHaveEmail}
               error={error.isError}
@@ -219,9 +243,13 @@ Don’t forget to check your spam folder!`}
               size="small"
               variant="contained"
               color="primary"
-              style={{marginLeft: '24px', marginRight: '17px'}}
+              style={{ marginLeft: '24px', marginRight: '17px' }}
               disabled={isWeb2users}
-              onClick={isWeb3UsersAndDontHaveEmail ? onClickSendVerificationEMail : onDeleteEmail}>
+              onClick={
+                isWeb3UsersAndDontHaveEmail
+                  ? onClickSendVerificationEMail
+                  : onDeleteEmail
+              }>
               {isWeb3UsersAndDontHaveEmail ? 'Verify' : 'Remove'}
             </Button>
           </>

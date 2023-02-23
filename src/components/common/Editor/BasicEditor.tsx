@@ -21,21 +21,29 @@ import {
   withProps,
 } from '@udecode/plate';
 
-import React, {useCallback, useRef} from 'react';
+import React, { useCallback, useRef } from 'react';
 
-import {alpha} from '@material-ui/core';
+import { alpha } from '@material-ui/core';
 
-import {EditorValue, Mentionable, MentionDetail} from './Editor.interface';
-import {useStyles} from './Editor.style';
-import {exitBreakPlugin, resetBlockTypePlugin, softBreakPlugin} from './config';
-import {createEmojiPlugin, createHashtagPlugin, createLinkPlugin} from './plugins';
-import {createCharLimitPlugin} from './plugins/CharLimit';
-import {MentionCombobox, MentionInputElement} from './render/Element/Mention';
-import {createEditorPlugins} from './util';
+import { EditorValue, Mentionable, MentionDetail } from './Editor.interface';
+import { useStyles } from './Editor.style';
+import {
+  exitBreakPlugin,
+  resetBlockTypePlugin,
+  softBreakPlugin,
+} from './config';
+import {
+  createEmojiPlugin,
+  createHashtagPlugin,
+  createLinkPlugin,
+} from './plugins';
+import { createCharLimitPlugin } from './plugins/CharLimit';
+import { MentionCombobox, MentionInputElement } from './render/Element/Mention';
+import { createEditorPlugins } from './util';
 
-import {ListItemComponent} from 'components/atoms/ListItem';
+import { ListItemComponent } from 'components/atoms/ListItem';
 import debounce from 'lodash/debounce';
-import {User} from 'src/interfaces/user';
+import { User } from 'src/interfaces/user';
 
 const MAX_CHARACTER_LIMIT = 5000;
 const MAX_HASHTAG_CHAR_LENGTH = 160;
@@ -113,9 +121,15 @@ export type BasicEditorProps = {
 };
 
 export const BasicEditor: React.FC<BasicEditorProps> = props => {
-  const {id, placeholder = 'Write a Reply ...', children, onSearchMention, onChange} = props;
+  const {
+    id,
+    placeholder = 'Write a Reply ...',
+    children,
+    onSearchMention,
+    onChange,
+  } = props;
 
-  const styles = useStyles({mobile: false});
+  const styles = useStyles({ mobile: false });
   const containerRef = useRef(null);
   const editableProps: TEditableProps<EditorValue> = {
     spellCheck: false,
@@ -128,7 +142,7 @@ export const BasicEditor: React.FC<BasicEditorProps> = props => {
     onSearchMention(query);
   }, 300);
 
-  const renderComboboxItem = useCallback(({item}) => {
+  const renderComboboxItem = useCallback(({ item }) => {
     return (
       <ListItemComponent
         title={item.data.name}
@@ -153,7 +167,11 @@ export const BasicEditor: React.FC<BasicEditorProps> = props => {
   return (
     <div className={styles.root}>
       <div ref={containerRef} className={styles.editor}>
-        <Plate id={id} editableProps={editableProps} plugins={plugins} onChange={onChange}>
+        <Plate
+          id={id}
+          editableProps={editableProps}
+          plugins={plugins}
+          onChange={onChange}>
           <MentionCombobox<MentionDetail>
             onRenderItem={renderComboboxItem}
             onSearch={handleSearchMention}

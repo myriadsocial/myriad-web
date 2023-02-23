@@ -1,7 +1,7 @@
-import {PostSubheaderActionProps} from '../SubHeader';
+import { PostSubheaderActionProps } from '../SubHeader';
 
-import {Post} from 'src/interfaces/post';
-import {User} from 'src/interfaces/user';
+import { Post } from 'src/interfaces/post';
+import { User } from 'src/interfaces/user';
 
 export type PostHeaderActionProps = PostSubheaderActionProps & {
   onDelete: () => void;

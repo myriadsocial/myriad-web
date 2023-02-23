@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const {withSentryConfig} = require('@sentry/nextjs');
+const { withSentryConfig } = require('@sentry/nextjs');
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
 
-const {version} = require('./package.json');
+const { version } = require('./package.json');
 
 /** @type {import('next').NextConfig} */
 const moduleExports = {
@@ -34,16 +34,21 @@ const moduleExports = {
     appVersion: `v${process.env.NEXT_PUBLIC_APP_VERSION ?? version}`,
     appAuthURL: process.env.NEXTAUTH_URL ?? 'http://localhost:3000',
     myriadRPCURL: process.env.NEXT_PUBLIC_MYRIAD_RPC_URL,
-    myriadWebsiteURL: process.env.NEXT_PUBLIC_MYRIAD_WEBSITE_URL ?? 'https://www.myriad.social',
-    myriadSupportMail: process.env.NEXT_PUBLIC_MYRIAD_SUPPORT_MAIL ?? 'support@myriad.social',
+    myriadWebsiteURL:
+      process.env.NEXT_PUBLIC_MYRIAD_WEBSITE_URL ?? 'https://www.myriad.social',
+    myriadSupportMail:
+      process.env.NEXT_PUBLIC_MYRIAD_SUPPORT_MAIL ?? 'support@myriad.social',
     firebaseProjectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
     firebaseAPIKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-    firebaseMessagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    firebaseMessagingSenderId:
+      process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
     firebaseStorageBucket:
-      process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ?? 'myriad-social-development.appspot.com',
+      process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ??
+      'myriad-social-development.appspot.com',
     firebaseAppId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
     firebaseMeasurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
-    nearTippingContractId: process.env.NEAR_TIPPING_CONTRACT_ID ?? 'myriadcore.testnet',
+    nearTippingContractId:
+      process.env.NEAR_TIPPING_CONTRACT_ID ?? 'myriadcore.testnet',
     myriadAPIURL: process.env.MYRIAD_API_URL ?? 'http://localhost:3001',
   },
   sentry: {
@@ -105,4 +110,7 @@ const withPwaWrapper = () => {
   return withPWA(moduleExports);
 };
 
-module.exports = withSentryConfig(withBundleAnalyzer(withPwaWrapper()), sentryWebpackPluginOptions);
+module.exports = withSentryConfig(
+  withBundleAnalyzer(withPwaWrapper()),
+  sentryWebpackPluginOptions,
+);

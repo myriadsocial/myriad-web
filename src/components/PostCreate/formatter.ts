@@ -1,9 +1,15 @@
-import {ELEMENT_MENTION, getNodeString} from '@udecode/plate';
+import { ELEMENT_MENTION, getNodeString } from '@udecode/plate';
 
-import {EditorValue, RootBlock} from 'components/common/Editor/Editor.interface';
-import {ELEMENT_HASHTAG} from 'components/common/Editor/plugins';
-import {deserialize, formatToString} from 'components/common/NodeViewer/formatter';
-import {Post} from 'src/interfaces/post';
+import {
+  EditorValue,
+  RootBlock,
+} from 'components/common/Editor/Editor.interface';
+import { ELEMENT_HASHTAG } from 'components/common/Editor/plugins';
+import {
+  deserialize,
+  formatToString,
+} from 'components/common/NodeViewer/formatter';
+import { Post } from 'src/interfaces/post';
 
 export type StringifyData = {
   text: string;
@@ -34,7 +40,9 @@ export const serialize = (nodes: EditorValue): Partial<Post> => {
           ];
         }
 
-        if (!post.mentions.map(mention => mention.id).includes(children.value)) {
+        if (
+          !post.mentions.map(mention => mention.id).includes(children.value)
+        ) {
           post.mentions.push({
             id: children.value,
             name: children.name as string,

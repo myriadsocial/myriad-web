@@ -1,4 +1,9 @@
-import {alpha, createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import {
+  alpha,
+  createStyles,
+  makeStyles,
+  Theme,
+} from '@material-ui/core/styles';
 
 type ExperienceStyleProps = {
   selected: boolean;
@@ -26,7 +31,8 @@ export const useStyles = makeStyles<Theme, ExperienceStyleProps>(theme =>
         },
 
         '&::before': {
-          backgroundColor: props => (props.selected ? '#6E3FC3' : 'transparent'),
+          backgroundColor: props =>
+            props.selected ? '#6E3FC3' : 'transparent',
         },
       },
 

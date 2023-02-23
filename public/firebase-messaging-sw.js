@@ -1,6 +1,8 @@
 /* global importScripts, firebase */
 importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js');
+importScripts(
+  'https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js',
+);
 importScripts('sw-env.js');
 
 firebase.initializeApp({
@@ -42,7 +44,7 @@ messaging.onBackgroundMessage(function (payload) {
     payload,
   );
 
-  const {title, body} = payload.data;
+  const { title, body } = payload.data;
 
   const notificationOptions = {
     body,

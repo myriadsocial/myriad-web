@@ -1,18 +1,23 @@
 import * as ExperienceAPI from '../../lib/api/experience';
-import {Actions as BaseAction, setLoading, setError, PaginationAction} from '../base/actions';
-import {RootState} from '../index';
+import {
+  Actions as BaseAction,
+  setLoading,
+  setError,
+  PaginationAction,
+} from '../base/actions';
+import { RootState } from '../index';
 import * as constants from './constants';
 
-import {Action} from 'redux';
-import {UserExperience, ExperienceType} from 'src/interfaces/experience';
-import {Friend} from 'src/interfaces/friend';
-import {SocialMedia} from 'src/interfaces/social';
-import {FriendStatusProps, User} from 'src/interfaces/user';
+import { Action } from 'redux';
+import { UserExperience, ExperienceType } from 'src/interfaces/experience';
+import { Friend } from 'src/interfaces/friend';
+import { SocialMedia } from 'src/interfaces/social';
+import { FriendStatusProps, User } from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
-import {PaginationParams} from 'src/lib/api/interfaces/pagination-params.interface';
+import { PaginationParams } from 'src/lib/api/interfaces/pagination-params.interface';
 import * as SocialAPI from 'src/lib/api/social';
 import * as UserAPI from 'src/lib/api/user';
-import {ThunkActionCreator} from 'src/types/thunk';
+import { ThunkActionCreator } from 'src/types/thunk';
 
 /**
  * Action Types
@@ -20,7 +25,7 @@ import {ThunkActionCreator} from 'src/types/thunk';
 
 export interface FetchProfileDetail extends Action {
   type: constants.FETCH_PROFILE_DETAIL;
-  detail: User & {friendInfo: FriendStatusProps};
+  detail: User & { friendInfo: FriendStatusProps };
 }
 
 export interface FetchProfileFriend extends PaginationAction {
@@ -78,7 +83,7 @@ export type Actions =
  * Actions
  */
 export const setProfile = (
-  profile: User & {friendInfo: FriendStatusProps},
+  profile: User & { friendInfo: FriendStatusProps },
 ): FetchProfileDetail => ({
   type: constants.FETCH_PROFILE_DETAIL,
   detail: profile,
@@ -99,7 +104,8 @@ export const fetchProfileDetail: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     try {
-      const detail: User & {friendInfo: FriendStatusProps} = await UserAPI.getUserDetail(userId);
+      const detail: User & { friendInfo: FriendStatusProps } =
+        await UserAPI.getUserDetail(userId);
 
       dispatch(setProfile(detail));
     } catch (error) {
@@ -117,14 +123,17 @@ export const fetchProfileFriend: ThunkActionCreator<Actions, RootState> =
     const {
       profileState: {
         detail,
-        friends: {params},
+        friends: { params },
       },
     } = getState();
 
     if (!detail) return;
 
     try {
-      const {data: friends, meta} = await FriendAPI.getFriends(detail.id, {...params, page});
+      const { data: friends, meta } = await FriendAPI.getFriends(detail.id, {
+        ...params,
+        page,
+      });
 
       dispatch({
         type: constants.FETCH_PROFILE_FRIEND,
@@ -146,7 +155,7 @@ export const searchProfileFriend: ThunkActionCreator<Actions, RootState> =
     const {
       profileState: {
         detail,
-        friends: {params},
+        friends: { params },
       },
     } = getState();
 
@@ -158,7 +167,10 @@ export const searchProfileFriend: ThunkActionCreator<Actions, RootState> =
         userId: detail.id,
       };
 
-      const {data: friends, meta} = await FriendAPI.searchFriend(filter, {...params, page});
+      const { data: friends, meta } = await FriendAPI.searchFriend(filter, {
+        ...params,
+        page,
+      });
 
       dispatch({
         type: constants.FILTER_PROFILE_FRIEND,
@@ -179,13 +191,13 @@ export const fetchProfileSocials: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     const {
-      profileState: {detail},
+      profileState: { detail },
     } = getState();
 
     if (!detail) return;
 
     try {
-      const {data} = await SocialAPI.getUserSocials(detail.id, all);
+      const { data } = await SocialAPI.getUserSocials(detail.id, all);
 
       dispatch({
         type: constants.FETCH_PROFILE_SOCIALS,
@@ -204,14 +216,15 @@ export const fetchProfileExperience: ThunkActionCreator<Actions, RootState> =
 
     try {
       const {
-        profileState: {detail},
+        profileState: { detail },
       } = getState();
 
       if (!detail) {
         throw new Error('User not found');
       }
 
-      const {meta, data: experiences} = await ExperienceAPI.getUserExperiences(detail.id, type);
+      const { meta, data: experiences } =
+        await ExperienceAPI.getUserExperiences(detail.id, type);
 
       dispatch({
         type: constants.FETCH_PROFILE_EXPERIENCE,

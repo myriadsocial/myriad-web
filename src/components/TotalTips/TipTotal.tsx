@@ -1,5 +1,5 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import {
   Button,
@@ -14,15 +14,15 @@ import {
   useTheme,
 } from '@material-ui/core';
 
-import {Avatar, AvatarSize} from '../atoms/Avatar';
-import {Modal, ModalProps} from '../atoms/Modal';
-import {useStyles} from './totalTips.style';
+import { Avatar, AvatarSize } from '../atoms/Avatar';
+import { Modal, ModalProps } from '../atoms/Modal';
+import { useStyles } from './totalTips.style';
 
-import {formatUsd} from 'src/helpers/balance';
-import {TipsResult} from 'src/interfaces/blockchain-interface';
+import { formatUsd } from 'src/helpers/balance';
+import { TipsResult } from 'src/interfaces/blockchain-interface';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {ExchangeRateState} from 'src/reducers/exchange-rate/reducer';
+import { RootState } from 'src/reducers';
+import { ExchangeRateState } from 'src/reducers/exchange-rate/reducer';
 
 type TipTotalNearProps = Pick<ModalProps, 'onClose' | 'open'> & {
   tipsResults: TipsResult[];
@@ -30,8 +30,8 @@ type TipTotalNearProps = Pick<ModalProps, 'onClose' | 'open'> & {
 };
 
 const TipTotal: React.FC<TipTotalNearProps> = props => {
-  const {open, onClose, tipsResults, handleVerifyReference} = props;
-  const {exchangeRates} = useSelector<RootState, ExchangeRateState>(
+  const { open, onClose, tipsResults, handleVerifyReference } = props;
+  const { exchangeRates } = useSelector<RootState, ExchangeRateState>(
     state => state.exchangeRateState,
   );
   const styles = useStyles();
@@ -39,7 +39,10 @@ const TipTotal: React.FC<TipTotalNearProps> = props => {
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
   const getDetailExchangeRate = (symbol: string) => {
-    return exchangeRates?.find(exchangeRate => exchangeRate.id === symbol)?.price ?? 0;
+    return (
+      exchangeRates?.find(exchangeRate => exchangeRate.id === symbol)?.price ??
+      0
+    );
   };
 
   const handleClose = () => {
@@ -61,7 +64,10 @@ const TipTotal: React.FC<TipTotalNearProps> = props => {
               {tipsResults.length > 0 &&
                 tipsResults.map((balanceDetail, index) => (
                   <TableRow key={index} className={styles.tableRow}>
-                    <TableCell component="th" scope="row" className={styles.tableCell}>
+                    <TableCell
+                      component="th"
+                      scope="row"
+                      className={styles.tableCell}>
                       <Avatar
                         name={balanceDetail.symbol}
                         src={balanceDetail.imageURL}
@@ -73,7 +79,9 @@ const TipTotal: React.FC<TipTotalNearProps> = props => {
                     </TableCell>
                     <TableCell align="right">
                       <div>
-                        <Typography variant="body1" style={{fontWeight: 'bold'}}>
+                        <Typography
+                          variant="body1"
+                          style={{ fontWeight: 'bold' }}>
                           {Number(balanceDetail.amount).toFixed(4)}
                         </Typography>
                         <Typography variant="caption" color="textSecondary">
@@ -90,7 +98,10 @@ const TipTotal: React.FC<TipTotalNearProps> = props => {
           </Table>
         </TableContainer>
         <div className={styles.wrapperButton}>
-          <Button onClick={handleVerifyReference} color="primary" variant="contained">
+          <Button
+            onClick={handleVerifyReference}
+            color="primary"
+            variant="contained">
             {i18n.t('Wallet.Tip.Reference.Button')}
           </Button>
         </div>

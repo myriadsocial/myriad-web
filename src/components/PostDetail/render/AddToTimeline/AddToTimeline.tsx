@@ -1,16 +1,16 @@
 import * as React from 'react';
 
-import {useStyles} from './AddToTimeline.style';
+import { useStyles } from './AddToTimeline.style';
 
-import {Button, ButtonVariant} from 'components/atoms/Button';
+import { Button, ButtonVariant } from 'components/atoms/Button';
 import useModalAddToPost from 'src/components/Expericence/ModalAddToPost/useModalAddToPost.hook';
-import {Post} from 'src/interfaces/post';
+import { Post } from 'src/interfaces/post';
 import i18n from 'src/locale';
 
 const Icon = () => {
   return (
     <svg
-      style={{marginRight: 5}}
+      style={{ marginRight: 5 }}
       width="20"
       height="14"
       viewBox="0 0 20 14"
@@ -48,30 +48,41 @@ const Icon = () => {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <path d="M6.66797 7H13.3346" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M10 10.3359L10 3.66927" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+      <path
+        d="M6.66797 7H13.3346"
+        stroke="white"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <path
+        d="M10 10.3359L10 3.66927"
+        stroke="white"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
     </svg>
   );
 };
 
-export const ButtonAddToTimeline: React.FC<{post: Post; mobile: boolean}> = props => {
-  const {post, mobile} = props;
-  const styles = useStyles({mobile});
-  const addPostToExperience = useModalAddToPost();
+export const ButtonAddToTimeline: React.FC<{ post: Post; mobile: boolean }> =
+  props => {
+    const { post, mobile } = props;
+    const styles = useStyles({ mobile });
+    const addPostToExperience = useModalAddToPost();
 
-  const handleOpenAddPostToExperience = () => {
-    const propsAddToPost = {
-      post: post,
+    const handleOpenAddPostToExperience = () => {
+      const propsAddToPost = {
+        post: post,
+      };
+      addPostToExperience(propsAddToPost);
     };
-    addPostToExperience(propsAddToPost);
+    return (
+      <Button
+        variant={ButtonVariant.CONTAINED}
+        className={styles.button}
+        onClick={handleOpenAddPostToExperience}>
+        <Icon />
+        {i18n.t('Post_Detail.Post_Options.Add_Post_To_Experience')}
+      </Button>
+    );
   };
-  return (
-    <Button
-      variant={ButtonVariant.CONTAINED}
-      className={styles.button}
-      onClick={handleOpenAddPostToExperience}>
-      <Icon />
-      {i18n.t('Post_Detail.Post_Options.Add_Post_To_Experience')}
-    </Button>
-  );
-};

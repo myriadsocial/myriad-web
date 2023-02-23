@@ -4,7 +4,7 @@ import Carousel from 'react-material-ui-carousel';
 
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 import Illustration from 'src/images/illustration/Ilustrasi_1.svg';
 import Illustration2 from 'src/images/illustration/Ilustrasi_2.svg';
@@ -63,8 +63,8 @@ const useStyles = makeStyles<Theme, CarouselLoginViewProps>(theme =>
 );
 
 export const CarouselLoginView: React.FC<CarouselLoginViewProps> = props => {
-  const {onMobileSignIn, anonymousLogin} = props;
-  const style = useStyles({...props});
+  const { onMobileSignIn, anonymousLogin } = props;
+  const style = useStyles({ ...props });
 
   return (
     <div className={style.root}>
@@ -104,12 +104,20 @@ export const CarouselLoginView: React.FC<CarouselLoginViewProps> = props => {
               component="span"
               gutterBottom={true}
               color="primary">
-              <Typography variant="h2" className={style.title} component="span" color="primary">
+              <Typography
+                variant="h2"
+                className={style.title}
+                component="span"
+                color="primary">
                 {i18n.t('Login.Layout.Carousel_Title_1_left')}
               </Typography>{' '}
               {i18n.t('Login.Layout.Carousel_Title_1_right')}
             </Typography>
-            <Typography variant="h4" className={style.subtitle} component="p" color="textPrimary">
+            <Typography
+              variant="h4"
+              className={style.subtitle}
+              component="p"
+              color="textPrimary">
               {i18n.t('Login.Layout.Carousel_Subtitle_1a')}{' '}
               {i18n.t('Login.Layout.Carousel_Subtitle_1b')}
             </Typography>
@@ -125,12 +133,20 @@ export const CarouselLoginView: React.FC<CarouselLoginViewProps> = props => {
               component="span"
               color="primary"
               gutterBottom={true}>
-              <Typography variant="h2" className={style.title} component="span" color="primary">
+              <Typography
+                variant="h2"
+                className={style.title}
+                component="span"
+                color="primary">
                 {i18n.t('Login.Layout.Carousel_Title_2_left')}
               </Typography>{' '}
               {i18n.t('Login.Layout.Carousel_Title_2_right')}
             </Typography>
-            <Typography variant="h4" className={style.subtitle} component="p" color="textPrimary">
+            <Typography
+              variant="h4"
+              className={style.subtitle}
+              component="p"
+              color="textPrimary">
               {i18n.t('Login.Layout.Carousel_Subtitle_2')}
             </Typography>
           </div>
@@ -147,7 +163,11 @@ export const CarouselLoginView: React.FC<CarouselLoginViewProps> = props => {
               gutterBottom={true}>
               {i18n.t('Login.Layout.Carousel_Title_3')}
             </Typography>
-            <Typography variant="h4" className={style.subtitle} component="p" color="textPrimary">
+            <Typography
+              variant="h4"
+              className={style.subtitle}
+              component="p"
+              color="textPrimary">
               {i18n.t('Login.Layout.Carousel_Subtitle_3')}
             </Typography>
           </div>

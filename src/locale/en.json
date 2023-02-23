@@ -70,7 +70,7 @@
         },
         "People": "People",
         "Post": "Post",
-        "Privacy" : "Privacy"
+        "Privacy": "Privacy"
       },
       "Post": {
         "Empty": "Added posts will appear here. You can add a post to your Timelines by selecting 'add post to Timeline' (three dots menu on the top right of each post)."
@@ -118,12 +118,11 @@
         "Tag": "Add at least one tag",
         "People": "Add at least one people"
       },
-      "Visibility" : {
-        "Public" : "Public",
-        "OnlyMe" : "Only Me",
-        "Custom" : "Custom"
+      "Visibility": {
+        "Public": "Public",
+        "OnlyMe": "Only Me",
+        "Custom": "Custom"
       }
-
     },
     "Modal_Add_Post": {
       "Title": "Select timeline",
@@ -136,7 +135,7 @@
       "Empty_Title": "Uh-oh",
       "Empty_Subtitle": "You haven't created any timeline yet.",
       "Btn_Confirm": "Confirm",
-      "Success_Msg" :"Successfully added post to timeline"
+      "Success_Msg": "Successfully added post to timeline"
     }
   },
   "General": {
@@ -148,9 +147,9 @@
     "Loading": "Loading",
     "See_More": "See More",
     "Save": "Save",
-    "Amount" : "Amount",
-    "Summary" : "Summary",
-    "Got_It" : "Got it!",
+    "Amount": "Amount",
+    "Summary": "Summary",
+    "Got_It": "Got it!",
     "ConnectWallet": "Connect Wallet"
   },
   "Confirm": {
@@ -198,7 +197,7 @@
       "Btn_Demo": "demo"
     },
     "Email": {
-      "LoginByEmail" : {
+      "LoginByEmail": {
         "Title": "Sign-in with email",
         "Subtitle": "You will receive a sign-in link in your inbox.",
         "Email_Placeholder": "Add your email",
@@ -231,7 +230,7 @@
         "No_Account_Description": "You don't seem to have an account on {{instance_name}}. Do you wish to create a new account on {{instance_name}}?",
         "No_Account_Cancel": "No, Select Others",
         "No_Account_Confirm": "Sign Out",
-        "Switch" : "Switch Instance"
+        "Switch": "Switch Instance"
       }
     },
     "Profile": {
@@ -263,7 +262,7 @@
       "Subtitle_2": "Check your inbox and click that link in order to sign-in. Don’t forget to check your spam folder!",
       "Button_Text": "Resend Login Link",
       "Timer_Text": "You can send your sign-in link again after {{time}} second(s)",
-      "From":"from"
+      "From": "from"
     }
   },
   "Profile_Card": {
@@ -500,8 +499,8 @@
         "Public": "Public",
         "Friend_Only": "Friend Only",
         "Only_Me": "Only Me",
-        "Custom" : "Custom",
-        "Timeline" : "My Timeline",
+        "Custom": "Custom",
+        "Timeline": "My Timeline",
         "Tipping_Warning": "By limiting audience exposure to this post, the number of users who can tip you will also get smaller.",
         "Cancel": "Cancel",
         "Confirm": "Confirm",
@@ -545,10 +544,10 @@
       "Public": "Public",
       "Friend_Only": "Friend Only",
       "Only_Me": "Only Me",
-      "Timeline" : "My Timeline",
-      "Custom" : "Custom",
-      "AlertTimeline" : "Only people you added to this timeline will be able to see this post",
-      "SelectedTimeline" : "Selected Timeline"
+      "Timeline": "My Timeline",
+      "Custom": "Custom",
+      "AlertTimeline": "Only people you added to this timeline will be able to see this post",
+      "SelectedTimeline": "Selected Timeline"
     },
     "NSFW": {
       "Label": "NSFW",
@@ -591,7 +590,7 @@
     "Error": {
       "Default": "Failed to create post, try again later",
       "ImageTooLarge": "Failed to create post, image too large",
-      "Empty" : "Failed to create post, cannot be empty"
+      "Empty": "Failed to create post, cannot be empty"
     }
   },
   "Post_Delete": {
@@ -679,7 +678,7 @@
       "Toaster_Success": "Post report has been submitted"
     },
     "Load_More": "View more replies",
-    "ExclusiveContent" : "{{type}} Exclusive Content"
+    "ExclusiveContent": "{{type}} Exclusive Content"
   },
   "Tipping": {
     "Modal_Main": {
@@ -794,8 +793,8 @@
         "Subtitle": "Find or invite your friends to Myriad 😉"
       },
       "Friend_Request": {
-      "Title": "Friend request is empty",
-       "Subtitle": "You don't have any pending requests"
+        "Title": "Friend request is empty",
+        "Subtitle": "You don't have any pending requests"
       }
     },
     "Button": {
@@ -1086,7 +1085,7 @@
       "Claim_All": "Claim all",
       "Claim": "Claim",
       "Switch": "Switch network to claim",
-      "Reference":{
+      "Reference": {
         "Title": "Reference verification",
         "Desc": "Verify your reference and start claiming your tips. To be processed, you need to pay a maximum gas fee of {{txFee}} {{token}}.",
         "Button": "Verify reference",
@@ -1206,27 +1205,27 @@
     "Toaster_Esc": "Press Esc to exit from fullscreen",
     "Disclaimer": "The Myriad Metaverse integration is an early beta feature. If you encounter problems, or if you want the best timeline on the Myriad Metaverse, go to"
   },
-  "LiteVersion":{
-    "Cancel":"Cancel",
-    "Confirm":"Confirm",
-    "CreateAccountEmail":"Create a new account",
-    "CreateAccountEmailDesc":"You will create a new account. You can still add a crypto wallet later.",
-    "LimitDescProfile":"is using lite version of Myriad. You can only send a friend request to users with active wallet.",
-    "LimitTitleExperience":"Create Timeline Limit Reached!",
-    "LimitTitleFriends":"Unable to Add Friend",
-    "LimitDescExperience":"You are currently using lite version of Myriad. You can only create up to 5 timelines! Connect Web 3.0 Wallet to create more timeline",
-    "LimitDescFriends":"Oops! You need to connect your wallet to do that. Alternatively, you can follow timelines curated by {{username}}",
-    "ViewTimelines":"View timelines",
+  "LiteVersion": {
+    "Cancel": "Cancel",
+    "Confirm": "Confirm",
+    "CreateAccountEmail": "Create a new account",
+    "CreateAccountEmailDesc": "You will create a new account. You can still add a crypto wallet later.",
+    "LimitDescProfile": "is using lite version of Myriad. You can only send a friend request to users with active wallet.",
+    "LimitTitleExperience": "Create Timeline Limit Reached!",
+    "LimitTitleFriends": "Unable to Add Friend",
+    "LimitDescExperience": "You are currently using lite version of Myriad. You can only create up to 5 timelines! Connect Web 3.0 Wallet to create more timeline",
+    "LimitDescFriends": "Oops! You need to connect your wallet to do that. Alternatively, you can follow timelines curated by {{username}}",
+    "ViewTimelines": "View timelines",
     "MaybeLater": "Maybe Later",
-    "ConnectWallet":"Connect Web 3.0 Wallet",
-    "LimitTitlePost":"Wow! That's a lot of posting! ",
-    "LimitDescPost":"To prevent spam, we are temporarily limiting posts to 15 per day. You can still browse Myriad to your heart's content!"
+    "ConnectWallet": "Connect Web 3.0 Wallet",
+    "LimitTitlePost": "Wow! That's a lot of posting! ",
+    "LimitDescPost": "To prevent spam, we are temporarily limiting posts to 15 per day. You can still browse Myriad to your heart's content!"
   },
-   "Visibilities":{
-    "PostVisibilities":"This post is only visible to its author and added people",
-    "Custom":"Custom",
-    "Hidden" : "The owner might be changed their privacy settings, shared it for certain group of people or it’s been deleted",
-    "Back" : "Back to Home"
+  "Visibilities": {
+    "PostVisibilities": "This post is only visible to its author and added people",
+    "Custom": "Custom",
+    "Hidden": "The owner might be changed their privacy settings, shared it for certain group of people or it’s been deleted",
+    "Back": "Back to Home"
   },
   "ExclusiveContent" : {
     "Create" : "Create Exclusive Content",

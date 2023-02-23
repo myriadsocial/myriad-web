@@ -4,12 +4,12 @@ import Link from 'next/link';
 
 import Typography from '@material-ui/core/Typography';
 
-import {ExperienceInfo} from '../ExperienceInfo/ExperienceInfo';
-import {PostSubHeaderProps} from './SubHeader.interface';
-import {useStyles} from './SubHeader.style';
+import { ExperienceInfo } from '../ExperienceInfo/ExperienceInfo';
+import { PostSubHeaderProps } from './SubHeader.interface';
+import { useStyles } from './SubHeader.style';
 
 import ShowIf from 'src/components/common/show-if.component';
-import {useDate} from 'src/hooks/use-date.hooks';
+import { useDate } from 'src/hooks/use-date.hooks';
 import i18n from 'src/locale';
 
 export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
@@ -24,12 +24,14 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
   experiences,
 }) => {
   const style = useStyles();
-  const {date: formatDate} = useDate(date);
+  const { date: formatDate } = useDate(date);
 
   return (
     <>
       <Typography component="div" className={style.root}>
-        <ShowIf condition={platform !== 'myriad'}>{i18n.t('Post_Detail.Imported_Post')} </ShowIf>
+        <ShowIf condition={platform !== 'myriad'}>
+          {i18n.t('Post_Detail.Imported_Post')}{' '}
+        </ShowIf>
 
         <Link href={`/post/[postId]`} as={`/post/${postId}`} shallow>
           <a href={`/post/${postId}`} className={style.linkGrey}>
@@ -43,7 +45,10 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
               {i18n.t('Post_Detail.by')}&nbsp;
               {importers.map(importer => (
                 <span key={importer.id}>
-                  <Link href={'/profile/[id]'} as={`/profile/${importer.id}`} shallow>
+                  <Link
+                    href={'/profile/[id]'}
+                    as={`/profile/${importer.id}`}
+                    shallow>
                     <a className={style.link}>{importer.name}</a>
                   </Link>
                   <ShowIf condition={totalImporters > 1}>
@@ -54,11 +59,18 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
               <ShowIf condition={importers.length === 0}>
                 <span className={style.link} onClick={onShowImporters}>
                   {totalImporters}&nbsp;
-                  <ShowIf condition={totalImporters === 1}>{i18n.t('Post_Detail.other')}</ShowIf>
-                  <ShowIf condition={totalImporters > 1}>{i18n.t('Post_Detail.others')}</ShowIf>
+                  <ShowIf condition={totalImporters === 1}>
+                    {i18n.t('Post_Detail.other')}
+                  </ShowIf>
+                  <ShowIf condition={totalImporters > 1}>
+                    {i18n.t('Post_Detail.others')}
+                  </ShowIf>
                 </span>
               </ShowIf>
-              <ShowIf condition={importers.length > 0 && totalImporters > importers.length}>
+              <ShowIf
+                condition={
+                  importers.length > 0 && totalImporters > importers.length
+                }>
                 <span className={style.link} onClick={onShowImporters}>
                   {totalImporters - importers.length}&nbsp;
                   <ShowIf condition={totalImporters - importers.length === 1}>
@@ -70,7 +82,11 @@ export const PostSubHeader: React.FC<PostSubHeaderProps> = ({
                 </span>
               </ShowIf>
               &nbsp;{i18n.t('Post_Detail.via')}&nbsp;
-              <a href={url} className={style.link} target="_blank" rel="noreferrer">
+              <a
+                href={url}
+                className={style.link}
+                target="_blank"
+                rel="noreferrer">
                 {platform}
               </a>
             </>

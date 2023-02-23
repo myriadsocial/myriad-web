@@ -1,18 +1,19 @@
 import React from 'react';
 
-import {Grid} from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 
-import {useSearchHook} from '../../hooks/use-search.hooks';
-import {UsersList} from './UsersList';
-import {Skeleton} from './UsersListItem.skeleton';
+import { useSearchHook } from '../../hooks/use-search.hooks';
+import { UsersList } from './UsersList';
+import { Skeleton } from './UsersListItem.skeleton';
 
 type UsersListContainerProps = {
   query: string;
 };
 
 export const UsersListContainer: React.FC<UsersListContainerProps> = props => {
-  const {query} = props;
-  const {users, hasMore, page, loading, searchUsers, isSearching} = useSearchHook();
+  const { query } = props;
+  const { users, hasMore, page, loading, searchUsers, isSearching } =
+    useSearchHook();
 
   const handleLoadNextPage = () => {
     searchUsers(query, page + 1);

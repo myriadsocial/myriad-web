@@ -1,6 +1,6 @@
-import {SocialsEnum} from './social';
-import {UserSocialMedia} from './user';
-import {WalletDetail} from './wallet';
+import { SocialsEnum } from './social';
+import { UserSocialMedia } from './user';
+import { WalletDetail } from './wallet';
 
 export interface PeopleProps {
   id: string;

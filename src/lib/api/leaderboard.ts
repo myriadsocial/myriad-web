@@ -1,8 +1,8 @@
 import MyriadAPI from './base';
-import {PAGINATION_LIMIT} from './constants/pagination';
-import {BaseList} from './interfaces/base-list.interface';
+import { PAGINATION_LIMIT } from './constants/pagination';
+import { BaseList } from './interfaces/base-list.interface';
 
-import {User} from 'src/interfaces/user';
+import { User } from 'src/interfaces/user';
 
 type UserList = BaseList<User>;
 
@@ -20,7 +20,7 @@ export const fetchLeaderboard = async (page = 1): Promise<UserList> => {
     pageNumber: page,
   };
 
-  const {data} = await MyriadAPI().request<UserList>({
+  const { data } = await MyriadAPI().request<UserList>({
     url: '/users',
     method: 'GET',
     params,

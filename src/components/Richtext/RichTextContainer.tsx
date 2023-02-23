@@ -1,32 +1,39 @@
-import React, {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import dynamic from 'next/dynamic';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {RichTextComponent} from '.';
-import {useStyles} from './richtext.style';
+import { RichTextComponent } from '.';
+import { useStyles } from './richtext.style';
 
-import {PromptComponent} from 'src/components/Mobile/PromptDrawer/Prompt';
-import {useQueryParams} from 'src/hooks/use-query-params.hooks';
-import {TimelineType} from 'src/interfaces/timeline';
+import { PromptComponent } from 'src/components/Mobile/PromptDrawer/Prompt';
+import { useQueryParams } from 'src/hooks/use-query-params.hooks';
+import { TimelineType } from 'src/interfaces/timeline';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {ConfigState} from 'src/reducers/config/reducer';
-import {UserState} from 'src/reducers/user/reducer';
+import { RootState } from 'src/reducers';
+import { ConfigState } from 'src/reducers/config/reducer';
+import { UserState } from 'src/reducers/user/reducer';
 
-const PostCreateContainer = dynamic(() => import('../PostCreate/PostCreate.container'), {
-  ssr: false,
-});
+const PostCreateContainer = dynamic(
+  () => import('../PostCreate/PostCreate.container'),
+  {
+    ssr: false,
+  },
+);
 
 export const RichTextContainer: React.FC = () => {
   const router = useRouter();
   const style = useStyles();
 
-  const {query} = useQueryParams();
+  const { query } = useQueryParams();
 
-  const {user, alias, anonymous} = useSelector<RootState, UserState>(state => state.userState);
-  const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
+  const { user, alias, anonymous } = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
+  const { settings } = useSelector<RootState, ConfigState>(
+    state => state.configState,
+  );
   const [createPostOpened, setCreatePostOpened] = useState(false);
   const [openPromptDrawer, setOpenPromptDrawer] = useState(false);
 
@@ -44,7 +51,7 @@ export const RichTextContainer: React.FC = () => {
 
     // change to all tab, on create post
     if (query.type && query.type !== TimelineType.ALL) {
-      router.push('/', undefined, {shallow: true});
+      router.push('/', undefined, { shallow: true });
     }
   };
 
@@ -73,7 +80,10 @@ export const RichTextContainer: React.FC = () => {
         open={openPromptDrawer}
         onCancel={handleCancel}
       />
-      <PostCreateContainer open={createPostOpened} onClose={handleCloseCreatePost} />
+      <PostCreateContainer
+        open={createPostOpened}
+        onClose={handleCloseCreatePost}
+      />
     </div>
   );
 };

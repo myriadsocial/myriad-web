@@ -1,4 +1,4 @@
-import {AlignToolbarButton} from '@udecode/plate';
+import { AlignToolbarButton } from '@udecode/plate';
 
 import React from 'react';
 

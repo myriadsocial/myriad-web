@@ -1,7 +1,7 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 
-import {Friend} from 'src/interfaces/friend';
-import {User} from 'src/interfaces/user';
+import { Friend } from 'src/interfaces/friend';
+import { User } from 'src/interfaces/user';
 
 export type UserWithMutual = User & {
   totalMutual?: number;
@@ -12,14 +12,21 @@ type FriendListHook = {
   removeFromFriendList: (userId: string) => void;
 };
 
-export const useFriendList = (friends: Friend[], user?: UserWithMutual): FriendListHook => {
+export const useFriendList = (
+  friends: Friend[],
+  user?: UserWithMutual,
+): FriendListHook => {
   const [friendList, setFriendList] = useState<UserWithMutual[]>([]);
 
   useEffect(() => {
     if (!user) return;
 
     const list = friends.reduce(function (list: UserWithMutual[], friend) {
-      if (friend.requestorId === user.id && friend.requestee && !friend?.requestee?.deletedAt) {
+      if (
+        friend.requestorId === user.id &&
+        friend.requestee &&
+        !friend?.requestee?.deletedAt
+      ) {
         list.push({
           ...friend.requestee,
           totalMutual: friend.totalMutual ?? 0,

@@ -1,13 +1,13 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {ExperiencePreview} from './ExperiencePreview';
-import {useStyles} from './experience.style';
+import { ExperiencePreview } from './ExperiencePreview';
+import { useStyles } from './experience.style';
 
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
-import {useExperienceHook} from 'src/hooks/use-experience-hook';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import { TopNavbarComponent } from 'src/components/atoms/TopNavbar';
+import { useExperienceHook } from 'src/hooks/use-experience-hook';
 import i18n from 'src/locale';
 
 export const ExperiencePreviewContainer: React.FC = () => {
@@ -22,7 +22,7 @@ export const ExperiencePreviewContainer: React.FC = () => {
   const enqueueSnackbar = useEnqueueSnackbar();
   const style = useStyles();
   const router = useRouter();
-  const {experienceId} = router.query;
+  const { experienceId } = router.query;
 
   useEffect(() => {
     if (experienceId) getExperienceDetail(experienceId);
@@ -37,7 +37,8 @@ export const ExperiencePreviewContainer: React.FC = () => {
   };
 
   const handleCloneExperience = (experienceId: string) => {
-    const totalOwnedExperience = userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
+    const totalOwnedExperience =
+      userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
 
     if (totalOwnedExperience >= 10) {
       enqueueSnackbar({

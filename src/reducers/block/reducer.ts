@@ -1,9 +1,9 @@
-import {PaginationState as BasePaginationState} from '../base/state';
-import {Actions} from './actions';
+import { PaginationState as BasePaginationState } from '../base/state';
+import { Actions } from './actions';
 import * as constants from './constants';
 
 import * as Redux from 'redux';
-import {Friend} from 'src/interfaces/friend';
+import { Friend } from 'src/interfaces/friend';
 
 export interface BlockState extends BasePaginationState {
   users: Friend[];
@@ -22,7 +22,10 @@ const initalState: BlockState = {
   },
 };
 
-export const BlockReducer: Redux.Reducer<BlockState, Actions> = (state = initalState, action) => {
+export const BlockReducer: Redux.Reducer<BlockState, Actions> = (
+  state = initalState,
+  action,
+) => {
   switch (action.type) {
     case constants.FETCH_BLOCKLIST: {
       if (!action.meta.currentPage || action.meta.currentPage === 1) {

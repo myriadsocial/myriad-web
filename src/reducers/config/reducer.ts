@@ -1,14 +1,14 @@
 import getConfig from 'next/config';
 
-import {State as BaseState} from '../base/state';
-import {Actions} from './actions';
+import { State as BaseState } from '../base/state';
+import { Actions } from './actions';
 import * as constants from './constants';
 
 import * as Redux from 'redux';
-import {Currency} from 'src/interfaces/currency';
-import {UserSettings} from 'src/interfaces/setting';
+import { Currency } from 'src/interfaces/currency';
+import { UserSettings } from 'src/interfaces/setting';
 
-const {publicRuntimeConfig} = getConfig();
+const { publicRuntimeConfig } = getConfig();
 
 export interface ConfigState extends BaseState {
   availableCurrencies: Currency[];
@@ -44,7 +44,10 @@ const initalState: ConfigState = {
   },
 };
 
-export const ConfigReducer: Redux.Reducer<ConfigState, Actions> = (state = initalState, action) => {
+export const ConfigReducer: Redux.Reducer<ConfigState, Actions> = (
+  state = initalState,
+  action,
+) => {
   switch (action.type) {
     case constants.FETCH_AVAILABLE_TOKEN: {
       return {

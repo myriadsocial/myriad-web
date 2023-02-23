@@ -1,8 +1,8 @@
-import {createPluginFactory} from '@udecode/plate-core';
+import { createPluginFactory } from '@udecode/plate-core';
 
-import {HashtagElement} from '../../render/Element/Hashtag';
-import {HashtagPlugin} from './type';
-import {withHashtag} from './withHashtag';
+import { HashtagElement } from '../../render/Element/Hashtag';
+import { HashtagPlugin } from './type';
+import { withHashtag } from './withHashtag';
 
 export const ELEMENT_HASHTAG = 'hashtag';
 

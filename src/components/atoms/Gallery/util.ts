@@ -1,9 +1,16 @@
-import {ImageListProps, ImageListItemProps, GalleryType} from './Gallery.types';
+import {
+  ImageListProps,
+  ImageListItemProps,
+  GalleryType,
+} from './Gallery.types';
 
-import {generateImageSizes} from 'src/helpers/image';
-import {Sizes} from 'src/interfaces/assets';
+import { generateImageSizes } from 'src/helpers/image';
+import { Sizes } from 'src/interfaces/assets';
 
-const horizontalGallery = (source: string[] | Sizes[], mobile: boolean): ImageListProps => {
+const horizontalGallery = (
+  source: string[] | Sizes[],
+  mobile: boolean,
+): ImageListProps => {
   let listCols = 1;
   let itemCols = 1;
   let ROWS = 1;
@@ -21,7 +28,8 @@ const horizontalGallery = (source: string[] | Sizes[], mobile: boolean): ImageLi
       listCols = 6;
       cellHeight = mobile ? 130 : 160;
       ROWS = index === 0 ? 2 : 1;
-      itemCols = index === 0 ? listCols : listCols / Math.min(source.length - 1, 3);
+      itemCols =
+        index === 0 ? listCols : listCols / Math.min(source.length - 1, 3);
     }
 
     const sizes = generateImageSizes(source[index]);
@@ -42,7 +50,10 @@ const horizontalGallery = (source: string[] | Sizes[], mobile: boolean): ImageLi
   };
 };
 
-const verticalGallery = (source: string[] | Sizes[], mobile: boolean): ImageListProps => {
+const verticalGallery = (
+  source: string[] | Sizes[],
+  mobile: boolean,
+): ImageListProps => {
   let listCols = 1;
   let ROWS = 1;
   let cellHeight = mobile ? 260 : 320;

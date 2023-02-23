@@ -1,40 +1,42 @@
-import {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import getConfig from 'next/config';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
+import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 
-import {useNearApi} from './use-near-api.hook';
-import {usePolkadotApi} from './use-polkadot-api.hook';
+import { useNearApi } from './use-near-api.hook';
+import { usePolkadotApi } from './use-polkadot-api.hook';
 
 import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {VariantType} from 'notistack';
-import {FeeInfo, TipsBalanceInfo} from 'src/interfaces/blockchain-interface';
-import {Network, NetworkIdEnum} from 'src/interfaces/network';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import { VariantType } from 'notistack';
+import { FeeInfo, TipsBalanceInfo } from 'src/interfaces/blockchain-interface';
+import { Network, NetworkIdEnum } from 'src/interfaces/network';
 import * as TransactionAPI from 'src/lib/api/transaction';
 import * as WalletAPI from 'src/lib/api/wallet';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {UserState} from 'src/reducers/user/reducer';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
 interface ClaimProps {
   claimSuccess: boolean;
   errorMessage: string;
 }
 
-const {publicRuntimeConfig} = getConfig();
+const { publicRuntimeConfig } = getConfig();
 
 export const useClaimTip = () => {
   const router = useRouter();
   const enqueueSnackbar = useEnqueueSnackbar();
 
-  const {user, networks, socials} = useSelector<RootState, UserState>(state => state.userState);
-  const {getClaimTipNear} = useNearApi();
-  const {getClaimTipMyriad} = usePolkadotApi();
-  const {server, provider} = useBlockchain();
+  const { user, networks, socials } = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
+  const { getClaimTipNear } = useNearApi();
+  const { getClaimTipMyriad } = usePolkadotApi();
+  const { server, provider } = useBlockchain();
 
   const [loading, setLoading] = useState(true);
   const [claiming, setClaiming] = useState(false);
@@ -67,7 +69,7 @@ export const useClaimTip = () => {
 
       url.search = '';
 
-      router.replace(url, undefined, {shallow: true});
+      router.replace(url, undefined, { shallow: true });
     }
 
     if (errorCode && errorMessage) {
@@ -79,15 +81,17 @@ export const useClaimTip = () => {
 
       url.search = '';
 
-      router.replace(url, undefined, {shallow: true});
+      router.replace(url, undefined, { shallow: true });
     }
 
     if (txInfo && !errorCode && !errorMessage) {
-      TransactionAPI.updateTransaction(JSON.parse(txInfo)).catch(() => console.log);
+      TransactionAPI.updateTransaction(JSON.parse(txInfo)).catch(
+        () => console.log,
+      );
 
       url.search = '';
 
-      router.replace(url, undefined, {shallow: true});
+      router.replace(url, undefined, { shallow: true });
     }
   }, [errorCode, transactionHashes, errorMessage, errorCode]);
 
@@ -106,13 +110,13 @@ export const useClaimTip = () => {
           })
           .finally(() => {
             getTip(verifyNearTips, nativeBalance);
-            enqueueSnackbar({message, variant});
+            enqueueSnackbar({ message, variant });
 
             const url = new URL(router.asPath, publicRuntimeConfig.appAuthURL);
 
             url.search = '';
 
-            router.replace(url, undefined, {shallow: true});
+            router.replace(url, undefined, { shallow: true });
           });
       } else {
         getTip();
@@ -141,7 +145,7 @@ export const useClaimTip = () => {
               network,
             );
 
-            const {tipsResults, feeInfo: fee} = result;
+            const { tipsResults, feeInfo: fee } = result;
 
             if (fee) setFeeInfo(fee);
 
@@ -163,7 +167,7 @@ export const useClaimTip = () => {
               nativeBalance,
             );
 
-            const {tipsResults, feeInfo: fee} = result;
+            const { tipsResults, feeInfo: fee } = result;
 
             if (fee) setFeeInfo(fee);
 
@@ -186,7 +190,9 @@ export const useClaimTip = () => {
         }
       }
 
-      const networksWithTip = await Promise.all<Network[]>(sortedNetworkPromise);
+      const networksWithTip = await Promise.all<Network[]>(
+        sortedNetworkPromise,
+      );
 
       setTipsEachNetwork(networksWithTip);
     } catch {
@@ -219,17 +225,25 @@ export const useClaimTip = () => {
       }
 
       const serverId = server?.accountId?.[selectedNetwork.id];
-      const currency = selectedNetwork.currencies?.find(({native, referenceId}) => {
-        if (ftIdentifier === 'native' && native) return true;
-        return referenceId === ftIdentifier;
-      });
+      const currency = selectedNetwork.currencies?.find(
+        ({ native, referenceId }) => {
+          if (ftIdentifier === 'native' && native) return true;
+          return referenceId === ftIdentifier;
+        },
+      );
 
       const trxInfo = {
         walletId: currentWallet.id,
         currencyIds: [currency.id],
       };
 
-      await provider.claimTip(serverId, user.id, [ftIdentifier], JSON.stringify(trxInfo), false);
+      await provider.claimTip(
+        serverId,
+        user.id,
+        [ftIdentifier],
+        JSON.stringify(trxInfo),
+        false,
+      );
 
       if (currency) TransactionAPI.updateTransaction(trxInfo);
 
@@ -239,11 +253,14 @@ export const useClaimTip = () => {
       claimSuccess = false;
     } finally {
       setClaiming(false);
-      callback && callback({claimSuccess, errorMessage});
+      callback && callback({ claimSuccess, errorMessage });
     }
   };
 
-  const claimAll = async (networkId: string, callback?: (claimProps: ClaimProps) => void) => {
+  const claimAll = async (
+    networkId: string,
+    callback?: (claimProps: ClaimProps) => void,
+  ) => {
     if (!user) return;
     if (!server?.accountId?.[networkId]) return;
 
@@ -274,9 +291,16 @@ export const useClaimTip = () => {
         currencyIds,
       };
 
-      await provider.claimTip(serverId, userId, ftIdentifiers, JSON.stringify(trxInfo), true);
+      await provider.claimTip(
+        serverId,
+        userId,
+        ftIdentifiers,
+        JSON.stringify(trxInfo),
+        true,
+      );
 
-      if (currencyIds.length > 0) TransactionAPI.updateTransaction({walletId, currencyIds});
+      if (currencyIds.length > 0)
+        TransactionAPI.updateTransaction({ walletId, currencyIds });
 
       getTip();
     } catch (error) {
@@ -284,7 +308,7 @@ export const useClaimTip = () => {
       claimSuccess = false;
     } finally {
       setClaimingAll(false);
-      callback && callback({claimSuccess, errorMessage});
+      callback && callback({ claimSuccess, errorMessage });
     }
   };
 
@@ -294,7 +318,7 @@ export const useClaimTip = () => {
     try {
       if (parseInt(txFee) === 0) throw new Error('Insufficient Gas Fee');
 
-      await WalletAPI.claimReference({txFee, tippingContractId});
+      await WalletAPI.claimReference({ txFee, tippingContractId });
 
       if (currentWallet.networkId !== NetworkIdEnum.NEAR) {
         const updatedNetwork = tipsEachNetwork.map(e => {
@@ -336,7 +360,7 @@ export const useClaimTip = () => {
         amount,
         nativeBalance,
         account,
-        ({signerOpened}) => {
+        ({ signerOpened }) => {
           if (signerOpened) setSignerLoading(true);
         },
       );

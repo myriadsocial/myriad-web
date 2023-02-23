@@ -9,7 +9,7 @@ export const ShimerComponent: React.FC = () => {
       <Grid
         container
         direction="row"
-        style={{width: '100%', marginBottom: '24px'}}
+        style={{ width: '100%', marginBottom: '24px' }}
         alignItems="center"
         justifyContent="space-between">
         <div
@@ -20,7 +20,12 @@ export const ShimerComponent: React.FC = () => {
             gap: 20,
           }}>
           <Skeleton variant="circle" width={40} height={40} />
-          <Skeleton variant="text" width={155} height={16} style={{borderRadius: 10}} />
+          <Skeleton
+            variant="text"
+            width={155}
+            height={16}
+            style={{ borderRadius: 10 }}
+          />
         </div>
 
         <div
@@ -29,14 +34,24 @@ export const ShimerComponent: React.FC = () => {
             flexDirection: 'column',
             alignItems: 'flex-end',
           }}>
-          <Skeleton variant="text" width={102} height={16} style={{borderRadius: 10}} />
-          <Skeleton variant="text" width={52} height={16} style={{borderRadius: 10}} />
+          <Skeleton
+            variant="text"
+            width={102}
+            height={16}
+            style={{ borderRadius: 10 }}
+          />
+          <Skeleton
+            variant="text"
+            width={52}
+            height={16}
+            style={{ borderRadius: 10 }}
+          />
         </div>
       </Grid>
       <Grid
         container
         direction="row"
-        style={{width: '100%', marginBottom: '24px'}}
+        style={{ width: '100%', marginBottom: '24px' }}
         alignItems="center"
         justifyContent="space-between">
         <div
@@ -47,7 +62,12 @@ export const ShimerComponent: React.FC = () => {
             gap: 20,
           }}>
           <Skeleton variant="circle" width={40} height={40} />
-          <Skeleton variant="text" width={155} height={16} style={{borderRadius: 10}} />
+          <Skeleton
+            variant="text"
+            width={155}
+            height={16}
+            style={{ borderRadius: 10 }}
+          />
         </div>
 
         <div
@@ -56,14 +76,24 @@ export const ShimerComponent: React.FC = () => {
             flexDirection: 'column',
             alignItems: 'flex-end',
           }}>
-          <Skeleton variant="text" width={102} height={16} style={{borderRadius: 10}} />
-          <Skeleton variant="text" width={52} height={16} style={{borderRadius: 10}} />
+          <Skeleton
+            variant="text"
+            width={102}
+            height={16}
+            style={{ borderRadius: 10 }}
+          />
+          <Skeleton
+            variant="text"
+            width={52}
+            height={16}
+            style={{ borderRadius: 10 }}
+          />
         </div>
       </Grid>
       <Grid
         container
         direction="row"
-        style={{width: '100%'}}
+        style={{ width: '100%' }}
         alignItems="center"
         justifyContent="space-between">
         <div
@@ -74,7 +104,12 @@ export const ShimerComponent: React.FC = () => {
             gap: 20,
           }}>
           <Skeleton variant="circle" width={40} height={40} />
-          <Skeleton variant="text" width={155} height={16} style={{borderRadius: 10}} />
+          <Skeleton
+            variant="text"
+            width={155}
+            height={16}
+            style={{ borderRadius: 10 }}
+          />
         </div>
 
         <div
@@ -83,8 +118,18 @@ export const ShimerComponent: React.FC = () => {
             flexDirection: 'column',
             alignItems: 'flex-end',
           }}>
-          <Skeleton variant="text" width={102} height={16} style={{borderRadius: 10}} />
-          <Skeleton variant="text" width={52} height={16} style={{borderRadius: 10}} />
+          <Skeleton
+            variant="text"
+            width={102}
+            height={16}
+            style={{ borderRadius: 10 }}
+          />
+          <Skeleton
+            variant="text"
+            width={52}
+            height={16}
+            style={{ borderRadius: 10 }}
+          />
         </div>
       </Grid>
     </>

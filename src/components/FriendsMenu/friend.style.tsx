@@ -1,13 +1,20 @@
-import {alpha, createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import {
+  alpha,
+  createStyles,
+  makeStyles,
+  Theme,
+} from '@material-ui/core/styles';
 
-import {FriendListProps} from './FriendList';
+import { FriendListProps } from './FriendList';
 
 export const useStyles = makeStyles<Theme, FriendListProps>(theme =>
   createStyles({
     root: {
       background: 'white',
-      padding: props => (props.type === 'contained' ? theme.spacing(3, 0) : theme.spacing(0)),
-      borderRadius: props => (props.type === 'contained' ? '20px 20px 0px 0px' : 'unset'),
+      padding: props =>
+        props.type === 'contained' ? theme.spacing(3, 0) : theme.spacing(0),
+      borderRadius: props =>
+        props.type === 'contained' ? '20px 20px 0px 0px' : 'unset',
     },
     search: {
       padding: '0px 24px',
@@ -47,8 +54,8 @@ export const useStyles = makeStyles<Theme, FriendListProps>(theme =>
       lineHeight: '15.06px',
       fontWeight: 400,
     },
-    button: {width: 'auto'},
-    fill: {fill: 'none'},
+    button: { width: 'auto' },
+    fill: { fill: 'none' },
     buttonText: {
       fontWeight: 600,
       fontSize: '14px',
@@ -115,7 +122,8 @@ export const useStyles = makeStyles<Theme, FriendListProps>(theme =>
       },
     },
     filterBox: {
-      justifyContent: props => (props.disableFilter ? 'flex-end' : 'space-between'),
+      justifyContent: props =>
+        props.disableFilter ? 'flex-end' : 'space-between',
       [theme.breakpoints.down('xs')]: {
         justifyContent: () => 'flex-end',
       },

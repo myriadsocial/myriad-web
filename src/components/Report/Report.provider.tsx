@@ -1,14 +1,14 @@
-import React, {useCallback, useState} from 'react';
+import React, { useCallback, useState } from 'react';
 
-import {Report} from './Report';
-import {ReportContext} from './Report.context';
+import { Report } from './Report';
+import { ReportContext } from './Report.context';
 
-import {useReport} from 'src/hooks/use-report.hook';
-import {Comment} from 'src/interfaces/comment';
-import {Post} from 'src/interfaces/post';
+import { useReport } from 'src/hooks/use-report.hook';
+import { Comment } from 'src/interfaces/comment';
+import { Post } from 'src/interfaces/post';
 
-export const ReportProvider: React.ComponentType = ({children}) => {
-  const {sendReport} = useReport();
+export const ReportProvider: React.ComponentType = ({ children }) => {
+  const { sendReport } = useReport();
   const [reference, setReference] = useState<Post | Comment>(null);
 
   const openReportDialog = useCallback((reference: Post | Comment) => {
@@ -30,7 +30,7 @@ export const ReportProvider: React.ComponentType = ({children}) => {
 
   return (
     <>
-      <ReportContext.Provider value={{reference, open: openReportDialog}}>
+      <ReportContext.Provider value={{ reference, open: openReportDialog }}>
         {children}
       </ReportContext.Provider>
 

@@ -1,9 +1,9 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
-import {CurrencyId} from '../../interfaces/currency';
-import {SocialsEnum} from '../../interfaces/social';
+import { CurrencyId } from '../../interfaces/currency';
+import { SocialsEnum } from '../../interfaces/social';
 import SimpleList from './ExperienceList';
 
 export default {
@@ -11,7 +11,9 @@ export default {
   component: SimpleList,
 } as ComponentMeta<typeof SimpleList>;
 
-const Template: ComponentStory<typeof SimpleList> = args => <SimpleList {...args} />;
+const Template: ComponentStory<typeof SimpleList> = args => (
+  <SimpleList {...args} />
+);
 
 export const ExperienceList = Template.bind({});
 ExperienceList.args = {
@@ -75,7 +77,8 @@ ExperienceList.args = {
         description: 'best projects in cryptoverse',
         createdAt: new Date(),
         updatedAt: new Date(),
-        createdBy: '0x443765fd2a8eff908ffbf8b0fdb45e404fc9cf19cd0003d37203f12d81926859',
+        createdBy:
+          '0x443765fd2a8eff908ffbf8b0fdb45e404fc9cf19cd0003d37203f12d81926859',
       },
     },
   ],

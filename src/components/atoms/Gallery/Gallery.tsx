@@ -1,20 +1,36 @@
-import {XIcon, ChevronRightIcon, ChevronLeftIcon} from '@heroicons/react/solid';
+import {
+  XIcon,
+  ChevronRightIcon,
+  ChevronLeftIcon,
+} from '@heroicons/react/solid';
 
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Carousel from 'react-material-ui-carousel';
 
-import {Dialog, IconButton, SvgIcon, Paper, Grid, useTheme, useMediaQuery} from '@material-ui/core';
+import {
+  Dialog,
+  IconButton,
+  SvgIcon,
+  Paper,
+  Grid,
+  useTheme,
+  useMediaQuery,
+} from '@material-ui/core';
 import ImageList from '@material-ui/core/ImageList';
 import ImageListItem from '@material-ui/core/ImageListItem';
 import ImageListItemBar from '@material-ui/core/ImageListItemBar';
 
-import {useStyles} from './Gallery.styles';
-import {GalleryType, ImageListProps, ImageListItemProps} from './Gallery.types';
-import {Skeleton} from './Image.skeleton';
-import {buildList} from './util';
+import { useStyles } from './Gallery.styles';
+import {
+  GalleryType,
+  ImageListProps,
+  ImageListItemProps,
+} from './Gallery.types';
+import { Skeleton } from './Image.skeleton';
+import { buildList } from './util';
 
 import ShowIf from 'src/components/common/show-if.component';
-import {Sizes} from 'src/interfaces/assets';
+import { Sizes } from 'src/interfaces/assets';
 
 type GalleryProps = {
   images: string[] | Sizes[];
@@ -22,7 +38,7 @@ type GalleryProps = {
 };
 
 export const Gallery: React.FC<GalleryProps> = props => {
-  const {images, variant = 'horizontal'} = props;
+  const { images, variant = 'horizontal' } = props;
 
   const style = useStyles();
   const theme = useTheme();
@@ -74,7 +90,10 @@ export const Gallery: React.FC<GalleryProps> = props => {
   return (
     <div className={style.root}>
       <ShowIf condition={variant === 'horizontal'}>
-        <ImageList rowHeight={list.cellHeight} cols={list.cols} className={style.imageGrid}>
+        <ImageList
+          rowHeight={list.cellHeight}
+          cols={list.cols}
+          className={style.imageGrid}>
           {items.slice(0, 4).map((image, i) => (
             <ImageListItem
               key={image.sizes.thumbnail}
@@ -84,7 +103,8 @@ export const Gallery: React.FC<GalleryProps> = props => {
               {image.loading && (
                 <Skeleton
                   width={
-                    image.cols === 1 || (image.cols === 2 && images.length === 2)
+                    image.cols === 1 ||
+                    (image.cols === 2 && images.length === 2)
                       ? 635
                       : 635 / image.cols
                   }
@@ -93,9 +113,13 @@ export const Gallery: React.FC<GalleryProps> = props => {
               )}
 
               <img
-                style={{visibility: image.loading ? 'hidden' : 'visible'}}
+                style={{ visibility: image.loading ? 'hidden' : 'visible' }}
                 className={style.imageGrid}
-                src={image.rows === 2 || list.cols === 1 ? image.sizes.medium : image.sizes.small}
+                src={
+                  image.rows === 2 || list.cols === 1
+                    ? image.sizes.medium
+                    : image.sizes.small
+                }
                 alt={image.src}
                 onLoad={imageLoaded(i)}
               />
@@ -118,10 +142,10 @@ export const Gallery: React.FC<GalleryProps> = props => {
             item
             xs={items.length > 1 ? 6 : 12}
             onClick={handleImageClick(0)}
-            style={{maxHeight: isMobile ? 270 : 340}}>
+            style={{ maxHeight: isMobile ? 270 : 340 }}>
             <img
               className={style.imageGrid}
-              style={{objectFit: 'cover', height: '100%', width: '100%'}}
+              style={{ objectFit: 'cover', height: '100%', width: '100%' }}
               src={items[0].sizes.medium}
               alt={items[0].src}
             />
@@ -132,10 +156,10 @@ export const Gallery: React.FC<GalleryProps> = props => {
               item
               xs={items.length > 1 ? 6 : 12}
               onClick={handleImageClick(1)}
-              style={{maxHeight: isMobile ? 270 : 340}}>
+              style={{ maxHeight: isMobile ? 270 : 340 }}>
               <img
                 className={style.imageGrid}
-                style={{objectFit: 'cover', height: '100%', width: '100%'}}
+                style={{ objectFit: 'cover', height: '100%', width: '100%' }}
                 src={items[1]?.sizes?.medium}
                 alt={items[1]?.src ?? 'BLABLA'}
               />
@@ -157,7 +181,10 @@ export const Gallery: React.FC<GalleryProps> = props => {
                   item
                   xs={12}
                   key={i}
-                  style={{position: 'relative', maxHeight: isMobile ? 135 : 170}}
+                  style={{
+                    position: 'relative',
+                    maxHeight: isMobile ? 135 : 170,
+                  }}
                   onClick={handleImageClick(i + 1)}>
                   <img
                     className={style.imageGrid}
@@ -166,7 +193,9 @@ export const Gallery: React.FC<GalleryProps> = props => {
                       width: '100%',
                       objectFit: 'cover',
                     }}
-                    src={image.rows === 2 ? image.sizes.medium : image.sizes.small}
+                    src={
+                      image.rows === 2 ? image.sizes.medium : image.sizes.small
+                    }
                     alt={image.src}
                   />
 
@@ -185,7 +214,10 @@ export const Gallery: React.FC<GalleryProps> = props => {
         </Grid>
       </ShowIf>
 
-      <Dialog open={viewerIsOpen} fullScreen classes={{paper: style.alignment}}>
+      <Dialog
+        open={viewerIsOpen}
+        fullScreen
+        classes={{ paper: style.alignment }}>
         <IconButton
           color="primary"
           aria-label="close"
@@ -199,12 +231,20 @@ export const Gallery: React.FC<GalleryProps> = props => {
           index={index}
           autoPlay={false}
           NextIcon={
-            <SvgIcon component={ChevronRightIcon} viewBox="0 0 20 20" className={style.icon} />
+            <SvgIcon
+              component={ChevronRightIcon}
+              viewBox="0 0 20 20"
+              className={style.icon}
+            />
           }
           PrevIcon={
-            <SvgIcon component={ChevronLeftIcon} viewBox="0 0 20 20" className={style.icon} />
+            <SvgIcon
+              component={ChevronLeftIcon}
+              viewBox="0 0 20 20"
+              className={style.icon}
+            />
           }
-          navButtonsProps={{className: style.navButton}}>
+          navButtonsProps={{ className: style.navButton }}>
           {list.images.map((image, i) => (
             <Paper key={i} className={style.preview}>
               <img src={image.sizes.large} alt="" className={style.image} />

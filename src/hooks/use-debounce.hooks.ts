@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 
 // delay in ms
 export default function useDebounce(value: string | null, delay: number) {

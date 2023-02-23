@@ -1,7 +1,7 @@
-import {ChevronDownIcon} from '@heroicons/react/solid';
-import {SearchIcon} from '@heroicons/react/solid';
+import { ChevronDownIcon } from '@heroicons/react/solid';
+import { SearchIcon } from '@heroicons/react/solid';
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
@@ -10,16 +10,16 @@ import MenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
-import {BalanceDetail} from '../../../interfaces/balance';
-import {Avatar, AvatarSize} from '../Avatar';
-import {CurrencyOptionProps} from './currencyOption.interface';
-import {useStyles} from './currencyOption.style';
+import { BalanceDetail } from '../../../interfaces/balance';
+import { Avatar, AvatarSize } from '../Avatar';
+import { CurrencyOptionProps } from './currencyOption.interface';
+import { useStyles } from './currencyOption.style';
 
 import debounce from 'lodash/debounce';
 import i18n from 'src/locale';
 
 export const CurrencyOptionComponent: React.FC<CurrencyOptionProps> = props => {
-  const {balanceDetails, onSelect} = props;
+  const { balanceDetails, onSelect } = props;
   const [search, setSearch] = useState('');
   const style = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -57,11 +57,19 @@ export const CurrencyOptionComponent: React.FC<CurrencyOptionProps> = props => {
 
   return (
     <div>
-      <IconButton style={{padding: 0}} onClick={handleClick} color="primary" aria-label="expand">
+      <IconButton
+        style={{ padding: 0 }}
+        onClick={handleClick}
+        color="primary"
+        aria-label="expand">
         <Typography component="span" color="textPrimary">
           {i18n.t('Tipping.Modal_Main.Currency_Options')}
         </Typography>
-        <SvgIcon classes={{root: style.fill}} component={ChevronDownIcon} viewBox="0 0 20 20" />
+        <SvgIcon
+          classes={{ root: style.fill }}
+          component={ChevronDownIcon}
+          viewBox="0 0 20 20"
+        />
       </IconButton>
       <Menu
         classes={{
@@ -70,8 +78,8 @@ export const CurrencyOptionComponent: React.FC<CurrencyOptionProps> = props => {
         id="friend-response-menu"
         anchorEl={anchorEl}
         getContentAnchorEl={null}
-        anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
-        transformOrigin={{vertical: 'top', horizontal: 'center'}}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={Boolean(anchorEl)}
         onClose={handleClose}>
         <div className={style.flex}>
@@ -85,18 +93,26 @@ export const CurrencyOptionComponent: React.FC<CurrencyOptionProps> = props => {
               'aria-label': 'search',
             }}
             startAdornment={
-              <SvgIcon classes={{root: style.fill}} component={SearchIcon} viewBox="0 0 24 24" />
+              <SvgIcon
+                classes={{ root: style.fill }}
+                component={SearchIcon}
+                viewBox="0 0 24 24"
+              />
             }
           />
         </div>
         <div className={style.header}>
-          <Typography component="span">{i18n.t('Tipping.Modal_Main.Coin')}</Typography>
-          <Typography component="span">{i18n.t('Tipping.Modal_Main.Balance')}</Typography>
+          <Typography component="span">
+            {i18n.t('Tipping.Modal_Main.Coin')}
+          </Typography>
+          <Typography component="span">
+            {i18n.t('Tipping.Modal_Main.Balance')}
+          </Typography>
         </div>
         {balanceDetails &&
           balanceDetails.map(item => (
             <MenuItem
-              classes={{root: style.hover}}
+              classes={{ root: style.hover }}
               key={item.id}
               onClick={() => handleSelect(item)}>
               <div className={style.flex}>

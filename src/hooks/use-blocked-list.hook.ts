@@ -1,10 +1,10 @@
-import {useState} from 'react';
-import {useDispatch} from 'react-redux';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
-import {isErrorWithMessage, ErrorWithMessage} from 'src/helpers/error';
-import {User} from 'src/interfaces/user';
+import { isErrorWithMessage, ErrorWithMessage } from 'src/helpers/error';
+import { User } from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
-import {getBlockList} from 'src/reducers/block/actions';
+import { getBlockList } from 'src/reducers/block/actions';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useBlockList = (user?: User) => {
@@ -26,7 +26,7 @@ export const useBlockList = (user?: User) => {
     setLoading(true);
 
     try {
-      const {data} = await FriendAPI.getBlockList(user.id, 0);
+      const { data } = await FriendAPI.getBlockList(user.id, 0);
 
       setBlockedUserIds(
         data.map(_data => {

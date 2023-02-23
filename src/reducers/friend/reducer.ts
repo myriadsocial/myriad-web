@@ -1,10 +1,10 @@
-import {PaginationState as BasePaginationState} from '../base/state';
-import {Actions} from './actions';
+import { PaginationState as BasePaginationState } from '../base/state';
+import { Actions } from './actions';
 import * as constants from './constants';
 
 import * as Redux from 'redux';
-import {Friend} from 'src/interfaces/friend';
-import {PaginationParams} from 'src/lib/api/interfaces/pagination-params.interface';
+import { Friend } from 'src/interfaces/friend';
+import { PaginationParams } from 'src/lib/api/interfaces/pagination-params.interface';
 
 export interface FriendState extends BasePaginationState {
   friends: Friend[];
@@ -26,7 +26,10 @@ const initalState: FriendState = {
   },
 };
 
-export const FriendReducer: Redux.Reducer<FriendState, Actions> = (state = initalState, action) => {
+export const FriendReducer: Redux.Reducer<FriendState, Actions> = (
+  state = initalState,
+  action,
+) => {
   switch (action.type) {
     case constants.FETCH_FRIEND: {
       if (!action.meta.currentPage || action.meta.currentPage === 1) {

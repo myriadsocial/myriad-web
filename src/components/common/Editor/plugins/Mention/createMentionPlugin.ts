@@ -5,9 +5,9 @@ import {
   mentionOnKeyDownHandler,
   MentionPlugin,
 } from '@udecode/plate';
-import {createPluginFactory} from '@udecode/plate-core';
+import { createPluginFactory } from '@udecode/plate-core';
 
-import {withMention} from './withMention';
+import { withMention } from './withMention';
 
 /**
  * Enables support for autocompleting @mentions.
@@ -18,12 +18,12 @@ export const createMentionPlugin = createPluginFactory<MentionPlugin>({
   isInline: true,
   isVoid: true,
   handlers: {
-    onKeyDown: mentionOnKeyDownHandler({query: isSelectionInMentionInput}),
+    onKeyDown: mentionOnKeyDownHandler({ query: isSelectionInMentionInput }),
   },
   withOverrides: withMention,
   options: {
     trigger: '@',
-    createMentionNode: item => ({value: item.text}),
+    createMentionNode: item => ({ value: item.text }),
   },
   plugins: [
     {
@@ -32,7 +32,7 @@ export const createMentionPlugin = createPluginFactory<MentionPlugin>({
       isInline: true,
     },
   ],
-  then: (editor, {key}) => ({
+  then: (editor, { key }) => ({
     options: {
       id: key,
     },

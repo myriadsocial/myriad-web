@@ -1,12 +1,12 @@
-import {ChevronRightIcon} from '@heroicons/react/outline';
+import { ChevronRightIcon } from '@heroicons/react/outline';
 
 import React from 'react';
 
-import {Typography} from '@material-ui/core';
-import {IconButton} from '@material-ui/core';
-import Box, {BoxProps} from '@material-ui/core/Box';
+import { Typography } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
+import Box, { BoxProps } from '@material-ui/core/Box';
 import SvgIcon from '@material-ui/core/SvgIcon';
-import {makeStyles, Theme} from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 
 type BoxComponentProps = BoxProps & {
   title?: string;
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     minWidth: props => props.minWidth ?? 0,
     padding: theme.spacing(3, 3.75),
     // @ts-ignore
-    paddingLeft: props => (props.paddingLeft === 0 ? theme.spacing(0) : theme.spacing(3.75)),
+    paddingLeft: props => theme.spacing(props.paddingLeft === 0 ? 0 : 3.75),
     // @ts-ignore
     paddingRight: props => props.paddingRight ?? theme.spacing(3.75),
 
@@ -67,7 +67,13 @@ export const BoxComponent: React.FC<BoxComponentProps> = props => {
     paddingRight,
     ...restProps
   } = props;
-  const styles = useStyles({isFitContent, radiusStr, minWidth, paddingLeft, paddingRight});
+  const styles = useStyles({
+    isFitContent,
+    radiusStr,
+    minWidth,
+    paddingLeft,
+    paddingRight,
+  });
 
   const handleClick = (): void => {
     onClick && onClick();

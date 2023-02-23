@@ -2,9 +2,9 @@ import React from 'react';
 
 import Image from 'next/image';
 
-import {Typography} from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 
-import {useStyles} from './Empty.styles';
+import { useStyles } from './Empty.styles';
 
 export type EmptyProps = {
   title: string;
@@ -16,8 +16,8 @@ export type EmptyProps = {
 };
 
 export const Empty: React.FC<EmptyProps> = props => {
-  const {title, subtitle, children, withImage, image} = props;
-  const styles = useStyles({...props});
+  const { title, subtitle, children, withImage, image } = props;
+  const styles = useStyles({ ...props });
 
   return (
     <div className={styles.root}>
@@ -25,7 +25,11 @@ export const Empty: React.FC<EmptyProps> = props => {
       <Typography variant="h4" className={styles.title} component="p">
         {title}
       </Typography>
-      <Typography variant="body1" className={styles.subtitle} color="textSecondary" component="p">
+      <Typography
+        variant="body1"
+        className={styles.subtitle}
+        color="textSecondary"
+        component="p">
         {subtitle}
       </Typography>
       {children}

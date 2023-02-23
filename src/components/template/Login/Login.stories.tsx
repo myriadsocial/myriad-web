@@ -1,9 +1,9 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
-import {LoginLayout as LoginLayoutComponent} from '.';
-import {Login} from '../../Login';
+import { LoginLayout as LoginLayoutComponent } from '.';
+import { Login } from '../../Login';
 
 export default {
   title: 'UI Revamp v2.0/Layout/Login',

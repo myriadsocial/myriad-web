@@ -1,11 +1,11 @@
 import getConfig from 'next/config';
 
-import {ApiPromise, WsProvider} from '@polkadot/api';
-import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
+import { ApiPromise, WsProvider } from '@polkadot/api';
+import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 
-import {ServerListProps} from 'src/interfaces/server-list';
+import { ServerListProps } from 'src/interfaces/server-list';
 
-const {publicRuntimeConfig} = getConfig();
+const { publicRuntimeConfig } = getConfig();
 
 export interface IProvider {
   provider: ApiPromise;
@@ -14,7 +14,10 @@ export interface IProvider {
 
   totalServer: () => Promise<number>;
 
-  serverList: (startKey?: string, pageSize?: number) => Promise<ServerListProps[]>;
+  serverList: (
+    startKey?: string,
+    pageSize?: number,
+  ) => Promise<ServerListProps[]>;
 
   serverListByOwner: (
     accountId: string,
@@ -39,7 +42,7 @@ export class MyriadProvider implements IProvider {
   static async connect() {
     try {
       const provider = new WsProvider(publicRuntimeConfig.myriadRPCURL);
-      const api = new ApiPromise({provider});
+      const api = new ApiPromise({ provider });
 
       await api.isReadyOrError;
 
@@ -50,7 +53,7 @@ export class MyriadProvider implements IProvider {
   }
 
   async signer(accountId: string): Promise<InjectedAccountWithMeta> {
-    const {enableExtension} = await import('src/helpers/extension');
+    const { enableExtension } = await import('src/helpers/extension');
     const allAccounts = await enableExtension();
 
     if (!allAccounts || allAccounts.length === 0) {
@@ -79,7 +82,10 @@ export class MyriadProvider implements IProvider {
     }
   }
 
-  async serverList(startKey?: string, pageSize = 10): Promise<ServerListProps[]> {
+  async serverList(
+    startKey?: string,
+    pageSize = 10,
+  ): Promise<ServerListProps[]> {
     try {
       const result = await this.provider.query.server.serverById.entriesPaged({
         args: [],
@@ -93,7 +99,7 @@ export class MyriadProvider implements IProvider {
 
       return data as unknown as ServerListProps[];
     } catch (error) {
-      console.log({error});
+      console.log({ error });
       return [];
     }
   }
@@ -104,11 +110,12 @@ export class MyriadProvider implements IProvider {
     pageSize = 10,
   ): Promise<ServerListProps[]> {
     try {
-      const result = await this.provider.query.server.serverByOwner.entriesPaged({
-        args: [accountId],
-        pageSize,
-        startKey,
-      });
+      const result =
+        await this.provider.query.server.serverByOwner.entriesPaged({
+          args: [accountId],
+          pageSize,
+          startKey,
+        });
 
       const data = result.map(list => {
         return list[1].toHuman();

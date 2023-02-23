@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Box from '@material-ui/core/Box';
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 type TabPanelProps<T> = {
   value: T;
@@ -30,8 +30,15 @@ const useStyles = makeStyles<Theme, TabPanelStyleProps>(theme =>
 );
 
 export const TabPanel = <T,>(props: TabPanelProps<T>): JSX.Element => {
-  const {children, value, index, padding = 3, paddingLeft = 0, paddingRight = 0} = props;
-  const styles = useStyles({...props, paddingLeft, paddingRight});
+  const {
+    children,
+    value,
+    index,
+    padding = 3,
+    paddingLeft = 0,
+    paddingRight = 0,
+  } = props;
+  const styles = useStyles({ ...props, paddingLeft, paddingRight });
 
   return (
     <div className={styles.root} hidden={value !== index} role="tabpanel">

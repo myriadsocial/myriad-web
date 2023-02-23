@@ -1,14 +1,16 @@
-import {useState, useEffect} from 'react';
-import {useSelector} from 'react-redux';
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
-import {formatDistanceStrict} from 'date-fns';
+import { formatDistanceStrict } from 'date-fns';
 import locale from 'date-fns/locale/en-US';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {ConfigState} from 'src/reducers/config/reducer';
+import { RootState } from 'src/reducers';
+import { ConfigState } from 'src/reducers/config/reducer';
 
 export const useDate = (value: string | Date) => {
-  const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
+  const { settings } = useSelector<RootState, ConfigState>(
+    state => state.configState,
+  );
   const [date, setDate] = useState<string>('');
 
   const formatDistanceLocale: Record<any, string> = {
@@ -43,9 +45,11 @@ export const useDate = (value: string | Date) => {
       if (options.comparison > 0) {
         return 'in ' + result;
       } else {
-        if (count < 45 && token === 'xSeconds') return (result = i18n.t('Date.Just_Now'));
-        if (count === 1 && token === 'xDays') return (result = i18n.t('Date.Yesterday'));
-        return i18n.t('Date.Result', {date: result});
+        if (count < 45 && token === 'xSeconds')
+          return (result = i18n.t('Date.Just_Now'));
+        if (count === 1 && token === 'xDays')
+          return (result = i18n.t('Date.Yesterday'));
+        return i18n.t('Date.Result', { date: result });
       }
     }
 

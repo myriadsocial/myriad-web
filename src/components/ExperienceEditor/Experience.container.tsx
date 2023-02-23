@@ -1,16 +1,16 @@
 import React from 'react';
 
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {useStyles} from './Experience.styles';
-import {ExperienceEditor} from './ExperienceEditor';
+import { useStyles } from './Experience.styles';
+import { ExperienceEditor } from './ExperienceEditor';
 
 import debounce from 'lodash/debounce';
-import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
-import {useExperienceHook} from 'src/hooks/use-experience-hook';
-import {useSearchHook} from 'src/hooks/use-search.hooks';
-import {useUpload} from 'src/hooks/use-upload.hook';
-import {ExperienceProps} from 'src/interfaces/experience';
+import { TopNavbarComponent } from 'src/components/atoms/TopNavbar';
+import { useExperienceHook } from 'src/hooks/use-experience-hook';
+import { useSearchHook } from 'src/hooks/use-search.hooks';
+import { useUpload } from 'src/hooks/use-upload.hook';
+import { ExperienceProps } from 'src/interfaces/experience';
 import i18n from 'src/locale';
 
 export const ExperienceContainer: React.FC = () => {
@@ -24,10 +24,10 @@ export const ExperienceContainer: React.FC = () => {
     searchPeople,
     loadExperience,
   } = useExperienceHook();
-  const {searchUsers, users} = useSearchHook();
+  const { searchUsers, users } = useSearchHook();
   const style = useStyles();
 
-  const {uploadImage} = useUpload();
+  const { uploadImage } = useUpload();
   const router = useRouter();
 
   const onImageUpload = async (files: File[]) => {

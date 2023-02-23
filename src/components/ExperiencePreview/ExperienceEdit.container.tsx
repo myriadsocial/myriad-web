@@ -1,16 +1,16 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {ExperienceEditor} from '../ExperienceEditor/ExperienceEditor';
-import {useStyles} from './experience.style';
+import { ExperienceEditor } from '../ExperienceEditor/ExperienceEditor';
+import { useStyles } from './experience.style';
 
 import debounce from 'lodash/debounce';
-import {TopNavbarComponent} from 'src/components/atoms/TopNavbar';
-import {useExperienceHook} from 'src/hooks/use-experience-hook';
-import {useSearchHook} from 'src/hooks/use-search.hooks';
-import {useUpload} from 'src/hooks/use-upload.hook';
-import {ExperienceProps} from 'src/interfaces/experience';
+import { TopNavbarComponent } from 'src/components/atoms/TopNavbar';
+import { useExperienceHook } from 'src/hooks/use-experience-hook';
+import { useSearchHook } from 'src/hooks/use-search.hooks';
+import { useUpload } from 'src/hooks/use-upload.hook';
+import { ExperienceProps } from 'src/interfaces/experience';
 import i18n from 'src/locale';
 
 export const ExperienceEditContainer: React.FC = () => {
@@ -25,12 +25,12 @@ export const ExperienceEditContainer: React.FC = () => {
     getExperienceDetail,
     updateExperience,
   } = useExperienceHook();
-  const {searchUsers, users} = useSearchHook();
-  const {uploadImage} = useUpload();
+  const { searchUsers, users } = useSearchHook();
+  const { uploadImage } = useUpload();
   const router = useRouter();
 
   useEffect(() => {
-    const {experienceId} = router.query;
+    const { experienceId } = router.query;
 
     if (experienceId) getExperienceDetail(experienceId);
   }, [router.query]);
@@ -42,7 +42,7 @@ export const ExperienceEditContainer: React.FC = () => {
   };
 
   const onSave = (attributes: ExperienceProps) => {
-    console.log({attributes});
+    console.log({ attributes });
     if (!experience) return;
 
     updateExperience(experience.id, attributes, () => {

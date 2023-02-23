@@ -1,27 +1,30 @@
 import React from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
-import {useSession} from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 
-import {Socials as SocialsComponent} from '.';
+import { Socials as SocialsComponent } from '.';
 
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {useShareSocial} from 'src/hooks/use-share-social';
-import {SocialMedia, SocialsEnum} from 'src/interfaces/social';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import { useShareSocial } from 'src/hooks/use-share-social';
+import { SocialMedia, SocialsEnum } from 'src/interfaces/social';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {deleteSocial, setAsPrimary} from 'src/reducers/user/actions';
-import {UserState} from 'src/reducers/user/reducer';
+import { RootState } from 'src/reducers';
+import { deleteSocial, setAsPrimary } from 'src/reducers/user/actions';
+import { UserState } from 'src/reducers/user/reducer';
 
 export const SocialsContainer: React.FC = () => {
-  const {data: session} = useSession();
+  const { data: session } = useSession();
   const dispatch = useDispatch();
 
-  const {isVerifying, resetVerification, verifyPublicKeyShared} = useShareSocial();
+  const { isVerifying, resetVerification, verifyPublicKeyShared } =
+    useShareSocial();
 
   const enqueueSnackbar = useEnqueueSnackbar();
 
-  const {user, socials, anonymous} = useSelector<RootState, UserState>(state => state.userState);
+  const { user, socials, anonymous } = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
 
   const address = session?.user.address as string;
 
@@ -29,12 +32,16 @@ export const SocialsContainer: React.FC = () => {
     dispatch(deleteSocial(people.id));
   };
 
-  const handleVerifySocial = async (social: SocialsEnum, profileUrl: string, hash: string) => {
+  const handleVerifySocial = async (
+    social: SocialsEnum,
+    profileUrl: string,
+    hash: string,
+  ) => {
     verifyPublicKeyShared(social, profileUrl, hash, () => {
       resetVerification();
 
       enqueueSnackbar({
-        message: i18n.t('SocialMedia.Alert.Verify', {social: social}),
+        message: i18n.t('SocialMedia.Alert.Verify', { social: social }),
         variant: 'success',
       });
     });

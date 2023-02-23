@@ -1,7 +1,7 @@
-import {createPluginFactory} from '@udecode/plate-core';
+import { createPluginFactory } from '@udecode/plate-core';
 
-import {ImageListElement} from '../../render/Element/ImageList/ImageList';
-import {ImageListPlugin} from './type';
+import { ImageListElement } from '../../render/Element/ImageList/ImageList';
+import { ImageListPlugin } from './type';
 
 export const ELEMENT_IMAGE_LIST = 'img-list';
 

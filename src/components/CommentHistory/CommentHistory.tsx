@@ -1,19 +1,28 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 
 import Link from 'next/link';
 
-import {Card, CardContent, CardHeader, Grid, Typography} from '@material-ui/core';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  Grid,
+  Typography,
+} from '@material-ui/core';
 
-import {Avatar, AvatarSize} from '../atoms/Avatar';
-import {TimeAgo} from '../common/TimeAgo.component';
+import { Avatar, AvatarSize } from '../atoms/Avatar';
+import { TimeAgo } from '../common/TimeAgo.component';
 import ShowIf from '../common/show-if.component';
-import {useStyles} from './CommentHistory.style';
+import { useStyles } from './CommentHistory.style';
 
-import {NodeViewer} from 'components/common/NodeViewer';
-import {deserialize, formatToString} from 'components/common/NodeViewer/formatter';
-import {Comment} from 'src/interfaces/comment';
-import {ReferenceType} from 'src/interfaces/interaction';
-import {User} from 'src/interfaces/user';
+import { NodeViewer } from 'components/common/NodeViewer';
+import {
+  deserialize,
+  formatToString,
+} from 'components/common/NodeViewer/formatter';
+import { Comment } from 'src/interfaces/comment';
+import { ReferenceType } from 'src/interfaces/interaction';
+import { User } from 'src/interfaces/user';
 import i18n from 'src/locale';
 
 type CommentHistoryProps = {
@@ -22,7 +31,7 @@ type CommentHistoryProps = {
 };
 
 export const CommentHistory: React.FC<CommentHistoryProps> = props => {
-  const {comment} = props;
+  const { comment } = props;
 
   const styles = useStyles();
 
@@ -51,7 +60,10 @@ export const CommentHistory: React.FC<CommentHistoryProps> = props => {
     <div className={styles.root}>
       <ShowIf condition={comment.type === ReferenceType.POST}>
         <Typography variant="body1" color="textSecondary" gutterBottom>
-          {i18n.t('Profile.Comments.Comment', {text: text, name: postUser?.name ?? 'Anonymous'})}
+          {i18n.t('Profile.Comments.Comment', {
+            text: text,
+            name: postUser?.name ?? 'Anonymous',
+          })}
           &nbsp;
           <Link href={'/post/[postId]'} as={`/post/${comment.postId}`} passHref>
             <Typography variant="body1" className={styles.link} component="a">
@@ -63,7 +75,10 @@ export const CommentHistory: React.FC<CommentHistoryProps> = props => {
 
       <ShowIf condition={comment.type === ReferenceType.COMMENT}>
         <Typography variant="body1" color="textSecondary" gutterBottom>
-          {i18n.t('Profile.Comments.Reply', {text: text, name: postUser?.name ?? 'Anonymous'})}
+          {i18n.t('Profile.Comments.Reply', {
+            text: text,
+            name: postUser?.name ?? 'Anonymous',
+          })}
           &nbsp;
           <Link href={'/post/[postId]'} as={`/post/${comment.postId}`} passHref>
             <Typography variant="body1" className={styles.link} component="a">
@@ -74,7 +89,11 @@ export const CommentHistory: React.FC<CommentHistoryProps> = props => {
       </ShowIf>
 
       <Grid container className={styles.detail} wrap="nowrap">
-        <Link href={'/profile/[id]'} as={`/profile/${comment.user.id}`} shallow passHref>
+        <Link
+          href={'/profile/[id]'}
+          as={`/profile/${comment.user.id}`}
+          shallow
+          passHref>
           <Avatar
             name={comment.user?.name}
             src={comment.user?.profilePictureURL}
@@ -86,8 +105,14 @@ export const CommentHistory: React.FC<CommentHistoryProps> = props => {
           <CardHeader
             title={
               <>
-                <Link href={'/profile/[id]'} as={`/profile/${comment.user.id}`} shallow>
-                  <Typography variant="body1" className={styles.userLink} component="a">
+                <Link
+                  href={'/profile/[id]'}
+                  as={`/profile/${comment.user.id}`}
+                  shallow>
+                  <Typography
+                    variant="body1"
+                    className={styles.userLink}
+                    component="a">
                     {comment.user.name}
                   </Typography>
                 </Link>
@@ -99,7 +124,7 @@ export const CommentHistory: React.FC<CommentHistoryProps> = props => {
               </>
             }
           />
-          <CardContent classes={{root: styles.content}}>
+          <CardContent classes={{ root: styles.content }}>
             <NodeViewer id={comment.id} text={comment.text} />
           </CardContent>
         </Card>

@@ -1,19 +1,19 @@
-import {HYDRATE} from 'next-redux-wrapper';
+import { HYDRATE } from 'next-redux-wrapper';
 
-import {State as BaseState} from '../base/state';
-import {Actions} from './actions';
+import { State as BaseState } from '../base/state';
+import { Actions } from './actions';
 import * as constants from './constants';
 
 import * as Redux from 'redux';
-import {UserExperience} from 'src/interfaces/experience';
-import {Friend} from 'src/interfaces/friend';
-import {SocialMedia} from 'src/interfaces/social';
-import {FriendStatusProps, User} from 'src/interfaces/user';
-import {PaginationParams} from 'src/lib/api/interfaces/pagination-params.interface';
+import { UserExperience } from 'src/interfaces/experience';
+import { Friend } from 'src/interfaces/friend';
+import { SocialMedia } from 'src/interfaces/social';
+import { FriendStatusProps, User } from 'src/interfaces/user';
+import { PaginationParams } from 'src/lib/api/interfaces/pagination-params.interface';
 
 export interface ProfileState extends BaseState {
   userId?: string;
-  detail?: User & {friendInfo: FriendStatusProps};
+  detail?: User & { friendInfo: FriendStatusProps };
   socials: SocialMedia[];
   friends: {
     filter?: string;
@@ -145,7 +145,7 @@ export const ProfileReducer: Redux.Reducer<ProfileState, Actions> = (
     }
 
     case constants.CLEAR_FRIENDED_STATUS: {
-      const tmpState = {...state};
+      const tmpState = { ...state };
       delete tmpState.friendStatus;
       return tmpState;
     }

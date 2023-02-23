@@ -1,12 +1,12 @@
-import {PaginationState as BasePaginationState} from '../base/state';
-import {Actions} from './actions';
+import { PaginationState as BasePaginationState } from '../base/state';
+import { Actions } from './actions';
 import * as constants from './constants';
 
 import update from 'immutability-helper';
 import * as Redux from 'redux';
-import {Experience, Tag} from 'src/interfaces/experience';
-import {People} from 'src/interfaces/people';
-import {Post} from 'src/interfaces/post';
+import { Experience, Tag } from 'src/interfaces/experience';
+import { People } from 'src/interfaces/people';
+import { Post } from 'src/interfaces/post';
 
 export interface ExperienceState extends BasePaginationState {
   experiences: Experience[];
@@ -128,7 +128,7 @@ export const ExperienceReducer: Redux.Reducer<ExperienceState, Actions> = (
 
     case constants.EXPERIENCE_LOADING: {
       return update(state, {
-        loading: {$set: action.loading},
+        loading: { $set: action.loading },
       });
     }
 

@@ -1,9 +1,9 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
-import {UserSocials as UserSocialsComponent} from '.';
-import {SocialsEnum} from '../../interfaces/social';
+import { UserSocials as UserSocialsComponent } from '.';
+import { SocialsEnum } from '../../interfaces/social';
 
 export default {
   title: 'UI Revamp v2.0/components/User Socials',
@@ -32,7 +32,8 @@ UserSocials.args = {
         name: 'Aaron Ting',
         originUserId: '123',
         platform: SocialsEnum.FACEBOOK,
-        profilePictureURL: 'https://res.cloudinary.com/dsget80gs/icon/Ellipse_445aaron.svg',
+        profilePictureURL:
+          'https://res.cloudinary.com/dsget80gs/icon/Ellipse_445aaron.svg',
         username: 'aaronting',
       },
     },
@@ -69,7 +70,8 @@ UserSocials.args = {
         name: 'The Cryptowatcher',
         originUserId: '234',
         platform: SocialsEnum.TWITTER,
-        profilePictureURL: 'https://res.cloudinary.com/dsget80gs/icon/Ellipse_445aaron.svg',
+        profilePictureURL:
+          'https://res.cloudinary.com/dsget80gs/icon/Ellipse_445aaron.svg',
         username: 'cryptowatcher',
       },
     },

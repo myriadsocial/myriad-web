@@ -1,35 +1,42 @@
-import {PlusIcon} from '@heroicons/react/outline';
+import { PlusIcon } from '@heroicons/react/outline';
 
 import React from 'react';
-import {shallowEqual, useSelector} from 'react-redux';
+import { shallowEqual, useSelector } from 'react-redux';
 
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
-import {useStyles} from './Tab.style';
+import { useStyles } from './Tab.style';
 
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {ExperienceListContainer, EmptyExperience} from 'src/components/ExperienceList';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import {
+  ExperienceListContainer,
+  EmptyExperience,
+} from 'src/components/ExperienceList';
 import ShowIf from 'src/components/common/show-if.component';
-import {ExperienceOwner, useExperienceHook} from 'src/hooks/use-experience-hook';
-import {User} from 'src/interfaces/user';
+import {
+  ExperienceOwner,
+  useExperienceHook,
+} from 'src/hooks/use-experience-hook';
+import { User } from 'src/interfaces/user';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
+import { RootState } from 'src/reducers';
 
 type ExperienceTabProps = {
   experienceType?: 'user' | 'trending';
 };
 
 export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
-  const {experienceType = 'user'} = props;
+  const { experienceType = 'user' } = props;
   const confirm = useConfirm();
 
   const router = useRouter();
   const styles = useStyles();
-  const {userExperiences, userExperiencesMeta, loadNextUserExperience} = useExperienceHook();
+  const { userExperiences, userExperiencesMeta, loadNextUserExperience } =
+    useExperienceHook();
 
   const user = useSelector<RootState, User | undefined>(
     state => state.userState.user,
@@ -39,7 +46,8 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
   const enqueueSnackbar = useEnqueueSnackbar();
 
   const handleCreateExperience = () => {
-    const totalOwnedExperience = userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
+    const totalOwnedExperience =
+      userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
 
     if (user.fullAccess && user.fullAccess !== undefined) {
       if (totalOwnedExperience >= 10) {
@@ -59,7 +67,7 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
           confirmationText: i18n.t('LiteVersion.ConnectWallet'),
           cancellationText: i18n.t('LiteVersion.MaybeLater'),
           onConfirm: () => {
-            router.push({pathname: '/wallet', query: {type: 'manage'}});
+            router.push({ pathname: '/wallet', query: { type: 'manage' } });
           },
           onCancel: () => {
             undefined;
@@ -95,7 +103,11 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
             component="div"
             className={styles.action}
             onClick={handleCreateExperience}>
-            <SvgIcon component={PlusIcon} viewBox="0 0 24 24" style={{fontSize: 14}} />
+            <SvgIcon
+              component={PlusIcon}
+              viewBox="0 0 24 24"
+              style={{ fontSize: 14 }}
+            />
             {i18n.t('Experience.Create.Title')}
           </Typography>
         </ShowIf>
@@ -104,19 +116,25 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
       <ExperienceListContainer
         noButton={true}
         selectable
-        owner={experienceType === 'user' ? ExperienceOwner.CURRENT_USER : ExperienceOwner.TRENDING}
+        owner={
+          experienceType === 'user'
+            ? ExperienceOwner.CURRENT_USER
+            : ExperienceOwner.TRENDING
+        }
         filterTimeline
         enableClone={experienceType === 'trending' || experienceType === 'user'}
         enableSubscribe={experienceType === 'trending'}
         hasMore={
           Boolean(user)
-            ? userExperiencesMeta.currentPage < userExperiencesMeta.totalPageCount
+            ? userExperiencesMeta.currentPage <
+              userExperiencesMeta.totalPageCount
             : false
         }
         loadNextPage={handleLoadNextPage}
       />
 
-      <ShowIf condition={userExperiences.length === 0 && experienceType === 'user'}>
+      <ShowIf
+        condition={userExperiences.length === 0 && experienceType === 'user'}>
         <EmptyExperience />
       </ShowIf>
     </div>

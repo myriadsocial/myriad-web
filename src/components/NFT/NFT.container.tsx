@@ -2,7 +2,7 @@ import React from 'react';
 
 import Typography from '@material-ui/core/Typography';
 
-import {useStyles} from './nft.style';
+import { useStyles } from './nft.style';
 
 import Illustration from 'src/images/illustration/NFT_Isometric_1.svg';
 import i18n from 'src/locale';

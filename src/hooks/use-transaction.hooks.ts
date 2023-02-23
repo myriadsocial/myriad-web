@@ -1,21 +1,21 @@
-import {useEffect, useState} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
-import {TransactionOrderType} from 'src/interfaces/transaction';
-import {RootState} from 'src/reducers';
+import { TransactionOrderType } from 'src/interfaces/transaction';
+import { RootState } from 'src/reducers';
 import {
   fetchTransactions,
   setTransactionFilter,
   setTransactionSort,
   TransactionFilterProps,
 } from 'src/reducers/transaction/actions';
-import {TransactionState} from 'src/reducers/transaction/reducer';
-import {UserState} from 'src/reducers/user/reducer';
+import { TransactionState } from 'src/reducers/transaction/reducer';
+import { UserState } from 'src/reducers/user/reducer';
 
 export const useTransaction = () => {
   const dispatch = useDispatch();
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const {transactions, meta, filter, pagination, loading} = useSelector<
+  const { user } = useSelector<RootState, UserState>(state => state.userState);
+  const { transactions, meta, filter, pagination, loading } = useSelector<
     RootState,
     TransactionState
   >(state => state.transactionState);

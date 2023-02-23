@@ -1,6 +1,6 @@
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-import {AvatarProps, AvatarSize} from './Avatar.interfaces';
+import { AvatarProps, AvatarSize } from './Avatar.interfaces';
 
 export const useStyles = makeStyles<Theme, AvatarProps>(theme =>
   createStyles({

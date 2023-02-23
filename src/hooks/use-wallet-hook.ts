@@ -1,16 +1,16 @@
 import * as Sentry from '@sentry/nextjs';
 
-import {useState} from 'react';
+import { useState } from 'react';
 
-import {BN, BN_ONE, BN_TWO, BN_TEN, BN_ZERO} from '@polkadot/util';
+import { BN, BN_ONE, BN_TWO, BN_TEN, BN_ZERO } from '@polkadot/util';
 
 import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {formatBalance} from 'src/helpers/balance';
-import {BalanceDetail} from 'src/interfaces/balance';
-import {TipsBalanceInfo} from 'src/interfaces/blockchain-interface';
-import {WalletDetail} from 'src/interfaces/wallet';
-import {storeTransaction} from 'src/lib/api/transaction';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import { formatBalance } from 'src/helpers/balance';
+import { BalanceDetail } from 'src/interfaces/balance';
+import { TipsBalanceInfo } from 'src/interfaces/blockchain-interface';
+import { WalletDetail } from 'src/interfaces/wallet';
+import { storeTransaction } from 'src/lib/api/transaction';
 import i18n from 'src/locale';
 
 export const useWallet = () => {
@@ -20,30 +20,33 @@ export const useWallet = () => {
   const [isSignerLoading, setSignerLoading] = useState<boolean>(false);
   const [isFetchingFee, setIsFetchingFee] = useState(false);
 
-  const {server, provider} = useBlockchain();
+  const { server, provider } = useBlockchain();
 
   const getEstimatedFee = async (
     walletDetail: WalletDetail,
     currency: BalanceDetail,
-  ): Promise<{estimatedFee: BN | null; minBalance: BN | null}> => {
+  ): Promise<{ estimatedFee: BN | null; minBalance: BN | null }> => {
     setIsFetchingFee(true);
 
     try {
-      let [{partialFee: minBalance}, {partialFee: estimatedFee}] = await Promise.all([
-        await provider.assetMinBalance(currency?.referenceId),
-        await provider.estimateFee(walletDetail),
-      ]);
+      let [{ partialFee: minBalance }, { partialFee: estimatedFee }] =
+        await Promise.all([
+          await provider.assetMinBalance(currency?.referenceId),
+          await provider.estimateFee(walletDetail),
+        ]);
 
       if (!estimatedFee) {
         // equal 0.01
-        estimatedFee = BN_ONE.mul(BN_TEN.pow(new BN(currency.decimal))).div(BN_TEN.pow(BN_TWO));
+        estimatedFee = BN_ONE.mul(BN_TEN.pow(new BN(currency.decimal))).div(
+          BN_TEN.pow(BN_TWO),
+        );
       }
 
       if (!minBalance) {
         minBalance = BN_ZERO;
       }
 
-      return {estimatedFee, minBalance};
+      return { estimatedFee, minBalance };
     } catch (error) {
       Sentry.captureException(error);
       return null;
@@ -79,10 +82,16 @@ export const useWallet = () => {
 
       if (txHash) {
         const finalAmount = formatBalance(amount, currency.decimal);
-        const txData = {hash: txHash, amount: finalAmount, from, to, currencyId: currency.id};
+        const txData = {
+          hash: txHash,
+          amount: finalAmount,
+          from,
+          to,
+          currencyId: currency.id,
+        };
 
-        if (type) Object.assign(txData, {type});
-        if (referenceId) Object.assign(txData, {referenceId});
+        if (type) Object.assign(txData, { type });
+        if (referenceId) Object.assign(txData, { referenceId });
 
         // Record the transaction
         await storeTransaction(txData);
@@ -91,9 +100,12 @@ export const useWallet = () => {
       }
     } catch (error) {
       const variant = error.message === 'Cancelled' ? 'warning' : 'error';
-      const message = variant === 'warning' ? i18n.t('Tipping.Toaster.Cancelled') : error.message;
+      const message =
+        variant === 'warning'
+          ? i18n.t('Tipping.Toaster.Cancelled')
+          : error.message;
 
-      enqueueSnackbar({variant, message});
+      enqueueSnackbar({ variant, message });
     } finally {
       setLoading(false);
       setSignerLoading(false);
@@ -132,10 +144,16 @@ export const useWallet = () => {
 
       if (txHash) {
         const finalAmount = formatBalance(amount, currency.decimal);
-        const txData = {hash: txHash, amount: finalAmount, from, to, currencyId: currency.id};
+        const txData = {
+          hash: txHash,
+          amount: finalAmount,
+          from,
+          to,
+          currencyId: currency.id,
+        };
 
-        if (type) Object.assign(txData, {type});
-        if (referenceId) Object.assign(txData, {referenceId});
+        if (type) Object.assign(txData, { type });
+        if (referenceId) Object.assign(txData, { referenceId });
 
         // Record the transaction
         await storeTransaction(txData);
@@ -144,9 +162,12 @@ export const useWallet = () => {
       }
     } catch (error) {
       const variant = error.message === 'Cancelled' ? 'warning' : 'error';
-      const message = variant === 'warning' ? i18n.t('Tipping.Toaster.Cancelled') : error.message;
+      const message =
+        variant === 'warning'
+          ? i18n.t('Tipping.Toaster.Cancelled')
+          : error.message;
 
-      enqueueSnackbar({variant, message});
+      enqueueSnackbar({ variant, message });
     } finally {
       setLoading(false);
       setSignerLoading(false);

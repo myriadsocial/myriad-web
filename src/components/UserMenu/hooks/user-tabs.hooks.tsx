@@ -1,26 +1,37 @@
-import React, {useMemo} from 'react';
-import {shallowEqual, useSelector} from 'react-redux';
+import React, { useMemo } from 'react';
+import { shallowEqual, useSelector } from 'react-redux';
 
-import {CommentHistoryListContainer} from 'src/components/CommentHistoryList';
-import {FriendListContainer} from 'src/components/FriendsMenu/FriendList.container';
-import {ProfileExperienceTab} from 'src/components/Profile/tabs/ExperienceTab';
-import {ProfilePostsTab} from 'src/components/Profile/tabs/PostTabs';
-import {UserSettingsContainer} from 'src/components/UserSettings';
-import {UserSocialContainer} from 'src/components/UserSocials';
-import {TabItems} from 'src/components/atoms/Tabs';
-import {TimelineFilterFields} from 'src/interfaces/timeline';
-import {FriendStatusProps, User} from 'src/interfaces/user';
+import { CommentHistoryListContainer } from 'src/components/CommentHistoryList';
+import { FriendListContainer } from 'src/components/FriendsMenu/FriendList.container';
+import { ProfileExperienceTab } from 'src/components/Profile/tabs/ExperienceTab';
+import { ProfilePostsTab } from 'src/components/Profile/tabs/PostTabs';
+import { UserSettingsContainer } from 'src/components/UserSettings';
+import { UserSocialContainer } from 'src/components/UserSocials';
+import { TabItems } from 'src/components/atoms/Tabs';
+import { TimelineFilterFields } from 'src/interfaces/timeline';
+import { FriendStatusProps, User } from 'src/interfaces/user';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
+import { RootState } from 'src/reducers';
 
-export type UserMenuTabs = 'post' | 'comments' | 'experience' | 'social' | 'friend' | 'setting';
+export type UserMenuTabs =
+  | 'post'
+  | 'comments'
+  | 'experience'
+  | 'social'
+  | 'friend'
+  | 'setting';
 
-export const useUserTabs = (excludes: UserMenuTabs[]): TabItems<UserMenuTabs>[] => {
-  const profile = useSelector<RootState, User & {friendInfo: FriendStatusProps}>(
-    state => state.profileState.detail,
+export const useUserTabs = (
+  excludes: UserMenuTabs[],
+): TabItems<UserMenuTabs>[] => {
+  const profile = useSelector<
+    RootState,
+    User & { friendInfo: FriendStatusProps }
+  >(state => state.profileState.detail, shallowEqual);
+  const user = useSelector<RootState, User>(
+    state => state.userState.user,
     shallowEqual,
   );
-  const user = useSelector<RootState, User>(state => state.userState.user, shallowEqual);
   const isOwnProfile = profile?.id === user?.id;
   const filtersFields: TimelineFilterFields = {
     owner: profile?.id,

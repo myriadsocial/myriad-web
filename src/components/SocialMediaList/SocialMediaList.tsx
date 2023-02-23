@@ -1,11 +1,11 @@
 import React from 'react';
 
-import {IconButton} from '@material-ui/core';
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import { IconButton } from '@material-ui/core';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-import {SocialMedia, SocialsEnum} from '../../interfaces/social';
-import {BoxComponent} from '../atoms/Box';
-import {SocialDetail, useSocialMediaList} from './use-social-media-list.hook';
+import { SocialMedia, SocialsEnum } from '../../interfaces/social';
+import { BoxComponent } from '../atoms/Box';
+import { SocialDetail, useSocialMediaList } from './use-social-media-list.hook';
 
 import i18n from 'src/locale';
 
@@ -63,7 +63,9 @@ export const SocialMediaList: React.FC<SocialMediaListProps> = ({
   };
 
   return (
-    <BoxComponent title={i18n.t('Section.Social_Media')} onClick={openSocialPage}>
+    <BoxComponent
+      title={i18n.t('Section.Social_Media')}
+      onClick={openSocialPage}>
       <div className={styles.list}>
         {socials.map(social => (
           <IconButton

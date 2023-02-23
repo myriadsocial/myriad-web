@@ -1,11 +1,11 @@
-import {ExclamationIcon, XIcon} from '@heroicons/react/solid';
+import { ExclamationIcon, XIcon } from '@heroicons/react/solid';
 
-import React, {useEffect, useState} from 'react';
-import {useCookies} from 'react-cookie';
+import React, { useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
 
 import getConfig from 'next/config';
 
-import {Link, Typography} from '@material-ui/core';
+import { Link, Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
@@ -14,7 +14,7 @@ import useStyles from './Banner.style';
 import clsx from 'clsx';
 import i18n from 'src/locale';
 
-const {publicRuntimeConfig} = getConfig();
+const { publicRuntimeConfig } = getConfig();
 export const APP_BANNER_COOKIE_KEY = 'hide-banner';
 
 export const AppStatusBanner: React.FC = () => {
@@ -48,7 +48,7 @@ export const AppStatusBanner: React.FC = () => {
         [style.padding]: true,
       })}>
       <SvgIcon
-        classes={{root: style.icon}}
+        classes={{ root: style.icon }}
         color="secondary"
         component={ExclamationIcon}
         viewBox="0 0 20 20"
@@ -59,7 +59,7 @@ export const AppStatusBanner: React.FC = () => {
         <Link
           href="https://app.myriad.social"
           target="_blank"
-          style={{color: '#FFD24D', textDecoration: 'none'}}>
+          style={{ color: '#FFD24D', textDecoration: 'none' }}>
           Myriad Mainnet
         </Link>
         &nbsp;{i18n.t('Banner.Demo2')}

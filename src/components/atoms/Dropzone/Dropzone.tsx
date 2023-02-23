@@ -1,17 +1,17 @@
 import CameraIcon from '@heroicons/react/outline/CameraIcon';
 
-import React, {useState} from 'react';
-import {ErrorCode, FileError, useDropzone} from 'react-dropzone';
+import React, { useState } from 'react';
+import { ErrorCode, FileError, useDropzone } from 'react-dropzone';
 
-import {Button, capitalize, Typography, SvgIcon} from '@material-ui/core';
+import { Button, capitalize, Typography, SvgIcon } from '@material-ui/core';
 
-import {UploadIcon} from '../Icons';
-import {useStyles} from './Dropzone.styles';
+import { UploadIcon } from '../Icons';
+import { useStyles } from './Dropzone.styles';
 import MultipleImagePreview from './Render/PreviewImage/Multiple';
 import SingleImagePreview from './Render/PreviewImage/Single';
 import VideoPreview from './Render/PreviewVideo';
 
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import i18n from 'src/locale';
 
@@ -48,13 +48,13 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
     height,
   } = props;
 
-  const styles = useStyles({...props, usage});
+  const styles = useStyles({ ...props, usage });
   const enqueueSnackbar = useEnqueueSnackbar();
 
   const [files, setFiles] = useState<File[]>([]);
   const [preview, setPreview] = useState<string[]>(value ? [value] : []);
 
-  const {getRootProps, getInputProps, open} = useDropzone({
+  const { getRootProps, getInputProps, open } = useDropzone({
     accept,
     maxSize: maxSize * 1024 * 1024,
     noClick: true,
@@ -66,7 +66,10 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
       if (multiple) {
         newFiles = [...files, ...acceptedFiles];
         setFiles(newFiles);
-        setPreview(prevPreview => [...prevPreview, ...acceptedFiles.map(URL.createObjectURL)]);
+        setPreview(prevPreview => [
+          ...prevPreview,
+          ...acceptedFiles.map(URL.createObjectURL),
+        ]);
       } else {
         setFiles(acceptedFiles);
         setPreview(acceptedFiles.map(URL.createObjectURL));
@@ -100,8 +103,11 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
   const formatButtonLable = () => {
     if (usage == 'post') {
       if (type == 'video') {
-        if (files.length > 0) return i18n.t('Dropzone.Btn_Replace_Video', {type: capitalize(type)});
-        return i18n.t('Dropzone.Btn_Upload_Video', {type: capitalize(type)});
+        if (files.length > 0)
+          return i18n.t('Dropzone.Btn_Replace_Video', {
+            type: capitalize(type),
+          });
+        return i18n.t('Dropzone.Btn_Upload_Video', { type: capitalize(type) });
       } else return i18n.t('Dropzone.Btn_Add_Image');
     }
 
@@ -115,7 +121,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
 
   const getErrorMessage = (error: FileError): string => {
     if (error.code === ErrorCode.FileTooLarge) {
-      return i18n.t('Dropzone.Error_File_Large', {maxSize});
+      return i18n.t('Dropzone.Error_File_Large', { maxSize });
     }
 
     return error.message;
@@ -123,7 +129,9 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
 
   return (
     <div className={styles.root}>
-      <div {...getRootProps({className: 'dropzone'})} className={styles.dropzone}>
+      <div
+        {...getRootProps({ className: 'dropzone' })}
+        className={styles.dropzone}>
         <input {...getInputProps()} />
 
         <ShowIf condition={type === 'image' && !multiple && preview.length > 0}>
@@ -131,7 +139,11 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
         </ShowIf>
 
         <ShowIf condition={type === 'image' && multiple && preview.length > 0}>
-          <MultipleImagePreview files={preview} onRemoveFile={removeFile} disableRemove={loading} />
+          <MultipleImagePreview
+            files={preview}
+            onRemoveFile={removeFile}
+            disableRemove={loading}
+          />
         </ShowIf>
 
         <ShowIf condition={type === 'video'}>
@@ -146,7 +158,9 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
           </ShowIf>
           <ShowIf condition={usage !== 'experience'}>
             <UploadIcon />
-            <Typography className={styles.placeholder}>{placeholder}</Typography>
+            <Typography className={styles.placeholder}>
+              {placeholder}
+            </Typography>
           </ShowIf>
         </ShowIf>
 
@@ -164,7 +178,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
             </ShowIf>
             <ShowIf condition={usage === 'experience'}>
               <Typography
-                style={{cursor: 'pointer', marginTop: 8}}
+                style={{ cursor: 'pointer', marginTop: 8 }}
                 color="primary"
                 variant="body1"
                 onClick={handleReuploadImage}>

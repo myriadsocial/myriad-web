@@ -1,25 +1,28 @@
-import React, {forwardRef, useRef, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import React, { forwardRef, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import dynamic from 'next/dynamic';
 
-import {Grid, useMediaQuery} from '@material-ui/core';
+import { Grid, useMediaQuery } from '@material-ui/core';
 
-import {Avatar, AvatarSize} from '../atoms/Avatar';
-import {useStyles} from './CommentEditor.style';
-import {serialize} from './formatter';
+import { Avatar, AvatarSize } from '../atoms/Avatar';
+import { useStyles } from './CommentEditor.style';
+import { serialize } from './formatter';
 
 import ExclusiveCreateContainer from 'components/ExclusiveContentCreate/ExclusiveCreate.container';
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
-import {initial} from 'components/common/Editor';
-import {getEditorSelectors, usePlateEditorRef} from 'components/common/Editor/store';
-import {ExclusiveContent} from 'components/common/Tipping/Tipping.interface';
-import {CommentProps} from 'src/interfaces/comment';
-import {ExclusiveContentPost} from 'src/interfaces/exclusive';
-import {ReferenceType, SectionType} from 'src/interfaces/interaction';
-import {User} from 'src/interfaces/user';
+import { initial } from 'components/common/Editor';
+import {
+  getEditorSelectors,
+  usePlateEditorRef,
+} from 'components/common/Editor/store';
+import { ExclusiveContent } from 'components/common/Tipping/Tipping.interface';
+import { CommentProps } from 'src/interfaces/comment';
+import { ExclusiveContentPost } from 'src/interfaces/exclusive';
+import { ReferenceType, SectionType } from 'src/interfaces/interaction';
+import { User } from 'src/interfaces/user';
 import i18n from 'src/locale';
-import {createExclusiveContent} from 'src/reducers/timeline/actions';
+import { createExclusiveContent } from 'src/reducers/timeline/actions';
 import theme from 'src/themes/light-theme';
 
 const CKEditor = dynamic(() => import('../common/CKEditor/BasicEditor'), {
@@ -49,7 +52,10 @@ export type CommentEditorProps = {
   onSubmit: (comment: Partial<CommentProps>) => void;
 };
 
-const CommentEditor = (props: CommentEditorProps, ref: React.ForwardedRef<HTMLDivElement>) => {
+const CommentEditor = (
+  props: CommentEditorProps,
+  ref: React.ForwardedRef<HTMLDivElement>,
+) => {
   const dispatch = useDispatch();
 
   const confirm = useConfirm();
@@ -58,10 +64,11 @@ const CommentEditor = (props: CommentEditorProps, ref: React.ForwardedRef<HTMLDi
   const Editor = isMobile ? CKEditor : PlateEditor;
   const Action = isMobile ? CommentActionMobile : CommentAction;
 
-  const styles = useStyles({mobile: isMobile});
+  const styles = useStyles({ mobile: isMobile });
 
   const [openExclusiveContent, setOpenExclusiveContent] = useState(false);
-  const [exclusiveContent, setExclusiveContent] = useState<ExclusiveContentPost | null>(null);
+  const [exclusiveContent, setExclusiveContent] =
+    useState<ExclusiveContentPost | null>(null);
   const handleOpenExclusiveContent = () => {
     setOpenExclusiveContent(!openExclusiveContent);
   };
@@ -124,7 +131,7 @@ const CommentEditor = (props: CommentEditorProps, ref: React.ForwardedRef<HTMLDi
           },
           () => {
             confirm({
-              title: i18n.t('LiteVersion.LimitTitlePost', {count: 0}),
+              title: i18n.t('LiteVersion.LimitTitlePost', { count: 0 }),
               description: i18n.t('LiteVersion.LimitDescPost'),
               icon: 'warning',
               confirmationText: i18n.t('General.Got_It'),

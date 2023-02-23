@@ -1,8 +1,8 @@
 import React from 'react';
 
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {SearchBox as SearchBoxComponent} from '.';
+import { SearchBox as SearchBoxComponent } from '.';
 
 type SearchBoxContainerProps = {
   onSubmitSearch?: (args: string) => void;
@@ -31,7 +31,7 @@ export const SearchBoxContainer: React.FC<SearchBoxContainerProps> = ({
           },
         },
         undefined,
-        {shallow: true},
+        { shallow: true },
       );
     }, DELAY);
   };

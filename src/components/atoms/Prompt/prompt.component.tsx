@@ -1,19 +1,19 @@
-import {CheckCircleIcon} from '@heroicons/react/solid';
-import {ExclamationCircleIcon} from '@heroicons/react/solid';
-import {ExclamationIcon} from '@heroicons/react/solid';
+import { CheckCircleIcon } from '@heroicons/react/solid';
+import { ExclamationCircleIcon } from '@heroicons/react/solid';
+import { ExclamationIcon } from '@heroicons/react/solid';
 
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 
-import {SvgIcon, useMediaQuery, useTheme} from '@material-ui/core';
+import { SvgIcon, useMediaQuery, useTheme } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
 
-import {Prompt} from './prompt';
-import {useStyles} from './prompt.style';
+import { Prompt } from './prompt';
+import { useStyles } from './prompt.style';
 
 export const PromptComponent: React.FC<Prompt> = props => {
-  const {open, title, subtitle, children, icon, onCancel} = props;
+  const { open, title, subtitle, children, icon, onCancel } = props;
 
   const style = useStyles();
   const theme = useTheme();
@@ -36,16 +36,16 @@ export const PromptComponent: React.FC<Prompt> = props => {
   return (
     <Dialog
       className={style.root}
-      classes={{container: style.container, paper: style.paper}}
-      PaperProps={{square: isMobile}}
+      classes={{ container: style.container, paper: style.paper }}
+      PaperProps={{ square: isMobile }}
       onClose={onCancel}
       aria-labelledby="simple-dialog-title"
       open={open}>
-      <DialogContent classes={{root: style.content}}>
+      <DialogContent classes={{ root: style.content }}>
         <div className={style.prompt}>
           <SvgIcon
             className={`${style.icon} ${style[icon]}`}
-            classes={{root: style.fill}}
+            classes={{ root: style.fill }}
             component={promptIcon}
             viewBox="0 0 20 20"
           />

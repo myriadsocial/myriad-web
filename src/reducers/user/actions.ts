@@ -1,27 +1,32 @@
-import {encodeAddress} from '@polkadot/keyring';
-import {hexToU8a} from '@polkadot/util';
+import { encodeAddress } from '@polkadot/keyring';
+import { hexToU8a } from '@polkadot/util';
 
-import {sortBalances} from '../balance/actions';
-import {Actions as BaseAction, setLoading, setError, PaginationAction} from '../base/actions';
-import {RootState} from '../index';
+import { sortBalances } from '../balance/actions';
+import {
+  Actions as BaseAction,
+  setLoading,
+  setError,
+  PaginationAction,
+} from '../base/actions';
+import { RootState } from '../index';
 import * as constants from './constants';
 
 import axios from 'axios';
-import {Action} from 'redux';
-import {BalanceDetail} from 'src/interfaces/balance';
-import {IProvider} from 'src/interfaces/blockchain-interface';
-import {Currency} from 'src/interfaces/currency';
-import {WrappedExperience} from 'src/interfaces/experience';
-import {SocialsEnum} from 'src/interfaces/index';
-import {NetworkIdEnum, Network} from 'src/interfaces/network';
-import {SocialMedia} from 'src/interfaces/social';
-import {User, UserTransactionDetail, UserWallet} from 'src/interfaces/user';
+import { Action } from 'redux';
+import { BalanceDetail } from 'src/interfaces/balance';
+import { IProvider } from 'src/interfaces/blockchain-interface';
+import { Currency } from 'src/interfaces/currency';
+import { WrappedExperience } from 'src/interfaces/experience';
+import { SocialsEnum } from 'src/interfaces/index';
+import { NetworkIdEnum, Network } from 'src/interfaces/network';
+import { SocialMedia } from 'src/interfaces/social';
+import { User, UserTransactionDetail, UserWallet } from 'src/interfaces/user';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import * as SocialAPI from 'src/lib/api/social';
 import * as TokenAPI from 'src/lib/api/token';
 import * as UserAPI from 'src/lib/api/user';
 import * as WalletAPI from 'src/lib/api/wallet';
-import {ThunkActionCreator} from 'src/types/thunk';
+import { ThunkActionCreator } from 'src/types/thunk';
 
 /**
  * Action Types
@@ -180,42 +185,43 @@ export const resetVerifyingSocial = (): ResetVerifyingSocial => ({
 /**
  * Action Creator
  */
-export const fetchUser: ThunkActionCreator<Actions, RootState> = () => async dispatch => {
-  dispatch(setLoading(true));
+export const fetchUser: ThunkActionCreator<Actions, RootState> =
+  () => async dispatch => {
+    dispatch(setLoading(true));
 
-  let user: User | null = null;
+    let user: User | null = null;
 
-  try {
-    user = await WalletAPI.getUser();
+    try {
+      user = await WalletAPI.getUser();
 
-    //Define empty arrays for users without wallets and currencies (login with email only)
-    if (!user.wallets) {
-      user.wallets = [];
+      //Define empty arrays for users without wallets and currencies (login with email only)
+      if (!user.wallets) {
+        user.wallets = [];
+      }
+      if (!user.currencies) {
+        user.currencies = [];
+      }
+
+      if (user.wallets.length > 0 && user.currencies.length > 0) {
+        dispatch(setCurrentUserWallet(user));
+      }
+
+      dispatch(setUser(user));
+    } catch (error) {
+      dispatch(setError(error));
+    } finally {
+      dispatch(setLoading(false));
     }
-    if (!user.currencies) {
-      user.currencies = [];
-    }
 
-    if (user.wallets.length > 0 && user.currencies.length > 0) {
-      dispatch(setCurrentUserWallet(user));
-    }
-
-    dispatch(setUser(user));
-  } catch (error) {
-    dispatch(setError(error));
-  } finally {
-    dispatch(setLoading(false));
-  }
-
-  return user;
-};
+    return user;
+  };
 
 export const fetchConnectedSocials: ThunkActionCreator<Actions, RootState> =
   () => async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     const {
-      userState: {user},
+      userState: { user },
     } = getState();
 
     if (!user) return;
@@ -223,7 +229,7 @@ export const fetchConnectedSocials: ThunkActionCreator<Actions, RootState> =
     try {
       const allSocials = true;
 
-      const {data} = await SocialAPI.getUserSocials(user.id, allSocials);
+      const { data } = await SocialAPI.getUserSocials(user.id, allSocials);
 
       dispatch({
         type: constants.FETCH_USER_SOCIALS,
@@ -242,12 +248,14 @@ export const fetchUserExperience: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     const {
-      userState: {user, anonymous},
+      userState: { user, anonymous },
     } = getState();
 
     try {
       if (anonymous) {
-        const {data: experiences, meta} = await ExperienceAPI.getExperiences({limit: 3});
+        const { data: experiences, meta } = await ExperienceAPI.getExperiences({
+          limit: 3,
+        });
         dispatch({
           type: constants.FETCH_USER_EXPERIENCE,
           experiences: experiences.map(item => ({
@@ -259,11 +267,8 @@ export const fetchUserExperience: ThunkActionCreator<Actions, RootState> =
       }
 
       if (user) {
-        const {meta, data: experiences} = await ExperienceAPI.getUserExperiences(
-          user.id,
-          undefined,
-          page,
-        );
+        const { meta, data: experiences } =
+          await ExperienceAPI.getUserExperiences(user.id, undefined, page);
 
         dispatch({
           type: constants.FETCH_USER_EXPERIENCE,
@@ -286,7 +291,8 @@ export const fetchUserWalletAddress: ThunkActionCreator<Actions, RootState> =
 
     if (provider) {
       const data = await provider.getMetadata();
-      convertedAddress = data !== null ? encodeAddress(hexToU8a(address), data) : address;
+      convertedAddress =
+        data !== null ? encodeAddress(hexToU8a(address), data) : address;
     }
 
     dispatch({
@@ -302,7 +308,7 @@ export const fetchCurrentUserWallets: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     const {
-      userState: {user},
+      userState: { user },
     } = getState();
 
     if (!user) return;
@@ -326,13 +332,13 @@ export const fetchUserWallets: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     const {
-      userState: {user},
+      userState: { user },
     } = getState();
 
     if (!user) return;
 
     try {
-      const {data: wallets, meta} = await WalletAPI.getUserWallets(user.id);
+      const { data: wallets, meta } = await WalletAPI.getUserWallets(user.id);
 
       dispatch({
         type: constants.FETCH_USER_WALLETS,
@@ -346,11 +352,19 @@ export const fetchUserWallets: ThunkActionCreator<Actions, RootState> =
     }
   };
 
-export const verifySocialMediaConnected: ThunkActionCreator<Actions, RootState> =
-  (platform: SocialsEnum, socialName: string, address: string, callback?: () => void) =>
+export const verifySocialMediaConnected: ThunkActionCreator<
+  Actions,
+  RootState
+> =
+  (
+    platform: SocialsEnum,
+    socialName: string,
+    address: string,
+    callback?: () => void,
+  ) =>
   async (dispatch, getState) => {
     const {
-      userState: {user},
+      userState: { user },
     } = getState();
 
     if (!user) return;
@@ -381,7 +395,7 @@ export const setDefaultCurrency: ThunkActionCreator<Actions, RootState> =
   (balanceDetails: BalanceDetail[]) => async (dispatch, getState) => {
     dispatch(setLoading(true));
     const {
-      userState: {user},
+      userState: { user },
     } = getState();
 
     if (!user) return;
@@ -391,11 +405,12 @@ export const setDefaultCurrency: ThunkActionCreator<Actions, RootState> =
   };
 
 export const updateUser: ThunkActionCreator<Actions, RootState> =
-  (attributes: Partial<User>, callback?: () => void) => async (dispatch, getState) => {
+  (attributes: Partial<User>, callback?: () => void) =>
+  async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     const {
-      userState: {user},
+      userState: { user },
     } = getState();
 
     if (!user) return;
@@ -424,7 +439,7 @@ export const deleteSocial: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     const {
-      userState: {user},
+      userState: { user },
     } = getState();
 
     if (!user) return;
@@ -445,7 +460,7 @@ export const setAsPrimary: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     const {
-      userState: {user},
+      userState: { user },
     } = getState();
 
     if (!user) return;
@@ -462,10 +477,11 @@ export const setAsPrimary: ThunkActionCreator<Actions, RootState> =
   };
 
 export const addUserCurrency: ThunkActionCreator<Actions, RootState> =
-  (selectedCurrency: Currency, callback?: () => void) => async (dispatch, getState) => {
+  (selectedCurrency: Currency, callback?: () => void) =>
+  async (dispatch, getState) => {
     dispatch(setLoading(true));
     const {
-      userState: {user},
+      userState: { user },
     } = getState();
 
     if (!user) return;
@@ -493,34 +509,35 @@ export const addUserCurrency: ThunkActionCreator<Actions, RootState> =
     }
   };
 
-export const fetchNetwork: ThunkActionCreator<Actions, RootState> = () => async dispatch => {
-  dispatch(setLoading(true));
+export const fetchNetwork: ThunkActionCreator<Actions, RootState> =
+  () => async dispatch => {
+    dispatch(setLoading(true));
 
-  try {
-    const {data: networks, meta} = await WalletAPI.getNetworks();
-    const filterNetwork: Network[] = [];
+    try {
+      const { data: networks, meta } = await WalletAPI.getNetworks();
+      const filterNetwork: Network[] = [];
 
-    for (const network of networks) {
-      const networkWithTips = {
-        ...network,
-        tips: [],
-      };
+      for (const network of networks) {
+        const networkWithTips = {
+          ...network,
+          tips: [],
+        };
 
-      if (network.id === NetworkIdEnum.MYRIAD) {
-        filterNetwork.unshift(networkWithTips);
-      } else {
-        filterNetwork.push(networkWithTips);
+        if (network.id === NetworkIdEnum.MYRIAD) {
+          filterNetwork.unshift(networkWithTips);
+        } else {
+          filterNetwork.push(networkWithTips);
+        }
       }
-    }
 
-    dispatch({
-      type: constants.FETCH_NETWORK,
-      payload: filterNetwork,
-      meta,
-    });
-  } catch (error) {
-    dispatch(setError(error.message));
-  } finally {
-    dispatch(setLoading(false));
-  }
-};
+      dispatch({
+        type: constants.FETCH_NETWORK,
+        payload: filterNetwork,
+        meta,
+      });
+    } catch (error) {
+      dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };

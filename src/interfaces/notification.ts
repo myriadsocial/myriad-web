@@ -1,6 +1,6 @@
-import {BaseModel} from './base.interface';
-import {SectionType} from './interaction';
-import {User} from './user';
+import { BaseModel } from './base.interface';
+import { SectionType } from './interaction';
+import { User } from './user';
 
 export enum NotificationType {
   FRIEND_REQUEST = 'friend_request',

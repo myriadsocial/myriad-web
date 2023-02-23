@@ -1,24 +1,29 @@
 import React from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
 import useConfirm from '../common/Confirm/use-confirm.hook';
-import {LanguageSetting} from './LanguageSetting';
+import { LanguageSetting } from './LanguageSetting';
 
-import {LanguageSettingType} from 'src/interfaces/setting';
-import {RootState} from 'src/reducers';
-import {updateLanguageSetting, fetchLanguageSetting} from 'src/reducers/config/actions';
-import {ConfigState} from 'src/reducers/config/reducer';
-import {UserState} from 'src/reducers/user/reducer';
+import { LanguageSettingType } from 'src/interfaces/setting';
+import { RootState } from 'src/reducers';
+import {
+  updateLanguageSetting,
+  fetchLanguageSetting,
+} from 'src/reducers/config/actions';
+import { ConfigState } from 'src/reducers/config/reducer';
+import { UserState } from 'src/reducers/user/reducer';
 
 export const LanguageSettingsContainer: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const confirm = useConfirm();
 
-  const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const { settings } = useSelector<RootState, ConfigState>(
+    state => state.configState,
+  );
+  const { user } = useSelector<RootState, UserState>(state => state.userState);
   const [langValue, setLangValue] = React.useState(settings.language);
 
   React.useEffect(() => {
@@ -52,7 +57,7 @@ export const LanguageSettingsContainer: React.FC = () => {
             pathname: '/',
           },
           undefined,
-          {shallow: true},
+          { shallow: true },
         );
       },
       onCancel: () => {
@@ -61,7 +66,7 @@ export const LanguageSettingsContainer: React.FC = () => {
             pathname: '/settings',
           },
           undefined,
-          {shallow: true},
+          { shallow: true },
         );
       },
     });

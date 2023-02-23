@@ -1,4 +1,4 @@
-import {ChevronDownIcon} from '@heroicons/react/outline';
+import { ChevronDownIcon } from '@heroicons/react/outline';
 
 import React from 'react';
 
@@ -12,10 +12,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
-import {useStyles} from './CurrencyOption.style';
+import { useStyles } from './CurrencyOption.style';
 
-import {Avatar, AvatarSize} from 'components/atoms/Avatar';
-import {Currency} from 'src/interfaces/currency';
+import { Avatar, AvatarSize } from 'components/atoms/Avatar';
+import { Currency } from 'src/interfaces/currency';
 import i18n from 'src/locale';
 
 export type CurrencyOptionProps = {
@@ -44,7 +44,8 @@ export const CurrencyOption: React.FC<CurrencyOptionProps> = ({
   };
 
   const filterCurrency = balances.filter(balance => {
-    if (balance.networkId === 'myriad' || balance.networkId === 'debio') return balance;
+    if (balance.networkId === 'myriad' || balance.networkId === 'debio')
+      return balance;
   });
 
   const onSelectBalance = (currency: Currency) => {
@@ -70,11 +71,19 @@ export const CurrencyOption: React.FC<CurrencyOptionProps> = ({
             />
           ) : null
         }
-        endIcon={<SvgIcon color="primary" component={ChevronDownIcon} viewBox="0 0 24 24" />}
+        endIcon={
+          <SvgIcon
+            color="primary"
+            component={ChevronDownIcon}
+            viewBox="0 0 24 24"
+          />
+        }
         size="small"
         variant="contained"
         color="inherit">
-        <Typography component="span" className={currentCurrency ? null : styles.placeholder}>
+        <Typography
+          component="span"
+          className={currentCurrency ? null : styles.placeholder}>
           {currentCurrency
             ? currentCurrency?.symbol
             : i18n.t('ExclusiveContent.Label.ChangeCurrency')}
@@ -83,16 +92,16 @@ export const CurrencyOption: React.FC<CurrencyOptionProps> = ({
       <Menu
         anchorEl={anchorEl}
         getContentAnchorEl={null}
-        anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
-        transformOrigin={{vertical: 'top', horizontal: 'left'}}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
         open={Boolean(anchorEl)}
         onClose={handleClose}>
         {filterCurrency.map(balance => (
           <MenuItem
             key={balance.id}
-            style={{filter: 'grayscale(0)'}}
+            style={{ filter: 'grayscale(0)' }}
             onClick={() => onSelectBalance(balance)}>
-            <ListItemIcon style={{minWidth: '36px'}}>
+            <ListItemIcon style={{ minWidth: '36px' }}>
               <Avatar
                 name={balance.id}
                 alt={balance.id}

@@ -1,8 +1,8 @@
-import {ChevronDownIcon} from '@heroicons/react/outline';
-import {SearchIcon} from '@heroicons/react/outline';
-import {XIcon} from '@heroicons/react/outline';
+import { ChevronDownIcon } from '@heroicons/react/outline';
+import { SearchIcon } from '@heroicons/react/outline';
+import { XIcon } from '@heroicons/react/outline';
 
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import {
@@ -16,27 +16,27 @@ import {
 } from '@material-ui/core';
 import Menu from '@material-ui/core/Menu';
 
-import {formatUsd} from '../../helpers/balance';
-import {Currency} from '../../interfaces/currency';
-import {Transaction, TransactionSort} from '../../interfaces/transaction';
-import {AvatarSize} from '../atoms/Avatar';
-import {MenuOptions} from '../atoms/DropdownMenu';
-import {DropdownMenu} from '../atoms/DropdownMenu';
-import {ListItemComponent} from '../atoms/ListItem';
-import {Modal, ModalProps} from '../atoms/Modal';
-import {SendTipButton} from '../common/SendTipButton/SendTipButton';
-import {useStyles} from './TipHistory.styles';
+import { formatUsd } from '../../helpers/balance';
+import { Currency } from '../../interfaces/currency';
+import { Transaction, TransactionSort } from '../../interfaces/transaction';
+import { AvatarSize } from '../atoms/Avatar';
+import { MenuOptions } from '../atoms/DropdownMenu';
+import { DropdownMenu } from '../atoms/DropdownMenu';
+import { ListItemComponent } from '../atoms/ListItem';
+import { Modal, ModalProps } from '../atoms/Modal';
+import { SendTipButton } from '../common/SendTipButton/SendTipButton';
+import { useStyles } from './TipHistory.styles';
 
-import {Empty} from 'src/components/atoms/Empty';
-import {Loading} from 'src/components/atoms/Loading';
+import { Empty } from 'src/components/atoms/Empty';
+import { Loading } from 'src/components/atoms/Loading';
 import ShowIf from 'src/components/common/show-if.component';
-import {timeAgo} from 'src/helpers/date';
-import {parseScientificNotatedNumber} from 'src/helpers/number';
-import {useExchangeRate} from 'src/hooks/use-exchange-rate.hook';
-import {Comment} from 'src/interfaces/comment';
-import {ReferenceType} from 'src/interfaces/interaction';
-import {Post} from 'src/interfaces/post';
-import {User} from 'src/interfaces/user';
+import { timeAgo } from 'src/helpers/date';
+import { parseScientificNotatedNumber } from 'src/helpers/number';
+import { useExchangeRate } from 'src/hooks/use-exchange-rate.hook';
+import { Comment } from 'src/interfaces/comment';
+import { ReferenceType } from 'src/interfaces/interaction';
+import { Post } from 'src/interfaces/post';
+import { User } from 'src/interfaces/user';
 import i18n from 'src/locale';
 
 type TipHistoryProps = Pick<ModalProps, 'open' | 'onClose'> & {
@@ -65,11 +65,13 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
     onFilter,
     nextPage,
   } = props;
-  const {loading, exchangeRates} = useExchangeRate();
+  const { loading, exchangeRates } = useExchangeRate();
   const styles = useStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [search, setSearch] = useState('');
-  const [selected, setSelected] = useState<string>(i18n.t('Tipping_History.Modal.All_Coin'));
+  const [selected, setSelected] = useState<string>(
+    i18n.t('Tipping_History.Modal.All_Coin'),
+  );
 
   useEffect(() => {
     if (selected === i18n.t('Tipping_History.Modal.All_Coin')) {
@@ -99,7 +101,9 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
       return 0;
     }
 
-    const found = exchangeRates.find(exchangeRate => exchangeRate.id === currencyId);
+    const found = exchangeRates.find(
+      exchangeRate => exchangeRate.id === currencyId,
+    );
 
     if (found) return found.price;
     return 0;
@@ -141,7 +145,10 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
   };
 
   return (
-    <Modal title={i18n.t('Tipping_History.Modal.Title')} open={open} onClose={onClose}>
+    <Modal
+      title={i18n.t('Tipping_History.Modal.Title')}
+      open={open}
+      onClose={onClose}>
       <div className={styles.root}>
         <div className={styles.options}>
           <DropdownMenu<TransactionSort>
@@ -152,9 +159,14 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
           />
 
           <div>
-            <Typography component="span">{i18n.t('Tipping_History.Modal.Coin')}:&nbsp;</Typography>
+            <Typography component="span">
+              {i18n.t('Tipping_History.Modal.Coin')}:&nbsp;
+            </Typography>
 
-            <Typography component="span" color="textPrimary" className={styles.selected}>
+            <Typography
+              component="span"
+              color="textPrimary"
+              className={styles.selected}>
               {selected}
             </Typography>
 
@@ -163,7 +175,11 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
               onClick={handleClick}
               color="primary"
               aria-label="expand">
-              <SvgIcon component={ChevronDownIcon} fontSize="small" color="primary" />
+              <SvgIcon
+                component={ChevronDownIcon}
+                fontSize="small"
+                color="primary"
+              />
             </IconButton>
 
             <Menu
@@ -173,8 +189,8 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
               }}
               anchorEl={anchorEl}
               getContentAnchorEl={null}
-              anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
-              transformOrigin={{vertical: 'top', horizontal: 'center'}}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+              transformOrigin={{ vertical: 'top', horizontal: 'center' }}
               open={Boolean(anchorEl)}
               onClose={handleClose}>
               <div>
@@ -207,7 +223,9 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
                 />
 
                 {currencies
-                  .filter(ar => ar.symbol.toLowerCase().includes(search.toLowerCase()))
+                  .filter(ar =>
+                    ar.symbol.toLowerCase().includes(search.toLowerCase()),
+                  )
                   .map(currency => (
                     <MenuItem
                       key={currency.id}
@@ -228,7 +246,11 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
 
       <div className={styles.list}>
         <ShowIf condition={tips.length === 0}>
-          <Empty title={i18n.t('Tipping_History.Modal.Empty')} subtitle="" margin={false} />
+          <Empty
+            title={i18n.t('Tipping_History.Modal.Empty')}
+            subtitle=""
+            margin={false}
+          />
         </ShowIf>
         <ShowIf condition={!!tips.length}>
           <List className={styles.list} id="scrollable-tip-history">
@@ -254,13 +276,20 @@ export const TipHistory: React.FC<TipHistoryProps> = props => {
                     <div className={styles.tip}>
                       <div>
                         <Typography variant="h5">
-                          {parseScientificNotatedNumber(+tip.amount)} {tip.currency.symbol}
+                          {parseScientificNotatedNumber(+tip.amount)}{' '}
+                          {tip.currency.symbol}
                         </Typography>
                         <Typography variant="caption" color="textSecondary">
-                          {`~${formatUsd(tip.amount, getConversion(tip.currencyId))} USD`}
+                          {`~${formatUsd(
+                            tip.amount,
+                            getConversion(tip.currencyId),
+                          )} USD`}
                         </Typography>
                       </div>
-                      <Avatar src={tip.currency.image} className={styles.logo} />
+                      <Avatar
+                        src={tip.currency.image}
+                        className={styles.logo}
+                      />
                     </div>
                   }
                 />

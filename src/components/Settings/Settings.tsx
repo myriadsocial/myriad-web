@@ -1,4 +1,4 @@
-import {ChevronRightIcon} from '@heroicons/react/outline';
+import { ChevronRightIcon } from '@heroicons/react/outline';
 
 import React from 'react';
 
@@ -14,10 +14,14 @@ import {
 } from '@material-ui/core';
 
 import ShowIf from '../common/show-if.component';
-import {useStyles} from './Settings.styles';
-import {SettingsOption, useSettingList, SettingsType} from './hooks/use-setting-list.hook';
+import { useStyles } from './Settings.styles';
+import {
+  SettingsOption,
+  useSettingList,
+  SettingsType,
+} from './hooks/use-setting-list.hook';
 
-import {UserSettings} from 'src/interfaces/setting';
+import { UserSettings } from 'src/interfaces/setting';
 import i18n from 'src/locale';
 
 type SettingsProps = {
@@ -28,7 +32,7 @@ type SettingsProps = {
 };
 
 export const Settings: React.FC<SettingsProps> = props => {
-  const {selectedType, value, onChange} = props;
+  const { selectedType, value, onChange } = props;
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
   const styles = useStyles();
@@ -58,10 +62,16 @@ export const Settings: React.FC<SettingsProps> = props => {
                   className={styles.option}
                   alignItems="center">
                   <ListItemText>
-                    <Typography variant="h5" color="textPrimary" className={styles.primary}>
+                    <Typography
+                      variant="h5"
+                      color="textPrimary"
+                      className={styles.primary}>
                       {item.title}
                     </Typography>
-                    <Typography variant="body1" color="textSecondary" className={styles.secondary}>
+                    <Typography
+                      variant="body1"
+                      color="textSecondary"
+                      className={styles.secondary}>
                       {item.subtitle}
                     </Typography>
                     {item.id === 'version' && isMobile && (
@@ -89,7 +99,8 @@ export const Settings: React.FC<SettingsProps> = props => {
       )}
 
       {selected && (
-        <ShowIf condition={selected.id !== 'version' && selected.id !== 'about'}>
+        <ShowIf
+          condition={selected.id !== 'version' && selected.id !== 'about'}>
           <Typography className={styles.subtitle} color="textPrimary">
             {selected?.title}
           </Typography>

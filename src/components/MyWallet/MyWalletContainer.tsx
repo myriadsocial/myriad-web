@@ -1,15 +1,15 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import {MyWallet} from '.';
-import {useStyles} from './myWallet.style';
+import { MyWallet } from '.';
+import { useStyles } from './myWallet.style';
 
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {UserState} from 'src/reducers/user/reducer';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
 const MyWalletContainer: React.FC = () => {
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const { user } = useSelector<RootState, UserState>(state => state.userState);
 
   const style = useStyles();
 

@@ -1,26 +1,26 @@
-import {InformationCircleIcon} from '@heroicons/react/outline';
+import { InformationCircleIcon } from '@heroicons/react/outline';
 
-import React, {useEffect, useRef, useState} from 'react';
-import {useSelector} from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import dynamic from 'next/dynamic';
 
-import {Button, SvgIcon, Typography} from '@material-ui/core';
+import { Button, SvgIcon, Typography } from '@material-ui/core';
 
 import CurrencyOption from './CurrencyOption';
-import {useStyles} from './ExclusiveCreate.styles';
-import {InputAmount} from './InputAmount';
+import { useStyles } from './ExclusiveCreate.styles';
+import { InputAmount } from './InputAmount';
 
-import {serialize} from 'components/PostCreate/formatter';
-import {checkEditor, getEditorSelectors} from 'components/common/Editor';
-import {TermOfService} from 'components/common/TermOfService';
-import {Currency} from 'src/interfaces/currency';
-import {ExclusiveContentPost} from 'src/interfaces/exclusive';
-import {Post} from 'src/interfaces/post';
-import {User} from 'src/interfaces/user';
+import { serialize } from 'components/PostCreate/formatter';
+import { checkEditor, getEditorSelectors } from 'components/common/Editor';
+import { TermOfService } from 'components/common/TermOfService';
+import { Currency } from 'src/interfaces/currency';
+import { ExclusiveContentPost } from 'src/interfaces/exclusive';
+import { Post } from 'src/interfaces/post';
+import { User } from 'src/interfaces/user';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {ConfigState} from 'src/reducers/config/reducer';
+import { RootState } from 'src/reducers';
+import { ConfigState } from 'src/reducers/config/reducer';
 
 const CKEditor = dynamic(() => import('../common/CKEditor/Editor'), {
   ssr: false,
@@ -41,7 +41,7 @@ type PostCreateProps = {
 };
 
 export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
-  const {user, isMobile, onSearchPeople, onSubmit, autoFocus} = props;
+  const { user, isMobile, onSearchPeople, onSubmit, autoFocus } = props;
   const styles = useStyles();
   const [currency, setCurrency] = useState<Currency>();
   const [amount, setAmount] = useState<string>('');
@@ -53,7 +53,7 @@ export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
 
   const Editor = isMobile ? CKEditor : PlateEditor;
 
-  const {filteredCurrencies: balances} = useSelector<RootState, ConfigState>(
+  const { filteredCurrencies: balances } = useSelector<RootState, ConfigState>(
     state => state.configState,
   );
 
@@ -106,7 +106,8 @@ export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
   };
 
   useEffect(() => {
-    if (agreementChecked && currency && amount !== '') setIsDisabledButton(false);
+    if (agreementChecked && currency && amount !== '')
+      setIsDisabledButton(false);
     else setIsDisabledButton(true);
   }, [agreementChecked, currency, amount]);
 
@@ -118,7 +119,7 @@ export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
 
   return (
     <>
-      <div style={{marginBottom: 20}}>
+      <div style={{ marginBottom: 20 }}>
         <Editor
           userId={`exclusive-${user.id}`}
           mobile={isMobile}
@@ -131,7 +132,7 @@ export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
         />
       </div>
       <div className={styles.currencyWrapper}>
-        <div style={{width: 'calc(100% - 152px)'}}>
+        <div style={{ width: 'calc(100% - 152px)' }}>
           <InputAmount
             type="exclusive"
             placeholder={i18n.t('ExclusiveContent.Label.ExclusiveContentPrice')}
@@ -148,7 +149,9 @@ export const ExclusiveCreate: React.FC<PostCreateProps> = props => {
       </div>
       <div className={styles.feeWrapper}>
         <SvgIcon component={InformationCircleIcon} className={styles.icon} />
-        <Typography variant="subtitle2">{i18n.t('ExclusiveContent.Label.Fee')}</Typography>
+        <Typography variant="subtitle2">
+          {i18n.t('ExclusiveContent.Label.Fee')}
+        </Typography>
       </div>
       <div
         style={{

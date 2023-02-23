@@ -1,15 +1,15 @@
 import getConfig from 'next/config';
 
-import {encodeAddress} from '@polkadot/keyring';
-import {hexToU8a, isHex} from '@polkadot/util';
+import { encodeAddress } from '@polkadot/keyring';
+import { hexToU8a, isHex } from '@polkadot/util';
 
-import {NetworkIdEnum} from 'src/interfaces/network';
-import {UserWallet} from 'src/interfaces/user';
+import { NetworkIdEnum } from 'src/interfaces/network';
+import { UserWallet } from 'src/interfaces/user';
 
-const {publicRuntimeConfig} = getConfig();
+const { publicRuntimeConfig } = getConfig();
 
 export const enableExtension = async () => {
-  const {web3Enable, web3Accounts} = await import('@polkadot/extension-dapp');
+  const { web3Enable, web3Accounts } = await import('@polkadot/extension-dapp');
 
   const extensions = await web3Enable(publicRuntimeConfig.appName);
 
@@ -26,7 +26,7 @@ export const enableExtension = async () => {
 };
 
 export const unsubscribeFromAccounts = async (): Promise<void> => {
-  const {web3AccountsSubscribe} = await import('@polkadot/extension-dapp');
+  const { web3AccountsSubscribe } = await import('@polkadot/extension-dapp');
 
   const allAccounts = await enableExtension();
 
@@ -46,7 +46,10 @@ export const unsubscribeFromAccounts = async (): Promise<void> => {
   }
 };
 
-export const convertToPolkadotAddress = (address: string, currentWallet: UserWallet): string => {
+export const convertToPolkadotAddress = (
+  address: string,
+  currentWallet: UserWallet,
+): string => {
   if (isHex(address)) {
     switch (currentWallet.networkId) {
       case NetworkIdEnum.MYRIAD: {

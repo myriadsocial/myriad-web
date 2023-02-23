@@ -1,22 +1,22 @@
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
 import isArray from 'lodash/isArray';
-import {Url} from 'url';
+import { Url } from 'url';
 
 export const useQueryParams = () => {
   const router = useRouter();
   const query = router.query;
 
   const replace = (url: Partial<Url>): void => {
-    router.push(url, undefined, {shallow: true});
+    router.push(url, undefined, { shallow: true });
   };
 
   const push = (key: string, value: string | string[], force = false): void => {
     if (!force) {
       query[key] = value;
-      router.push({query}, undefined, {shallow: true});
+      router.push({ query }, undefined, { shallow: true });
     } else {
-      router.push({query: {[key]: value}}, undefined, {shallow: true});
+      router.push({ query: { [key]: value } }, undefined, { shallow: true });
     }
   };
 

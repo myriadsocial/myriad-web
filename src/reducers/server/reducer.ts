@@ -1,8 +1,8 @@
-import {Actions} from './actions';
+import { Actions } from './actions';
 import * as constants from './constants';
 
 import * as Redux from 'redux';
-import {Server} from 'src/lib/api/server';
+import { Server } from 'src/lib/api/server';
 
 export interface ServerState {
   apiURL: string;
@@ -14,7 +14,10 @@ const initalState: ServerState = {
   server: null,
 };
 
-export const ServerReducer: Redux.Reducer<ServerState, Actions> = (state = initalState, action) => {
+export const ServerReducer: Redux.Reducer<ServerState, Actions> = (
+  state = initalState,
+  action,
+) => {
   switch (action.type) {
     case constants.FETCH_SERVER: {
       return {

@@ -1,8 +1,8 @@
-import {BaseModel} from './base.interface';
-import {Currency} from './currency';
-import {BlockchainPlatform} from './wallet';
+import { BaseModel } from './base.interface';
+import { Currency } from './currency';
+import { BlockchainPlatform } from './wallet';
 
-import {TipsResult} from 'src/interfaces/blockchain-interface';
+import { TipsResult } from 'src/interfaces/blockchain-interface';
 
 export enum NetworkIdEnum {
   ETHEREUM = 'ethereum',

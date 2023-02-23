@@ -1,4 +1,9 @@
-import {createStyles, makeStyles, Theme, alpha} from '@material-ui/core/styles';
+import {
+  createStyles,
+  makeStyles,
+  Theme,
+  alpha,
+} from '@material-ui/core/styles';
 
 type HashtagStyleProps = {
   focused?: boolean;
@@ -11,7 +16,8 @@ export const useStyles = makeStyles<Theme, HashtagStyleProps>(theme =>
       fontWeight: 600,
       // to separate element & text
       paddingRight: 1,
-      background: props => (props.selected ? alpha(theme.palette.secondary.main, 0.3) : 'none'),
+      background: props =>
+        props.selected ? alpha(theme.palette.secondary.main, 0.3) : 'none',
       userSelect: 'auto',
       cursor: 'pointer',
     },

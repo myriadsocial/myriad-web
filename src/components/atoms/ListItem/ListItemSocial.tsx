@@ -1,16 +1,21 @@
 import React from 'react';
 
-import {Typography} from '@material-ui/core';
-import ListItem, {ListItemProps} from '@material-ui/core/ListItem';
+import { Typography } from '@material-ui/core';
+import ListItem, { ListItemProps } from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Radio from '@material-ui/core/Radio';
-import {createStyles, makeStyles, Theme, alpha} from '@material-ui/core/styles';
+import {
+  createStyles,
+  makeStyles,
+  Theme,
+  alpha,
+} from '@material-ui/core/styles';
 
-import {Avatar, AvatarSize} from '../Avatar';
+import { Avatar, AvatarSize } from '../Avatar';
 
-import {SocialMedia} from 'src/interfaces/social';
+import { SocialMedia } from 'src/interfaces/social';
 
 type ListItemSocialComponentProps = ListItemProps & {
   account: SocialMedia;
@@ -87,63 +92,78 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export const ListItemSocialComponent: React.FC<ListItemSocialComponentProps> = props => {
-  const {account, selectedPeople, title, subtitle, avatar, action, active, handleChange} = props;
-  const styles = useStyles();
+export const ListItemSocialComponent: React.FC<ListItemSocialComponentProps> =
+  props => {
+    const {
+      account,
+      selectedPeople,
+      title,
+      subtitle,
+      avatar,
+      action,
+      active,
+      handleChange,
+    } = props;
+    const styles = useStyles();
 
-  const iconStyles = [styles.icon];
-  const listProps: any = {};
+    const iconStyles = [styles.icon];
+    const listProps: any = {};
 
-  if (active) {
-    iconStyles.push(styles.active);
-  }
+    if (active) {
+      iconStyles.push(styles.active);
+    }
 
-  return (
-    <ListItem
-      component="div"
-      ContainerComponent="div"
-      className={styles.root}
-      role={undefined}
-      disableGutters
-      selected={selectedPeople === account.peopleId}
-      {...listProps}>
-      <ListItemIcon className={styles.itemIcon}>
-        <Radio
-          edge="start"
-          color="primary"
-          tabIndex={-1}
-          checked={selectedPeople === account.peopleId || account.primary}
-          value={account.peopleId}
-          disableRipple
-          onChange={() => handleChange(account)}
-          inputProps={{'aria-labelledby': `checkbox-list-lable-${account.peopleId}`}}
-        />
-      </ListItemIcon>
+    return (
+      <ListItem
+        component="div"
+        ContainerComponent="div"
+        className={styles.root}
+        role={undefined}
+        disableGutters
+        selected={selectedPeople === account.peopleId}
+        {...listProps}>
+        <ListItemIcon className={styles.itemIcon}>
+          <Radio
+            edge="start"
+            color="primary"
+            tabIndex={-1}
+            checked={selectedPeople === account.peopleId || account.primary}
+            value={account.peopleId}
+            disableRipple
+            onChange={() => handleChange(account)}
+            inputProps={{
+              'aria-labelledby': `checkbox-list-lable-${account.peopleId}`,
+            }}
+          />
+        </ListItemIcon>
 
-      <ListItemAvatar className={styles.avatar}>
-        <Avatar name={title} src={avatar} size={AvatarSize.LARGE} />
-      </ListItemAvatar>
+        <ListItemAvatar className={styles.avatar}>
+          <Avatar name={title} src={avatar} size={AvatarSize.LARGE} />
+        </ListItemAvatar>
 
-      <ListItemText
-        primary={
-          <Typography component="div" variant="h5" color="textPrimary">
-            {title}
-          </Typography>
-        }
-        secondary={
-          subtitle ? (
-            <Typography component="span" variant="subtitle1" color="textPrimary">
-              {subtitle}
+        <ListItemText
+          primary={
+            <Typography component="div" variant="h5" color="textPrimary">
+              {title}
             </Typography>
-          ) : undefined
-        }
-      />
+          }
+          secondary={
+            subtitle ? (
+              <Typography
+                component="span"
+                variant="subtitle1"
+                color="textPrimary">
+                {subtitle}
+              </Typography>
+            ) : undefined
+          }
+        />
 
-      {action && (
-        <div id="remove-item" className={styles.action}>
-          {action}
-        </div>
-      )}
-    </ListItem>
-  );
-};
+        {action && (
+          <div id="remove-item" className={styles.action}>
+            {action}
+          </div>
+        )}
+      </ListItem>
+    );
+  };

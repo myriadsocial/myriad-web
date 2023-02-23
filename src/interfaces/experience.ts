@@ -1,7 +1,7 @@
-import {BaseModel} from './base.interface';
-import {People} from './people';
-import {Post} from './post';
-import {User} from './user';
+import { BaseModel } from './base.interface';
+import { People } from './people';
+import { Post } from './post';
+import { User } from './user';
 
 export type LayoutType = 'timeline' | 'photo';
 export type ExperienceType = 'all' | 'personal' | 'other';

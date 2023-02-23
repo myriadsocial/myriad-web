@@ -53,12 +53,12 @@ import {
   TComboboxItem,
 } from '@udecode/plate';
 
-import {ELEMENT_EMOJI, TEmojiElement} from './plugins/EmojiPicker';
-import {ELEMENT_HASHTAG, THashtagElement} from './plugins/Hashtag';
-import {TImageListElement, ELEMENT_IMAGE_LIST} from './plugins/ImageList';
-import {ELEMENT_SHOW_MORE} from './plugins/ShowMore';
+import { ELEMENT_EMOJI, TEmojiElement } from './plugins/EmojiPicker';
+import { ELEMENT_HASHTAG, THashtagElement } from './plugins/Hashtag';
+import { TImageListElement, ELEMENT_IMAGE_LIST } from './plugins/ImageList';
+import { ELEMENT_SHOW_MORE } from './plugins/ShowMore';
 
-import {CSSProperties} from 'styled-components';
+import { CSSProperties } from 'styled-components';
 
 /**
  * Text
@@ -146,7 +146,10 @@ export interface MyAlignProps {
   textAlign?: CSSProperties['textAlign'];
 }
 
-export interface BlockElement extends TElement, IndentListProps, LineHeightProps {
+export interface BlockElement
+  extends TElement,
+    IndentListProps,
+    LineHeightProps {
   id?: string;
 }
 
@@ -260,7 +263,7 @@ export type EditorValue = RootBlock[];
  * Editor types
  */
 
-export type Editor = PlateEditor<EditorValue> & {isDragging?: boolean};
+export type Editor = PlateEditor<EditorValue> & { isDragging?: boolean };
 export type ReactEditor = TReactEditor<EditorValue>;
 export type Node = ENode<EditorValue>;
 export type NodeEntry = ENodeEntry<EditorValue>;
@@ -285,16 +288,32 @@ export type MentionDetail = {
 
 export type MyDecorate<P = PluginOptions> = Decorate<P, EditorValue, Editor>;
 export type MyDecorateEntry = DecorateEntry<EditorValue>;
-export type MyDOMHandler<P = PluginOptions> = DOMHandler<P, EditorValue, Editor>;
+export type MyDOMHandler<P = PluginOptions> = DOMHandler<
+  P,
+  EditorValue,
+  Editor
+>;
 export type MyInjectComponent = InjectComponent<EditorValue>;
 export type MyInjectProps = InjectProps<EditorValue>;
-export type MyKeyboardHandler<P = PluginOptions> = KeyboardHandler<P, EditorValue, Editor>;
+export type MyKeyboardHandler<P = PluginOptions> = KeyboardHandler<
+  P,
+  EditorValue,
+  Editor
+>;
 export type MyOnChange<P = PluginOptions> = OnChange<P, EditorValue, Editor>;
 export type MyOverrideByKey = OverrideByKey<EditorValue, Editor>;
-export type MyPlatePlugin<P = PluginOptions> = PlatePlugin<P, EditorValue, Editor>;
+export type MyPlatePlugin<P = PluginOptions> = PlatePlugin<
+  P,
+  EditorValue,
+  Editor
+>;
 export type MyPlatePluginInsertData = PlatePluginInsertData<EditorValue>;
 export type MyPlatePluginProps = PlatePluginProps<EditorValue>;
 export type MyPlateProps = PlateProps<EditorValue, Editor>;
 export type MySerializeHtml = SerializeHtml<EditorValue>;
-export type MyWithOverride<P = PluginOptions> = WithOverride<P, EditorValue, Editor>;
+export type MyWithOverride<P = PluginOptions> = WithOverride<
+  P,
+  EditorValue,
+  Editor
+>;
 export type MyAutoformatRule = AutoformatRule<EditorValue, Editor>;

@@ -1,5 +1,5 @@
-import {NetworkIdEnum} from './network';
-import {BlockchainPlatform, WalletTypeEnum} from './wallet';
+import { NetworkIdEnum } from './network';
+import { BlockchainPlatform, WalletTypeEnum } from './wallet';
 
 export interface SignInCredential {
   // User detail

@@ -1,38 +1,40 @@
-import {ChevronDownIcon, ChevronUpIcon} from '@heroicons/react/outline';
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline';
 
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {IconButton, SvgIcon, Typography} from '@material-ui/core';
+import { IconButton, SvgIcon, Typography } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import BaseButton from '@material-ui/core/Button';
 
-import {PostDetailExperience} from '../PostDetailExperience/PostDetailExperience';
-import {Loading} from '../atoms/Loading';
+import { PostDetailExperience } from '../PostDetailExperience/PostDetailExperience';
+import { Loading } from '../atoms/Loading';
 import useConfirm from '../common/Confirm/use-confirm.hook';
-import {useStyles} from './experience.style';
+import { useStyles } from './experience.style';
 
-import {Empty} from 'components/atoms/Empty';
-import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorizeAction';
+import { Empty } from 'components/atoms/Empty';
+import { WithAuthorizeAction } from 'components/common/Authorization/WithAuthorizeAction';
 import ShowIf from 'components/common/show-if.component';
-import {ListItemPeopleComponent} from 'src/components/atoms/ListItem/ListItemPeople';
-import {acronym} from 'src/helpers/string';
-import {useExperienceHook} from 'src/hooks/use-experience-hook';
-import {Experience, WrappedExperience} from 'src/interfaces/experience';
-import {People} from 'src/interfaces/people';
-import {SocialsEnum} from 'src/interfaces/social';
-import {User} from 'src/interfaces/user';
+import { ListItemPeopleComponent } from 'src/components/atoms/ListItem/ListItemPeople';
+import { acronym } from 'src/helpers/string';
+import { useExperienceHook } from 'src/hooks/use-experience-hook';
+import { Experience, WrappedExperience } from 'src/interfaces/experience';
+import { People } from 'src/interfaces/people';
+import { SocialsEnum } from 'src/interfaces/social';
+import { User } from 'src/interfaces/user';
 import * as UserAPI from 'src/lib/api/user';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {UserState} from 'src/reducers/user/reducer';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
-const ExperienceSignInDialog = dynamic(() => import('./ExperienceSignIn'), {ssr: false});
+const ExperienceSignInDialog = dynamic(() => import('./ExperienceSignIn'), {
+  ssr: false,
+});
 
 type Props = {
   experience: Experience;
@@ -52,22 +54,36 @@ enum TagsProps {
 const Button = WithAuthorizeAction(BaseButton);
 
 export const ExperiencePreview: React.FC<Props> = props => {
-  const {experience, userExperiences, onSubscribe, onUnsubscribe, onFollow, onUpdate} = props;
+  const {
+    experience,
+    userExperiences,
+    onSubscribe,
+    onUnsubscribe,
+    onFollow,
+    onUpdate,
+  } = props;
 
   const style = useStyles();
   const router = useRouter();
   const confirm = useConfirm();
 
-  const {experiencePosts, hasMore, loadPostExperience, loadNextPostExperience} =
-    useExperienceHook();
+  const {
+    experiencePosts,
+    hasMore,
+    loadPostExperience,
+    loadNextPostExperience,
+  } = useExperienceHook();
 
-  const {anonymous, user} = useSelector<RootState, UserState>(state => state.userState);
+  const { anonymous, user } = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
   const [promptSignin, setPromptSignin] = React.useState(false);
   const [isExpandPeople, setIsExpandPeople] = React.useState(false);
   const [isExpandPost, setIsExpandPost] = React.useState(false);
   const [selectedUserIds, setSelectedUserIds] = React.useState<User[]>([]);
   const [pageUserIds, setPageUserIds] = React.useState<number>(1);
-  const [isLoadingSelectedUser, setIsLoadingSelectedUser] = React.useState<boolean>(false);
+  const [isLoadingSelectedUser, setIsLoadingSelectedUser] =
+    React.useState<boolean>(false);
 
   React.useEffect(() => {
     loadPostExperience(experience.id);
@@ -90,7 +106,9 @@ export const ExperiencePreview: React.FC<Props> = props => {
         <Typography
           key={tag}
           component="span"
-          className={type === TagsProps.ALLOWED ? style.allowedTag : style.prohibitedTag}>
+          className={
+            type === TagsProps.ALLOWED ? style.allowedTag : style.prohibitedTag
+          }>
           {tag}
         </Typography>
       );
@@ -111,8 +129,9 @@ export const ExperiencePreview: React.FC<Props> = props => {
 
   const isSubscribed = () => {
     return (
-      userExperiences.filter(ar => ar.experience.id === experience.id && ar.subscribed === true)
-        .length > 0
+      userExperiences.filter(
+        ar => ar.experience.id === experience.id && ar.subscribed === true,
+      ).length > 0
     );
   };
 
@@ -140,10 +159,11 @@ export const ExperiencePreview: React.FC<Props> = props => {
   const openUnsubscribeConfirmation = () => {
     confirm({
       title: i18n.t('Experience.Alert.Confirmation_Unsub.Title'),
-      description: `${i18n.t('Experience.Alert.Confirmation_Unsub.Desc_1')}\n ${i18n.t(
-        'Experience.Alert.Confirmation_Unsub.Desc_2',
-        {experience_name: experience.name},
-      )}`,
+      description: `${i18n.t(
+        'Experience.Alert.Confirmation_Unsub.Desc_1',
+      )}\n ${i18n.t('Experience.Alert.Confirmation_Unsub.Desc_2', {
+        experience_name: experience.name,
+      })}`,
       confirmationText: i18n.t('Experience.Alert.Confirmation_Unsub.Btn'),
       onConfirm: () => {
         const subscribedExperience = userExperiences.find(
@@ -177,7 +197,8 @@ export const ExperiencePreview: React.FC<Props> = props => {
   };
 
   const checkVisibility = () => {
-    if (experience?.visibility === 'private') return i18n.t('Experience.Editor.Visibility.OnlyMe');
+    if (experience?.visibility === 'private')
+      return i18n.t('Experience.Editor.Visibility.OnlyMe');
     else if (experience?.visibility === 'public')
       return i18n.t('Experience.Editor.Visibility.Public');
     else if (experience?.visibility === 'selected_user')
@@ -187,9 +208,13 @@ export const ExperiencePreview: React.FC<Props> = props => {
   const getSelectedIds = async (userIds: string[]) => {
     setIsLoadingSelectedUser(true);
     const response = await UserAPI.getUserByIds(userIds, pageUserIds);
-    setSelectedUserIds([...selectedUserIds, ...(response?.data as unknown as User[])]);
+    setSelectedUserIds([
+      ...selectedUserIds,
+      ...(response?.data as unknown as User[]),
+    ]);
     setIsLoadingSelectedUser(false);
-    if (pageUserIds < response.meta.totalPageCount) setPageUserIds(pageUserIds + 1);
+    if (pageUserIds < response.meta.totalPageCount)
+      setPageUserIds(pageUserIds + 1);
   };
 
   React.useEffect(() => {
@@ -207,13 +232,18 @@ export const ExperiencePreview: React.FC<Props> = props => {
             className={style.avatar}
           />
         ) : (
-          <Avatar alt={experience.name} variant="rounded" className={style.avatar}>
+          <Avatar
+            alt={experience.name}
+            variant="rounded"
+            className={style.avatar}>
             {experience.name.charAt(0)}
           </Avatar>
         )}
 
         <div className={style.experienceSummary}>
-          <Typography className={style.experienceName}>{experience.name}</Typography>
+          <Typography className={style.experienceName}>
+            {experience.name}
+          </Typography>
           <div className={style.experienceCounterMetric}>
             <Typography component={'span'} className={style.wrapperCounter}>
               <Typography className={style.counterNumberMetric}>
@@ -247,7 +277,11 @@ export const ExperiencePreview: React.FC<Props> = props => {
                 variant="contained"
                 color="primary"
                 className={style.actionButton}
-                onClick={isSubscribed() ? openUnsubscribeConfirmation : handleSubscribeExperience}>
+                onClick={
+                  isSubscribed()
+                    ? openUnsubscribeConfirmation
+                    : handleSubscribeExperience
+                }>
                 {isSubscribed()
                   ? i18n.t('Experience.Preview.Button.Unsubscribe')
                   : i18n.t('Experience.Preview.Button.Subscribe')}
@@ -267,7 +301,9 @@ export const ExperiencePreview: React.FC<Props> = props => {
           )}
         </div>
       </div>
-      <Typography className={style.description}>{experience.description}</Typography>
+      <Typography className={style.description}>
+        {experience.description}
+      </Typography>
       {(experience?.createdBy !== user?.id || anonymous) && (
         <div className={style.mobileButton}>
           <Button
@@ -283,7 +319,11 @@ export const ExperiencePreview: React.FC<Props> = props => {
             variant="contained"
             color="primary"
             className={style.actionButton}
-            onClick={isSubscribed() ? openUnsubscribeConfirmation : handleSubscribeExperience}>
+            onClick={
+              isSubscribed()
+                ? openUnsubscribeConfirmation
+                : handleSubscribeExperience
+            }>
             {isSubscribed()
               ? i18n.t('Experience.Preview.Button.Unsubscribe')
               : i18n.t('Experience.Preview.Button.Subscribe')}
@@ -313,7 +353,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
               alt={experience.user.name}
               src={experience.user.profilePictureURL}
               variant="circular"
-              style={{cursor: 'pointer'}}
+              style={{ cursor: 'pointer' }}
               className={style.photo}>
               {acronym(experience.user.name)}
             </Avatar>
@@ -322,7 +362,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
             href={`profile/${experience.user.id}`}
             as={`/profile/${experience.user.id}`}
             passHref>
-            <Typography className={style.user} style={{cursor: 'pointer'}}>
+            <Typography className={style.user} style={{ cursor: 'pointer' }}>
               {experience.user.name}
             </Typography>
           </Link>
@@ -346,7 +386,9 @@ export const ExperiencePreview: React.FC<Props> = props => {
           <Typography className={style.subtitle}>
             {i18n.t('Experience.Preview.Subheader.Privacy')}
           </Typography>
-          <Typography className={style.tagSection}>{checkVisibility()}</Typography>
+          <Typography className={style.tagSection}>
+            {checkVisibility()}
+          </Typography>
           {experience?.visibility === 'selected_user' && (
             <div className={style.customVisibility}>
               <ShowIf condition={isLoadingSelectedUser}>
@@ -356,10 +398,16 @@ export const ExperiencePreview: React.FC<Props> = props => {
                 selectedUserIds.map(person => (
                   <ListItemPeopleComponent
                     key={person.id}
-                    onClick={() => handleOpenProfile(person as unknown as People)}
+                    onClick={() =>
+                      handleOpenProfile(person as unknown as People)
+                    }
                     id="selectable-experience-list-item"
                     title={person.name}
-                    subtitle={<Typography variant="caption">@{person.username}</Typography>}
+                    subtitle={
+                      <Typography variant="caption">
+                        @{person.username}
+                      </Typography>
+                    }
                     avatar={person.profilePictureURL}
                     platform={'myriad'}
                   />
@@ -372,7 +420,10 @@ export const ExperiencePreview: React.FC<Props> = props => {
         <Typography className={style.subtitle}>
           {i18n.t('Experience.Preview.Subheader.People')}
         </Typography>
-        <IconButton onClick={handleExpandPeople} color="primary" aria-label="expand">
+        <IconButton
+          onClick={handleExpandPeople}
+          color="primary"
+          aria-label="expand">
           <SvgIcon
             component={isExpandPeople ? ChevronUpIcon : ChevronDownIcon}
             fontSize="small"
@@ -390,7 +441,9 @@ export const ExperiencePreview: React.FC<Props> = props => {
               onClick={() => handleOpenProfile(person)}
               id="selectable-experience-list-item"
               title={person.name}
-              subtitle={<Typography variant="caption">@{person.username}</Typography>}
+              subtitle={
+                <Typography variant="caption">@{person.username}</Typography>
+              }
               avatar={person.profilePictureURL}
               platform={person.platform}
             />
@@ -400,7 +453,10 @@ export const ExperiencePreview: React.FC<Props> = props => {
         <Typography className={style.subtitle}>
           {i18n.t('Experience.Preview.Subheader.Post')}
         </Typography>
-        <IconButton onClick={handleExpandPosts} color="primary" aria-label="expand">
+        <IconButton
+          onClick={handleExpandPosts}
+          color="primary"
+          aria-label="expand">
           <SvgIcon
             component={isExpandPost ? ChevronUpIcon : ChevronDownIcon}
             fontSize="small"
@@ -437,7 +493,10 @@ export const ExperiencePreview: React.FC<Props> = props => {
         </InfiniteScroll>
       )}
 
-      <ExperienceSignInDialog open={promptSignin} onClose={() => setPromptSignin(false)} />
+      <ExperienceSignInDialog
+        open={promptSignin}
+        onClose={() => setPromptSignin(false)}
+      />
     </div>
   );
 };

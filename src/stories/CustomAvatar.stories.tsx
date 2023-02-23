@@ -1,8 +1,8 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
-import {Avatar} from '../components/atoms/Avatar/Avatar';
+import { Avatar } from '../components/atoms/Avatar/Avatar';
 
 export default {
   title: 'UI Revamp v2.0/atoms',
@@ -10,7 +10,7 @@ export default {
   argTypes: {
     size: {
       options: ['small', 'medium', 'large'],
-      control: {type: 'radio'},
+      control: { type: 'radio' },
     },
   },
 } as ComponentMeta<typeof Avatar>;

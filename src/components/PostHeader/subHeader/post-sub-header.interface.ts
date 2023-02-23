@@ -1,4 +1,4 @@
-import {User} from 'src/interfaces/user';
+import { User } from 'src/interfaces/user';
 
 export type PostSubHeaderProps = {
   postId: string;

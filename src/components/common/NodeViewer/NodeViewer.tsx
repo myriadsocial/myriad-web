@@ -24,22 +24,25 @@ import {
   withProps,
 } from '@udecode/plate';
 
-import React, {useMemo, useRef, useState} from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {alignmentPlugin, baseUIElements} from '../Editor/config';
-import {createEmojiPlugin} from '../Editor/plugins';
-import {createHashtagPlugin} from '../Editor/plugins/Hashtag';
-import {createImageListPlugin} from '../Editor/plugins/ImageList';
-import {createShowMorePlugin, ELEMENT_SHOW_MORE} from '../Editor/plugins/ShowMore';
-import {MediaEmbedElement} from '../Editor/render/Element/MediaEmbed';
-import {ShowMoreElement} from '../Editor/render/Element/ShowMore';
-import {createEditorPlugins} from '../Editor/util';
-import {useStyles} from './NodeViewer.style';
-import {deserialize, minimize} from './formatter';
+import { alignmentPlugin, baseUIElements } from '../Editor/config';
+import { createEmojiPlugin } from '../Editor/plugins';
+import { createHashtagPlugin } from '../Editor/plugins/Hashtag';
+import { createImageListPlugin } from '../Editor/plugins/ImageList';
+import {
+  createShowMorePlugin,
+  ELEMENT_SHOW_MORE,
+} from '../Editor/plugins/ShowMore';
+import { MediaEmbedElement } from '../Editor/render/Element/MediaEmbed';
+import { ShowMoreElement } from '../Editor/render/Element/ShowMore';
+import { createEditorPlugins } from '../Editor/util';
+import { useStyles } from './NodeViewer.style';
+import { deserialize, minimize } from './formatter';
 
-import {ReportType} from 'src/interfaces/comment';
+import { ReportType } from 'src/interfaces/comment';
 
 const corePlugins = createEditorPlugins([
   createParagraphPlugin(),
@@ -83,12 +86,14 @@ export type NodeViewerProps = {
 };
 
 export const NodeViewer: React.FC<NodeViewerProps> = props => {
-  const {id, text, reportType, expand} = props;
+  const { id, text, reportType, expand } = props;
   const styles = useStyles();
   const router = useRouter();
   const containerRef = useRef(null);
 
-  const [elements, setElements] = useState(minimize(text, reportType, expand ? null : 250));
+  const [elements, setElements] = useState(
+    minimize(text, reportType, expand ? null : 250),
+  );
 
   const toggleShowMore = () => {
     const value = deserialize(text);
@@ -135,7 +140,7 @@ export const NodeViewer: React.FC<NodeViewerProps> = props => {
       <div ref={containerRef}>
         <Plate
           id={`${id}-${elements[0].children.length}`}
-          editableProps={{readOnly: true}}
+          editableProps={{ readOnly: true }}
           plugins={plugins}
           value={elements}
         />

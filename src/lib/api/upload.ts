@@ -21,13 +21,16 @@ export type ResponseFileUpload = {
   files: FileUploaded[];
 };
 
-export const image = async (file: File, options: UploadOptions): Promise<ResponseFileUpload> => {
+export const image = async (
+  file: File,
+  options: UploadOptions,
+): Promise<ResponseFileUpload> => {
   const kind = Kind.IMAGE;
 
   const formData = new FormData();
   formData.append('file', file);
 
-  const {data} = await MyriadAPI().request<ResponseFileUpload>({
+  const { data } = await MyriadAPI().request<ResponseFileUpload>({
     url: `/buckets/${kind}`,
     method: 'POST',
     headers: {
@@ -49,7 +52,7 @@ export const imageAsBuffer = async (
   const formData = new FormData();
   formData.append('file', file);
 
-  const {data} = await MyriadAPI().request<ResponseFileUpload>({
+  const { data } = await MyriadAPI().request<ResponseFileUpload>({
     url: `/buckets/${kind}`,
     method: 'POST',
     headers: {
@@ -62,13 +65,16 @@ export const imageAsBuffer = async (
   return data;
 };
 
-export const video = async (file: File, options: UploadOptions): Promise<ResponseFileUpload> => {
+export const video = async (
+  file: File,
+  options: UploadOptions,
+): Promise<ResponseFileUpload> => {
   const kind = Kind.VIDEO;
 
   const formData = new FormData();
   formData.append('file', file);
 
-  const {data} = await MyriadAPI().request<ResponseFileUpload>({
+  const { data } = await MyriadAPI().request<ResponseFileUpload>({
     url: `/buckets/${kind}`,
     method: 'POST',
     headers: {

@@ -1,5 +1,5 @@
-import {Post} from 'src/interfaces/post';
-import {User} from 'src/interfaces/user';
+import { Post } from 'src/interfaces/post';
+import { User } from 'src/interfaces/user';
 
 export type PostHeaderProps = {
   user?: User;

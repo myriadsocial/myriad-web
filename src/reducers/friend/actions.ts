@@ -1,15 +1,20 @@
-import {Actions as BaseAction, PaginationAction, setLoading, setError} from '../base/actions';
-import {RootState} from '../index';
-import {FetchProfileDetail, setProfile} from '../profile/actions';
+import {
+  Actions as BaseAction,
+  PaginationAction,
+  setLoading,
+  setError,
+} from '../base/actions';
+import { RootState } from '../index';
+import { FetchProfileDetail, setProfile } from '../profile/actions';
 import * as constants from './constants';
 
 import axios from 'axios';
-import {Action} from 'redux';
-import {Friend} from 'src/interfaces/friend';
-import {User} from 'src/interfaces/user';
+import { Action } from 'redux';
+import { Friend } from 'src/interfaces/friend';
+import { User } from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
-import {PaginationParams} from 'src/lib/api/interfaces/pagination-params.interface';
-import {ThunkActionCreator} from 'src/types/thunk';
+import { PaginationParams } from 'src/lib/api/interfaces/pagination-params.interface';
+import { ThunkActionCreator } from 'src/types/thunk';
 
 /**
  * Action Types
@@ -51,7 +56,9 @@ export type Actions =
  *
  * Actions
  */
-export const updateFriendParams = (params: PaginationParams): UpdateFriendsPagination => ({
+export const updateFriendParams = (
+  params: PaginationParams,
+): UpdateFriendsPagination => ({
   type: constants.SET_FRIENDS_FILTER,
   params,
 });
@@ -68,7 +75,7 @@ export const fetchFriend: ThunkActionCreator<Actions, RootState> =
   async (dispatch, getState) => {
     let currentUser = user;
 
-    const {userState} = getState();
+    const { userState } = getState();
 
     if (!user) {
       currentUser = userState.user;
@@ -79,7 +86,10 @@ export const fetchFriend: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     try {
-      const {meta, data: friends} = await FriendAPI.getFriends(currentUser.id, {page});
+      const { meta, data: friends } = await FriendAPI.getFriends(
+        currentUser.id,
+        { page },
+      );
 
       dispatch({
         type: constants.FETCH_FRIEND,
@@ -98,13 +108,16 @@ export const searchFriend: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     const {
-      userState: {user},
+      userState: { user },
     } = getState();
 
     if (!user) return;
 
     try {
-      const {meta, data: friends} = await FriendAPI.searchFriend({query, userId: user.id}, {page});
+      const { meta, data: friends } = await FriendAPI.searchFriend(
+        { query, userId: user.id },
+        { page },
+      );
 
       dispatch({
         type: constants.FILTER_FRIEND,
@@ -124,7 +137,7 @@ export const removeFromFriend: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     const {
-      userState: {user},
+      userState: { user },
     } = getState();
 
     try {
@@ -151,8 +164,8 @@ export const blockFromFriend: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     const {
-      userState: {user},
-      profileState: {detail},
+      userState: { user },
+      profileState: { detail },
     } = getState();
 
     try {

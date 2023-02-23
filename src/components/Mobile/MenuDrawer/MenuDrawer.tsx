@@ -1,11 +1,11 @@
-import {LogoutIcon} from '@heroicons/react/outline';
-import {MenuIcon} from '@heroicons/react/solid';
+import { LogoutIcon } from '@heroicons/react/outline';
+import { MenuIcon } from '@heroicons/react/solid';
 
-import React, {useState} from 'react';
-import {useCookies} from 'react-cookie';
-import {useSelector} from 'react-redux';
+import React, { useState } from 'react';
+import { useCookies } from 'react-cookie';
+import { useSelector } from 'react-redux';
 
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
 import {
   ListItem,
@@ -20,38 +20,51 @@ import {
   CircularProgress,
 } from '@material-ui/core';
 
-import {NetworkOption} from 'components/ProfileCard/NetworkOption/NetworkOption';
-import SelectServer, {COOKIE_INSTANCE_URL} from 'components/SelectServer';
-import {CommonWalletIcon} from 'components/atoms/Icons';
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import { NetworkOption } from 'components/ProfileCard/NetworkOption/NetworkOption';
+import SelectServer, { COOKIE_INSTANCE_URL } from 'components/SelectServer';
+import { CommonWalletIcon } from 'components/atoms/Icons';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import ShowIf from 'components/common/show-if.component';
-import {useMenuList, MenuId, MenuDetail} from 'src/components/Menu/use-menu-list';
-import {Metric} from 'src/components/Metric';
-import {useStyles} from 'src/components/Mobile/MenuDrawer/menuDrawer.style';
-import {PromptComponent} from 'src/components/Mobile/PromptDrawer/Prompt';
-import {ProfileContent} from 'src/components/ProfileCard';
-import {ListItemComponent} from 'src/components/atoms/ListItem';
-import {formatAddress} from 'src/helpers/wallet';
-import {useAuthHook} from 'src/hooks/auth.hook';
-import {useInstances} from 'src/hooks/use-instances.hooks';
-import {useUserHook} from 'src/hooks/use-user.hook';
-import {ServerListProps} from 'src/interfaces/server-list';
+import {
+  useMenuList,
+  MenuId,
+  MenuDetail,
+} from 'src/components/Menu/use-menu-list';
+import { Metric } from 'src/components/Metric';
+import { useStyles } from 'src/components/Mobile/MenuDrawer/menuDrawer.style';
+import { PromptComponent } from 'src/components/Mobile/PromptDrawer/Prompt';
+import { ProfileContent } from 'src/components/ProfileCard';
+import { ListItemComponent } from 'src/components/atoms/ListItem';
+import { formatAddress } from 'src/helpers/wallet';
+import { useAuthHook } from 'src/hooks/auth.hook';
+import { useInstances } from 'src/hooks/use-instances.hooks';
+import { useUserHook } from 'src/hooks/use-user.hook';
+import { ServerListProps } from 'src/interfaces/server-list';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {NotificationState} from 'src/reducers/notification/reducer';
+import { RootState } from 'src/reducers';
+import { NotificationState } from 'src/reducers/notification/reducer';
 
 export const MenuDrawerComponent: React.FC = () => {
-  const {total} = useSelector<RootState, NotificationState>(state => state.notificationState);
+  const { total } = useSelector<RootState, NotificationState>(
+    state => state.notificationState,
+  );
 
   const [selected, setSelected] = React.useState<MenuId>('home');
   const [openDrawer, setOpenDrawer] = React.useState(false);
   const [openPromptDrawer, setOpenPromptDrawer] = React.useState(false);
   const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
-  const {switchInstance, loadingSwitch, onLoadingSwitch} = useInstances();
+  const { switchInstance, loadingSwitch, onLoadingSwitch } = useInstances();
 
-  const {logout} = useAuthHook();
-  const {user, alias, anonymous, userWalletAddress, networks, currentWallet, wallets} =
-    useUserHook();
+  const { logout } = useAuthHook();
+  const {
+    user,
+    alias,
+    anonymous,
+    userWalletAddress,
+    networks,
+    currentWallet,
+    wallets,
+  } = useUserHook();
   const enqueueSnackbar = useEnqueueSnackbar();
 
   const router = useRouter();
@@ -122,7 +135,10 @@ export const MenuDrawerComponent: React.FC = () => {
   };
 
   const handleLoginOrCreateAccount = () => {
-    router.push({pathname: '/login', query: {instance: cookies[COOKIE_INSTANCE_URL]}});
+    router.push({
+      pathname: '/login',
+      query: { instance: cookies[COOKIE_INSTANCE_URL] },
+    });
   };
 
   const openMenu = (item: MenuDetail) => () => {
@@ -143,7 +159,10 @@ export const MenuDrawerComponent: React.FC = () => {
     }
   };
 
-  const handleSwitchInstance = async (server: ServerListProps, callback?: () => void) => {
+  const handleSwitchInstance = async (
+    server: ServerListProps,
+    callback?: () => void,
+  ) => {
     try {
       await switchInstance(server);
 
@@ -152,7 +171,7 @@ export const MenuDrawerComponent: React.FC = () => {
       if (err.message === 'AccountNotFound') {
         setRegister(true);
       } else {
-        enqueueSnackbar({message: err.message, variant: 'error'});
+        enqueueSnackbar({ message: err.message, variant: 'error' });
       }
 
       onLoadingSwitch(false);
@@ -162,10 +181,10 @@ export const MenuDrawerComponent: React.FC = () => {
   return (
     <>
       <SvgIcon
-        classes={{root: style.fill}}
+        classes={{ root: style.fill }}
         component={MenuIcon}
         viewBox="0 0 20 20"
-        style={{width: 25, height: 25}}
+        style={{ width: 25, height: 25 }}
         onClick={handleOpenDrawer}
       />
       <Drawer anchor={'left'} open={openDrawer} onClose={handleOpenDrawer}>
@@ -192,7 +211,10 @@ export const MenuDrawerComponent: React.FC = () => {
               {/* network */}
               <div className={style.wallet}>
                 <ShowIf condition={anonymous}>
-                  <Button variant="contained" color="primary" onClick={handleLoginOrCreateAccount}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleLoginOrCreateAccount}>
                     Sign in or Create an Account
                   </Button>
                 </ShowIf>
@@ -210,15 +232,24 @@ export const MenuDrawerComponent: React.FC = () => {
                     </Typography>
                   </ShowIf>
                   <ShowIf condition={!anonymous && !wallets.length}>
-                    <Button variant="contained" color="primary" onClick={handleConnectWeb3Wallet}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleConnectWeb3Wallet}>
                       <CommonWalletIcon viewBox="1 -3.5 20 20" />
-                      <span style={{paddingLeft: '5px'}}>Connect Web 3.0 wallet</span>
+                      <span style={{ paddingLeft: '5px' }}>
+                        Connect Web 3.0 wallet
+                      </span>
                     </Button>
                   </ShowIf>
                 </ShowIf>
               </div>
               {/* metric */}
-              <Metric official={false} data={user?.metric} anonymous={anonymous} />
+              <Metric
+                official={false}
+                data={user?.metric}
+                anonymous={anonymous}
+              />
             </div>
 
             <div className={style.instance}>
@@ -254,7 +285,9 @@ export const MenuDrawerComponent: React.FC = () => {
               className={style.logoutListItem}
               ContainerComponent="div"
               disabled={anonymous ? true : false}
-              onClick={anonymous ? () => console.log('disabled!') : handleSignOut}>
+              onClick={
+                anonymous ? () => console.log('disabled!') : handleSignOut
+              }>
               <ListItemIcon className={iconStyles.join(' ')}>
                 <SvgIcon color="error" component={LogoutIcon} />
               </ListItemIcon>

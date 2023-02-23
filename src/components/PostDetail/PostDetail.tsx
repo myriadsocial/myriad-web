@@ -1,38 +1,43 @@
-import React, {useCallback, useState} from 'react';
+import React, { useCallback, useState } from 'react';
 
 import dynamic from 'next/dynamic';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {Typography, useMediaQuery, useTheme} from '@material-ui/core';
+import { Typography, useMediaQuery, useTheme } from '@material-ui/core';
 
-import {PostDetailProps} from './PostDetail.interface';
-import {useStyles} from './PostDetail.styles';
-import {ButtonAddToTimeline} from './render/AddToTimeline/AddToTimeline';
-import {PostFooter} from './render/Footer';
-import {PostHeader} from './render/Header';
+import { PostDetailProps } from './PostDetail.interface';
+import { useStyles } from './PostDetail.styles';
+import { ButtonAddToTimeline } from './render/AddToTimeline/AddToTimeline';
+import { PostFooter } from './render/Footer';
+import { PostHeader } from './render/Header';
 
 import ButtonPayment from 'components/ExclusiveContentCreate/Payment/ButtonPayment';
 import Reveal from 'components/ExclusiveContentCreate/Reveal/Reveal';
-import {NodeViewer} from 'components/common/NodeViewer';
-import {ExclusiveContent} from 'components/common/Tipping/Tipping.interface';
+import { NodeViewer } from 'components/common/NodeViewer';
+import { ExclusiveContent } from 'components/common/Tipping/Tipping.interface';
 import ShowIf from 'components/common/show-if.component';
-import {LinkPreview} from 'src/components/atoms/LinkPreview';
-import {NSFW} from 'src/components/atoms/NSFW/NSFW.component';
-import {SendTipButton} from 'src/components/common/SendTipButton/SendTipButton';
-import {isJson} from 'src/helpers/string';
-import {useToggle} from 'src/hooks/use-toggle.hook';
-import {InfoIconYellow} from 'src/images/Icons';
-import {ReferenceType} from 'src/interfaces/interaction';
+import { LinkPreview } from 'src/components/atoms/LinkPreview';
+import { NSFW } from 'src/components/atoms/NSFW/NSFW.component';
+import { SendTipButton } from 'src/components/common/SendTipButton/SendTipButton';
+import { isJson } from 'src/helpers/string';
+import { useToggle } from 'src/hooks/use-toggle.hook';
+import { InfoIconYellow } from 'src/images/Icons';
+import { ReferenceType } from 'src/interfaces/interaction';
 import i18n from 'src/locale';
 
-const Reddit = dynamic(() => import('./render/Reddit'), {ssr: false});
-const Twitter = dynamic(() => import('./render/Twitter'), {ssr: false});
-const Gallery = dynamic(() => import('src/components/atoms/Gallery/Gallery'), {ssr: false});
-const Video = dynamic(() => import('src/components/atoms/Video/Video'), {ssr: false});
+const Reddit = dynamic(() => import('./render/Reddit'), { ssr: false });
+const Twitter = dynamic(() => import('./render/Twitter'), { ssr: false });
+const Gallery = dynamic(() => import('src/components/atoms/Gallery/Gallery'), {
+  ssr: false,
+});
+const Video = dynamic(() => import('src/components/atoms/Video/Video'), {
+  ssr: false,
+});
 
 export const PostDetail: React.FC<PostDetailProps> = props => {
-  const {user, post, type, expand, preview, ...restProps} = props;
-  const {onRemoveVote, onToggleDownvote, onUpvote, onToggleShowComment} = restProps;
+  const { user, post, type, expand, preview, ...restProps } = props;
+  const { onRemoveVote, onToggleDownvote, onUpvote, onToggleShowComment } =
+    restProps;
   const router = useRouter();
   const styles = useStyles();
   const theme = useTheme();
@@ -43,20 +48,25 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
   const [exclusiveContent, setExclusiveContent] = useState<ExclusiveContent>();
 
   const downvoted = post.votes
-    ? post.votes.filter(vote => vote.userId === user?.id && !vote.state).length > 0
+    ? post.votes.filter(vote => vote.userId === user?.id && !vote.state)
+        .length > 0
     : false;
   const upvoted = post.votes
-    ? post.votes.filter(vote => vote.userId === user?.id && vote.state).length > 0
+    ? post.votes.filter(vote => vote.userId === user?.id && vote.state).length >
+      0
     : false;
 
   const isPostCreator = post.createdBy === user?.id;
   const isInternalPost = post.platform === 'myriad';
   const isExternalPost = post.platform !== 'myriad';
   const isOriginOwner = post?.people?.userSocialMedia?.userId === user?.id;
-  const showTipButton = (isInternalPost && !isPostCreator) || (isExternalPost && !isOriginOwner);
+  const showTipButton =
+    (isInternalPost && !isPostCreator) || (isExternalPost && !isOriginOwner);
   const isPostOwner = isInternalPost ? isPostCreator : isOriginOwner;
-  const isAssetImageExist = post?.asset?.images && post?.asset?.images?.length > 0;
-  const isAssetVideoExist = post?.asset?.videos && post?.asset?.videos?.length > 0;
+  const isAssetImageExist =
+    post?.asset?.images && post?.asset?.images?.length > 0;
+  const isAssetVideoExist =
+    post?.asset?.videos && post?.asset?.videos?.length > 0;
   const showEmbedded =
     post?.asset?.images?.length === 0 &&
     post?.asset?.videos?.length === 0 &&
@@ -91,7 +101,12 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
 
   return (
     <div className={styles.wrapper}>
-      <PostHeader user={user} owned={isPostCreator} post={post} {...restProps} />
+      <PostHeader
+        user={user}
+        owned={isPostCreator}
+        post={post}
+        {...restProps}
+      />
 
       <div className={styles.content}>
         <ShowIf condition={hiddenContent}>
@@ -110,7 +125,7 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
                 columnGap: '10px',
               }}>
               <InfoIconYellow />
-              <Typography style={{fontSize: 12, color: '#404040'}}>
+              <Typography style={{ fontSize: 12, color: '#404040' }}>
                 {i18n.t('Visibilities.PostVisibilities')}
               </Typography>
             </div>
@@ -125,15 +140,25 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           </ShowIf>
 
           <ShowIf condition={['myriad'].includes(post.platform) && isHtmlPost}>
-            <div className="html-content" dangerouslySetInnerHTML={{__html: post.text}} />
+            <div
+              className="html-content"
+              dangerouslySetInnerHTML={{ __html: post.text }}
+            />
           </ShowIf>
 
-          <ShowIf condition={['twitter'].includes(post.platform) && post.text.length > 0}>
+          <ShowIf
+            condition={
+              ['twitter'].includes(post.platform) && post.text.length > 0
+            }>
             <Twitter text={post.text} onHashtagClicked={handleHashtagClicked} />
           </ShowIf>
 
           <ShowIf condition={['reddit'].includes(post.platform)}>
-            <Reddit title={post.title} text={post.text} onHashtagClicked={handleHashtagClicked} />
+            <Reddit
+              title={post.title}
+              text={post.text}
+              onHashtagClicked={handleHashtagClicked}
+            />
           </ShowIf>
 
           {post.asset?.exclusiveContents &&
@@ -148,9 +173,13 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
 
           {exclusiveContent && <Reveal content={exclusiveContent} />}
 
-          {isAssetImageExist && <Gallery images={post.asset?.images} variant="vertical" />}
+          {isAssetImageExist && (
+            <Gallery images={post.asset?.images} variant="vertical" />
+          )}
 
-          {isAssetVideoExist && <Video url={post.asset.videos[0]} height={308} width={560} />}
+          {isAssetVideoExist && (
+            <Video url={post.asset.videos[0]} height={308} width={560} />
+          )}
 
           {showEmbedded && <LinkPreview embed={post.embeddedURL} />}
 

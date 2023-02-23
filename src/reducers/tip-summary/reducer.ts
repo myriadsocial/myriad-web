@@ -1,14 +1,18 @@
-import {HYDRATE} from 'next-redux-wrapper';
+import { HYDRATE } from 'next-redux-wrapper';
 
-import {PaginationState as BasePaginationState} from '../base/state';
-import {Actions} from './actions';
+import { PaginationState as BasePaginationState } from '../base/state';
+import { Actions } from './actions';
 import * as constants from './constants';
 
 import * as Redux from 'redux';
-import {Comment} from 'src/interfaces/comment';
-import {Post} from 'src/interfaces/post';
-import {Transaction, TransactionDetail, TransactionSort} from 'src/interfaces/transaction';
-import {User} from 'src/interfaces/user';
+import { Comment } from 'src/interfaces/comment';
+import { Post } from 'src/interfaces/post';
+import {
+  Transaction,
+  TransactionDetail,
+  TransactionSort,
+} from 'src/interfaces/transaction';
+import { User } from 'src/interfaces/user';
 
 export interface TipSummaryState extends BasePaginationState {
   reference: Post | Comment | User | null;

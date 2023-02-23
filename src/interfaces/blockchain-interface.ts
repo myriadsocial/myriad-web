@@ -1,15 +1,15 @@
-import {ApiPromise} from '@polkadot/api';
-import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
-import {u32} from '@polkadot/types';
-import {BN} from '@polkadot/util';
+import { ApiPromise } from '@polkadot/api';
+import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
+import { u32 } from '@polkadot/types';
+import { BN } from '@polkadot/util';
 
-import {Near} from '../lib/services/near-api-js';
-import {PolkadotJs} from '../lib/services/polkadot-js';
+import { Near } from '../lib/services/near-api-js';
+import { PolkadotJs } from '../lib/services/polkadot-js';
 
 import * as nearAPI from 'near-api-js';
-import {Network} from 'src/interfaces/network';
-import {WalletDetail} from 'src/interfaces/wallet';
-import {Server} from 'src/lib/api/server';
+import { Network } from 'src/interfaces/network';
+import { WalletDetail } from 'src/interfaces/wallet';
+import { Server } from 'src/lib/api/server';
 
 export interface IProvider {
   provider: ProviderProps;
@@ -64,8 +64,14 @@ export interface IProvider {
 
 export const MYRIAD_WALLET_KEY = '@Myriad_Wallet_Key';
 
-export type SignatureProps = {nonce: number; publicAddress: string; signature: string};
-export type SignerProps = InjectedAccountWithMeta | nearAPI.ConnectedWalletAccount;
+export type SignatureProps = {
+  nonce: number;
+  publicAddress: string;
+  signature: string;
+};
+export type SignerProps =
+  | InjectedAccountWithMeta
+  | nearAPI.ConnectedWalletAccount;
 export type ProviderProps = ApiPromise | NearInitializeProps;
 export type BlockchainProps = PolkadotJs | Near;
 export type BalanceChanges = (change: BN) => void;
@@ -187,7 +193,9 @@ export interface ContractProps {
     attachedGas: string,
     attachedAmount: string,
   ) => void;
-  storage_balance_of: (props: ContractBalanceProps) => null | ContractStorageBalanceProps;
+  storage_balance_of: (
+    props: ContractBalanceProps,
+  ) => null | ContractStorageBalanceProps;
   storage_deposit: (props: ContractBalanceProps) => void;
 }
 

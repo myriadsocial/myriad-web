@@ -1,0 +1,5 @@
+* @myriadsocial/frontend
+
+.github/ @myriadsocial/devops
+.maintain/ @myriadsocial/devops
+.dockerignore @myriadsocial/devops

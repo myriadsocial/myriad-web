@@ -1,16 +1,16 @@
-import {DotsVerticalIcon} from '@heroicons/react/outline';
-import {DuplicateIcon} from '@heroicons/react/outline';
+import { DotsVerticalIcon } from '@heroicons/react/outline';
+import { DuplicateIcon } from '@heroicons/react/outline';
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
 import getConfig from 'next/config';
 import NextImage from 'next/image';
 import Link from 'next/link';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {Avatar, Button, Grid} from '@material-ui/core';
-import {TextField, InputAdornment} from '@material-ui/core';
+import { Avatar, Button, Grid } from '@material-ui/core';
+import { TextField, InputAdornment } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
@@ -21,15 +21,15 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
 import useConfirm from '../common/Confirm/use-confirm.hook';
-import {useStyles} from './Experience.style';
+import { useStyles } from './Experience.style';
 
-import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorizeAction';
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {Modal} from 'src/components/atoms/Modal';
+import { WithAuthorizeAction } from 'components/common/Authorization/WithAuthorizeAction';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import { Modal } from 'src/components/atoms/Modal';
 import ShowIf from 'src/components/common/show-if.component';
-import {useExperienceHook} from 'src/hooks/use-experience-hook';
-import {WrappedExperience} from 'src/interfaces/experience';
-import {User} from 'src/interfaces/user';
+import { useExperienceHook } from 'src/hooks/use-experience-hook';
+import { WrappedExperience } from 'src/interfaces/experience';
+import { User } from 'src/interfaces/user';
 import i18n from 'src/locale';
 
 type ExperienceProps = {
@@ -50,7 +50,7 @@ const MenuItem = WithAuthorizeAction(BaseMenuItem);
 const DEFAULT_IMAGE =
   'https://pbs.twimg.com/profile_images/1407599051579617281/-jHXi6y5_400x400.jpg';
 
-const {publicRuntimeConfig} = getConfig();
+const { publicRuntimeConfig } = getConfig();
 
 export const Experience: React.FC<ExperienceProps> = props => {
   const {
@@ -69,15 +69,18 @@ export const Experience: React.FC<ExperienceProps> = props => {
   const confirm = useConfirm();
   const enqueueSnackbar = useEnqueueSnackbar();
 
-  const [menuAnchorElement, setMenuAnchorElement] = useState<null | HTMLElement>(null);
-  const [shareAnchorElement, setShareAnchorElement] = useState<null | HTMLElement>(null);
+  const [menuAnchorElement, setMenuAnchorElement] =
+    useState<null | HTMLElement>(null);
+  const [shareAnchorElement, setShareAnchorElement] =
+    useState<null | HTMLElement>(null);
 
   const isOwnExperience = userExperience.experience.user.id === user?.id;
   const experienceId = userExperience.experience.id;
   const userExperienceId = userExperience.id;
   const link = publicRuntimeConfig.appAuthURL + `/experience/${experienceId}`;
-  const {userExperiencesMeta} = useExperienceHook();
-  const totalOwnedExperience = userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
+  const { userExperiencesMeta } = useExperienceHook();
+  const totalOwnedExperience =
+    userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
   const handleClickExperience = () => {
     handleCloseSettings();
 
@@ -87,7 +90,11 @@ export const Experience: React.FC<ExperienceProps> = props => {
   };
 
   const handleCloneExperience = () => {
-    if (totalOwnedExperience >= 5 && !user.fullAccess && user.fullAccess !== undefined) {
+    if (
+      totalOwnedExperience >= 5 &&
+      !user.fullAccess &&
+      user.fullAccess !== undefined
+    ) {
       confirm({
         title: i18n.t('LiteVersion.LimitTitleExperience'),
         description: i18n.t('LiteVersion.LimitDescExperience'),
@@ -95,7 +102,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
         confirmationText: i18n.t('LiteVersion.ConnectWallet'),
         cancellationText: i18n.t('LiteVersion.MaybeLater'),
         onConfirm: () => {
-          router.push({pathname: '/wallet', query: {type: 'manage'}});
+          router.push({ pathname: '/wallet', query: { type: 'manage' } });
         },
         onCancel: () => {
           undefined;
@@ -151,7 +158,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
       title: i18n.t('Experience.List.Prompt_Unsub.Title'),
       description: `${i18n.t('Experience.List.Prompt_Unsub.Desc_1')}\n ${i18n.t(
         'Experience.List.Prompt_Unsub.Desc_2',
-        {experience_name: userExperience.experience.name},
+        { experience_name: userExperience.experience.name },
       )}`,
       icon: 'warning',
       confirmationText: i18n.t('Experience.List.Prompt_Unsub.Btn_Yes'),
@@ -191,13 +198,19 @@ export const Experience: React.FC<ExperienceProps> = props => {
   return (
     <>
       <Card className={styles.root}>
-        <CardActionArea onClick={handleClickExperience} disableRipple component="div">
+        <CardActionArea
+          onClick={handleClickExperience}
+          disableRipple
+          component="div">
           <Grid container justifyContent="space-between" wrap="nowrap">
             <div>
               {userExperience.experience.experienceImageURL ? (
                 <NextImage
                   alt={userExperience.experience.name}
-                  src={userExperience.experience.experienceImageURL ?? DEFAULT_IMAGE}
+                  src={
+                    userExperience.experience.experienceImageURL ??
+                    DEFAULT_IMAGE
+                  }
                   placeholder="empty"
                   objectFit="cover"
                   objectPosition="center"
@@ -216,11 +229,14 @@ export const Experience: React.FC<ExperienceProps> = props => {
               )}
             </div>
 
-            <CardContent classes={{root: styles.cardContent}}>
+            <CardContent classes={{ root: styles.cardContent }}>
               <Typography className={styles.title} variant="body1">
                 {userExperience.experience.name}
               </Typography>
-              <Typography variant="caption" color="primary" className={styles.subtitle}>
+              <Typography
+                variant="caption"
+                color="primary"
+                className={styles.subtitle}>
                 {userExperience.experience.user.name}
               </Typography>
               <Typography noWrap color="textSecondary">
@@ -240,10 +256,10 @@ export const Experience: React.FC<ExperienceProps> = props => {
                 {isOwnExperience ? ` ${i18n.t('Experience.List.You')}` : ''}
               </Typography>
             </CardContent>
-            <div style={{display: 'flex', alignItems: 'center'}}>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
               {userExperience?.experience.createdBy === user?.id ? (
                 <Button
-                  style={{width: 140}}
+                  style={{ width: 140 }}
                   size="small"
                   variant="contained"
                   color="primary"
@@ -254,12 +270,14 @@ export const Experience: React.FC<ExperienceProps> = props => {
                 </Button>
               ) : (
                 <Button
-                  style={{width: 140}}
+                  style={{ width: 140 }}
                   variant="contained"
                   color="primary"
                   size="small"
                   onClick={() =>
-                    isSubscribed ? confirmUnsubscribe() : handleSubscribeExperience()
+                    isSubscribed
+                      ? confirmUnsubscribe()
+                      : handleSubscribeExperience()
                   }>
                   {isSubscribed
                     ? i18n.t('Experience.Preview.Button.Unsubscribe')
@@ -268,7 +286,11 @@ export const Experience: React.FC<ExperienceProps> = props => {
               )}
 
               <IconButton aria-label="settings" onClick={handleClickSettings}>
-                <SvgIcon component={DotsVerticalIcon} viewBox="0 0 24 24" className={styles.icon} />
+                <SvgIcon
+                  component={DotsVerticalIcon}
+                  viewBox="0 0 24 24"
+                  className={styles.icon}
+                />
               </IconButton>
             </div>
           </Grid>
@@ -282,11 +304,14 @@ export const Experience: React.FC<ExperienceProps> = props => {
           }}
           anchorEl={menuAnchorElement}
           getContentAnchorEl={null}
-          anchorOrigin={{vertical: 'top', horizontal: 'center'}}
-          transformOrigin={{vertical: 'bottom', horizontal: 'center'}}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          transformOrigin={{ vertical: 'bottom', horizontal: 'center' }}
           open={Boolean(menuAnchorElement)}
           onClose={handleCloseSettings}>
-          <Link href={`/experience/[experienceId]`} as={`/experience/${experienceId}`} passHref>
+          <Link
+            href={`/experience/[experienceId]`}
+            as={`/experience/${experienceId}`}
+            passHref>
             <BaseMenuItem onClick={handleCloseSettings}>
               {i18n.t('Experience.List.Menu.View')}
             </BaseMenuItem>
@@ -312,7 +337,10 @@ export const Experience: React.FC<ExperienceProps> = props => {
             </MenuItem>
           </ShowIf>
 
-          <ShowIf condition={!userExperience.subscribed && !isOwnExperience && !isHidden()}>
+          <ShowIf
+            condition={
+              !userExperience.subscribed && !isOwnExperience && !isHidden()
+            }>
             <MenuItem
               onClick={handleSubscribeExperience}
               fallback={handleCloseSettings}
@@ -321,7 +349,8 @@ export const Experience: React.FC<ExperienceProps> = props => {
             </MenuItem>
           </ShowIf>
 
-          <ShowIf condition={Boolean(userExperience.subscribed) && !isOwnExperience}>
+          <ShowIf
+            condition={Boolean(userExperience.subscribed) && !isOwnExperience}>
             <MenuItem
               onClick={confirmUnsubscribe}
               fallback={handleCloseSettings}
@@ -363,8 +392,12 @@ export const Experience: React.FC<ExperienceProps> = props => {
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <CopyToClipboard text={link} onCopy={handleExperienceLinkCopied}>
-                    <IconButton aria-label="copy-post-link" style={{padding: 0}}>
+                  <CopyToClipboard
+                    text={link}
+                    onCopy={handleExperienceLinkCopied}>
+                    <IconButton
+                      aria-label="copy-post-link"
+                      style={{ padding: 0 }}>
                       <SvgIcon component={DuplicateIcon} color="primary" />
                     </IconButton>
                   </CopyToClipboard>

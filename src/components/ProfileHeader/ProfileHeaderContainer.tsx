@@ -1,46 +1,48 @@
-import React, {useEffect} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
-import {ProfileHeaderComponent} from '.';
+import { ProfileHeaderComponent } from '.';
 
-import {useTimelineFilter} from 'components/PostList/hooks/use-timeline-filter.hook';
+import { useTimelineFilter } from 'components/PostList/hooks/use-timeline-filter.hook';
 import useTipHistoryHook from 'components/TipHistory/use-tip-history.hook';
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import debounce from 'lodash/debounce';
-import {useFriendRequest} from 'src/hooks/use-friend-request.hook';
-import {useQueryParams} from 'src/hooks/use-query-params.hooks';
-import {useReport} from 'src/hooks/use-report.hook';
-import {FriendStatus} from 'src/interfaces/friend';
-import {ReportProps} from 'src/interfaces/report';
+import { useFriendRequest } from 'src/hooks/use-friend-request.hook';
+import { useQueryParams } from 'src/hooks/use-query-params.hooks';
+import { useReport } from 'src/hooks/use-report.hook';
+import { FriendStatus } from 'src/interfaces/friend';
+import { ReportProps } from 'src/interfaces/report';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {blockFromFriend} from 'src/reducers/friend/actions';
+import { RootState } from 'src/reducers';
+import { blockFromFriend } from 'src/reducers/friend/actions';
 import {
   fetchProfileDetail,
   fetchProfileExperience,
   fetchProfileFriend,
 } from 'src/reducers/profile/actions';
-import {ProfileState} from 'src/reducers/profile/reducer';
-import {UserState} from 'src/reducers/user/reducer';
+import { ProfileState } from 'src/reducers/profile/reducer';
+import { UserState } from 'src/reducers/user/reducer';
 
 type Props = {
   edit?: () => void;
 };
 
-export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
+export const ProfileHeaderContainer: React.FC<Props> = ({ edit }) => {
   const dispatch = useDispatch();
   const enqueueSnackbar = useEnqueueSnackbar();
 
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const {detail: profile, friendStatus} = useSelector<RootState, ProfileState>(
-    state => state.profileState,
-  );
+  const { user } = useSelector<RootState, UserState>(state => state.userState);
+  const { detail: profile, friendStatus } = useSelector<
+    RootState,
+    ProfileState
+  >(state => state.profileState);
 
-  const {requestFriend, removeFriendRequest, toggleRequest} = useFriendRequest();
-  const {sendReportWithAttributes} = useReport();
-  const {open: openTipHistory} = useTipHistoryHook();
-  const {query} = useQueryParams();
-  const {filterTimeline} = useTimelineFilter({owner: profile?.id});
+  const { requestFriend, removeFriendRequest, toggleRequest } =
+    useFriendRequest();
+  const { sendReportWithAttributes } = useReport();
+  const { open: openTipHistory } = useTipHistoryHook();
+  const { query } = useQueryParams();
+  const { filterTimeline } = useTimelineFilter({ owner: profile?.id });
 
   const urlLink = () => {
     if (typeof window !== 'undefined') {
@@ -108,7 +110,9 @@ export const ProfileHeaderContainer: React.FC<Props> = ({edit}) => {
       removeFriendRequest(profile, () => {
         if (status === 'approved') {
           enqueueSnackbar({
-            message: i18n.t('Profile.Header.Alert.Unfriend', {name: profile?.name}),
+            message: i18n.t('Profile.Header.Alert.Unfriend', {
+              name: profile?.name,
+            }),
             variant: 'success',
           });
         }

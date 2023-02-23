@@ -1,7 +1,7 @@
-import {ELEMENT_MENTION} from '@udecode/plate';
+import { ELEMENT_MENTION } from '@udecode/plate';
 
-import {EditorValue} from 'components/common/Editor/Editor.interface';
-import {CommentProps} from 'src/interfaces/comment';
+import { EditorValue } from 'components/common/Editor/Editor.interface';
+import { CommentProps } from 'src/interfaces/comment';
 
 export type CommentSerializedProps = Pick<CommentProps, 'text' | 'mentions'>;
 

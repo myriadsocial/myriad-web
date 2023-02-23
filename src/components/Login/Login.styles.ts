@@ -1,4 +1,4 @@
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -12,7 +12,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'column',
       justifyContent: 'center',
     },
-    iconTitle: {fontSize: 16, fontWeight: 400},
+    iconTitle: { fontSize: 16, fontWeight: 400 },
     loading: {
       color: theme.palette.primary.main,
       position: 'absolute',

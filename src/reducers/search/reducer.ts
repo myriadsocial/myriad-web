@@ -1,8 +1,8 @@
-import {HYDRATE} from 'next-redux-wrapper';
+import { HYDRATE } from 'next-redux-wrapper';
 
-import {User} from '../../interfaces/user';
-import {PaginationState as BasePaginationState} from '../base/state';
-import {Actions} from './actions';
+import { User } from '../../interfaces/user';
+import { PaginationState as BasePaginationState } from '../base/state';
+import { Actions } from './actions';
 import * as constants from './constants';
 
 import update from 'immutability-helper';
@@ -45,12 +45,14 @@ export const SearchReducer: Redux.Reducer<SearchState, Actions> = (
     }
 
     case constants.LOAD_USERS: {
-      const {users, meta} = action.payload;
+      const { users, meta } = action.payload;
 
       return {
         ...state,
         searchedUsers:
-          !meta.currentPage || meta.currentPage === 1 ? users : [...state.searchedUsers, ...users],
+          !meta.currentPage || meta.currentPage === 1
+            ? users
+            : [...state.searchedUsers, ...users],
         isSearching: true,
         hasMore: meta.currentPage < meta.totalPageCount,
         meta,
@@ -58,7 +60,7 @@ export const SearchReducer: Redux.Reducer<SearchState, Actions> = (
     }
 
     case constants.SEARCH_USERS: {
-      const {meta} = action.payload;
+      const { meta } = action.payload;
 
       return {
         ...state,
@@ -80,20 +82,20 @@ export const SearchReducer: Redux.Reducer<SearchState, Actions> = (
 
     case constants.USERS_LOADING: {
       return update(state, {
-        loading: {$set: action.loading},
+        loading: { $set: action.loading },
       });
     }
 
     case constants.SET_IS_SEARCHING: {
       return update(state, {
-        isSearching: {$set: true},
-        query: {$set: action.query},
+        isSearching: { $set: true },
+        query: { $set: action.query },
       });
     }
 
     case constants.SET_FINISH_SEARCHING: {
       return update(state, {
-        isSearching: {$set: false},
+        isSearching: { $set: false },
       });
     }
 

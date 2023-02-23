@@ -1,17 +1,19 @@
-import {useState} from 'react';
+import { useState } from 'react';
 
-import {SettingsOption} from './use-setting-list.hook';
+import { SettingsOption } from './use-setting-list.hook';
 
-import {NotificationSettingType} from 'src/interfaces/setting';
+import { NotificationSettingType } from 'src/interfaces/setting';
 import i18n from 'src/locale';
 
 export type NotificationSetting = Record<NotificationSettingType, boolean>;
-export type NotificationSettingsOption = SettingsOption<NotificationSettingType> & {
-  enabled: boolean;
-};
+export type NotificationSettingsOption =
+  SettingsOption<NotificationSettingType> & {
+    enabled: boolean;
+  };
 
 export const useNotificationSetting = (setting: NotificationSetting) => {
-  const [notificationSettings, setNotificationSetting] = useState<NotificationSetting>(setting);
+  const [notificationSettings, setNotificationSetting] =
+    useState<NotificationSetting>(setting);
 
   const settings: NotificationSettingsOption[] = [
     {

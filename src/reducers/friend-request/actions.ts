@@ -1,15 +1,20 @@
-import {Actions as BaseAction, PaginationAction, setLoading, setError} from '../base/actions';
-import {fetchFriend} from '../friend/actions';
-import {RootState} from '../index';
-import {FetchProfileDetail, setProfile} from '../profile/actions';
+import {
+  Actions as BaseAction,
+  PaginationAction,
+  setLoading,
+  setError,
+} from '../base/actions';
+import { fetchFriend } from '../friend/actions';
+import { RootState } from '../index';
+import { FetchProfileDetail, setProfile } from '../profile/actions';
 import * as constants from './constants';
 
 import axios from 'axios';
-import {Action} from 'redux';
-import {Friend, FriendStatus} from 'src/interfaces/friend';
-import {User} from 'src/interfaces/user';
+import { Action } from 'redux';
+import { Friend, FriendStatus } from 'src/interfaces/friend';
+import { User } from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
-import {ThunkActionCreator} from 'src/types/thunk';
+import { ThunkActionCreator } from 'src/types/thunk';
 
 /**
  * Action Types
@@ -28,7 +33,11 @@ export interface CreateFriendRequest extends Action {
  * Union Action Types
  */
 
-export type Actions = LoadFriendRequests | CreateFriendRequest | BaseAction | FetchProfileDetail;
+export type Actions =
+  | LoadFriendRequests
+  | CreateFriendRequest
+  | BaseAction
+  | FetchProfileDetail;
 
 /**
  *
@@ -44,7 +53,10 @@ export const fetchFriendRequest: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     try {
-      const {data: requests, meta} = await FriendAPI.getFriendRequests(user.id, page);
+      const { data: requests, meta } = await FriendAPI.getFriendRequests(
+        user.id,
+        page,
+      );
 
       dispatch({
         type: constants.FETCH_FRIEND_REQUEST,
@@ -63,7 +75,7 @@ export const createFriendRequest: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     const {
-      userState: {user},
+      userState: { user },
     } = getState();
 
     try {
@@ -102,7 +114,7 @@ export const deleteFriendRequest: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     const {
-      userState: {user},
+      userState: { user },
     } = getState();
 
     try {
@@ -126,12 +138,13 @@ export const deleteFriendRequest: ThunkActionCreator<Actions, RootState> =
   };
 
 export const toggleFriendRequest: ThunkActionCreator<Actions, RootState> =
-  (friendId: string, status: FriendStatus, callback?: () => void) => async (dispatch, getState) => {
+  (friendId: string, status: FriendStatus, callback?: () => void) =>
+  async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     try {
       const {
-        userState: {user},
+        userState: { user },
       } = getState();
 
       if (!user) {

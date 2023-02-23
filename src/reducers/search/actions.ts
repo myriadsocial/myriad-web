@@ -1,12 +1,12 @@
-import {Actions as BaseAction, setError} from '../base/actions';
-import {RootState} from '../index';
+import { Actions as BaseAction, setError } from '../base/actions';
+import { RootState } from '../index';
 import * as constants from './constants';
 
-import {Action} from 'redux';
-import {User} from 'src/interfaces/user';
-import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
+import { Action } from 'redux';
+import { User } from 'src/interfaces/user';
+import { ListMeta } from 'src/lib/api/interfaces/base-list.interface';
 import * as UserAPI from 'src/lib/api/user';
-import {ThunkActionCreator} from 'src/types/thunk';
+import { ThunkActionCreator } from 'src/types/thunk';
 
 /**
  * Action Types
@@ -101,7 +101,7 @@ export const loadUsers: ThunkActionCreator<Actions, RootState> =
     dispatch(setUsersLoading(true));
 
     try {
-      const {data: users, meta} = await UserAPI.searchUsers(page);
+      const { data: users, meta } = await UserAPI.searchUsers(page);
 
       dispatch({
         type: constants.LOAD_USERS,
@@ -123,7 +123,7 @@ export const searchUsers: ThunkActionCreator<Actions, RootState> =
     const {
       searchState: {
         query: storedQuery,
-        meta: {currentPage},
+        meta: { currentPage },
       },
     } = getState();
 
@@ -136,7 +136,7 @@ export const searchUsers: ThunkActionCreator<Actions, RootState> =
     dispatch(setIsSearching(query));
 
     try {
-      const {meta, data: users} = await UserAPI.searchUsers(page, query);
+      const { meta, data: users } = await UserAPI.searchUsers(page, query);
 
       dispatch({
         type: constants.SEARCH_USERS,

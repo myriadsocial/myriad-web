@@ -1,31 +1,41 @@
-import {ChatAltIcon, DuplicateIcon, ShareIcon} from '@heroicons/react/outline';
+import {
+  ChatAltIcon,
+  DuplicateIcon,
+  ShareIcon,
+} from '@heroicons/react/outline';
 
-import React, {useState} from 'react';
-import {CopyToClipboard} from 'react-copy-to-clipboard';
+import React, { useState } from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import getConfig from 'next/config';
 
-import {TextField, Typography, InputAdornment, Hidden, IconButton} from '@material-ui/core';
+import {
+  TextField,
+  Typography,
+  InputAdornment,
+  Hidden,
+  IconButton,
+} from '@material-ui/core';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
-import {PostFooterProps} from './Footer.interface';
-import {useStyles} from './Footer.style';
+import { PostFooterProps } from './Footer.interface';
+import { useStyles } from './Footer.style';
 
-import {Modal} from 'components/atoms/Modal';
-import {Text} from 'components/atoms/Text';
-import {VotingComponent} from 'components/atoms/Voting';
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import { Modal } from 'components/atoms/Modal';
+import { Text } from 'components/atoms/Text';
+import { VotingComponent } from 'components/atoms/Voting';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import ShowIf from 'src/components/common/show-if.component';
-import {formatCount} from 'src/helpers/number';
+import { formatCount } from 'src/helpers/number';
 import i18n from 'src/locale';
 
-const {publicRuntimeConfig} = getConfig();
+const { publicRuntimeConfig } = getConfig();
 
 export const PostFooter: React.FC<PostFooterProps> = props => {
   const style = useStyles();
   const {
     postId,
-    metrics: {discussions = 0, debates = 0, upvotes = 0, downvotes = 0},
+    metrics: { discussions = 0, debates = 0, upvotes = 0, downvotes = 0 },
     downvoted = false,
     upvoted = false,
     children,
@@ -72,9 +82,17 @@ export const PostFooter: React.FC<PostFooterProps> = props => {
           onClick={onShowComments}
           className={style.action}
           color="primary">
-          <SvgIcon classes={{root: style.fill}} component={ChatAltIcon} viewBox="0 0 24 24" />
+          <SvgIcon
+            classes={{ root: style.fill }}
+            component={ChatAltIcon}
+            viewBox="0 0 24 24"
+          />
         </IconButton>
-        <Typography component="span" color="primary" variant="body1" className={style.comment}>
+        <Typography
+          component="span"
+          color="primary"
+          variant="body1"
+          className={style.comment}>
           <Typography component="span" color="primary" variant="body1">
             {formatCount(discussions + debates)}
           </Typography>
@@ -91,15 +109,23 @@ export const PostFooter: React.FC<PostFooterProps> = props => {
 
       <ShowIf condition={type !== 'share'}>
         <div className={style.section}>
-          <IconButton onClick={handleClickShareLink} className={style.action} color="primary">
+          <IconButton
+            onClick={handleClickShareLink}
+            className={style.action}
+            color="primary">
             <SvgIcon
               className={style.mr1}
-              classes={{root: style.fill}}
+              classes={{ root: style.fill }}
               component={ShareIcon}
               viewBox="0 0 24 24"
             />
             <Hidden xsDown>
-              <Text locale="Post_Share.Action" color="primary" variant="body1" weight="semi-bold" />
+              <Text
+                locale="Post_Share.Action"
+                color="primary"
+                variant="body1"
+                weight="semi-bold"
+              />
             </Hidden>
           </IconButton>
         </div>
@@ -114,7 +140,11 @@ export const PostFooter: React.FC<PostFooterProps> = props => {
         open={Boolean(shareAnchorEl)}
         onClose={handleCloseCopyLink}>
         <div className={style.copy}>
-          <Typography component="p" className={style.subtitle} color="primary" variant="h4">
+          <Typography
+            component="p"
+            className={style.subtitle}
+            color="primary"
+            variant="h4">
             {i18n.t('Post_Share.Post_URL')}
           </Typography>
           <TextField
@@ -130,7 +160,9 @@ export const PostFooter: React.FC<PostFooterProps> = props => {
               endAdornment: (
                 <InputAdornment position="end">
                   <CopyToClipboard text={postUrl} onCopy={handleLinkCopied}>
-                    <IconButton aria-label="copy-post-link" style={{padding: 0}}>
+                    <IconButton
+                      aria-label="copy-post-link"
+                      style={{ padding: 0 }}>
                       <SvgIcon component={DuplicateIcon} color="primary" />
                     </IconButton>
                   </CopyToClipboard>
@@ -139,7 +171,11 @@ export const PostFooter: React.FC<PostFooterProps> = props => {
             }}
           />
           <div className={style.divider} />
-          <Typography component="p" className={style.subtitle} color="primary" variant="h4">
+          <Typography
+            component="p"
+            className={style.subtitle}
+            color="primary"
+            variant="h4">
             {i18n.t('Post_Share.Embed_Link')}
           </Typography>
           <TextField
@@ -158,7 +194,9 @@ export const PostFooter: React.FC<PostFooterProps> = props => {
                   <CopyToClipboard
                     text={`<iframe src="${embedUrl}"></iframe>`}
                     onCopy={handleLinkCopied}>
-                    <IconButton aria-label="copy-post-embed" style={{padding: 0}}>
+                    <IconButton
+                      aria-label="copy-post-embed"
+                      style={{ padding: 0 }}>
                       <SvgIcon component={DuplicateIcon} color="primary" />
                     </IconButton>
                   </CopyToClipboard>

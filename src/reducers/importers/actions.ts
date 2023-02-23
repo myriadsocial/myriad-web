@@ -1,10 +1,15 @@
-import {Actions as BaseAction, PaginationAction, setLoading, setError} from '../base/actions';
-import {RootState} from '../index';
+import {
+  Actions as BaseAction,
+  PaginationAction,
+  setLoading,
+  setError,
+} from '../base/actions';
+import { RootState } from '../index';
 import * as constants from './constants';
 
-import {Importer} from 'src/interfaces/user';
+import { Importer } from 'src/interfaces/user';
 import * as ImporterAPI from 'src/lib/api/importers';
-import {ThunkActionCreator} from 'src/types/thunk';
+import { ThunkActionCreator } from 'src/types/thunk';
 
 export interface LoadImporters extends PaginationAction {
   type: constants.FETCH_IMPORTER;
@@ -23,11 +28,11 @@ export const fetchImporter: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     const {
-      userState: {user},
+      userState: { user },
     } = getState();
 
     try {
-      const {meta, data: importers} = await ImporterAPI.getImporters(
+      const { meta, data: importers } = await ImporterAPI.getImporters(
         originPostId,
         platform,
         user?.id as string,
@@ -36,7 +41,9 @@ export const fetchImporter: ThunkActionCreator<Actions, RootState> =
 
       dispatch({
         type: constants.FETCH_IMPORTER,
-        importers: importers.filter(importer => importer && importer.id !== postCreator),
+        importers: importers.filter(
+          importer => importer && importer.id !== postCreator,
+        ),
         meta,
       });
     } catch (error) {
@@ -46,23 +53,24 @@ export const fetchImporter: ThunkActionCreator<Actions, RootState> =
     }
   };
 
-export const removeImporter: ThunkActionCreator<Actions, RootState> = () => async dispatch => {
-  dispatch(setLoading(true));
+export const removeImporter: ThunkActionCreator<Actions, RootState> =
+  () => async dispatch => {
+    dispatch(setLoading(true));
 
-  try {
-    dispatch({
-      type: constants.FETCH_IMPORTER,
-      importers: [],
-      meta: {
-        currentPage: 1,
-        itemsPerPage: 10,
-        totalItemCount: 0,
-        totalPageCount: 0,
-      },
-    });
-  } catch (error) {
-    dispatch(setError(error));
-  } finally {
-    dispatch(setLoading(false));
-  }
-};
+    try {
+      dispatch({
+        type: constants.FETCH_IMPORTER,
+        importers: [],
+        meta: {
+          currentPage: 1,
+          itemsPerPage: 10,
+          totalItemCount: 0,
+          totalPageCount: 0,
+        },
+      });
+    } catch (error) {
+      dispatch(setError(error));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };

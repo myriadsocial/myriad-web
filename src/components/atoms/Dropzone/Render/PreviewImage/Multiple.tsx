@@ -1,13 +1,19 @@
-import {XIcon} from '@heroicons/react/outline';
+import { XIcon } from '@heroicons/react/outline';
 
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
 import NextImage from 'next/image';
 
-import {Grid, IconButton, SvgIcon, useMediaQuery, useTheme} from '@material-ui/core';
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import {
+  Grid,
+  IconButton,
+  SvgIcon,
+  useMediaQuery,
+  useTheme,
+} from '@material-ui/core';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-import {Skeleton} from '../../File.skeleton';
+import { Skeleton } from '../../File.skeleton';
 
 import ShowIf from 'components/common/show-if.component';
 
@@ -55,7 +61,7 @@ export const useStyles = makeStyles<Theme>(theme =>
 );
 
 export const Multiple: React.FC<PreviewMultipleProps> = props => {
-  const {files, width, height, disableRemove, onRemoveFile} = props;
+  const { files, width, height, disableRemove, onRemoveFile } = props;
 
   const styles = useStyles();
   const theme = useTheme();
@@ -74,8 +80,10 @@ export const Multiple: React.FC<PreviewMultipleProps> = props => {
   }, [files]);
 
   const cols = files.length === 1 ? 12 : 4;
-  const colWidth = width ?? cols === 4 ? (isMobile ? 80 : 215) : isMobile ? 220 : 605;
-  const colHeight = height ?? cols === 4 ? (isMobile ? 80 : 112) : isMobile ? 120 : 315;
+  const colWidth =
+    width ?? cols === 4 ? (isMobile ? 80 : 215) : isMobile ? 220 : 605;
+  const colHeight =
+    height ?? cols === 4 ? (isMobile ? 80 : 112) : isMobile ? 120 : 315;
 
   const updateLoading = (index: number) => () => {
     setPreviews(prev => {
@@ -119,7 +127,7 @@ export const Multiple: React.FC<PreviewMultipleProps> = props => {
             aria-label="remove image"
             onClick={removeFile(i)}
             className={styles.icon}>
-            <SvgIcon component={XIcon} style={{fontSize: '1rem'}} />
+            <SvgIcon component={XIcon} style={{ fontSize: '1rem' }} />
           </IconButton>
         </Grid>
       ))}

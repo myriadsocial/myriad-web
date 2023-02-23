@@ -1,4 +1,4 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
@@ -17,15 +17,15 @@ export default {
   argTypes: {
     color: {
       options: [...buttonColors],
-      control: {type: 'radio'},
+      control: { type: 'radio' },
     },
     size: {
       options: [...buttonSizes],
-      control: {type: 'radio'},
+      control: { type: 'radio' },
     },
     variant: {
       options: [...buttonVariants],
-      control: {type: 'radio'},
+      control: { type: 'radio' },
     },
   },
 } as ComponentMeta<typeof Button>;

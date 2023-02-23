@@ -1,9 +1,9 @@
-import React, {useEffect} from 'react';
-import {useSelector} from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 import getConfig from 'next/config';
 import dynamic from 'next/dynamic';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
 import {
   Button,
@@ -14,24 +14,24 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
+import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 
-import {toHexPublicKey} from '../../lib/crypto';
-import {BoxComponent} from '../atoms/Box';
-import {Manage} from './Manage';
-import {useStyles} from './manage.style';
+import { toHexPublicKey } from '../../lib/crypto';
+import { BoxComponent } from '../atoms/Box';
+import { Manage } from './Manage';
+import { useStyles } from './manage.style';
 
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
-import {useAuthHook} from 'src/hooks/auth.hook';
-import {useConnect} from 'src/hooks/use-connect.hook';
-import {useNearApi} from 'src/hooks/use-near-api.hook';
-import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
-import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
-import {Near} from 'src/lib/services/near-api-js';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import { PromptComponent } from 'src/components/atoms/Prompt/prompt.component';
+import { useAuthHook } from 'src/hooks/auth.hook';
+import { useConnect } from 'src/hooks/use-connect.hook';
+import { useNearApi } from 'src/hooks/use-near-api.hook';
+import { usePolkadotExtension } from 'src/hooks/use-polkadot-app.hook';
+import { BlockchainPlatform, WalletTypeEnum } from 'src/interfaces/wallet';
+import { Near } from 'src/lib/services/near-api-js';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {UserState} from 'src/reducers/user/reducer';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
 const PolkadotAccountList = dynamic(
   () => import('components/PolkadotAccountList/PolkadotAccountList'),
@@ -40,9 +40,12 @@ const PolkadotAccountList = dynamic(
   },
 );
 
-const NearSelectorList = dynamic(() => import('components/NearSelector/NearSelectorList'), {
-  ssr: false,
-});
+const NearSelectorList = dynamic(
+  () => import('components/NearSelector/NearSelectorList'),
+  {
+    ssr: false,
+  },
+);
 
 export const ManageCointainer: React.FC = () => {
   const router = useRouter();
@@ -51,13 +54,13 @@ export const ManageCointainer: React.FC = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
   const styles = useStyles();
 
-  const {enablePolkadotExtension} = usePolkadotExtension();
-  const {getRegisteredAccounts} = useAuthHook();
-  const {connectToNear} = useNearApi();
-  const {loading, connectDisconnectNetwork} = useConnect();
-  const {publicRuntimeConfig} = getConfig();
+  const { enablePolkadotExtension } = usePolkadotExtension();
+  const { getRegisteredAccounts } = useAuthHook();
+  const { connectToNear } = useNearApi();
+  const { loading, connectDisconnectNetwork } = useConnect();
+  const { publicRuntimeConfig } = getConfig();
 
-  const {user, currentWallet, wallets} = useSelector<RootState, UserState>(
+  const { user, currentWallet, wallets } = useSelector<RootState, UserState>(
     state => state.userState,
   );
 
@@ -66,7 +69,8 @@ export const ManageCointainer: React.FC = () => {
   const [extensionInstalled, setExtensionInstalled] = React.useState(false);
   const [accounts, setAccounts] = React.useState<InjectedAccountWithMeta[]>([]);
   const [walletId, setWalletId] = React.useState<string | null>(null);
-  const [promptDisconnectSuccess, setPromptDisconnectSuccess] = React.useState(false);
+  const [promptDisconnectSuccess, setPromptDisconnectSuccess] =
+    React.useState(false);
   const [confirmDisconnect, setConfirmDisconnect] = React.useState(false);
   const [walletName, setWalletName] = React.useState<string | null>(null);
   const [initNear, setInitNear] = React.useState<boolean>(false);
@@ -76,25 +80,33 @@ export const ManageCointainer: React.FC = () => {
   const wallet = router.query.wallet as string | string[] | null;
 
   useEffect(() => {
-    if (!Array.isArray(action) && accountId && (action === 'connect' || action === 'disconnect')) {
-      const walletId = action === 'disconnect' ? (accountId as string) : undefined;
+    if (
+      !Array.isArray(action) &&
+      accountId &&
+      (action === 'connect' || action === 'disconnect')
+    ) {
+      const walletId =
+        action === 'disconnect' ? (accountId as string) : undefined;
 
-      connectDisconnectNearAccount(wallet as WalletTypeEnum, walletId).then(verified => {
-        if (verified && Boolean(walletId)) return setPromptDisconnectSuccess(true);
+      connectDisconnectNearAccount(wallet as WalletTypeEnum, walletId).then(
+        verified => {
+          if (verified && Boolean(walletId))
+            return setPromptDisconnectSuccess(true);
 
-        const successMessage = i18n.t('Wallet.Manage.Alert.Connect');
-        const errorMessage = Boolean(walletId)
-          ? i18n.t('Wallet.Manage.Alert.ErrorDisconnect')
-          : i18n.t('Wallet.Manage.Alert.ErrorConnect');
+          const successMessage = i18n.t('Wallet.Manage.Alert.Connect');
+          const errorMessage = Boolean(walletId)
+            ? i18n.t('Wallet.Manage.Alert.ErrorDisconnect')
+            : i18n.t('Wallet.Manage.Alert.ErrorConnect');
 
-        enqueueSnackbar({
-          message: verified ? successMessage : errorMessage,
-          variant: verified ? 'success' : 'error',
-        });
-      });
+          enqueueSnackbar({
+            message: verified ? successMessage : errorMessage,
+            variant: verified ? 'success' : 'error',
+          });
+        },
+      );
     }
 
-    router.replace(router.route, undefined, {shallow: true});
+    router.replace(router.route, undefined, { shallow: true });
   }, [action, accountId]);
 
   const closeAccountList = () => {
@@ -124,12 +136,19 @@ export const ManageCointainer: React.FC = () => {
     setAccounts(accounts);
   };
 
-  const handleConnect = async (account?: InjectedAccountWithMeta, wallet?: WalletTypeEnum) => {
+  const handleConnect = async (
+    account?: InjectedAccountWithMeta,
+    wallet?: WalletTypeEnum,
+  ) => {
     closeAccountList();
     closeWalletList();
 
     const verified = await (account
-      ? connectDisconnectNetwork(BlockchainPlatform.SUBSTRATE, account, walletId)
+      ? connectDisconnectNetwork(
+          BlockchainPlatform.SUBSTRATE,
+          account,
+          walletId,
+        )
       : connectDisconnectNearAccount(wallet, walletId));
 
     if (verified && Boolean(walletId)) return setPromptDisconnectSuccess(true);
@@ -159,8 +178,8 @@ export const ManageCointainer: React.FC = () => {
       if (!user) return false;
 
       const signatureData = await connectToNear(
-        {successCallbackURL: callbackUrl, failedCallbackURL: callbackUrl},
-        {userId: user.id},
+        { successCallbackURL: callbackUrl, failedCallbackURL: callbackUrl },
+        { userId: user.id },
         wallet,
         'connect',
       );
@@ -186,7 +205,7 @@ export const ManageCointainer: React.FC = () => {
     } catch {
       return false;
     } finally {
-      router.replace(router.route, undefined, {shallow: true});
+      router.replace(router.route, undefined, { shallow: true });
     }
   };
 
@@ -227,7 +246,9 @@ export const ManageCointainer: React.FC = () => {
     await enablePolkadotExtension();
 
     const accounts = await getRegisteredAccounts();
-    const currentAccount = accounts.find(account => toHexPublicKey(account) === walletId);
+    const currentAccount = accounts.find(
+      account => toHexPublicKey(account) === walletId,
+    );
     if (!currentAccount) {
       setConfirmDisconnect(false);
       return enqueueSnackbar({
@@ -273,13 +294,18 @@ export const ManageCointainer: React.FC = () => {
         subtitle={
           <Typography component="div">
             {walletName === WalletTypeEnum.POLKADOT
-              ? i18n.t('Wallet.Manage.Alert.Disconnect.Confirm.Subtitle_Polkadot', {
+              ? i18n.t(
+                  'Wallet.Manage.Alert.Disconnect.Confirm.Subtitle_Polkadot',
+                  {
+                    name: walletName,
+                  },
+                )
+              : i18n.t('Wallet.Manage.Alert.Disconnect.Confirm.Subtitle_Near', {
                   name: walletName,
-                })
-              : i18n.t('Wallet.Manage.Alert.Disconnect.Confirm.Subtitle_Near', {name: walletName})}
+                })}
           </Typography>
         }>
-        <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
+        <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
           <Button
             size="small"
             variant="outlined"
@@ -287,7 +313,11 @@ export const ManageCointainer: React.FC = () => {
             onClick={() => setConfirmDisconnect(false)}>
             {i18n.t('Wallet.Manage.Alert.Disconnect.Confirm.Btn_Cancel')}
           </Button>
-          <Button size="small" variant="contained" color="primary" onClick={onConfirmDisconnect}>
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={onConfirmDisconnect}>
             {i18n.t('Wallet.Manage.Alert.Disconnect.Confirm.Btn_Confirm')}
           </Button>
         </div>
@@ -303,7 +333,7 @@ export const ManageCointainer: React.FC = () => {
             {i18n.t('Wallet.Manage.Alert.Disconnect.Success.Subtitle')}
           </Typography>
         }>
-        <div style={{display: 'flex', justifyContent: 'center'}}>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
           <Button
             size="small"
             variant="contained"

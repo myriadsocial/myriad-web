@@ -1,6 +1,6 @@
-import {TElement} from '@udecode/plate-core';
+import { TElement } from '@udecode/plate-core';
 
-import {SkinTones} from 'emoji-picker-react';
+import { SkinTones } from 'emoji-picker-react';
 
 export type TEmojiElement = TElement & {
   emoji: string;

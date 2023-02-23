@@ -1,32 +1,35 @@
-import React, {useState} from 'react';
-import {useSelector} from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
-import {useSession} from 'next-auth/react';
-import {useRouter} from 'next/router';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
-import {NoSsr} from '@material-ui/core';
+import { NoSsr } from '@material-ui/core';
 
-import {AddSocialMedia} from '../AddSocialMedia';
-import {SocialMediaList as SocialMediaListComponent} from './SocialMediaList';
-import {SocialDetail} from './use-social-media-list.hook';
+import { AddSocialMedia } from '../AddSocialMedia';
+import { SocialMediaList as SocialMediaListComponent } from './SocialMediaList';
+import { SocialDetail } from './use-social-media-list.hook';
 
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {useShareSocial} from 'src/hooks/use-share-social';
-import {SocialsEnum} from 'src/interfaces/social';
-import {getIdentity} from 'src/lib/api/social';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import { useShareSocial } from 'src/hooks/use-share-social';
+import { SocialsEnum } from 'src/interfaces/social';
+import { getIdentity } from 'src/lib/api/social';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {UserState} from 'src/reducers/user/reducer';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
 export const SocialMediaListContainer: React.FC = () => {
   const router = useRouter();
-  const {data: session} = useSession();
+  const { data: session } = useSession();
 
-  const {isVerifying, verifyPublicKeyShared} = useShareSocial();
+  const { isVerifying, verifyPublicKeyShared } = useShareSocial();
 
-  const {user, socials} = useSelector<RootState, UserState>(state => state.userState);
+  const { user, socials } = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
   const enqueueSnackbar = useEnqueueSnackbar();
-  const [selectedSocial, setSelectedSocial] = useState<SocialsEnum | null>(null);
+  const [selectedSocial, setSelectedSocial] =
+    useState<SocialsEnum | null>(null);
   const [addSocialHash, setAddSocialHash] = useState<string | null>(null);
 
   const address = session?.user.address as string;
@@ -38,7 +41,7 @@ export const SocialMediaListContainer: React.FC = () => {
   const handleAddSocialMedia = async (social: SocialsEnum) => {
     setSelectedSocial(social);
 
-    const {hash} = await getIdentity();
+    const { hash } = await getIdentity();
     setAddSocialHash(hash);
   };
 
@@ -50,7 +53,7 @@ export const SocialMediaListContainer: React.FC = () => {
     verifyPublicKeyShared(social, profileUrl, addSocialHash, () => {
       setSelectedSocial(null);
       enqueueSnackbar({
-        message: i18n.t('SocialMedia.Alert.Verify', {social: social}),
+        message: i18n.t('SocialMedia.Alert.Verify', { social: social }),
         variant: 'success',
       });
     });

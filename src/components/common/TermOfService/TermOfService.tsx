@@ -1,9 +1,14 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-import {Checkbox, FormControlLabel, Link, Typography} from '@material-ui/core';
+import {
+  Checkbox,
+  FormControlLabel,
+  Link,
+  Typography,
+} from '@material-ui/core';
 
 import ShowIf from '../show-if.component';
-import {useStyles} from './TermOfService.style';
+import { useStyles } from './TermOfService.style';
 
 import i18n from 'src/locale';
 
@@ -13,7 +18,7 @@ type TermOfServiceProps = {
 };
 
 export const TermOfService: React.FC<TermOfServiceProps> = props => {
-  const {about, onChange} = props;
+  const { about, onChange } = props;
 
   const styles = useStyles();
 
@@ -48,7 +53,9 @@ export const TermOfService: React.FC<TermOfServiceProps> = props => {
             className={styles.link}>
             {i18n.t('TOS.Text_2')}
           </Link>
-          <ShowIf condition={Boolean(about)}>{i18n.t('TOS.Text_3', {about: about})}</ShowIf>
+          <ShowIf condition={Boolean(about)}>
+            {i18n.t('TOS.Text_3', { about: about })}
+          </ShowIf>
         </Typography>
       }
     />

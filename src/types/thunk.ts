@@ -1,7 +1,7 @@
-import {RootState} from '../reducers';
+import { RootState } from '../reducers';
 
-import {Action, ActionCreator, AnyAction} from 'redux';
-import {ThunkAction, ThunkDispatch} from 'redux-thunk';
+import { Action, ActionCreator, AnyAction } from 'redux';
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 
 export type ThunkActionCreator<A extends Action, S = void> = ActionCreator<
   ThunkAction<void, S, void, A>

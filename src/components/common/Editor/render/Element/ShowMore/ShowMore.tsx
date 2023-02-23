@@ -1,10 +1,15 @@
-import {getRootProps, StyledElementProps, TElement, Value} from '@udecode/plate';
+import {
+  getRootProps,
+  StyledElementProps,
+  TElement,
+  Value,
+} from '@udecode/plate';
 
 import * as React from 'react';
 
-import {Typography} from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 
-import {useStyles} from './ShowMore.styles';
+import { useStyles } from './ShowMore.styles';
 
 import i18n from 'src/locale';
 
@@ -15,7 +20,7 @@ export interface ShowMoreElementProps {
 export const ShowMoreElement = <V extends Value>(
   props: StyledElementProps<V, TElement> & ShowMoreElementProps,
 ) => {
-  const {attributes, nodeProps, onToggle} = props;
+  const { attributes, nodeProps, onToggle } = props;
   const rootProps = getRootProps(props);
 
   const styles = useStyles();

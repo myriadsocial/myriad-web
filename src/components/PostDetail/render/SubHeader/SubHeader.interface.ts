@@ -1,5 +1,5 @@
-import {Experience} from 'src/interfaces/experience';
-import {User} from 'src/interfaces/user';
+import { Experience } from 'src/interfaces/experience';
+import { User } from 'src/interfaces/user';
 
 export type PostSubheaderActionProps = {
   onShowImporters: () => void;

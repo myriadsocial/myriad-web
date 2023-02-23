@@ -1,11 +1,14 @@
 import MyriadAPI from './base';
-import {PAGINATION_LIMIT} from './constants/pagination';
-import {BaseList} from './interfaces/base-list.interface';
-import {FilterParams, PaginationParams} from './interfaces/pagination-params.interface';
+import { PAGINATION_LIMIT } from './constants/pagination';
+import { BaseList } from './interfaces/base-list.interface';
+import {
+  FilterParams,
+  PaginationParams,
+} from './interfaces/pagination-params.interface';
 
-import {Comment, CommentProps} from 'src/interfaces/comment';
-import {SectionType} from 'src/interfaces/interaction';
-import {WalletDetail} from 'src/interfaces/wallet';
+import { Comment, CommentProps } from 'src/interfaces/comment';
+import { SectionType } from 'src/interfaces/interaction';
+import { WalletDetail } from 'src/interfaces/wallet';
 
 type CommentList = BaseList<Comment>;
 
@@ -19,7 +22,12 @@ export const loadComments = async (
   params: CommentListFilterParams,
   pagination: PaginationParams,
 ): Promise<CommentList> => {
-  const {page = 1, limit = PAGINATION_LIMIT, orderField = 'createdAt', sort = 'DESC'} = pagination;
+  const {
+    page = 1,
+    limit = PAGINATION_LIMIT,
+    orderField = 'createdAt',
+    sort = 'DESC',
+  } = pagination;
   const filterParams: Record<string, any> = {
     include: [
       'votes',
@@ -27,7 +35,7 @@ export const loadComments = async (
       {
         relation: 'user',
         scope: {
-          include: [{relation: 'wallets'}],
+          include: [{ relation: 'wallets' }],
         },
       },
     ],
@@ -45,7 +53,7 @@ export const loadComments = async (
     commentParams.section = params.section;
   }
 
-  const {data} = await MyriadAPI().request<CommentList>({
+  const { data } = await MyriadAPI().request<CommentList>({
     url: `/user/comments`,
     method: 'GET',
     params: commentParams,
@@ -55,7 +63,7 @@ export const loadComments = async (
 };
 
 export const reply = async (comment: CommentProps): Promise<Comment> => {
-  const {data} = await MyriadAPI().request<Comment>({
+  const { data } = await MyriadAPI().request<Comment>({
     url: `/user/comments`,
     method: 'POST',
     data: comment,
@@ -65,7 +73,7 @@ export const reply = async (comment: CommentProps): Promise<Comment> => {
 };
 
 export const remove = async (commentId: string): Promise<Comment> => {
-  const {data} = await MyriadAPI().request<Comment>({
+  const { data } = await MyriadAPI().request<Comment>({
     url: `/user/comments/${commentId}`,
     method: 'DELETE',
   });
@@ -78,8 +86,13 @@ export const loadUserComments = async (
   userId: string,
   pagination: PaginationParams,
 ): Promise<CommentList> => {
-  const {page = 1, limit = PAGINATION_LIMIT, orderField = 'createdAt', sort = 'DESC'} = pagination;
-  const {data} = await MyriadAPI().request<CommentList>({
+  const {
+    page = 1,
+    limit = PAGINATION_LIMIT,
+    orderField = 'createdAt',
+    sort = 'DESC',
+  } = pagination;
+  const { data } = await MyriadAPI().request<CommentList>({
     url: `/user/comments`,
     method: 'GET',
     params: {
@@ -108,8 +121,10 @@ export const loadUserComments = async (
   return data;
 };
 
-export const getWalletAddress = async (commentId: string): Promise<WalletDetail> => {
-  const {data} = await MyriadAPI().request<WalletDetail>({
+export const getWalletAddress = async (
+  commentId: string,
+): Promise<WalletDetail> => {
+  const { data } = await MyriadAPI().request<WalletDetail>({
     url: `/walletaddress/comment/${commentId}`,
     method: 'GET',
   });

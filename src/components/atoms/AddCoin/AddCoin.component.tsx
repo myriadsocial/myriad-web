@@ -1,8 +1,8 @@
-import {CheckCircleIcon} from '@heroicons/react/solid';
-import {SearchIcon} from '@heroicons/react/solid';
+import { CheckCircleIcon } from '@heroicons/react/solid';
+import { SearchIcon } from '@heroicons/react/solid';
 
-import React, {useState, useEffect} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -16,26 +16,30 @@ import ListItemText from '@material-ui/core/ListItemText';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
-import {Avatar, AvatarSize} from '../Avatar';
-import {Modal} from '../Modal';
-import {useStyles} from './AddCoin.style';
-import {Props} from './addCoin.interface';
+import { Avatar, AvatarSize } from '../Avatar';
+import { Modal } from '../Modal';
+import { useStyles } from './AddCoin.style';
+import { Props } from './addCoin.interface';
 
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {Currency, CurrencyId} from 'src/interfaces/currency';
-import {RootState} from 'src/reducers';
-import {ConfigState} from 'src/reducers/config/reducer';
-import {addUserCurrency} from 'src/reducers/user/actions';
-import {UserState} from 'src/reducers/user/reducer';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import { Currency, CurrencyId } from 'src/interfaces/currency';
+import { RootState } from 'src/reducers';
+import { ConfigState } from 'src/reducers/config/reducer';
+import { addUserCurrency } from 'src/reducers/user/actions';
+import { UserState } from 'src/reducers/user/reducer';
 
 export const AddCoin: React.FC<Props> = props => {
-  const {open, onClose} = props;
+  const { open, onClose } = props;
   const style = useStyles();
   const dispatch = useDispatch();
   const enqueueSnackbar = useEnqueueSnackbar();
 
-  const {availableCurrencies} = useSelector<RootState, ConfigState>(state => state.configState);
-  const {currencies} = useSelector<RootState, UserState>(state => state.userState);
+  const { availableCurrencies } = useSelector<RootState, ConfigState>(
+    state => state.configState,
+  );
+  const { currencies } = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
 
   const [searchedCurrencies, setSearchedCurrencies] = useState<Currency[]>([]);
   const [loading, setLoading] = useState(false);
@@ -129,7 +133,11 @@ export const AddCoin: React.FC<Props> = props => {
             'aria-label': 'search',
           }}
           startAdornment={
-            <SvgIcon classes={{root: style.fill}} component={SearchIcon} viewBox="0 0 24 24" />
+            <SvgIcon
+              classes={{ root: style.fill }}
+              component={SearchIcon}
+              viewBox="0 0 24 24"
+            />
           }
         />
 
@@ -141,9 +149,9 @@ export const AddCoin: React.FC<Props> = props => {
                 disabled={isAdded(currency.symbol)}
                 key={currency.id}
                 onClick={() => handleSelectAsset(currency.symbol)}
-                className={`${!isAdded(currency.symbol) && style.hover} ${style.item} ${isSelected(
-                  'ACA',
-                )}`}
+                className={`${!isAdded(currency.symbol) && style.hover} ${
+                  style.item
+                } ${isSelected('ACA')}`}
                 alignItems="center">
                 <ListItemAvatar>
                   <Avatar
@@ -173,7 +181,7 @@ export const AddCoin: React.FC<Props> = props => {
                   <ListItemSecondaryAction>
                     <SvgIcon
                       color="primary"
-                      classes={{root: style.fill}}
+                      classes={{ root: style.fill }}
                       component={CheckCircleIcon}
                       viewBox="0 0 20 20"
                     />

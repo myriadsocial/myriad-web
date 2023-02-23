@@ -1,4 +1,4 @@
-import {ELEMENT_LINK, LinkPlugin} from '@udecode/plate';
+import { ELEMENT_LINK, LinkPlugin } from '@udecode/plate';
 import {
   getEditorString,
   getPluginType,
@@ -13,12 +13,12 @@ import {
   Value,
   WithPlatePlugin,
 } from '@udecode/plate-core';
-import {withRemoveEmptyNodes} from '@udecode/plate-normalizers';
+import { withRemoveEmptyNodes } from '@udecode/plate-normalizers';
 
-import {upsertLinkAtSelection} from './transforms/upsertLinkAtSelection';
-import {wrapLink} from './transforms/wrapLink';
+import { upsertLinkAtSelection } from './transforms/upsertLinkAtSelection';
+import { wrapLink } from './transforms/wrapLink';
 
-import {Range} from 'slate';
+import { Range } from 'slate';
 
 const upsertLink = <V extends Value>(
   editor: PlateEditor<V>,
@@ -32,7 +32,7 @@ const upsertLink = <V extends Value>(
 ) => {
   unwrapNodes(editor, {
     at,
-    match: {type: getPluginType(editor, ELEMENT_LINK)},
+    match: { type: getPluginType(editor, ELEMENT_LINK) },
   });
 
   const newSelection = editor.selection as Range;
@@ -46,12 +46,15 @@ const upsertLink = <V extends Value>(
   });
 };
 
-const upsertLinkIfValid = <V extends Value>(editor: PlateEditor<V>, {isUrl}: {isUrl: any}) => {
+const upsertLinkIfValid = <V extends Value>(
+  editor: PlateEditor<V>,
+  { isUrl }: { isUrl: any },
+) => {
   const rangeFromBlockStart = getRangeFromBlockStart(editor);
   const textFromBlockStart = getEditorString(editor, rangeFromBlockStart);
 
   if (rangeFromBlockStart && isUrl(textFromBlockStart)) {
-    upsertLink(editor, {url: textFromBlockStart, at: rangeFromBlockStart});
+    upsertLink(editor, { url: textFromBlockStart, at: rangeFromBlockStart });
     return true;
   }
 };
@@ -65,33 +68,43 @@ const upsertLinkIfValid = <V extends Value>(editor: PlateEditor<V>, {isUrl}: {is
  * Paste a string inside a link element will edit its children text but not its url.
  *
  */
-export const withLink = <V extends Value = Value, E extends PlateEditor<V> = PlateEditor<V>>(
+export const withLink = <
+  V extends Value = Value,
+  E extends PlateEditor<V> = PlateEditor<V>,
+>(
   editor: E,
-  {type, options: {isUrl, rangeBeforeOptions}}: WithPlatePlugin<LinkPlugin, V, E>,
+  {
+    type,
+    options: { isUrl, rangeBeforeOptions },
+  }: WithPlatePlugin<LinkPlugin, V, E>,
 ) => {
-  const {insertData, insertText} = editor;
+  const { insertData, insertText } = editor;
 
   editor.insertText = text => {
     if (isUrl!(text)) {
-      return upsertLinkAtSelection(editor, {url: text});
+      return upsertLinkAtSelection(editor, { url: text });
     }
 
     if (text === ' ' && isCollapsed(editor.selection)) {
       const selection = editor.selection as Range;
 
-      if (upsertLinkIfValid(editor, {isUrl})) {
-        moveSelection(editor, {unit: 'offset'});
+      if (upsertLinkIfValid(editor, { isUrl })) {
+        moveSelection(editor, { unit: 'offset' });
         return insertText(text);
       }
 
-      const beforeWordRange = getRangeBefore(editor, selection, rangeBeforeOptions);
+      const beforeWordRange = getRangeBefore(
+        editor,
+        selection,
+        rangeBeforeOptions,
+      );
 
       if (beforeWordRange) {
         const beforeWordText = getEditorString(editor, beforeWordRange);
 
         if (isUrl!(beforeWordText)) {
-          upsertLink(editor, {url: beforeWordText, at: beforeWordRange});
-          moveSelection(editor, {unit: 'offset'});
+          upsertLink(editor, { url: beforeWordText, at: beforeWordRange });
+          moveSelection(editor, { unit: 'offset' });
         }
       }
     }
@@ -104,10 +117,10 @@ export const withLink = <V extends Value = Value, E extends PlateEditor<V> = Pla
 
     if (text) {
       if (isUrl!(text)) {
-        return upsertLinkAtSelection(editor, {url: text});
+        return upsertLinkAtSelection(editor, { url: text });
       }
 
-      if (someNode(editor, {match: {type}})) {
+      if (someNode(editor, { match: { type } })) {
         return insertText(text);
       }
     }
@@ -118,7 +131,7 @@ export const withLink = <V extends Value = Value, E extends PlateEditor<V> = Pla
   editor = withRemoveEmptyNodes<V, E>(
     editor,
     mockPlugin<{}, V, E>({
-      options: {types: type},
+      options: { types: type },
     }),
   );
 

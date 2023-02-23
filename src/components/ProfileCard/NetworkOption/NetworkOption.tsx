@@ -1,4 +1,4 @@
-import {ChevronDownIcon} from '@heroicons/react/outline';
+import { ChevronDownIcon } from '@heroicons/react/outline';
 
 import React from 'react';
 
@@ -10,7 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
-import {useStyles} from './networkOption.style';
+import { useStyles } from './networkOption.style';
 
 import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
 import {
@@ -20,9 +20,9 @@ import {
   KusamaNetworkIcon,
   DebioNetworkIcon,
 } from 'src/components/atoms/Icons';
-import {formatNetworkTitle} from 'src/helpers/wallet';
-import {Network} from 'src/interfaces/network';
-import {UserWallet} from 'src/interfaces/user';
+import { formatNetworkTitle } from 'src/helpers/wallet';
+import { Network } from 'src/interfaces/network';
+import { UserWallet } from 'src/interfaces/user';
 
 export type NetworkOptionProps = {
   currentWallet?: UserWallet;
@@ -38,7 +38,7 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({
 }) => {
   const styles = useStyles();
 
-  const {switchNetwork} = useBlockchain();
+  const { switchNetwork } = useBlockchain();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const currentNetworkId = currentWallet?.networkId;
@@ -68,8 +68,12 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({
   };
 
   const getSelectedText = (): string => {
-    const selectedNetwork = networks.find(network => network.id === currentNetworkId);
-    return formatNetworkTitle(selectedNetwork) ?? currentWallet?.networkId ?? '';
+    const selectedNetwork = networks.find(
+      network => network.id === currentNetworkId,
+    );
+    return (
+      formatNetworkTitle(selectedNetwork) ?? currentWallet?.networkId ?? ''
+    );
   };
 
   const getSelectedIcon = () => {
@@ -84,7 +88,13 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({
         onClick={handleClick}
         className={styles.walletButton}
         startIcon={getSelectedIcon()}
-        endIcon={<SvgIcon color="primary" component={ChevronDownIcon} viewBox="0 0 24 24" />}
+        endIcon={
+          <SvgIcon
+            color="primary"
+            component={ChevronDownIcon}
+            viewBox="0 0 24 24"
+          />
+        }
         size="small"
         variant="contained"
         color="inherit">
@@ -93,8 +103,8 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({
       <Menu
         anchorEl={anchorEl}
         getContentAnchorEl={null}
-        anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
-        transformOrigin={{vertical: 'top', horizontal: 'left'}}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
         open={Boolean(anchorEl)}
         onClose={handleClose}>
         {networks.map(network => (
@@ -103,7 +113,9 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({
             onClick={() => handleSwitchNetwork(network)}
             disabled={!isMobile ? false : network.id === 'near' ? false : true}
             className={network.id === currentNetworkId ? styles.menu : ''}>
-            <ListItemIcon>{icons[network.id as keyof typeof icons]}</ListItemIcon>
+            <ListItemIcon>
+              {icons[network.id as keyof typeof icons]}
+            </ListItemIcon>
             <ListItemText>{formatNetworkTitle(network)}</ListItemText>
           </MenuItem>
         ))}

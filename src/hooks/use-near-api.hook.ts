@@ -1,15 +1,19 @@
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import {BN, BN_ZERO, BN_TEN} from '@polkadot/util';
+import { BN, BN_ZERO, BN_TEN } from '@polkadot/util';
 
-import {formatBalanceV2} from 'src/helpers/balance';
-import {CallbackURL, SignatureProps, TipsResultsProps} from 'src/interfaces/blockchain-interface';
-import {Network, NetworkIdEnum} from 'src/interfaces/network';
-import {Wallet} from 'src/interfaces/user';
-import {WalletTypeEnum} from 'src/interfaces/wallet';
-import {Near} from 'src/lib/services/near-api-js';
-import {RootState} from 'src/reducers';
-import {UserState} from 'src/reducers/user/reducer';
+import { formatBalanceV2 } from 'src/helpers/balance';
+import {
+  CallbackURL,
+  SignatureProps,
+  TipsResultsProps,
+} from 'src/interfaces/blockchain-interface';
+import { Network, NetworkIdEnum } from 'src/interfaces/network';
+import { Wallet } from 'src/interfaces/user';
+import { WalletTypeEnum } from 'src/interfaces/wallet';
+import { Near } from 'src/lib/services/near-api-js';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
 type UserNetwork = {
   userId?: string;
@@ -17,7 +21,9 @@ type UserNetwork = {
 };
 
 export const useNearApi = () => {
-  const {networks} = useSelector<RootState, UserState>(state => state.userState);
+  const { networks } = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
 
   const connectToNear = async (
     callbackURL?: CallbackURL,
@@ -40,8 +46,8 @@ export const useNearApi = () => {
 
     return Near.signWithWallet(
       wallet,
-      {successCallbackURL, failedCallbackURL},
-      {userId: userNetwork?.userId, walletType},
+      { successCallbackURL, failedCallbackURL },
+      { userId: userNetwork?.userId, walletType },
       action,
     );
   };
@@ -55,7 +61,12 @@ export const useNearApi = () => {
     verifyNearTips = false,
     nearBalance = '0.00',
   ): Promise<TipsResultsProps> => {
-    const data = await Near.claimTipBalances(network.rpcURL, serverId, referenceId, referenceIds);
+    const data = await Near.claimTipBalances(
+      network.rpcURL,
+      serverId,
+      referenceId,
+      referenceIds,
+    );
 
     let nativeDecimal = 0;
     let accountIdExist = true;
@@ -68,11 +79,12 @@ export const useNearApi = () => {
         return false;
       });
 
-      const {tips_balance, symbol, unclaimed_reference_ids} = e;
-      const {account_id, tips_balance_info} = tips_balance;
-      const {server_id, reference_type, reference_id, ft_identifier} = tips_balance_info;
+      const { tips_balance, symbol, unclaimed_reference_ids } = e;
+      const { account_id, tips_balance_info } = tips_balance;
+      const { server_id, reference_type, reference_id, ft_identifier } =
+        tips_balance_info;
 
-      let {formatted_amount} = e;
+      let { formatted_amount } = e;
       let accountId = unclaimed_reference_ids.length === 0 ? account_id : null;
 
       if (verifyNearTips) {
@@ -83,7 +95,9 @@ export const useNearApi = () => {
       if (!accountId && wallet?.networkId === network.id) {
         if (currency.native) nativeDecimal = currency.decimal;
         if (parseFloat(formatted_amount) > 0) {
-          const decimal = new BN(BN_TEN).pow(new BN(currency.decimal.toString()));
+          const decimal = new BN(BN_TEN).pow(
+            new BN(currency.decimal.toString()),
+          );
           const amount = new BN(formatted_amount).mul(decimal);
           if (amount.gt(BN_ZERO)) accountIdExist = false;
         }

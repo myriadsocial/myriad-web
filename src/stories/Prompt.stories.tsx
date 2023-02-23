@@ -1,10 +1,10 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
-import {Button, Grid} from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 
-import {PromptComponent} from '../components/atoms/Prompt/prompt.component';
+import { PromptComponent } from '../components/atoms/Prompt/prompt.component';
 
 export default {
   title: 'UI Revamp v2.0/components/Prompt',
@@ -12,12 +12,14 @@ export default {
   argTypes: {
     icon: {
       options: ['danger', 'warning', 'success'],
-      control: {type: 'radio'},
+      control: { type: 'radio' },
     },
   },
 } as ComponentMeta<typeof PromptComponent>;
 
-const Template: ComponentStory<typeof PromptComponent> = args => <PromptComponent {...args} />;
+const Template: ComponentStory<typeof PromptComponent> = args => (
+  <PromptComponent {...args} />
+);
 
 export const Prompt = Template.bind({});
 Prompt.args = {

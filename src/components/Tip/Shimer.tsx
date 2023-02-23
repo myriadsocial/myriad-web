@@ -9,7 +9,7 @@ export const ShimerComponent: React.FC = () => {
       <Grid
         container
         direction="row"
-        style={{width: '100%', marginBottom: '24px'}}
+        style={{ width: '100%', marginBottom: '24px' }}
         alignItems="center"
         justifyContent="space-between">
         <div
@@ -32,18 +32,43 @@ export const ShimerComponent: React.FC = () => {
           <Skeleton variant="text" width={57} height={16} />
         </div>
       </Grid>
-      <Grid container direction="row" justifyContent="flex-start" alignItems="center" spacing={2}>
+      <Grid
+        container
+        direction="row"
+        justifyContent="flex-start"
+        alignItems="center"
+        spacing={2}>
         <Grid item xs={12} md={6}>
-          <Skeleton variant="rect" width={'100%'} height={159} style={{borderRadius: 20}} />
+          <Skeleton
+            variant="rect"
+            width={'100%'}
+            height={159}
+            style={{ borderRadius: 20 }}
+          />
         </Grid>
         <Grid item xs={12} md={6}>
-          <Skeleton variant="rect" width={'100%'} height={159} style={{borderRadius: 20}} />
+          <Skeleton
+            variant="rect"
+            width={'100%'}
+            height={159}
+            style={{ borderRadius: 20 }}
+          />
         </Grid>
         <Grid item xs={12} md={6}>
-          <Skeleton variant="rect" width={'100%'} height={159} style={{borderRadius: 20}} />
+          <Skeleton
+            variant="rect"
+            width={'100%'}
+            height={159}
+            style={{ borderRadius: 20 }}
+          />
         </Grid>
         <Grid item xs={12} md={6}>
-          <Skeleton variant="rect" width={'100%'} height={159} style={{borderRadius: 20}} />
+          <Skeleton
+            variant="rect"
+            width={'100%'}
+            height={159}
+            style={{ borderRadius: 20 }}
+          />
         </Grid>
       </Grid>
     </>

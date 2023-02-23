@@ -1,13 +1,13 @@
-import {ChevronDownIcon} from '@heroicons/react/outline';
+import { ChevronDownIcon } from '@heroicons/react/outline';
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-import {SvgIcon, Typography, IconButton} from '@material-ui/core';
+import { SvgIcon, Typography, IconButton } from '@material-ui/core';
 
-import {PostTags} from '../PostTag/PostTags';
-import {Modal} from '../atoms/Modal';
-import {useStyles} from './NSFWTags.styles';
-import {tagOptions} from './default';
+import { PostTags } from '../PostTag/PostTags';
+import { Modal } from '../atoms/Modal';
+import { useStyles } from './NSFWTags.styles';
+import { tagOptions } from './default';
 
 type NSFWTagsProps = {
   tags: string[];
@@ -16,12 +16,12 @@ type NSFWTagsProps = {
 };
 
 export const NSFWTags: React.FC<NSFWTagsProps> = props => {
-  const {tags, onConfirm, ...restProps} = props;
+  const { tags, onConfirm, ...restProps } = props;
 
   const [isOpen, setOpen] = useState(false);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-  const styles = useStyles({selected: selectedTags.length > 0});
+  const styles = useStyles({ selected: selectedTags.length > 0 });
 
   const openTag = () => {
     setOpen(true);
@@ -39,7 +39,11 @@ export const NSFWTags: React.FC<NSFWTagsProps> = props => {
 
   return (
     <>
-      <IconButton onClick={openTag} color="primary" aria-label="expand" className={styles.expand}>
+      <IconButton
+        onClick={openTag}
+        color="primary"
+        aria-label="expand"
+        className={styles.expand}>
         <Typography component="span" className={styles.nsfw}>
           NSFW
         </Typography>
@@ -54,7 +58,11 @@ export const NSFWTags: React.FC<NSFWTagsProps> = props => {
         open={isOpen}
         maxWidth="sm"
         onClose={closeTag}>
-        <PostTags selected={tags} options={tagOptions} onConfirm={handleConfirmTags} />
+        <PostTags
+          selected={tags}
+          options={tagOptions}
+          onConfirm={handleConfirmTags}
+        />
       </Modal>
     </>
   );

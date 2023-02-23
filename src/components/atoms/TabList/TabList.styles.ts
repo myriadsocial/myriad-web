@@ -1,6 +1,6 @@
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-import {TabMark, TabSize} from '.';
+import { TabMark, TabSize } from '.';
 
 type StylesProps = {
   mark: TabMark;
@@ -30,7 +30,9 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
 
       '& .Mui-selected': {
         backgroundColor: props =>
-          props.mark === 'underline' ? 'transparent' : theme.palette.secondary.main,
+          props.mark === 'underline'
+            ? 'transparent'
+            : theme.palette.secondary.main,
         borderRadius: 5,
         color: '#12130F',
 
@@ -51,7 +53,9 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
       minWidth: props => (props.size === 'small' ? 36 : 48),
       padding: theme.spacing(0.5),
       color: props =>
-        props.mark === 'underline' ? theme.palette.text.secondary : theme.palette.text.primary,
+        props.mark === 'underline'
+          ? theme.palette.text.secondary
+          : theme.palette.text.primary,
       [theme.breakpoints.down('xs')]: {
         padding: theme.spacing(0.5, 1),
       },

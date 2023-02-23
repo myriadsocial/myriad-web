@@ -1,9 +1,9 @@
-import {useState, useEffect} from 'react';
-import {useDispatch} from 'react-redux';
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
-import {LanguageSettingType} from 'src/interfaces/setting';
+import { LanguageSettingType } from 'src/interfaces/setting';
 import i18n from 'src/locale';
-import {updateLanguageSetting} from 'src/reducers/config/actions';
+import { updateLanguageSetting } from 'src/reducers/config/actions';
 
 export const useLanguage = () => {
   const [language, setLanguage] = useState<LanguageSettingType | null>(null);

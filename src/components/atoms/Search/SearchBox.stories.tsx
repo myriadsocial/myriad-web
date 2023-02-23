@@ -1,8 +1,8 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
-import {SearchBox} from '.';
+import { SearchBox } from '.';
 
 export default {
   title: 'UI Revamp v2.0/atoms/Search Box',
@@ -10,7 +10,9 @@ export default {
   argTypes: {},
 } as ComponentMeta<typeof SearchBox>;
 
-const Template: ComponentStory<typeof SearchBox> = args => <SearchBox {...args} />;
+const Template: ComponentStory<typeof SearchBox> = args => (
+  <SearchBox {...args} />
+);
 
 export const DefaultSearchBox = Template.bind({});
 DefaultSearchBox.args = {

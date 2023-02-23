@@ -6,13 +6,13 @@ import {
   getNodeString,
 } from '@udecode/plate';
 
-import {EditorValue, RootBlock} from '../Editor/Editor.interface';
-import {ELEMENT_EMOJI} from '../Editor/plugins/EmojiPicker';
-import {ELEMENT_HASHTAG} from '../Editor/plugins/Hashtag';
-import {ELEMENT_IMAGE_LIST} from '../Editor/plugins/ImageList/createImageListPlugin';
-import {ELEMENT_SHOW_MORE} from '../Editor/plugins/ShowMore';
+import { EditorValue, RootBlock } from '../Editor/Editor.interface';
+import { ELEMENT_EMOJI } from '../Editor/plugins/EmojiPicker';
+import { ELEMENT_HASHTAG } from '../Editor/plugins/Hashtag';
+import { ELEMENT_IMAGE_LIST } from '../Editor/plugins/ImageList/createImageListPlugin';
+import { ELEMENT_SHOW_MORE } from '../Editor/plugins/ShowMore';
 
-import {ReportType} from 'src/interfaces/comment';
+import { ReportType } from 'src/interfaces/comment';
 import i18n from 'src/locale';
 
 const ReportTypeCategoryMapper: Record<ReportType, string> = {
@@ -41,12 +41,17 @@ const translationText = (text: string, reportType: ReportType) => {
 };
 
 const mediaElementExist = (value: EditorValue): boolean => {
-  const match = value.filter(node => [ELEMENT_MEDIA_EMBED, ELEMENT_IMAGE].includes(node.type));
+  const match = value.filter(node =>
+    [ELEMENT_MEDIA_EMBED, ELEMENT_IMAGE].includes(node.type),
+  );
 
   return match.length > 0;
 };
 
-export const formatToString = (element: RootBlock, reportType?: ReportType): string => {
+export const formatToString = (
+  element: RootBlock,
+  reportType?: ReportType,
+): string => {
   return element.children
     .map(children => {
       if (!children.type) {
@@ -84,7 +89,7 @@ export const deserialize = (text: string) => {
     origin = [
       {
         type: ELEMENT_PARAGRAPH,
-        children: [{text}],
+        children: [{ text }],
       },
     ];
   }
@@ -92,7 +97,11 @@ export const deserialize = (text: string) => {
   return origin;
 };
 
-export const minimize = (text: string, reportType?: ReportType, length?: number): EditorValue => {
+export const minimize = (
+  text: string,
+  reportType?: ReportType,
+  length?: number,
+): EditorValue => {
   const origin = deserialize(text);
   const nodes: EditorValue = [];
 
@@ -107,7 +116,8 @@ export const minimize = (text: string, reportType?: ReportType, length?: number)
 
     for (let index = 0; index < origin.length; index++) {
       const current: RootBlock = origin[index];
-      const next: RootBlock | null = index < origin.length - 1 ? origin[index + 1] : null;
+      const next: RootBlock | null =
+        index < origin.length - 1 ? origin[index + 1] : null;
       const prev: RootBlock | null = index > 0 ? origin[index - 1] : null;
 
       // build gallery if consecutive image element found
@@ -123,7 +133,7 @@ export const minimize = (text: string, reportType?: ReportType, length?: number)
         if (!next || next.type !== ELEMENT_IMAGE) {
           nodes.push({
             type: ELEMENT_IMAGE_LIST,
-            children: [{text: ''}],
+            children: [{ text: '' }],
             urls: [...imageUrls],
           });
 
@@ -156,10 +166,10 @@ export const minimize = (text: string, reportType?: ReportType, length?: number)
     nodes.push({
       type: ELEMENT_PARAGRAPH,
       children: [
-        {text: text},
+        { text: text },
         {
           type: ELEMENT_SHOW_MORE,
-          children: [{text: ''}],
+          children: [{ text: '' }],
         },
       ],
     });
@@ -176,7 +186,7 @@ export const minimize = (text: string, reportType?: ReportType, length?: number)
     if (urls.length) {
       nodes.push({
         type: ELEMENT_IMAGE_LIST,
-        children: [{text: ''}],
+        children: [{ text: '' }],
         urls,
       });
     }

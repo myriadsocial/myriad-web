@@ -1,12 +1,12 @@
 import getConfig from 'next/config';
 
 import path from 'path';
-import {Sizes} from 'src/interfaces/assets';
+import { Sizes } from 'src/interfaces/assets';
 
 const STORAGE_BASE_URL = 'https://storage.googleapis.com';
 
 export const generateImageSizes = (url: string | Sizes): Sizes => {
-  const {publicRuntimeConfig} = getConfig();
+  const { publicRuntimeConfig } = getConfig();
 
   if (typeof url === 'object') {
     return {

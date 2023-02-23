@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 
 import debounce from 'lodash/debounce';
 
@@ -14,9 +14,12 @@ export const useScroll = () => {
   }, []);
 
   const listenToScroll = debounce(() => {
-    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const winScroll =
+      document.body.scrollTop || document.documentElement.scrollTop;
 
-    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const height =
+      document.documentElement.scrollHeight -
+      document.documentElement.clientHeight;
 
     const scrolled = winScroll / height;
     setScrollPosition(scrolled);

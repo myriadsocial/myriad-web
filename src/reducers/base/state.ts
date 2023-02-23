@@ -1,6 +1,6 @@
-import {Color} from '@material-ui/lab/Alert';
+import { Color } from '@material-ui/lab/Alert';
 
-import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
+import { ListMeta } from 'src/lib/api/interfaces/base-list.interface';
 
 export interface State {
   loading: boolean;

@@ -1,6 +1,6 @@
-import {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
-import {useNavigate} from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import getConfig from 'next/config';
 import Image from 'next/image';
@@ -15,17 +15,17 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import {useStyles} from './CreateAccounts.style';
+import { useStyles } from './CreateAccounts.style';
 
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import ShowIf from 'components/common/show-if.component';
 import useMobileDetect from 'src/hooks/use-is-mobile-detect';
-import {IcEmail} from 'src/images/Icons';
-import {signUpWithEmail} from 'src/lib/api/auth-link';
-import {Server} from 'src/lib/api/server';
+import { IcEmail } from 'src/images/Icons';
+import { signUpWithEmail } from 'src/lib/api/auth-link';
+import { Server } from 'src/lib/api/server';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {ConfigState} from 'src/reducers/config/reducer';
+import { RootState } from 'src/reducers';
+import { ConfigState } from 'src/reducers/config/reducer';
 
 const USERNAME_MAX_LENGTH = 16;
 const USERNAME_MIN_LENGTH = 3;
@@ -37,10 +37,13 @@ const NAME_HELPER_TEXT = i18n.t('Login.Profile.Helper_Text_Name', {
 const USERNAME_HELPER_TEXT = i18n.t('Login.Profile.Helper_Text_Username', {
   min_length: USERNAME_MIN_LENGTH,
 });
-const {publicRuntimeConfig} = getConfig();
+const { publicRuntimeConfig } = getConfig();
 
 type ProfileProps = {
-  checkUsernameAvailability: (username: string, callback: (available: boolean) => void) => void;
+  checkUsernameAvailability: (
+    username: string,
+    callback: (available: boolean) => void,
+  ) => void;
   email: string;
   instance: Server;
 };
@@ -48,10 +51,12 @@ export default function CreateAccounts(props: ProfileProps) {
   const detect = useMobileDetect();
 
   const styles = useStyles(detect.isMobile())();
-  const {checkUsernameAvailability, email, instance} = props;
+  const { checkUsernameAvailability, email, instance } = props;
   const confirm = useConfirm();
   const navigate = useNavigate();
-  const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
+  const { settings } = useSelector<RootState, ConfigState>(
+    state => state.configState,
+  );
 
   const [profile, setProfile] = useState({
     name: {
@@ -86,7 +91,11 @@ export default function CreateAccounts(props: ProfileProps) {
   };
 
   const handleVisitWeb = (url: string) => {
-    window.open(publicRuntimeConfig.appAuthURL + url, '_blank', 'noopener,noreferrer');
+    window.open(
+      publicRuntimeConfig.appAuthURL + url,
+      '_blank',
+      'noopener,noreferrer',
+    );
   };
 
   const _showModal = () => {
@@ -129,22 +138,30 @@ export default function CreateAccounts(props: ProfileProps) {
       min_length: USERNAME_MIN_LENGTH,
     });
 
-    if (profile.name.value && profile.name.value.length < DISPLAY_NAME_MIN_LENGTH) {
+    if (
+      profile.name.value &&
+      profile.name.value.length < DISPLAY_NAME_MIN_LENGTH
+    ) {
       nameHelper = i18n.t('Login.Profile.Helper_Validate_Name_Min', {
         min_length: DISPLAY_NAME_MIN_LENGTH,
       });
     } else {
       const valid = /^([^"'*\\]*)$/.test(profile.name.value);
-      if (!valid) nameHelper = i18n.t('Login.Profile.Helper_Validate_Name_Char');
+      if (!valid)
+        nameHelper = i18n.t('Login.Profile.Helper_Validate_Name_Char');
     }
 
-    if (profile.username.value && profile.username.value.length < USERNAME_MIN_LENGTH) {
+    if (
+      profile.username.value &&
+      profile.username.value.length < USERNAME_MIN_LENGTH
+    ) {
       usernameHelper = i18n.t('Login.Profile.Helper_Validate_Username_Min', {
         min_length: USERNAME_MIN_LENGTH,
       });
     } else {
       const valid = /^[a-zA-Z0-9]+$/.test(profile.username.value);
-      if (!valid) usernameHelper = i18n.t('Login.Profile.Helper_Validate_Username_Char');
+      if (!valid)
+        usernameHelper = i18n.t('Login.Profile.Helper_Validate_Username_Char');
     }
 
     setProfile(prevSetting => ({
@@ -188,7 +205,10 @@ export default function CreateAccounts(props: ProfileProps) {
   const validateName = (): boolean => {
     let error = false;
 
-    if (!profile.name.value || profile.name.value.length < DISPLAY_NAME_MIN_LENGTH) {
+    if (
+      !profile.name.value ||
+      profile.name.value.length < DISPLAY_NAME_MIN_LENGTH
+    ) {
       error = true;
 
       setProfile(prevSetting => ({
@@ -235,7 +255,10 @@ export default function CreateAccounts(props: ProfileProps) {
   const validateUsername = (): boolean => {
     let error = false;
 
-    if (!profile.username.value || profile.username.value.length < USERNAME_MIN_LENGTH) {
+    if (
+      !profile.username.value ||
+      profile.username.value.length < USERNAME_MIN_LENGTH
+    ) {
       error = true;
 
       setProfile(prevSetting => ({
@@ -301,7 +324,7 @@ export default function CreateAccounts(props: ProfileProps) {
         <IcEmail />
         <Typography className={styles.textEmail}>{email}</Typography>
       </div>
-      <div style={{position: 'relative', marginBottom: '15px'}}>
+      <div style={{ position: 'relative', marginBottom: '15px' }}>
         <Typography variant="h5" className={styles.textTitle}>
           {i18n.t('Login.Profile.Instance')}
         </Typography>
@@ -324,16 +347,22 @@ export default function CreateAccounts(props: ProfileProps) {
             height={30}
             width={30}
           />
-          <div style={{width: '100%', paddingRight: 8}}>
+          <div style={{ width: '100%', paddingRight: 8 }}>
             <Box
               fontSize={14}
               fontWeight="fontWeightRegular"
-              style={{color: 'rgba(115, 66, 204, 1)'}}>
+              style={{ color: 'rgba(115, 66, 204, 1)' }}>
               {instance?.name}
             </Box>
-            <Box fontSize={12} fontWeight="fontWeightRegular" style={{color: '#0A0A0A'}}>
+            <Box
+              fontSize={12}
+              fontWeight="fontWeightRegular"
+              style={{ color: '#0A0A0A' }}>
               {isDescriptionLong && !expanded
-                ? `${instance?.description.split(' ').slice(0, 10).join(' ')}...`
+                ? `${instance?.description
+                    .split(' ')
+                    .slice(0, 10)
+                    .join(' ')}...`
                 : instance?.description}
             </Box>
           </div>
@@ -372,7 +401,7 @@ export default function CreateAccounts(props: ProfileProps) {
             fullWidth
             variant="outlined"
             onChange={handleChangeName}
-            inputProps={{maxLength: DISPLAY_NAME_MAX_LENGTH}}
+            inputProps={{ maxLength: DISPLAY_NAME_MAX_LENGTH }}
           />
           <Typography className={`${styles.count}`} component="span">
             ({profile.name.value.length}/{DISPLAY_NAME_MAX_LENGTH})
@@ -387,7 +416,10 @@ export default function CreateAccounts(props: ProfileProps) {
             fullWidth
             variant="outlined"
             onChange={handleChangeUsername}
-            inputProps={{maxLength: USERNAME_MAX_LENGTH, style: {textTransform: 'lowercase'}}}
+            inputProps={{
+              maxLength: USERNAME_MAX_LENGTH,
+              style: { textTransform: 'lowercase' },
+            }}
           />
           <Typography className={`${styles.count}`} component="span">
             ({profile.username.value.length}/{USERNAME_MAX_LENGTH})
@@ -399,9 +431,15 @@ export default function CreateAccounts(props: ProfileProps) {
           <FormControlLabel
             className={styles.termControl}
             onChange={toggleTermApproved}
-            control={<Checkbox name="term" color="primary" className={styles.checkbox} />}
+            control={
+              <Checkbox
+                name="term"
+                color="primary"
+                className={styles.checkbox}
+              />
+            }
             label={
-              <Typography style={{color: '#0A0A0A'}}>
+              <Typography style={{ color: '#0A0A0A' }}>
                 {i18n.t('Login.Options.Text_Terms_1')}&nbsp;
                 <Typography
                   component={'a'}
@@ -420,11 +458,15 @@ export default function CreateAccounts(props: ProfileProps) {
             }
           />
         </Grid>
-        <div style={{display: 'flex'}}>
-          <Button variant="outlined" fullWidth color="secondary" onClick={() => navigate('/email')}>
+        <div style={{ display: 'flex' }}>
+          <Button
+            variant="outlined"
+            fullWidth
+            color="secondary"
+            onClick={() => navigate('/email')}>
             Back
           </Button>
-          <div style={{width: 8}} />
+          <div style={{ width: 8 }} />
           <Button
             disabled={
               !isTermApproved ||

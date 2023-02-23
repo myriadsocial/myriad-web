@@ -1,6 +1,6 @@
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-import {MetricProps} from './Metric';
+import { MetricProps } from './Metric';
 
 export const useStyles = makeStyles<Theme, MetricProps>(theme =>
   createStyles({

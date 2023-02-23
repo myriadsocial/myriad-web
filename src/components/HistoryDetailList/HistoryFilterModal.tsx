@@ -1,6 +1,6 @@
-import {ChevronDownIcon} from '@heroicons/react/outline';
+import { ChevronDownIcon } from '@heroicons/react/outline';
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 import {
   Typography,
@@ -15,10 +15,10 @@ import {
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
-import {useStyles} from './HistoryDetailList.styles';
+import { useStyles } from './HistoryDetailList.styles';
 
-import {MenuOptions} from 'components/atoms/DropdownMenu';
-import {Modal} from 'components/atoms/Modal';
+import { MenuOptions } from 'components/atoms/DropdownMenu';
+import { Modal } from 'components/atoms/Modal';
 import i18n from 'src/locale';
 
 export type HistoryFilterModalProps = {
@@ -67,15 +67,21 @@ export const HistoryFilterModal: React.FC<HistoryFilterModalProps> = props => {
         <Typography>{i18n.t('Wallet.History.Transaction')}</Typography>
         <List dense={false} className={style.filterList}>
           {filterOption.map(option => (
-            <ListItem key={option.id} button onClick={() => setFilter(option.id)}>
+            <ListItem
+              key={option.id}
+              button
+              onClick={() => setFilter(option.id)}>
               <Radio
                 edge="end"
                 checked={filter === option.id}
                 value={option.id}
                 name="radio-buttons"
-                inputProps={{'aria-labelledby': option.id}}
+                inputProps={{ 'aria-labelledby': option.id }}
               />
-              <ListItemText primary={option.title} className={style.optionFilterText} />
+              <ListItemText
+                primary={option.title}
+                className={style.optionFilterText}
+              />
             </ListItem>
           ))}
         </List>
@@ -83,12 +89,13 @@ export const HistoryFilterModal: React.FC<HistoryFilterModalProps> = props => {
           id="combo-box-demo"
           options={currencyOption}
           getOptionLabel={option => option.title}
-          style={{width: '100%'}}
+          style={{ width: '100%' }}
           open={openCurrencyList}
           value={currencyOption.filter(ar => ar.id === currency)[0]}
           onChange={(event, newValue) => {
             if (newValue) {
-              const tmpVal: MenuOptions<string> = newValue as MenuOptions<string>;
+              const tmpVal: MenuOptions<string> =
+                newValue as MenuOptions<string>;
               setCurrency(tmpVal.id);
               setOpenCurrencyList(false);
             }
@@ -106,7 +113,7 @@ export const HistoryFilterModal: React.FC<HistoryFilterModalProps> = props => {
                   <React.Fragment>
                     <IconButton
                       aria-label="copy-post-link"
-                      style={{padding: 0, position: 'absolute', right: 20}}
+                      style={{ padding: 0, position: 'absolute', right: 20 }}
                       onClick={() => setOpenCurrencyList(!openCurrencyList)}>
                       <SvgIcon component={ChevronDownIcon} />
                     </IconButton>

@@ -1,13 +1,13 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
-import {Button} from '@material-ui/core';
+import { Button } from '@material-ui/core';
 
-import {BoxComponent} from '.';
+import { BoxComponent } from '.';
 
-import {socials} from 'src/components/atoms/Icons';
-import {SocialsEnum} from 'src/interfaces/social';
+import { socials } from 'src/components/atoms/Icons';
+import { SocialsEnum } from 'src/interfaces/social';
 
 export default {
   title: 'UI Revamp v2.0/atoms/Box',
@@ -15,7 +15,9 @@ export default {
   argTypes: {},
 } as ComponentMeta<typeof BoxComponent>;
 
-const Template: ComponentStory<typeof BoxComponent> = args => <BoxComponent {...args} />;
+const Template: ComponentStory<typeof BoxComponent> = args => (
+  <BoxComponent {...args} />
+);
 
 export const TextBox = Template.bind({});
 TextBox.args = {

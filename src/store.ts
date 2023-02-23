@@ -1,10 +1,10 @@
-import {createWrapper, HYDRATE} from 'next-redux-wrapper';
+import { createWrapper, HYDRATE } from 'next-redux-wrapper';
 
-import {combinedReducers, RootState} from './reducers';
-import {DESTROY_SESSION} from './reducers/user/constants';
+import { combinedReducers, RootState } from './reducers';
+import { DESTROY_SESSION } from './reducers/user/constants';
 
-import {applyMiddleware, Store, createStore, AnyAction, Reducer} from 'redux';
-import {composeWithDevTools} from 'redux-devtools-extension';
+import { applyMiddleware, Store, createStore, AnyAction, Reducer } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import thunkMiddleware from 'redux-thunk';
 
 const reducer: Reducer<RootState, AnyAction> = (state, action) => {
@@ -33,4 +33,4 @@ const makeStore = () => {
 };
 
 // Export the wrapper & wrap the pages/_app.js with this wrapper only
-export const wrapper = createWrapper(makeStore, {debug: false});
+export const wrapper = createWrapper(makeStore, { debug: false });

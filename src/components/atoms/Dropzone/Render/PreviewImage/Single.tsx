@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-import NextImage, {ImageProps} from 'next/image';
+import NextImage, { ImageProps } from 'next/image';
 
-import {Skeleton} from '../../File.skeleton';
+import { Skeleton } from '../../File.skeleton';
 
 import ShowIf from 'components/common/show-if.component';
 
@@ -15,7 +15,7 @@ export const Single: React.FC<PreviewSingleProps> = props => {
   const [loading, setLoading] = useState(true);
 
   return (
-    <div style={{position: 'relative'}}>
+    <div style={{ position: 'relative' }}>
       <NextImage
         {...props}
         placeholder="empty"
@@ -25,7 +25,7 @@ export const Single: React.FC<PreviewSingleProps> = props => {
       />
 
       <ShowIf condition={loading}>
-        <span style={{position: 'absolute', top: 0, left: 0}}>
+        <span style={{ position: 'absolute', top: 0, left: 0 }}>
           <Skeleton {...props} />
         </span>
       </ShowIf>

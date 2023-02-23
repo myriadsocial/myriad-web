@@ -1,4 +1,4 @@
-import {Server} from 'src/lib/api/server';
+import { Server } from 'src/lib/api/server';
 
 export interface ServerListProps {
   id: number;

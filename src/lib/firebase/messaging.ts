@@ -5,7 +5,7 @@ import FirebaseApp from './app';
 import firebase from 'firebase/app';
 import 'firebase/messaging';
 import localforage from 'localforage';
-import {NotificationProps} from 'src/interfaces/notification';
+import { NotificationProps } from 'src/interfaces/notification';
 
 export const init = async (
   onMessage?: (payload?: NotificationProps) => void,
@@ -22,13 +22,15 @@ export const init = async (
 
     messaging.onMessage(
       function (payload: any) {
-        const {publicRuntimeConfig} = getConfig();
+        const { publicRuntimeConfig } = getConfig();
         const appUrl = publicRuntimeConfig.appAuthURL ?? '';
 
         try {
-          const notificationProps: NotificationProps = JSON.parse(payload?.data?.data);
+          const notificationProps: NotificationProps = JSON.parse(
+            payload?.data?.data,
+          );
 
-          const {title, body} = payload?.data;
+          const { title, body } = payload?.data;
 
           navigator.serviceWorker
             .getRegistration('/firebase-cloud-messaging-push-scope')
@@ -36,7 +38,7 @@ export const init = async (
               registration.showNotification(title, {
                 body,
                 icon: appUrl + '/images/logo.jpg',
-                data: {appUrl},
+                data: { appUrl },
               });
             });
 

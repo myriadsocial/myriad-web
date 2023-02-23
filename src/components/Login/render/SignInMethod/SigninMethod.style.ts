@@ -1,4 +1,4 @@
-import {createStyles, makeStyles} from '@material-ui/core/styles';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = (isMobile: boolean) =>
   makeStyles(() =>
@@ -16,8 +16,18 @@ export const useStyles = (isMobile: boolean) =>
           marginRight: 0,
         },
       },
-      textSign: {fontSize: 18, fontWeight: 'bold', color: 'black', textAlign: 'center'},
-      textSubtitle: {fontSize: 14, fontWeight: 'normal', color: 'black', textAlign: 'center'},
+      textSign: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: 'black',
+        textAlign: 'center',
+      },
+      textSubtitle: {
+        fontSize: 14,
+        fontWeight: 'normal',
+        color: 'black',
+        textAlign: 'center',
+      },
       card: {
         padding: 10,
         borderColor: '#E0E0E0',
@@ -40,8 +50,8 @@ export const useStyles = (isMobile: boolean) =>
         height: 108,
         width: 108,
       },
-      wrapperCard: {height: 108, width: 108},
-      textMethod: {fontSize: 11.2, fontWeight: 600, color: 'black'},
+      wrapperCard: { height: 108, width: 108 },
+      textMethod: { fontSize: 11.2, fontWeight: 600, color: 'black' },
       description: {
         textAlign: 'center',
         fontSize: 10,
@@ -49,8 +59,12 @@ export const useStyles = (isMobile: boolean) =>
         fontWeight: 600,
         marginTop: 10,
       },
-      wrapperButton: {border: 0, background: 'white'},
-      wrapperTooltip: {display: 'flex', alignItems: 'center', justifyContent: 'center'},
+      wrapperButton: { border: 0, background: 'white' },
+      wrapperTooltip: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
       wrapperCards: {
         display: 'flex',
         alignItems: 'center',
@@ -58,7 +72,7 @@ export const useStyles = (isMobile: boolean) =>
         marginTop: 24,
         marginBottom: 67,
       },
-      tooltip: {color: '#DECCFF'},
-      textOr: {fontSize: 14, color: 'black', marginLeft: 12, marginRight: 12},
+      tooltip: { color: '#DECCFF' },
+      textOr: { fontSize: 14, color: 'black', marginLeft: 12, marginRight: 12 },
     }),
   );

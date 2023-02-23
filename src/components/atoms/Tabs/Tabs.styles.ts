@@ -1,6 +1,6 @@
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-import {TabPosition, TabMark, TabSize} from '../TabList';
+import { TabPosition, TabMark, TabSize } from '../TabList';
 
 type StylesProps = {
   position?: TabPosition;

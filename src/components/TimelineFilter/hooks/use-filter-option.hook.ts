@@ -1,17 +1,25 @@
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import {MenuOptions} from 'src/components/atoms/DropdownMenu';
-import {TabListItem} from 'src/components/atoms/TabList';
-import {TimelineOrderType, TimelineType, PostOriginType} from 'src/interfaces/timeline';
-import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
+import { MenuOptions } from 'src/components/atoms/DropdownMenu';
+import { TabListItem } from 'src/components/atoms/TabList';
+import {
+  TimelineOrderType,
+  TimelineType,
+  PostOriginType,
+} from 'src/interfaces/timeline';
+import { SortType } from 'src/lib/api/interfaces/pagination-params.interface';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {ProfileState} from 'src/reducers/profile/reducer';
-import {UserState} from 'src/reducers/user/reducer';
+import { RootState } from 'src/reducers';
+import { ProfileState } from 'src/reducers/profile/reducer';
+import { UserState } from 'src/reducers/user/reducer';
 
 export const useFilterOption = () => {
-  const {user, anonymous} = useSelector<RootState, UserState>(state => state.userState);
-  const {detail: people} = useSelector<RootState, ProfileState>(state => state.profileState);
+  const { user, anonymous } = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
+  const { detail: people } = useSelector<RootState, ProfileState>(
+    state => state.profileState,
+  );
 
   // Filter options
   const originFilterOptions: MenuOptions<PostOriginType>[] = [
@@ -23,8 +31,8 @@ export const useFilterOption = () => {
       id: 'myriad',
       title:
         !anonymous && people?.id == user?.id
-          ? i18n.t('Post_Sorting.Origin_Filter.Myriad', {name: 'Myriad'})
-          : i18n.t('Post_Sorting.Origin_Filter.Myriad', {name: people?.name}),
+          ? i18n.t('Post_Sorting.Origin_Filter.Myriad', { name: 'Myriad' })
+          : i18n.t('Post_Sorting.Origin_Filter.Myriad', { name: people?.name }),
     },
     {
       id: 'imported',
@@ -75,8 +83,8 @@ export const useFilterOption = () => {
   ];
 
   const sortOptions: MenuOptions<SortType>[] = [
-    {id: 'DESC', title: i18n.t('Post_Sorting.Sort.Latest')},
-    {id: 'ASC', title: i18n.t('Post_Sorting.Sort.Oldest')},
+    { id: 'DESC', title: i18n.t('Post_Sorting.Sort.Latest') },
+    { id: 'ASC', title: i18n.t('Post_Sorting.Sort.Oldest') },
   ];
 
   return {

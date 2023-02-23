@@ -1,6 +1,6 @@
-import {DotsVerticalIcon} from '@heroicons/react/outline';
+import { DotsVerticalIcon } from '@heroicons/react/outline';
 
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Checkbox from '@material-ui/core/Checkbox';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -18,19 +18,19 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 
-import {useStyles, ShimerComponent} from '.';
-import {PrimaryCoinMenuContainer} from '../PrimaryCoinMenu/PrimaryCoinMenuContainer';
-import {BalanceSortType} from '../Timeline/default';
-import {Avatar, AvatarSize} from '../atoms/Avatar';
-import {DropdownMenu, MenuOptions} from '../atoms/DropdownMenu';
+import { useStyles, ShimerComponent } from '.';
+import { PrimaryCoinMenuContainer } from '../PrimaryCoinMenu/PrimaryCoinMenuContainer';
+import { BalanceSortType } from '../Timeline/default';
+import { Avatar, AvatarSize } from '../atoms/Avatar';
+import { DropdownMenu, MenuOptions } from '../atoms/DropdownMenu';
 import SearchComponent from '../atoms/Search/SearchBox';
 
 import orderBy from 'lodash/orderBy';
-import {Empty} from 'src/components/atoms/Empty';
+import { Empty } from 'src/components/atoms/Empty';
 import ShowIf from 'src/components/common/show-if.component';
-import {formatUsd} from 'src/helpers/balance';
-import {useExchangeRate} from 'src/hooks/use-exchange-rate.hook';
-import {BalanceDetail} from 'src/interfaces/balance';
+import { formatUsd } from 'src/helpers/balance';
+import { useExchangeRate } from 'src/hooks/use-exchange-rate.hook';
+import { BalanceDetail } from 'src/interfaces/balance';
 import i18n from 'src/locale';
 
 type BalanceDetailListProps = {
@@ -41,15 +41,17 @@ type BalanceDetailListProps = {
 };
 
 export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
-  const {balanceDetails, isLoading} = props;
+  const { balanceDetails, isLoading } = props;
 
   const [checked, setChecked] = React.useState(true);
   const [isSearch, setIsSearch] = React.useState(false);
   const [isOnPrimaryCoinMenu, setIsOnPrimaryCoinMenu] = useState(false);
-  const [defaultBalanceDetails, setDefaultBalanceDetails] = useState<BalanceDetail[]>([]);
+  const [defaultBalanceDetails, setDefaultBalanceDetails] = useState<
+    BalanceDetail[]
+  >([]);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  const {loading, exchangeRates} = useExchangeRate();
+  const { loading, exchangeRates } = useExchangeRate();
 
   const balanceSortOptions: MenuOptions<BalanceSortType>[] = [
     {
@@ -73,7 +75,9 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
       return 0;
     }
 
-    const found = exchangeRates.find(exchangeRate => exchangeRate.id === currencyId);
+    const found = exchangeRates.find(
+      exchangeRate => exchangeRate.id === currencyId,
+    );
 
     if (found) return found.price;
     return 0;
@@ -85,21 +89,27 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
 
   const handleHideZeroBalances = () => {
     if (checked) {
-      setDefaultBalanceDetails(balanceDetails.filter(balance => balance.freeBalance > 0));
+      setDefaultBalanceDetails(
+        balanceDetails.filter(balance => balance.freeBalance > 0),
+      );
     } else setDefaultBalanceDetails(balanceDetails);
   };
 
   const handleSearch = (query: string) => {
     const regex = new RegExp(`^${query.toLowerCase()}`, 'i');
 
-    const result = balanceDetails.filter(balance => balance.name.toLowerCase().match(regex));
+    const result = balanceDetails.filter(balance =>
+      balance.name.toLowerCase().match(regex),
+    );
 
     if (!query) setDefaultBalanceDetails(balanceDetails);
     else setDefaultBalanceDetails(result);
     setIsSearch(!!query);
   };
 
-  const handleOpenManageAssets = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleOpenManageAssets = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -115,13 +125,21 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
   const handleSortChanged = (sort: BalanceSortType) => {
     switch (sort) {
       case 'highest': {
-        const sortedHighestBalances = orderBy(defaultBalanceDetails, 'freeBalance', 'desc');
+        const sortedHighestBalances = orderBy(
+          defaultBalanceDetails,
+          'freeBalance',
+          'desc',
+        );
         setDefaultBalanceDetails(sortedHighestBalances);
         break;
       }
 
       case 'lowest': {
-        const sortedLowestBalances = orderBy(defaultBalanceDetails, 'freeBalance', 'asc');
+        const sortedLowestBalances = orderBy(
+          defaultBalanceDetails,
+          'freeBalance',
+          'asc',
+        );
         setDefaultBalanceDetails(sortedLowestBalances);
         break;
       }
@@ -141,7 +159,9 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
   if (isOnPrimaryCoinMenu)
     return (
       <>
-        <PrimaryCoinMenuContainer togglePrimaryCoinMenu={togglePrimaryCoinMenu} />
+        <PrimaryCoinMenuContainer
+          togglePrimaryCoinMenu={togglePrimaryCoinMenu}
+        />
       </>
     );
 
@@ -154,7 +174,10 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
           iconPosition={'end'}
           outlined={true}
         />
-        <IconButton disableRipple aria-label="refresh" onClick={handleOpenManageAssets}>
+        <IconButton
+          disableRipple
+          aria-label="refresh"
+          onClick={handleOpenManageAssets}>
           <SvgIcon component={DotsVerticalIcon} color="inherit" />
         </IconButton>
       </div>
@@ -169,14 +192,14 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
         <FormGroup>
           <FormControlLabel
             disabled={isSearch}
-            classes={{root: classes.formControl}}
+            classes={{ root: classes.formControl }}
             control={
               <Checkbox
                 checked={checked}
                 color="primary"
                 onChange={handleChange}
-                inputProps={{'aria-label': 'controlled'}}
-                classes={{root: classes.fill}}
+                inputProps={{ 'aria-label': 'controlled' }}
+                classes={{ root: classes.fill }}
               />
             }
             label={i18n.t('Wallet.Balance.Hide_0')}
@@ -187,14 +210,16 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
         <ShimerComponent />
       </ShowIf>
 
-      <ShowIf condition={!defaultBalanceDetails.length && !isLoading && isSearch}>
+      <ShowIf
+        condition={!defaultBalanceDetails.length && !isLoading && isSearch}>
         <Empty
           title={i18n.t('Wallet.Balance.Search_Empty.Title')}
           subtitle={i18n.t('Wallet.Balance.Search_Empty.Subtitle')}
         />
       </ShowIf>
 
-      <ShowIf condition={!!defaultBalanceDetails.length && !isLoading && !isSearch}>
+      <ShowIf
+        condition={!!defaultBalanceDetails.length && !isLoading && !isSearch}>
         <TableContainer component={List}>
           <Table className={classes.root} aria-label="Balance Detail Table">
             <TableBody>
@@ -207,7 +232,10 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
                 defaultBalanceDetails.length > 0 &&
                 defaultBalanceDetails.map(balanceDetail => (
                   <TableRow key={balanceDetail.id} className={classes.tableRow}>
-                    <TableCell component="th" scope="row" className={classes.tableCell}>
+                    <TableCell
+                      component="th"
+                      scope="row"
+                      className={classes.tableCell}>
                       <Avatar
                         name={balanceDetail.symbol}
                         src={balanceDetail.image}
@@ -219,7 +247,9 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
                     </TableCell>
                     <TableCell align="right">
                       <div>
-                        <Typography variant="body1" style={{fontWeight: 'bold'}}>
+                        <Typography
+                          variant="body1"
+                          style={{ fontWeight: 'bold' }}>
                           {parseFloat(balanceDetail.freeBalance.toFixed(4))}
                         </Typography>
                         <Typography variant="caption" color="textSecondary">
@@ -240,12 +270,14 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
       <Menu
         id="manage-assets"
         anchorEl={anchorEl}
-        style={{width: 170}}
-        classes={{paper: classes.menu}}
+        style={{ width: 170 }}
+        classes={{ paper: classes.menu }}
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleCloseManageAssets}>
-        <MenuItem onClick={handleOpenManageAsset}>{i18n.t('Wallet.Balance.Manage')}</MenuItem>
+        <MenuItem onClick={handleOpenManageAsset}>
+          {i18n.t('Wallet.Balance.Manage')}
+        </MenuItem>
       </Menu>
     </>
   );

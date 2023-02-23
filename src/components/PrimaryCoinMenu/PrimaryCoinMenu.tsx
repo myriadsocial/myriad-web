@@ -1,19 +1,24 @@
-import React, {useState} from 'react';
-import {DragDropContext, Droppable, Draggable, DropResult} from 'react-beautiful-dnd';
+import React, { useState } from 'react';
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from 'react-beautiful-dnd';
 
-import {useMediaQuery, useTheme} from '@material-ui/core';
+import { useMediaQuery, useTheme } from '@material-ui/core';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
 
-import {useStyles} from '.';
-import {User} from '../../interfaces/user';
-import {Button, ButtonVariant, ButtonColor} from '../atoms/Button';
-import {DraggableBalanceCard} from './DraggableBalanceCard';
+import { useStyles } from '.';
+import { User } from '../../interfaces/user';
+import { Button, ButtonVariant, ButtonColor } from '../atoms/Button';
+import { DraggableBalanceCard } from './DraggableBalanceCard';
 
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {useCurrency} from 'src/hooks/use-currency.hook';
-import {BalanceDetail} from 'src/interfaces/balance';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import { useCurrency } from 'src/hooks/use-currency.hook';
+import { BalanceDetail } from 'src/interfaces/balance';
 import i18n from 'src/locale';
 
 type PrimaryCoinMenuProps = {
@@ -26,15 +31,15 @@ type PrimaryCoinMenuProps = {
 export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
-  const {togglePrimaryCoinMenu, balanceDetails, user, networkId} = props;
+  const { togglePrimaryCoinMenu, balanceDetails, user, networkId } = props;
   const classes = useStyles();
 
   const enqueueSnackbar = useEnqueueSnackbar();
-  const {updateCurrencySet} = useCurrency();
+  const { updateCurrencySet } = useCurrency();
 
   const [coins, updateCoins] = useState(balanceDetails);
 
-  const handleOnDragEnd = ({source, destination}: DropResult) => {
+  const handleOnDragEnd = ({ source, destination }: DropResult) => {
     // Handle if dragging out of bounds
     if (!destination) return;
 
@@ -76,17 +81,17 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
                 {i18n.t('Wallet.Primary_Coin.Text_2')}
               </Typography>
               <div className={classes.title}>
-                <Typography variant="body1" style={{fontWeight: 'bold'}}>
+                <Typography variant="body1" style={{ fontWeight: 'bold' }}>
                   {i18n.t('Wallet.Primary_Coin.Text_1')}
                 </Typography>
               </div>
             </div>
           ) : (
             <div className={classes.primaryCoinWrapper}>
-              <Typography variant="body1" style={{fontWeight: 'bold'}}>
+              <Typography variant="body1" style={{ fontWeight: 'bold' }}>
                 {i18n.t('Wallet.Primary_Coin.Text_1')}
               </Typography>
-              <div style={{marginLeft: 'auto'}}>
+              <div style={{ marginLeft: 'auto' }}>
                 <Typography variant="body1" color="textSecondary">
                   {i18n.t('Wallet.Primary_Coin.Text_2')}
                 </Typography>
@@ -104,12 +109,17 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
                   {provided.placeholder}
                   {coins.map((coin, index) => {
                     return (
-                      <Draggable key={coin.id} draggableId={coin.id} index={index}>
+                      <Draggable
+                        key={coin.id}
+                        draggableId={coin.id}
+                        index={index}>
                         {provided =>
                           index === 1 ? (
                             <>
                               <div className={classes.title}>
-                                <Typography variant="body1" style={{fontWeight: 'bold'}}>
+                                <Typography
+                                  variant="body1"
+                                  style={{ fontWeight: 'bold' }}>
                                   Favorite coin
                                 </Typography>
                               </div>
@@ -155,7 +165,9 @@ export const PrimaryCoinMenu: React.FC<PrimaryCoinMenuProps> = props => {
             color={ButtonColor.SECONDARY}>
             {i18n.t('General.Cancel')}
           </Button>
-          <Button onClick={handleSetDefaultCurrency} variant={ButtonVariant.CONTAINED}>
+          <Button
+            onClick={handleSetDefaultCurrency}
+            variant={ButtonVariant.CONTAINED}>
             {i18n.t('General.Save')}
           </Button>
         </div>

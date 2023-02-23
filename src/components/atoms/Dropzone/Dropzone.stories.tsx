@@ -1,8 +1,8 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
-import {Dropzone} from '.';
+import { Dropzone } from '.';
 
 export default {
   title: 'UI Revamp v2.0/atoms/Dropzone',
@@ -10,7 +10,9 @@ export default {
   argTypes: {},
 } as ComponentMeta<typeof Dropzone>;
 
-const Template: ComponentStory<typeof Dropzone> = args => <Dropzone {...args} />;
+const Template: ComponentStory<typeof Dropzone> = args => (
+  <Dropzone {...args} />
+);
 
 export const ImageUpload = Template.bind({});
 ImageUpload.args = {

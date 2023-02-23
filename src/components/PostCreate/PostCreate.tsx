@@ -1,37 +1,37 @@
-import {ArrowLeftIcon, GiftIcon, TrashIcon} from '@heroicons/react/outline';
+import { ArrowLeftIcon, GiftIcon, TrashIcon } from '@heroicons/react/outline';
 
-import React, {useRef, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import React, { useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import dynamic from 'next/dynamic';
 
-import {Button, IconButton, SvgIcon, Typography} from '@material-ui/core';
+import { Button, IconButton, SvgIcon, Typography } from '@material-ui/core';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 
-import {NSFWTags} from '../NSFWTags';
-import {PostImport} from '../PostImport';
-import {DropdownMenu} from '../atoms/DropdownMenu';
-import {Modal} from '../atoms/Modal';
-import {TabPanel} from '../atoms/TabPanel';
-import {useStyles} from './PostCreate.styles';
+import { NSFWTags } from '../NSFWTags';
+import { PostImport } from '../PostImport';
+import { DropdownMenu } from '../atoms/DropdownMenu';
+import { Modal } from '../atoms/Modal';
+import { TabPanel } from '../atoms/TabPanel';
+import { useStyles } from './PostCreate.styles';
 import SettingVisibility from './SettingVisibility';
 import TimelineVisibility from './TimelineVisibility';
-import {menuOptions} from './default';
-import {serialize} from './formatter';
+import { menuOptions } from './default';
+import { serialize } from './formatter';
 
 import ExclusiveCreate from 'components/ExclusiveContentCreate/ExclusiveCreate';
 import Reveal from 'components/ExclusiveContentCreate/Reveal/Reveal';
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
-import {getEditorSelectors} from 'components/common/Editor/store';
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {ExclusiveContent} from 'components/common/Tipping/Tipping.interface';
+import { getEditorSelectors } from 'components/common/Editor/store';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import { ExclusiveContent } from 'components/common/Tipping/Tipping.interface';
 import ShowIf from 'src/components/common/show-if.component';
-import {ExclusiveContentPost} from 'src/interfaces/exclusive';
-import {Post, PostVisibility} from 'src/interfaces/post';
-import {User} from 'src/interfaces/user';
+import { ExclusiveContentPost } from 'src/interfaces/exclusive';
+import { Post, PostVisibility } from 'src/interfaces/post';
+import { User } from 'src/interfaces/user';
 import i18n from 'src/locale';
-import {createExclusiveContent} from 'src/reducers/timeline/actions';
+import { createExclusiveContent } from 'src/reducers/timeline/actions';
 
 const CKEditor = dynamic(() => import('../common/CKEditor/Editor'), {
   ssr: false,
@@ -60,7 +60,7 @@ const initialPost = {
 };
 
 export const PostCreate: React.FC<PostCreateProps> = props => {
-  const {open, user, isMobile, onClose, onSubmit, onSearchPeople} = props;
+  const { open, user, isMobile, onClose, onSubmit, onSearchPeople } = props;
   const dispatch = useDispatch();
   const confirm = useConfirm();
   const styles = useStyles();
@@ -72,12 +72,13 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
   const content = useRef('');
 
   const [importUrl, setImport] = useState<string | undefined>();
-  const [exclusiveContent, setExclusiveContent] = useState<ExclusiveContentPost | null>(null);
+  const [exclusiveContent, setExclusiveContent] =
+    useState<ExclusiveContentPost | null>(null);
   const [showExclusive, setShowExclusive] = useState<boolean>(false);
 
   const Editor = isMobile ? CKEditor : PlateEditor;
 
-  const header: Record<PostCreateType, {title: string; subtitle: string}> = {
+  const header: Record<PostCreateType, { title: string; subtitle: string }> = {
     create: {
       title: i18n.t('Post_Create.Title'),
       subtitle: i18n.t('Post_Create.Subtitle'),
@@ -88,7 +89,10 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
     },
   };
 
-  const handleTabChange = (event: React.ChangeEvent<{}>, tab: PostCreateType) => {
+  const handleTabChange = (
+    event: React.ChangeEvent<{}>,
+    tab: PostCreateType,
+  ) => {
     setActiveTab(tab);
   };
 
@@ -97,11 +101,15 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
   };
 
   const handleConfirmNSFWTags = (tags: string[]) => {
-    setPost(prevPost => ({...prevPost, isNSFW: tags.length > 0, NSFWTag: tags.join(',')}));
+    setPost(prevPost => ({
+      ...prevPost,
+      isNSFW: tags.length > 0,
+      NSFWTag: tags.join(','),
+    }));
   };
 
   const handleVisibilityChange = (visibility: PostVisibility) => {
-    setPost(prevPost => ({...prevPost, visibility}));
+    setPost(prevPost => ({ ...prevPost, visibility }));
   };
 
   const handleSubmit = () => {
@@ -143,14 +151,16 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
               };
 
               if (resp?.id) {
-                Object.assign(data, {asset: {exclusiveContents: [resp.id]}});
+                Object.assign(data, {
+                  asset: { exclusiveContents: [resp.id] },
+                });
               }
 
               onSubmit(data);
             },
             () => {
               confirm({
-                title: i18n.t('LiteVersion.LimitTitlePost', {count: 0}),
+                title: i18n.t('LiteVersion.LimitTitlePost', { count: 0 }),
                 description: i18n.t('LiteVersion.LimitDescPost'),
                 icon: 'warning',
                 confirmationText: i18n.t('General.Got_It'),
@@ -195,14 +205,16 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
               };
 
               if (resp?.id) {
-                Object.assign(data, {asset: {exclusiveContents: [resp.id]}});
+                Object.assign(data, {
+                  asset: { exclusiveContents: [resp.id] },
+                });
               }
 
               onSubmit(data);
             },
             () => {
               confirm({
-                title: i18n.t('LiteVersion.LimitTitlePost', {count: 0}),
+                title: i18n.t('LiteVersion.LimitTitlePost', { count: 0 }),
                 description: i18n.t('LiteVersion.LimitDescPost'),
                 icon: 'warning',
                 confirmationText: i18n.t('General.Got_It'),
@@ -266,8 +278,10 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
     handleshowExclusive();
   };
 
-  const handleTitleModal: () => {title: string; subtitle: string} = () => {
-    const title = !showExclusive ? header[activeTab].title : i18n.t('ExclusiveContent.Add');
+  const handleTitleModal: () => { title: string; subtitle: string } = () => {
+    const title = !showExclusive
+      ? header[activeTab].title
+      : i18n.t('ExclusiveContent.Add');
     const subtitle = !showExclusive ? header[activeTab].subtitle : '';
 
     return {
@@ -297,7 +311,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
       </ShowIf>
 
       <TabPanel value={activeTab} index="create">
-        <div style={{display: showExclusive ? 'none' : 'block'}}>
+        <div style={{ display: showExclusive ? 'none' : 'block' }}>
           <Editor
             userId={user.id}
             mobile={isMobile}
@@ -322,8 +336,10 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
             </div>
           )}
         </div>
-        <div style={{display: showExclusive ? 'block' : 'none'}}>
-          <IconButton aria-label="exclusive-content" onClick={handleshowExclusive}>
+        <div style={{ display: showExclusive ? 'block' : 'none' }}>
+          <IconButton
+            aria-label="exclusive-content"
+            onClick={handleshowExclusive}>
             <SvgIcon
               component={ArrowLeftIcon}
               viewBox="0 0 24 24"
@@ -341,12 +357,16 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
       </TabPanel>
 
       <TabPanel value={activeTab} index="import">
-        <PostImport value={importUrl} onChange={handlePostUrlChange} onError={handleErrorImport} />
+        <PostImport
+          value={importUrl}
+          onChange={handlePostUrlChange}
+          onError={handleErrorImport}
+        />
       </TabPanel>
 
       <div className={styles.action}>
         <div className={styles.option}>
-          <div style={{display: showExclusive ? 'none' : 'flex'}}>
+          <div style={{ display: showExclusive ? 'none' : 'flex' }}>
             <DropdownMenu<PostVisibility>
               title={i18n.t('Post_Create.Visibility.Label')}
               options={menuOptions}
@@ -364,13 +384,19 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
           <ShowIf condition={!showExclusive}>
             {!exclusiveContent ? (
               <>
-                <IconButton aria-label="exclusive-content" onClick={handleshowExclusive}>
-                  <SvgIcon component={GiftIcon} viewBox="0 0 24 24" className={styles.giftIcon} />
+                <IconButton
+                  aria-label="exclusive-content"
+                  onClick={handleshowExclusive}>
+                  <SvgIcon
+                    component={GiftIcon}
+                    viewBox="0 0 24 24"
+                    className={styles.giftIcon}
+                  />
                   <Typography
                     component="span"
                     color="primary"
                     variant="body1"
-                    style={{lineHeight: 1.8}}>
+                    style={{ lineHeight: 1.8 }}>
                     {i18n.t('ExclusiveContent.Add')}
                   </Typography>
                 </IconButton>
@@ -384,12 +410,12 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
                     component={TrashIcon}
                     viewBox="0 0 24 24"
                     className={styles.giftIcon}
-                    style={{color: '#f44336'}}
+                    style={{ color: '#f44336' }}
                   />
                   <Typography
                     component="span"
                     variant="body1"
-                    style={{lineHeight: 1.8, color: '#f44336'}}>
+                    style={{ lineHeight: 1.8, color: '#f44336' }}>
                     {i18n.t('ExclusiveContent.Remove')}
                   </Typography>
                 </IconButton>
@@ -440,7 +466,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
         </ShowIf>
         <ShowIf condition={post.visibility === PostVisibility.TIMELINE}>
           <TimelineVisibility setPost={setPost} pageType="create" />
-          <div style={{textAlign: 'right'}}>
+          <div style={{ textAlign: 'right' }}>
             <Button
               disabled={loading || !post.selectedTimelineIds}
               variant="contained"

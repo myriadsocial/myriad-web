@@ -1,6 +1,6 @@
-import {MenuOptions} from '../atoms/DropdownMenu';
+import { MenuOptions } from '../atoms/DropdownMenu';
 
-import {TransactionOrderType} from 'src/interfaces/transaction';
+import { TransactionOrderType } from 'src/interfaces/transaction';
 import i18n from 'src/locale';
 
 export const transactionSortOptions: MenuOptions<TransactionOrderType>[] = [

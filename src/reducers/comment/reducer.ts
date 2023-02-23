@@ -1,10 +1,10 @@
-import {PaginationState as BasePaginationState} from '../base/state';
-import {Actions} from './actions';
+import { PaginationState as BasePaginationState } from '../base/state';
+import { Actions } from './actions';
 import * as constants from './constants';
 
 import * as Redux from 'redux';
-import {Comment} from 'src/interfaces/comment';
-import {PaginationParams} from 'src/lib/api/interfaces/pagination-params.interface';
+import { Comment } from 'src/interfaces/comment';
+import { PaginationParams } from 'src/lib/api/interfaces/pagination-params.interface';
 
 export interface CommentState extends BasePaginationState {
   comments: Comment[];

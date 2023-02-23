@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {SvgIcon, SvgIconProps} from '@material-ui/core';
+import { SvgIcon, SvgIconProps } from '@material-ui/core';
 
 import ArrowUp from 'src/images/Icons/ArrowUp.svg';
 import DragIndicator from 'src/images/Icons/DragIndicator.svg';
@@ -21,18 +21,18 @@ export const MyriadCircleIcon: React.FC<IconProps> = props => (
   <SvgIcon
     component={MyriadCircle}
     viewBox="0 0 30 30"
-    style={{width: props.width, height: props.height, fill: 'none'}}
+    style={{ width: props.width, height: props.height, fill: 'none' }}
     {...props}
   />
 );
 
 export const MyriadFullIcon: React.FC<IconProps> = props => {
-  const {width = 221, height = 48} = props;
+  const { width = 221, height = 48 } = props;
   return (
     <SvgIcon
       component={MyriadFull}
       viewBox="0 14 221 58"
-      style={{width: width, height: height, fill: 'none'}}
+      style={{ width: width, height: height, fill: 'none' }}
       {...props}
     />
   );
@@ -42,7 +42,7 @@ export const MyriadFullBlackIcon: React.FC<IconProps> = props => (
   <SvgIcon
     component={MyriadFullBlack}
     viewBox="0 0 142 36"
-    style={{width: 'auto', height: 'auto'}}
+    style={{ width: 'auto', height: 'auto' }}
     {...props}
   />
 );
@@ -51,7 +51,7 @@ export const MyriadGreyIcon: React.FC<IconProps> = props => (
   <SvgIcon
     component={MyriadGrey}
     viewBox="0 0 50 50"
-    style={{width: 50, height: 50, visibility: 'visible'}}
+    style={{ width: 50, height: 50, visibility: 'visible' }}
     {...props}
   />
 );
@@ -68,20 +68,20 @@ export const UploadIcon: React.FC<IconProps> = props => (
   <SvgIcon
     component={Upload}
     viewBox="0 0 56 56"
-    style={{fill: 'none', width: 'auto', height: 'auto'}}
+    style={{ fill: 'none', width: 'auto', height: 'auto' }}
     {...props}
   />
 );
 
 export const ArrowUpIcon: React.FC<IconProps> = props => (
   <SvgIcon viewBox="0 0 20 20" {...props}>
-    <ArrowUp style={{width: 20, height: 20}} />
+    <ArrowUp style={{ width: 20, height: 20 }} />
   </SvgIcon>
 );
 
 export const DragIndicatorIcon: React.FC<IconProps> = props => (
   <SvgIcon viewBox="0 0 20 20" {...props}>
-    <DragIndicator style={{width: 20, height: 20}} />
+    <DragIndicator style={{ width: 20, height: 20 }} />
   </SvgIcon>
 );
 
@@ -94,5 +94,10 @@ export const SortIcon: React.FC<IconProps> = props => (
 );
 
 export const InfoIcon: React.FC<IconProps> = props => (
-  <SvgIcon component={Info} viewBox="0 0 24 24" style={{width: 24, height: 24}} {...props} />
+  <SvgIcon
+    component={Info}
+    viewBox="0 0 24 24"
+    style={{ width: 24, height: 24 }}
+    {...props}
+  />
 );

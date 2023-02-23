@@ -18,7 +18,7 @@ export const dataURItoBlob = (dataURI: string): Blob => {
   }
 
   // write the ArrayBuffer to a blob, and you're done
-  const blob = new Blob([ab], {type: mimeString});
+  const blob = new Blob([ab], { type: mimeString });
 
   return blob;
 };

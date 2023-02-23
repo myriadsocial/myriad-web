@@ -1,7 +1,7 @@
 import * as React from 'react';
 import ReactMarkdown from 'react-markdown';
 
-import {Typography} from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 
 import remarkGFM from 'remark-gfm';
 import remarkHTML from 'remark-html';
@@ -18,10 +18,10 @@ type RenderRedditProps = {
 };
 
 export const RenderReddit: React.FC<RenderRedditProps> = props => {
-  const {title, text, maxLength, onShowMore, onHashtagClicked} = props;
+  const { title, text, maxLength, onShowMore, onHashtagClicked } = props;
 
   return (
-    <div style={{paddingBottom: 16}}>
+    <div style={{ paddingBottom: 16 }}>
       {title && (
         <LinkifyComponent
           text={title}

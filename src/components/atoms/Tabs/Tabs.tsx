@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
-import {TabsProps} from '@material-ui/core';
+import { TabsProps } from '@material-ui/core';
 
-import {TabList, TabPosition, TabMark, TabSize} from '../TabList';
-import {TabPanel} from '../TabPanel';
-import {useStyles} from './Tabs.styles';
-import {TabItems} from './Tabs.types';
+import { TabList, TabPosition, TabMark, TabSize } from '../TabList';
+import { TabPanel } from '../TabPanel';
+import { useStyles } from './Tabs.styles';
+import { TabItems } from './Tabs.types';
 
 type TabsComponentProps<T> = TabsProps & {
   tabs: TabItems<T>[];
@@ -36,7 +36,7 @@ const Tabs = <T,>(
     paddingLeft,
   } = props;
 
-  const styles = useStyles({position, mark, size});
+  const styles = useStyles({ position, mark, size });
 
   const [selectedTab, setSelectedTab] = useState<T>(selected);
 
@@ -51,7 +51,11 @@ const Tabs = <T,>(
 
   return (
     <div ref={ref}>
-      <TabList {...props} onChangeTab={handleTabChange} className={styles.tabs} />
+      <TabList
+        {...props}
+        onChangeTab={handleTabChange}
+        className={styles.tabs}
+      />
 
       {tabs.map(tab => {
         return tab.id === selectedTab ? (
@@ -71,5 +75,5 @@ const Tabs = <T,>(
 };
 
 export const TabsComponent = React.forwardRef(Tabs) as <T>(
-  props: TabsComponentProps<T> & {ref?: React.ForwardedRef<HTMLDivElement>},
+  props: TabsComponentProps<T> & { ref?: React.ForwardedRef<HTMLDivElement> },
 ) => ReturnType<typeof Tabs>;

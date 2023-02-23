@@ -1,4 +1,4 @@
-import {default as Button} from './Button';
+import { default as Button } from './Button';
 import {
   ButtonSize,
   ButtonColor,
@@ -9,6 +9,14 @@ import {
   ButtonProps,
 } from './button.interfaces';
 
-export {Button, ButtonSize, ButtonColor, ButtonVariant, buttonSizes, buttonColors, buttonVariants};
+export {
+  Button,
+  ButtonSize,
+  ButtonColor,
+  ButtonVariant,
+  buttonSizes,
+  buttonColors,
+  buttonVariants,
+};
 
-export type {ButtonProps};
+export type { ButtonProps };

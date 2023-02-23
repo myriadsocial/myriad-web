@@ -1,18 +1,21 @@
-import React, {createRef, useEffect} from 'react';
+import React, { createRef, useEffect } from 'react';
 
-import {CommentDeleted} from '../CommentDeleted';
-import {CommentDetail, CommentDetailProps} from '../CommentDetail';
-import {useStyles} from './CommentList.style';
+import { CommentDeleted } from '../CommentDeleted';
+import { CommentDetail, CommentDetailProps } from '../CommentDetail';
+import { useStyles } from './CommentList.style';
 
 import useTipHistoryHook from 'components/TipHistory/use-tip-history.hook';
-import {LoadMoreComponent} from 'src/components/atoms/LoadMore/LoadMore';
-import {useQueryParams} from 'src/hooks/use-query-params.hooks';
-import {Comment} from 'src/interfaces/comment';
-import {SectionType} from 'src/interfaces/interaction';
-import {User} from 'src/interfaces/user';
+import { LoadMoreComponent } from 'src/components/atoms/LoadMore/LoadMore';
+import { useQueryParams } from 'src/hooks/use-query-params.hooks';
+import { Comment } from 'src/interfaces/comment';
+import { SectionType } from 'src/interfaces/interaction';
+import { User } from 'src/interfaces/user';
 import i18n from 'src/locale';
 
-type CommentListProps = Omit<CommentDetailProps, 'comment' | 'deep' | 'onOpenTipHistory'> & {
+type CommentListProps = Omit<
+  CommentDetailProps,
+  'comment' | 'deep' | 'onOpenTipHistory'
+> & {
   comments: Comment[];
   user?: User;
   deep?: number;
@@ -37,13 +40,16 @@ export const CommentList: React.FC<CommentListProps> = props => {
   } = props;
 
   const styles = useStyles();
-  const {query} = useQueryParams();
+  const { query } = useQueryParams();
   const tipHistory = useTipHistoryHook();
 
-  const refs: RefComment = comments.reduce((acc: RefComment, value: Comment) => {
-    acc[value.id] = createRef<HTMLDivElement>();
-    return acc;
-  }, {});
+  const refs: RefComment = comments.reduce(
+    (acc: RefComment, value: Comment) => {
+      acc[value.id] = createRef<HTMLDivElement>();
+      return acc;
+    },
+    {},
+  );
 
   useEffect(() => {
     if (Object.keys(refs).length > 0) {
@@ -90,7 +96,10 @@ export const CommentList: React.FC<CommentListProps> = props => {
       })}
 
       {comments.length > 0 && hasMoreComment && (
-        <LoadMoreComponent loadmore={onLoadMoreComments} text={i18n.t('Post_Comment.Load_More')} />
+        <LoadMoreComponent
+          loadmore={onLoadMoreComments}
+          text={i18n.t('Post_Comment.Load_More')}
+        />
       )}
     </div>
   );

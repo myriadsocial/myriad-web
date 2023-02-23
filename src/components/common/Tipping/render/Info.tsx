@@ -1,11 +1,11 @@
 import React from 'react';
 
-import {IconButton, Typography} from '@material-ui/core';
+import { IconButton, Typography } from '@material-ui/core';
 import Link from '@material-ui/core/Link';
 import BaseTooltip from '@material-ui/core/Tooltip';
-import {withStyles} from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 
-import {InfoIcon} from 'src/components/atoms/Icons';
+import { InfoIcon } from 'src/components/atoms/Icons';
 import i18n from 'src/locale';
 
 const Tooltip = withStyles({
@@ -16,7 +16,7 @@ const Tooltip = withStyles({
 
 export const TippingInfo: React.FC = () => (
   <Tooltip
-    PopperProps={{keepMounted: true}}
+    PopperProps={{ keepMounted: true }}
     interactive
     placement="right"
     disableFocusListener
@@ -36,7 +36,7 @@ export const TippingInfo: React.FC = () => (
         </Link>
       </Typography>
     }>
-    <IconButton style={{backgroundColor: 'transparent', padding: 1}}>
+    <IconButton style={{ backgroundColor: 'transparent', padding: 1 }}>
       <InfoIcon />
     </IconButton>
   </Tooltip>

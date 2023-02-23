@@ -1,9 +1,9 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
-import {ProfileCard as ProfileCardComponent} from '.';
-import {AvatarSize} from '../atoms/Avatar';
+import { ProfileCard as ProfileCardComponent } from '.';
+import { AvatarSize } from '../atoms/Avatar';
 
 export default {
   title: 'UI Revamp v2.0/components/Profile Card',
@@ -11,7 +11,7 @@ export default {
   argTypes: {
     size: {
       options: [AvatarSize.SMALL, AvatarSize.MEDIUM, AvatarSize.LARGE],
-      control: {type: 'radio'},
+      control: { type: 'radio' },
     },
   },
 } as ComponentMeta<typeof ProfileCardComponent>;

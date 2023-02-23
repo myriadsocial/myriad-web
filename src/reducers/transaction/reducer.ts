@@ -1,11 +1,11 @@
-import {PaginationState as BasePaginationState} from '../base/state';
-import {Actions, TransactionFilterProps} from './actions';
+import { PaginationState as BasePaginationState } from '../base/state';
+import { Actions, TransactionFilterProps } from './actions';
 import * as constants from './constants';
 
 import update from 'immutability-helper';
 import * as Redux from 'redux';
-import {Transaction} from 'src/interfaces/transaction';
-import {PaginationParams} from 'src/lib/api/interfaces/pagination-params.interface';
+import { Transaction } from 'src/interfaces/transaction';
+import { PaginationParams } from 'src/lib/api/interfaces/pagination-params.interface';
 
 export interface TransactionState extends BasePaginationState {
   transactions: Transaction[];
@@ -66,7 +66,7 @@ export const TransactionReducer: Redux.Reducer<TransactionState, Actions> = (
 
     case constants.SET_TRANSACTION_LOADING: {
       return update(state, {
-        loading: {$set: action.loading},
+        loading: { $set: action.loading },
       });
     }
 

@@ -1,22 +1,22 @@
-import React, {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {Button, Link, Typography} from '@material-ui/core';
+import { Button, Link, Typography } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-import {BalanceDetail} from '../../interfaces/balance';
-import {BoxComponent} from '../atoms/Box';
-import {ListItemComponent} from '../atoms/ListItem';
+import { BalanceDetail } from '../../interfaces/balance';
+import { BoxComponent } from '../atoms/Box';
+import { ListItemComponent } from '../atoms/ListItem';
 
 import ShowIf from 'components/common/show-if.component';
 import InfoIconYellow from 'src/images/Icons/InfoIconYellow.svg';
-import {getTipStatus} from 'src/lib/api/wallet';
+import { getTipStatus } from 'src/lib/api/wallet';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {UserState} from 'src/reducers/user/reducer';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
 type WalletProps = {
   balances: Array<BalanceDetail>;
@@ -35,14 +35,17 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export const WalletBalances: React.FC<WalletProps> = ({balances, loading}) => {
+export const WalletBalances: React.FC<WalletProps> = ({
+  balances,
+  loading,
+}) => {
   const styles = useStyles();
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const { user } = useSelector<RootState, UserState>(state => state.userState);
   const [isHaveTips, setIsHaveTips] = useState<boolean>(false);
   const router = useRouter();
 
   const changeToWalletPage = () => {
-    router.push({pathname: '/wallet', query: {type: 'manage'}});
+    router.push({ pathname: '/wallet', query: { type: 'manage' } });
   };
 
   const checkStatusTips = async () => {
@@ -76,25 +79,34 @@ export const WalletBalances: React.FC<WalletProps> = ({balances, loading}) => {
             alignItems: 'start',
             marginBottom: 16,
           }}>
-          <div style={{marginRight: 8, marginTop: 4}}>
+          <div style={{ marginRight: 8, marginTop: 4 }}>
             <InfoIconYellow />
           </div>
           {isHaveTips ? (
             <Typography>
-              Someone sent you a tip! Connect your wallet now to claim your tip. You can check your
-              tip balance{' '}
-              <Link onClick={() => router.push({pathname: '/wallet', query: {type: 'tip'}})}>
+              Someone sent you a tip! Connect your wallet now to claim your tip.
+              You can check your tip balance{' '}
+              <Link
+                onClick={() =>
+                  router.push({ pathname: '/wallet', query: { type: 'tip' } })
+                }>
                 here
               </Link>{' '}
-              and follow the instructions on how to claim it once your wallet is connected.
+              and follow the instructions on how to claim it once your wallet is
+              connected.
             </Typography>
           ) : (
             <Typography>
-              You don’t have any wallet connected. Connect your wallet now to send tips.
+              You don’t have any wallet connected. Connect your wallet now to
+              send tips.
             </Typography>
           )}
         </div>
-        <Button variant="contained" color="primary" onClick={changeToWalletPage} fullWidth>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={changeToWalletPage}
+          fullWidth>
           Connect Wallet
         </Button>
       </ShowIf>

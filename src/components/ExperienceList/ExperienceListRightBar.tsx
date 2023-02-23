@@ -1,14 +1,14 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {Experience as ExperienceCard} from '../ExpericenceRightBar';
-import {useStyles} from './ExperienceList.style';
+import { Experience as ExperienceCard } from '../ExpericenceRightBar';
+import { useStyles } from './ExperienceList.style';
 
-import {useQueryParams} from 'src/hooks/use-query-params.hooks';
-import {WrappedExperience} from 'src/interfaces/experience';
-import {TimelineType} from 'src/interfaces/timeline';
-import {User} from 'src/interfaces/user';
+import { useQueryParams } from 'src/hooks/use-query-params.hooks';
+import { WrappedExperience } from 'src/interfaces/experience';
+import { TimelineType } from 'src/interfaces/timeline';
+import { User } from 'src/interfaces/user';
 
 type ExperienceListProps = {
   experiences: WrappedExperience[];
@@ -40,12 +40,14 @@ export const ExperienceListRightBar: React.FC<ExperienceListProps> = props => {
   const classes = useStyles();
   const router = useRouter();
 
-  const {getIdByType} = useQueryParams();
+  const { getIdByType } = useQueryParams();
   const [selectedExperienceId, setSelectedExperienceId] = useState<string>();
 
   useEffect(() => {
     const experienceId = getIdByType('experience');
-    const exists = experiences.find(item => item.experience.id === experienceId);
+    const exists = experiences.find(
+      item => item.experience.id === experienceId,
+    );
 
     if (experienceId && exists) {
       setSelectedExperienceId(experienceId);
@@ -57,7 +59,10 @@ export const ExperienceListRightBar: React.FC<ExperienceListProps> = props => {
   //TODO: still unable to only select one experience card
   const handleSelectExperience = (userExperience: WrappedExperience) => () => {
     if (userExperience) setSelectedExperienceId(userExperience.experience.id);
-    if (userExperience.experience.id && userExperience.experience.id === selectedExperienceId) {
+    if (
+      userExperience.experience.id &&
+      userExperience.experience.id === selectedExperienceId
+    ) {
       setSelectedExperienceId(undefined);
     }
 
@@ -72,7 +77,10 @@ export const ExperienceListRightBar: React.FC<ExperienceListProps> = props => {
             user={user}
             anonymous={anonymous}
             userExperience={item}
-            selected={Boolean(selectedExperienceId) && selectedExperienceId === item.experience.id}
+            selected={
+              Boolean(selectedExperienceId) &&
+              selectedExperienceId === item.experience.id
+            }
             selectable={selectable}
             onSelect={handleSelectExperience(item)}
             onDelete={onDelete}

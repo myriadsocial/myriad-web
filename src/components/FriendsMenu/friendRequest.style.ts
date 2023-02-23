@@ -1,4 +1,9 @@
-import {alpha, createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import {
+  alpha,
+  createStyles,
+  makeStyles,
+  Theme,
+} from '@material-ui/core/styles';
 
 type FriendStyleProps = {
   type?: 'contained' | 'basic';
@@ -8,8 +13,10 @@ export const useStyles = makeStyles<Theme, FriendStyleProps>(theme =>
   createStyles({
     root: {
       background: 'white',
-      padding: props => (props.type === 'contained' ? theme.spacing(3, 0) : theme.spacing(0)),
-      borderRadius: props => (props.type === 'contained' ? '20px 20px 0px 0px' : 'unset'),
+      padding: props =>
+        props.type === 'contained' ? theme.spacing(3, 0) : theme.spacing(0),
+      borderRadius: props =>
+        props.type === 'contained' ? '20px 20px 0px 0px' : 'unset',
     },
     search: {
       padding: '0px 24px',
@@ -55,7 +62,7 @@ export const useStyles = makeStyles<Theme, FriendStyleProps>(theme =>
         display: 'none',
       },
     },
-    fill: {fill: 'none'},
+    fill: { fill: 'none' },
     buttonText: {
       fontWeight: 600,
       fontSize: '14px',

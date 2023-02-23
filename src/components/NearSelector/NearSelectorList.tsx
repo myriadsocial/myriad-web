@@ -5,12 +5,12 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 
-import {Modal} from '../atoms/Modal';
-import {AllignTitle} from '../atoms/Modal/Modal.types';
-import {useStyles} from './NearSelectorList.styles';
+import { Modal } from '../atoms/Modal';
+import { AllignTitle } from '../atoms/Modal/Modal.types';
+import { useStyles } from './NearSelectorList.styles';
 
-import {MyNearWalletIcon, NearNetworkIcon} from 'components/atoms/Icons';
-import {WalletTypeEnum} from 'src/interfaces/wallet';
+import { MyNearWalletIcon, NearNetworkIcon } from 'components/atoms/Icons';
+import { WalletTypeEnum } from 'src/interfaces/wallet';
 
 type NearSelectorList = {
   isOpen: boolean;
@@ -53,7 +53,10 @@ const NearSelectorList: React.FC<NearSelectorList> = ({
                 )}
 
                 <ListItemText>
-                  <Typography className={styles.walletDetail} component="span" color="textPrimary">
+                  <Typography
+                    className={styles.walletDetail}
+                    component="span"
+                    color="textPrimary">
                     {e === WalletTypeEnum.NEAR ? 'NEAR Wallet' : 'MyNearWallet'}
                   </Typography>
                 </ListItemText>

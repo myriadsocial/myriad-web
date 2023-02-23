@@ -8,5 +8,5 @@ type EmptyResultProps = {
   emptyContent: EmptyContentEnum;
 };
 
-export {EmptyContentEnum};
-export type {EmptyResultProps};
+export { EmptyContentEnum };
+export type { EmptyResultProps };

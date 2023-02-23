@@ -1,14 +1,14 @@
-import {Actions as BaseAction, setError} from '../base/actions';
-import {RootState} from '../index';
+import { Actions as BaseAction, setError } from '../base/actions';
+import { RootState } from '../index';
 import * as constants from './constants';
 
-import {Action} from 'redux';
-import {formatNumber} from 'src/helpers/balance';
-import {BalanceDetail} from 'src/interfaces/balance';
-import {IProvider} from 'src/interfaces/blockchain-interface';
-import {Currency, CurrencyId} from 'src/interfaces/currency';
+import { Action } from 'redux';
+import { formatNumber } from 'src/helpers/balance';
+import { BalanceDetail } from 'src/interfaces/balance';
+import { IProvider } from 'src/interfaces/blockchain-interface';
+import { Currency, CurrencyId } from 'src/interfaces/currency';
 import * as TokenAPI from 'src/lib/api/token';
-import {ThunkActionCreator} from 'src/types/thunk';
+import { ThunkActionCreator } from 'src/types/thunk';
 
 /**
  * Action Types
@@ -57,13 +57,19 @@ export type Actions =
  *
  * Actions
  */
-export const increaseBalance = (currencyId: CurrencyId, change: number): IncreaseBalance => ({
+export const increaseBalance = (
+  currencyId: CurrencyId,
+  change: number,
+): IncreaseBalance => ({
   type: constants.INCREASE_BALANCE,
   currencyId,
   change,
 });
 
-export const decreaseBalance = (currencyId: CurrencyId, change: number): DecreaseBalance => ({
+export const decreaseBalance = (
+  currencyId: CurrencyId,
+  change: number,
+): DecreaseBalance => ({
   type: constants.DECREASE_BALANCE,
   currencyId,
   change,
@@ -88,8 +94,8 @@ export const loadBalances: ThunkActionCreator<Actions, RootState> =
   (provider: IProvider, force = false) =>
   async (dispatch, getState) => {
     const {
-      userState: {user, currencies, anonymous},
-      balanceState: {initialized},
+      userState: { user, currencies, anonymous },
+      balanceState: { initialized },
     } = getState();
 
     dispatch(setBalanceLoading(true));
@@ -103,8 +109,10 @@ export const loadBalances: ThunkActionCreator<Actions, RootState> =
     try {
       if (!provider) throw new Error('NotConnected');
 
-      const retrieveBalance = async (currency: Currency): Promise<RetrieveBalanceProps> => {
-        const {balance, nonce} = await provider.balances(
+      const retrieveBalance = async (
+        currency: Currency,
+      ): Promise<RetrieveBalanceProps> => {
+        const { balance, nonce } = await provider.balances(
           currency.decimal,
           currency.referenceId,
           change => {
@@ -126,15 +134,14 @@ export const loadBalances: ThunkActionCreator<Actions, RootState> =
 
       const balanceDetails: BalanceDetail[] = await Promise.all(
         currencies.map(async currency => {
-          const {originBalance, freeBalance, previousNonce} = await retrieveBalance(currency).catch(
-            () => {
+          const { originBalance, freeBalance, previousNonce } =
+            await retrieveBalance(currency).catch(() => {
               return {
                 originBalance: null,
                 freeBalance: null,
                 previousNonce: 0,
               };
-            },
-          );
+            });
           return {
             ...currency,
             originBalance,
@@ -166,13 +173,14 @@ export const loadBalances: ThunkActionCreator<Actions, RootState> =
     }
   };
 
-export const clearBalances: ThunkActionCreator<Actions, RootState> = () => async dispatch => {
-  dispatch(setBalanceLoading(true));
-  dispatch({
-    type: constants.FETCH_BALANCES,
-    balanceDetails: [],
-  });
-};
+export const clearBalances: ThunkActionCreator<Actions, RootState> =
+  () => async dispatch => {
+    dispatch(setBalanceLoading(true));
+    dispatch({
+      type: constants.FETCH_BALANCES,
+      balanceDetails: [],
+    });
+  };
 
 export const getUserCurrencies: ThunkActionCreator<Actions, RootState> =
   () => async (dispatch, getState) => {
@@ -180,14 +188,14 @@ export const getUserCurrencies: ThunkActionCreator<Actions, RootState> =
 
     try {
       const {
-        userState: {user},
+        userState: { user },
       } = getState();
 
       if (!user) {
         throw new Error('User not found');
       }
 
-      const {data} = await TokenAPI.getUserCurrencies(user.id);
+      const { data } = await TokenAPI.getUserCurrencies(user.id);
       const currenciesId = data.map(currency => currency.currencyId);
       dispatch({
         type: constants.FETCH_CURRENCIES_ID,

@@ -1,18 +1,20 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
-import {HeaderComponent} from '.';
+import { HeaderComponent } from '.';
 
-import {PostVisibility} from 'src/interfaces/post';
-import {SocialsEnum} from 'src/interfaces/social';
+import { PostVisibility } from 'src/interfaces/post';
+import { SocialsEnum } from 'src/interfaces/social';
 
 export default {
   title: 'UI Revamp v2.0/atoms/Post Header',
   component: HeaderComponent,
 } as ComponentMeta<typeof HeaderComponent>;
 
-const Template: ComponentStory<typeof HeaderComponent> = args => <HeaderComponent {...args} />;
+const Template: ComponentStory<typeof HeaderComponent> = args => (
+  <HeaderComponent {...args} />
+);
 
 export const MyriadPost = Template.bind({});
 MyriadPost.args = {
@@ -46,9 +48,14 @@ MyriadPost.args = {
       discussions: 0,
       debates: 0,
     },
-    createdAt: new Date('Fri Aug 27 2021 13:39:48 GMT+0000 (Coordinated Universal Time)'),
-    updatedAt: new Date('Fri Aug 27 2021 13:39:48 GMT+0000 (Coordinated Universal Time)'),
-    createdBy: '0x76e85125c8a6997e5e40e5e1f0a64a8154b5c69308e54b426ad3a34af1545b1d',
+    createdAt: new Date(
+      'Fri Aug 27 2021 13:39:48 GMT+0000 (Coordinated Universal Time)',
+    ),
+    updatedAt: new Date(
+      'Fri Aug 27 2021 13:39:48 GMT+0000 (Coordinated Universal Time)',
+    ),
+    createdBy:
+      '0x76e85125c8a6997e5e40e5e1f0a64a8154b5c69308e54b426ad3a34af1545b1d',
     user: {
       id: '0x76e85125c8a6997e5e40e5e1f0a64a8154b5c69308e54b426ad3a34af1545b1d',
       name: 'Nomaden',
@@ -96,9 +103,14 @@ OtherPost.args = {
       comments: 0,
       shares: 0,
     },
-    createdAt: new Date('Fri Aug 27 2021 13:39:48 GMT+0000 (Coordinated Universal Time)'),
-    updatedAt: new Date('Fri Aug 27 2021 13:39:48 GMT+0000 (Coordinated Universal Time)'),
-    createdBy: '0x48c145fb4a5aeb32075023a576180107ecc1e5470ab2ebdd1965b71a33dad363',
+    createdAt: new Date(
+      'Fri Aug 27 2021 13:39:48 GMT+0000 (Coordinated Universal Time)',
+    ),
+    updatedAt: new Date(
+      'Fri Aug 27 2021 13:39:48 GMT+0000 (Coordinated Universal Time)',
+    ),
+    createdBy:
+      '0x48c145fb4a5aeb32075023a576180107ecc1e5470ab2ebdd1965b71a33dad363',
     peopleId: '60efac8c565ab8004ed28ba6',
     user: {
       id: '0x48c145fb4a5aeb32075023a576180107ecc1e5470ab2ebdd1965b71a33dad363',

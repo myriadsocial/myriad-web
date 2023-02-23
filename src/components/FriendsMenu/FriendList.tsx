@@ -1,13 +1,13 @@
-import {DotsHorizontalIcon, DotsVerticalIcon} from '@heroicons/react/outline';
+import { DotsHorizontalIcon, DotsVerticalIcon } from '@heroicons/react/outline';
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import Link from 'next/link';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {Menu, MenuItem, Grid} from '@material-ui/core';
+import { Menu, MenuItem, Grid } from '@material-ui/core';
 import BaseButton from '@material-ui/core/Button';
 import BaseIconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
@@ -17,31 +17,31 @@ import ListItemText from '@material-ui/core/ListItemText';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
-import {Avatar, AvatarSize} from '../atoms/Avatar';
-import {DropdownMenu} from '../atoms/DropdownMenu';
-import {MenuOptions} from '../atoms/DropdownMenu';
+import { Avatar, AvatarSize } from '../atoms/Avatar';
+import { DropdownMenu } from '../atoms/DropdownMenu';
+import { MenuOptions } from '../atoms/DropdownMenu';
 import SearchComponent from '../atoms/Search/SearchBox';
 import useConfirm from '../common/Confirm/use-confirm.hook';
 import useTipping from '../common/Tipping/use-tipping.hook';
-import {FriendType} from './default';
-import {useStyles} from './friend.style';
-import {UserWithMutual, useFriendList} from './hooks/use-friend-list.hook';
+import { FriendType } from './default';
+import { useStyles } from './friend.style';
+import { UserWithMutual, useFriendList } from './hooks/use-friend-list.hook';
 
-import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorizeAction';
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {Empty} from 'src/components/atoms/Empty';
-import {Loading} from 'src/components/atoms/Loading';
+import { WithAuthorizeAction } from 'components/common/Authorization/WithAuthorizeAction';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import { Empty } from 'src/components/atoms/Empty';
+import { Loading } from 'src/components/atoms/Loading';
 import ShowIf from 'src/components/common/show-if.component';
-import {Friend} from 'src/interfaces/friend';
-import {ReferenceType} from 'src/interfaces/interaction';
-import {User} from 'src/interfaces/user';
-import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
+import { Friend } from 'src/interfaces/friend';
+import { ReferenceType } from 'src/interfaces/interaction';
+import { User } from 'src/interfaces/user';
+import { SortType } from 'src/lib/api/interfaces/pagination-params.interface';
 import * as UserAPI from 'src/lib/api/user';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {BalanceState} from 'src/reducers/balance/reducer';
-import {blockFromFriend, removeFromFriend} from 'src/reducers/friend/actions';
-import {UserState} from 'src/reducers/user/reducer';
+import { RootState } from 'src/reducers';
+import { BalanceState } from 'src/reducers/balance/reducer';
+import { blockFromFriend, removeFromFriend } from 'src/reducers/friend/actions';
+import { UserState } from 'src/reducers/user/reducer';
 
 export type FriendListProps = {
   type?: 'contained' | 'basic';
@@ -77,20 +77,25 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     onLoadNextPage,
     isProfile,
   } = props;
-  const style = useStyles({...props, type, disableFilter});
+  const style = useStyles({ ...props, type, disableFilter });
   const router = useRouter();
   const dispatch = useDispatch();
   const confirm = useConfirm();
   const tipping = useTipping();
 
   const enqueueSnackbar = useEnqueueSnackbar();
-  const {friendList, removeFromFriendList} = useFriendList(friends, user);
+  const { friendList, removeFromFriendList } = useFriendList(friends, user);
 
-  const {user: currentUser} = useSelector<RootState, UserState>(state => state.userState);
-  const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
+  const { user: currentUser } = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
+  const { balanceDetails } = useSelector<RootState, BalanceState>(
+    state => state.balanceState,
+  );
   const Button = WithAuthorizeAction(BaseButton);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [currentFriend, setCurrentFriend] = useState<null | UserWithMutual>(null);
+  const [currentFriend, setCurrentFriend] =
+    useState<null | UserWithMutual>(null);
 
   const friendFilterOptions: MenuOptions<FriendType>[] = [
     {
@@ -104,12 +109,13 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
   ];
 
   const sortOptions: MenuOptions<SortType>[] = [
-    {id: 'DESC', title: i18n.t('Friends.Sort.Latest')},
-    {id: 'ASC', title: i18n.t('Friends.Sort.Oldest')},
+    { id: 'DESC', title: i18n.t('Friends.Sort.Latest') },
+    { id: 'ASC', title: i18n.t('Friends.Sort.Oldest') },
   ];
 
   const handleOpenFriendSetting =
-    (currentFriend: UserWithMutual) => (event: React.MouseEvent<HTMLButtonElement>) => {
+    (currentFriend: UserWithMutual) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
       setCurrentFriend(currentFriend);
       setAnchorEl(event.currentTarget);
     };
@@ -124,7 +130,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     try {
       const user = currentFriend as User;
       const walletDetail = await UserAPI.getWalletAddress(user.id);
-      const receiver = {...user, walletDetail};
+      const receiver = { ...user, walletDetail };
 
       tipping.send({
         receiver,
@@ -148,7 +154,9 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
     if (!currentFriend) {
       router.push('/404');
     } else {
-      router.push(`/profile/${currentFriend.id}`, undefined, {shallow: false});
+      router.push(`/profile/${currentFriend.id}`, undefined, {
+        shallow: false,
+      });
     }
   };
 
@@ -195,7 +203,10 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
       router.push('/404');
     } else {
       const removedFriend = friends.find(friend => {
-        return friend.requesteeId === currentFriend.id || friend.requestorId === currentFriend.id;
+        return (
+          friend.requesteeId === currentFriend.id ||
+          friend.requestorId === currentFriend.id
+        );
       });
 
       if (!removedFriend) return;
@@ -247,9 +258,16 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
           subtitle="Connect your Web 3.0 wallet to unlock this feature"
           // eslint-disable-next-line react/no-children-prop
           children={
-            <div style={{width: '100%', marginTop: 24}}>
-              <Link href={{pathname: '/wallet', query: {type: 'manage'}}} shallow passHref>
-                <Button onClick={() => undefined} color="primary" variant="contained" size="small">
+            <div style={{ width: '100%', marginTop: 24 }}>
+              <Link
+                href={{ pathname: '/wallet', query: { type: 'manage' } }}
+                shallow
+                passHref>
+                <Button
+                  onClick={() => undefined}
+                  color="primary"
+                  variant="contained"
+                  size="small">
                   {i18n.t('LiteVersion.ConnectWallet')}
                 </Button>
               </Link>
@@ -258,7 +276,9 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
           withImage
         />
       );
-    return <Empty title={'Nothing to see here!'} subtitle="Friend list is empty." />;
+    return (
+      <Empty title={'Nothing to see here!'} subtitle="Friend list is empty." />
+    );
   }
 
   return (
@@ -303,11 +323,14 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
             {friendList.map(friend => (
               <ListItem
                 key={friend.id}
-                classes={{root: background ? style.backgroundEven : ''}}
+                classes={{ root: background ? style.backgroundEven : '' }}
                 className={style.option}
                 alignItems="center">
                 <ListItemAvatar>
-                  <Link href={'/profile/[id]'} as={`/profile/${friend.id}`} passHref>
+                  <Link
+                    href={'/profile/[id]'}
+                    as={`/profile/${friend.id}`}
+                    passHref>
                     <Avatar
                       name={friend.name}
                       src={friend.profilePictureURL}
@@ -316,14 +339,25 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
                   </Link>
                 </ListItemAvatar>
                 <ListItemText>
-                  <Link href={'/profile/[id]'} as={`/profile/${friend.id}`} passHref>
-                    <Typography className={style.name} component="span" color="textPrimary">
+                  <Link
+                    href={'/profile/[id]'}
+                    as={`/profile/${friend.id}`}
+                    passHref>
+                    <Typography
+                      className={style.name}
+                      component="span"
+                      color="textPrimary">
                       {friend.name}
                     </Typography>
                   </Link>
                   <ShowIf condition={!!friend.totalMutual}>
-                    <Typography className={style.friend} component="p" color="textSecondary">
-                      {i18n.t('Friends.List.Mutual', {total: friend.totalMutual})}
+                    <Typography
+                      className={style.friend}
+                      component="p"
+                      color="textSecondary">
+                      {i18n.t('Friends.List.Mutual', {
+                        total: friend.totalMutual,
+                      })}
                     </Typography>
                   </ShowIf>
                 </ListItemText>
@@ -331,7 +365,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
                 <div className="hidden-button">
                   <IconButton
                     aria-label="friend-setting"
-                    classes={{root: style.iconbutton}}
+                    classes={{ root: style.iconbutton }}
                     color="primary"
                     onClick={handleOpenFriendSetting(friend)}
                     disableRipple={true}
@@ -339,7 +373,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
                     disableTouchRipple>
                     <SvgIcon
                       component={DotsHorizontalIcon}
-                      classes={{root: style.icon}}
+                      classes={{ root: style.icon }}
                       fontSize="small"
                     />
                   </IconButton>
@@ -353,7 +387,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
                     disableFocusRipple={true}
                     disableTouchRipple>
                     <SvgIcon
-                      classes={{root: style.icon2}}
+                      classes={{ root: style.icon2 }}
                       component={DotsVerticalIcon}
                       fontSize="small"
                     />
@@ -368,14 +402,18 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
       <Menu
         id={currentFriend?.id ?? 'friend-id'}
         anchorEl={anchorEl}
-        style={{width: 170}}
+        style={{ width: 170 }}
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleCloseFriendSetting}>
-        <MenuItem onClick={handleVisitProfile}>{i18n.t('Friends.Menu.Visit')}</MenuItem>
+        <MenuItem onClick={handleVisitProfile}>
+          {i18n.t('Friends.Menu.Visit')}
+        </MenuItem>
         <MenuItem
           disabled={
-            balanceDetails.length === 0 || currentFriend?.id === currentUser?.id || !tipping.enabled
+            balanceDetails.length === 0 ||
+            currentFriend?.id === currentUser?.id ||
+            !tipping.enabled
           }
           onClick={handleSendTip}>
           {i18n.t('Friends.Menu.Send_Tip')}

@@ -4,10 +4,10 @@ import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 
-import {EmptyResultProps, EmptyContentEnum} from './EmptyResult.interfaces';
-import {useStyles} from './EmptyResult.styles';
+import { EmptyResultProps, EmptyContentEnum } from './EmptyResult.interfaces';
+import { useStyles } from './EmptyResult.styles';
 
-export const EmptyResult: React.FC<EmptyResultProps> = ({emptyContent}) => {
+export const EmptyResult: React.FC<EmptyResultProps> = ({ emptyContent }) => {
   const classes = useStyles();
 
   return (
@@ -15,7 +15,10 @@ export const EmptyResult: React.FC<EmptyResultProps> = ({emptyContent}) => {
       <Typography className={classes.title} component="p">
         Uh-oh!
       </Typography>
-      <Typography className={classes.subtitle} color="textSecondary" component="p">
+      <Typography
+        className={classes.subtitle}
+        color="textSecondary"
+        component="p">
         No {emptyContent} found.
       </Typography>
       {emptyContent === EmptyContentEnum.EXPERIENCE ? (

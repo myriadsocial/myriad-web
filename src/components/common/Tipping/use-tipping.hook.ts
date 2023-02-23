@@ -1,6 +1,6 @@
-import {useContext} from 'react';
+import { useContext } from 'react';
 
-import SendTipContext, {HandleTipping} from './Tipping.context';
+import SendTipContext, { HandleTipping } from './Tipping.context';
 
 const useTipping = (): HandleTipping => {
   const tipping = useContext(SendTipContext);

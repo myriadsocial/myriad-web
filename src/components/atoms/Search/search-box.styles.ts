@@ -1,6 +1,6 @@
-import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
-import {SearchBoxProps} from '.';
+import { SearchBoxProps } from '.';
 
 export const useStyles = makeStyles<Theme, SearchBoxProps>(theme =>
   createStyles({

@@ -1,10 +1,15 @@
-import {SearchIcon, XCircleIcon, PlusCircleIcon, ChevronDownIcon} from '@heroicons/react/solid';
+import {
+  SearchIcon,
+  XCircleIcon,
+  PlusCircleIcon,
+  ChevronDownIcon,
+} from '@heroicons/react/solid';
 
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
 import {
   Button,
@@ -24,24 +29,28 @@ import {
   AutocompleteRenderOptionState,
 } from '@material-ui/lab';
 
-import {ExperienceProps, VisibilityItem, Tag} from '../../interfaces/experience';
-import {People} from '../../interfaces/people';
-import {PostDetailExperience} from '../PostDetailExperience/PostDetailExperience';
-import {Dropzone} from '../atoms/Dropzone';
-import {ListItemPeopleComponent} from '../atoms/ListItem/ListItemPeople';
-import {Loading} from '../atoms/Loading';
+import {
+  ExperienceProps,
+  VisibilityItem,
+  Tag,
+} from '../../interfaces/experience';
+import { People } from '../../interfaces/people';
+import { PostDetailExperience } from '../PostDetailExperience/PostDetailExperience';
+import { Dropzone } from '../atoms/Dropzone';
+import { ListItemPeopleComponent } from '../atoms/ListItem/ListItemPeople';
+import { Loading } from '../atoms/Loading';
 import ShowIf from '../common/show-if.component';
-import {useStyles} from './Experience.styles';
+import { useStyles } from './Experience.styles';
 
-import {debounce, isEmpty} from 'lodash';
-import {useExperienceHook} from 'src/hooks/use-experience-hook';
-import {useSearchHook} from 'src/hooks/use-search.hooks';
-import {Post} from 'src/interfaces/post';
-import {User} from 'src/interfaces/user';
+import { debounce, isEmpty } from 'lodash';
+import { useExperienceHook } from 'src/hooks/use-experience-hook';
+import { useSearchHook } from 'src/hooks/use-search.hooks';
+import { Post } from 'src/interfaces/post';
+import { User } from 'src/interfaces/user';
 import * as UserAPI from 'src/lib/api/user';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {UserState} from 'src/reducers/user/reducer';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
 type ExperienceEditorProps = {
   type?: 'Clone' | 'Edit' | 'Create';
@@ -95,20 +104,27 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     addPostsToExperience,
   } = useExperienceHook();
   const router = useRouter();
-  const {clearUsers} = useSearchHook();
+  const { clearUsers } = useSearchHook();
 
   const ref = useRef(null);
-  const {anonymous, user} = useSelector<RootState, UserState>(state => state.userState);
+  const { anonymous, user } = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
   const [experienceId, setExperienceId] = useState<string | undefined>();
-  const [newExperience, setNewExperience] = useState<ExperienceProps>(experience);
-  const [image, setImage] = useState<string | undefined>(experience.experienceImageURL);
+  const [newExperience, setNewExperience] =
+    useState<ExperienceProps>(experience);
+  const [image, setImage] = useState<string | undefined>(
+    experience.experienceImageURL,
+  );
   const [, setDetailChanged] = useState<boolean>(false);
   const [isLoading, setIsloading] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-  const [selectedVisibility, setSelectedVisibility] = useState<VisibilityItem>();
+  const [selectedVisibility, setSelectedVisibility] =
+    useState<VisibilityItem>();
   const [selectedUserIds, setSelectedUserIds] = useState<User[]>([]);
   const [pageUserIds, setPageUserIds] = React.useState<number>(1);
-  const [isLoadingSelectedUser, setIsLoadingSelectedUser] = useState<boolean>(false);
+  const [isLoadingSelectedUser, setIsLoadingSelectedUser] =
+    useState<boolean>(false);
   const [errors, setErrors] = useState({
     name: false,
     picture: false,
@@ -163,16 +179,17 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
 
       setIsloading(false);
       setImage(url);
-      setNewExperience({...newExperience, experienceImageURL: url});
+      setNewExperience({ ...newExperience, experienceImageURL: url });
     } else {
-      setNewExperience({...newExperience, experienceImageURL: undefined});
+      setNewExperience({ ...newExperience, experienceImageURL: undefined });
     }
 
     setDetailChanged(true);
   };
 
   const handleChange =
-    (field: keyof ExperienceProps) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    (field: keyof ExperienceProps) =>
+    (event: React.ChangeEvent<HTMLInputElement>) => {
       const value = event.target.value.trimStart();
 
       setNewExperience(prevExperience => ({
@@ -219,8 +236,11 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
 
     const prohibitedTagsChanged =
       type === TagsProps.PROHIBITED &&
-      (data.filter(tag => !experience?.prohibitedTags || !experience.prohibitedTags.includes(tag))
-        .length > 0 ||
+      (data.filter(
+        tag =>
+          !experience?.prohibitedTags ||
+          !experience.prohibitedTags.includes(tag),
+      ).length > 0 ||
         experience?.prohibitedTags?.length !== data.length);
     const allowedTagsChanged =
       type === TagsProps.ALLOWED &&
@@ -282,7 +302,10 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     if (reason === 'select-option') {
       setNewExperience(prevExperience => ({
         ...prevExperience,
-        people: [...people, ...value.filter(option => people.indexOf(option) === -1)],
+        people: [
+          ...people,
+          ...value.filter(option => people.indexOf(option) === -1),
+        ],
       }));
       clearSearchedPeople();
     }
@@ -305,7 +328,8 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     const validName = newExperience.name.length > 0;
     // const validPicture = Boolean(newExperience.experienceImageURL);
     const validTags = newExperience.allowedTags.length >= 0;
-    const validPeople = newExperience.people.filter(people => !isEmpty(people.id)).length >= 0;
+    const validPeople =
+      newExperience.people.filter(people => !isEmpty(people.id)).length >= 0;
     const validSelectedUserIds =
       selectedVisibility && selectedVisibility?.id === 'selected_user'
         ? selectedUserIds.length > 0
@@ -321,7 +345,13 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       selectedUserId: !validSelectedUserIds,
     });
 
-    return validName && validTags && validPeople && validVisibility && validSelectedUserIds;
+    return (
+      validName &&
+      validTags &&
+      validPeople &&
+      validVisibility &&
+      validSelectedUserIds
+    );
   };
 
   const saveExperience = () => {
@@ -418,9 +448,12 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     reason: AutocompleteChangeReason,
   ) => {
     const people = selectedUserIds ? selectedUserIds : [];
-    console.log({value});
+    console.log({ value });
     if (reason === 'select-option') {
-      setSelectedUserIds([...people, ...value.filter(option => people.indexOf(option) === -1)]);
+      setSelectedUserIds([
+        ...people,
+        ...value.filter(option => people.indexOf(option) === -1),
+      ]);
       clearSearchedUser();
       clearUsers();
     }
@@ -430,14 +463,16 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
 
   const removeVisibilityPeople = (selected: User) => () => {
     setSelectedUserIds(
-      selectedUserIds ? selectedUserIds.filter(people => people.id != selected.id) : [],
+      selectedUserIds
+        ? selectedUserIds.filter(people => people.id != selected.id)
+        : [],
     );
 
     setDetailChanged(true);
   };
 
   const mappingUserIds = () => {
-    console.log({selectedVisibility});
+    console.log({ selectedVisibility });
     if (selectedVisibility?.id === 'selected_user') {
       const mapIds = Object.values(selectedUserIds.map(option => option.id));
       setNewExperience(prevExperience => ({
@@ -461,9 +496,13 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   const getSelectedIds = async (userIds: string[]) => {
     setIsLoadingSelectedUser(true);
     const response = await UserAPI.getUserByIds(userIds, pageUserIds);
-    setSelectedUserIds([...selectedUserIds, ...(response?.data as unknown as User[])]);
+    setSelectedUserIds([
+      ...selectedUserIds,
+      ...(response?.data as unknown as User[]),
+    ]);
     setIsLoadingSelectedUser(false);
-    if (pageUserIds < response.meta.totalPageCount) setPageUserIds(pageUserIds + 1);
+    if (pageUserIds < response.meta.totalPageCount)
+      setPageUserIds(pageUserIds + 1);
   };
 
   React.useEffect(() => {
@@ -471,7 +510,9 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   }, [experience, pageUserIds]);
   useEffect(() => {
     if (experience) {
-      const visibility = visibilityList.find(option => option.id === experience?.visibility);
+      const visibility = visibilityList.find(
+        option => option.id === experience?.visibility,
+      );
       setSelectedVisibility(visibility);
 
       getSelectedIds(experience?.selectedUserIds);
@@ -482,16 +523,18 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     <div className={styles.root} ref={ref}>
       <div className={styles.header}>
         <div>
-          <Typography variant="h4">{i18n.t(`Experience.Editor.Header`)}</Typography>
+          <Typography variant="h4">
+            {i18n.t(`Experience.Editor.Header`)}
+          </Typography>
           <Typography variant="body1" color="textSecondary">
             {i18n.t(`Experience.Editor.Sub_Header`)}
           </Typography>
         </div>
-        <FormControl classes={{root: styles.formControl}}>
+        <FormControl classes={{ root: styles.formControl }}>
           <Button
             color="primary"
             variant="contained"
-            style={{width: 'auto'}}
+            style={{ width: 'auto' }}
             onClick={saveExperience}>
             {i18n.t(`Experience.Editor.Btn.${type}`)}
           </Button>
@@ -502,7 +545,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
           <FormControl
             fullWidth
             variant="outlined"
-            style={{position: 'relative', zIndex: 100}}
+            style={{ position: 'relative', zIndex: 100 }}
             error={errors.picture}>
             <Dropzone
               error={errors.picture}
@@ -533,7 +576,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
               value={newExperience?.name || ''}
               onChange={handleChange('name')}
               labelWidth={110}
-              inputProps={{maxLength: 50}}
+              inputProps={{ maxLength: 50 }}
             />
             <FormHelperText id="experience-name-error">
               {i18n.t('Experience.Editor.Helper.Name')}
@@ -554,19 +597,19 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
             value={selectedVisibility || null}
             popupIcon={
               <SvgIcon
-                classes={{root: styles.fill}}
+                classes={{ root: styles.fill }}
                 component={ChevronDownIcon}
                 viewBox={'0 0 20 20'}
               />
             }
-            renderInput={({inputProps, ...rest}) => (
+            renderInput={({ inputProps, ...rest }) => (
               <TextField
                 {...rest}
                 error={errors.visibility}
                 label={i18n.t('Experience.Editor.Label_4')}
                 placeholder={i18n.t('Experience.Editor.Placeholder_4')}
                 variant="outlined"
-                inputProps={{...inputProps, readOnly: true}}
+                inputProps={{ ...inputProps, readOnly: true }}
               />
             )}
           />
@@ -587,7 +630,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
                 autoHighlight={false}
                 popupIcon={
                   <SvgIcon
-                    classes={{root: styles.fill}}
+                    classes={{ root: styles.fill }}
                     component={SearchIcon}
                     viewBox={'0 0 20 20'}
                   />
@@ -605,34 +648,43 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
                     InputProps={{
                       ...params.InputProps,
                       endAdornment: (
-                        <React.Fragment>{params.InputProps.endAdornment}</React.Fragment>
+                        <React.Fragment>
+                          {params.InputProps.endAdornment}
+                        </React.Fragment>
                       ),
                     }}
                     helperText={i18n.t('Experience.Editor.Helper.People')}
                   />
                 )}
-                renderOption={(option, state: AutocompleteRenderOptionState) => {
+                renderOption={(
+                  option,
+                  state: AutocompleteRenderOptionState,
+                ) => {
                   if (option.id === '') return null;
                   return (
                     <div className={styles.option}>
                       <ListItemPeopleComponent
                         id="selectable-experience-list-item"
                         title={option.name}
-                        subtitle={<Typography variant="caption">@{option.username}</Typography>}
+                        subtitle={
+                          <Typography variant="caption">
+                            @{option.username}
+                          </Typography>
+                        }
                         avatar={option.profilePictureURL}
                         platform={'myriad'}
                         action={
                           <IconButton className={styles.removePeople}>
                             {state.selected ? (
                               <SvgIcon
-                                classes={{root: styles.fill}}
+                                classes={{ root: styles.fill }}
                                 component={XCircleIcon}
                                 color="error"
                                 viewBox={'0 0 20 20'}
                               />
                             ) : (
                               <SvgIcon
-                                classes={{root: styles.fill}}
+                                classes={{ root: styles.fill }}
                                 component={PlusCircleIcon}
                                 viewBox={'0 0 20 20'}
                               />
@@ -657,13 +709,17 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
                         id="selected-experience-list-item"
                         key={people.id}
                         title={people.name}
-                        subtitle={<Typography variant="caption">@{people.username}</Typography>}
+                        subtitle={
+                          <Typography variant="caption">
+                            @{people.username}
+                          </Typography>
+                        }
                         avatar={people.profilePictureURL}
                         platform={'myriad'}
                         action={
                           <IconButton onClick={removeVisibilityPeople(people)}>
                             <SvgIcon
-                              classes={{root: styles.fill}}
+                              classes={{ root: styles.fill }}
                               component={XCircleIcon}
                               color="error"
                               viewBox={'0 0 20 20'}
@@ -677,7 +733,10 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
             </>
           )}
 
-          <FormControl fullWidth variant="outlined" style={{position: 'relative'}}>
+          <FormControl
+            fullWidth
+            variant="outlined"
+            style={{ position: 'relative' }}>
             <InputLabel htmlFor="experience-description">
               {i18n.t('Experience.Editor.Subtitle_2')}
             </InputLabel>
@@ -687,10 +746,12 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
               value={newExperience?.description || ''}
               onChange={handleChange('description')}
               labelWidth={70}
-              inputProps={{maxLength: 280}}
+              inputProps={{ maxLength: 280 }}
               multiline
             />
-            <FormHelperText id="experience-description-error">&nbsp;</FormHelperText>
+            <FormHelperText id="experience-description-error">
+              &nbsp;
+            </FormHelperText>
             <Typography variant="subtitle1" className={styles.counter}>
               {newExperience?.description?.length ?? 0}/280
             </Typography>
@@ -728,7 +789,11 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
                 helperText={''}
                 InputProps={{
                   ...params.InputProps,
-                  endAdornment: <React.Fragment>{params.InputProps.endAdornment}</React.Fragment>,
+                  endAdornment: (
+                    <React.Fragment>
+                      {params.InputProps.endAdornment}
+                    </React.Fragment>
+                  ),
                 }}
               />
             )}
@@ -764,7 +829,11 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
                 onChange={handleSearchTags}
                 InputProps={{
                   ...params.InputProps,
-                  endAdornment: <React.Fragment>{params.InputProps.endAdornment}</React.Fragment>,
+                  endAdornment: (
+                    <React.Fragment>
+                      {params.InputProps.endAdornment}
+                    </React.Fragment>
+                  ),
                 }}
               />
             )}
@@ -782,7 +851,11 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
             disableClearable
             autoHighlight={false}
             popupIcon={
-              <SvgIcon classes={{root: styles.fill}} component={SearchIcon} viewBox={'0 0 20 20'} />
+              <SvgIcon
+                classes={{ root: styles.fill }}
+                component={SearchIcon}
+                viewBox={'0 0 20 20'}
+              />
             }
             onChange={handlePeopleChange}
             renderTags={() => null}
@@ -796,7 +869,11 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
                 onChange={handleSearchPeople}
                 InputProps={{
                   ...params.InputProps,
-                  endAdornment: <React.Fragment>{params.InputProps.endAdornment}</React.Fragment>,
+                  endAdornment: (
+                    <React.Fragment>
+                      {params.InputProps.endAdornment}
+                    </React.Fragment>
+                  ),
                 }}
                 helperText={''}
               />
@@ -808,21 +885,25 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
                   <ListItemPeopleComponent
                     id="selectable-experience-list-item"
                     title={option.name}
-                    subtitle={<Typography variant="caption">@{option.username}</Typography>}
+                    subtitle={
+                      <Typography variant="caption">
+                        @{option.username}
+                      </Typography>
+                    }
                     avatar={option.profilePictureURL}
                     platform={option.platform}
                     action={
                       <IconButton className={styles.removePeople}>
                         {state.selected ? (
                           <SvgIcon
-                            classes={{root: styles.fill}}
+                            classes={{ root: styles.fill }}
                             component={XCircleIcon}
                             color="error"
                             viewBox={'0 0 20 20'}
                           />
                         ) : (
                           <SvgIcon
-                            classes={{root: styles.fill}}
+                            classes={{ root: styles.fill }}
                             component={PlusCircleIcon}
                             viewBox={'0 0 20 20'}
                           />
@@ -843,13 +924,17 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
                   id="selected-experience-list-item"
                   key={people.id}
                   title={people.name}
-                  subtitle={<Typography variant="caption">@{people.username}</Typography>}
+                  subtitle={
+                    <Typography variant="caption">
+                      @{people.username}
+                    </Typography>
+                  }
                   avatar={people.profilePictureURL}
                   platform={people.platform}
                   action={
                     <IconButton onClick={removeSelectedPeople(people)}>
                       <SvgIcon
-                        classes={{root: styles.fill}}
+                        classes={{ root: styles.fill }}
                         component={XCircleIcon}
                         color="error"
                         viewBox={'0 0 20 20'}
@@ -888,7 +973,9 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
                     anonymous={anonymous}
                     onImporters={() => null}
                     type={'default'}
-                    onRemoveFromExperience={() => handleRemoveFromExperience(post)}
+                    onRemoveFromExperience={() =>
+                      handleRemoveFromExperience(post)
+                    }
                   />
                 ))}
               </>

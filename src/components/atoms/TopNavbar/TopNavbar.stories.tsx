@@ -1,8 +1,8 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
-import {TopNavbarComponent, SectionTitle} from '.';
+import { TopNavbarComponent, SectionTitle } from '.';
 
 export default {
   title: 'UI Revamp v2.0/atoms/Top Navbar',

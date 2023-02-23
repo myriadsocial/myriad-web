@@ -1,27 +1,31 @@
-import {useState, useEffect} from 'react';
-import {useNavigate} from 'react-router';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
 
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {Button, TextField, Typography} from '@material-ui/core';
+import { Button, TextField, Typography } from '@material-ui/core';
 
-import {useStyles} from './LoginByEmail.style';
+import { useStyles } from './LoginByEmail.style';
 
 import SelectServer from 'src/components/SelectServer';
-import {useAuthLinkHook} from 'src/hooks/auth-link.hook';
-import {ServerListProps} from 'src/interfaces/server-list';
+import { useAuthLinkHook } from 'src/hooks/auth-link.hook';
+import { ServerListProps } from 'src/interfaces/server-list';
 import i18n from 'src/locale';
 import validator from 'validator';
 
 type LoginByEmailProps = {
-  onNext: (successCallback: () => void, failedCallback: () => void, email: string) => Promise<void>;
+  onNext: (
+    successCallback: () => void,
+    failedCallback: () => void,
+    email: string,
+  ) => Promise<void>;
 };
 
-const LoginByEmail = ({onNext}: LoginByEmailProps) => {
+const LoginByEmail = ({ onNext }: LoginByEmailProps) => {
   const styles = useStyles();
   const router = useRouter();
 
-  const {requestLink} = useAuthLinkHook();
+  const { requestLink } = useAuthLinkHook();
 
   const [email, setEmail] = useState('');
   const [error, setError] = useState({
@@ -41,7 +45,7 @@ const LoginByEmail = ({onNext}: LoginByEmailProps) => {
 
   const emailValidation = (email: string) => {
     if (!email.length) {
-      setError({isError: false, message: ''});
+      setError({ isError: false, message: '' });
     } else if (!validator.isEmail(email)) {
       setError({
         isError: true,
@@ -75,14 +79,19 @@ const LoginByEmail = ({onNext}: LoginByEmailProps) => {
     navigate('/');
   };
 
-  const handleSwitchInstance = (server: ServerListProps, callback?: () => void) => {
+  const handleSwitchInstance = (
+    server: ServerListProps,
+    callback?: () => void,
+  ) => {
     callback && callback();
   };
 
   return (
     <div className={styles.root}>
       <div>
-        <Typography className={styles.title}>{i18n.t('Login.Email.LoginByEmail.Title')}</Typography>
+        <Typography className={styles.title}>
+          {i18n.t('Login.Email.LoginByEmail.Title')}
+        </Typography>
         <Typography className={styles.subtitle}>
           {i18n.t('Login.Email.LoginByEmail.Subtitle')}
         </Typography>

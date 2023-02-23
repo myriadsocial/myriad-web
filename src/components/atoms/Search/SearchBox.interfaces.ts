@@ -33,5 +33,5 @@ type SearchBoxProps = {
   hidden?: boolean;
 };
 
-export {SearchBoxColor, searchBoxColors};
-export type {SearchBoxProps};
+export { SearchBoxColor, searchBoxColors };
+export type { SearchBoxProps };

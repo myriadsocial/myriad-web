@@ -1,30 +1,37 @@
-import {useCallback} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import {Comment} from 'src/interfaces/comment';
-import {ReferenceType} from 'src/interfaces/interaction';
-import {Post} from 'src/interfaces/post';
-import {TransactionSort} from 'src/interfaces/transaction';
-import {User} from 'src/interfaces/user';
-import {RootState} from 'src/reducers';
-import {ConfigState} from 'src/reducers/config/reducer';
+import { Comment } from 'src/interfaces/comment';
+import { ReferenceType } from 'src/interfaces/interaction';
+import { Post } from 'src/interfaces/post';
+import { TransactionSort } from 'src/interfaces/transaction';
+import { User } from 'src/interfaces/user';
+import { RootState } from 'src/reducers';
+import { ConfigState } from 'src/reducers/config/reducer';
 import {
   fetchTransactionHistory,
   setTransactionCurrency,
   setTransactionSort,
 } from 'src/reducers/tip-summary/actions';
-import {TipSummaryState} from 'src/reducers/tip-summary/reducer';
-import {UserState} from 'src/reducers/user/reducer';
+import { TipSummaryState } from 'src/reducers/tip-summary/reducer';
+import { UserState } from 'src/reducers/user/reducer';
 
-export const useTipHistory = (reference: Post | Comment | User, referenceType: ReferenceType) => {
+export const useTipHistory = (
+  reference: Post | Comment | User,
+  referenceType: ReferenceType,
+) => {
   const dispatch = useDispatch();
 
-  const {user, currencies} = useSelector<RootState, UserState>(state => state.userState);
-  const {availableCurrencies} = useSelector<RootState, ConfigState>(state => state.configState);
+  const { user, currencies } = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
+  const { availableCurrencies } = useSelector<RootState, ConfigState>(
+    state => state.configState,
+  );
   const {
     transactions,
     hasMore,
-    meta: {currentPage},
+    meta: { currentPage },
   } = useSelector<RootState, TipSummaryState>(state => state.tipSummaryState);
 
   const isTippingDisabled = useCallback((): boolean => {
@@ -42,7 +49,9 @@ export const useTipHistory = (reference: Post | Comment | User, referenceType: R
     if ('platform' in reference) {
       const isPostCreator = reference.createdBy === user?.id;
       const isInternalPost = reference.platform === 'myriad';
-      const isOriginOwner = user?.people?.find(person => person.id === reference.peopleId)
+      const isOriginOwner = user?.people?.find(
+        person => person.id === reference.peopleId,
+      )
         ? true
         : false;
 
@@ -77,7 +86,9 @@ export const useTipHistory = (reference: Post | Comment | User, referenceType: R
   }, [reference, referenceType]);
 
   const handleLoadNextPage = useCallback(() => {
-    dispatch(fetchTransactionHistory(reference, referenceType, currentPage + 1));
+    dispatch(
+      fetchTransactionHistory(reference, referenceType, currentPage + 1),
+    );
   }, [reference, referenceType]);
 
   return {

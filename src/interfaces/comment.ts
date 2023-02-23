@@ -1,7 +1,7 @@
-import {BaseModel} from './base.interface';
-import {ReferenceType, SectionType, Vote} from './interaction';
-import {MentionUserProps, Post} from './post';
-import {User} from './user';
+import { BaseModel } from './base.interface';
+import { ReferenceType, SectionType, Vote } from './interaction';
+import { MentionUserProps, Post } from './post';
+import { User } from './user';
 
 type CommentMetric = {
   upvotes: number;

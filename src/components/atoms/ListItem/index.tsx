@@ -2,17 +2,17 @@ import React from 'react';
 
 import Image from 'next/image';
 
-import {Typography} from '@material-ui/core';
-import {AvatarProps} from '@material-ui/core/Avatar';
-import ListItem, {ListItemProps} from '@material-ui/core/ListItem';
+import { Typography } from '@material-ui/core';
+import { AvatarProps } from '@material-ui/core/Avatar';
+import ListItem, { ListItemProps } from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import SvgIcon from '@material-ui/core/SvgIcon';
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-import {Avatar, AvatarSize} from '../Avatar';
+import { Avatar, AvatarSize } from '../Avatar';
 
 import ShowIf from 'components/common/show-if.component';
 
@@ -37,7 +37,9 @@ const useStyles = makeStyles<Theme, ListItemComponentProps>((theme: Theme) =>
       paddingLeft: 0,
       [theme.breakpoints.up('sm')]: {
         display: props =>
-          ['experience', 'wallet', 'topic', 'socials'].includes(props.id as string) && 'none',
+          ['experience', 'wallet', 'topic', 'socials'].includes(
+            props.id as string,
+          ) && 'none',
       },
     },
     avatar: {
@@ -91,7 +93,7 @@ export const ListItemComponent: React.FC<ListItemComponentProps> = props => {
     isBanned = false,
     isAnimated = false,
   } = props;
-  const styles = useStyles({...props});
+  const styles = useStyles({ ...props });
 
   const iconSyles = [styles.icon];
   const listProps: any = {};
@@ -113,7 +115,9 @@ export const ListItemComponent: React.FC<ListItemComponentProps> = props => {
       onClick={onClick}
       {...listProps}>
       {icon ? (
-        <ListItemIcon data-testid={`list-item-icon-${title}`} classes={{root: iconSyles.join(' ')}}>
+        <ListItemIcon
+          data-testid={`list-item-icon-${title}`}
+          classes={{ root: iconSyles.join(' ') }}>
           <SvgIcon component={icon} />
         </ListItemIcon>
       ) : (
@@ -140,7 +144,10 @@ export const ListItemComponent: React.FC<ListItemComponentProps> = props => {
         }
         secondary={
           subtitle ? (
-            <Typography component="span" variant="subtitle1" color="textPrimary">
+            <Typography
+              component="span"
+              variant="subtitle1"
+              color="textPrimary">
               {subtitle}
             </Typography>
           ) : undefined
@@ -148,11 +155,19 @@ export const ListItemComponent: React.FC<ListItemComponentProps> = props => {
       />
 
       <ShowIf condition={isAnimated}>
-        <Image src="/images/animated_new.gif" alt={'new'} width={40} height={20} quality={100} />
+        <Image
+          src="/images/animated_new.gif"
+          alt={'new'}
+          width={40}
+          height={20}
+          quality={100}
+        />
       </ShowIf>
 
       {action && (
-        <ListItemSecondaryAction className={styles.action}>{action}</ListItemSecondaryAction>
+        <ListItemSecondaryAction className={styles.action}>
+          {action}
+        </ListItemSecondaryAction>
       )}
     </ListItem>
   );

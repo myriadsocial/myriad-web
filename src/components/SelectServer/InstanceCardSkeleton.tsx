@@ -1,8 +1,14 @@
 import React from 'react';
 
-import {Card, CardActionArea, CardContent, CardMedia, ListItem} from '@material-ui/core';
-import {alpha, createStyles, makeStyles} from '@material-ui/core/styles';
-import {Skeleton} from '@material-ui/lab';
+import {
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  ListItem,
+} from '@material-ui/core';
+import { alpha, createStyles, makeStyles } from '@material-ui/core/styles';
+import { Skeleton } from '@material-ui/lab';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -25,7 +31,7 @@ export const InstanceCardSkeleton = () => {
   return (
     <React.Fragment>
       <ListItem>
-        <Card className={styles.root} style={{background: 'transparent'}}>
+        <Card className={styles.root} style={{ background: 'transparent' }}>
           <CardActionArea
             style={{
               display: 'flex',
@@ -34,10 +40,10 @@ export const InstanceCardSkeleton = () => {
               alignItems: 'center',
               paddingBottom: '10px',
             }}>
-            <CardMedia style={{padding: 16}}>
+            <CardMedia style={{ padding: 16 }}>
               <Skeleton height={80} width={80} variant="rect" />
             </CardMedia>
-            <CardContent style={{width: '100%'}}>
+            <CardContent style={{ width: '100%' }}>
               <Skeleton height={80} width={368} variant="rect" />
             </CardContent>
           </CardActionArea>
@@ -53,10 +59,10 @@ export const InstanceCardSkeleton = () => {
               alignItems: 'center',
               paddingBottom: '10px',
             }}>
-            <CardMedia style={{padding: 16}}>
+            <CardMedia style={{ padding: 16 }}>
               <Skeleton height={80} width={80} variant="rect" />
             </CardMedia>
-            <CardContent style={{width: '100%'}}>
+            <CardContent style={{ width: '100%' }}>
               <Skeleton height={80} width={368} variant="rect" />
             </CardContent>
           </CardActionArea>

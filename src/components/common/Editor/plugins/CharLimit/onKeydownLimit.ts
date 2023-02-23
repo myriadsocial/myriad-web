@@ -1,8 +1,12 @@
-import {KeyboardHandlerReturnType, PlateEditor, Value} from '@udecode/plate-core';
+import {
+  KeyboardHandlerReturnType,
+  PlateEditor,
+  Value,
+} from '@udecode/plate-core';
 
-import {EditorValue} from '../../Editor.interface';
+import { EditorValue } from '../../Editor.interface';
 
-import {formatToString} from 'components/common/NodeViewer/formatter';
+import { formatToString } from 'components/common/NodeViewer/formatter';
 
 export const getOnKeydownLimit =
   <V extends Value = Value, E extends PlateEditor<V> = PlateEditor<V>>(
@@ -16,7 +20,10 @@ export const getOnKeydownLimit =
       .join('. ')
       .trim();
 
-    if (event.key !== 'Backspace' && currentRawString.length >= plugin.options.max) {
+    if (
+      event.key !== 'Backspace' &&
+      currentRawString.length >= plugin.options.max
+    ) {
       event.preventDefault();
     }
   };

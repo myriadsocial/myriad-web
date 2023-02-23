@@ -1,23 +1,23 @@
-import {useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {Button, Typography} from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 
-import {useStyles} from '../../../LoginMagicLink.style';
+import { useStyles } from '../../../LoginMagicLink.style';
 
-import {useAuthLinkHook} from 'src/hooks/auth-link.hook';
+import { useAuthLinkHook } from 'src/hooks/auth-link.hook';
 import i18n from 'src/locale';
 
 type LoginMagicLinkProps = {
   email: string;
 };
 
-const LoginMagicLink = ({email = ''}: LoginMagicLinkProps) => {
+const LoginMagicLink = ({ email = '' }: LoginMagicLinkProps) => {
   const [userEmail] = useState(email);
 
-  const {requestLink} = useAuthLinkHook();
+  const { requestLink } = useAuthLinkHook();
 
   const classes = useStyles();
 
@@ -74,7 +74,7 @@ const LoginMagicLink = ({email = ''}: LoginMagicLinkProps) => {
         setCountDown(COOLDOWN_TIME);
       }
     } catch (error) {
-      console.log({error});
+      console.log({ error });
     }
   };
 
@@ -86,7 +86,9 @@ const LoginMagicLink = ({email = ''}: LoginMagicLinkProps) => {
     <div className={classes.root}>
       <div className={classes.wrapper}>
         <div className={classes.title}>
-          <Typography variant="h3">{i18n.t('Login.Magic_Link.Title')}</Typography>
+          <Typography variant="h3">
+            {i18n.t('Login.Magic_Link.Title')}
+          </Typography>
         </div>
         <div className={classes.subtitle}>
           <Typography variant="body1">
@@ -96,7 +98,9 @@ const LoginMagicLink = ({email = ''}: LoginMagicLinkProps) => {
           <Typography variant="body1">
             {i18n.t('Login.Magic_Link.From')} <b>no-reply@myriad.systems</b>.
           </Typography>
-          <Typography variant="body1">{i18n.t('Login.Magic_Link.Subtitle_2')}</Typography>
+          <Typography variant="body1">
+            {i18n.t('Login.Magic_Link.Subtitle_2')}
+          </Typography>
         </div>
 
         <Button
@@ -110,7 +114,7 @@ const LoginMagicLink = ({email = ''}: LoginMagicLinkProps) => {
 
         <div className={classes.subtitle}>
           <Typography variant="body1">
-            {i18n.t('Login.Magic_Link.Timer_Text', {time: countDown})}
+            {i18n.t('Login.Magic_Link.Timer_Text', { time: countDown })}
           </Typography>
         </div>
       </div>

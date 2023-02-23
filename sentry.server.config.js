@@ -10,7 +10,9 @@ if (SENTRY_DSN) {
     dsn: SENTRY_DSN,
     tracesSampleRate: 1.0,
     tracesSampler: samplingContext => {
-      if (samplingContext?.transactionContext?.name === 'GET /api/healthcheck') {
+      if (
+        samplingContext?.transactionContext?.name === 'GET /api/healthcheck'
+      ) {
         return false;
       }
       return true;

@@ -1,14 +1,20 @@
 import MyriadAPI from './base';
-import {PAGINATION_LIMIT} from './constants/pagination';
-import {BaseList} from './interfaces/base-list.interface';
-import {PaginationParams} from './interfaces/pagination-params.interface';
+import { PAGINATION_LIMIT } from './constants/pagination';
+import { BaseList } from './interfaces/base-list.interface';
+import { PaginationParams } from './interfaces/pagination-params.interface';
 
-import {Transaction, TransactionProps, TransactionInfo} from 'src/interfaces/transaction';
+import {
+  Transaction,
+  TransactionProps,
+  TransactionInfo,
+} from 'src/interfaces/transaction';
 
 type TransactionList = BaseList<Transaction>;
 
-export const storeTransaction = async (values: TransactionProps): Promise<Transaction> => {
-  const {data} = await MyriadAPI().request<Transaction>({
+export const storeTransaction = async (
+  values: TransactionProps,
+): Promise<Transaction> => {
+  const { data } = await MyriadAPI().request<Transaction>({
     url: '/user/transactions',
     method: 'POST',
     data: values,
@@ -21,14 +27,19 @@ export const getTransactions = async (
   options: Partial<TransactionProps>,
   pagination: PaginationParams,
 ): Promise<TransactionList> => {
-  const {page = 1, limit = PAGINATION_LIMIT, orderField = 'createdAt', sort = 'DESC'} = pagination;
+  const {
+    page = 1,
+    limit = PAGINATION_LIMIT,
+    orderField = 'createdAt',
+    sort = 'DESC',
+  } = pagination;
 
   let status: string | null = null;
   const include: Array<any> = [
     {
       relation: 'currency',
       scope: {
-        include: [{relation: 'network'}],
+        include: [{ relation: 'network' }],
       },
     },
     {
@@ -47,7 +58,7 @@ export const getTransactions = async (
     status = 'sent';
   }
 
-  const {data} = await MyriadAPI().request<TransactionList>({
+  const { data } = await MyriadAPI().request<TransactionList>({
     url: '/user/transactions',
     method: 'GET',
     params: {
@@ -67,7 +78,9 @@ export const getTransactions = async (
   return data;
 };
 
-export const updateTransaction = async (transactionInfo: TransactionInfo): Promise<void> => {
+export const updateTransaction = async (
+  transactionInfo: TransactionInfo,
+): Promise<void> => {
   await MyriadAPI().request({
     url: `/user/transactions`,
     method: 'PATCH',

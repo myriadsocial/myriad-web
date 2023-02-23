@@ -1,9 +1,9 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
-import {ListItemComponent} from '.';
-import {FacebookIcon} from '../Icons';
+import { ListItemComponent } from '.';
+import { FacebookIcon } from '../Icons';
 
 export default {
   title: 'UI Revamp v2.0/atoms/ListItem',
@@ -11,16 +11,18 @@ export default {
   argTypes: {
     variant: {
       options: ['square', 'rounded', 'circular'],
-      control: {type: 'radio'},
+      control: { type: 'radio' },
     },
     size: {
       options: ['small', 'medium', 'large'],
-      control: {type: 'radio'},
+      control: { type: 'radio' },
     },
   },
 } as ComponentMeta<typeof ListItemComponent>;
 
-const Template: ComponentStory<typeof ListItemComponent> = args => <ListItemComponent {...args} />;
+const Template: ComponentStory<typeof ListItemComponent> = args => (
+  <ListItemComponent {...args} />
+);
 
 export const WithIcon = Template.bind({});
 WithIcon.args = {
@@ -30,13 +32,15 @@ WithIcon.args = {
 
 export const WithSubtitle = Template.bind({});
 WithSubtitle.args = {
-  avatar: 'https://res.cloudinary.com/dsget80gs/w_150,h_150,c_thumb/e6bvyvm8xtewfzafmgto.jpg',
+  avatar:
+    'https://res.cloudinary.com/dsget80gs/w_150,h_150,c_thumb/e6bvyvm8xtewfzafmgto.jpg',
   title: 'Item avatar',
   subtitle: '500K Followers',
 };
 
 export const WithAvatar = Template.bind({});
 WithAvatar.args = {
-  avatar: 'https://res.cloudinary.com/dsget80gs/w_150,h_150,c_thumb/e6bvyvm8xtewfzafmgto.jpg',
+  avatar:
+    'https://res.cloudinary.com/dsget80gs/w_150,h_150,c_thumb/e6bvyvm8xtewfzafmgto.jpg',
   title: 'Item avatar',
 };

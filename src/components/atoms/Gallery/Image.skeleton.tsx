@@ -1,8 +1,8 @@
 import React from 'react';
 
-import {Skeleton as BaseSekeleton} from '@material-ui/lab';
+import { Skeleton as BaseSekeleton } from '@material-ui/lab';
 
-import {MyriadGreyIcon} from '../Icons';
+import { MyriadGreyIcon } from '../Icons';
 
 type SkeletonProps = {
   height: number;

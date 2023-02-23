@@ -1,7 +1,7 @@
-import {useMemo} from 'react';
+import { useMemo } from 'react';
 
-import {TagOptions} from 'src/components/PostTag';
-import {PostVisibility} from 'src/interfaces/post';
+import { TagOptions } from 'src/components/PostTag';
+import { PostVisibility } from 'src/interfaces/post';
 import i18n from 'src/locale';
 
 export const usePostVisibilityList = (): TagOptions[] => {
@@ -9,15 +9,21 @@ export const usePostVisibilityList = (): TagOptions[] => {
     () => [
       {
         id: PostVisibility.PUBLIC,
-        title: i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Public'),
+        title: i18n.t(
+          'Post_Detail.Post_Options.Post_Visibility_Setting.Public',
+        ),
       },
       {
         id: PostVisibility.FRIEND,
-        title: i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Friend_Only'),
+        title: i18n.t(
+          'Post_Detail.Post_Options.Post_Visibility_Setting.Friend_Only',
+        ),
       },
       {
         id: PostVisibility.PRIVATE,
-        title: i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Only_Me'),
+        title: i18n.t(
+          'Post_Detail.Post_Options.Post_Visibility_Setting.Only_Me',
+        ),
       },
       {
         id: PostVisibility.CUSTOM,
@@ -25,7 +31,9 @@ export const usePostVisibilityList = (): TagOptions[] => {
       },
       {
         id: PostVisibility.TIMELINE,
-        title: i18n.t('Post_Detail.Post_Options.Post_Visibility_Setting.Timeline'),
+        title: i18n.t(
+          'Post_Detail.Post_Options.Post_Visibility_Setting.Timeline',
+        ),
       },
     ],
     [],

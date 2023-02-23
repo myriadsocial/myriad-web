@@ -1,5 +1,5 @@
-import {BaseModel} from './base.interface';
-import {ReferenceType} from './interaction';
+import { BaseModel } from './base.interface';
+import { ReferenceType } from './interaction';
 
 export enum ReportStatusType {
   PENDING = 'pending',

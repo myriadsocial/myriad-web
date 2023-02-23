@@ -1,4 +1,4 @@
-import {LayoutType} from './experience';
+import { LayoutType } from './experience';
 
 export enum TimelineType {
   ALL = 'all',

@@ -1,8 +1,8 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
-import {AddCoin} from './AddCoin.component';
+import { AddCoin } from './AddCoin.component';
 
 export default {
   title: 'UI Revamp v2.0/atoms/AddCoin',

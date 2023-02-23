@@ -1,4 +1,4 @@
-import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -10,7 +10,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         width: '100%',
       },
     },
-    flex: {display: 'flex', justifyContent: 'space-between'},
+    flex: { display: 'flex', justifyContent: 'space-between' },
     name: {
       color: theme.palette.primary.main,
       fontWeight: 600,
