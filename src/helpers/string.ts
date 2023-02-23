@@ -163,4 +163,4 @@ export const stringComment = (text: string): string => {
   }
 
   return comment;
-}
+};
