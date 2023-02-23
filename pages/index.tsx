@@ -38,7 +38,7 @@ import {
 import { wrapper } from 'src/store';
 import { ThunkDispatchAction } from 'src/types/thunk';
 
-const { publicRuntimeConfig, serverRuntimeConfig } = getConfig();
+const { publicRuntimeConfig } = getConfig();
 
 type HomePageProps = {
   session: Session;
@@ -109,7 +109,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     const queryInstanceURL = query.instance;
     const sessionInstanceURL = session?.user?.instanceURL;
     const cookiesInstanceURL = cookies[COOKIE_INSTANCE_URL];
-    const defaultInstanceURL = serverRuntimeConfig.myriadAPIURL;
+    const defaultInstanceURL = publicRuntimeConfig.myriadAPIURL;
 
     const anonymous = !session?.user;
     const apiURL =

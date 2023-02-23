@@ -28,7 +28,7 @@ const OnBoardingContainer = dynamic(
   },
 );
 
-const { publicRuntimeConfig, serverRuntimeConfig } = getConfig();
+const { publicRuntimeConfig } = getConfig();
 
 const description = i18n.t('Login.Description');
 
@@ -115,7 +115,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     const queryInstanceURL = query.instance;
     const cookiesInstanceURL = cookies[COOKIE_INSTANCE_URL];
-    const defaultInstanceURL = serverRuntimeConfig.myriadAPIURL;
+    const defaultInstanceURL = publicRuntimeConfig.myriadAPIURL;
     const apiURL = queryInstanceURL ?? cookiesInstanceURL ?? defaultInstanceURL;
 
     const available = await healthcheck(apiURL);

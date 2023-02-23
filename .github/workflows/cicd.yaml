@@ -74,6 +74,7 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
           context: .
           file: .maintain/docker/Dockerfile
+          build-args: VCS_REF=${{ github.sha }}
           tags: ${{ github.repository }}:${{ github.sha }}
           outputs: type=docker,dest=/tmp/docker_image.tar
       - name: Move Cache Docker Layers

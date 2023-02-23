@@ -7,7 +7,7 @@ import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
 import { isErrorWithMessage } from 'src/helpers/error';
 import { decryptMessage } from 'src/lib/crypto';
 
-const { serverRuntimeConfig } = getConfig();
+const { publicRuntimeConfig } = getConfig();
 
 export const config = {
   api: {
@@ -39,8 +39,7 @@ export default async function handler(
 
     return httpProxyMiddleware(req, res, {
       // You can use the `http-proxy` option
-      // target: serverRuntimeConfig.myriadAPIURL,
-      target: instanceURL ?? serverRuntimeConfig.myriadAPIURL,
+      target: instanceURL ?? publicRuntimeConfig.myriadAPIURL,
       // In addition, you can use the `pathRewrite` option provided by `next-http-proxy`
       pathRewrite: [
         {

@@ -47,7 +47,7 @@ import {
 import { wrapper } from 'src/store';
 import { ThunkDispatchAction } from 'src/types/thunk';
 
-const { publicRuntimeConfig, serverRuntimeConfig } = getConfig();
+const { publicRuntimeConfig } = getConfig();
 
 const ResourceDeleted = dynamic(
   () => import('src/components/common/ResourceDeleted/ResourceDeleted'),
@@ -155,7 +155,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     const queryInstanceURL = query.instance;
     const sessionInstanceURL = session?.user?.instanceURL;
     const cookiesInstanceURL = cookies[COOKIE_INSTANCE_URL];
-    const defaultInstanceURL = serverRuntimeConfig.myriadAPIURL;
+    const defaultInstanceURL = publicRuntimeConfig.myriadAPIURL;
 
     const apiURL =
       sessionInstanceURL ??
