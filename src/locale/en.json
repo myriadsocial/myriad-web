@@ -1227,34 +1227,34 @@
     "Hidden": "The owner might be changed their privacy settings, shared it for certain group of people or it’s been deleted",
     "Back": "Back to Home"
   },
-  "ExclusiveContent" : {
-    "Create" : "Create Exclusive Content",
-    "Add" : "Add Exclusive Content",
-    "Attach" : "Attach Exclusive Content",
-    "Remove" : "Remove Exclusive Content",
-    "Available" : "Reveal Exclusive Content",
-    "Label" : {
-      "Attach" : "Attach",
-      "ExclusiveContent" : "Exclusive Content",
-      "ExclusiveContentPrice" : "Exclusive Content Price",
-      "ChangeCurrency" : "Change Currency",
-      "Fee" : "5% platform fee will be deducted from your payment",
-      "NetworkError" : "Network Error",
-      "Rethink" : "No, Let me rethink",
-      "SwitchNetwork" : "Switch Network",
-      "UnlockNow" : "Unlock Now"
+  "ExclusiveContent": {
+    "Create": "Create Exclusive Content",
+    "Add": "Add Exclusive Content",
+    "Attach": "Attach Exclusive Content",
+    "Remove": "Remove Exclusive Content",
+    "Available": "Reveal Exclusive Content",
+    "Label": {
+      "Attach": "Attach",
+      "ExclusiveContent": "Exclusive Content",
+      "ExclusiveContentPrice": "Exclusive Content Price",
+      "ChangeCurrency": "Change Currency",
+      "Fee": "5% platform fee will be deducted from your payment",
+      "NetworkError": "Network Error",
+      "Rethink": "No, Let me rethink",
+      "SwitchNetwork": "Switch Network",
+      "UnlockNow": "Unlock Now"
     },
-    "Placeholder" : {
-      "AddPrice" : "Add Price",
-      "Editor" : "The content you add here will be revealed to your audience upon payment."
+    "Placeholder": {
+      "AddPrice": "Add Price",
+      "Editor": "The content you add here will be revealed to your audience upon payment."
     },
-    "Text" : {
-      "NetworkError" : "Payment only available in {{accept}} now you are in {{current}}. Switch network to proceed",
-      "NotLogin" : "This is paid content. Sign in with your crypto wallet to view it.",
-      "Web2User" : "You don’t have any wallet connected to your account. Let’s try to connect your wallet to reveal this exclusive content."
+    "Text": {
+      "NetworkError": "Payment only available in {{accept}} now you are in {{current}}. Switch network to proceed",
+      "NotLogin": "This is paid content. Sign in with your crypto wallet to view it.",
+      "Web2User": "You don’t have any wallet connected to your account. Let’s try to connect your wallet to reveal this exclusive content."
     },
-    "Prompt_Success" : {
-      "Title" : "Unlock Content Success"
+    "Prompt_Success": {
+      "Title": "Unlock Content Success"
     }
   }
 }

@@ -86,27 +86,149 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> =
       [],
     );
 
-  const initComments = () => {
-    if (!selected) {
-      handleChangeTab(SectionType.DISCUSSION);
-    }
-  };
+    const confirmChangeToPrivate = (payload: Partial<Post>) => {
+      confirm({
+        title: i18n.t(
+          'Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Private_Title',
+        ),
+        description: i18n.t(
+          'Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Private_Description',
+        ),
+        confirmationText: i18n.t(
+          'Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Private_Text',
+        ),
+        cancellationText: i18n.t(
+          'Post_Detail.Post_Options.Post_Visibility_Setting.Cancel_Private_Text',
+        ),
+        onConfirm: () => {
+          handleUpdatePost(payload);
+        },
+      });
+    };
 
-  return (
-    <>
-      <Paper ref={ref} className={styles.root}>
-        <PostDetail
-          {...props}
-          key={props.post.id}
-          type={type}
-          onUpvote={upvotePost}
-          onToggleDownvote={handleToggleDownvotePost}
-          onRemoveVote={removePostVote}
-          onToggleShowComment={handleToggleShowComment}
-          onShowImporters={toggleImporterList}
-          onChangeVisibility={toggleVisibility}
-          onDelete={handleDeletePost}
-          onReport={handleReport}
+    const handleUpdatePost = (payload: Partial<Post>) => {
+      dispatch(
+        editPost(post.id, payload, () => {
+          openSuccessPrompt(payload.visibility);
+        }),
+      );
+    };
+
+    const openSuccessPrompt = (updatedVisibility: string) => {
+      confirm({
+        title: i18n.t(
+          'Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Title',
+        ),
+        description: (
+          <Typography>
+            {updatedVisibility === Visibility.FRIEND
+              ? i18n.t(
+                  'Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Description',
+                  {
+                    visibility: i18n.t(
+                      'Post_Detail.Post_Options.Post_Visibility_Setting.Friend_Only',
+                    ),
+                  },
+                )
+              : updatedVisibility === Visibility.PRIVATE
+              ? i18n.t(
+                  'Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Description',
+                  {
+                    visibility: i18n.t(
+                      'Post_Detail.Post_Options.Post_Visibility_Setting.Only_Me',
+                    ),
+                  },
+                )
+              : updatedVisibility === Visibility.CUSTOM
+              ? i18n.t(
+                  'Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Description',
+                  {
+                    visibility: i18n.t(
+                      'Post_Detail.Post_Options.Post_Visibility_Setting.Custom',
+                    ),
+                  },
+                )
+              : updatedVisibility === Visibility.TIMELINE
+              ? i18n.t(
+                  'Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Description',
+                  {
+                    visibility: i18n.t(
+                      'Post_Detail.Post_Options.Post_Visibility_Setting.Timeline',
+                    ),
+                  },
+                )
+              : i18n.t(
+                  'Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Description',
+                  {
+                    visibility: i18n.t(
+                      'Post_Detail.Post_Options.Post_Visibility_Setting.Public',
+                    ),
+                  },
+                )}
+          </Typography>
+        ),
+        confirmationText: i18n.t(
+          'Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Text',
+        ),
+        hideCancel: true,
+      });
+    };
+
+    const handleDeletePost = useCallback(() => {
+      confirm({
+        title: i18n.t('Post_Delete.Title'),
+        description: i18n.t('Post_Delete.Description'),
+        icon: 'danger',
+        confirmationText: i18n.t('Post_Delete.Confirmation_Text'),
+        cancellationText: i18n.t('Post_Delete.Cancellation_Text'),
+        onConfirm: () => {
+          dispatch(deletePost(post.id));
+        },
+      });
+    }, []);
+
+    const handleReport = useCallback(() => {
+      report.open(post);
+    }, []);
+
+    const initComments = () => {
+      if (!selected) {
+        handleChangeTab(SectionType.DISCUSSION);
+      }
+    };
+
+    return (
+      <>
+        <Paper ref={ref} className={styles.root}>
+          <PostDetail
+            {...props}
+            key={props.post.id}
+            type={type}
+            onUpvote={upvotePost}
+            onToggleDownvote={handleToggleDownvotePost}
+            onRemoveVote={removePostVote}
+            onToggleShowComment={handleToggleShowComment}
+            onShowImporters={toggleImporterList}
+            onChangeVisibility={toggleVisibility}
+            onDelete={handleDeletePost}
+            onReport={handleReport}
+          />
+          <Collapse in={showComment} onEntering={initComments}>
+            {selected && (
+              <TabsComponent<SectionType>
+                tabs={tabs}
+                position="space-evenly"
+                selected={selected}
+                onChangeTab={handleChangeTab}
+              />
+            )}
+          </Collapse>
+        </Paper>
+
+        <PostImporter
+          open={showImporterList}
+          post={post}
+          onClose={toggleImporterList}
         />
         <PostVisibility
           open={showVisibility}

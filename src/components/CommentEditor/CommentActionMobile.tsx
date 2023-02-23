@@ -16,7 +16,7 @@ import {
 
 import { useStyles } from './CommentEditor.style';
 
-import {ExclusiveContentPost} from 'src/interfaces/exclusive';
+import { ExclusiveContentPost } from 'src/interfaces/exclusive';
 import i18n from 'src/locale';
 
 type CommentActionProps = {
@@ -72,7 +72,11 @@ export const CommentActionMobile: React.FC<CommentActionProps> = props => {
               onClick={handleOpenExclusiveContent}
               disabled={length === 0}
               className={styles.attachButton}>
-              <SvgIcon component={PaperClipIcon} viewBox="0 0 24 24" color="primary" />
+              <SvgIcon
+                component={PaperClipIcon}
+                viewBox="0 0 24 24"
+                color="primary"
+              />
               <Typography component="span" color="primary" variant="body1">
                 {i18n.t('ExclusiveContent.Attach')}
               </Typography>
