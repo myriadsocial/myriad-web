@@ -160,6 +160,7 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> = props => 
       <Paper ref={ref} className={styles.root}>
         <PostDetail
           {...props}
+          key={props.post.id}
           type={type}
           onUpvote={upvotePost}
           onToggleDownvote={handleToggleDownvotePost}
