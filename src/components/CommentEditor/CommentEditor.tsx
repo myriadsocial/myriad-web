@@ -197,7 +197,6 @@ const CommentEditor = (props: CommentEditorProps, ref: React.ForwardedRef<HTMLDi
               exclusiveContent={exclusiveContent}
               handleOpenExclusiveContent={handleOpenExclusiveContent}
               handleRemoveExclusiveContent={handleRemoveExclusiveContent}
-              user={user}
             />
           </Editor>
         </div>
