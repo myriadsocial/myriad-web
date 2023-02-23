@@ -13,8 +13,8 @@ const moduleExports = {
     styledComponent: true,
   },
   generateBuildId: async () => {
-    if (process.env.BUILD_ID) {
-      return process.env.BUILD_ID;
+    if (process.env.NEXT_PUBLIC_APP_BUILD_ID) {
+      return process.env.NEXT_PUBLIC_APP_BUILD_ID;
     } else {
       return version;
     }

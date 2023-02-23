@@ -8,7 +8,7 @@ ARG VCS_REF
 WORKDIR /app
 COPY . .
 COPY --from=dependencies /app/node_modules ./node_modules
-ENV BUILD_ID=${VCS_REF}
+ENV NEXT_PUBLIC_APP_BUILD_ID=${VCS_REF}
 RUN yarn build \
   && yarn install --production --prefer-offline --network-timeout 100000
 
@@ -24,6 +24,6 @@ COPY --from=builder --chown=myriad /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 USER myriad
-ENV BUILD_ID=${VCS_REF} NODE_ENV=production HOST=0.0.0.0 PORT=3000
+ENV NEXT_PUBLIC_APP_BUILD_ID=${VCS_REF} NODE_ENV=production HOST=0.0.0.0 PORT=3000
 EXPOSE ${PORT}
 ENTRYPOINT ["yarn", "start"]
