@@ -223,7 +223,7 @@ jobs:
             --set-string serviceAccount.annotations.'iam\.gke\.io/gcp-service-account'=${{ github.event.repository.name }}@${{ secrets[format('{0}_{1}', matrix.environment, 'GCP_PROJECT_ID')] }}.iam.gserviceaccount.com \
             --set-string config.app.environment=${{ steps.secrets.outputs.WEB_APP_ENVIRONMENT }} \
             --set-string config.app.name="${{ steps.secrets.outputs.WEB_APP_NAME }}" \
-            --set-string config.app.version=${{ needs.compute-build-info.outputs.package_version }} \
+            --set-string config.app.version=${{ needs.release-please.outputs.tag_name || github.sha }} \
             --set-string config.app.authURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
             --set-string config.app.secret=${{ steps.secrets.outputs.WEB_APP_SECRET }} \
             --set-string config.supportMail=${{ steps.secrets.outputs.SUPPORT_MAIL }} \
