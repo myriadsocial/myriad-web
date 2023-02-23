@@ -146,7 +146,7 @@ export const useExperienceHook = () => {
 
         enqueueSnackbar({
           variant: 'success',
-          message: 'Experience successfully cloned!',
+          message: 'Timeline successfully cloned!',
         });
       }),
     );
@@ -174,7 +174,7 @@ export const useExperienceHook = () => {
 
         enqueueSnackbar({
           variant: 'success',
-          message: 'experience succesfully updated!',
+          message: 'Timeline successfully updated!',
         });
       }),
     );
@@ -187,7 +187,7 @@ export const useExperienceHook = () => {
 
         enqueueSnackbar({
           variant: 'success',
-          message: 'Experience succesfully created!',
+          message: 'Timeline successfully created!',
         });
       }),
     );
