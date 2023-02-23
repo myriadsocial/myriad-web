@@ -24,7 +24,7 @@ const moduleExports = {
   },
   serverRuntimeConfig: {
     // Will only be available on the server side
-    appSecret: process.env.SECRET ?? 'd98b4af078b46a9984829a72030976e0',
+    appSecret: process.env.APP_SECRET ?? 'd98b4af078b46a9984829a72030976e0',
     myriadAPIURL: process.env.MYRIAD_API_URL ?? 'http://localhost:3001',
   },
   publicRuntimeConfig: {
@@ -32,7 +32,7 @@ const moduleExports = {
     appEnvironment: process.env.NEXT_PUBLIC_APP_ENVIRONMENT ?? 'local',
     appName: process.env.NEXT_PUBLIC_APP_NAME ?? `Myriad Local`,
     appVersion: `v${process.env.NEXT_PUBLIC_APP_VERSION ?? version}`,
-    appAuthURL: process.env.NEXTAUTH_URL ?? 'http://localhost:3000',
+    appAuthURL: process.env.NEXT_PUBLIC_APP_AUTH_URL ?? 'http://localhost:3000',
     myriadRPCURL: process.env.NEXT_PUBLIC_MYRIAD_RPC_URL,
     myriadWebsiteURL:
       process.env.NEXT_PUBLIC_MYRIAD_WEBSITE_URL ?? 'https://www.myriad.social',
