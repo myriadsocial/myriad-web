@@ -22,7 +22,6 @@ import {EmojiPickerToolbarButton} from 'components/common/Editor/render/Toolbar/
 import {formatToString} from 'components/common/NodeViewer/formatter';
 import ShowIf from 'components/common/show-if.component';
 import {ExclusiveContentPost} from 'src/interfaces/exclusive';
-import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
 
 type CommentActionProps = {
@@ -33,7 +32,6 @@ type CommentActionProps = {
   exclusiveContent?: ExclusiveContentPost;
   handleRemoveExclusiveContent: () => void;
   handleOpenExclusiveContent: () => void;
-  user: User;
 };
 
 export const CommentAction: React.FC<CommentActionProps> = props => {
@@ -44,7 +42,6 @@ export const CommentAction: React.FC<CommentActionProps> = props => {
     exclusiveContent,
     handleRemoveExclusiveContent,
     handleOpenExclusiveContent,
-    user,
   } = props;
 
   const styles = useStyles({mobile: false});
@@ -78,38 +75,15 @@ export const CommentAction: React.FC<CommentActionProps> = props => {
         </ButtonGroup>
         <ButtonGroup color="primary">
           {!exclusiveContent ? (
-            <>
-              {user.fullAccess ? (
-                <IconButton
-                  onClick={handleOpenExclusiveContent}
-                  disabled={length === 0}
-                  className={styles.attachButton}>
-                  <SvgIcon component={PaperClipIcon} viewBox="0 0 24 24" color="primary" />
-                  <Typography component="span" color="primary" variant="body1">
-                    {i18n.t('ExclusiveContent.Attach')}
-                  </Typography>
-                </IconButton>
-              ) : (
-                <Tooltip
-                  title={<Typography>{i18n.t('ExclusiveContent.Text.Tooltip')}</Typography>}
-                  aria-label="exclusive-content">
-                  <IconButton aria-label="exclusive-content" onClick={null}>
-                    <SvgIcon
-                      component={PaperClipIcon}
-                      viewBox="0 0 24 24"
-                      className={styles.giftIconGray}
-                    />
-                    <Typography
-                      component="span"
-                      color={'#C2C2C2' as never}
-                      variant="body1"
-                      style={{lineHeight: 1.8}}>
-                      {i18n.t('ExclusiveContent.Add')}
-                    </Typography>
-                  </IconButton>
-                </Tooltip>
-              )}
-            </>
+            <IconButton
+              onClick={handleOpenExclusiveContent}
+              disabled={length === 0}
+              className={styles.attachButton}>
+              <SvgIcon component={PaperClipIcon} viewBox="0 0 24 24" color="primary" />
+              <Typography component="span" color="primary" variant="body1">
+                {i18n.t('ExclusiveContent.Attach')}
+              </Typography>
+            </IconButton>
           ) : (
             <IconButton
               onClick={handleRemoveExclusiveContent}
