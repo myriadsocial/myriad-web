@@ -1,12 +1,12 @@
-import {BN} from '@polkadot/util';
+import { BN } from '@polkadot/util';
 
-import {BalanceDetail} from './balance';
-import {BaseModel} from './base.interface';
+import { BalanceDetail } from './balance';
+import { BaseModel } from './base.interface';
 
-import {Currency, CurrencyId} from 'src/interfaces/currency';
-import {Post} from 'src/interfaces/post';
-import {UserOnTransaction, User} from 'src/interfaces/user';
-import {WalletDetail} from 'src/interfaces/wallet';
+import { Currency, CurrencyId } from 'src/interfaces/currency';
+import { Post } from 'src/interfaces/post';
+import { UserOnTransaction, User } from 'src/interfaces/user';
+import { WalletDetail } from 'src/interfaces/wallet';
 
 export type TransactionProps = {
   hash: string;

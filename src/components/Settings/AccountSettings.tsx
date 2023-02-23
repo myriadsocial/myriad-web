@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
   List,
@@ -10,14 +10,18 @@ import {
 } from '@material-ui/core';
 import BaseButton from '@material-ui/core/Button';
 
-import {DropdownMenu} from '../atoms/DropdownMenu';
-import {useStyles} from './Settings.styles';
-import {accountPrivacyOptions} from './default';
-import {useAccountSetting} from './hooks/use-account-setting.hook';
-import {SettingsOption} from './hooks/use-setting-list.hook';
+import { DropdownMenu } from '../atoms/DropdownMenu';
+import { useStyles } from './Settings.styles';
+import { accountPrivacyOptions } from './default';
+import { useAccountSetting } from './hooks/use-account-setting.hook';
+import { SettingsOption } from './hooks/use-setting-list.hook';
 
-import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorizeAction';
-import {PrivacySettings, PrivacySettingType, PrivacyType} from 'src/interfaces/setting';
+import { WithAuthorizeAction } from 'components/common/Authorization/WithAuthorizeAction';
+import {
+  PrivacySettings,
+  PrivacySettingType,
+  PrivacyType,
+} from 'src/interfaces/setting';
 import i18n from 'src/locale';
 
 type AccountSettingsProps = {
@@ -28,7 +32,7 @@ type AccountSettingsProps = {
 const Button = WithAuthorizeAction(BaseButton);
 
 export const AccountSettings: React.FC<AccountSettingsProps> = props => {
-  const {value, onSaveSetting} = props;
+  const { value, onSaveSetting } = props;
 
   const [privacy, setPrivacy] = useState<PrivacySettings>(value);
 
@@ -41,7 +45,7 @@ export const AccountSettings: React.FC<AccountSettingsProps> = props => {
 
   const changePrivacySetting =
     (item: SettingsOption<PrivacySettingType>) => (selected: PrivacyType) => {
-      setPrivacy({...privacy, [item.id]: selected});
+      setPrivacy({ ...privacy, [item.id]: selected });
     };
 
   const savePrivacySetting = () => {
@@ -53,7 +57,10 @@ export const AccountSettings: React.FC<AccountSettingsProps> = props => {
       <List>
         {settings.map(item => {
           return (
-            <ListItem key={item.id} className={styles.option} alignItems="center">
+            <ListItem
+              key={item.id}
+              className={styles.option}
+              alignItems="center">
               <ListItemText>
                 <Typography variant="h5" color="textPrimary">
                   {item.title}

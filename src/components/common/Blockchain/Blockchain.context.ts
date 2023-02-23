@@ -1,8 +1,8 @@
-import {createContext} from 'react';
+import { createContext } from 'react';
 
-import {IProvider} from 'src/interfaces/blockchain-interface';
-import {Network} from 'src/interfaces/network';
-import {Server} from 'src/lib/api/server';
+import { IProvider } from 'src/interfaces/blockchain-interface';
+import { Network } from 'src/interfaces/network';
+import { Server } from 'src/lib/api/server';
 
 export type HandleSwitchNetwork = (network: Network) => void;
 

@@ -1,13 +1,13 @@
-import {CameraIcon} from '@heroicons/react/outline';
+import { CameraIcon } from '@heroicons/react/outline';
 
-import React, {useRef} from 'react';
+import React, { useRef } from 'react';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
 import SvgIcon from '@material-ui/core/SvgIcon';
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-import {User} from 'src/interfaces/user';
+import { User } from 'src/interfaces/user';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -81,19 +81,23 @@ export const IconButtonUpload: React.FC<ButtonUploadProps> = ({
         type="file"
         ref={uploadFieldRef}
         onChange={handleFileChange}
-        style={{display: 'none'}}
+        style={{ display: 'none' }}
         accept="image/*"
       />
       <div className={styles.wrapper}>
         <IconButton
           onClick={user.fullAccess ? selectFile : undefined}
           disabled={loading}
-          classes={{root: styles.action}}
+          classes={{ root: styles.action }}
           aria-label="upload-background">
           <SvgIcon component={CameraIcon} viewBox="0 0 24 24" />
         </IconButton>
         {loading && (
-          <CircularProgress size={24} color="primary" className={styles.buttonProgress} />
+          <CircularProgress
+            size={24}
+            color="primary"
+            className={styles.buttonProgress}
+          />
         )}
       </div>
     </div>

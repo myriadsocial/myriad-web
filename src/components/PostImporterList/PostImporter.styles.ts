@@ -1,4 +1,9 @@
-import {createStyles, makeStyles, Theme, alpha} from '@material-ui/core/styles';
+import {
+  createStyles,
+  makeStyles,
+  Theme,
+  alpha,
+} from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -14,7 +19,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       lineHeight: '20.08px',
       fontWeight: 400,
     },
-    link: {textDecoration: 'none'},
+    link: { textDecoration: 'none' },
     list: {
       display: 'flex',
       flexWrap: 'wrap',

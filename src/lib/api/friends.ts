@@ -1,9 +1,12 @@
 import MyriadAPI from './base';
-import {PAGINATION_LIMIT} from './constants/pagination';
-import {BaseList} from './interfaces/base-list.interface';
-import {PaginationParams, FilterParams} from './interfaces/pagination-params.interface';
+import { PAGINATION_LIMIT } from './constants/pagination';
+import { BaseList } from './interfaces/base-list.interface';
+import {
+  PaginationParams,
+  FilterParams,
+} from './interfaces/pagination-params.interface';
 
-import {Friend, FriendStatus} from 'src/interfaces/friend';
+import { Friend, FriendStatus } from 'src/interfaces/friend';
 
 type FriendsFilterParams = FilterParams & {
   userId: string;
@@ -11,8 +14,11 @@ type FriendsFilterParams = FilterParams & {
 type FriendList = BaseList<Friend>;
 type FriendRequestList = BaseList<Friend>;
 
-export const getFriendRequests = async (userId: string, page = 1): Promise<FriendRequestList> => {
-  const {data} = await MyriadAPI().request<FriendRequestList>({
+export const getFriendRequests = async (
+  userId: string,
+  page = 1,
+): Promise<FriendRequestList> => {
+  const { data } = await MyriadAPI().request<FriendRequestList>({
     url: `/user/friends`,
     method: 'GET',
     params: {
@@ -33,9 +39,14 @@ export const getFriends = async (
   userId: string,
   pagination: PaginationParams,
 ): Promise<FriendList> => {
-  const {page = 1, limit = PAGINATION_LIMIT, orderField = 'createdAt', sort = 'DESC'} = pagination;
+  const {
+    page = 1,
+    limit = PAGINATION_LIMIT,
+    orderField = 'createdAt',
+    sort = 'DESC',
+  } = pagination;
 
-  const {data} = await MyriadAPI().request<FriendList>({
+  const { data } = await MyriadAPI().request<FriendList>({
     url: `/user/friends`,
     method: 'GET',
     params: {
@@ -74,9 +85,12 @@ export const getFriends = async (
   return data;
 };
 
-export const getBlockList = async (userId: string, page = 1): Promise<FriendList> => {
+export const getBlockList = async (
+  userId: string,
+  page = 1,
+): Promise<FriendList> => {
   const params: Record<string, any> = {
-    filter: {include: ['requestee', 'requestor']},
+    filter: { include: ['requestee', 'requestor'] },
     userId: userId,
     status: FriendStatus.BLOCKED,
   };
@@ -87,7 +101,7 @@ export const getBlockList = async (userId: string, page = 1): Promise<FriendList
     params.pageLimit = PAGINATION_LIMIT;
   }
 
-  const {data} = await MyriadAPI().request<FriendList>({
+  const { data } = await MyriadAPI().request<FriendList>({
     url: `/user/friends`,
     method: 'GET',
     params,
@@ -100,10 +114,15 @@ export const searchFriend = async (
   filter: FriendsFilterParams,
   pagination: PaginationParams,
 ): Promise<FriendList> => {
-  const {query, userId} = filter;
-  const {page = 1, limit = PAGINATION_LIMIT, orderField = 'createdAt', sort = 'DESC'} = pagination;
+  const { query, userId } = filter;
+  const {
+    page = 1,
+    limit = PAGINATION_LIMIT,
+    orderField = 'createdAt',
+    sort = 'DESC',
+  } = pagination;
 
-  const {data} = await MyriadAPI().request<FriendList>({
+  const { data } = await MyriadAPI().request<FriendList>({
     url: `/users`,
     method: 'GET',
     params: {
@@ -143,7 +162,10 @@ export const searchFriend = async (
   return data;
 };
 
-export const sendRequest = async (userId: string, requesteeId: string): Promise<Friend> => {
+export const sendRequest = async (
+  userId: string,
+  requesteeId: string,
+): Promise<Friend> => {
   const result = await MyriadAPI().request<Friend>({
     url: `/user/friends`,
     method: 'POST',
@@ -157,7 +179,10 @@ export const sendRequest = async (userId: string, requesteeId: string): Promise<
   return result.data;
 };
 
-export const toggleRequest = async (requestId: string, status: FriendStatus): Promise<void> => {
+export const toggleRequest = async (
+  requestId: string,
+  status: FriendStatus,
+): Promise<void> => {
   await MyriadAPI().request({
     url: `/user/friends/${requestId}`,
     method: 'PATCH',
@@ -174,7 +199,10 @@ export const deleteRequest = async (requestId: string): Promise<void> => {
   });
 };
 
-export const blockUser = async (requesteeId: string, userId: string): Promise<Friend> => {
+export const blockUser = async (
+  requesteeId: string,
+  userId: string,
+): Promise<Friend> => {
   const result = await MyriadAPI().request({
     url: '/user/friends',
     method: 'POST',

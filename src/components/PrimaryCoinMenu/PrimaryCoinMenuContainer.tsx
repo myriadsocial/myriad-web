@@ -1,31 +1,36 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import {PrimaryCoinMenu} from '.';
-import {UserState} from '../../reducers/user/reducer';
+import { PrimaryCoinMenu } from '.';
+import { UserState } from '../../reducers/user/reducer';
 
-import {RootState} from 'src/reducers';
-import {BalanceState} from 'src/reducers/balance/reducer';
+import { RootState } from 'src/reducers';
+import { BalanceState } from 'src/reducers/balance/reducer';
 
 type PrimaryCoinMenuContainer = {
   togglePrimaryCoinMenu: () => void;
 };
 
-export const PrimaryCoinMenuContainer: React.FC<PrimaryCoinMenuContainer> = props => {
-  const {user, currentWallet} = useSelector<RootState, UserState>(state => state.userState);
+export const PrimaryCoinMenuContainer: React.FC<PrimaryCoinMenuContainer> =
+  props => {
+    const { user, currentWallet } = useSelector<RootState, UserState>(
+      state => state.userState,
+    );
 
-  const {togglePrimaryCoinMenu} = props;
+    const { togglePrimaryCoinMenu } = props;
 
-  const {balanceDetails} = useSelector<RootState, BalanceState>(state => state.balanceState);
+    const { balanceDetails } = useSelector<RootState, BalanceState>(
+      state => state.balanceState,
+    );
 
-  if (!user) return null;
+    if (!user) return null;
 
-  return (
-    <PrimaryCoinMenu
-      togglePrimaryCoinMenu={togglePrimaryCoinMenu}
-      balanceDetails={balanceDetails}
-      user={user}
-      networkId={currentWallet.networkId}
-    />
-  );
-};
+    return (
+      <PrimaryCoinMenu
+        togglePrimaryCoinMenu={togglePrimaryCoinMenu}
+        balanceDetails={balanceDetails}
+        user={user}
+        networkId={currentWallet.networkId}
+      />
+    );
+  };

@@ -1,8 +1,8 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
-import {PostImport as PostImportComponent} from './PostImport';
+import { PostImport as PostImportComponent } from './PostImport';
 
 export default {
   title: 'UI Revamp v2.0/components/Post Import',

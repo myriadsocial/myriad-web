@@ -1,19 +1,19 @@
 import React from 'react';
 
-import {GetServerSideProps} from 'next';
+import { GetServerSideProps } from 'next';
 import getConfig from 'next/config';
 import Head from 'next/head';
 
-import {Grid} from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-import {MyriadFullIcon} from 'src/components/atoms/Icons';
-import {PolkadotLink} from 'src/components/common/PolkadotLink.component';
+import { MyriadFullIcon } from 'src/components/atoms/Icons';
+import { PolkadotLink } from 'src/components/common/PolkadotLink.component';
 import i18n from 'src/locale';
 
-const {publicRuntimeConfig} = getConfig();
+const { publicRuntimeConfig } = getConfig();
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -58,12 +58,18 @@ const Mobile: React.FC = () => {
       <Head>
         <title>{publicRuntimeConfig.appName}</title>
       </Head>
-      <Grid container direction="column" justifyContent="center" alignContent="center">
+      <Grid
+        container
+        direction="column"
+        justifyContent="center"
+        alignContent="center">
         <Grid item xs={12} className={style.logo}>
           <MyriadFullIcon />
         </Grid>
         <Grid item xs={12}>
-          <Typography className={style.title}>{i18n.t('Mobile.title')}</Typography>
+          <Typography className={style.title}>
+            {i18n.t('Mobile.title')}
+          </Typography>
           <Typography className={`${style.subtitle} ${style.mb4}`}>
             {i18n.t('Mobile.subtitle')}
           </Typography>
@@ -90,8 +96,8 @@ const Mobile: React.FC = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const {req} = context;
-  const {headers} = req;
+  const { req } = context;
+  const { headers } = req;
 
   if (typeof window === 'undefined' && headers['user-agent']) {
     const UAParser = eval('require("ua-parser-js")');

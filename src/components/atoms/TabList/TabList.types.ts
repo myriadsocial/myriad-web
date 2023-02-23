@@ -8,7 +8,12 @@ export type TabListItem<T> = {
   disabled?: boolean;
 };
 
-export type TabPosition = 'left' | 'right' | 'center' | 'space-around' | 'space-evenly';
+export type TabPosition =
+  | 'left'
+  | 'right'
+  | 'center'
+  | 'space-around'
+  | 'space-evenly';
 
 export type TabMark = 'underline' | 'cover';
 

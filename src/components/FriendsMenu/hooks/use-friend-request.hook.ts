@@ -1,5 +1,5 @@
-import {Friend} from 'src/interfaces/friend';
-import {User} from 'src/interfaces/user';
+import { Friend } from 'src/interfaces/friend';
+import { User } from 'src/interfaces/user';
 
 export type FriendRequestDetail = {
   id: string;
@@ -9,7 +9,10 @@ export type FriendRequestDetail = {
   friend: Friend;
 };
 
-export const useFriendRequestList = (friends: Friend[], user?: User): FriendRequestDetail[] => {
+export const useFriendRequestList = (
+  friends: Friend[],
+  user?: User,
+): FriendRequestDetail[] => {
   if (!user) return [];
 
   return friends.reduce(function (list: FriendRequestDetail[], friend) {
@@ -37,7 +40,10 @@ export const useFriendRequestList = (friends: Friend[], user?: User): FriendRequ
   }, []);
 };
 
-export const useBlockList = (blockList: Friend[], user?: User): FriendRequestDetail[] => {
+export const useBlockList = (
+  blockList: Friend[],
+  user?: User,
+): FriendRequestDetail[] => {
   if (!user) return [];
 
   return blockList.reduce(function (list: FriendRequestDetail[], friend) {

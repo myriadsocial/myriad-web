@@ -1,16 +1,16 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 import Link from 'next/link';
 
 import Typography from '@material-ui/core/Typography';
 
-import {useStyles} from './experience-info.style';
+import { useStyles } from './experience-info.style';
 
-import {Avatar} from 'src/components/atoms/Avatar';
-import {Modal} from 'src/components/atoms/Modal';
+import { Avatar } from 'src/components/atoms/Avatar';
+import { Modal } from 'src/components/atoms/Modal';
 import ShowIf from 'src/components/common/show-if.component';
-import {useExperienceHook} from 'src/hooks/use-experience-hook';
-import {Experience} from 'src/interfaces/experience';
+import { useExperienceHook } from 'src/hooks/use-experience-hook';
+import { Experience } from 'src/interfaces/experience';
 import i18n from 'src/locale';
 
 export type ExperienceInfo = {
@@ -20,10 +20,10 @@ export type ExperienceInfo = {
 };
 
 export const ExperienceInfo: React.FC<ExperienceInfo> = props => {
-  const {postId, totalExperience, experiences} = props;
+  const { postId, totalExperience, experiences } = props;
 
   const style = useStyles();
-  const {loadExperienceAdded} = useExperienceHook();
+  const { loadExperienceAdded } = useExperienceHook();
   const [experienceList, setExperienceList] = useState<Experience[]>([]);
   const [open, setOpen] = useState(false);
 
@@ -49,12 +49,18 @@ export const ExperienceInfo: React.FC<ExperienceInfo> = props => {
           <ShowIf condition={totalExperience > 1}>
             &nbsp;{i18n.t('Post_Detail.Experience.And')}&nbsp;
             <span className={style.link} onClick={handleOpen}>
-              {i18n.t('Post_Detail.Experience.Other_Exp', {number: totalExperience - 1})}
+              {i18n.t('Post_Detail.Experience.Other_Exp', {
+                number: totalExperience - 1,
+              })}
             </span>
           </ShowIf>
           <Modal
             title={i18n.t('Post_Detail.Experience.Modal_Title')}
-            subtitle={<Typography>{i18n.t('Post_Detail.Experience.Modal_Sub')}</Typography>}
+            subtitle={
+              <Typography>
+                {i18n.t('Post_Detail.Experience.Modal_Sub')}
+              </Typography>
+            }
             open={open}
             onClose={handleClose}>
             <div className={style.list}>

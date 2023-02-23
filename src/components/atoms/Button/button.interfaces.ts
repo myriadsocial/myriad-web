@@ -65,5 +65,12 @@ interface ButtonProps {
   onClick?: () => void;
 }
 
-export {ButtonSize, ButtonColor, ButtonVariant, buttonSizes, buttonColors, buttonVariants};
-export type {ButtonProps};
+export {
+  ButtonSize,
+  ButtonColor,
+  ButtonVariant,
+  buttonSizes,
+  buttonColors,
+  buttonVariants,
+};
+export type { ButtonProps };

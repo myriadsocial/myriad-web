@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {SvgIcon} from '@material-ui/core';
+import { SvgIcon } from '@material-ui/core';
 
 import FacebookDefault from 'src/images/Icons/facebook.svg';
 import RedditDefault from 'src/images/Icons/reddit.svg';
@@ -14,23 +14,23 @@ import Twitter from 'src/images/socials/twitter.svg';
 import VK from 'src/images/socials/vk.svg';
 import WeChat from 'src/images/socials/wechat.svg';
 import Weibo from 'src/images/socials/weibo.svg';
-import {SocialsEnum} from 'src/interfaces/social';
+import { SocialsEnum } from 'src/interfaces/social';
 
 export const TwitterIcon = (
-  <SvgIcon viewBox="0 0 20 20" style={{background: '#3b5998', fontSize: 20}}>
-    <TwitterDefault style={{width: 20, height: 20}} />
+  <SvgIcon viewBox="0 0 20 20" style={{ background: '#3b5998', fontSize: 20 }}>
+    <TwitterDefault style={{ width: 20, height: 20 }} />
   </SvgIcon>
 );
 
 export const RedditIcon = (
-  <SvgIcon viewBox="0 0 20 20" style={{background: '#3b5998', fontSize: 20}}>
-    <RedditDefault style={{width: 20, height: 20}} />
+  <SvgIcon viewBox="0 0 20 20" style={{ background: '#3b5998', fontSize: 20 }}>
+    <RedditDefault style={{ width: 20, height: 20 }} />
   </SvgIcon>
 );
 
 export const FacebookIcon = (
-  <SvgIcon viewBox="0 0 20 20" style={{background: '#3b5998', fontSize: 20}}>
-    <FacebookDefault style={{width: 20, height: 20}} />
+  <SvgIcon viewBox="0 0 20 20" style={{ background: '#3b5998', fontSize: 20 }}>
+    <FacebookDefault style={{ width: 20, height: 20 }} />
   </SvgIcon>
 );
 

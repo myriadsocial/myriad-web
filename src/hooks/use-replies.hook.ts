@@ -1,15 +1,18 @@
-import {useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import delay from 'lodash/delay';
-import {Comment, CommentProps} from 'src/interfaces/comment';
-import {SectionType, Vote} from 'src/interfaces/interaction';
-import {User} from 'src/interfaces/user';
+import { Comment, CommentProps } from 'src/interfaces/comment';
+import { SectionType, Vote } from 'src/interfaces/interaction';
+import { User } from 'src/interfaces/user';
 import * as CommentAPI from 'src/lib/api/comment';
-import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
-import {RootState} from 'src/reducers';
-import {increaseCommentCount, updatePostMetric} from 'src/reducers/timeline/actions';
-import {UserState} from 'src/reducers/user/reducer';
+import { ListMeta } from 'src/lib/api/interfaces/base-list.interface';
+import { RootState } from 'src/reducers';
+import {
+  increaseCommentCount,
+  updatePostMetric,
+} from 'src/reducers/timeline/actions';
+import { UserState } from 'src/reducers/user/reducer';
 
 type useCommentHookProps = {
   error: any;
@@ -25,9 +28,12 @@ type useCommentHookProps = {
   removeReply: (comment: Comment) => void;
 };
 
-export const useRepliesHook = (referenceId: string, deep: number): useCommentHookProps => {
+export const useRepliesHook = (
+  referenceId: string,
+  deep: number,
+): useCommentHookProps => {
   const dispatch = useDispatch();
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const { user } = useSelector<RootState, UserState>(state => state.userState);
   const [replies, setReplies] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>(null);
@@ -39,7 +45,11 @@ export const useRepliesHook = (referenceId: string, deep: number): useCommentHoo
     nextPage: 0,
   });
 
-  const reply = async (user: User, comment: CommentProps, callback?: () => void) => {
+  const reply = async (
+    user: User,
+    comment: CommentProps,
+    callback?: () => void,
+  ) => {
     const data = await CommentAPI.reply(comment);
     data.isUpvoted = false;
     data.isDownVoted = false;
@@ -47,7 +57,7 @@ export const useRepliesHook = (referenceId: string, deep: number): useCommentHoo
 
     const postId = data.postId;
 
-    setReplies(prevReplies => [{...data, user}, ...prevReplies]);
+    setReplies(prevReplies => [{ ...data, user }, ...prevReplies]);
 
     dispatch(increaseCommentCount(postId, comment.section));
 
@@ -143,10 +153,16 @@ export const useRepliesHook = (referenceId: string, deep: number): useCommentHoo
     };
 
     try {
-      const {data, meta} = await CommentAPI.loadComments(filters, {page: 1});
+      const { data, meta } = await CommentAPI.loadComments(filters, {
+        page: 1,
+      });
       const repliesData = data.map(comment => {
-        const upvoted = comment.votes?.filter(vote => vote.userId === user?.id && vote.state);
-        const downvoted = comment.votes?.filter(vote => vote.userId === user?.id && !vote.state);
+        const upvoted = comment.votes?.filter(
+          vote => vote.userId === user?.id && vote.state,
+        );
+        const downvoted = comment.votes?.filter(
+          vote => vote.userId === user?.id && !vote.state,
+        );
 
         comment.isUpvoted = upvoted && upvoted.length > 0;
         comment.isDownVoted = downvoted && downvoted.length > 0;
@@ -172,10 +188,16 @@ export const useRepliesHook = (referenceId: string, deep: number): useCommentHoo
     };
 
     try {
-      const {data, meta} = await CommentAPI.loadComments(filters, {page: dataMeta.nextPage ?? 1});
+      const { data, meta } = await CommentAPI.loadComments(filters, {
+        page: dataMeta.nextPage ?? 1,
+      });
       const repliesData = data.map(comment => {
-        const upvoted = comment.votes?.filter(vote => vote.userId === user?.id && vote.state);
-        const downvoted = comment.votes?.filter(vote => vote.userId === user?.id && !vote.state);
+        const upvoted = comment.votes?.filter(
+          vote => vote.userId === user?.id && vote.state,
+        );
+        const downvoted = comment.votes?.filter(
+          vote => vote.userId === user?.id && !vote.state,
+        );
 
         comment.isUpvoted = upvoted && upvoted.length > 0;
         comment.isDownVoted = downvoted && downvoted.length > 0;

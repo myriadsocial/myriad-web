@@ -1,4 +1,4 @@
-import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
+import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -24,6 +24,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       gap: 8,
     },
-    avatar: {width: 64, height: 64},
+    avatar: { width: 64, height: 64 },
   }),
 );

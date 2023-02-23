@@ -1,10 +1,10 @@
 import React from 'react';
 
-import {Report} from './Report';
+import { Report } from './Report';
 
-import {useReport} from 'src/hooks/use-report.hook';
-import {Comment} from 'src/interfaces/comment';
-import {Post} from 'src/interfaces/post';
+import { useReport } from 'src/hooks/use-report.hook';
+import { Comment } from 'src/interfaces/comment';
+import { Post } from 'src/interfaces/post';
 
 type ReportContainerProps = {
   reference: Post | Comment | null;
@@ -12,10 +12,10 @@ type ReportContainerProps = {
 };
 
 export const ReportContainer: React.FC<ReportContainerProps> = props => {
-  const {reference, onClose} = props;
+  const { reference, onClose } = props;
   const isOpen = Boolean(reference);
 
-  const {sendReport} = useReport();
+  const { sendReport } = useReport();
 
   const handleConfirmReport = (type: string, description: string) => {
     if (reference) {
@@ -28,7 +28,12 @@ export const ReportContainer: React.FC<ReportContainerProps> = props => {
   if (!reference) return null;
 
   return (
-    <Report open={isOpen} reference={reference} onClose={onClose} onConfirm={handleConfirmReport} />
+    <Report
+      open={isOpen}
+      reference={reference}
+      onClose={onClose}
+      onConfirm={handleConfirmReport}
+    />
   );
 };
 

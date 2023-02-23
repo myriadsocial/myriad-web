@@ -1,10 +1,10 @@
-import {isUrl} from '@udecode/plate-common';
+import { isUrl } from '@udecode/plate-common';
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-import {Button, FormControl, Input, InputLabel} from '@material-ui/core';
+import { Button, FormControl, Input, InputLabel } from '@material-ui/core';
 
-import {useStyles} from './EmbedURL.styles';
+import { useStyles } from './EmbedURL.styles';
 
 import i18n from 'src/locale';
 
@@ -15,7 +15,7 @@ type EmbedURLProps = {
 };
 
 export const EmbedURL: React.FC<EmbedURLProps> = props => {
-  const {prefix = '', defaultValue, onConfirm} = props;
+  const { prefix = '', defaultValue, onConfirm } = props;
   const styles = useStyles();
 
   const [url, setUrl] = useState<string | null>(null);
@@ -40,7 +40,7 @@ export const EmbedURL: React.FC<EmbedURLProps> = props => {
     <div className={styles.root}>
       <FormControl fullWidth className={styles.input}>
         <InputLabel htmlFor="link-to-file">
-          {i18n.t('Post_Create.Upload.Embed.Placeholder', {prefix: prefix})}
+          {i18n.t('Post_Create.Upload.Embed.Placeholder', { prefix: prefix })}
         </InputLabel>
         <Input
           id="link-to-file"

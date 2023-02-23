@@ -1,11 +1,16 @@
-import {Actions as BaseAction, PaginationAction, setLoading, setError} from '../base/actions';
-import {RootState} from '../index';
+import {
+  Actions as BaseAction,
+  PaginationAction,
+  setLoading,
+  setError,
+} from '../base/actions';
+import { RootState } from '../index';
 import * as constants from './constants';
 
-import {Friend} from 'src/interfaces/friend';
-import {User} from 'src/interfaces/user';
+import { Friend } from 'src/interfaces/friend';
+import { User } from 'src/interfaces/user';
 import * as FriendAPI from 'src/lib/api/friends';
-import {ThunkActionCreator} from 'src/types/thunk';
+import { ThunkActionCreator } from 'src/types/thunk';
 
 /**
  * Action Types
@@ -36,7 +41,7 @@ export const getBlockList: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     try {
-      const {meta, data: users} = await FriendAPI.getBlockList(user.id, page);
+      const { meta, data: users } = await FriendAPI.getBlockList(user.id, page);
 
       dispatch({
         type: constants.FETCH_BLOCKLIST,
@@ -55,7 +60,7 @@ export const unblockUser: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
 
     const {
-      userState: {user},
+      userState: { user },
     } = getState();
 
     try {

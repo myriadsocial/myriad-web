@@ -1,4 +1,4 @@
-import {TagOptions} from 'src/components/PostTag';
+import { TagOptions } from 'src/components/PostTag';
 import i18n from 'src/locale';
 
 export const usePostReportList = (): TagOptions[] => {

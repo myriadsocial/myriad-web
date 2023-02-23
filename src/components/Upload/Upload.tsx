@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-import {Button, LinearProgress} from '@material-ui/core';
+import { Button, LinearProgress } from '@material-ui/core';
 
-import {Dropzone} from '../atoms/Dropzone';
-import {useStyles} from './Upload.styles';
+import { Dropzone } from '../atoms/Dropzone';
+import { useStyles } from './Upload.styles';
 
 import i18n from 'src/locale';
 

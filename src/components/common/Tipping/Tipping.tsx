@@ -1,36 +1,36 @@
-import React, {useEffect, useMemo, useState} from 'react';
-import {useSelector} from 'react-redux';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 
-import {Backdrop, CircularProgress} from '@material-ui/core';
+import { Backdrop, CircularProgress } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
-import {BN, BN_ZERO} from '@polkadot/util';
+import { BN, BN_ZERO } from '@polkadot/util';
 
-import {TermOfService} from '../TermOfService';
+import { TermOfService } from '../TermOfService';
 import ShowIf from '../show-if.component';
-import {ExclusiveContentWithPrices, SendTipProps} from './Tipping.interface';
-import {useStyles} from './Tipping.style';
-import {TippingInfo} from './render/Info';
-import {InputAmount} from './render/InputAmount';
-import {Summary} from './render/Summary';
-import {TIPPING_STORAGE_KEY} from './render/Tipping.success';
+import { ExclusiveContentWithPrices, SendTipProps } from './Tipping.interface';
+import { useStyles } from './Tipping.style';
+import { TippingInfo } from './render/Info';
+import { InputAmount } from './render/InputAmount';
+import { Summary } from './render/Summary';
+import { TIPPING_STORAGE_KEY } from './render/Tipping.success';
 
 import localforage from 'localforage';
-import {Button, ButtonVariant} from 'src/components/atoms/Button';
-import {CurrencyOptionComponent} from 'src/components/atoms/CurrencyOption';
-import {ListItemComponent} from 'src/components/atoms/ListItem';
-import {formatBalance} from 'src/helpers/balance';
-import {toBigNumber} from 'src/helpers/string';
-import {useWallet} from 'src/hooks/use-wallet-hook';
-import {BalanceDetail} from 'src/interfaces/balance';
-import {TipsBalanceInfo} from 'src/interfaces/blockchain-interface';
-import {ReferenceType} from 'src/interfaces/interaction';
-import {User} from 'src/interfaces/user';
+import { Button, ButtonVariant } from 'src/components/atoms/Button';
+import { CurrencyOptionComponent } from 'src/components/atoms/CurrencyOption';
+import { ListItemComponent } from 'src/components/atoms/ListItem';
+import { formatBalance } from 'src/helpers/balance';
+import { toBigNumber } from 'src/helpers/string';
+import { useWallet } from 'src/hooks/use-wallet-hook';
+import { BalanceDetail } from 'src/interfaces/balance';
+import { TipsBalanceInfo } from 'src/interfaces/blockchain-interface';
+import { ReferenceType } from 'src/interfaces/interaction';
+import { User } from 'src/interfaces/user';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {UserState} from 'src/reducers/user/reducer';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
 const INITIAL_AMOUNT = new BN(-1);
 
@@ -49,9 +49,11 @@ export const Tipping: React.FC<SendTipProps> = props => {
   } = props;
 
   const classes = useStyles();
-  const {isSignerLoading, sendTip, payUnlockableContent} = useWallet();
+  const { isSignerLoading, sendTip, payUnlockableContent } = useWallet();
 
-  const {currentWallet, currencies} = useSelector<RootState, UserState>(state => state.userState);
+  const { currentWallet, currencies } = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
   const [amount, setAmount] = useState<BN>(INITIAL_AMOUNT);
   const [transactionFee, setTransactionFee] = useState<BN>(INITIAL_AMOUNT);
   const [assetMinBalance, setAssetMinBalance] = useState<BN>(BN_ZERO);
@@ -105,8 +107,11 @@ export const Tipping: React.FC<SendTipProps> = props => {
     setTransactionFee(estimatedFee);
     if (isTipping()) setAssetMinBalance(minBalance);
     else {
-      const exclusiveContentWithPrices = reference as ExclusiveContentWithPrices;
-      setAssetMinBalance(toBigNumber(exclusiveContentWithPrices.prices[0].amount.toString(), 10));
+      const exclusiveContentWithPrices =
+        reference as ExclusiveContentWithPrices;
+      setAssetMinBalance(
+        toBigNumber(exclusiveContentWithPrices.prices[0].amount.toString(), 10),
+      );
     }
   };
 
@@ -146,7 +151,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
         from: senderAddress,
         to: receiver.id,
         amount,
-        currency: {...currency, network: currentWallet.network},
+        currency: { ...currency, network: currentWallet.network },
         walletDetail: receiver.walletDetail,
         type: null,
         referenceId: null,
@@ -177,7 +182,12 @@ export const Tipping: React.FC<SendTipProps> = props => {
         attributes.type,
         attributes.referenceId,
         hash => {
-          onSuccess(currency, currentWallet?.network?.explorerURL, hash, attributes.amount);
+          onSuccess(
+            currency,
+            currentWallet?.network?.explorerURL,
+            hash,
+            attributes.amount,
+          );
 
           setAmount(INITIAL_AMOUNT);
           setTransactionFee(INITIAL_AMOUNT);
@@ -203,7 +213,12 @@ export const Tipping: React.FC<SendTipProps> = props => {
         referenceType,
         referenceId,
         hash => {
-          onSuccess(currency, currentWallet?.network?.explorerURL, hash, amount);
+          onSuccess(
+            currency,
+            currentWallet?.network?.explorerURL,
+            hash,
+            amount,
+          );
 
           setAmount(INITIAL_AMOUNT);
           setTransactionFee(INITIAL_AMOUNT);
@@ -244,10 +259,15 @@ export const Tipping: React.FC<SendTipProps> = props => {
             avatar={currency.image}
             title={currency.symbol}
             subtitle={
-              +currency.freeBalance === 0 ? '0' : parseFloat(currency.freeBalance.toFixed(4))
+              +currency.freeBalance === 0
+                ? '0'
+                : parseFloat(currency.freeBalance.toFixed(4))
             }
             action={
-              <CurrencyOptionComponent onSelect={handleChangeCurrency} balanceDetails={balances} />
+              <CurrencyOptionComponent
+                onSelect={handleChangeCurrency}
+                balanceDetails={balances}
+              />
             }
           />
 
@@ -282,7 +302,10 @@ export const Tipping: React.FC<SendTipProps> = props => {
 
               <Button
                 isDisabled={
-                  !agreementChecked || amount.lte(BN_ZERO) || loadingFee || !tippingAmountValid
+                  !agreementChecked ||
+                  amount.lte(BN_ZERO) ||
+                  loadingFee ||
+                  !tippingAmountValid
                 }
                 variant={ButtonVariant.CONTAINED}
                 onClick={signTransaction}>
@@ -359,7 +382,10 @@ export const Tipping: React.FC<SendTipProps> = props => {
 
             <Button
               isDisabled={
-                !agreementChecked || amount.lte(BN_ZERO) || loadingFee || !tippingAmountValid
+                !agreementChecked ||
+                amount.lte(BN_ZERO) ||
+                loadingFee ||
+                !tippingAmountValid
               }
               variant={ButtonVariant.CONTAINED}
               onClick={signTransaction}>

@@ -1,13 +1,20 @@
 import React from 'react';
 
-import {List, ListItem, ListItemText, Avatar, ListItemAvatar, Badge} from '@material-ui/core';
-import {Theme, withStyles, createStyles} from '@material-ui/core/styles';
+import {
+  List,
+  ListItem,
+  ListItemText,
+  Avatar,
+  ListItemAvatar,
+  Badge,
+} from '@material-ui/core';
+import { Theme, withStyles, createStyles } from '@material-ui/core/styles';
 
-import {SocialMedia, SocialsEnum} from '../../interfaces/social';
-import {useStyles} from './UserSocials.styles';
+import { SocialMedia, SocialsEnum } from '../../interfaces/social';
+import { useStyles } from './UserSocials.styles';
 
-import {Empty} from 'src/components/atoms/Empty';
-import {socials as socialsIcon} from 'src/components/atoms/Icons';
+import { Empty } from 'src/components/atoms/Empty';
+import { socials as socialsIcon } from 'src/components/atoms/Icons';
 import i18n from 'src/locale';
 
 type UserSocialsProps = {
@@ -31,7 +38,7 @@ const StyledBadge = withStyles((theme: Theme) =>
 )(Badge);
 
 export const UserSocials: React.FC<UserSocialsProps> = props => {
-  const {socials, isPrivate, isFriend, isOwner} = props;
+  const { socials, isPrivate, isFriend, isOwner } = props;
 
   const styles = useStyles();
 
@@ -40,10 +47,14 @@ export const UserSocials: React.FC<UserSocialsProps> = props => {
 
     switch (selectedSocials.platform) {
       case SocialsEnum.TWITTER:
-        url = `https://twitter.com/${selectedSocials.people?.username as string}`;
+        url = `https://twitter.com/${
+          selectedSocials.people?.username as string
+        }`;
         break;
       case SocialsEnum.REDDIT:
-        url = `https://reddit.com/user/${selectedSocials.people?.username as string}`;
+        url = `https://reddit.com/user/${
+          selectedSocials.people?.username as string
+        }`;
         break;
     }
 

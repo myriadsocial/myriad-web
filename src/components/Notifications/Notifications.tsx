@@ -2,28 +2,36 @@ import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Link from 'next/link';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {Badge, Button, Grid, ListItemSecondaryAction} from '@material-ui/core';
+import {
+  Badge,
+  Button,
+  Grid,
+  ListItemSecondaryAction,
+} from '@material-ui/core';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import {Theme, withStyles, createStyles} from '@material-ui/core/styles';
+import { Theme, withStyles, createStyles } from '@material-ui/core/styles';
 
-import {Avatar, AvatarSize} from '../atoms/Avatar';
-import {SocialAvatar} from '../atoms/SocialAvatar';
+import { Avatar, AvatarSize } from '../atoms/Avatar';
+import { SocialAvatar } from '../atoms/SocialAvatar';
 import ShowIf from '../common/show-if.component';
-import {useStyles} from './Notifications.styles';
-import {useNotificationList, NotificationList} from './hooks/use-notification-list.hook';
+import { useStyles } from './Notifications.styles';
+import {
+  useNotificationList,
+  NotificationList,
+} from './hooks/use-notification-list.hook';
 
 import clsx from 'clsx';
-import {Loading} from 'src/components/atoms/Loading';
-import {timeAgo} from 'src/helpers/date';
-import {acronym} from 'src/helpers/string';
-import {Notification, NotificationType} from 'src/interfaces/notification';
+import { Loading } from 'src/components/atoms/Loading';
+import { timeAgo } from 'src/helpers/date';
+import { acronym } from 'src/helpers/string';
+import { Notification, NotificationType } from 'src/interfaces/notification';
 import i18n from 'src/locale';
 
 type NotificationsProps = {
@@ -66,7 +74,7 @@ export const Notifications: React.FC<NotificationsProps> = props => {
     onMarkItemAsRead,
   } = props;
 
-  const style = useStyles({gutter, size});
+  const style = useStyles({ gutter, size });
   const router = useRouter();
 
   const list = useNotificationList(notifications, infinite, exclude);
@@ -90,12 +98,16 @@ export const Notifications: React.FC<NotificationsProps> = props => {
 
   return (
     <Paper className={style.root}>
-      <Grid container justifyContent="space-between" alignItems="center" className={style.header}>
+      <Grid
+        container
+        justifyContent="space-between"
+        alignItems="center"
+        className={style.header}>
         <Typography className={style.title} color="textPrimary">
           {i18n.t('Notification.Header.Title')}
         </Typography>
         <Button
-          style={{width: 'auto'}}
+          style={{ width: 'auto' }}
           color="primary"
           disabled={unread === 0}
           onClick={onMarkAllAsRead}>
@@ -173,7 +185,7 @@ export const Notifications: React.FC<NotificationsProps> = props => {
         <div className={style.footer}>
           <Link href="/notification">
             <a className={style.link}>
-              <Typography style={{fontWeight: 'bold'}}>
+              <Typography style={{ fontWeight: 'bold' }}>
                 {i18n.t('Notification.Footer.View')}
               </Typography>
             </a>

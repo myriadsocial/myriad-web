@@ -1,4 +1,4 @@
-import {TElement} from '@udecode/plate-core';
+import { TElement } from '@udecode/plate-core';
 
 export interface TImageListElement extends TElement {
   urls: string[];

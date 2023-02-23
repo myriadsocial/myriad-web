@@ -7,7 +7,7 @@ import {
   ResetNodePlugin,
 } from '@udecode/plate';
 
-import {MyPlatePlugin} from '../Editor.interface';
+import { MyPlatePlugin } from '../Editor.interface';
 
 const resetBlockTypesCommonRule = {
   types: [ELEMENT_BLOCKQUOTE, ELEMENT_TODO_LI],

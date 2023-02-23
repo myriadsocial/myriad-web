@@ -1,7 +1,7 @@
 import '@fontsource/mulish';
 
-import {createTheme, alpha} from '@material-ui/core/styles';
-import {BreakpointValues} from '@material-ui/core/styles/createBreakpoints';
+import { createTheme, alpha } from '@material-ui/core/styles';
+import { BreakpointValues } from '@material-ui/core/styles/createBreakpoints';
 
 declare module '@material-ui/core/styles' {
   interface Theme {
@@ -122,7 +122,7 @@ const DISABLED_PROPS = {
   color: '#FFF',
 };
 
-const {breakpoints} = createTheme();
+const { breakpoints } = createTheme();
 
 const breakpointsValue: BreakpointValues = {
   xs: 500,

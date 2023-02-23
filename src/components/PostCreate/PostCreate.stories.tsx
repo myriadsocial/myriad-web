@@ -1,8 +1,8 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
-import {PostCreate as PostCreateComponent} from './PostCreate';
+import { PostCreate as PostCreateComponent } from './PostCreate';
 
 export default {
   title: 'UI Revamp v2.0/components/Post Create',

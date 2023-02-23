@@ -1,9 +1,9 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
-import {AddSocialMedia as AddSocialMediaComponent} from '.';
-import {SocialsEnum} from '../../interfaces/social';
+import { AddSocialMedia as AddSocialMediaComponent } from '.';
+import { SocialsEnum } from '../../interfaces/social';
 
 export default {
   title: 'UI Revamp v2.0/components/Add Social Media',

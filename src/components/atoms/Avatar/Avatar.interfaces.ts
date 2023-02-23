@@ -1,4 +1,4 @@
-import {AvatarProps as BaseAvatarProps} from '@material-ui/core/Avatar';
+import { AvatarProps as BaseAvatarProps } from '@material-ui/core/Avatar';
 
 export enum AvatarSize {
   TINY = 'tiny',

@@ -1,17 +1,17 @@
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import {Grid} from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 
-import {CommentHistory} from '../CommentHistory/CommentHistory';
-import {MenuOptions} from '../atoms/DropdownMenu';
-import {DropdownMenu} from '../atoms/DropdownMenu';
-import {useStyles} from './CommentHistoryList.style';
+import { CommentHistory } from '../CommentHistory/CommentHistory';
+import { MenuOptions } from '../atoms/DropdownMenu';
+import { DropdownMenu } from '../atoms/DropdownMenu';
+import { useStyles } from './CommentHistoryList.style';
 
-import {Loading} from 'src/components/atoms/Loading';
-import {Comment} from 'src/interfaces/comment';
-import {User} from 'src/interfaces/user';
-import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
+import { Loading } from 'src/components/atoms/Loading';
+import { Comment } from 'src/interfaces/comment';
+import { User } from 'src/interfaces/user';
+import { SortType } from 'src/lib/api/interfaces/pagination-params.interface';
 import i18n from 'src/locale';
 
 type CommentHistoryListProps = {
@@ -24,13 +24,13 @@ type CommentHistoryListProps = {
 };
 
 export const CommentHistoryList: React.FC<CommentHistoryListProps> = props => {
-  const {comments, user, hasMore, sort, loadMore, onSort} = props;
+  const { comments, user, hasMore, sort, loadMore, onSort } = props;
 
   const styles = useStyles();
 
   const sortOptions: MenuOptions<SortType>[] = [
-    {id: 'DESC', title: i18n.t('Friends.Sort.Latest')},
-    {id: 'ASC', title: i18n.t('Friends.Sort.Oldest')},
+    { id: 'DESC', title: i18n.t('Friends.Sort.Latest') },
+    { id: 'ASC', title: i18n.t('Friends.Sort.Oldest') },
   ];
 
   return (

@@ -1,18 +1,18 @@
-import React, {useState, useEffect} from 'react';
-import {useSelector} from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {useMediaQuery, useTheme} from '@material-ui/core';
+import { useMediaQuery, useTheme } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 
-import {User} from '../../interfaces/user';
-import {TabsComponent} from '../atoms/Tabs';
-import {useStyles} from './UserMenu.styles';
-import {useUserTabs, UserMenuTabs} from './hooks/user-tabs.hooks';
+import { User } from '../../interfaces/user';
+import { TabsComponent } from '../atoms/Tabs';
+import { useStyles } from './UserMenu.styles';
+import { useUserTabs, UserMenuTabs } from './hooks/user-tabs.hooks';
 
-import {RootState} from 'src/reducers';
-import {ProfileState} from 'src/reducers/profile/reducer';
+import { RootState } from 'src/reducers';
+import { ProfileState } from 'src/reducers/profile/reducer';
 
 type UserMenuProps = {
   selected: UserMenuTabs;
@@ -22,8 +22,10 @@ type UserMenuProps = {
 };
 
 export const UserMenu: React.FC<UserMenuProps> = props => {
-  const {selected, excludes = []} = props;
-  const {detail: profileDetail} = useSelector<RootState, ProfileState>(state => state.profileState);
+  const { selected, excludes = [] } = props;
+  const { detail: profileDetail } = useSelector<RootState, ProfileState>(
+    state => state.profileState,
+  );
 
   const router = useRouter();
   const theme = useTheme();
@@ -42,9 +44,13 @@ export const UserMenu: React.FC<UserMenuProps> = props => {
   useEffect(() => {
     if (tab === 'experience') {
       setActiveTab(tab as UserMenuTabs);
-      router.replace({pathname: `/profile/${profileDetail.id}`, query: {}}, undefined, {
-        shallow: true,
-      });
+      router.replace(
+        { pathname: `/profile/${profileDetail.id}`, query: {} },
+        undefined,
+        {
+          shallow: true,
+        },
+      );
     }
   }, [router.query]);
 

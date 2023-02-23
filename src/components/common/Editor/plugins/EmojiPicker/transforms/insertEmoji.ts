@@ -7,15 +7,15 @@ import {
   moveSelection,
 } from '@udecode/plate-core';
 
-import {ELEMENT_EMOJI} from '../createEmojiPlugin';
-import {TEmojiElement} from '../type';
+import { ELEMENT_EMOJI } from '../createEmojiPlugin';
+import { TEmojiElement } from '../type';
 
-import {IEmojiData} from 'emoji-picker-react';
-import {Range} from 'slate';
+import { IEmojiData } from 'emoji-picker-react';
+import { Range } from 'slate';
 
 export const insertEmoji = <V extends Value>(
   editor: PlateEditor<V>,
-  {emoji, unified, activeSkinTone}: IEmojiData,
+  { emoji, unified, activeSkinTone }: IEmojiData,
 ): void => {
   if (!editor.selection) return;
 
@@ -27,14 +27,14 @@ export const insertEmoji = <V extends Value>(
       editor,
       {
         type,
-        children: [{text: ' '}],
+        children: [{ text: ' ' }],
         emoji,
         unified,
         activeSkinTone,
       },
-      {at: selection},
+      { at: selection },
     );
 
-    moveSelection(editor, {unit: 'offset', distance: emoji.length});
+    moveSelection(editor, { unit: 'offset', distance: emoji.length });
   }
 };

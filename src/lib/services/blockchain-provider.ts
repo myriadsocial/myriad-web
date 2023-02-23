@@ -1,9 +1,9 @@
-import {BlockchainProps} from '../../interfaces/blockchain-interface';
-import {Near} from './near-api-js';
-import {PolkadotJs} from './polkadot-js';
+import { BlockchainProps } from '../../interfaces/blockchain-interface';
+import { Near } from './near-api-js';
+import { PolkadotJs } from './polkadot-js';
 
-import {Network} from 'src/interfaces/network';
-import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
+import { Network } from 'src/interfaces/network';
+import { BlockchainPlatform, WalletTypeEnum } from 'src/interfaces/wallet';
 
 export class BlockchainProvider {
   private readonly _provider: BlockchainProps;

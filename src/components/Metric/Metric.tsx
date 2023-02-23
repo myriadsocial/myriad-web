@@ -1,12 +1,12 @@
 import React from 'react';
 
-import {Grid, Typography} from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 
-import {useStyles} from './Metric.style';
+import { useStyles } from './Metric.style';
 
 import ShowIf from 'src/components/common/show-if.component';
-import {formatCount} from 'src/helpers/number';
-import {UserMetric} from 'src/interfaces/user';
+import { formatCount } from 'src/helpers/number';
+import { UserMetric } from 'src/interfaces/user';
 import i18n from 'src/locale';
 
 export type MetricProps = {
@@ -17,11 +17,15 @@ export type MetricProps = {
 };
 
 export const Metric: React.FC<MetricProps> = props => {
-  const {data, official, profile = false, anonymous = false} = props;
-  const style = useStyles({...props, profile});
+  const { data, official, profile = false, anonymous = false } = props;
+  const style = useStyles({ ...props, profile });
 
   return (
-    <Grid container wrap="nowrap" justifyContent="space-between" classes={{root: style.root}}>
+    <Grid
+      container
+      wrap="nowrap"
+      justifyContent="space-between"
+      classes={{ root: style.root }}>
       <Grid item xs={3}>
         <Typography variant="body1" className={style.username} component="p">
           {i18n.t('Profile.Header.Metric.Post')}
@@ -49,7 +53,10 @@ export const Metric: React.FC<MetricProps> = props => {
         </Grid>
       </ShowIf>
       <Grid item xs={3}>
-        <Typography variant="body1" className={`${style.username}`} component="p">
+        <Typography
+          variant="body1"
+          className={`${style.username}`}
+          component="p">
           {i18n.t('Profile.Header.Metric.Experience')}
         </Typography>
         <Typography variant="h5" className={style.total} component="p">

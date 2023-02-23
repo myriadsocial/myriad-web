@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
-import {generateRedditEmbedUrl} from 'src/helpers/url';
+import { generateRedditEmbedUrl } from 'src/helpers/url';
 
 export interface RedditPostEmbedProps {
   url: string;
@@ -11,7 +11,7 @@ export interface RedditPostEmbedProps {
 }
 
 export const RedditEmbed: React.FC<RedditPostEmbedProps> = props => {
-  const {url} = props;
+  const { url } = props;
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -32,7 +32,7 @@ export const RedditEmbed: React.FC<RedditPostEmbedProps> = props => {
 
     const abortController = new AbortController();
 
-    fetch(`${postUrl}.json`, {signal: abortController.signal})
+    fetch(`${postUrl}.json`, { signal: abortController.signal })
       .then(res => {
         if (res.status < 300) {
           props.onLoad && props.onLoad(res);
@@ -62,7 +62,7 @@ export const RedditEmbed: React.FC<RedditPostEmbedProps> = props => {
           title="Reddit preview"
           src={embedUrl}
           sandbox="allow-scripts allow-same-origin allow-popups"
-          style={{border: 'none'}}
+          style={{ border: 'none' }}
           width="780"
           height="560"
           scrolling="yes"

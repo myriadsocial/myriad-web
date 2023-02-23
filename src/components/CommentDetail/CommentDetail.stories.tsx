@@ -1,11 +1,11 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
-import {Comment} from '../../interfaces/comment';
-import {CommentDetail as CommentDetailComponent} from './CommentDetail';
+import { Comment } from '../../interfaces/comment';
+import { CommentDetail as CommentDetailComponent } from './CommentDetail';
 
-import {ReferenceType, SectionType} from 'src/interfaces/interaction';
+import { ReferenceType, SectionType } from 'src/interfaces/interaction';
 
 export default {
   title: 'UI Revamp v2.0/atoms/Comment Detail',

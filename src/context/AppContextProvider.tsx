@@ -1,12 +1,12 @@
-import React, {ComponentProps, ComponentType} from 'react';
+import React, { ComponentProps, ComponentType } from 'react';
 
-import {AlertProvider} from './alert.context';
+import { AlertProvider } from './alert.context';
 
-import {ReportProvider} from 'components/Report/Report.provider';
-import {TipHistoryProvider} from 'components/TipHistory/TipHistory.provider';
-import {AuthorizationProvider} from 'components/common/Authorization/Authorization.provider';
-import {ModalAddToPostProvider} from 'src/components/Expericence/ModalAddToPost/ModalAddToPost.provider';
-import {ConfirmProvider} from 'src/components/common/Confirm/Confirm.provider';
+import { ReportProvider } from 'components/Report/Report.provider';
+import { TipHistoryProvider } from 'components/TipHistory/TipHistory.provider';
+import { AuthorizationProvider } from 'components/common/Authorization/Authorization.provider';
+import { ModalAddToPostProvider } from 'src/components/Expericence/ModalAddToPost/ModalAddToPost.provider';
+import { ConfirmProvider } from 'src/components/common/Confirm/Confirm.provider';
 
 /**
  * Order matters
@@ -21,10 +21,14 @@ const providers = [
   ReportProvider,
 ];
 
-const combineComponents = (...components: ComponentType<any>[]): React.ComponentType => {
+const combineComponents = (
+  ...components: ComponentType<any>[]
+): React.ComponentType => {
   return components.reduce(
     (AccumulatedComponents, CurrentComponent) => {
-      return ({children}: ComponentProps<ComponentType<any>>): JSX.Element => {
+      return ({
+        children,
+      }: ComponentProps<ComponentType<any>>): JSX.Element => {
         return (
           <AccumulatedComponents>
             <CurrentComponent>{children}</CurrentComponent>
@@ -32,7 +36,7 @@ const combineComponents = (...components: ComponentType<any>[]): React.Component
         );
       };
     },
-    ({children}) => <>{children}</>,
+    ({ children }) => <>{children}</>,
   );
 };
 

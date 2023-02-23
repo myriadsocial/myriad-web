@@ -1,6 +1,6 @@
-import {useContext} from 'react';
+import { useContext } from 'react';
 
-import {ReportContext, HandleReport} from './Report.context';
+import { ReportContext, HandleReport } from './Report.context';
 
 const useReport = (): HandleReport => {
   const report = useContext(ReportContext);

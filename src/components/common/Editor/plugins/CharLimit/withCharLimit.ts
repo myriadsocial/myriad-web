@@ -1,15 +1,18 @@
-import {PlateEditor, Value, WithPlatePlugin} from '@udecode/plate-core';
+import { PlateEditor, Value, WithPlatePlugin } from '@udecode/plate-core';
 
-import {EditorValue} from '../../Editor.interface';
-import {CharLimitPlugin} from './type';
+import { EditorValue } from '../../Editor.interface';
+import { CharLimitPlugin } from './type';
 
-import {formatToString} from 'components/common/NodeViewer/formatter';
+import { formatToString } from 'components/common/NodeViewer/formatter';
 
-export const withCharLimit = <V extends Value = Value, E extends PlateEditor<V> = PlateEditor<V>>(
+export const withCharLimit = <
+  V extends Value = Value,
+  E extends PlateEditor<V> = PlateEditor<V>,
+>(
   editor: E,
-  {type, options}: WithPlatePlugin<CharLimitPlugin, V, E>,
+  { type, options }: WithPlatePlugin<CharLimitPlugin, V, E>,
 ) => {
-  const {insertText, insertData} = editor;
+  const { insertText, insertData } = editor;
 
   editor.insertText = (text: string) => {
     const children = editor.children as EditorValue;

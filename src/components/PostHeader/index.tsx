@@ -1,24 +1,24 @@
-import {DotsVerticalIcon} from '@heroicons/react/solid';
+import { DotsVerticalIcon } from '@heroicons/react/solid';
 
 import React from 'react';
 
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {capitalize, Menu, Typography} from '@material-ui/core';
+import { capitalize, Menu, Typography } from '@material-ui/core';
 import CardHeader from '@material-ui/core/CardHeader';
 import IconButton from '@material-ui/core/IconButton';
 import BaseMenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
-import {SocialAvatar} from '../atoms/SocialAvatar';
-import {PostHeaderProps} from './PostHeader.interface';
-import {useStyles} from './postHeader.style';
-import {PostSubHeader} from './subHeader/post-sub-header.component';
+import { SocialAvatar } from '../atoms/SocialAvatar';
+import { PostHeaderProps } from './PostHeader.interface';
+import { useStyles } from './postHeader.style';
+import { PostSubHeader } from './subHeader/post-sub-header.component';
 
-import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorizeAction';
+import { WithAuthorizeAction } from 'components/common/Authorization/WithAuthorizeAction';
 import useModalAddToPost from 'src/components/Expericence/ModalAddToPost/useModalAddToPost.hook';
 import ShowIf from 'src/components/common/show-if.component';
-import {SocialsEnum} from 'src/interfaces/social';
+import { SocialsEnum } from 'src/interfaces/social';
 import i18n from 'src/locale';
 
 const MenuItem = WithAuthorizeAction(BaseMenuItem);
@@ -45,7 +45,9 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  const handleOpenPostSetting = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleOpenPostSetting = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -154,7 +156,7 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
   return (
     <>
       <CardHeader
-        classes={{root: style.headerRoot}}
+        classes={{ root: style.headerRoot }}
         className={style.header}
         disableTypography
         avatar={
@@ -170,8 +172,13 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
           />
         }
         title={
-          <Typography variant="h5" onClick={openContentProfileUrl} className={style.title}>
-            {post.platform === 'myriad' ? post.user?.name : (post.people?.name as string)}
+          <Typography
+            variant="h5"
+            onClick={openContentProfileUrl}
+            className={style.title}>
+            {post.platform === 'myriad'
+              ? post.user?.name
+              : (post.people?.name as string)}
           </Typography>
         }
         subheader={
@@ -194,7 +201,11 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
               disableRipple={true}
               disableFocusRipple={true}
               disableTouchRipple>
-              <SvgIcon component={DotsVerticalIcon} viewBox="0 0 20 20" className={style.icon} />
+              <SvgIcon
+                component={DotsVerticalIcon}
+                viewBox="0 0 20 20"
+                className={style.icon}
+              />
             </IconButton>
           ) : null
         }
@@ -203,8 +214,8 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
       <Menu
         id="post-setting"
         anchorEl={anchorEl}
-        style={{width: 170}}
-        classes={{paper: style.menu}}
+        style={{ width: 170 }}
+        classes={{ paper: style.menu }}
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClosePostSetting}>
@@ -239,13 +250,17 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
         </ShowIf>
 
         <ShowIf condition={owner && !post.deletedAt}>
-          <MenuItem onClick={handlePostVisibility} fallback={handleClosePostSetting}>
+          <MenuItem
+            onClick={handlePostVisibility}
+            fallback={handleClosePostSetting}>
             {i18n.t('Post_Detail.Post_Options.Post_Visibility')}
           </MenuItem>
         </ShowIf>
 
         <ShowIf condition={!!user}>
-          <MenuItem onClick={handleOpenAddPostToExperience} fallback={handleClosePostSetting}>
+          <MenuItem
+            onClick={handleOpenAddPostToExperience}
+            fallback={handleClosePostSetting}>
             {i18n.t('Post_Detail.Post_Options.Add_Post_To_Experience')}
           </MenuItem>
         </ShowIf>

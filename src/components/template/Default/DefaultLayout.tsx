@@ -1,36 +1,45 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import {useCookies} from 'react-cookie';
-import {useDispatch} from 'react-redux';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useCookies } from 'react-cookie';
+import { useDispatch } from 'react-redux';
 
-import {Session} from 'next-auth';
-import {useSession} from 'next-auth/react';
+import { Session } from 'next-auth';
+import { useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {Container} from '@material-ui/core';
+import { Container } from '@material-ui/core';
 
 import useStyles from './DefaultLayout.styles';
 
-import {COOKIE_INSTANCE_URL} from 'components/SelectServer';
-import {withError, WithErrorProps} from 'src/components/Error';
-import {MenuContainer} from 'src/components/Menu';
-import {NotificationsContainer} from 'src/components/Notifications';
+import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
+import { withError, WithErrorProps } from 'src/components/Error';
+import { MenuContainer } from 'src/components/Menu';
+import { NotificationsContainer } from 'src/components/Notifications';
 import PwaWrapper from 'src/components/PwaWrapper';
-import {RightMenuBar} from 'src/components/RightMenuBar/RightMenuBar';
-import {CookieConsent, COOKIE_CONSENT_NAME} from 'src/components/common/CookieConsent';
-import {TippingProvider} from 'src/components/common/Tipping/Tipping.provider';
+import { RightMenuBar } from 'src/components/RightMenuBar/RightMenuBar';
+import {
+  CookieConsent,
+  COOKIE_CONSENT_NAME,
+} from 'src/components/common/CookieConsent';
+import { TippingProvider } from 'src/components/common/Tipping/Tipping.provider';
 import ShowIf from 'src/components/common/show-if.component';
-import {useInstances} from 'src/hooks/use-instances.hooks';
-import {useUserHook} from 'src/hooks/use-user.hook';
-import {IProvider, MYRIAD_WALLET_KEY} from 'src/interfaces/blockchain-interface';
-import {NotificationProps} from 'src/interfaces/notification';
-import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
+import { useInstances } from 'src/hooks/use-instances.hooks';
+import { useUserHook } from 'src/hooks/use-user.hook';
+import {
+  IProvider,
+  MYRIAD_WALLET_KEY,
+} from 'src/interfaces/blockchain-interface';
+import { NotificationProps } from 'src/interfaces/notification';
+import { BlockchainPlatform, WalletTypeEnum } from 'src/interfaces/wallet';
 import * as FirebaseAnalytic from 'src/lib/firebase/analytic';
 import * as FirebaseMessaging from 'src/lib/firebase/messaging';
-import {BlockchainProvider} from 'src/lib/services/blockchain-provider';
-import {clearBalances, loadBalances} from 'src/reducers/balance/actions';
-import {countNewNotification, processNotification} from 'src/reducers/notification/actions';
-import {fetchUserWalletAddress} from 'src/reducers/user/actions';
+import { BlockchainProvider } from 'src/lib/services/blockchain-provider';
+import { clearBalances, loadBalances } from 'src/reducers/balance/actions';
+import {
+  countNewNotification,
+  processNotification,
+} from 'src/reducers/notification/actions';
+import { fetchUserWalletAddress } from 'src/reducers/user/actions';
 
 const WalletBalancesContainer = dynamic(
   () => import('../../WalletBalance/WalletBalanceContainer'),
@@ -67,7 +76,7 @@ type DefaultLayoutProps = WithErrorProps & {
 };
 
 const Default: React.FC<DefaultLayoutProps> = props => {
-  const {children} = props;
+  const { children } = props;
 
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -75,9 +84,9 @@ const Default: React.FC<DefaultLayoutProps> = props => {
 
   const [cookies] = useCookies([COOKIE_CONSENT_NAME, COOKIE_INSTANCE_URL]);
 
-  const {user, anonymous, currentWallet, updateUserFcmToken} = useUserHook();
-  const {instance} = useInstances();
-  const {data: session} = useSession();
+  const { user, anonymous, currentWallet, updateUserFcmToken } = useUserHook();
+  const { instance } = useInstances();
+  const { data: session } = useSession();
 
   const [showNotification, setShowNotification] = useState<boolean>(false);
   const [provider, setProvider] = useState<IProvider>(null);
@@ -127,9 +136,11 @@ const Default: React.FC<DefaultLayoutProps> = props => {
 
     if (query?.instance?.toString() === rpc) return;
 
-    Object.assign(query, {instance: rpc});
+    Object.assign(query, { instance: rpc });
 
-    router.replace({pathname: router.pathname, query}, undefined, {shallow: true});
+    router.replace({ pathname: router.pathname, query }, undefined, {
+      shallow: true,
+    });
   }, [cookies[COOKIE_INSTANCE_URL], router.query.instance]);
 
   const processMessages = (payload?: NotificationProps) => {
@@ -158,7 +169,8 @@ const Default: React.FC<DefaultLayoutProps> = props => {
 
   const onInitializeBlockchain = async () => {
     setInitialize(true);
-    if (provider?.constructor.name === 'PolkadotJs') await provider.disconnect();
+    if (provider?.constructor.name === 'PolkadotJs')
+      await provider.disconnect();
     setProvider(null);
   };
 
@@ -192,7 +204,10 @@ const Default: React.FC<DefaultLayoutProps> = props => {
             <div className={classes.firstCol}>
               <div className={classes.innerFirstColWrapper}>
                 <div>
-                  <MenuContainer logo={instance?.images?.logo_banner ?? ''} anonymous={anonymous} />
+                  <MenuContainer
+                    logo={instance?.images?.logo_banner ?? ''}
+                    anonymous={anonymous}
+                  />
                 </div>
                 <div>
                   <SocialMediaListContainer />
@@ -209,7 +224,9 @@ const Default: React.FC<DefaultLayoutProps> = props => {
 
             <div className={classes.thirdCol}>
               <div className={classes.innerThirdColWrapper}>
-                <ProfileCardContainer toggleNotification={handleToggleNotification} />
+                <ProfileCardContainer
+                  toggleNotification={handleToggleNotification}
+                />
 
                 <ShowIf condition={!showNotification}>
                   <RightMenuBar />

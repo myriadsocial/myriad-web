@@ -1,8 +1,8 @@
-import {createPluginFactory} from '@udecode/plate-core';
+import { createPluginFactory } from '@udecode/plate-core';
 
-import {getOnKeydownLimit} from './onKeydownLimit';
-import {CharLimitPlugin} from './type';
-import {withCharLimit} from './withCharLimit';
+import { getOnKeydownLimit } from './onKeydownLimit';
+import { CharLimitPlugin } from './type';
+import { withCharLimit } from './withCharLimit';
 
 export const ELEMENT_CHAR_LIMIT = 'char-limit';
 

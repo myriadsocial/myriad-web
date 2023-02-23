@@ -1,8 +1,8 @@
-import {createContext} from 'react';
+import { createContext } from 'react';
 
-import {TippingOptions} from './Tipping.interface';
+import { TippingOptions } from './Tipping.interface';
 
-import {WalletTypeEnum} from 'src/interfaces/wallet';
+import { WalletTypeEnum } from 'src/interfaces/wallet';
 
 export type HandleSendTip = (options: TippingOptions) => void;
 

@@ -1,9 +1,9 @@
-import {PaginationState as BasePaginationState} from '../base/state';
-import {Actions} from './actions';
+import { PaginationState as BasePaginationState } from '../base/state';
+import { Actions } from './actions';
 import * as constants from './constants';
 
 import * as Redux from 'redux';
-import {Notification} from 'src/interfaces/notification';
+import { Notification } from 'src/interfaces/notification';
 
 export interface NotificationState extends BasePaginationState {
   notifications: Notification[];

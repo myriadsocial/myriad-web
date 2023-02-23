@@ -1,6 +1,6 @@
-import {ELEMENT_IMAGE, ExitBreakPlugin, KEYS_HEADING} from '@udecode/plate';
+import { ELEMENT_IMAGE, ExitBreakPlugin, KEYS_HEADING } from '@udecode/plate';
 
-import {MyPlatePlugin} from '../Editor.interface';
+import { MyPlatePlugin } from '../Editor.interface';
 
 export const exitBreakPlugin: Partial<MyPlatePlugin<ExitBreakPlugin>> = {
   options: {

@@ -1,6 +1,6 @@
-import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
-import {CommentDetailProps} from './CommentDetail.interface';
+import { CommentDetailProps } from './CommentDetail.interface';
 
 export const useStyles = makeStyles<Theme, CommentDetailProps>(theme =>
   createStyles({
@@ -32,7 +32,8 @@ export const useStyles = makeStyles<Theme, CommentDetailProps>(theme =>
     },
     flex: {
       display: 'flex',
-      padding: props => (props.deep > 0 ? theme.spacing(0, 0, 0, 2) : theme.spacing(0, 2)),
+      padding: props =>
+        props.deep > 0 ? theme.spacing(0, 0, 0, 2) : theme.spacing(0, 2),
     },
     flexSpaceBetween: {
       display: 'flex',

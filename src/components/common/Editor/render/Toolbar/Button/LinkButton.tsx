@@ -5,21 +5,24 @@ import {
   usePlateEditorState,
   withPlateEventProvider,
 } from '@udecode/plate-core';
-import {ELEMENT_LINK} from '@udecode/plate-link';
-import {ToolbarButton, ToolbarButtonProps} from '@udecode/plate-ui-toolbar';
+import { ELEMENT_LINK } from '@udecode/plate-link';
+import { ToolbarButton, ToolbarButtonProps } from '@udecode/plate-ui-toolbar';
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-import {Modal} from 'components/atoms/Modal';
-import {getPrevLink, upsertLinkAtSelection} from 'components/common/Editor/plugins/Link';
-import {EmbedURL} from 'src/components/EmbedURL';
-import {useToggle} from 'src/hooks/use-toggle.hook';
+import { Modal } from 'components/atoms/Modal';
+import {
+  getPrevLink,
+  upsertLinkAtSelection,
+} from 'components/common/Editor/plugins/Link';
+import { EmbedURL } from 'src/components/EmbedURL';
+import { useToggle } from 'src/hooks/use-toggle.hook';
 import i18n from 'src/locale';
 
 export type LinkToolbarButtonProps = ToolbarButtonProps;
 
 export const LinkToolbarButton = withPlateEventProvider(
-  ({id, getLinkUrl, ...props}: LinkToolbarButtonProps) => {
+  ({ id, getLinkUrl, ...props }: LinkToolbarButtonProps) => {
     id = useEventPlateId(id);
     const editor = usePlateEditorState(id)!;
 
@@ -27,7 +30,7 @@ export const LinkToolbarButton = withPlateEventProvider(
     const [prevLink, setPrevLink] = useState<string | null>(null);
 
     const type = getPluginType(editor, ELEMENT_LINK);
-    const isLink = !!editor?.selection && someNode(editor, {match: {type}});
+    const isLink = !!editor?.selection && someNode(editor, { match: { type } });
 
     const openDialog = (prev: string | null) => {
       setPrevLink(prev);
@@ -35,7 +38,7 @@ export const LinkToolbarButton = withPlateEventProvider(
     };
 
     const handleConfirmLink = (url: string | null) => {
-      upsertLinkAtSelection(editor, {url});
+      upsertLinkAtSelection(editor, { url });
       toggleLinkDialog();
     };
 

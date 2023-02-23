@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {Menu} from './Menu';
-import {MenuId} from './use-menu-list';
+import { Menu } from './Menu';
+import { MenuId } from './use-menu-list';
 
 type MenuProps = {
   logo: string;

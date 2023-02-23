@@ -1,11 +1,15 @@
-import {useSelector, useDispatch, shallowEqual} from 'react-redux';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 
-import {WrappedExperience, ExperienceProps, Experience} from '../interfaces/experience';
-import {RootState} from '../reducers';
+import {
+  WrappedExperience,
+  ExperienceProps,
+  Experience,
+} from '../interfaces/experience';
+import { RootState } from '../reducers';
 
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import pick from 'lodash/pick';
-import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
+import { ListMeta } from 'src/lib/api/interfaces/base-list.interface';
 import {
   searchExperiences,
   searchPeople,
@@ -25,8 +29,8 @@ import {
   clearExperiences,
   fetchTrendingExperience,
 } from 'src/reducers/experience/actions';
-import {ExperienceState} from 'src/reducers/experience/reducer';
-import {fetchUserExperience} from 'src/reducers/user/actions';
+import { ExperienceState } from 'src/reducers/experience/reducer';
+import { fetchUserExperience } from 'src/reducers/user/actions';
 
 export enum ExperienceOwner {
   ALL = 'all',
@@ -57,9 +61,9 @@ export const useExperienceHook = () => {
     state => state.profileState.experience.data,
     shallowEqual,
   );
-  const {data: userExperiences, meta: userExperiencesMeta} = useSelector<
+  const { data: userExperiences, meta: userExperiencesMeta } = useSelector<
     RootState,
-    {data: WrappedExperience[]; meta: ListMeta}
+    { data: WrappedExperience[]; meta: ListMeta }
   >(state => state.userState.experiences, shallowEqual);
 
   const loadExperience = () => {
@@ -180,7 +184,10 @@ export const useExperienceHook = () => {
     );
   };
 
-  const saveExperience = (newExperience: ExperienceProps, callback?: (id: string) => void) => {
+  const saveExperience = (
+    newExperience: ExperienceProps,
+    callback?: (id: string) => void,
+  ) => {
     dispatch(
       createExperience(newExperience, id => {
         callback && callback(id);
@@ -193,7 +200,10 @@ export const useExperienceHook = () => {
     );
   };
 
-  const beSubscribeExperience = (experienceId: string, callback?: () => void) => {
+  const beSubscribeExperience = (
+    experienceId: string,
+    callback?: () => void,
+  ) => {
     dispatch(
       subscribeExperience(experienceId, () => {
         dispatch(fetchUserExperience());
@@ -217,7 +227,10 @@ export const useExperienceHook = () => {
     );
   };
 
-  const beUnsubscribeExperience = (experienceId: string, callback?: () => void) => {
+  const beUnsubscribeExperience = (
+    experienceId: string,
+    callback?: () => void,
+  ) => {
     dispatch(
       unsubscribeExperience(experienceId, () => {
         dispatch(fetchUserExperience());

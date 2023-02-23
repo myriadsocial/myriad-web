@@ -1,20 +1,24 @@
 import * as Sentry from '@sentry/nextjs';
 
-import {useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
-import {isHex} from '@polkadot/util';
+import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
+import { isHex } from '@polkadot/util';
 
-import {NetworkIdEnum} from 'src/interfaces/network';
-import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
-import {AccountRegisteredError} from 'src/lib/api/errors/account-registered.error';
+import { NetworkIdEnum } from 'src/interfaces/network';
+import { BlockchainPlatform, WalletTypeEnum } from 'src/interfaces/wallet';
+import { AccountRegisteredError } from 'src/lib/api/errors/account-registered.error';
 import * as WalletAPI from 'src/lib/api/wallet';
-import {toHexPublicKey} from 'src/lib/crypto';
-import {PolkadotJs} from 'src/lib/services/polkadot-js';
-import {RootState} from 'src/reducers';
-import {fetchUser, fetchUserWallets, setFullAccess} from 'src/reducers/user/actions';
-import {UserState} from 'src/reducers/user/reducer';
+import { toHexPublicKey } from 'src/lib/crypto';
+import { PolkadotJs } from 'src/lib/services/polkadot-js';
+import { RootState } from 'src/reducers';
+import {
+  fetchUser,
+  fetchUserWallets,
+  setFullAccess,
+} from 'src/reducers/user/actions';
+import { UserState } from 'src/reducers/user/reducer';
 
 export interface NearPayload {
   publicAddress: string;
@@ -27,7 +31,7 @@ export interface NearPayload {
 export const useConnect = () => {
   const dispatch = useDispatch();
 
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const { user } = useSelector<RootState, UserState>(state => state.userState);
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -45,7 +49,7 @@ export const useConnect = () => {
 
       switch (blockchainPlatform) {
         case BlockchainPlatform.SUBSTRATE:
-          const {nonce} = await WalletAPI.getUserNonceByUserId(user?.id);
+          const { nonce } = await WalletAPI.getUserNonceByUserId(user?.id);
 
           if (!nonce) return false;
 
@@ -53,7 +57,7 @@ export const useConnect = () => {
           const polkadotSignature = await PolkadotJs.signWithWallet(
             polkadotAccount,
             nonce,
-            ({signerOpened}) => {
+            ({ signerOpened }) => {
               if (signerOpened) setLoading(true);
             },
           );
@@ -77,7 +81,7 @@ export const useConnect = () => {
 
         case BlockchainPlatform.NEAR:
           const nearAccount = account as NearPayload;
-          const {pubKey, nearAddress, nonce: nearNonce} = nearAccount;
+          const { pubKey, nearAddress, nonce: nearNonce } = nearAccount;
 
           payload = {
             publicAddress: pubKey,
@@ -142,13 +146,13 @@ export const useConnect = () => {
 
       switch (blockchainPlatform) {
         case BlockchainPlatform.SUBSTRATE: {
-          const {nonce} = await WalletAPI.getUserNonceByUserId(user?.id);
+          const { nonce } = await WalletAPI.getUserNonceByUserId(user?.id);
 
           const polkadotAccount = account as InjectedAccountWithMeta;
           const signature = await PolkadotJs.signWithWallet(
             polkadotAccount,
             nonce,
-            ({signerOpened}) => {
+            ({ signerOpened }) => {
               if (signerOpened) setLoading(true);
             },
           );

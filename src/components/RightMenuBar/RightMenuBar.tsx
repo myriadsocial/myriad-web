@@ -1,19 +1,26 @@
-import {ChatAlt2Icon, HashtagIcon, VariableIcon, TrendingUpIcon} from '@heroicons/react/outline';
+import {
+  ChatAlt2Icon,
+  HashtagIcon,
+  VariableIcon,
+  TrendingUpIcon,
+} from '@heroicons/react/outline';
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 import dynamic from 'next/dynamic';
 
-import {SvgIcon} from '@material-ui/core';
+import { SvgIcon } from '@material-ui/core';
 
-import {TabsComponent} from '../atoms/Tabs';
-import {useStyles} from './RightMenuBar.styles';
+import { TabsComponent } from '../atoms/Tabs';
+import { useStyles } from './RightMenuBar.styles';
 
 import i18n from 'src/locale';
 
 const ExperienceTab = dynamic(() => import('./tabs/ExperienceTab'));
 const TrendingTab = dynamic(() => import('./tabs/TrendingTab'));
-const TrendingExperienceTab = dynamic(() => import('./tabs/TrendingExperienceTab'));
+const TrendingExperienceTab = dynamic(
+  () => import('./tabs/TrendingExperienceTab'),
+);
 
 export const RightMenuBar: React.FC = () => {
   const iconTabs = [

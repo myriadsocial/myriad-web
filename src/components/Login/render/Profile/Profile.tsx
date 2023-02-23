@@ -1,10 +1,10 @@
-import React, {useEffect, useCallback, useState, useMemo} from 'react';
-import {useSelector} from 'react-redux';
-import {useNavigate} from 'react-router';
+import React, { useEffect, useCallback, useState, useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 
 import Image from 'next/image';
 import Link from 'next/link';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
 import {
   Button,
@@ -16,9 +16,9 @@ import {
   Checkbox,
 } from '@material-ui/core';
 
-import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
+import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 
-import {useStyles} from './Profile.style';
+import { useStyles } from './Profile.style';
 
 import {
   PolkadotNetworkIcon,
@@ -28,19 +28,22 @@ import {
 } from 'src/components/atoms/Icons';
 import useConfirm from 'src/components/common/Confirm/use-confirm.hook';
 import ShowIf from 'src/components/common/show-if.component';
-import {useAuthHook} from 'src/hooks/auth.hook';
-import {NetworkIdEnum} from 'src/interfaces/network';
-import {WalletTypeEnum} from 'src/interfaces/wallet';
-import {Server} from 'src/lib/api/server';
-import {toHexPublicKey} from 'src/lib/crypto';
-import {BlockchainProvider} from 'src/lib/services/blockchain-provider';
+import { useAuthHook } from 'src/hooks/auth.hook';
+import { NetworkIdEnum } from 'src/interfaces/network';
+import { WalletTypeEnum } from 'src/interfaces/wallet';
+import { Server } from 'src/lib/api/server';
+import { toHexPublicKey } from 'src/lib/crypto';
+import { BlockchainProvider } from 'src/lib/services/blockchain-provider';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {ConfigState} from 'src/reducers/config/reducer';
-import {UserState} from 'src/reducers/user/reducer';
+import { RootState } from 'src/reducers';
+import { ConfigState } from 'src/reducers/config/reducer';
+import { UserState } from 'src/reducers/user/reducer';
 
 type ProfileProps = {
-  checkUsernameAvailability: (username: string, callback: (available: boolean) => void) => void;
+  checkUsernameAvailability: (
+    username: string,
+    callback: (available: boolean) => void,
+  ) => void;
   walletType: WalletTypeEnum | string | null;
   networkId: NetworkIdEnum | null;
   instance: Server;
@@ -71,15 +74,19 @@ export const Profile: React.FC<ProfileProps> = props => {
     instance,
   } = props;
 
-  const {networks} = useSelector<RootState, UserState>(state => state.userState);
-  const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
+  const { networks } = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
+  const { settings } = useSelector<RootState, ConfigState>(
+    state => state.configState,
+  );
   const [termApproved, setTermApproved] = useState(false);
   const styles = useStyles();
   const confirm = useConfirm();
   const navigate = useNavigate();
   const router = useRouter();
 
-  const {signUpWithExternalAuth} = useAuthHook();
+  const { signUpWithExternalAuth } = useAuthHook();
 
   const [profile, setProfile] = useState({
     name: {
@@ -102,22 +109,30 @@ export const Profile: React.FC<ProfileProps> = props => {
       min_length: USERNAME_MIN_LENGTH,
     });
 
-    if (profile.name.value && profile.name.value.length < DISPLAY_NAME_MIN_LENGTH) {
+    if (
+      profile.name.value &&
+      profile.name.value.length < DISPLAY_NAME_MIN_LENGTH
+    ) {
       nameHelper = i18n.t('Login.Profile.Helper_Validate_Name_Min', {
         min_length: DISPLAY_NAME_MIN_LENGTH,
       });
     } else {
       const valid = /^([^"'*\\]*)$/.test(profile.name.value);
-      if (!valid) nameHelper = i18n.t('Login.Profile.Helper_Validate_Name_Char');
+      if (!valid)
+        nameHelper = i18n.t('Login.Profile.Helper_Validate_Name_Char');
     }
 
-    if (profile.username.value && profile.username.value.length < USERNAME_MIN_LENGTH) {
+    if (
+      profile.username.value &&
+      profile.username.value.length < USERNAME_MIN_LENGTH
+    ) {
       usernameHelper = i18n.t('Login.Profile.Helper_Validate_Username_Min', {
         min_length: USERNAME_MIN_LENGTH,
       });
     } else {
       const valid = /^[a-zA-Z0-9]+$/.test(profile.username.value);
-      if (!valid) usernameHelper = i18n.t('Login.Profile.Helper_Validate_Username_Char');
+      if (!valid)
+        usernameHelper = i18n.t('Login.Profile.Helper_Validate_Username_Char');
     }
 
     setProfile(prevSetting => ({
@@ -171,7 +186,10 @@ export const Profile: React.FC<ProfileProps> = props => {
   const validateName = (): boolean => {
     let error = false;
 
-    if (!profile.name.value || profile.name.value.length < DISPLAY_NAME_MIN_LENGTH) {
+    if (
+      !profile.name.value ||
+      profile.name.value.length < DISPLAY_NAME_MIN_LENGTH
+    ) {
       error = true;
 
       setProfile(prevSetting => ({
@@ -218,7 +236,10 @@ export const Profile: React.FC<ProfileProps> = props => {
   const validateUsername = (): boolean => {
     let error = false;
 
-    if (!profile.username.value || profile.username.value.length < USERNAME_MIN_LENGTH) {
+    if (
+      !profile.username.value ||
+      profile.username.value.length < USERNAME_MIN_LENGTH
+    ) {
       error = true;
 
       setProfile(prevSetting => ({
@@ -264,16 +285,18 @@ export const Profile: React.FC<ProfileProps> = props => {
 
   const handleChangeWallet = async () => {
     if (walletType === WalletTypeEnum.NEAR) {
-      const network = networks.find(network => network.id === NetworkIdEnum.NEAR);
+      const network = networks.find(
+        network => network.id === NetworkIdEnum.NEAR,
+      );
 
       if (network) {
         const blockchain = await BlockchainProvider.connect(network);
         const provider = blockchain.Near;
-        const {wallet} = provider.provider;
+        const { wallet } = provider.provider;
 
         if (wallet.isSignedIn()) {
           wallet.signOut();
-          router.replace(router.route, undefined, {shallow: true});
+          router.replace(router.route, undefined, { shallow: true });
         } else {
           console.log('no signed in NEAR wallet found!');
         }
@@ -361,9 +384,15 @@ export const Profile: React.FC<ProfileProps> = props => {
     <>
       <ShowIf condition={!isMobileSignIn}>
         <div className={styles.root}>
-          <div style={{marginBottom: 24, gap: 16, display: 'flex', flexDirection: 'column'}}>
+          <div
+            style={{
+              marginBottom: 24,
+              gap: 16,
+              display: 'flex',
+              flexDirection: 'column',
+            }}>
             <div>
-              <Typography variant="h5" style={{fontWeight: 600}}>
+              <Typography variant="h5" style={{ fontWeight: 600 }}>
                 {i18n.t('Login.Profile.Wallet')}
               </Typography>
               <div
@@ -383,17 +412,22 @@ export const Profile: React.FC<ProfileProps> = props => {
                   <Box
                     fontSize={14}
                     fontWeight="fontWeightRegular"
-                    style={{color: 'rgba(115, 66, 204, 1)'}}>
+                    style={{ color: 'rgba(115, 66, 204, 1)' }}>
                     {account?.meta?.name || ''}
                   </Box>
-                  <Box fontSize={12} fontWeight="fontWeightRegular" style={{color: '#0A0A0A'}}>
-                    {account?.address || publicAddress?.split('/')[1] || 'Unknown Account'}
+                  <Box
+                    fontSize={12}
+                    fontWeight="fontWeightRegular"
+                    style={{ color: '#0A0A0A' }}>
+                    {account?.address ||
+                      publicAddress?.split('/')[1] ||
+                      'Unknown Account'}
                   </Box>
                 </div>
               </div>
             </div>
-            <div style={{position: 'relative'}}>
-              <Typography variant="h5" style={{fontWeight: 600}}>
+            <div style={{ position: 'relative' }}>
+              <Typography variant="h5" style={{ fontWeight: 600 }}>
                 {i18n.t('Login.Profile.Instance')}
               </Typography>
               <div
@@ -415,16 +449,22 @@ export const Profile: React.FC<ProfileProps> = props => {
                   height={30}
                   width={30}
                 />
-                <div style={{width: '100%', paddingRight: 8}}>
+                <div style={{ width: '100%', paddingRight: 8 }}>
                   <Box
                     fontSize={14}
                     fontWeight="fontWeightRegular"
-                    style={{color: 'rgba(115, 66, 204, 1)'}}>
+                    style={{ color: 'rgba(115, 66, 204, 1)' }}>
                     {instance.name}
                   </Box>
-                  <Box fontSize={12} fontWeight="fontWeightRegular" style={{color: '#0A0A0A'}}>
+                  <Box
+                    fontSize={12}
+                    fontWeight="fontWeightRegular"
+                    style={{ color: '#0A0A0A' }}>
                     {isDescriptionLong && !expanded
-                      ? `${instance.description.split(' ').slice(0, 10).join(' ')}...`
+                      ? `${instance.description
+                          .split(' ')
+                          .slice(0, 10)
+                          .join(' ')}...`
                       : instance.description}
                   </Box>
                 </div>
@@ -450,8 +490,8 @@ export const Profile: React.FC<ProfileProps> = props => {
               </ShowIf>
             </div>
           </div>
-          <div style={{marginBottom: 33}}>
-            <Typography variant="h5" style={{fontWeight: 600}}>
+          <div style={{ marginBottom: 33 }}>
+            <Typography variant="h5" style={{ fontWeight: 600 }}>
               {i18n.t('Login.Profile.Title')}
             </Typography>
             <Typography variant="caption" color="textSecondary">
@@ -467,7 +507,7 @@ export const Profile: React.FC<ProfileProps> = props => {
               fullWidth
               variant="outlined"
               onChange={handleChangeName}
-              inputProps={{maxLength: DISPLAY_NAME_MAX_LENGTH}}
+              inputProps={{ maxLength: DISPLAY_NAME_MAX_LENGTH }}
             />
             <Typography className={`${styles.count}`} component="span">
               ({profile.name.value.length}/{DISPLAY_NAME_MAX_LENGTH})
@@ -483,7 +523,10 @@ export const Profile: React.FC<ProfileProps> = props => {
               fullWidth
               variant="outlined"
               onChange={handleChangeUsername}
-              inputProps={{maxLength: USERNAME_MAX_LENGTH, style: {textTransform: 'lowercase'}}}
+              inputProps={{
+                maxLength: USERNAME_MAX_LENGTH,
+                style: { textTransform: 'lowercase' },
+              }}
             />
             <Typography className={`${styles.count}`} component="span">
               ({profile.username.value.length}/{USERNAME_MAX_LENGTH})
@@ -494,9 +537,15 @@ export const Profile: React.FC<ProfileProps> = props => {
             <FormControlLabel
               className={styles.termControl}
               onChange={toggleTermApproved}
-              control={<Checkbox name="term" color="primary" className={styles.checkbox} />}
+              control={
+                <Checkbox
+                  name="term"
+                  color="primary"
+                  className={styles.checkbox}
+                />
+              }
               label={
-                <Typography style={{color: '#0A0A0A'}}>
+                <Typography style={{ color: '#0A0A0A' }}>
                   {i18n.t('Login.Options.Text_Terms_1')}&nbsp;
                   <Link href="/term-of-use" passHref>
                     <Typography component={'a'} className={styles.term}>
@@ -523,7 +572,7 @@ export const Profile: React.FC<ProfileProps> = props => {
               fullWidth>
               {i18n.t('Login.Profile.Btn_Change_Wallet')}
             </Button>
-            <div style={{width: 8}} />
+            <div style={{ width: 8 }} />
             <Button
               disabled={profile.username.value.length === 0 || !termApproved}
               onClick={handleConfirmation}
@@ -539,9 +588,9 @@ export const Profile: React.FC<ProfileProps> = props => {
       <ShowIf condition={isMobileSignIn}>
         <div className={styles.mobileRoot}>
           <div className={styles.mobileCard}>
-            <div style={{marginBottom: 24}}>
+            <div style={{ marginBottom: 24 }}>
               <div className={styles.title}>
-                <Typography variant="h5" style={{fontWeight: 600}}>
+                <Typography variant="h5" style={{ fontWeight: 600 }}>
                   {i18n.t('Login.Profile.Title')}
                 </Typography>
                 <Typography variant="caption" color="textSecondary">
@@ -556,12 +605,12 @@ export const Profile: React.FC<ProfileProps> = props => {
                 id="name"
                 label={i18n.t('Login.Profile.Placeholder_Display_Name')}
                 helperText={profile.name.helper}
-                FormHelperTextProps={{style: {marginLeft: 0}}}
+                FormHelperTextProps={{ style: { marginLeft: 0 } }}
                 error={profile.name.error}
                 fullWidth
                 variant="outlined"
                 onChange={handleChangeName}
-                inputProps={{maxLength: DISPLAY_NAME_MAX_LENGTH}}
+                inputProps={{ maxLength: DISPLAY_NAME_MAX_LENGTH }}
               />
               <Typography className={`${styles.count}`} component="span">
                 ({profile.name.value.length}/{DISPLAY_NAME_MAX_LENGTH})
@@ -572,12 +621,15 @@ export const Profile: React.FC<ProfileProps> = props => {
                 id="username"
                 label={i18n.t('Login.Profile.Placeholder_Username')}
                 helperText={profile.username.helper}
-                FormHelperTextProps={{style: {marginLeft: 0}}}
+                FormHelperTextProps={{ style: { marginLeft: 0 } }}
                 error={profile.username.error}
                 fullWidth
                 variant="outlined"
                 onChange={handleChangeUsername}
-                inputProps={{maxLength: USERNAME_MAX_LENGTH, style: {textTransform: 'lowercase'}}}
+                inputProps={{
+                  maxLength: USERNAME_MAX_LENGTH,
+                  style: { textTransform: 'lowercase' },
+                }}
               />
               <Typography className={`${styles.count}`} component="span">
                 ({profile.username.value.length}/{USERNAME_MAX_LENGTH})
@@ -588,9 +640,15 @@ export const Profile: React.FC<ProfileProps> = props => {
               <FormControlLabel
                 className={styles.termControl}
                 onChange={toggleTermApproved}
-                control={<Checkbox name="term" color="primary" className={styles.checkbox} />}
+                control={
+                  <Checkbox
+                    name="term"
+                    color="primary"
+                    className={styles.checkbox}
+                  />
+                }
                 label={
-                  <Typography style={{color: '#0A0A0A'}}>
+                  <Typography style={{ color: '#0A0A0A' }}>
                     {i18n.t('Login.Options.Text_Terms_1')}&nbsp;
                     <Link href="/term-of-use" passHref>
                       <Typography component={'a'} className={styles.term}>

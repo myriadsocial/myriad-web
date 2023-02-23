@@ -11,7 +11,9 @@ export const init = async () => {
   firebase.analytics();
 };
 
-export const logScreenView = async (screenName: string): Promise<void | boolean> => {
+export const logScreenView = async (
+  screenName: string,
+): Promise<void | boolean> => {
   try {
     const analytics = firebase.analytics();
 

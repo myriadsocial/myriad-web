@@ -1,6 +1,6 @@
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-import {AllignTitle, TitleSize} from './Modal.types';
+import { AllignTitle, TitleSize } from './Modal.types';
 
 type StylesProps = {
   align: AllignTitle;

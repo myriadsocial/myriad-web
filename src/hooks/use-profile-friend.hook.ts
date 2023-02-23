@@ -1,7 +1,7 @@
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
-import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
-import {RootState} from 'src/reducers';
+import { SortType } from 'src/lib/api/interfaces/pagination-params.interface';
+import { RootState } from 'src/reducers';
 import {
   searchProfileFriend,
   fetchProfileFriend,
@@ -35,7 +35,7 @@ export const useProfileFriend = () => {
   };
 
   const sort = (sort: SortType) => {
-    dispatch(updateProfileFriendParams({sort}));
+    dispatch(updateProfileFriendParams({ sort }));
 
     if (filter) {
       search(filter);

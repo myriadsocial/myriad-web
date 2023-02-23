@@ -1,4 +1,4 @@
-import {RangeBeforeOptions, TElement} from '@udecode/plate-core';
+import { RangeBeforeOptions, TElement } from '@udecode/plate-core';
 
 export interface THashtagElement extends TElement {
   hashtag: string;

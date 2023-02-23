@@ -1,25 +1,31 @@
-import React, {useState, useRef} from 'react';
+import React, { useState, useRef } from 'react';
 
 import dynamic from 'next/dynamic';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
 import Paper from '@material-ui/core/Paper';
 
-import {NSFW} from '../atoms/NSFW/NSFW.component';
-import {Video} from '../atoms/Video';
-import {useStyles} from './PostDetailExperience.styles';
-import {HeaderComponentExperience} from './PostDetailExperienceHeader';
+import { NSFW } from '../atoms/NSFW/NSFW.component';
+import { Video } from '../atoms/Video';
+import { useStyles } from './PostDetailExperience.styles';
+import { HeaderComponentExperience } from './PostDetailExperienceHeader';
 
-import {NodeViewer} from 'components/common/NodeViewer';
-import {LinkPreview} from 'src/components/atoms/LinkPreview';
+import { NodeViewer } from 'components/common/NodeViewer';
+import { LinkPreview } from 'src/components/atoms/LinkPreview';
 import ShowIf from 'src/components/common/show-if.component';
-import {isJson} from 'src/helpers/string';
-import {Post} from 'src/interfaces/post';
-import {User} from 'src/interfaces/user';
+import { isJson } from 'src/helpers/string';
+import { Post } from 'src/interfaces/post';
+import { User } from 'src/interfaces/user';
 
-const Gallery = dynamic(() => import('../atoms/Gallery/Gallery'), {ssr: false});
-const Reddit = dynamic(() => import('../PostDetail/render/Reddit'), {ssr: false});
-const Twitter = dynamic(() => import('../PostDetail/render/Twitter'), {ssr: false});
+const Gallery = dynamic(() => import('../atoms/Gallery/Gallery'), {
+  ssr: false,
+});
+const Reddit = dynamic(() => import('../PostDetail/render/Reddit'), {
+  ssr: false,
+});
+const Twitter = dynamic(() => import('../PostDetail/render/Twitter'), {
+  ssr: false,
+});
 
 type PostDetailProps = {
   user?: User;
@@ -32,7 +38,13 @@ type PostDetailProps = {
 };
 
 export const PostDetailExperience: React.FC<PostDetailProps> = props => {
-  const {post, onImporters, onRemoveFromExperience, type = 'default', expanded} = props;
+  const {
+    post,
+    onImporters,
+    onRemoveFromExperience,
+    type = 'default',
+    expanded,
+  } = props;
 
   const styles = useStyles();
   const router = useRouter();
@@ -44,9 +56,13 @@ export const PostDetailExperience: React.FC<PostDetailProps> = props => {
   const isHtmlPost = isInternalPost && !isJson(post.text);
 
   const onHashtagClicked = async (hashtag: string) => {
-    await router.push(`/topic/hashtag?tag=${hashtag.replace('#', '')}`, undefined, {
-      shallow: true,
-    });
+    await router.push(
+      `/topic/hashtag?tag=${hashtag.replace('#', '')}`,
+      undefined,
+      {
+        shallow: true,
+      },
+    );
   };
 
   const handleViewContent = () => {
@@ -77,11 +93,15 @@ export const PostDetailExperience: React.FC<PostDetailProps> = props => {
 
         <ShowIf condition={viewContent}>
           <ShowIf condition={['myriad'].includes(post.platform) && !isHtmlPost}>
-            <NodeViewer id={`${post.id}-${type}`} text={post.text} expand={expanded} />
+            <NodeViewer
+              id={`${post.id}-${type}`}
+              text={post.text}
+              expand={expanded}
+            />
           </ShowIf>
 
           <ShowIf condition={['myriad'].includes(post.platform) && isHtmlPost}>
-            <div dangerouslySetInnerHTML={{__html: post.text}} />
+            <div dangerouslySetInnerHTML={{ __html: post.text }} />
           </ShowIf>
 
           <ShowIf condition={['twitter'].includes(post.platform)}>

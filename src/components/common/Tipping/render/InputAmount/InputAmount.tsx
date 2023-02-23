@@ -1,15 +1,15 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
-import {TextField} from '@material-ui/core';
-import type {InputProps} from '@material-ui/core';
+import { TextField } from '@material-ui/core';
+import type { InputProps } from '@material-ui/core';
 
-import {BN, BN_ZERO, isBn} from '@polkadot/util';
+import { BN, BN_ZERO, isBn } from '@polkadot/util';
 
-import {useStyles} from './InputAmount.style';
+import { useStyles } from './InputAmount.style';
 
-import {formatBalance} from 'src/helpers/balance';
-import {toBigNumber} from 'src/helpers/string';
-import {CurrencyId} from 'src/interfaces/currency';
+import { formatBalance } from 'src/helpers/balance';
+import { toBigNumber } from 'src/helpers/string';
+import { CurrencyId } from 'src/interfaces/currency';
 import i18n from 'src/locale';
 
 type InputAmountProps = Omit<InputProps, 'onChange'> & {
@@ -97,11 +97,17 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
 
   const validateInput = (amount: string): [BN, boolean, string?] => {
     const value = toBigNumber(amount, decimal);
-    const balance = isBn(maxValue) ? maxValue : toBigNumber(maxValue.toString(), decimal);
+    const balance = isBn(maxValue)
+      ? maxValue
+      : toBigNumber(maxValue.toString(), decimal);
     const maxTip = balance.sub(minBalance.gt(BN_ZERO) ? minBalance : fee);
 
     if (length && amount.length > length) {
-      return [value, false, i18n.t('Tipping.Modal_Main.Error_Amount_Max', {length: length})];
+      return [
+        value,
+        false,
+        i18n.t('Tipping.Modal_Main.Error_Amount_Max', { length: length }),
+      ];
     }
 
     if (value.lte(BN_ZERO)) {
@@ -109,15 +115,27 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
     }
 
     if (maxTip && maxTip.lten(0)) {
-      return [value, false, i18n.t('Tipping.Modal_Main.Error_Insufficient_Balance')];
+      return [
+        value,
+        false,
+        i18n.t('Tipping.Modal_Main.Error_Insufficient_Balance'),
+      ];
     }
 
     if (maxTip && maxTip.gtn(0) && value.gt(maxTip)) {
-      return [value, false, i18n.t('Tipping.Modal_Main.Error_Insufficient_Balance')];
+      return [
+        value,
+        false,
+        i18n.t('Tipping.Modal_Main.Error_Insufficient_Balance'),
+      ];
     }
 
     if (Number(amount) < minInput) {
-      return [value, false, i18n.t('Tipping.Modal_Main.Error_Insufficient_Balance')];
+      return [
+        value,
+        false,
+        i18n.t('Tipping.Modal_Main.Error_Insufficient_Balance'),
+      ];
     }
 
     return [value, true];
@@ -127,12 +145,14 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
     <>
       <TextField
         id="input-amount"
-        classes={{root: type === 'common' ? styles.input : styles.inputExclusiveAmount}}
+        classes={{
+          root: type === 'common' ? styles.input : styles.inputExclusiveAmount,
+        }}
         label={placeholder}
         type="number"
         variant="outlined"
-        InputLabelProps={{shrink: dirty}}
-        inputProps={{min: 0}}
+        InputLabelProps={{ shrink: dirty }}
+        inputProps={{ min: 0 }}
         value={value}
         error={!valid}
         onChange={handleAmountChange}

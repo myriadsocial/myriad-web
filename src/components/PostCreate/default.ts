@@ -1,6 +1,6 @@
-import {PostVisibility} from '../../interfaces/post';
-import {TagOptions} from '../PostTag';
-import {MenuOptions} from '../atoms/DropdownMenu';
+import { PostVisibility } from '../../interfaces/post';
+import { TagOptions } from '../PostTag';
+import { MenuOptions } from '../atoms/DropdownMenu';
 
 import i18n from 'src/locale';
 

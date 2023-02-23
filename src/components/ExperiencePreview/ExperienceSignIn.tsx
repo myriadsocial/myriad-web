@@ -1,15 +1,15 @@
 import React from 'react';
-import {useCookies} from 'react-cookie';
+import { useCookies } from 'react-cookie';
 
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {Button} from '@material-ui/core';
+import { Button } from '@material-ui/core';
 
-import {useStyles} from './experience.style';
+import { useStyles } from './experience.style';
 
-import {COOKIE_INSTANCE_URL} from 'components/SelectServer';
-import {PromptComponent as PromptMobile} from 'src/components/Mobile/PromptDrawer/Prompt';
-import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
+import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
+import { PromptComponent as PromptMobile } from 'src/components/Mobile/PromptDrawer/Prompt';
+import { PromptComponent } from 'src/components/atoms/Prompt/prompt.component';
 
 export type ExperienceSignInProps = {
   open: boolean;
@@ -17,7 +17,7 @@ export type ExperienceSignInProps = {
 };
 
 export const ExperienceSignIn: React.FC<ExperienceSignInProps> = props => {
-  const {open, onClose} = props;
+  const { open, onClose } = props;
 
   const router = useRouter();
   const style = useStyles();
@@ -33,13 +33,17 @@ export const ExperienceSignIn: React.FC<ExperienceSignInProps> = props => {
     <>
       <PromptMobile
         title={'Start your Experience!'}
-        subtitle={'When you join Myriad, you can create, subscribe or clone an experience.'}
+        subtitle={
+          'When you join Myriad, you can create, subscribe or clone an experience.'
+        }
         open={open}
         onCancel={onClose}
       />
       <PromptComponent
         title={'Start your Experience!'}
-        subtitle={'When you join Myriad, you can create, subscribe, or clone \n an experience.'}
+        subtitle={
+          'When you join Myriad, you can create, subscribe, or clone \n an experience.'
+        }
         open={open}
         icon="warning"
         onCancel={onClose}>
@@ -48,11 +52,15 @@ export const ExperienceSignIn: React.FC<ExperienceSignInProps> = props => {
             size="small"
             variant="outlined"
             color="secondary"
-            style={{marginRight: '12px'}}
+            style={{ marginRight: '12px' }}
             onClick={onClose}>
             Back
           </Button>
-          <Button size="small" variant="contained" color="primary" onClick={handleSignIn}>
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={handleSignIn}>
             Sign in
           </Button>
         </div>

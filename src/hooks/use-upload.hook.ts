@@ -1,18 +1,18 @@
 import * as Sentry from '@sentry/nextjs';
 
-import {useState} from 'react';
-import {useSelector} from 'react-redux';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import axios from 'axios';
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {isErrorWithMessage} from 'src/helpers/error';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import { isErrorWithMessage } from 'src/helpers/error';
 import * as UploadAPI from 'src/lib/api/upload';
-import {RootState} from 'src/reducers';
-import {UserState} from 'src/reducers/user/reducer';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useUpload = () => {
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const { user } = useSelector<RootState, UserState>(state => state.userState);
   const enqueueSnackbar = useEnqueueSnackbar();
 
   const [image, setImage] = useState<string | null>(null);
@@ -39,7 +39,9 @@ export const useUpload = () => {
       const data = await UploadAPI.image(file, {
         onUploadProgress: (event: ProgressEvent) => {
           const fileProgress =
-            (Math.round((100 * event.loaded) / event.total) * (randomIntBetween(5, 8) * 10)) / 100;
+            (Math.round((100 * event.loaded) / event.total) *
+              (randomIntBetween(5, 8) * 10)) /
+            100;
 
           setProgress(fileProgress);
         },
@@ -83,7 +85,9 @@ export const useUpload = () => {
       const data = await UploadAPI.video(file, {
         onUploadProgress: (event: ProgressEvent) => {
           const fileProgress =
-            (Math.round((100 * event.loaded) / event.total) * (randomIntBetween(5, 8) * 10)) / 100;
+            (Math.round((100 * event.loaded) / event.total) *
+              (randomIntBetween(5, 8) * 10)) /
+            100;
 
           setProgress(fileProgress);
         },

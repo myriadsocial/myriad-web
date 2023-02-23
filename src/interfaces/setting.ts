@@ -2,7 +2,11 @@ export type LayoutFilterType = 'people' | 'topic' | 'focus';
 
 export type PrivacyType = 'public' | 'private';
 export type PrivacySettingType = 'accountPrivacy' | 'socialMediaPrivacy';
-export type NotificationSettingType = 'comments' | 'mentions' | 'friendRequests' | 'tips';
+export type NotificationSettingType =
+  | 'comments'
+  | 'mentions'
+  | 'friendRequests'
+  | 'tips';
 export type LanguageSettingType = 'en' | 'id' | 'ru';
 
 export type PrivacySettings = Record<PrivacySettingType, PrivacyType>;

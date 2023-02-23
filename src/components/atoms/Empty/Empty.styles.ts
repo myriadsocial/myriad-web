@@ -1,6 +1,6 @@
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-import {EmptyProps} from './Empty';
+import { EmptyProps } from './Empty';
 
 export const useStyles = makeStyles<Theme, EmptyProps>(theme =>
   createStyles({

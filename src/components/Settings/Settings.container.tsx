@@ -1,24 +1,27 @@
-import React, {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import getConfig from 'next/config';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {Settings as SettingsComponent} from './Settings';
-import {useStyles} from './Settings.styles';
-import {SettingsType} from './hooks/use-setting-list.hook';
+import { Settings as SettingsComponent } from './Settings';
+import { useStyles } from './Settings.styles';
+import { SettingsType } from './hooks/use-setting-list.hook';
 
-import {RootState} from 'src/reducers';
-import {ConfigState} from 'src/reducers/config/reducer';
+import { RootState } from 'src/reducers';
+import { ConfigState } from 'src/reducers/config/reducer';
 
-const {publicRuntimeConfig} = getConfig();
+const { publicRuntimeConfig } = getConfig();
 
 export const SettingsContainer: React.FC = () => {
   const style = useStyles();
   const router = useRouter();
 
-  const {settings} = useSelector<RootState, ConfigState>(state => state.configState);
-  const [currentSection, setCurrentSection] = useState<SettingsType | undefined>();
+  const { settings } = useSelector<RootState, ConfigState>(
+    state => state.configState,
+  );
+  const [currentSection, setCurrentSection] =
+    useState<SettingsType | undefined>();
 
   useEffect(() => {
     const section = router.query.section as SettingsType | undefined;
@@ -40,10 +43,10 @@ export const SettingsContainer: React.FC = () => {
         router.push(
           {
             pathname: '/settings',
-            query: {section},
+            query: { section },
           },
           undefined,
-          {shallow: true},
+          { shallow: true },
         );
     }
   };

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {Session, User} from 'next-auth';
+import { Session, User } from 'next-auth';
 
-import {NetworkIdEnum} from 'src/interfaces/network';
-import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
+import { NetworkIdEnum } from 'src/interfaces/network';
+import { BlockchainPlatform, WalletTypeEnum } from 'src/interfaces/wallet';
 
 declare module 'next-auth' {
   interface User {

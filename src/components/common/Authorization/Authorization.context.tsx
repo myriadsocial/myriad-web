@@ -1,6 +1,6 @@
-import {Context, createContext} from 'react';
+import { Context, createContext } from 'react';
 
-import {Actions} from './Authorization.interface';
+import { Actions } from './Authorization.interface';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {};
@@ -11,4 +11,5 @@ const defaultContext: Actions = {
   alert: noop,
 };
 
-export const AuthorizationContext: Context<Actions> = createContext(defaultContext);
+export const AuthorizationContext: Context<Actions> =
+  createContext(defaultContext);

@@ -1,15 +1,24 @@
-import {Actions as BaseAction, PaginationAction, setError, setLoading} from '../base/actions';
-import {RootState} from '../index';
+import {
+  Actions as BaseAction,
+  PaginationAction,
+  setError,
+  setLoading,
+} from '../base/actions';
+import { RootState } from '../index';
 import * as constants from './constants';
 
-import {Action} from 'redux';
-import {Comment} from 'src/interfaces/comment';
-import {Post} from 'src/interfaces/post';
-import {Transaction, TransactionDetail, TransactionSort} from 'src/interfaces/transaction';
-import {User} from 'src/interfaces/user';
+import { Action } from 'redux';
+import { Comment } from 'src/interfaces/comment';
+import { Post } from 'src/interfaces/post';
+import {
+  Transaction,
+  TransactionDetail,
+  TransactionSort,
+} from 'src/interfaces/transaction';
+import { User } from 'src/interfaces/user';
 import MyriadAPI from 'src/lib/api/base';
 import * as TransactionAPI from 'src/lib/api/transaction';
-import {ThunkActionCreator} from 'src/types/thunk';
+import { ThunkActionCreator } from 'src/types/thunk';
 
 /**
  * Action Types
@@ -79,7 +88,9 @@ export type Actions =
  *
  * Actions
  */
-export const setTippedReference = (reference: Post | Comment | User): SetTippedReference => ({
+export const setTippedReference = (
+  reference: Post | Comment | User,
+): SetTippedReference => ({
   type: constants.SET_TIPPED_REFERENCE,
   payload: reference,
 });
@@ -93,12 +104,16 @@ export const clearTippedContent = (): ClearTippedContent => ({
   type: constants.CLEAR_TIPPED_CONTENT,
 });
 
-export const setTransactionCurrency = (currency: string): SetTransactionCurrency => ({
+export const setTransactionCurrency = (
+  currency: string,
+): SetTransactionCurrency => ({
   type: constants.SET_TRANSACTION_CURRENCY,
   currency,
 });
 
-export const setTransactionSort = (sort: TransactionSort): SetTransactionSort => ({
+export const setTransactionSort = (
+  sort: TransactionSort,
+): SetTransactionSort => ({
   type: constants.SET_TRANSACTION_SORT,
   sort,
 });
@@ -110,7 +125,7 @@ export const fetchTransactionHistory: ThunkActionCreator<Actions, RootState> =
 
     try {
       const {
-        tipSummaryState: {sort, currency},
+        tipSummaryState: { sort, currency },
       } = getState();
 
       const filter = {
@@ -120,7 +135,7 @@ export const fetchTransactionHistory: ThunkActionCreator<Actions, RootState> =
       };
       const orderField = sort === 'highest' ? 'amount' : 'createdAt';
 
-      const {data, meta} = await TransactionAPI.getTransactions(filter, {
+      const { data, meta } = await TransactionAPI.getTransactions(filter, {
         page,
         orderField,
       });
@@ -143,14 +158,14 @@ export const fetchTransactionSummary: ThunkActionCreator<Actions, RootState> =
 
     try {
       const {
-        userState: {user},
+        userState: { user },
       } = getState();
 
       if (!user) {
         throw new Error('User not found');
       }
 
-      const {data} = await MyriadAPI().request<TransactionDetail[]>({
+      const { data } = await MyriadAPI().request<TransactionDetail[]>({
         url: `/posts/${post.id}/transaction-summary`,
         method: 'GET',
       });
@@ -166,18 +181,21 @@ export const fetchTransactionSummary: ThunkActionCreator<Actions, RootState> =
     }
   };
 
-export const fetchTransactionHistoryForComment: ThunkActionCreator<Actions, RootState> =
+export const fetchTransactionHistoryForComment: ThunkActionCreator<
+  Actions,
+  RootState
+> =
   (page = 1) =>
   async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     try {
       const {
-        userState: {user},
+        userState: { user },
       } = getState();
 
       const {
-        tipSummaryState: {reference: comment},
+        tipSummaryState: { reference: comment },
       } = getState();
 
       if (!user) {
@@ -188,12 +206,12 @@ export const fetchTransactionHistoryForComment: ThunkActionCreator<Actions, Root
         throw new Error('Comment not found');
       }
 
-      const {data, meta} = await TransactionAPI.getTransactions(
+      const { data, meta } = await TransactionAPI.getTransactions(
         {
           type: 'comment',
           referenceId: comment.id,
         },
-        {page},
+        { page },
       );
 
       dispatch({
@@ -208,38 +226,40 @@ export const fetchTransactionHistoryForComment: ThunkActionCreator<Actions, Root
     }
   };
 
-export const fetchTransactionSummaryForComment: ThunkActionCreator<Actions, RootState> =
-  () => async (dispatch, getState) => {
-    dispatch(setLoading(true));
+export const fetchTransactionSummaryForComment: ThunkActionCreator<
+  Actions,
+  RootState
+> = () => async (dispatch, getState) => {
+  dispatch(setLoading(true));
 
-    try {
-      const {
-        userState: {user},
-      } = getState();
-      const {
-        tipSummaryState: {reference: comment},
-      } = getState();
+  try {
+    const {
+      userState: { user },
+    } = getState();
+    const {
+      tipSummaryState: { reference: comment },
+    } = getState();
 
-      if (!user) {
-        throw new Error('User not found');
-      }
-
-      if (!comment) {
-        throw new Error('Comment not found');
-      }
-
-      const {data} = await MyriadAPI().request<TransactionDetail[]>({
-        url: `/comments/${comment.id}/transaction-summary`,
-        method: 'GET',
-      });
-
-      dispatch({
-        type: constants.FETCH_TRANSACTION_SUMMARY_FOR_COMMENT,
-        summary: data,
-      });
-    } catch (error) {
-      dispatch(setError(error));
-    } finally {
-      dispatch(setLoading(false));
+    if (!user) {
+      throw new Error('User not found');
     }
-  };
+
+    if (!comment) {
+      throw new Error('Comment not found');
+    }
+
+    const { data } = await MyriadAPI().request<TransactionDetail[]>({
+      url: `/comments/${comment.id}/transaction-summary`,
+      method: 'GET',
+    });
+
+    dispatch({
+      type: constants.FETCH_TRANSACTION_SUMMARY_FOR_COMMENT,
+      summary: data,
+    });
+  } catch (error) {
+    dispatch(setError(error));
+  } finally {
+    dispatch(setLoading(false));
+  }
+};

@@ -1,5 +1,5 @@
-import {formatDistanceStrict, format} from 'date-fns';
-import {id, enUS} from 'date-fns/locale';
+import { formatDistanceStrict, format } from 'date-fns';
+import { id, enUS } from 'date-fns/locale';
 import locale from 'date-fns/locale/en-US';
 import i18n from 'src/locale';
 
@@ -31,9 +31,11 @@ const customFormatDistance = (token: any, count: any, options: any) => {
     if (options.comparison > 0) {
       return 'in ' + result;
     } else {
-      if (count < 45 && token === 'xSeconds') return (result = i18n.t('Date.Just_Now'));
-      if (count === 1 && token === 'xDays') return (result = i18n.t('Date.Yesterday'));
-      return i18n.t('Date.Result', {date: result});
+      if (count < 45 && token === 'xSeconds')
+        return (result = i18n.t('Date.Just_Now'));
+      if (count === 1 && token === 'xDays')
+        return (result = i18n.t('Date.Yesterday'));
+      return i18n.t('Date.Result', { date: result });
     }
   }
 

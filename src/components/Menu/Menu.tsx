@@ -1,19 +1,19 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 import Image from 'next/image';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {Backdrop, CircularProgress} from '@material-ui/core';
+import { Backdrop, CircularProgress } from '@material-ui/core';
 
-import {BoxComponent} from '../atoms/Box';
-import {ListItemComponent} from '../atoms/ListItem';
-import {useStyles} from './Menu.styles';
-import {useMenuList, MenuDetail, MenuId} from './use-menu-list';
+import { BoxComponent } from '../atoms/Box';
+import { ListItemComponent } from '../atoms/ListItem';
+import { useStyles } from './Menu.styles';
+import { useMenuList, MenuDetail, MenuId } from './use-menu-list';
 
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import SelectServer from 'src/components/SelectServer';
-import {useInstances} from 'src/hooks/use-instances.hooks';
-import {ServerListProps} from 'src/interfaces/server-list';
+import { useInstances } from 'src/hooks/use-instances.hooks';
+import { ServerListProps } from 'src/interfaces/server-list';
 import i18n from 'src/locale';
 
 type MenuProps = {
@@ -24,14 +24,14 @@ type MenuProps = {
 };
 
 export const Menu: React.FC<MenuProps> = props => {
-  const {selected, onChange, logo} = props;
+  const { selected, onChange, logo } = props;
 
   const styles = useStyles();
   const router = useRouter();
 
   const enqueueSnackbar = useEnqueueSnackbar();
 
-  const {switchInstance, loadingSwitch, onLoadingSwitch} = useInstances();
+  const { switchInstance, loadingSwitch, onLoadingSwitch } = useInstances();
 
   const menu = useMenuList(selected);
 
@@ -39,7 +39,7 @@ export const Menu: React.FC<MenuProps> = props => {
 
   const gotoHome = () => {
     if (router.pathname === '/') return;
-    router.push('/', undefined, {shallow: true});
+    router.push('/', undefined, { shallow: true });
   };
 
   const openMenu = (item: MenuDetail) => () => {
@@ -47,7 +47,10 @@ export const Menu: React.FC<MenuProps> = props => {
     onChange(item.url);
   };
 
-  const handleSwitchInstance = async (server: ServerListProps, callback?: () => void) => {
+  const handleSwitchInstance = async (
+    server: ServerListProps,
+    callback?: () => void,
+  ) => {
     try {
       await switchInstance(server);
 
@@ -56,7 +59,7 @@ export const Menu: React.FC<MenuProps> = props => {
       if (err.message === 'AccountNotFound') {
         setRegister(true);
       } else {
-        enqueueSnackbar({message: err.message, variant: 'error'});
+        enqueueSnackbar({ message: err.message, variant: 'error' });
       }
 
       onLoadingSwitch(false);

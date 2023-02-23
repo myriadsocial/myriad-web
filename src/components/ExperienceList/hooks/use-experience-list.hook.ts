@@ -1,11 +1,18 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 
-import {ExperienceOwner, useExperienceHook} from 'src/hooks/use-experience-hook';
-import {WrappedExperience} from 'src/interfaces/experience';
+import {
+  ExperienceOwner,
+  useExperienceHook,
+} from 'src/hooks/use-experience-hook';
+import { WrappedExperience } from 'src/interfaces/experience';
 
 export const useExperienceList = (owner: ExperienceOwner) => {
-  const {experiences, userExperiences, profileExperiences, trendingExperiences} =
-    useExperienceHook();
+  const {
+    experiences,
+    userExperiences,
+    profileExperiences,
+    trendingExperiences,
+  } = useExperienceHook();
 
   const [list, setList] = useState<WrappedExperience[]>([]);
 
@@ -14,7 +21,9 @@ export const useExperienceList = (owner: ExperienceOwner) => {
   }, [experiences, userExperiences, profileExperiences, trendingExperiences]);
 
   const generateExperienceList = () => {
-    const subscribedExperiencesIds = userExperiences.map(item => item.experience.id);
+    const subscribedExperiencesIds = userExperiences.map(
+      item => item.experience.id,
+    );
 
     switch (owner) {
       case ExperienceOwner.CURRENT_USER:
@@ -23,14 +32,20 @@ export const useExperienceList = (owner: ExperienceOwner) => {
       case ExperienceOwner.PROFILE:
         setList(
           profileExperiences.map(profileExperience => {
-            const subscribed = subscribedExperiencesIds.includes(profileExperience.experience.id);
+            const subscribed = subscribedExperiencesIds.includes(
+              profileExperience.experience.id,
+            );
             const subscribedExperience = userExperiences.find(
-              userExperience => userExperience.experience.id === profileExperience.experience.id,
+              userExperience =>
+                userExperience.experience.id ===
+                profileExperience.experience.id,
             );
 
             return {
               ...profileExperience,
-              id: subscribedExperience ? subscribedExperience.id : profileExperience.id,
+              id: subscribedExperience
+                ? subscribedExperience.id
+                : profileExperience.id,
               subscribed,
             };
           }),
@@ -40,7 +55,9 @@ export const useExperienceList = (owner: ExperienceOwner) => {
       case ExperienceOwner.TRENDING:
         setList(
           trendingExperiences.map(experience => ({
-            id: userExperiences.find(item => item.experience.id === experience.id)?.id ?? undefined,
+            id:
+              userExperiences.find(item => item.experience.id === experience.id)
+                ?.id ?? undefined,
             subscribed: subscribedExperiencesIds.includes(experience.id),
             experience,
           })),
@@ -50,7 +67,9 @@ export const useExperienceList = (owner: ExperienceOwner) => {
       default:
         setList(
           experiences.map(experience => ({
-            id: userExperiences.find(item => item.experience.id === experience.id)?.id ?? undefined,
+            id:
+              userExperiences.find(item => item.experience.id === experience.id)
+                ?.id ?? undefined,
             subscribed: subscribedExperiencesIds.includes(experience.id),
             experience,
           })),

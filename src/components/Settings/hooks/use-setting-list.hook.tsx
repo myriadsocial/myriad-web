@@ -1,20 +1,20 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import getConfig from 'next/config';
 
-import {AccountSettingsContainer} from '../AccountSettingsContainer';
+import { AccountSettingsContainer } from '../AccountSettingsContainer';
 import EmailSettings from '../EmailSettings';
-import {LanguageSettingsContainer} from '../LanguageSettingsContainer';
-import {NotificationSettingsContainer} from '../NotificationSettings.container';
-import {BlockListContainer} from '../render/BlockList';
-import {HelpComponent} from '../render/Help';
+import { LanguageSettingsContainer } from '../LanguageSettingsContainer';
+import { NotificationSettingsContainer } from '../NotificationSettings.container';
+import { BlockListContainer } from '../render/BlockList';
+import { HelpComponent } from '../render/Help';
 
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {UserState} from 'src/reducers/user/reducer';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
-const {publicRuntimeConfig} = getConfig();
+const { publicRuntimeConfig } = getConfig();
 
 export type SettingsType =
   | 'account'
@@ -35,7 +35,9 @@ export type SettingsOption<T> = {
 };
 
 export const useSettingList = (): SettingsOption<SettingsType>[] => {
-  const {anonymous} = useSelector<RootState, UserState>(state => state.userState);
+  const { anonymous } = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
 
   const panel: SettingsOption<SettingsType>[] = [
     {
@@ -48,7 +50,9 @@ export const useSettingList = (): SettingsOption<SettingsType>[] => {
       id: 'help',
       title: i18n.t('Setting.List_Menu.Help_Title'),
       subtitle: i18n.t('Setting.List_Menu.Help_Subtitle'),
-      component: <HelpComponent support={publicRuntimeConfig.myriadSupportMail} />,
+      component: (
+        <HelpComponent support={publicRuntimeConfig.myriadSupportMail} />
+      ),
     },
     {
       id: 'about',

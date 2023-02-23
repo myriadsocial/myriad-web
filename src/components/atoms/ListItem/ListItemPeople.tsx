@@ -1,17 +1,17 @@
 import React from 'react';
 
-import {Typography} from '@material-ui/core';
-import ListItem, {ListItemProps} from '@material-ui/core/ListItem';
+import { Typography } from '@material-ui/core';
+import ListItem, { ListItemProps } from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import SvgIcon from '@material-ui/core/SvgIcon';
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-import {SocialAvatar} from '../SocialAvatar';
+import { SocialAvatar } from '../SocialAvatar';
 
-import {SocialsEnum} from 'src/interfaces/social';
-import {PostOrigin} from 'src/interfaces/timeline';
+import { SocialsEnum } from 'src/interfaces/social';
+import { PostOrigin } from 'src/interfaces/timeline';
 
 type ListItemComponentProps = ListItemProps & {
   icon?: any;
@@ -71,60 +71,76 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export const ListItemPeopleComponent: React.FC<ListItemComponentProps> = props => {
-  const {icon, avatar, url, platform, title, subtitle, action, active, onClick} = props;
-  const styles = useStyles();
+export const ListItemPeopleComponent: React.FC<ListItemComponentProps> =
+  props => {
+    const {
+      icon,
+      avatar,
+      url,
+      platform,
+      title,
+      subtitle,
+      action,
+      active,
+      onClick,
+    } = props;
+    const styles = useStyles();
 
-  const iconStyles = [styles.icon];
-  const listProps: any = {};
+    const iconStyles = [styles.icon];
+    const listProps: any = {};
 
-  if (url) {
-    listProps.button = true;
-  }
+    if (url) {
+      listProps.button = true;
+    }
 
-  if (active) {
-    iconStyles.push(styles.active);
-  }
+    if (active) {
+      iconStyles.push(styles.active);
+    }
 
-  return (
-    <ListItem
-      key={title}
-      component="div"
-      className={styles.root}
-      ContainerComponent="div"
-      onClick={onClick}
-      {...listProps}>
-      {icon ? (
-        <ListItemIcon className={iconStyles.join(' ')}>
-          <SvgIcon component={icon} />
-        </ListItemIcon>
-      ) : (
-        <ListItemAvatar className={styles.avatar}>
-          <SocialAvatar
-            name={title}
-            origin={platform as PostOrigin}
-            avatar={avatar}
-            onClick={console.log}
-          />
-        </ListItemAvatar>
-      )}
+    return (
+      <ListItem
+        key={title}
+        component="div"
+        className={styles.root}
+        ContainerComponent="div"
+        onClick={onClick}
+        {...listProps}>
+        {icon ? (
+          <ListItemIcon className={iconStyles.join(' ')}>
+            <SvgIcon component={icon} />
+          </ListItemIcon>
+        ) : (
+          <ListItemAvatar className={styles.avatar}>
+            <SocialAvatar
+              name={title}
+              origin={platform as PostOrigin}
+              avatar={avatar}
+              onClick={console.log}
+            />
+          </ListItemAvatar>
+        )}
 
-      <ListItemText
-        primary={
-          <Typography component="div" variant="h5" color="textPrimary">
-            {title}
-          </Typography>
-        }
-        secondary={
-          subtitle ? (
-            <Typography component="span" variant="subtitle1" color="textPrimary">
-              {subtitle}
+        <ListItemText
+          primary={
+            <Typography component="div" variant="h5" color="textPrimary">
+              {title}
             </Typography>
-          ) : undefined
-        }
-      />
+          }
+          secondary={
+            subtitle ? (
+              <Typography
+                component="span"
+                variant="subtitle1"
+                color="textPrimary">
+                {subtitle}
+              </Typography>
+            ) : undefined
+          }
+        />
 
-      {action && <div className={`${styles.action} hidden-button`}>{action}</div>}
-    </ListItem>
-  );
-};
+        {action && (
+          <div className={`${styles.action} hidden-button`}>{action}</div>
+        )}
+      </ListItem>
+    );
+  };

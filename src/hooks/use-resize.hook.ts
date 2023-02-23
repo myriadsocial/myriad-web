@@ -1,8 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
 import debounce from 'lodash/debounce';
 
-export const useResize = (elemRef: React.MutableRefObject<HTMLDivElement | null>): number => {
+export const useResize = (
+  elemRef: React.MutableRefObject<HTMLDivElement | null>,
+): number => {
   const [height, setHeight] = useState(0);
 
   useEffect(() => {

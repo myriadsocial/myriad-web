@@ -2,17 +2,21 @@ import * as Sentry from '@sentry/nextjs';
 
 import React from 'react';
 
-import {NextPage} from 'next';
-import NextErrorComponent, {ErrorProps} from 'next/error';
+import { NextPage } from 'next';
+import NextErrorComponent, { ErrorProps } from 'next/error';
 
-import {Error as ErrorComponent} from 'src/components/Error';
+import { Error as ErrorComponent } from 'src/components/Error';
 
 interface AppErrorProps extends ErrorProps {
   err?: Error;
   hasGetInitialPropsRun?: boolean;
 }
 
-const AppError: NextPage<AppErrorProps> = ({statusCode, hasGetInitialPropsRun, err}) => {
+const AppError: NextPage<AppErrorProps> = ({
+  statusCode,
+  hasGetInitialPropsRun,
+  err,
+}) => {
   if (!hasGetInitialPropsRun && err) {
     // getInitialProps is not called in case of
     // https://github.com/vercel/next.js/issues/8592. As a workaround, we pass
@@ -25,8 +29,9 @@ const AppError: NextPage<AppErrorProps> = ({statusCode, hasGetInitialPropsRun, e
 };
 
 AppError.getInitialProps = async ctx => {
-  const {err, asPath} = ctx;
-  const errorInitialProps: AppErrorProps = await NextErrorComponent.getInitialProps(ctx);
+  const { err, asPath } = ctx;
+  const errorInitialProps: AppErrorProps =
+    await NextErrorComponent.getInitialProps(ctx);
 
   // Workaround for https://github.com/vercel/next.js/issues/8592, mark when
   // getInitialProps has run
@@ -58,7 +63,9 @@ AppError.getInitialProps = async ctx => {
   // If this point is reached, getInitialProps was called without any
   // information about what the error might be. This is unexpected and may
   // indicate a bug introduced in Next.js, so record it in Sentry
-  Sentry.captureException(new Error(`_error.js getInitialProps missing data at path: ${asPath}`));
+  Sentry.captureException(
+    new Error(`_error.js getInitialProps missing data at path: ${asPath}`),
+  );
   await Sentry.flush(2000);
 
   return errorInitialProps;

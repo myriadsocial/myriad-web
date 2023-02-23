@@ -1,15 +1,15 @@
-import {CameraIcon} from '@heroicons/react/outline';
+import { CameraIcon } from '@heroicons/react/outline';
 
-import React, {useRef} from 'react';
+import React, { useRef } from 'react';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-import {User} from '../../interfaces/user';
+import { User } from '../../interfaces/user';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -100,7 +100,7 @@ export const ImageButton: React.FC<ButtonUploadProps> = ({
   };
 
   const handleRemovePicture = () => {
-    removePicture({profilePictureURL: ''});
+    removePicture({ profilePictureURL: '' });
     handleClose();
   };
 
@@ -110,19 +110,23 @@ export const ImageButton: React.FC<ButtonUploadProps> = ({
         type="file"
         ref={uploadFieldRef}
         onChange={handleFileChange}
-        style={{display: 'none'}}
+        style={{ display: 'none' }}
         accept="image/*"
       />
       <div className={styles.wrapper}>
         <IconButton
           onClick={user.fullAccess ? handleClick : undefined}
           disabled={loading}
-          classes={{root: styles.action}}
+          classes={{ root: styles.action }}
           aria-label="upload-background">
           <SvgIcon component={CameraIcon} viewBox="0 0 24 24" />
         </IconButton>
         {loading && (
-          <CircularProgress size={24} color="primary" className={styles.buttonProgress} />
+          <CircularProgress
+            size={24}
+            color="primary"
+            className={styles.buttonProgress}
+          />
         )}
       </div>
       <Menu
@@ -131,12 +135,15 @@ export const ImageButton: React.FC<ButtonUploadProps> = ({
         }}
         anchorEl={anchorEl}
         getContentAnchorEl={null}
-        anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
-        transformOrigin={{vertical: 'top', horizontal: 'center'}}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={Boolean(anchorEl)}
         onClose={handleClose}>
         <MenuItem onClick={selectFile}>Change picture</MenuItem>
-        <MenuItem disabled={!imageProfile} onClick={handleRemovePicture} className={styles.delete}>
+        <MenuItem
+          disabled={!imageProfile}
+          onClick={handleRemovePicture}
+          className={styles.delete}>
           Remove picture
         </MenuItem>
       </Menu>

@@ -1,6 +1,6 @@
-import {Actions} from './actions';
+import { Actions } from './actions';
 import * as constants from './constants';
-import {State as BaseState} from './state';
+import { State as BaseState } from './state';
 
 import axios from 'axios';
 import * as Redux from 'redux';
@@ -9,7 +9,10 @@ const initalState: BaseState = {
   loading: false,
 };
 
-export const BaseReducer: Redux.Reducer<BaseState, Actions> = (state = initalState, action) => {
+export const BaseReducer: Redux.Reducer<BaseState, Actions> = (
+  state = initalState,
+  action,
+) => {
   switch (action.type) {
     case constants.ACTION_FAILED: {
       if (axios.isAxiosError(action.payload)) {

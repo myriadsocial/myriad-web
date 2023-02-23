@@ -1,7 +1,7 @@
-import {createPluginFactory} from '@udecode/plate-core';
+import { createPluginFactory } from '@udecode/plate-core';
 
-import {EmojiElement} from '../../render/Element/Emoji';
-import {EmojiPlugin} from './type';
+import { EmojiElement } from '../../render/Element/Emoji';
+import { EmojiPlugin } from './type';
 
 export const ELEMENT_EMOJI = 'emoji';
 
@@ -14,7 +14,7 @@ export const createEmojiPlugin = createPluginFactory<EmojiPlugin>({
   isInline: true,
   isVoid: true,
   component: EmojiElement,
-  then: (editor, {key}) => ({
+  then: (editor, { key }) => ({
     options: {
       id: key,
     },

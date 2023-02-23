@@ -1,8 +1,12 @@
-import {useCallback} from 'react';
-import {useDispatch} from 'react-redux';
+import { useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 
-import {Post} from 'src/interfaces/post';
-import {removeVote, setDownvoting, upvote} from 'src/reducers/timeline/actions';
+import { Post } from 'src/interfaces/post';
+import {
+  removeVote,
+  setDownvoting,
+  upvote,
+} from 'src/reducers/timeline/actions';
 
 export const usePostInteractionHook = () => {
   const dispatch = useDispatch();

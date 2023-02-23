@@ -1,14 +1,20 @@
-import {isUrl} from '@udecode/plate-common';
+import { isUrl } from '@udecode/plate-common';
 
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
-import {FormControl, FormHelperText, Input, InputLabel, Typography} from '@material-ui/core';
+import {
+  FormControl,
+  FormHelperText,
+  Input,
+  InputLabel,
+  Typography,
+} from '@material-ui/core';
 
-import {Embed} from '../atoms/Embed';
-import {useStyles} from './PostImport.styles';
+import { Embed } from '../atoms/Embed';
+import { useStyles } from './PostImport.styles';
 
 import ShowIf from 'src/components/common/show-if.component';
-import {SocialsEnum} from 'src/interfaces/social';
+import { SocialsEnum } from 'src/interfaces/social';
 import i18n from 'src/locale';
 
 type PostImportProps = {
@@ -20,14 +26,16 @@ type PostImportProps = {
 type ErrorType = 'unsupported' | 'invalid';
 
 const regex = {
-  [SocialsEnum.TWITTER]: /^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(es)?\/(\d+)/,
+  [SocialsEnum.TWITTER]:
+    /^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(es)?\/(\d+)/,
   [SocialsEnum.FACEBOOK]:
     /^(?:https?:\/\/)?(?:www\.|m\.|mobile\.|touch\.|mbasic\.)?(?:facebook\.com|fb(?:\.me|\.com))\/(?!$)(?:(?:\w)*#!\/)?(?:pages\/)?(?:photo\.php\?fbid=)?(?:[\w\-]*\/)*?(?:\/)?(?:profile\.php\?id=)?([^\/?&\s]*)(?:\/|&|\?)?.*$/s,
-  [SocialsEnum.REDDIT]: /(?:^.+?)(?:reddit.com)(\/r|\/user)(?:\/[\w\d]+){2}(?:\/)([\w\d]*)/,
+  [SocialsEnum.REDDIT]:
+    /(?:^.+?)(?:reddit.com)(\/r|\/user)(?:\/[\w\d]+){2}(?:\/)([\w\d]*)/,
 };
 
 export const PostImport: React.FC<PostImportProps> = props => {
-  const {value, onChange, onError} = props;
+  const { value, onChange, onError } = props;
   const styles = useStyles();
 
   const [url, setUrl] = useState<string>('');
@@ -42,7 +50,9 @@ export const PostImport: React.FC<PostImportProps> = props => {
     }
   }, [value]);
 
-  const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleUrlChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ): void => {
     const url = event.target.value;
 
     setError(null);
@@ -92,7 +102,9 @@ export const PostImport: React.FC<PostImportProps> = props => {
   return (
     <div className={styles.root}>
       <FormControl fullWidth className={styles.input} error={Boolean(error)}>
-        <InputLabel htmlFor="link-to-post">{i18n.t('Post_Import.Text_Placeholder')}</InputLabel>
+        <InputLabel htmlFor="link-to-post">
+          {i18n.t('Post_Import.Text_Placeholder')}
+        </InputLabel>
         <Input id="link-to-post" value={url} onChange={handleUrlChange} />
         <ShowIf condition={Boolean(error)}>
           <FormHelperText id="component-error-text">

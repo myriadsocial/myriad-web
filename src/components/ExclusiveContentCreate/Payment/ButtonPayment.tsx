@@ -1,27 +1,30 @@
-import {GiftIcon} from '@heroicons/react/outline';
+import { GiftIcon } from '@heroicons/react/outline';
 
-import {Dispatch, SetStateAction, useEffect, useState} from 'react';
-import {shallowEqual, useSelector} from 'react-redux';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { shallowEqual, useSelector } from 'react-redux';
 
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {Button, SvgIcon} from '@material-ui/core';
+import { Button, SvgIcon } from '@material-ui/core';
 
-import {useStyles} from './Payment.style';
+import { useStyles } from './Payment.style';
 
-import {PromptComponent} from 'components/atoms/Prompt/prompt.component';
+import { PromptComponent } from 'components/atoms/Prompt/prompt.component';
 import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
-import {ExclusiveContent} from 'components/common/Tipping/Tipping.interface';
+import { ExclusiveContent } from 'components/common/Tipping/Tipping.interface';
 import useTipping from 'components/common/Tipping/use-tipping.hook';
-import {useUserHook} from 'src/hooks/use-user.hook';
-import {Currency} from 'src/interfaces/currency';
-import {ReferenceType} from 'src/interfaces/interaction';
-import {Network} from 'src/interfaces/network';
-import {getExclusiveContent, getWalletAddressExclusive} from 'src/lib/api/post';
+import { useUserHook } from 'src/hooks/use-user.hook';
+import { Currency } from 'src/interfaces/currency';
+import { ReferenceType } from 'src/interfaces/interaction';
+import { Network } from 'src/interfaces/network';
+import {
+  getExclusiveContent,
+  getWalletAddressExclusive,
+} from 'src/lib/api/post';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {ECState} from 'src/reducers/exclusive-content/reducer';
-import {UserState} from 'src/reducers/user/reducer';
+import { RootState } from 'src/reducers';
+import { ECState } from 'src/reducers/exclusive-content/reducer';
+import { UserState } from 'src/reducers/user/reducer';
 
 const ButtonPayment = ({
   id,
@@ -32,10 +35,14 @@ const ButtonPayment = ({
   contentId: string;
   setExclusive: Dispatch<SetStateAction<ExclusiveContent>>;
 }) => {
-  const {currentWallet} = useSelector<RootState, UserState>(state => state.userState);
-  const {paid, ecId} = useSelector<RootState, ECState>(state => state.ecState);
-  const {user} = useUserHook();
-  const {switchNetwork} = useBlockchain();
+  const { currentWallet } = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
+  const { paid, ecId } = useSelector<RootState, ECState>(
+    state => state.ecState,
+  );
+  const { user } = useUserHook();
+  const { switchNetwork } = useBlockchain();
   const router = useRouter();
 
   const tipping = useTipping();
@@ -49,7 +56,7 @@ const ButtonPayment = ({
     state => state.userState.anonymous,
     shallowEqual,
   );
-  const {wallets} = user || {wallets: []};
+  const { wallets } = user || { wallets: [] };
   const isWeb2Users = !wallets.length && !anonymous;
 
   const handleCloseTipInfo = () => {
@@ -79,12 +86,17 @@ const ButtonPayment = ({
         setExclusive(exclusiveDetail);
       } else {
         setAcceptNetwork(exclusiveDetail.prices[0]?.currency);
-        if (currentWallet?.networkId !== exclusiveDetail.prices[0]?.currency?.networkId) {
+        if (
+          currentWallet?.networkId !==
+          exclusiveDetail.prices[0]?.currency?.networkId
+        ) {
           return handleNetworkError();
         }
-        const walletAddress = await getWalletAddressExclusive(exclusiveDetail?.id);
+        const walletAddress = await getWalletAddressExclusive(
+          exclusiveDetail?.id,
+        );
         tipping.send({
-          receiver: {...exclusiveDetail?.user, walletDetail: walletAddress},
+          receiver: { ...exclusiveDetail?.user, walletDetail: walletAddress },
           reference: exclusiveDetail,
           referenceType: ReferenceType.EXCLUSIVE_CONTENT,
           currencyContent: exclusiveDetail.prices[0]?.currency,
@@ -131,7 +143,10 @@ const ButtonPayment = ({
         open={openSwitchNetwork}
         onCancel={handleNetworkError}>
         <div className={styles.wrapperButtonFlex}>
-          <Button variant="outlined" color="secondary" onClick={handleNetworkError}>
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={handleNetworkError}>
             {i18n.t('General.Cancel')}
           </Button>
           <Button
@@ -149,7 +164,10 @@ const ButtonPayment = ({
         open={tipInfoOpened}
         onCancel={handleCloseTipInfo}>
         <div className={styles.wrapperButtonFlex}>
-          <Button variant="outlined" color="secondary" onClick={handleCloseTipInfo}>
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={handleCloseTipInfo}>
             {i18n.t('General.Cancel')}
           </Button>
           <Button variant="contained" color="primary" onClick={handleLogin}>
@@ -171,7 +189,10 @@ const ButtonPayment = ({
             onClick={handleCloseConnectWalletWarningPrompt}>
             {i18n.t('General.Cancel')}
           </Button>
-          <Button variant="contained" color="primary" onClick={handleConnectWeb3Wallet}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleConnectWeb3Wallet}>
             {i18n.t('General.ConnectWallet')}
           </Button>
         </div>

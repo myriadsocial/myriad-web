@@ -1,15 +1,21 @@
-import {convertToPolkadotAddress} from './extension';
+import { convertToPolkadotAddress } from './extension';
 
 import capitalize from 'lodash/capitalize';
-import {Network, NetworkIdEnum} from 'src/interfaces/network';
-import {UserWallet} from 'src/interfaces/user';
-import {BlockchainPlatform} from 'src/interfaces/wallet';
+import { Network, NetworkIdEnum } from 'src/interfaces/network';
+import { UserWallet } from 'src/interfaces/user';
+import { BlockchainPlatform } from 'src/interfaces/wallet';
 
-export const formatAddress = (currentWallet: UserWallet, address: null | string) => {
+export const formatAddress = (
+  currentWallet: UserWallet,
+  address: null | string,
+) => {
   if (address && address.length > 14) {
     let validAddress = '';
 
-    if (currentWallet?.network?.blockchainPlatform === BlockchainPlatform.SUBSTRATE) {
+    if (
+      currentWallet?.network?.blockchainPlatform ===
+      BlockchainPlatform.SUBSTRATE
+    ) {
       validAddress = convertToPolkadotAddress(address, currentWallet);
     } else {
       validAddress = address;
@@ -24,7 +30,10 @@ export const formatAddress = (currentWallet: UserWallet, address: null | string)
   return address;
 };
 
-export const formatNetworkTitle = (network?: Network, networkId?: NetworkIdEnum) => {
+export const formatNetworkTitle = (
+  network?: Network,
+  networkId?: NetworkIdEnum,
+) => {
   const id = network?.id ?? networkId;
   switch (id) {
     case NetworkIdEnum.NEAR:
@@ -34,7 +43,10 @@ export const formatNetworkTitle = (network?: Network, networkId?: NetworkIdEnum)
   }
 };
 
-export const formatWalletTitle = (network?: Network, networkId?: NetworkIdEnum) => {
+export const formatWalletTitle = (
+  network?: Network,
+  networkId?: NetworkIdEnum,
+) => {
   if (network) {
     switch (network?.blockchainPlatform) {
       case BlockchainPlatform.SUBSTRATE:

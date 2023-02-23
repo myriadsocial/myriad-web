@@ -1,12 +1,12 @@
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
-import {useBlockList} from './use-blocked-list.hook';
+import { useBlockList } from './use-blocked-list.hook';
 
-import {Friend, FriendStatus} from 'src/interfaces/friend';
-import {User} from 'src/interfaces/user';
-import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
-import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
-import {RootState} from 'src/reducers';
+import { Friend, FriendStatus } from 'src/interfaces/friend';
+import { User } from 'src/interfaces/user';
+import { ListMeta } from 'src/lib/api/interfaces/base-list.interface';
+import { SortType } from 'src/lib/api/interfaces/pagination-params.interface';
+import { RootState } from 'src/reducers';
 import {
   fetchFriendRequest,
   createFriendRequest,
@@ -23,15 +23,19 @@ import {
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useFriendsHook = (user?: User) => {
   const dispatch = useDispatch();
-  const {load: loadBlockedUsers} = useBlockList(user);
+  const { load: loadBlockedUsers } = useBlockList(user);
 
-  const filter = useSelector<RootState, string | undefined>(state => state.friendState.filter);
-  const {currentPage: currentFriendPage, totalPageCount} = useSelector<RootState, ListMeta>(
-    state => state.friendState.meta,
+  const filter = useSelector<RootState, string | undefined>(
+    state => state.friendState.filter,
   );
-  const {currentPage: currentFriendRequestPage} = useSelector<RootState, ListMeta>(
-    state => state.friendRequestState.meta,
-  );
+  const { currentPage: currentFriendPage, totalPageCount } = useSelector<
+    RootState,
+    ListMeta
+  >(state => state.friendState.meta);
+  const { currentPage: currentFriendRequestPage } = useSelector<
+    RootState,
+    ListMeta
+  >(state => state.friendRequestState.meta);
 
   const loadRequests = () => {
     if (!user) return;
@@ -70,7 +74,7 @@ export const useFriendsHook = (user?: User) => {
   };
 
   const sort = (sort: SortType) => {
-    dispatch(updateFriendParams({sort}));
+    dispatch(updateFriendParams({ sort }));
 
     if (filter) {
       searchFriends(filter);

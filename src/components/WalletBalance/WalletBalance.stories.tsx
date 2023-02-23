@@ -1,16 +1,16 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
-import {WalletBalances as WalletBalancesComponent} from '.';
+import { WalletBalances as WalletBalancesComponent } from '.';
 
-import {CurrencyId} from 'src/interfaces/currency';
+import { CurrencyId } from 'src/interfaces/currency';
 
 export default {
   title: 'UI Revamp v2.0/components/Wallet Balances',
   component: WalletBalancesComponent,
   argTypes: {
-    backgroundColor: {control: 'color'},
+    backgroundColor: { control: 'color' },
   },
 } as ComponentMeta<typeof WalletBalancesComponent>;
 

@@ -1,23 +1,23 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Link from 'next/link';
 
-import {List, ListItem, ListItemText, Typography} from '@material-ui/core';
+import { List, ListItem, ListItemText, Typography } from '@material-ui/core';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 
-import {Avatar, AvatarSize} from '../atoms/Avatar';
-import {Loading} from '../atoms/Loading';
-import {Modal} from '../atoms/Modal';
-import {useStyles} from './PostImporter.styles';
+import { Avatar, AvatarSize } from '../atoms/Avatar';
+import { Loading } from '../atoms/Loading';
+import { Modal } from '../atoms/Modal';
+import { useStyles } from './PostImporter.styles';
 
-import {LoadMoreComponent} from 'src/components/atoms/LoadMore/LoadMore';
-import {Post} from 'src/interfaces/post';
+import { LoadMoreComponent } from 'src/components/atoms/LoadMore/LoadMore';
+import { Post } from 'src/interfaces/post';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {fetchImporter} from 'src/reducers/importers/actions';
-import {ImporterState} from 'src/reducers/importers/reducer';
+import { RootState } from 'src/reducers';
+import { fetchImporter } from 'src/reducers/importers/actions';
+import { ImporterState } from 'src/reducers/importers/reducer';
 
 type Props = {
   open: boolean;
@@ -26,14 +26,14 @@ type Props = {
 };
 
 export const PostImporter: React.FC<Props> = props => {
-  const {post, open, onClose} = props;
+  const { post, open, onClose } = props;
   const styles = useStyles();
   const dispatch = useDispatch();
 
   const {
     importers,
     loading,
-    meta: {currentPage, totalPageCount},
+    meta: { currentPage, totalPageCount },
   } = useSelector<RootState, ImporterState>(state => state.importersState);
   const [importer, setImporter] = useState<string | undefined>(undefined);
   const hasMore = currentPage < totalPageCount;
@@ -44,7 +44,14 @@ export const PostImporter: React.FC<Props> = props => {
       if (post.importers?.length === 0) {
         dispatch(fetchImporter(post.originPostId, post.platform, ''));
       } else {
-        dispatch(fetchImporter(post.originPostId, post.platform, post.createdBy, currentPage + 1));
+        dispatch(
+          fetchImporter(
+            post.originPostId,
+            post.platform,
+            post.createdBy,
+            currentPage + 1,
+          ),
+        );
       }
     }
   };
@@ -54,7 +61,9 @@ export const PostImporter: React.FC<Props> = props => {
       if (post.importers?.length === 0) {
         dispatch(fetchImporter(post.originPostId, post.platform, ''));
       } else {
-        dispatch(fetchImporter(post.originPostId, post.platform, post.createdBy));
+        dispatch(
+          fetchImporter(post.originPostId, post.platform, post.createdBy),
+        );
       }
     }
   }, [dispatch, post, open]);
@@ -76,7 +85,7 @@ export const PostImporter: React.FC<Props> = props => {
       } ${i18n.t('Post_Import.Importer_List_Subtitle')}`}
       className={styles.root}
       gutter="custom">
-      <List style={{padding: 0}}>
+      <List style={{ padding: 0 }}>
         <InfiniteScroll
           scrollableTarget="scrollable-timeline"
           dataLength={importers.length}
@@ -87,21 +96,35 @@ export const PostImporter: React.FC<Props> = props => {
             .filter(ar => Boolean(ar.deletedAt) === false)
             .map(e => {
               return (
-                <Link key={e.id} href={'/profile/[id]'} as={`/profile/${e.id}`} passHref>
-                  <a style={{cursor: 'pointer', textDecoration: 'none'}}>
+                <Link
+                  key={e.id}
+                  href={'/profile/[id]'}
+                  as={`/profile/${e.id}`}
+                  passHref>
+                  <a style={{ cursor: 'pointer', textDecoration: 'none' }}>
                     <ListItem
                       style={{
-                        background: importer === e.id ? 'rgba(255, 200, 87, 0.2)' : '#FFF',
+                        background:
+                          importer === e.id
+                            ? 'rgba(255, 200, 87, 0.2)'
+                            : '#FFF',
                         padding: '8px 30px',
                       }}
                       onClick={onClose}
                       onMouseEnter={onHover(e.id)}
                       onMouseLeave={onHover(undefined)}>
                       <ListItemAvatar>
-                        <Avatar name={e.name} src={e.profilePictureURL} size={AvatarSize.MEDIUM} />
+                        <Avatar
+                          name={e.name}
+                          src={e.profilePictureURL}
+                          size={AvatarSize.MEDIUM}
+                        />
                       </ListItemAvatar>
                       <ListItemText>
-                        <Typography className={styles.name} component="span" color="textPrimary">
+                        <Typography
+                          className={styles.name}
+                          component="span"
+                          color="textPrimary">
                           {e.name}
                         </Typography>
                       </ListItemText>
@@ -113,7 +136,9 @@ export const PostImporter: React.FC<Props> = props => {
         </InfiniteScroll>
       </List>
       {loading && <Loading />}
-      {importers.length > 0 && hasMore && <LoadMoreComponent loadmore={onLoadNextPage} />}
+      {importers.length > 0 && hasMore && (
+        <LoadMoreComponent loadmore={onLoadNextPage} />
+      )}
     </Modal>
   );
 };

@@ -1,8 +1,8 @@
-import {Actions} from './actions';
+import { Actions } from './actions';
 import * as constants from './constants';
 
 import * as Redux from 'redux';
-import {ExchangeRate} from 'src/interfaces/exchange';
+import { ExchangeRate } from 'src/interfaces/exchange';
 
 export interface ExchangeRateState {
   exchangeRates: ExchangeRate[];

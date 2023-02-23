@@ -1,1 +1,1 @@
-export {default} from './PwaWrapper';
+export { default } from './PwaWrapper';

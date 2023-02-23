@@ -1,12 +1,12 @@
 import React from 'react';
 
-import {useStyles} from './Embed.styles';
-import {RedditEmbed} from './Reddit/RedditEmbed';
-import {TweetEmbed} from './Twitter/TweetEmbed';
+import { useStyles } from './Embed.styles';
+import { RedditEmbed } from './Reddit/RedditEmbed';
+import { TweetEmbed } from './Twitter/TweetEmbed';
 
-import {Loading} from 'src/components/atoms/Loading';
+import { Loading } from 'src/components/atoms/Loading';
 import ShowIf from 'src/components/common/show-if.component';
-import {SocialsEnum} from 'src/interfaces/social';
+import { SocialsEnum } from 'src/interfaces/social';
 
 type EmbedProps = {
   social: SocialsEnum;
@@ -19,7 +19,7 @@ type EmbedProps = {
 };
 
 export const Embed: React.FC<EmbedProps> = props => {
-  const {social, url, postId, onClick, onError, onLoad} = props;
+  const { social, url, postId, onClick, onError, onLoad } = props;
   const styles = useStyles();
 
   const handleClick = (): void => {
@@ -32,7 +32,7 @@ export const Embed: React.FC<EmbedProps> = props => {
         <div className={styles.embed}>
           <TweetEmbed
             tweetId={postId}
-            options={{height: 560}}
+            options={{ height: 560 }}
             placeholder={<Loading />}
             onLoad={onLoad}
             onError={onError}
@@ -41,7 +41,12 @@ export const Embed: React.FC<EmbedProps> = props => {
       </ShowIf>
 
       <ShowIf condition={social === SocialsEnum.REDDIT}>
-        <RedditEmbed url={url} placeholder={<Loading />} onLoad={onLoad} onError={onError} />
+        <RedditEmbed
+          url={url}
+          placeholder={<Loading />}
+          onLoad={onLoad}
+          onError={onError}
+        />
       </ShowIf>
     </div>
   );

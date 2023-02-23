@@ -25,7 +25,9 @@ module.exports = {
 
     rules.push({
       test: /\.mjs$/,
-      include: [path.join(__dirname, '..', 'node_modules/@polkadot/extension-dapp/')],
+      include: [
+        path.join(__dirname, '..', 'node_modules/@polkadot/extension-dapp/'),
+      ],
       type: 'javascript/auto',
     });
 

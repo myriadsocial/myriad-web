@@ -1,6 +1,6 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 
-import {AuthorizationContext} from './Authorization.context';
+import { AuthorizationContext } from './Authorization.context';
 
 type BaseAction = {
   onClick: (...args: any) => void;
@@ -8,9 +8,12 @@ type BaseAction = {
 };
 
 // just a function that accepts Component as an argument
-export function WithAuthorizeAction<T>(WrappedComponent: React.ComponentType<T & BaseAction>) {
+export function WithAuthorizeAction<T>(
+  WrappedComponent: React.ComponentType<T & BaseAction>,
+) {
   // Try to create a nice displayName for React Dev Tools.
-  const displayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
+  const displayName =
+    WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
   const ComponentWithBannedAction: React.FC<T & BaseAction> = props => {
     const authorization = useContext(AuthorizationContext);

@@ -8,7 +8,7 @@ import {
   ELEMENT_H6,
 } from '@udecode/plate';
 
-import {MyPlatePlugin} from '../Editor.interface';
+import { MyPlatePlugin } from '../Editor.interface';
 
 export const alignmentPlugin: Partial<MyPlatePlugin> = {
   inject: {

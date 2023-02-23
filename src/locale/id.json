@@ -70,7 +70,7 @@
         },
         "People": "Orang",
         "Post": "Pos",
-        "Privacy" : "Privasi"
+        "Privacy": "Privasi"
       },
       "Post": {
         "Empty": "Pos yang ditambahkan akan muncul di sini. Anda dapat menambahkan postingan ke pengalaman dengan memilih 'tambahkan postingan ke pengalaman' pada opsi lainnya."
@@ -118,10 +118,10 @@
         "Tag": "Tambah minimal satu tag",
         "People": "Tambah minimal satu orang"
       },
-      "Visibility" : {
-        "Public" : "Publik",
-        "OnlyMe" : "Hanya Saya",
-        "Custom" : "Kustom"
+      "Visibility": {
+        "Public": "Publik",
+        "OnlyMe": "Hanya Saya",
+        "Custom": "Kustom"
       }
     },
     "Modal_Add_Post": {
@@ -135,7 +135,7 @@
       "Empty_Title": "Uh-oh",
       "Empty_Subtitle": "Anda belum membuat pengalaman apa pun.",
       "Btn_Confirm": "Konfirmasi",
-      "Success_Msg" :"Berhasil menambahkan postingan ke timeline"
+      "Success_Msg": "Berhasil menambahkan postingan ke timeline"
     }
   },
   "General": {
@@ -147,9 +147,9 @@
     "Loading": "Memuat",
     "See_More": "Selengkapnya",
     "Save": "Simpan",
-    "Amount" : "Jumlah",
-    "Summary" : "Ringkasan",
-    "Got_It" : "Mengerti!",
+    "Amount": "Jumlah",
+    "Summary": "Ringkasan",
+    "Got_It": "Mengerti!",
     "ConnectWallet": "Hubungkan Dompet"
   },
   "Confirm": {
@@ -175,7 +175,7 @@
       "Subtitle_2": "Periksa kotak masuk Anda dan klik tautan itu untuk masuk. Jangan lupa untuk memeriksa folder spam Anda!",
       "Button_Text": "Kirim Ulang Tautan Masuk",
       "Timer_Text": "Anda dapat mengirim kembali tautan masuk Anda setelah {{time}} detik(s)",
-      "From":"dari"
+      "From": "dari"
     },
     "Description": "Platform sosial yang sepenuhnya berada di bawah kendali Anda. Tetap anonim, cari topik Anda sendiri, pilih antarmuka Anda dan kendalikan apa yang Anda lihat.",
     "Alert": {
@@ -205,7 +205,7 @@
       "Btn_Demo": "demo"
     },
     "Email": {
-      "LoginByEmail" : {
+      "LoginByEmail": {
         "Title": "Masuk dengan email",
         "Subtitle": "Kamu akan memperoleh tautan akses dalam kotak masukmu.",
         "Email_Placeholder": "Ketik emailmu",
@@ -237,7 +237,7 @@
         "No_Account_Description": "Anda tidak memiliki akun di {{instance_name}}. Buat akun baru di {{instance_name}}?",
         "No_Account_Cancel": "Tidak, Pilih Lainnya",
         "No_Account_Confirm": "Keluar",
-        "Switch" : "Ubah Server"
+        "Switch": "Ubah Server"
       }
     },
     "Profile": {
@@ -381,7 +381,6 @@
       "See": "Lihat Pos",
       "Comment": "Anda mengomentari “{{text}}...” yang diposting oleh {{name}}.",
       "Reply": "Anda membalas komentar di “{{text}}...” yang Diposting oleh {{name}}."
-
     },
     "Experience": {
       "Empty": {
@@ -497,8 +496,8 @@
         "Public": "Publik",
         "Friend_Only": "Teman saja",
         "Only_Me": "Hanya saya",
-        "Custom" : "Kustom",
-        "Timeline" : "Linimasa Saya",
+        "Custom": "Kustom",
+        "Timeline": "Linimasa Saya",
         "Tipping_Warning": "Dengan membatasi paparan pengguna terhadap postingan ini, jumlah pengguna yang dapat memberikan tip juga akan berkurang.",
         "Cancel": "Batal",
         "Confirm": "Konfirmasi",
@@ -542,10 +541,10 @@
       "Public": "Publik",
       "Friend_Only": "Hanya teman",
       "Only_Me": "Hanya saya",
-      "Timeline" : "Linimasa Saya",
-       "Custom" : "Kustom",
-       "AlertTimeline" : "Hanya orang yang Anda tambahkan ke linimasa ini yang dapat melihat postingan ini",
-       "SelectedTimeline" : "Linimasa Terpilih"
+      "Timeline": "Linimasa Saya",
+      "Custom": "Kustom",
+      "AlertTimeline": "Hanya orang yang Anda tambahkan ke linimasa ini yang dapat melihat postingan ini",
+      "SelectedTimeline": "Linimasa Terpilih"
     },
     "NSFW": {
       "Label": "NSFW",
@@ -588,7 +587,7 @@
     "Error": {
       "Default": "Gagal membuat postingan, coba lagi nanti",
       "ImageTooLarge": "Gagal membuat postingan, ukuran foto terlalu besar",
-      "Empty" : "Gagal membuat postingan, tidak boleh kosong"
+      "Empty": "Gagal membuat postingan, tidak boleh kosong"
     }
   },
   "Post_Delete": {
@@ -676,7 +675,7 @@
       "Toaster_Success": "Laporan postingan telah terkirim"
     },
     "Load_More": "Lihat balasan lainnya",
-    "ExclusiveContent" : "{{Lampirkan}} Konten Eksklusif"
+    "ExclusiveContent": "{{Lampirkan}} Konten Eksklusif"
   },
   "Tipping": {
     "Modal_Main": {
@@ -1082,7 +1081,7 @@
       "Claim_All": "Klaim Semua",
       "Claim": "Klaim",
       "Switch": "Ganti network untuk mengklaim",
-      "Reference":{
+      "Reference": {
         "Title": "Verifikasi referensi",
         "Desc": "Verifikasi referensi Anda dan mulailah mengklaim tip Anda. Untuk diproses, Anda perlu membayar biaya gas maksimum {{txFee}} {{token}}.",
         "Button": "Verifikasi referensi",
@@ -1202,56 +1201,56 @@
     "Toaster_Esc": "Tekan Esc untuk keluar dari layar penuh",
     "Disclaimer": "Integrasi Myriad Metaverse masih dalam tahap beta. Jika Anda mengalami masalah, atau jika Anda menginginkan pengalaman terbaik di Myriad Metaverse, kunjungi"
   },
-   "LiteVersion":{
-    "Cancel":"Batal",
-    "Confirm":"Konfirmasi",
-    "CreateAccountEmail":"Buat Akun Baru",
-    "CreateAccountEmailDesc":"Anda akan membuat akun baru. Anda masih dapat menambahkan dompet kripto nanti.",
-    "LimitDescProfile":"menggunakan Myriad versi lite. Anda hanya dapat mengirim permintaan pertemanan kepada pengguna dengan dompet aktif.",
-    "LimitTitleExperience":"Batas Buat Pengalaman Tercapai!",
-    "LimitTitleFriends":"Tidak bisa menambah teman",
-    "LimitDescExperience":"Anda sedang menggunakan Myriad versi lite. Anda hanya dapat membuat hingga 5 linimasa! Hubungkan Dompet Web 3.0 untuk menciptakan lebih banyak linimasa",
-    "LimitDescFriends":"Ups! Anda perlu menghubungkan dompet Anda untuk melakukan itu. Atau, Anda dapat mengikuti linimasa yang dikuratori oleh {{username}}",
-    "ViewTimelines":"Tampilkan linimasa",
+  "LiteVersion": {
+    "Cancel": "Batal",
+    "Confirm": "Konfirmasi",
+    "CreateAccountEmail": "Buat Akun Baru",
+    "CreateAccountEmailDesc": "Anda akan membuat akun baru. Anda masih dapat menambahkan dompet kripto nanti.",
+    "LimitDescProfile": "menggunakan Myriad versi lite. Anda hanya dapat mengirim permintaan pertemanan kepada pengguna dengan dompet aktif.",
+    "LimitTitleExperience": "Batas Buat Pengalaman Tercapai!",
+    "LimitTitleFriends": "Tidak bisa menambah teman",
+    "LimitDescExperience": "Anda sedang menggunakan Myriad versi lite. Anda hanya dapat membuat hingga 5 linimasa! Hubungkan Dompet Web 3.0 untuk menciptakan lebih banyak linimasa",
+    "LimitDescFriends": "Ups! Anda perlu menghubungkan dompet Anda untuk melakukan itu. Atau, Anda dapat mengikuti linimasa yang dikuratori oleh {{username}}",
+    "ViewTimelines": "Tampilkan linimasa",
     "MaybeLater": "Nanti Saja",
-    "ConnectWallet":"Hubungkan Dompet Web 3.0",
-    "LimitTitlePost":"Wow! Sudah banyak postingannya!",
-    "LimitDescPost":"Untuk mencegah spam, untuk sementara kami membatasi postingan hingga 15 posting per hari. Anda masih dapat menelusuri Myriad sepuasnya!"
+    "ConnectWallet": "Hubungkan Dompet Web 3.0",
+    "LimitTitlePost": "Wow! Sudah banyak postingannya!",
+    "LimitDescPost": "Untuk mencegah spam, untuk sementara kami membatasi postingan hingga 15 posting per hari. Anda masih dapat menelusuri Myriad sepuasnya!"
   },
-  "Visibilities":{
-    "PostVisibilities":"Pos ini hanya dapat dilihat oleh pembuatnya dan orang yang ditambahkan",
-    "Custom":"Kustom",
-    "Hidden" : "Pemilik mungkin mengubah setelan privasinya, membagikannya untuk sekelompok orang tertentu, atau telah dihapus",
-    "Back" : "Kembali ke Beranda"
+  "Visibilities": {
+    "PostVisibilities": "Pos ini hanya dapat dilihat oleh pembuatnya dan orang yang ditambahkan",
+    "Custom": "Kustom",
+    "Hidden": "Pemilik mungkin mengubah setelan privasinya, membagikannya untuk sekelompok orang tertentu, atau telah dihapus",
+    "Back": "Kembali ke Beranda"
   },
-  "ExclusiveContent" : {
-    "Create" : "Buat Konten Eksklusif",
-    "Add" : "Tambah Konten Eksklusif",
-    "Attach" : "Lampirkan Konten Eksklusif",
-    "Remove" : "Hapus Konten Eksklusif",
-    "Available" : "Buka Konten Eksklusif",
-    "Label" : {
-      "Attach" : "Lampirkan",
-      "ExclusiveContent" : "Konten Eksklusif",
-      "ExclusiveContentPrice" : "Harga Konten Eksklusif",
-      "ChangeCurrency" : "Ubah Mata Uang",
-      "Fee" : "Biaya platform sebesar 5% akan dipotong dari pembayaran yang Anda terima",
-      "NetworkError" : "Jaringan Salah",
-      "Rethink" : "Tidak, saya pikirkan kembali",
-      "SwitchNetwork" : "Ubah Jaringan",
-      "UnlockNow" : "Buka Sekarang"
+  "ExclusiveContent": {
+    "Create": "Buat Konten Eksklusif",
+    "Add": "Tambah Konten Eksklusif",
+    "Attach": "Lampirkan Konten Eksklusif",
+    "Remove": "Hapus Konten Eksklusif",
+    "Available": "Buka Konten Eksklusif",
+    "Label": {
+      "Attach": "Lampirkan",
+      "ExclusiveContent": "Konten Eksklusif",
+      "ExclusiveContentPrice": "Harga Konten Eksklusif",
+      "ChangeCurrency": "Ubah Mata Uang",
+      "Fee": "Biaya platform sebesar 5% akan dipotong dari pembayaran yang Anda terima",
+      "NetworkError": "Jaringan Salah",
+      "Rethink": "Tidak, saya pikirkan kembali",
+      "SwitchNetwork": "Ubah Jaringan",
+      "UnlockNow": "Buka Sekarang"
     },
-    "Placeholder" : {
-      "AddPrice" : "Masukan Harga",
-      "Editor" : "Konten yang Anda tambahkan di sini akan dibuka kepada audiens anda setelah melakukan pembayaran."
+    "Placeholder": {
+      "AddPrice": "Masukan Harga",
+      "Editor": "Konten yang Anda tambahkan di sini akan dibuka kepada audiens anda setelah melakukan pembayaran."
     },
-    "Text" : {
-      "NetworkError" : "Pembayaran hanya berlaku di jaringan {{accept}} saat ini anda berada di jaringan {{current}}. Ubah jaringan untuk memproses pembayaran",
-      "NotLogin" : "Ini adalah konten berbayar. Masuk dengan dompet kripto Anda untuk melihatnya.",
-      "Web2User" : "Anda tidak memiliki dompet yang terhubung ke akun Anda. Mari coba sambungkan dompet Anda untuk membuka konten eksklusif ini."
+    "Text": {
+      "NetworkError": "Pembayaran hanya berlaku di jaringan {{accept}} saat ini anda berada di jaringan {{current}}. Ubah jaringan untuk memproses pembayaran",
+      "NotLogin": "Ini adalah konten berbayar. Masuk dengan dompet kripto Anda untuk melihatnya.",
+      "Web2User": "Anda tidak memiliki dompet yang terhubung ke akun Anda. Mari coba sambungkan dompet Anda untuk membuka konten eksklusif ini."
     },
-    "Prompt_Success" : {
-      "Title" : "Konten Berhasil Dibuka"
+    "Prompt_Success": {
+      "Title": "Konten Berhasil Dibuka"
     }
   }
 }

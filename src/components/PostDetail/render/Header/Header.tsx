@@ -1,34 +1,34 @@
-import {DotsVerticalIcon} from '@heroicons/react/solid';
+import { DotsVerticalIcon } from '@heroicons/react/solid';
 
-import React, {useCallback} from 'react';
+import React, { useCallback } from 'react';
 
 import Link from 'next/link';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {capitalize, Menu, Typography} from '@material-ui/core';
+import { capitalize, Menu, Typography } from '@material-ui/core';
 import CardHeader from '@material-ui/core/CardHeader';
 import IconButton from '@material-ui/core/IconButton';
 import ExternalLink from '@material-ui/core/Link';
 import BaseMenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
-import {PostSubHeader} from '../SubHeader';
-import {PostHeaderProps} from './Header.interface';
-import {useStyles} from './Header.style';
+import { PostSubHeader } from '../SubHeader';
+import { PostHeaderProps } from './Header.interface';
+import { useStyles } from './Header.style';
 
 import useTipHistory from 'components/TipHistory/use-tip-history.hook';
-import {AvatarSize} from 'components/atoms/Avatar';
-import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorizeAction';
-import {SocialAvatar} from 'src/components/atoms/SocialAvatar';
+import { AvatarSize } from 'components/atoms/Avatar';
+import { WithAuthorizeAction } from 'components/common/Authorization/WithAuthorizeAction';
+import { SocialAvatar } from 'src/components/atoms/SocialAvatar';
 import ShowIf from 'src/components/common/show-if.component';
-import {SocialsEnum} from 'src/interfaces/social';
+import { SocialsEnum } from 'src/interfaces/social';
 import i18n from 'src/locale';
 
 const MenuItem = WithAuthorizeAction(BaseMenuItem);
 
 export const PostHeader: React.FC<PostHeaderProps> = props => {
-  const {user, post, owned} = props;
-  const {onDelete, onChangeVisibility, onReport, onShowImporters} = props;
+  const { user, post, owned } = props;
+  const { onDelete, onChangeVisibility, onReport, onShowImporters } = props;
 
   const style = useStyles();
   const router = useRouter();
@@ -36,7 +36,9 @@ export const PostHeader: React.FC<PostHeaderProps> = props => {
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  const handleOpenPostSetting = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleOpenPostSetting = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -113,7 +115,7 @@ export const PostHeader: React.FC<PostHeaderProps> = props => {
   return (
     <>
       <CardHeader
-        classes={{root: style.headerRoot}}
+        classes={{ root: style.headerRoot }}
         className={style.header}
         disableTypography
         avatar={
@@ -130,8 +132,13 @@ export const PostHeader: React.FC<PostHeaderProps> = props => {
           />
         }
         title={
-          <Typography variant="h5" onClick={openContentProfileUrl} className={style.title}>
-            {post.platform === 'myriad' ? post.user?.name : (post.people?.name as string)}
+          <Typography
+            variant="h5"
+            onClick={openContentProfileUrl}
+            className={style.title}>
+            {post.platform === 'myriad'
+              ? post.user?.name
+              : (post.people?.name as string)}
           </Typography>
         }
         subheader={
@@ -155,7 +162,11 @@ export const PostHeader: React.FC<PostHeaderProps> = props => {
             disableRipple={true}
             disableFocusRipple={true}
             disableTouchRipple>
-            <SvgIcon component={DotsVerticalIcon} viewBox="0 0 20 20" className={style.icon} />
+            <SvgIcon
+              component={DotsVerticalIcon}
+              viewBox="0 0 20 20"
+              className={style.icon}
+            />
           </IconButton>
         }
       />
@@ -164,8 +175,8 @@ export const PostHeader: React.FC<PostHeaderProps> = props => {
         <Menu
           id="post-setting"
           anchorEl={anchorEl}
-          style={{width: 170}}
-          classes={{paper: style.menu}}
+          style={{ width: 170 }}
+          classes={{ paper: style.menu }}
           keepMounted
           open={Boolean(anchorEl)}
           onClose={handleClosePostSetting}>
@@ -183,7 +194,11 @@ export const PostHeader: React.FC<PostHeaderProps> = props => {
 
           <ShowIf condition={!owned && post.platform !== 'myriad'}>
             <BaseMenuItem>
-              <ExternalLink href={post.url} target="_blank" color="inherit" underline="none">
+              <ExternalLink
+                href={post.url}
+                target="_blank"
+                color="inherit"
+                underline="none">
                 {i18n.t('Post_Detail.Post_Options.View_Source_Post')}
               </ExternalLink>
             </BaseMenuItem>
@@ -214,7 +229,9 @@ export const PostHeader: React.FC<PostHeaderProps> = props => {
           </ShowIf>
 
           <ShowIf condition={owned && !post.deletedAt}>
-            <MenuItem onClick={handlePostVisibility} fallback={handleClosePostSetting}>
+            <MenuItem
+              onClick={handlePostVisibility}
+              fallback={handleClosePostSetting}>
               {i18n.t('Post_Detail.Post_Options.Post_Visibility')}
             </MenuItem>
           </ShowIf>

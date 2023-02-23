@@ -1,18 +1,18 @@
-import {useCallback} from 'react';
-import {useSelector, useDispatch, shallowEqual} from 'react-redux';
+import { useCallback } from 'react';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 
-import {ParsedUrlQuery} from 'querystring';
-import {Post} from 'src/interfaces/post';
+import { ParsedUrlQuery } from 'querystring';
+import { Post } from 'src/interfaces/post';
 import {
   TimelineType,
   TimelineOrderType,
   PostOriginType,
   TimelineFilterFields,
 } from 'src/interfaces/timeline';
-import {User} from 'src/interfaces/user';
-import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
-import {RootState} from 'src/reducers';
-import {loadTimeline, clearTimeline} from 'src/reducers/timeline/actions';
+import { User } from 'src/interfaces/user';
+import { SortType } from 'src/lib/api/interfaces/pagination-params.interface';
+import { RootState } from 'src/reducers';
+import { loadTimeline, clearTimeline } from 'src/reducers/timeline/actions';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useTimelineFilter = (filters?: TimelineFilterFields) => {
@@ -22,20 +22,29 @@ export const useTimelineFilter = (filters?: TimelineFilterFields) => {
     state => state.timelineState.filters.fields,
     shallowEqual,
   );
-  const people = useSelector<RootState, User>(state => state.profileState.detail, shallowEqual);
+  const people = useSelector<RootState, User>(
+    state => state.profileState.detail,
+    shallowEqual,
+  );
   const anonymous = useSelector<RootState, boolean>(
     state => state.userState.anonymous,
     shallowEqual,
   );
-  const {posts, empty, loading, hasMore} = useSelector<
+  const { posts, empty, loading, hasMore } = useSelector<
     RootState,
-    {posts: Post[]; empty: boolean; loading: boolean; hasMore: boolean}
+    { posts: Post[]; empty: boolean; loading: boolean; hasMore: boolean }
   >(
     state => ({
       posts: state.timelineState.posts,
-      empty: state.timelineState.meta.totalItemCount === 0 && !state.timelineState.loading,
-      loading: state.timelineState.meta.totalItemCount === 0 && state.timelineState.loading,
-      hasMore: state.timelineState.meta.totalPageCount > state.timelineState.meta.currentPage,
+      empty:
+        state.timelineState.meta.totalItemCount === 0 &&
+        !state.timelineState.loading,
+      loading:
+        state.timelineState.meta.totalItemCount === 0 &&
+        state.timelineState.loading,
+      hasMore:
+        state.timelineState.meta.totalPageCount >
+        state.timelineState.meta.currentPage,
     }),
     shallowEqual,
   );
@@ -44,7 +53,8 @@ export const useTimelineFilter = (filters?: TimelineFilterFields) => {
     shallowEqual,
   );
   const originType: PostOriginType = filterFields?.platform
-    ? filterFields.platform.includes.length === 1 && filterFields.platform.includes('myriad')
+    ? filterFields.platform.includes.length === 1 &&
+      filterFields.platform.includes('myriad')
       ? 'myriad'
       : 'imported'
     : 'all';
@@ -80,7 +90,9 @@ export const useTimelineFilter = (filters?: TimelineFilterFields) => {
       if (query?.order) {
         const order = Array.isArray(query.order) ? query.order[0] : query.order;
 
-        if (Object.values(TimelineOrderType).includes(order as TimelineOrderType)) {
+        if (
+          Object.values(TimelineOrderType).includes(order as TimelineOrderType)
+        ) {
           timelineOrder = order as TimelineOrderType;
         }
       }

@@ -1,5 +1,5 @@
-import {Session} from 'next-auth';
-import {useSession} from 'next-auth/react';
+import { Session } from 'next-auth';
+import { useSession } from 'next-auth/react';
 
 jest.mock('next/router', () => require('next-router-mock'));
 jest.mock('next-auth/react');

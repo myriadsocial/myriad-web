@@ -1,4 +1,4 @@
-import {BaseModel} from './base.interface';
+import { BaseModel } from './base.interface';
 
 export enum ReferenceType {
   POST = 'post',

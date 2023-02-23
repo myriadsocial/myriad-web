@@ -1,19 +1,21 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import {Typography} from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 
-import {WalletBalances as WalletBalancesComponent} from '.';
-import {BoxComponent} from '../atoms/Box';
+import { WalletBalances as WalletBalancesComponent } from '.';
+import { BoxComponent } from '../atoms/Box';
 
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {BalanceState} from 'src/reducers/balance/reducer';
-import {UserState} from 'src/reducers/user/reducer';
+import { RootState } from 'src/reducers';
+import { BalanceState } from 'src/reducers/balance/reducer';
+import { UserState } from 'src/reducers/user/reducer';
 
 export const WalletBalancesContainer: React.FC = () => {
-  const {anonymous} = useSelector<RootState, UserState>(state => state.userState);
-  const {balanceDetails, loading} = useSelector<RootState, BalanceState>(
+  const { anonymous } = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
+  const { balanceDetails, loading } = useSelector<RootState, BalanceState>(
     state => state.balanceState,
   );
 
@@ -24,7 +26,9 @@ export const WalletBalancesContainer: React.FC = () => {
       </BoxComponent>
     );
 
-  return <WalletBalancesComponent balances={balanceDetails} loading={loading} />;
+  return (
+    <WalletBalancesComponent balances={balanceDetails} loading={loading} />
+  );
 };
 
 export default WalletBalancesContainer;

@@ -1,6 +1,11 @@
 module.exports = {
-  extends: ['next/core-web-vitals', 'plugin:@typescript-eslint/recommended', 'prettier'],
-  ignorePatterns: ['**/public/*.js', '**/plugins/*.js', 'plugins/**/*.js'],
+  extends: [
+    'next/core-web-vitals',
+    'plugin:@typescript-eslint/recommended',
+    'prettier',
+    'plugin:storybook/recommended',
+  ],
+  ignorePatterns: ['**/public/*.js'],
   rules: {
     'comma-dangle': ['error', 'always-multiline'],
     'no-useless-escape': ['warn'],
@@ -15,6 +20,9 @@ module.exports = {
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/ban-types': ['warn'],
     '@typescript-eslint/no-empty-interface': ['warn'],
-    '@typescript-eslint/no-unused-vars': ['error', {vars: 'local', args: 'none'}],
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      { vars: 'local', args: 'none' },
+    ],
   },
 };

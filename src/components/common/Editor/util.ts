@@ -11,16 +11,22 @@ import {
   PluginOptions,
 } from '@udecode/plate';
 
-import {EditorValue, Editor, MyOverrideByKey, MyPlatePlugin} from './Editor.interface';
+import {
+  EditorValue,
+  Editor,
+  MyOverrideByKey,
+  MyPlatePlugin,
+} from './Editor.interface';
 
-import {serialize} from 'components/PostCreate/formatter';
+import { serialize } from 'components/PostCreate/formatter';
 
 /**
  * Utils
  */
 export const createEditor = () => createTEditor() as Editor;
-export const createPlateEditor = (options: CreatePlateEditorOptions<EditorValue, Editor> = {}) =>
-  baseCreatePlateEditor<EditorValue, Editor>(options);
+export const createPlateEditor = (
+  options: CreatePlateEditorOptions<EditorValue, Editor> = {},
+) => baseCreatePlateEditor<EditorValue, Editor>(options);
 export const createPluginFactory = <P = PluginOptions>(
   defaultPlugin: PlatePlugin<NoInfer<P>, EditorValue, Editor>,
 ) => baseCreatePluginFactory(defaultPlugin);
@@ -35,7 +41,7 @@ export const createEditorPlugins = (
 export const initial: EditorValue = [
   {
     type: ELEMENT_PARAGRAPH,
-    children: [{text: ''}],
+    children: [{ text: '' }],
   },
 ];
 

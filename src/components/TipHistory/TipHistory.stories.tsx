@@ -1,12 +1,12 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
-import {TipHistory as TipHistoryComponent} from '.';
-import {CurrencyId} from '../../interfaces/currency';
-import {ContentType} from '../../interfaces/wallet';
+import { TipHistory as TipHistoryComponent } from '.';
+import { CurrencyId } from '../../interfaces/currency';
+import { ContentType } from '../../interfaces/wallet';
 
-import {NetworkIdEnum} from 'src/interfaces/network';
+import { NetworkIdEnum } from 'src/interfaces/network';
 
 export default {
   title: 'UI Revamp v2.0/components/Tip History',
@@ -44,7 +44,8 @@ TipHistory.args = {
           id: '6232d3a5dbe01066471dca12',
           name: 'NutrisariJerukManisBgt',
           username: 'nutrisarijeruk',
-          bannerImageURL: 'https://res.cloudinary.com/dsget80gs/background/profile-default-bg.png',
+          bannerImageURL:
+            'https://res.cloudinary.com/dsget80gs/background/profile-default-bg.png',
           metric: {
             totalPosts: 16,
             totalExperiences: 0,
@@ -73,7 +74,8 @@ TipHistory.args = {
           id: '6232eaa8dbe01066471dd305',
           name: 'Mojito',
           username: 'mojito',
-          bannerImageURL: 'https://res.cloudinary.com/dsget80gs/background/profile-default-bg.png',
+          bannerImageURL:
+            'https://res.cloudinary.com/dsget80gs/background/profile-default-bg.png',
           bio: 'nospacnoeefbahfjabhfbahbhasbhbahjbhcjaschjbashbahbsabchabshcbshbhcsbhcbshbchsbchsbchbsjcbahbchabhcbashchahcahcbhasasbchbashbchabshbchsbhcbshchshcscabjbshbhacbsh',
           websiteURL:
             'asjabhjfbahsbhasbhjfabhbashbhabshbashbhsabhbshbchsbjcnsjcksakocaoidiqwuhqwbdhjwbfhsbnvbsndbvhsdbvdhvbhdbvhsdjknskldvksdnjvnsdjkvsdhvhsbdvhbdshvsdhvjsnjdbjhdjnvjdbhvbdshvbdhsbvhdsbhvbhdsbvhdbvhbdshvbsdivsyighfuehfiusfjhskdfnjkshdfheiufhdjsfkjsdbhfbshdfhsdgfihsgfsdhfhsdbfhsdbfhsgdfhshdfjsjfioahuifgewygygwygyfggyegfyegyfgeyfbsjnjkhdjhdgsygdygysdbhbdsnjshjdfhueguifhiowhejfnjwenfaiohfuagyehbbhsbfhsbdhfgsdufhsudfhsodhfoishoeishjefbshbdfgsufhjskndjfnsjkdbfusgeufhuisheufhsnefjksndjkfhsuhdfuihsuehfseugfushufhushuehfhsbfbhsbehfbshebjhfsbhejbfhsbehfbshefusheuhfusheuofhsoef',
@@ -141,7 +143,8 @@ TipHistory.args = {
           id: '6232d3a5dbe01066471dca12',
           name: 'NutrisariJerukManisBgt',
           username: 'nutrisarijeruk',
-          bannerImageURL: 'https://res.cloudinary.com/dsget80gs/background/profile-default-bg.png',
+          bannerImageURL:
+            'https://res.cloudinary.com/dsget80gs/background/profile-default-bg.png',
           metric: {
             totalPosts: 16,
             totalExperiences: 0,
@@ -170,7 +173,8 @@ TipHistory.args = {
           id: '6232eaa8dbe01066471dd305',
           name: 'Mojito',
           username: 'mojito',
-          bannerImageURL: 'https://res.cloudinary.com/dsget80gs/background/profile-default-bg.png',
+          bannerImageURL:
+            'https://res.cloudinary.com/dsget80gs/background/profile-default-bg.png',
           bio: 'nospacnoeefbahfjabhfbahbhasbhbahjbhcjaschjbashbahbsabchabshcbshbhcsbhcbshbchsbchsbchbsjcbahbchabhcbashchahcahcbhasasbchbashbchabshbchsbhcbshchshcscabjbshbhacbsh',
           websiteURL:
             'asjabhjfbahsbhasbhjfabhbashbhabshbashbhsabhbshbchsbjcnsjcksakocaoidiqwuhqwbdhjwbfhsbnvbsndbvhsdbvdhvbhdbvhsdjknskldvksdnjvnsdjkvsdhvhsbdvhbdshvsdhvjsnjdbjhdjnvjdbhvbdshvbdhsbvhdsbhvbhdsbvhdbvhbdshvbsdivsyighfuehfiusfjhskdfnjkshdfheiufhdjsfkjsdbhfbshdfhsdgfihsgfsdhfhsdbfhsdbfhsgdfhshdfjsjfioahuifgewygygwygyfggyegfyegyfgeyfbsjnjkhdjhdgsygdygysdbhbdsnjshjdfhueguifhiowhejfnjwenfaiohfuagyehbbhsbfhsbdhfgsdufhsudfhsodhfoishoeishjefbshbdfgsufhjskndjfnsjkdbfusgeufhuisheufhsnefjksndjkfhsuhdfuihsuehfseugfushufhushuehfhsbfbhsbehfbshebjhfsbhejbfhsbehfbshefusheuhfusheuofhsoef',

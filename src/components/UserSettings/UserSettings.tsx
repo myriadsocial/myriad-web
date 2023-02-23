@@ -1,7 +1,7 @@
-import {DuplicateIcon} from '@heroicons/react/outline';
+import { DuplicateIcon } from '@heroicons/react/outline';
 
 import React from 'react';
-import {CopyToClipboard} from 'react-copy-to-clipboard';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import {
   IconButton,
@@ -14,9 +14,9 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import {WalletOption} from '../Manage/use-wallet-list.hook';
+import { WalletOption } from '../Manage/use-wallet-list.hook';
 import ShowIf from '../common/show-if.component';
-import {useStyles} from './UserSettings.styles';
+import { useStyles } from './UserSettings.styles';
 
 type UserSettingsProps = {
   wallets: WalletOption[];
@@ -24,7 +24,7 @@ type UserSettingsProps = {
 };
 
 export const UserSettings: React.FC<UserSettingsProps> = props => {
-  const {wallets, onPublicKeyCopied} = props;
+  const { wallets, onPublicKeyCopied } = props;
 
   const styles = useStyles();
 
@@ -58,9 +58,16 @@ export const UserSettings: React.FC<UserSettingsProps> = props => {
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
-                          <CopyToClipboard text={option.walletId} onCopy={onPublicKeyCopied}>
-                            <IconButton aria-label="copy-post-link" style={{padding: 0}}>
-                              <SvgIcon component={DuplicateIcon} color="primary" />
+                          <CopyToClipboard
+                            text={option.walletId}
+                            onCopy={onPublicKeyCopied}>
+                            <IconButton
+                              aria-label="copy-post-link"
+                              style={{ padding: 0 }}>
+                              <SvgIcon
+                                component={DuplicateIcon}
+                                color="primary"
+                              />
                             </IconButton>
                           </CopyToClipboard>
                         </InputAdornment>

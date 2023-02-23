@@ -1,12 +1,12 @@
-import {Sizes} from './assets';
-import {BaseModel} from './base.interface';
-import {Comment} from './comment';
-import {Vote} from './interaction';
-import {PeopleWithSocialMedaia} from './people';
-import {PostOrigin} from './timeline';
-import {User} from './user';
+import { Sizes } from './assets';
+import { BaseModel } from './base.interface';
+import { Comment } from './comment';
+import { Vote } from './interaction';
+import { PeopleWithSocialMedaia } from './people';
+import { PostOrigin } from './timeline';
+import { User } from './user';
 
-import {Experience} from 'src/interfaces/experience';
+import { Experience } from 'src/interfaces/experience';
 
 export type ImageData = {
   src: string;

@@ -1,12 +1,12 @@
-import React, {useCallback} from 'react';
-import {useDispatch} from 'react-redux';
+import React, { useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 
 import CommentEditor from './CommentEditor';
 
-import {CommentProps} from 'src/interfaces/comment';
-import {ReferenceType, SectionType} from 'src/interfaces/interaction';
-import {User} from 'src/interfaces/user';
-import {searchUsers} from 'src/reducers/search/actions';
+import { CommentProps } from 'src/interfaces/comment';
+import { ReferenceType, SectionType } from 'src/interfaces/interaction';
+import { User } from 'src/interfaces/user';
+import { searchUsers } from 'src/reducers/search/actions';
 
 type CommentEditorContainerProps = {
   user: User;
@@ -18,7 +18,7 @@ type CommentEditorContainerProps = {
 };
 
 const CommentEditorContainer: React.FC<CommentEditorContainerProps> = props => {
-  const {user} = props;
+  const { user } = props;
 
   const dispatch = useDispatch();
 

@@ -1,13 +1,13 @@
-import type {NextApiRequest, NextApiResponse} from 'next';
-import {getSession} from 'next-auth/react';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { getSession } from 'next-auth/react';
 import httpProxyMiddleware from 'next-http-proxy-middleware';
 import getConfig from 'next/config';
 
-import {COOKIE_INSTANCE_URL} from 'components/SelectServer';
-import {isErrorWithMessage} from 'src/helpers/error';
-import {decryptMessage} from 'src/lib/crypto';
+import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
+import { isErrorWithMessage } from 'src/helpers/error';
+import { decryptMessage } from 'src/lib/crypto';
 
-const {serverRuntimeConfig} = getConfig();
+const { publicRuntimeConfig } = getConfig();
 
 export const config = {
   api: {
@@ -16,11 +16,14 @@ export const config = {
   },
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   let headers = {};
 
   try {
-    const session = await getSession({req});
+    const session = await getSession({ req });
     const sessionInstanceURL = session?.user?.instanceURL;
     const cookiesInstanceURL = req.cookies[COOKIE_INSTANCE_URL];
     const instanceURL = sessionInstanceURL ?? cookiesInstanceURL;
@@ -36,8 +39,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     return httpProxyMiddleware(req, res, {
       // You can use the `http-proxy` option
-      // target: serverRuntimeConfig.myriadAPIURL,
-      target: instanceURL ?? serverRuntimeConfig.myriadAPIURL,
+      target: instanceURL ?? publicRuntimeConfig.myriadAPIURL,
       // In addition, you can use the `pathRewrite` option provided by `next-http-proxy`
       pathRewrite: [
         {
@@ -55,7 +57,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       message = error.message;
     }
 
-    console.error('[api-proxy][error]', {error: message});
-    res.status(500).send({error: message});
+    console.error('[api-proxy][error]', { error: message });
+    res.status(500).send({ error: message });
   }
 }

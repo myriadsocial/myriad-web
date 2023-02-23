@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
-import {Tooltip} from '@material-ui/core';
+import { Tooltip } from '@material-ui/core';
 import Tab from '@material-ui/core/Tab';
-import Tabs, {TabsProps} from '@material-ui/core/Tabs';
+import Tabs, { TabsProps } from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 
-import {useStyles} from './TabList.styles';
-import {TabListItem, TabMark, TabSize} from './TabList.types';
+import { useStyles } from './TabList.styles';
+import { TabListItem, TabMark, TabSize } from './TabList.types';
 
 type TabListProps<T> = TabsProps & {
   tabs: TabListItem<T>[];
@@ -29,7 +29,7 @@ export const TabList = <T,>(props: TabListProps<T>): JSX.Element => {
     ...tabsProps
   } = props;
 
-  const styles = useStyles({mark, size, background});
+  const styles = useStyles({ mark, size, background });
 
   const [selectedTab, setSelectedTab] = useState<T>(selected);
 
@@ -52,7 +52,7 @@ export const TabList = <T,>(props: TabListProps<T>): JSX.Element => {
         className: styles.indicatorColor,
         children: <span className={styles.indicator} />,
       }}
-      classes={{root: styles.tabs}}
+      classes={{ root: styles.tabs }}
       onChange={handleTabChange}>
       {tabs.map((tab, i) => {
         if (tab.tooltip) {

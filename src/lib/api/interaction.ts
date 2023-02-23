@@ -1,16 +1,22 @@
 import MyriadAPI from './base';
 
-import {Comment} from 'src/interfaces/comment';
-import {ReferenceType, SectionType, Vote, VoteProps} from 'src/interfaces/interaction';
-import {Post} from 'src/interfaces/post';
-import {ReportProps} from 'src/interfaces/report';
+import { Comment } from 'src/interfaces/comment';
+import {
+  ReferenceType,
+  SectionType,
+  Vote,
+  VoteProps,
+} from 'src/interfaces/interaction';
+import { Post } from 'src/interfaces/post';
+import { ReportProps } from 'src/interfaces/report';
 
 export const vote = async (
   userId: string,
   reference: Post | Comment,
   section?: SectionType,
 ): Promise<Vote> => {
-  const type = 'platform' in reference ? ReferenceType.POST : ReferenceType.COMMENT;
+  const type =
+    'platform' in reference ? ReferenceType.POST : ReferenceType.COMMENT;
   const postId = 'platform' in reference ? reference.id : reference.postId;
 
   const attributes: VoteProps = {
@@ -22,7 +28,7 @@ export const vote = async (
     section,
   };
 
-  const {data} = await MyriadAPI().request<Vote>({
+  const { data } = await MyriadAPI().request<Vote>({
     url: `/user/votes`,
     method: 'POST',
     data: attributes,
@@ -36,7 +42,8 @@ export const downvote = async (
   reference: Post | Comment,
   section?: SectionType,
 ): Promise<Vote> => {
-  const type = 'platform' in reference ? ReferenceType.POST : ReferenceType.COMMENT;
+  const type =
+    'platform' in reference ? ReferenceType.POST : ReferenceType.COMMENT;
   const postId = 'platform' in reference ? reference.id : reference.postId;
 
   const attributes: VoteProps = {
@@ -48,7 +55,7 @@ export const downvote = async (
     section,
   };
 
-  const {data} = await MyriadAPI().request<Vote>({
+  const { data } = await MyriadAPI().request<Vote>({
     url: `/user/votes`,
     method: 'POST',
     data: attributes,
@@ -66,7 +73,10 @@ export const removeVote = async (id: string): Promise<void> => {
 
 export const report = async (
   userId: string,
-  report: Pick<ReportProps, 'referenceId' | 'type' | 'referenceType' | 'description'>,
+  report: Pick<
+    ReportProps,
+    'referenceId' | 'type' | 'referenceType' | 'description'
+  >,
 ): Promise<void> => {
   await MyriadAPI().request({
     url: `/user/reports`,

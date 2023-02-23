@@ -3,4 +3,4 @@ import IcInfoBlack from './IcInfoBlack.svg';
 import InfoIconYellow from './InfoIconYellow.svg';
 import LogoMyriadCircle from './myriad-circle.svg';
 
-export {IcEmail, LogoMyriadCircle, IcInfoBlack, InfoIconYellow};
+export { IcEmail, LogoMyriadCircle, IcInfoBlack, InfoIconYellow };

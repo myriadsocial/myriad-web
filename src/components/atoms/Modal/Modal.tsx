@@ -1,15 +1,15 @@
-import {XIcon} from '@heroicons/react/solid';
+import { XIcon } from '@heroicons/react/solid';
 
 import React from 'react';
 
-import {IconButton, SvgIcon, Typography} from '@material-ui/core';
-import Dialog, {DialogProps} from '@material-ui/core/Dialog';
+import { IconButton, SvgIcon, Typography } from '@material-ui/core';
+import Dialog, { DialogProps } from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-import {TopNavbarComponent} from '../TopNavbar';
-import {useStyles} from './Modal.styles';
-import {AllignTitle, TitleSize} from './Modal.types';
+import { TopNavbarComponent } from '../TopNavbar';
+import { useStyles } from './Modal.styles';
+import { AllignTitle, TitleSize } from './Modal.types';
 
 import ShowIf from 'components/common/show-if.component';
 import i18n from 'src/locale';
@@ -38,7 +38,7 @@ export const Modal: React.FC<ModalProps> = props => {
     ...otherProps
   } = props;
 
-  const styles = useStyles({align, titleSize, gutter, fullScreen});
+  const styles = useStyles({ align, titleSize, gutter, fullScreen });
 
   const handleClose = () => {
     onClose();
@@ -50,20 +50,30 @@ export const Modal: React.FC<ModalProps> = props => {
       {...otherProps}
       fullScreen={fullScreen}
       className={styles.root}
-      classes={{paper: styles.paper}}
+      classes={{ paper: styles.paper }}
       disableEnforceFocus>
       <ShowIf condition={!fullScreen}>
-        <DialogTitle disableTypography className={[styles.title, className].join(' ')}>
+        <DialogTitle
+          disableTypography
+          className={[styles.title, className].join(' ')}>
           {title === i18n.t('ExclusiveContent.Add') ? (
             <div className={styles.titleEC}>
-              <Typography variant={titleSize === 'small' ? 'h5' : 'h4'}>{title}</Typography>
+              <Typography variant={titleSize === 'small' ? 'h5' : 'h4'}>
+                {title}
+              </Typography>
             </div>
           ) : (
-            <Typography variant={titleSize === 'small' ? 'h5' : 'h4'}>{title}</Typography>
+            <Typography variant={titleSize === 'small' ? 'h5' : 'h4'}>
+              {title}
+            </Typography>
           )}
 
-          {subtitle && (typeof subtitle === 'string' || subtitle instanceof String) ? (
-            <Typography variant="subtitle1" display="block" className={styles.subtitle}>
+          {subtitle &&
+          (typeof subtitle === 'string' || subtitle instanceof String) ? (
+            <Typography
+              variant="subtitle1"
+              display="block"
+              className={styles.subtitle}>
               {subtitle}
             </Typography>
           ) : (
@@ -82,7 +92,11 @@ export const Modal: React.FC<ModalProps> = props => {
 
       <ShowIf condition={fullScreen}>
         <div className={styles.nav}>
-          <TopNavbarComponent sectionTitle={title} description={subtitle} onClick={onClose} />
+          <TopNavbarComponent
+            sectionTitle={title}
+            description={subtitle}
+            onClick={onClose}
+          />
         </div>
       </ShowIf>
 

@@ -1,7 +1,7 @@
-import {PostHeaderActionProps} from './render/Header';
+import { PostHeaderActionProps } from './render/Header';
 
-import {Post, PostMetric} from 'src/interfaces/post';
-import {User} from 'src/interfaces/user';
+import { Post, PostMetric } from 'src/interfaces/post';
+import { User } from 'src/interfaces/user';
 
 export type PostDetailActionProps = PostHeaderActionProps & {
   onUpvote: (post: Post) => void;

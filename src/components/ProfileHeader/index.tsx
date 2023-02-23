@@ -1,12 +1,17 @@
-import {ChevronDownIcon, UserAddIcon, UserIcon, CheckIcon} from '@heroicons/react/outline';
-import {DotsVerticalIcon} from '@heroicons/react/solid';
+import {
+  ChevronDownIcon,
+  UserAddIcon,
+  UserIcon,
+  CheckIcon,
+} from '@heroicons/react/outline';
+import { DotsVerticalIcon } from '@heroicons/react/solid';
 
 import React from 'react';
-import {CopyToClipboard} from 'react-copy-to-clipboard';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {Grid} from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -17,26 +22,26 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 
-import {Metric} from '../Metric';
+import { Metric } from '../Metric';
 import useConfirm from '../common/Confirm/use-confirm.hook';
-import {SendTipButton} from '../common/SendTipButton/SendTipButton';
-import {useFriendOptions} from './hooks/use-friend-options.hook';
-import {useStyles} from './profile-header.style';
-import {Website} from './render/Website';
+import { SendTipButton } from '../common/SendTipButton/SendTipButton';
+import { useFriendOptions } from './hooks/use-friend-options.hook';
+import { useStyles } from './profile-header.style';
+import { Website } from './render/Website';
 
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {OfficialBadgeIcon} from 'src/components/atoms/Icons';
-import {ReportComponent} from 'src/components/atoms/Report/Report.component';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import { OfficialBadgeIcon } from 'src/components/atoms/Icons';
+import { ReportComponent } from 'src/components/atoms/Report/Report.component';
 import ShowIf from 'src/components/common/show-if.component';
-import {acronym} from 'src/helpers/string';
-import {Friend} from 'src/interfaces/friend';
-import {ReferenceType} from 'src/interfaces/interaction';
-import {ReportProps} from 'src/interfaces/report';
-import {FriendStatusProps, User} from 'src/interfaces/user';
+import { acronym } from 'src/helpers/string';
+import { Friend } from 'src/interfaces/friend';
+import { ReferenceType } from 'src/interfaces/interaction';
+import { ReportProps } from 'src/interfaces/report';
+import { FriendStatusProps, User } from 'src/interfaces/user';
 import i18n from 'src/locale';
 
 export type Props = {
-  person: User & {friendInfo: FriendStatusProps};
+  person: User & { friendInfo: FriendStatusProps };
   user?: User;
   status?: Friend;
   onSendRequest: () => void;
@@ -70,12 +75,13 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
   } = props;
   const style = useStyles();
   const confirm = useConfirm();
-  const {self, canAddFriend, isBlocked, isFriend, isRequested, isRequesting} =
+  const { self, canAddFriend, isBlocked, isFriend, isRequested, isRequesting } =
     useFriendOptions(person);
   const enqueueSnackbar = useEnqueueSnackbar();
   const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [anchorElFriend, setAnchorElFriend] = React.useState<null | HTMLElement>(null);
+  const [anchorElFriend, setAnchorElFriend] =
+    React.useState<null | HTMLElement>(null);
   const [modalReportOpened, setModalReportOpened] = React.useState(false);
 
   const handleCloseMenu = () => {
@@ -142,7 +148,9 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
     handleCloseMenu();
 
     confirm({
-      title: i18n.t('Profile.Header.Prompt.Unfriend.Title', {name: person.name}),
+      title: i18n.t('Profile.Header.Prompt.Unfriend.Title', {
+        name: person.name,
+      }),
       description: i18n.t('Profile.Header.Prompt.Unfriend.Desc'),
       icon: 'danger',
       confirmationText: i18n.t('Profile.Header.Prompt.Unfriend.Btn'),
@@ -161,17 +169,23 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
   const handleNotFullAccess = () => {
     confirm({
       title: i18n.t('LiteVersion.LimitTitleFriends'),
-      description: i18n.t('LiteVersion.LimitDescFriends', {username: person.username}),
+      description: i18n.t('LiteVersion.LimitDescFriends', {
+        username: person.username,
+      }),
       icon: 'warning',
       confirmationText: i18n.t('LiteVersion.ConnectWallet'),
       cancellationText: i18n.t('LiteVersion.ViewTimelines'),
       onConfirm: () => {
-        router.push({pathname: '/wallet', query: {type: 'manage'}});
+        router.push({ pathname: '/wallet', query: { type: 'manage' } });
       },
       onCancel: () => {
-        router.replace({pathname: `/profile/${person.id}`, query: {tab: 'experience'}}, undefined, {
-          shallow: true,
-        });
+        router.replace(
+          { pathname: `/profile/${person.id}`, query: { tab: 'experience' } },
+          undefined,
+          {
+            shallow: true,
+          },
+        );
       },
     });
   };
@@ -186,7 +200,11 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
         />
         <div className={style.screen} />
 
-        <Grid container alignItems="flex-start" justifyContent="space-between" wrap="nowrap">
+        <Grid
+          container
+          alignItems="flex-start"
+          justifyContent="space-between"
+          wrap="nowrap">
           <Grid container alignItems="center">
             <Avatar
               alt={person.name}
@@ -200,17 +218,27 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 {person.name}
                 <ShowIf condition={Boolean(person.verified)}>
                   <Tooltip
-                    title={<Typography>{i18n.t('Profile.Header.Tooltip.Official')}</Typography>}
+                    title={
+                      <Typography>
+                        {i18n.t('Profile.Header.Tooltip.Official')}
+                      </Typography>
+                    }
                     aria-label="official-account">
                     <IconButton
                       aria-label="official-badge"
-                      style={{backgroundColor: 'transparent', paddingLeft: 4}}>
+                      style={{
+                        backgroundColor: 'transparent',
+                        paddingLeft: 4,
+                      }}>
                       <OfficialBadgeIcon viewBox="0 0 24 24" color="primary" />
                     </IconButton>
                   </Tooltip>
                 </ShowIf>
               </Typography>
-              <Typography variant="body1" component="p" className={style.username}>
+              <Typography
+                variant="body1"
+                component="p"
+                className={style.username}>
                 @{person.username || 'username'}
               </Typography>
             </div>
@@ -218,10 +246,10 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
           <ShowIf condition={!!user}>
             <IconButton
               onClick={handleClickUserOption}
-              classes={{root: style.userMenu}}
+              classes={{ root: style.userMenu }}
               aria-label="profile-setting">
               <SvgIcon
-                classes={{root: style.solid}}
+                classes={{ root: style.solid }}
                 component={DotsVerticalIcon}
                 viewBox="0 0 20 20"
               />
@@ -232,8 +260,8 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
               }}
               anchorEl={anchorEl}
               getContentAnchorEl={null}
-              anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
-              transformOrigin={{vertical: 'top', horizontal: 'right'}}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+              transformOrigin={{ vertical: 'top', horizontal: 'right' }}
               open={Boolean(anchorEl)}
               onClose={handleCloseMenu}>
               <MenuItem onClick={showProfileTipHistory}>
@@ -244,7 +272,9 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
               </CopyToClipboard>
               <ShowIf condition={!self}>
                 <ShowIf condition={person.username !== 'myriad_official'}>
-                  <MenuItem onClick={handleOpenReportModal} className={style.delete}>
+                  <MenuItem
+                    onClick={handleOpenReportModal}
+                    className={style.delete}>
                     {i18n.t('Profile.Header.Menu.Report')}
                   </MenuItem>
                 </ShowIf>
@@ -273,15 +303,23 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
           justifyContent="space-between"
           className={style.detail}>
           <div className={style.metric}>
-            <Metric data={person.metric} official={person.username === 'myriad_official'} profile />
+            <Metric
+              data={person.metric}
+              official={person.username === 'myriad_official'}
+              profile
+            />
           </div>
 
           <div className={style.actionItem}>
-            <Grid container justifyContent="space-between" alignItems="center" direction="row">
+            <Grid
+              container
+              justifyContent="space-between"
+              alignItems="center"
+              direction="row">
               <ShowIf condition={self && !!user}>
                 <Button
                   onClick={handleOpenEdit}
-                  classes={{root: style.editBtn}}
+                  classes={{ root: style.editBtn }}
                   fullWidth
                   variant="contained"
                   color="primary"
@@ -290,17 +328,20 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 </Button>
               </ShowIf>
               <ShowIf condition={!self && !!user}>
-                <ShowIf condition={canAddFriend && person.username !== 'myriad_official'}>
+                <ShowIf
+                  condition={
+                    canAddFriend && person.username !== 'myriad_official'
+                  }>
                   <Button
                     onClick={handleSendRequest}
                     startIcon={
                       <SvgIcon
-                        classes={{root: style.fill}}
+                        classes={{ root: style.fill }}
                         component={UserAddIcon}
                         viewBox="0 0 22 22"
                       />
                     }
-                    classes={{root: style.button}}
+                    classes={{ root: style.button }}
                     variant="contained"
                     color="primary"
                     size="small">
@@ -310,25 +351,38 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
 
                 <ShowIf
                   condition={
-                    !isBlocked && !canAddFriend && person.username !== 'myriad_official' && !!user
+                    !isBlocked &&
+                    !canAddFriend &&
+                    person.username !== 'myriad_official' &&
+                    !!user
                   }>
                   <Button
                     onClick={handleClickFriendOption}
                     startIcon={
                       <SvgIcon
-                        classes={{root: style.fill}}
-                        component={isFriend ? UserIcon : isRequesting ? CheckIcon : UserAddIcon}
+                        classes={{ root: style.fill }}
+                        component={
+                          isFriend
+                            ? UserIcon
+                            : isRequesting
+                            ? CheckIcon
+                            : UserAddIcon
+                        }
                         viewBox="0 0 22 22"
                       />
                     }
                     endIcon={
-                      isFriend || isRequested ? <SvgIcon component={ChevronDownIcon} /> : null
+                      isFriend || isRequested ? (
+                        <SvgIcon component={ChevronDownIcon} />
+                      ) : null
                     }
-                    classes={{root: style.button}}
+                    classes={{ root: style.button }}
                     variant="contained"
                     color={isFriend ? 'primary' : 'default'}
                     size="small">
-                    <ShowIf condition={isFriend}>{i18n.t('Profile.Header.Status.Friends')}</ShowIf>
+                    <ShowIf condition={isFriend}>
+                      {i18n.t('Profile.Header.Status.Friends')}
+                    </ShowIf>
                     <ShowIf condition={isRequested}>
                       {i18n.t('Profile.Header.Status.Respond')}
                     </ShowIf>
@@ -337,11 +391,11 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                     </ShowIf>
                   </Button>
                   <Menu
-                    classes={{paper: style.menu}}
+                    classes={{ paper: style.menu }}
                     anchorEl={anchorElFriend}
                     getContentAnchorEl={null}
-                    anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
-                    transformOrigin={{vertical: 'top', horizontal: 'right'}}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                    transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                     open={Boolean(anchorElFriend)}
                     onClose={handleCloseMenu}>
                     <ShowIf condition={isFriend}>
@@ -350,7 +404,9 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                       </MenuItem>
                     </ShowIf>
                     <ShowIf condition={isFriend}>
-                      <MenuItem onClick={confirmBlockPerson} className={style.delete}>
+                      <MenuItem
+                        onClick={confirmBlockPerson}
+                        className={style.delete}>
                         {i18n.t('Profile.Header.Menu.Block')}
                       </MenuItem>
                     </ShowIf>
@@ -371,7 +427,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                   <SendTipButton
                     reference={person}
                     referenceType={ReferenceType.USER}
-                    classes={{root: style.button}}
+                    classes={{ root: style.button }}
                     showIcon
                     variant="contained"
                     color="primary"

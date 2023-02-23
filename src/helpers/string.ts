@@ -1,6 +1,6 @@
-import {SyntheticEvent} from 'react';
+import { SyntheticEvent } from 'react';
 
-import {BN, BN_TEN} from '@polkadot/util';
+import { BN, BN_TEN } from '@polkadot/util';
 
 import parse from 'html-react-parser';
 
@@ -111,7 +111,8 @@ export const htmlToJson = (html: any) => {
             const imgs = item.props.children.src;
             img.push(imgs);
           } else {
-            if (typeof item.props.children === 'string') text += item.props.children;
+            if (typeof item.props.children === 'string')
+              text += item.props.children;
             else text += item.props.children.props.children;
           }
         }
@@ -139,12 +140,13 @@ export const htmlToJson = (html: any) => {
           const imgs = html.props.children.src;
           img.push(imgs);
         } else {
-          if (typeof html.props.children === 'string') text += html.props.children;
+          if (typeof html.props.children === 'string')
+            text += html.props.children;
           else text += html.props.children.props.children;
         }
       }
     }
   }
 
-  return {img, text};
+  return { img, text };
 };

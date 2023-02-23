@@ -1,11 +1,16 @@
-import {Actions as BaseAction, PaginationAction, setLoading, setError} from '../base/actions';
-import {RootState} from '../index';
+import {
+  Actions as BaseAction,
+  PaginationAction,
+  setLoading,
+  setError,
+} from '../base/actions';
+import { RootState } from '../index';
 import * as constants from './constants';
 
-import {Action} from 'redux';
-import {People} from 'src/interfaces/people';
+import { Action } from 'redux';
+import { People } from 'src/interfaces/people';
 import * as PeopleAPI from 'src/lib/api/people';
-import {ThunkActionCreator} from 'src/types/thunk';
+import { ThunkActionCreator } from 'src/types/thunk';
 
 /**
  * Action Types
@@ -42,14 +47,14 @@ export const fetchPeople: ThunkActionCreator<Actions, RootState> =
     dispatch(setLoading(true));
     try {
       const {
-        userState: {user},
+        userState: { user },
       } = getState();
 
       if (!user) {
         throw new Error('User not found');
       }
 
-      const {meta, data: people} = await PeopleAPI.getPeople(page);
+      const { meta, data: people } = await PeopleAPI.getPeople(page);
 
       dispatch({
         type: constants.FETCH_PEOPLE,
@@ -69,7 +74,7 @@ export const searchPeople: ThunkActionCreator<Actions, RootState> =
 
     try {
       const {
-        userState: {user},
+        userState: { user },
       } = getState();
 
       if (!user) {

@@ -2,7 +2,7 @@ import * as Sentry from '@sentry/nextjs';
 
 import getConfig from 'next/config';
 
-import axios, {AxiosInstance} from 'axios';
+import axios, { AxiosInstance } from 'axios';
 
 type MyriadAPIParams = {
   apiURL?: string;
@@ -11,7 +11,7 @@ type MyriadAPIParams = {
 
 let API: AxiosInstance;
 
-const {publicRuntimeConfig} = getConfig();
+const { publicRuntimeConfig } = getConfig();
 
 const setupAPIClient = () => {
   API = axios.create({
@@ -69,7 +69,10 @@ const setupFederatedAPIClient = (apiURL: string) => {
   );
 };
 
-export const initialize = (params?: MyriadAPIParams, anonymous?: boolean): AxiosInstance => {
+export const initialize = (
+  params?: MyriadAPIParams,
+  anonymous?: boolean,
+): AxiosInstance => {
   if (params?.apiURL) {
     setupFederatedAPIClient(params?.apiURL);
   }

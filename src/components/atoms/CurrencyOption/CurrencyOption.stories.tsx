@@ -1,8 +1,8 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
-import {CurrencyOptionComponent} from '.';
+import { CurrencyOptionComponent } from '.';
 
 export default {
   title: 'UI Revamp v2.0/atoms/Currency option',

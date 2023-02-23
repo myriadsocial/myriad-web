@@ -33,19 +33,19 @@ import {
   TNodeProps,
   ELEMENT_MENTION_INPUT,
 } from '@udecode/plate';
-import {createComboboxPlugin} from '@udecode/plate-combobox';
+import { createComboboxPlugin } from '@udecode/plate-combobox';
 
-import React, {useCallback, useMemo, useRef, useState} from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 
-import {Grid, LinearProgress, Snackbar, Typography} from '@material-ui/core';
+import { Grid, LinearProgress, Snackbar, Typography } from '@material-ui/core';
 import EmojiEmotionsIcon from '@material-ui/icons/EmojiEmotions';
 import ImageIcon from '@material-ui/icons/Image';
 import LinkIcon from '@material-ui/icons/Link';
 import OndemandVideoIcon from '@material-ui/icons/OndemandVideo';
 
-import {EditorProps} from '../CKEditor/Editor.interface';
-import {EditorValue, Mentionable, MentionDetail} from './Editor.interface';
-import {useStyles} from './Editor.style';
+import { EditorProps } from '../CKEditor/Editor.interface';
+import { EditorValue, Mentionable, MentionDetail } from './Editor.interface';
+import { useStyles } from './Editor.style';
 import {
   alignmentPlugin,
   baseUIElements,
@@ -61,9 +61,9 @@ import {
   createLinkPlugin,
   createMentionPlugin,
 } from './plugins';
-import {Counter} from './render/Counter';
-import {MediaEmbedElement, MentionCombobox} from './render/Element';
-import {MentionInputElement} from './render/Element/Mention/MentionInput';
+import { Counter } from './render/Counter';
+import { MediaEmbedElement, MentionCombobox } from './render/Element';
+import { MentionInputElement } from './render/Element/Mention/MentionInput';
 import {
   Toolbar,
   ToolbarAlignButtons,
@@ -77,12 +77,12 @@ import {
   LinkToolbarButton,
   MediaEmbedToolbarButton,
 } from './render/Toolbar/Button';
-import {createEditorPlugins, initial} from './util';
-import {dataURItoBlob} from './utils/image';
+import { createEditorPlugins, initial } from './util';
+import { dataURItoBlob } from './utils/image';
 
-import {debounce} from 'lodash';
-import {ListItemComponent} from 'src/components/atoms/ListItem';
-import {User} from 'src/interfaces/user';
+import { debounce } from 'lodash';
+import { ListItemComponent } from 'src/components/atoms/ListItem';
+import { User } from 'src/interfaces/user';
 import * as UploadAPI from 'src/lib/api/upload';
 
 const MAX_CHARACTER_LIMIT = 5000;
@@ -145,7 +145,7 @@ const corePlugins = createEditorPlugins([
     options: {
       trigger: '@',
       insertSpaceAfterMention: true,
-      inputCreation: {key: 'creationId', value: 'main'},
+      inputCreation: { key: 'creationId', value: 'main' },
       createMentionNode: (item: Mentionable) => {
         const element: TNodeProps<TMentionElement> = {
           value: item.key,
@@ -191,14 +191,16 @@ export const Editor: React.FC<EditorProps> = props => {
     autoFocus = false,
   } = props;
 
-  const styles = useStyles({mobile, counter: true});
+  const styles = useStyles({ mobile, counter: true });
   const ref = useRef(null);
 
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
 
   const plugins = useMemo(() => {
-    const handleFileUpload = async (dataURI: string | ArrayBuffer): Promise<string> => {
+    const handleFileUpload = async (
+      dataURI: string | ArrayBuffer,
+    ): Promise<string> => {
       if (dataURI instanceof ArrayBuffer) {
         // code
       }
@@ -206,7 +208,7 @@ export const Editor: React.FC<EditorProps> = props => {
       if (typeof dataURI === 'string') {
         const file = dataURItoBlob(dataURI);
         setUploading(true);
-        const {files} = await UploadAPI.imageAsBuffer(file, {
+        const { files } = await UploadAPI.imageAsBuffer(file, {
           onUploadProgress: (event: ProgressEvent) => {
             const fileProgress = Math.round((100 * event.loaded) / event.total);
 
@@ -246,7 +248,7 @@ export const Editor: React.FC<EditorProps> = props => {
     [],
   );
 
-  const renderComboboxItem = useCallback(({item}) => {
+  const renderComboboxItem = useCallback(({ item }) => {
     return (
       <ListItemComponent
         title={item.data.name}
@@ -271,7 +273,7 @@ export const Editor: React.FC<EditorProps> = props => {
   return (
     <div
       className={`${styles.root} ${styles.large} ${styles.editorWrapper}`}
-      style={{borderColor: isErrorEditor ? '#FE3333' : '#E0E0E0'}}>
+      style={{ borderColor: isErrorEditor ? '#FE3333' : '#E0E0E0' }}>
       <Toolbar className={styles.toolbar}>
         {!mobile && <ToolbarBasicButtons />}
         <ToolbarMarksButtons />
@@ -316,7 +318,9 @@ export const Editor: React.FC<EditorProps> = props => {
           horizontal: 'right',
         }}>
         <Grid className={styles.progress}>
-          <Typography variant="subtitle1">Upload Progress {progress}%</Typography>
+          <Typography variant="subtitle1">
+            Upload Progress {progress}%
+          </Typography>
           <LinearProgress variant="determinate" value={progress} />
         </Grid>
       </Snackbar>

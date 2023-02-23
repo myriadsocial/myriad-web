@@ -1,7 +1,13 @@
-import {findNode, FindNodeOptions, getPluginType, PlateEditor, Value} from '@udecode/plate-core';
+import {
+  findNode,
+  FindNodeOptions,
+  getPluginType,
+  PlateEditor,
+  Value,
+} from '@udecode/plate-core';
 
-import {THashtagElement} from '..';
-import {ELEMENT_HASHTAG} from '../createHashtagPlugin';
+import { THashtagElement } from '..';
+import { ELEMENT_HASHTAG } from '../createHashtagPlugin';
 
 export const findHashtag = <V extends Value>(
   editor: PlateEditor<V>,
@@ -9,5 +15,5 @@ export const findHashtag = <V extends Value>(
 ) =>
   findNode<THashtagElement>(editor, {
     ...options,
-    match: {type: getPluginType(editor, ELEMENT_HASHTAG)},
+    match: { type: getPluginType(editor, ELEMENT_HASHTAG) },
   });

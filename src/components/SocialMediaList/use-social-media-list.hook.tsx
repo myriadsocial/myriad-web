@@ -1,7 +1,7 @@
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 
-import {socials as socialsIcons} from 'src/components/atoms/Icons';
-import {SocialsEnum, SocialMedia} from 'src/interfaces/social';
+import { socials as socialsIcons } from 'src/components/atoms/Icons';
+import { SocialsEnum, SocialMedia } from 'src/interfaces/social';
 
 export type SocialDetail = {
   id: SocialsEnum;
@@ -15,7 +15,9 @@ function enumKeys<E>(e: E): (keyof E)[] {
   return Object.keys(e) as (keyof E)[];
 }
 
-export const useSocialMediaList = (connected: SocialMedia[]): SocialDetail[] => {
+export const useSocialMediaList = (
+  connected: SocialMedia[],
+): SocialDetail[] => {
   const socials: SocialDetail[] = [];
 
   const icons: Partial<Record<SocialsEnum, JSX.Element>> = useMemo(
@@ -27,7 +29,9 @@ export const useSocialMediaList = (connected: SocialMedia[]): SocialDetail[] => 
   );
 
   const getPrimaryAccount = (social: SocialsEnum): SocialMedia | null => {
-    let match = connected.find(item => item.platform === social && item.primary);
+    let match = connected.find(
+      item => item.platform === social && item.primary,
+    );
 
     if (!match) {
       match = connected.find(item => item.platform === social);

@@ -11,7 +11,7 @@ export const updateAccountSettings = async (
   userId: string,
   settings: Partial<PrivacySettings>,
 ): Promise<PrivacySettings> => {
-  const {data} = await MyriadAPI().request<PrivacySettings>({
+  const { data } = await MyriadAPI().request<PrivacySettings>({
     url: `/user/account-setting`,
     method: 'PATCH',
     data: settings,
@@ -19,8 +19,10 @@ export const updateAccountSettings = async (
   return data;
 };
 
-export const getAccountSettings = async (userId: string): Promise<PrivacySettings> => {
-  const {data} = await MyriadAPI().request<PrivacySettings>({
+export const getAccountSettings = async (
+  userId: string,
+): Promise<PrivacySettings> => {
+  const { data } = await MyriadAPI().request<PrivacySettings>({
     url: `/user/account-setting`,
     method: 'GET',
   });
@@ -32,7 +34,7 @@ export const updateNotificationSettings = async (
   userId: string,
   settings: NotificationSettingItems,
 ): Promise<NotificationSettingItems> => {
-  const {data} = await MyriadAPI().request<NotificationSettingItems>({
+  const { data } = await MyriadAPI().request<NotificationSettingItems>({
     url: `/user/notification-setting`,
     method: 'PATCH',
     data: settings,
@@ -43,7 +45,7 @@ export const updateNotificationSettings = async (
 export const getNotificationSettings = async (
   userId: string,
 ): Promise<NotificationSettingItems> => {
-  const {data} = await MyriadAPI().request<NotificationSettingItems>({
+  const { data } = await MyriadAPI().request<NotificationSettingItems>({
     url: `/user/notification-setting`,
     method: 'GET',
   });
@@ -54,17 +56,20 @@ export const getNotificationSettings = async (
 export const sendVerificationEmailServices = async (
   payload: ResendVerificationEmailPayloadType,
 ): Promise<ResendVerificationEmailPayloadType> => {
-  const {data} = await MyriadAPI().request<ResendVerificationEmailPayloadType>({
-    url: `/user/otp/email`,
-    method: 'POST',
-    data: payload,
-  });
+  const { data } =
+    await MyriadAPI().request<ResendVerificationEmailPayloadType>({
+      url: `/user/otp/email`,
+      method: 'POST',
+      data: payload,
+    });
 
   return data;
 };
 
-export const updateEmail = async (token: string): Promise<UpdateEmailPayloadType> => {
-  const {data} = await MyriadAPI().request<UpdateEmailPayloadType>({
+export const updateEmail = async (
+  token: string,
+): Promise<UpdateEmailPayloadType> => {
+  const { data } = await MyriadAPI().request<UpdateEmailPayloadType>({
     url: `/user/email-setting?token=${token}`,
     method: 'PATCH',
   });
@@ -72,7 +77,7 @@ export const updateEmail = async (token: string): Promise<UpdateEmailPayloadType
 };
 
 export const deleteEmail = async (token: string): Promise<string> => {
-  const {data} = await MyriadAPI().request<string>({
+  const { data } = await MyriadAPI().request<string>({
     url: `/user/email-setting?token=${token}`,
     method: 'DELETE',
   });

@@ -1,1 +1,1 @@
-export {default} from './BigTopBanner';
+export { default } from './BigTopBanner';

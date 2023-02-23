@@ -1,4 +1,4 @@
-import {CheckCircleIcon, XCircleIcon} from '@heroicons/react/outline';
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/outline';
 
 import React from 'react';
 
@@ -14,15 +14,15 @@ import ListItemText from '@material-ui/core/ListItemText';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
-import {Avatar, AvatarSize} from '../atoms/Avatar';
-import {Empty} from '../atoms/Empty';
-import {useStyles} from './friendRequest.style';
-import {useFriendRequestList} from './hooks/use-friend-request.hook';
+import { Avatar, AvatarSize } from '../atoms/Avatar';
+import { Empty } from '../atoms/Empty';
+import { useStyles } from './friendRequest.style';
+import { useFriendRequestList } from './hooks/use-friend-request.hook';
 
-import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorizeAction';
+import { WithAuthorizeAction } from 'components/common/Authorization/WithAuthorizeAction';
 import ShowIf from 'src/components/common/show-if.component';
-import {Friend} from 'src/interfaces/friend';
-import {User} from 'src/interfaces/user';
+import { Friend } from 'src/interfaces/friend';
+import { User } from 'src/interfaces/user';
 import i18n from 'src/locale';
 
 type FriendRequestProps = {
@@ -36,7 +36,7 @@ const IconButton = WithAuthorizeAction(BaseIconButton);
 const Button = WithAuthorizeAction(BaseButton);
 
 export const FriendRequestComponent: React.FC<FriendRequestProps> = props => {
-  const {user, requests, onAcceptRequest, onDeclineRequest} = props;
+  const { user, requests, onAcceptRequest, onDeclineRequest } = props;
   const style = useStyles({});
 
   const list = useFriendRequestList(requests, user);
@@ -57,9 +57,16 @@ export const FriendRequestComponent: React.FC<FriendRequestProps> = props => {
         subtitle="Connect your Web 3.0 wallet to unlock this feature"
         // eslint-disable-next-line react/no-children-prop
         children={
-          <div style={{width: '100%', marginTop: 24}}>
-            <Link href={{pathname: '/wallet', query: {type: 'manage'}}} shallow passHref>
-              <Button onClick={() => undefined} color="primary" variant="contained" size="small">
+          <div style={{ width: '100%', marginTop: 24 }}>
+            <Link
+              href={{ pathname: '/wallet', query: { type: 'manage' } }}
+              shallow
+              passHref>
+              <Button
+                onClick={() => undefined}
+                color="primary"
+                variant="contained"
+                size="small">
                 {i18n.t('LiteVersion.ConnectWallet')}
               </Button>
             </Link>
@@ -76,17 +83,33 @@ export const FriendRequestComponent: React.FC<FriendRequestProps> = props => {
         {list.map(request => (
           <ListItem className={style.item} alignItems="center" key={request.id}>
             <ListItemAvatar>
-              <Avatar name={request.name} src={request.avatar} size={AvatarSize.MEDIUM} />
+              <Avatar
+                name={request.name}
+                src={request.avatar}
+                size={AvatarSize.MEDIUM}
+              />
             </ListItemAvatar>
             <ListItemText>
-              <Link href={'/profile/[id]'} as={`/profile/${request.id}`} shallow passHref>
-                <Typography className={style.name} component="a" color="textPrimary">
+              <Link
+                href={'/profile/[id]'}
+                as={`/profile/${request.id}`}
+                shallow
+                passHref>
+                <Typography
+                  className={style.name}
+                  component="a"
+                  color="textPrimary">
                   {request.name}
                 </Typography>
               </Link>
               <ShowIf condition={!!request.totalMutual}>
-                <Typography className={style.friend} component="p" color="textSecondary">
-                  {i18n.t('Friends.List.Mutual', {total: request.totalMutual})}
+                <Typography
+                  className={style.friend}
+                  component="p"
+                  color="textSecondary">
+                  {i18n.t('Friends.List.Mutual', {
+                    total: request.totalMutual,
+                  })}
                 </Typography>
               </ShowIf>
             </ListItemText>
@@ -98,7 +121,7 @@ export const FriendRequestComponent: React.FC<FriendRequestProps> = props => {
                 variant="text"
                 startIcon={
                   <SvgIcon
-                    classes={{root: style.fill}}
+                    classes={{ root: style.fill }}
                     component={CheckCircleIcon}
                     viewBox="0 0 24 24"
                   />
@@ -114,7 +137,7 @@ export const FriendRequestComponent: React.FC<FriendRequestProps> = props => {
                 variant="text"
                 startIcon={
                   <SvgIcon
-                    classes={{root: style.fill}}
+                    classes={{ root: style.fill }}
                     component={XCircleIcon}
                     viewBox="0 0 24 24"
                   />
@@ -131,7 +154,7 @@ export const FriendRequestComponent: React.FC<FriendRequestProps> = props => {
                   disableFocusRipple={true}
                   disableTouchRipple>
                   <SvgIcon
-                    classes={{root: style.fill}}
+                    classes={{ root: style.fill }}
                     component={CheckCircleIcon}
                     viewBox="0 0 24 24"
                     color="primary"
@@ -144,7 +167,7 @@ export const FriendRequestComponent: React.FC<FriendRequestProps> = props => {
                   disableFocusRipple={true}
                   disableTouchRipple>
                   <SvgIcon
-                    classes={{root: style.fill}}
+                    classes={{ root: style.fill }}
                     component={XCircleIcon}
                     viewBox="0 0 24 24"
                     color="secondary"

@@ -1,5 +1,10 @@
 import MuiTableCell from '@material-ui/core/TableCell';
-import {withStyles, makeStyles, createStyles, Theme} from '@material-ui/core/styles';
+import {
+  withStyles,
+  makeStyles,
+  createStyles,
+  Theme,
+} from '@material-ui/core/styles';
 
 export const TableCell = withStyles({
   root: {

@@ -7,7 +7,7 @@ import {
   removeMentionInput,
   TMentionInputElement,
 } from '@udecode/plate';
-import {comboboxActions} from '@udecode/plate-combobox';
+import { comboboxActions } from '@udecode/plate-combobox';
 import {
   getEditorString,
   getNodeString,
@@ -25,13 +25,18 @@ import {
   WithPlatePlugin,
 } from '@udecode/plate-core';
 
-import {Range} from 'slate';
+import { Range } from 'slate';
 
-export const withMention = <V extends Value = Value, E extends PlateEditor<V> = PlateEditor<V>>(
+export const withMention = <
+  V extends Value = Value,
+  E extends PlateEditor<V> = PlateEditor<V>,
+>(
   editor: E,
-  {options: {id, trigger, inputCreation}}: WithPlatePlugin<MentionPlugin, V, E>,
+  {
+    options: { id, trigger, inputCreation },
+  }: WithPlatePlugin<MentionPlugin, V, E>,
 ) => {
-  const {type} = getPlugin<{}, V>(editor, ELEMENT_MENTION_INPUT);
+  const { type } = getPlugin<{}, V>(editor, ELEMENT_MENTION_INPUT);
 
   const {
     apply,
@@ -95,19 +100,31 @@ export const withMention = <V extends Value = Value, E extends PlateEditor<V> = 
   };
 
   editor.insertText = text => {
-    if (!editor.selection || text !== trigger || isSelectionInMentionInput(editor)) {
+    if (
+      !editor.selection ||
+      text !== trigger ||
+      isSelectionInMentionInput(editor)
+    ) {
       return _insertText(text);
     }
 
     // Make sure a mention input is created at the beginning of line or after a whitespace
     const previousChar = getEditorString(
       editor,
-      getRange(editor, editor.selection, getPointBefore(editor, editor.selection)),
+      getRange(
+        editor,
+        editor.selection,
+        getPointBefore(editor, editor.selection),
+      ),
     );
 
     const nextChar = getEditorString(
       editor,
-      getRange(editor, editor.selection, getPointAfter(editor, editor.selection)),
+      getRange(
+        editor,
+        editor.selection,
+        getPointAfter(editor, editor.selection),
+      ),
     );
 
     const beginningOfLine = previousChar === '';
@@ -115,10 +132,13 @@ export const withMention = <V extends Value = Value, E extends PlateEditor<V> = 
     const precededByWhitespace = previousChar === ' ';
     const followedByWhitespace = nextChar === ' ';
 
-    if ((beginningOfLine || precededByWhitespace) && (endOfLine || followedByWhitespace)) {
+    if (
+      (beginningOfLine || precededByWhitespace) &&
+      (endOfLine || followedByWhitespace)
+    ) {
       const data: TMentionInputElement = {
         type,
-        children: [{text: ''}],
+        children: [{ text: '' }],
         trigger,
       };
       if (inputCreation) {
@@ -140,11 +160,11 @@ export const withMention = <V extends Value = Value, E extends PlateEditor<V> = 
       }
     } else if (operation.type === 'set_selection') {
       const previousMentionInputPath = Range.isRange(operation.properties)
-        ? findMentionInput(editor, {at: operation.properties})?.[1]
+        ? findMentionInput(editor, { at: operation.properties })?.[1]
         : undefined;
 
       const currentMentionInputPath = Range.isRange(operation.newProperties)
-        ? findMentionInput(editor, {at: operation.newProperties})?.[1]
+        ? findMentionInput(editor, { at: operation.newProperties })?.[1]
         : undefined;
 
       if (previousMentionInputPath && !currentMentionInputPath) {
@@ -162,7 +182,9 @@ export const withMention = <V extends Value = Value, E extends PlateEditor<V> = 
         return;
       }
 
-      const text = ((operation.node as TMentionInputElement).children as TText[])[0]?.text ?? '';
+      const text =
+        ((operation.node as TMentionInputElement).children as TText[])[0]
+          ?.text ?? '';
 
       if (
         inputCreation === undefined ||
@@ -172,8 +194,8 @@ export const withMention = <V extends Value = Value, E extends PlateEditor<V> = 
         // an insert_node with the mention input, i.e. nothing indicating that it
         // was an undo.
         setSelection(editor, {
-          anchor: {path: operation.path.concat([0]), offset: text.length},
-          focus: {path: operation.path.concat([0]), offset: text.length},
+          anchor: { path: operation.path.concat([0]), offset: text.length },
+          focus: { path: operation.path.concat([0]), offset: text.length },
         });
 
         comboboxActions.open({

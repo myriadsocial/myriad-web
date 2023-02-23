@@ -1,4 +1,9 @@
-import {createStyles, Theme, makeStyles, alpha} from '@material-ui/core/styles';
+import {
+  createStyles,
+  Theme,
+  makeStyles,
+  alpha,
+} from '@material-ui/core/styles';
 
 type NotificationComponentProps = {
   gutter?: number;
@@ -37,8 +42,10 @@ export const useStyles = makeStyles<Theme, NotificationComponentProps>(theme =>
       fontWeight: 600,
     },
     list: {
-      marginLeft: props => (props.gutter ? theme.spacing(-1 * props.gutter) : 0),
-      marginRight: props => (props.gutter ? theme.spacing(-1 * props.gutter) : 0),
+      marginLeft: props =>
+        props.gutter ? theme.spacing(-1 * props.gutter) : 0,
+      marginRight: props =>
+        props.gutter ? theme.spacing(-1 * props.gutter) : 0,
       '& .MuiListItem-button:hover': {
         backgroundColor: alpha('#FFC857', 0.15),
       },
@@ -46,7 +53,8 @@ export const useStyles = makeStyles<Theme, NotificationComponentProps>(theme =>
     item: {
       marginBottom: theme.spacing(0.5),
       paddingRight: 0,
-      paddingTop: props => (props.gutter ? theme.spacing(0.5 * props.gutter) : 0),
+      paddingTop: props =>
+        props.gutter ? theme.spacing(0.5 * props.gutter) : 0,
       position: 'relative',
 
       '& .MuiListItemText-root': {

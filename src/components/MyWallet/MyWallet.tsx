@@ -1,12 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
 import dynamic from 'next/dynamic';
 
-import {MyWalletProps} from '.';
-import {TabsComponent} from '../atoms/Tabs';
-import {useStyles} from './myWallet.style';
+import { MyWalletProps } from '.';
+import { TabsComponent } from '../atoms/Tabs';
+import { useStyles } from './myWallet.style';
 
-import {useQueryParams} from 'src/hooks/use-query-params.hooks';
+import { useQueryParams } from 'src/hooks/use-query-params.hooks';
 import i18n from 'src/locale';
 
 const BalanceDetailListContainer = dynamic(
@@ -31,7 +31,7 @@ const TipContainer = dynamic(() => import('../Tip/Tip.container'), {
 export const MyWallet: React.FC<MyWalletProps> = () => {
   const style = useStyles();
 
-  const {query} = useQueryParams();
+  const { query } = useQueryParams();
 
   const [tabTexts] = useState([
     {

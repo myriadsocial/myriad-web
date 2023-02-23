@@ -1,11 +1,12 @@
-import {Value} from '@udecode/plate-core';
-import {ImageResizableProps, TImageElement} from '@udecode/plate-image';
-import {StyledElementProps} from '@udecode/plate-styled-components';
+import { Value } from '@udecode/plate-core';
+import { ImageResizableProps, TImageElement } from '@udecode/plate-image';
+import { StyledElementProps } from '@udecode/plate-styled-components';
 
-import {ResizableProps} from 're-resizable';
-import {CSSProp} from 'styled-components';
+import { ResizableProps } from 're-resizable';
+import { CSSProp } from 'styled-components';
 
-export interface ImageElementStyleProps<V extends Value = Value> extends ImageElementProps<V> {
+export interface ImageElementStyleProps<V extends Value = Value>
+  extends ImageElementProps<V> {
   selected?: boolean;
   focused?: boolean;
 }

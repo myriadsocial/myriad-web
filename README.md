@@ -1,13 +1,12 @@
 <div align="center">
 <img src="https://avatars.githubusercontent.com/u/80524516?s=200&v=4">
 </div>
-<br>
-<br>
 
 <div align="Center">
-<h1>Myriad Web</h1>
+<h1>Myriad Web App</h1>
 <h2>It's Your Turn to Own Your Web</h2>
 Starting with Myriad.Social, we are creating a platform where social app, metaverse and messenger seamlessly integrate, together and with further applications. As a user, a content creator or a builder, Myriad is designed to be yours.
+
 <br>
 <br>
 
@@ -36,26 +35,66 @@ yarn dev
 
 Open http://127.0.0.1:3000 in your browser.
 
-## Fix code style and formatting issues
+## Code style and formatting
+
+### Code style
+
+To check code style:
 
 ```sh
-yarn run lint
+yarn lint:check
 ```
 
-To automatically fix such issues:
+To automatically fix code style issues:
 
 ```sh
-yarn run lint:fix
+yarn lint:fix
+```
+
+### Formatting
+
+To check format:
+
+```sh
+yarn format:check
+```
+
+To automatically fix format issues:
+
+```sh
+yarn format:fix
 ```
 
 ## Other useful commands
 
-- `yarn run docker:build`: Build a Docker image for this application
-- `yarn run docker:run`: Run this application inside a Docker container
-- `yarn run docker:down`: Tear down this docker contaner
+- `yarn docker:build`: Build a Docker image for this application
+- `yarn docker:run`: Run this application inside a Docker container
+- `yarn docker:down`: Tear down this docker contaner
 
 ## Tests
 
+### Run all tests
+
 ```sh
 yarn test
+```
+
+### Or run partial test
+
+Run unit test
+
+```sh
+yarn test:unit
+```
+
+Run integration test
+
+```sh
+yarn test:integration
+```
+
+Run acceptance test
+
+```sh
+yarn test:acceptance
 ```

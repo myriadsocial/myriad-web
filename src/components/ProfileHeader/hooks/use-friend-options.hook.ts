@@ -1,5 +1,5 @@
-import {FriendStatus} from 'src/interfaces/friend';
-import {FriendStatusProps, User} from 'src/interfaces/user';
+import { FriendStatus } from 'src/interfaces/friend';
+import { FriendStatusProps, User } from 'src/interfaces/user';
 
 type FriendOptions = {
   self: boolean;
@@ -10,7 +10,9 @@ type FriendOptions = {
   canAddFriend: boolean;
 };
 
-export const useFriendOptions = (person: User & {friendInfo: FriendStatusProps}): FriendOptions => {
+export const useFriendOptions = (
+  person: User & { friendInfo: FriendStatusProps },
+): FriendOptions => {
   const self = (): boolean => person?.friendInfo?.status === 'owner';
 
   return {

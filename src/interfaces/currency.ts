@@ -1,5 +1,5 @@
-import {BaseModel} from './base.interface';
-import {Network} from './network';
+import { BaseModel } from './base.interface';
+import { Network } from './network';
 
 export type CurrencyProps = {
   image: string;

@@ -1,7 +1,7 @@
-import {Actions} from './actions';
+import { Actions } from './actions';
 import * as constants from './constants';
 
-import {ExclusiveContent} from 'components/common/Tipping/Tipping.interface';
+import { ExclusiveContent } from 'components/common/Tipping/Tipping.interface';
 import * as Redux from 'redux';
 
 export interface ECState {
@@ -16,7 +16,10 @@ const initalState: ECState = {
   ecId: '',
 };
 
-export const ECReducer: Redux.Reducer<ECState, Actions> = (state = initalState, action) => {
+export const ECReducer: Redux.Reducer<ECState, Actions> = (
+  state = initalState,
+  action,
+) => {
   switch (action.type) {
     case constants.PAID_EXCLUSIVE_CONTENT: {
       return {

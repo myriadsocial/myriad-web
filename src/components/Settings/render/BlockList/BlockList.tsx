@@ -12,15 +12,15 @@ import {
   useBlockList,
   FriendRequestDetail,
 } from '../../../FriendsMenu/hooks/use-friend-request.hook';
-import {Avatar, AvatarSize} from '../../../atoms/Avatar';
-import {useStyles} from './BlockList.style';
+import { Avatar, AvatarSize } from '../../../atoms/Avatar';
+import { useStyles } from './BlockList.style';
 
-import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorizeAction';
-import {Empty} from 'src/components/atoms/Empty';
+import { WithAuthorizeAction } from 'components/common/Authorization/WithAuthorizeAction';
+import { Empty } from 'src/components/atoms/Empty';
 import useConfirm from 'src/components/common/Confirm/use-confirm.hook';
 import ShowIf from 'src/components/common/show-if.component';
-import {Friend} from 'src/interfaces/friend';
-import {User} from 'src/interfaces/user';
+import { Friend } from 'src/interfaces/friend';
+import { User } from 'src/interfaces/user';
 import i18n from 'src/locale';
 
 type Props = {
@@ -31,7 +31,11 @@ type Props = {
 
 const Button = WithAuthorizeAction(BaseButton);
 
-export const BlockListComponent: React.FC<Props> = ({blockList, user, onUnblock}) => {
+export const BlockListComponent: React.FC<Props> = ({
+  blockList,
+  user,
+  onUnblock,
+}) => {
   const style = useStyles();
 
   const confirm = useConfirm();
@@ -56,18 +60,27 @@ export const BlockListComponent: React.FC<Props> = ({blockList, user, onUnblock}
         </Typography>
       </div>
 
-      <List style={{marginTop: 12}}>
+      <List style={{ marginTop: 12 }}>
         <ShowIf condition={list.length === 0}>
-          <Empty title={i18n.t('Setting.List_Menu.Blocked_Setting.Empty_Block')} />
+          <Empty
+            title={i18n.t('Setting.List_Menu.Blocked_Setting.Empty_Block')}
+          />
         </ShowIf>
 
         {list.map(user => (
           <ListItem key={user.id} className={style.item} alignItems="center">
             <ListItemAvatar>
-              <Avatar src={user.avatar} name={user.name} size={AvatarSize.MEDIUM} />
+              <Avatar
+                src={user.avatar}
+                name={user.name}
+                size={AvatarSize.MEDIUM}
+              />
             </ListItemAvatar>
             <ListItemText>
-              <Typography className={style.name} component="span" color="textPrimary">
+              <Typography
+                className={style.name}
+                component="span"
+                color="textPrimary">
                 {user.name}
               </Typography>
               <ListItemSecondaryAction className="hidden-button">

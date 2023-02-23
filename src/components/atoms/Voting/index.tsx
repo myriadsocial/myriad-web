@@ -1,21 +1,21 @@
-import {ArrowCircleDownIcon} from '@heroicons/react/outline';
-import {ArrowCircleUpIcon} from '@heroicons/react/outline';
+import { ArrowCircleDownIcon } from '@heroicons/react/outline';
+import { ArrowCircleUpIcon } from '@heroicons/react/outline';
 
 import React from 'react';
-import {shallowEqual, useSelector} from 'react-redux';
+import { shallowEqual, useSelector } from 'react-redux';
 
 import BaseIconButton from '@material-ui/core/IconButton';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
-import {VoteProps} from './voting.interface';
-import {useStyles} from './voting.style';
+import { VoteProps } from './voting.interface';
+import { useStyles } from './voting.style';
 
-import {WithAuthorizeAction} from 'components/common/Authorization/WithAuthorizeAction';
+import { WithAuthorizeAction } from 'components/common/Authorization/WithAuthorizeAction';
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import debounce from 'lodash/debounce';
-import {formatCount} from 'src/helpers/number';
-import {RootState} from 'src/reducers';
+import { formatCount } from 'src/helpers/number';
+import { RootState } from 'src/reducers';
 
 const IconButton = WithAuthorizeAction(BaseIconButton);
 
@@ -37,7 +37,7 @@ export const VotingComponent: React.FC<VoteProps> = props => {
     shallowEqual,
   );
 
-  const style = useStyles({variant, size});
+  const style = useStyles({ variant, size });
 
   const handleUpVote = debounce(() => {
     if (anonymous) {
@@ -71,7 +71,7 @@ export const VotingComponent: React.FC<VoteProps> = props => {
           onClick={handleUpVote}
           className={`${style.action} ${style.mr1}`}>
           <SvgIcon
-            classes={{root: isUpVoted ? style.primary : style.default}}
+            classes={{ root: isUpVoted ? style.primary : style.default }}
             component={ArrowCircleUpIcon}
             viewBox="0 0 24 24"
           />
@@ -79,9 +79,12 @@ export const VotingComponent: React.FC<VoteProps> = props => {
         <Typography variant="body1" component="span" className={style.mr1}>
           {formatCount(vote)}
         </Typography>
-        <IconButton disabled={disabled} onClick={handleDownVote} className={style.action}>
+        <IconButton
+          disabled={disabled}
+          onClick={handleDownVote}
+          className={style.action}>
           <SvgIcon
-            classes={{root: isDownVoted ? style.error : style.default}}
+            classes={{ root: isDownVoted ? style.error : style.default }}
             component={ArrowCircleDownIcon}
             viewBox="0 0 24 24"
           />

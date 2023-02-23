@@ -6,7 +6,7 @@ import {
   SoftBreakPlugin,
 } from '@udecode/plate';
 
-import {MyPlatePlugin} from '../Editor.interface';
+import { MyPlatePlugin } from '../Editor.interface';
 
 export const softBreakPlugin: Partial<MyPlatePlugin<SoftBreakPlugin>> = {
   options: {
@@ -17,7 +17,12 @@ export const softBreakPlugin: Partial<MyPlatePlugin<SoftBreakPlugin>> = {
       {
         hotkey: 'enter',
         query: {
-          allow: [ELEMENT_CODE_BLOCK, ELEMENT_BLOCKQUOTE, ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED],
+          allow: [
+            ELEMENT_CODE_BLOCK,
+            ELEMENT_BLOCKQUOTE,
+            ELEMENT_IMAGE,
+            ELEMENT_MEDIA_EMBED,
+          ],
         },
       },
     ],

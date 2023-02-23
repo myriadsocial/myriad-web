@@ -1,8 +1,8 @@
-import {RootState} from '../index';
+import { RootState } from '../index';
 import * as constants from './constants';
 
-import {Action} from 'redux';
-import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
+import { Action } from 'redux';
+import { ListMeta } from 'src/lib/api/interfaces/base-list.interface';
 
 /**
  * Action Types

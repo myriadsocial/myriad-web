@@ -1,4 +1,4 @@
-import {BalanceDetail} from 'src/interfaces/balance';
+import { BalanceDetail } from 'src/interfaces/balance';
 
 export type CurrencyOptionProps = {
   balanceDetails: BalanceDetail[];

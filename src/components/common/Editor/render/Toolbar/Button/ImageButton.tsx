@@ -1,12 +1,12 @@
-import {usePlateEditorRef} from '@udecode/plate-core';
-import {insertImage} from '@udecode/plate-image';
-import {ToolbarButton, ToolbarButtonProps} from '@udecode/plate-ui-toolbar';
+import { usePlateEditorRef } from '@udecode/plate-core';
+import { insertImage } from '@udecode/plate-image';
+import { ToolbarButton, ToolbarButtonProps } from '@udecode/plate-ui-toolbar';
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-import {Upload} from 'components/Upload';
-import {Modal} from 'components/atoms/Modal';
-import {useToggle} from 'src/hooks/use-toggle.hook';
+import { Upload } from 'components/Upload';
+import { Modal } from 'components/atoms/Modal';
+import { useToggle } from 'src/hooks/use-toggle.hook';
 import * as UploadAPI from 'src/lib/api/upload';
 import i18n from 'src/locale';
 
@@ -34,10 +34,11 @@ export const ImageToolbarButton: React.FC<ImageToolbarButtonProps> = ({
     const size = images.length;
 
     for (const [index, image] of toImageEntries(images)) {
-      const {files} = await UploadAPI.image(image, {
+      const { files } = await UploadAPI.image(image, {
         onUploadProgress: (event: ProgressEvent) => {
           const fileProgress = Math.round((100 * event.loaded) / event.total);
-          const totalProgress: number = (100 * index) / size + fileProgress / size;
+          const totalProgress: number =
+            (100 * index) / size + fileProgress / size;
 
           setProgress(totalProgress);
         },

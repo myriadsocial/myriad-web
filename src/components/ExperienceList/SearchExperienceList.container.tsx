@@ -1,11 +1,11 @@
 import React from 'react';
 
-import {Grid} from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 
-import {Skeleton} from '../Expericence';
-import {ExperienceListContainer} from './ExperienceList.container';
+import { Skeleton } from '../Expericence';
+import { ExperienceListContainer } from './ExperienceList.container';
 
-import {useExperienceHook} from 'src/hooks/use-experience-hook';
+import { useExperienceHook } from 'src/hooks/use-experience-hook';
 
 type SearchExperienceListContainerProps = {
   query: string;
@@ -13,9 +13,10 @@ type SearchExperienceListContainerProps = {
 
 export const SearchExperienceListContainer: React.FC<SearchExperienceListContainerProps> =
   props => {
-    const {query} = props;
+    const { query } = props;
 
-    const {page, experiences, hasMore, loading, searchExperience} = useExperienceHook();
+    const { page, experiences, hasMore, loading, searchExperience } =
+      useExperienceHook();
 
     const handleLoadNextPage = () => {
       searchExperience(query, page + 1);

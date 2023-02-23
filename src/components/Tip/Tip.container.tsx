@@ -1,29 +1,32 @@
-import React, {useState} from 'react';
-import {useSelector} from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import dynamic from 'next/dynamic';
 
-import {Backdrop, CircularProgress, NoSsr} from '@material-ui/core';
+import { Backdrop, CircularProgress, NoSsr } from '@material-ui/core';
 
-import {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
+import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 
-import {BoxComponent} from '../atoms/Box';
-import {ShimerComponent} from './Shimer';
-import {Tip} from './Tip';
-import {useStyles} from './tip.style';
+import { BoxComponent } from '../atoms/Box';
+import { ShimerComponent } from './Shimer';
+import { Tip } from './Tip';
+import { useStyles } from './tip.style';
 
 import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {VariantType} from 'notistack';
-import {Empty} from 'src/components/atoms/Empty';
-import {useAuthHook} from 'src/hooks/auth.hook';
-import {useClaimTip} from 'src/hooks/use-claim-tip.hook';
-import {usePolkadotExtension} from 'src/hooks/use-polkadot-app.hook';
-import {TipsBalanceInfo, TipsResult} from 'src/interfaces/blockchain-interface';
-import {Network, NetworkIdEnum} from 'src/interfaces/network';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import { VariantType } from 'notistack';
+import { Empty } from 'src/components/atoms/Empty';
+import { useAuthHook } from 'src/hooks/auth.hook';
+import { useClaimTip } from 'src/hooks/use-claim-tip.hook';
+import { usePolkadotExtension } from 'src/hooks/use-polkadot-app.hook';
+import {
+  TipsBalanceInfo,
+  TipsResult,
+} from 'src/interfaces/blockchain-interface';
+import { Network, NetworkIdEnum } from 'src/interfaces/network';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {UserState} from 'src/reducers/user/reducer';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
 const PolkadotAccountList = dynamic(
   () => import('components/PolkadotAccountList/PolkadotAccountList'),
@@ -50,10 +53,12 @@ export const TipContainer: React.FC = () => {
     payTransactionFee,
   } = useClaimTip();
 
-  const {loadingSwitch, switchNetwork} = useBlockchain();
-  const {currentWallet, user} = useSelector<RootState, UserState>(state => state.userState);
-  const {enablePolkadotExtension} = usePolkadotExtension();
-  const {getRegisteredAccounts} = useAuthHook();
+  const { loadingSwitch, switchNetwork } = useBlockchain();
+  const { currentWallet, user } = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
+  const { enablePolkadotExtension } = usePolkadotExtension();
+  const { getRegisteredAccounts } = useAuthHook();
 
   const [showAccountList, setShowAccountList] = useState<boolean>(false);
   const [extensionInstalled, setExtensionInstalled] = useState<boolean>(false);
@@ -62,25 +67,29 @@ export const TipContainer: React.FC = () => {
   const [isHaveTips, setIsHaveTips] = useState<boolean>(false);
 
   const handleClaimTip = (networkId: string, ftIdentifier: string) => {
-    claim(networkId, ftIdentifier, ({claimSuccess, errorMessage}) => {
+    claim(networkId, ftIdentifier, ({ claimSuccess, errorMessage }) => {
       if (networkId === NetworkIdEnum.MYRIAD) {
         // TODO: Register translation
         const variant = claimSuccess ? 'success' : 'warning';
-        const message = claimSuccess ? i18n.t('Wallet.Tip.Alert.Success') : errorMessage;
+        const message = claimSuccess
+          ? i18n.t('Wallet.Tip.Alert.Success')
+          : errorMessage;
 
-        enqueueSnackbar({message, variant});
+        enqueueSnackbar({ message, variant });
       }
     });
   };
 
   const handleClaimTipAll = (networkId: string) => {
-    claimAll(networkId, ({claimSuccess, errorMessage}) => {
+    claimAll(networkId, ({ claimSuccess, errorMessage }) => {
       if (networkId === NetworkIdEnum.MYRIAD) {
         // TODO: Register translation
         const variant = claimSuccess ? 'success' : 'warning';
-        const message = claimSuccess ? i18n.t('Wallet.Tip.Alert.Success') : errorMessage;
+        const message = claimSuccess
+          ? i18n.t('Wallet.Tip.Alert.Success')
+          : errorMessage;
 
-        enqueueSnackbar({message, variant});
+        enqueueSnackbar({ message, variant });
       }
     });
   };
@@ -94,7 +103,10 @@ export const TipContainer: React.FC = () => {
     return false;
   };
 
-  const handleVerifyReference = async (networkId: string, nativeBalance: string | number) => {
+  const handleVerifyReference = async (
+    networkId: string,
+    nativeBalance: string | number,
+  ) => {
     if (!user?.id) return;
 
     try {
@@ -102,7 +114,8 @@ export const TipContainer: React.FC = () => {
         throw new Error('Insufficient Gas Fee');
       }
 
-      if (!server?.accountId?.[currentWallet?.networkId]) throw new Error('Server not exists');
+      if (!server?.accountId?.[currentWallet?.networkId])
+        throw new Error('Server not exists');
 
       const serverId = server.accountId[currentWallet?.networkId];
       const tipsBalanceInfo = {
@@ -114,7 +127,11 @@ export const TipContainer: React.FC = () => {
 
       switch (networkId) {
         case NetworkIdEnum.NEAR: {
-          await payTransactionFee(tipsBalanceInfo, feeInfo.trxFee, nativeBalance.toString());
+          await payTransactionFee(
+            tipsBalanceInfo,
+            feeInfo.trxFee,
+            nativeBalance.toString(),
+          );
           break;
         }
 
@@ -164,19 +181,26 @@ export const TipContainer: React.FC = () => {
     let variant: VariantType = 'success';
 
     try {
-      await payTransactionFee(tipsBalanceInfo, feeInfo.trxFee, undefined, account);
+      await payTransactionFee(
+        tipsBalanceInfo,
+        feeInfo.trxFee,
+        undefined,
+        account,
+      );
     } catch (error) {
       variant = error.message === 'Cancelled' ? 'warning' : 'error';
       message = error.message;
     } finally {
       setTipsBalanceInfo(null);
 
-      enqueueSnackbar({variant, message});
+      enqueueSnackbar({ variant, message });
     }
   };
 
   const getNativeToken = (tips: TipsResult[]) => {
-    const native = tips.find(tip => tip?.tipsBalanceInfo?.ftIdentifier === 'native');
+    const native = tips.find(
+      tip => tip?.tipsBalanceInfo?.ftIdentifier === 'native',
+    );
     if (native) return native.symbol;
     return '';
   };
@@ -190,7 +214,7 @@ export const TipContainer: React.FC = () => {
         if (isHaveTips) return;
         if (element != tipsEachNetwork.length - 1) return;
         return (
-          <div style={{marginTop: 20}} key={network.id}>
+          <div style={{ marginTop: 20 }} key={network.id}>
             <Empty
               title={i18n.t('Wallet.Tip.Empty.Title')}
               subtitle={i18n.t('Wallet.Tip.Empty.Subtitle')}
@@ -205,7 +229,7 @@ export const TipContainer: React.FC = () => {
         case NetworkIdEnum.MYRIAD:
         case NetworkIdEnum.NEAR:
           return (
-            <div style={{marginTop: 20}} key={network.id}>
+            <div style={{ marginTop: 20 }} key={network.id}>
               <Empty
                 title={i18n.t('Wallet.Tip.Empty.Title')}
                 subtitle={i18n.t('Wallet.Tip.Empty.Subtitle')}
@@ -220,14 +244,22 @@ export const TipContainer: React.FC = () => {
     if (!isHaveTips) setIsHaveTips(true);
 
     return (
-      <BoxComponent isWithChevronRightIcon={false} marginTop={'20px'} key={network.id}>
+      <BoxComponent
+        isWithChevronRightIcon={false}
+        marginTop={'20px'}
+        key={network.id}>
         {showTip(network, tipsBalances, nativeToken)}
       </BoxComponent>
     );
   };
 
-  const showTip = (network: Network, tipsBalances: TipsResult[], token: string) => {
-    if ((claimingAll || verifyingReference) && isShow(network)) return <ShimerComponent />;
+  const showTip = (
+    network: Network,
+    tipsBalances: TipsResult[],
+    token: string,
+  ) => {
+    if ((claimingAll || verifyingReference) && isShow(network))
+      return <ShimerComponent />;
     return (
       <Tip
         loading={claiming}
@@ -262,7 +294,9 @@ export const TipContainer: React.FC = () => {
         onClose={closeAccountList}
       />
 
-      <Backdrop className={styles.backdrop} open={claimingAll || isSignerLoading}>
+      <Backdrop
+        className={styles.backdrop}
+        open={claimingAll || isSignerLoading}>
         <CircularProgress color="primary" />
       </Backdrop>
     </NoSsr>

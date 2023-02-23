@@ -1,9 +1,9 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
-import {ExperienceEditor} from '.';
-import {SocialsEnum} from '../../interfaces/social';
+import { ExperienceEditor } from '.';
+import { SocialsEnum } from '../../interfaces/social';
 
 export default {
   title: 'UI Revamp v2.0/components/Experience Editor',
@@ -11,7 +11,9 @@ export default {
   argTypes: {},
 } as ComponentMeta<typeof ExperienceEditor>;
 
-const Template: ComponentStory<typeof ExperienceEditor> = args => <ExperienceEditor {...args} />;
+const Template: ComponentStory<typeof ExperienceEditor> = args => (
+  <ExperienceEditor {...args} />
+);
 
 export const CreateExperience = Template.bind({});
 CreateExperience.args = {
@@ -39,7 +41,8 @@ CreateExperience.args = {
       name: 'Person 1',
       originUserId: '1',
       platform: SocialsEnum.FACEBOOK,
-      profilePictureURL: 'https://res.cloudinary.com/dsget80gs/bd75blw2pnmpj9aqwdxm.png',
+      profilePictureURL:
+        'https://res.cloudinary.com/dsget80gs/bd75blw2pnmpj9aqwdxm.png',
       username: 'personone',
     },
     {
@@ -47,7 +50,8 @@ CreateExperience.args = {
       name: 'Person 2',
       originUserId: '2',
       platform: SocialsEnum.FACEBOOK,
-      profilePictureURL: 'https://res.cloudinary.com/dsget80gs/rvi6x1stnczatom2jq2y.jpg',
+      profilePictureURL:
+        'https://res.cloudinary.com/dsget80gs/rvi6x1stnczatom2jq2y.jpg',
       username: 'persontwo',
     },
   ],
@@ -85,7 +89,8 @@ EditExperience.args = {
       name: 'Person 1',
       originUserId: '1',
       platform: SocialsEnum.FACEBOOK,
-      profilePictureURL: 'https://res.cloudinary.com/dsget80gs/bd75blw2pnmpj9aqwdxm.png',
+      profilePictureURL:
+        'https://res.cloudinary.com/dsget80gs/bd75blw2pnmpj9aqwdxm.png',
       username: 'personone',
     },
     {
@@ -93,7 +98,8 @@ EditExperience.args = {
       name: 'Person 2',
       originUserId: '2',
       platform: SocialsEnum.FACEBOOK,
-      profilePictureURL: 'https://res.cloudinary.com/dsget80gs/rvi6x1stnczatom2jq2y.jpg',
+      profilePictureURL:
+        'https://res.cloudinary.com/dsget80gs/rvi6x1stnczatom2jq2y.jpg',
       username: 'persontwo',
     },
   ],

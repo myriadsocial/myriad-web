@@ -1,17 +1,17 @@
-import {EyeOffIcon} from '@heroicons/react/outline';
+import { EyeOffIcon } from '@heroicons/react/outline';
 
 import React from 'react';
 
-import {Button, Typography} from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
-import {useStyles} from './nsfw.style';
+import { useStyles } from './nsfw.style';
 
 type Props = {
   viewContent: () => void;
 };
 export const NSFW: React.FC<Props> = props => {
-  const {viewContent} = props;
+  const { viewContent } = props;
   const style = useStyles();
 
   const handleClick = () => {
@@ -22,7 +22,7 @@ export const NSFW: React.FC<Props> = props => {
     <div className={style.root}>
       <SvgIcon
         className={style.icon}
-        classes={{root: style.fill}}
+        classes={{ root: style.fill }}
         component={EyeOffIcon}
         viewBox="0 0 24 24"
       />
@@ -32,7 +32,11 @@ export const NSFW: React.FC<Props> = props => {
       <Typography variant="body1" className={style.subTitle} component="p">
         this post may contain sensitive content
       </Typography>
-      <Button onClick={handleClick} size="small" color="primary" variant="contained">
+      <Button
+        onClick={handleClick}
+        size="small"
+        color="primary"
+        variant="contained">
         View content
       </Button>
     </div>

@@ -1,12 +1,12 @@
-import {HYDRATE} from 'next-redux-wrapper';
+import { HYDRATE } from 'next-redux-wrapper';
 
-import {State as BaseState} from '../base/state';
-import {Actions} from './actions';
+import { State as BaseState } from '../base/state';
+import { Actions } from './actions';
 import * as constants from './constants';
 
 import update from 'immutability-helper';
 import * as Redux from 'redux';
-import {BalanceDetail} from 'src/interfaces/balance';
+import { BalanceDetail } from 'src/interfaces/balance';
 
 export interface BalanceState extends BaseState {
   balanceDetails: BalanceDetail[];
@@ -73,7 +73,7 @@ export const BalanceReducer: Redux.Reducer<BalanceState, Actions> = (
 
     case constants.BALANCE_LOADING: {
       return update(state, {
-        loading: {$set: action.loading},
+        loading: { $set: action.loading },
       });
     }
 

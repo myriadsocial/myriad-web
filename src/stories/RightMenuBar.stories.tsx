@@ -1,8 +1,8 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
-import {RightMenuBar} from '../components/RightMenuBar/RightMenuBar';
+import { RightMenuBar } from '../components/RightMenuBar/RightMenuBar';
 
 export default {
   title: 'UI Revamp v2.0/components/Right Menu Bar',

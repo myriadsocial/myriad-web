@@ -1,11 +1,11 @@
-import {Actions as BaseAction, setError, setLoading} from '../base/actions';
-import {RootState} from '../index';
+import { Actions as BaseAction, setError, setLoading } from '../base/actions';
+import { RootState } from '../index';
 import * as constants from './constants';
 
-import {Action} from 'redux';
-import {Server} from 'src/lib/api/server';
+import { Action } from 'redux';
+import { Server } from 'src/lib/api/server';
 import * as ServerAPI from 'src/lib/api/server';
-import {ThunkActionCreator} from 'src/types/thunk';
+import { ThunkActionCreator } from 'src/types/thunk';
 
 /**
  * Action Types

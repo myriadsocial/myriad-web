@@ -1,11 +1,14 @@
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import {Comment} from 'src/interfaces/comment';
-import {User} from 'src/interfaces/user';
-import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
-import {RootState} from 'src/reducers';
-import {fetchCommentHistory, updateCommentParams} from 'src/reducers/comment/actions';
-import {CommentState} from 'src/reducers/comment/reducer';
+import { Comment } from 'src/interfaces/comment';
+import { User } from 'src/interfaces/user';
+import { SortType } from 'src/lib/api/interfaces/pagination-params.interface';
+import { RootState } from 'src/reducers';
+import {
+  fetchCommentHistory,
+  updateCommentParams,
+} from 'src/reducers/comment/actions';
+import { CommentState } from 'src/reducers/comment/reducer';
 
 type useCommentHistoryProps = {
   comments: Comment[];
@@ -19,9 +22,10 @@ type useCommentHistoryProps = {
 export const useCommentHistory = (user?: User): useCommentHistoryProps => {
   const dispatch = useDispatch();
 
-  const {comments, hasMore, meta, params} = useSelector<RootState, CommentState>(
-    state => state.commentState,
-  );
+  const { comments, hasMore, meta, params } = useSelector<
+    RootState,
+    CommentState
+  >(state => state.commentState);
 
   const load = () => {
     if (!user) return;
@@ -36,7 +40,7 @@ export const useCommentHistory = (user?: User): useCommentHistoryProps => {
   };
 
   const sortBy = (sort: SortType) => {
-    dispatch(updateCommentParams({sort}));
+    dispatch(updateCommentParams({ sort }));
 
     load();
   };

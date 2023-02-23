@@ -1,14 +1,18 @@
-import {Data, NoData, TComboboxItem} from '@udecode/plate-combobox';
-import {getPluginOptions, usePlateEditorRef} from '@udecode/plate-core';
-import {ELEMENT_MENTION, getMentionOnSelectItem, MentionPlugin} from '@udecode/plate-mention';
-import {Combobox, ComboboxProps} from '@udecode/plate-ui-combobox';
+import { Data, NoData, TComboboxItem } from '@udecode/plate-combobox';
+import { getPluginOptions, usePlateEditorRef } from '@udecode/plate-core';
+import {
+  ELEMENT_MENTION,
+  getMentionOnSelectItem,
+  MentionPlugin,
+} from '@udecode/plate-mention';
+import { Combobox, ComboboxProps } from '@udecode/plate-ui-combobox';
 
-import {useCallback} from 'react';
-import {shallowEqual, useDispatch, useSelector} from 'react-redux';
+import { useCallback } from 'react';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
-import {User} from 'src/interfaces/user';
-import {RootState} from 'src/reducers';
-import {searchUsers} from 'src/reducers/search/actions';
+import { User } from 'src/interfaces/user';
+import { RootState } from 'src/reducers';
+import { searchUsers } from 'src/reducers/search/actions';
 
 export interface MentionComboboxProps<TData extends Data = NoData>
   extends Partial<ComboboxProps<TData>> {
@@ -22,11 +26,11 @@ export const MentionCombobox = <TData extends Data = NoData>({
   id = pluginKey,
   ...props
 }: MentionComboboxProps<TData>) => {
-  const {formatLabel} = props;
+  const { formatLabel } = props;
   const dispatch = useDispatch();
 
   const editor = usePlateEditorRef()!;
-  const {trigger} = getPluginOptions<MentionPlugin>(editor, pluginKey);
+  const { trigger } = getPluginOptions<MentionPlugin>(editor, pluginKey);
 
   const mentionables = useSelector<RootState, TComboboxItem<TData>[]>(
     state => state.searchState.searchedUsers.map(person => formatLabel(person)),

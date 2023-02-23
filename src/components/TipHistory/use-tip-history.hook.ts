@@ -1,6 +1,6 @@
-import {useContext} from 'react';
+import { useContext } from 'react';
 
-import {TipHistoryContext, HandleTipHistory} from './TipHistory.context';
+import { TipHistoryContext, HandleTipHistory } from './TipHistory.context';
 
 const useTipHistoryHook = (): HandleTipHistory => {
   const tipHistory = useContext(TipHistoryContext);

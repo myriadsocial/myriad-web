@@ -1,5 +1,5 @@
 import MyriadAPI from './base';
-import {LoginResponseProps} from './ext-auth';
+import { LoginResponseProps } from './ext-auth';
 
 import axios from 'axios';
 
@@ -20,7 +20,7 @@ export const getLinkWithEmail = async (
   apiURL?: string,
 ): Promise<string> => {
   if (apiURL) {
-    const {data} = await axios({
+    const { data } = await axios({
       url: `${apiURL}/authentication/otp/email`,
       method: 'POST',
       data: {
@@ -28,12 +28,12 @@ export const getLinkWithEmail = async (
       },
     });
 
-    const {message} = data;
+    const { message } = data;
 
     return message;
   }
 
-  const {data} = await MyriadAPI().request({
+  const { data } = await MyriadAPI().request({
     url: '/authentication/otp/email',
     method: 'POST',
     data: {
@@ -41,13 +41,15 @@ export const getLinkWithEmail = async (
     },
   });
 
-  const {message} = data;
+  const { message } = data;
 
   return message;
 };
 
-export const loginWithLink = async (token: string): Promise<LoginResponseProps> => {
-  const {data} = await MyriadAPI().request({
+export const loginWithLink = async (
+  token: string,
+): Promise<LoginResponseProps> => {
+  const { data } = await MyriadAPI().request({
     url: '/authentication/login/otp',
     method: 'POST',
     data: {
@@ -63,7 +65,7 @@ export const loginWithLink = async (token: string): Promise<LoginResponseProps> 
 };
 
 export const signUpWithEmail = async (values: SignupWithEmailProps) => {
-  const {data} = await MyriadAPI().request({
+  const { data } = await MyriadAPI().request({
     url: '/authentication/signup/email',
     method: 'POST',
     data: {

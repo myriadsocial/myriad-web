@@ -1,12 +1,21 @@
-import {Actions as BaseAction, PaginationAction, setLoading, setError} from '../base/actions';
-import {fetchFriend} from '../friend/actions';
-import {RootState} from '../index';
+import {
+  Actions as BaseAction,
+  PaginationAction,
+  setLoading,
+  setError,
+} from '../base/actions';
+import { fetchFriend } from '../friend/actions';
+import { RootState } from '../index';
 import * as constants from './constants';
 
-import {Action} from 'redux';
-import {Notification, NotificationProps, NotificationType} from 'src/interfaces/notification';
+import { Action } from 'redux';
+import {
+  Notification,
+  NotificationProps,
+  NotificationType,
+} from 'src/interfaces/notification';
 import * as NotificationAPI from 'src/lib/api/notification';
-import {ThunkActionCreator} from 'src/types/thunk';
+import { ThunkActionCreator } from 'src/types/thunk';
 
 /**
  * Action Types
@@ -62,14 +71,15 @@ export const fetchNotification: ThunkActionCreator<Actions, RootState> =
 
     try {
       const {
-        userState: {user},
+        userState: { user },
       } = getState();
 
       if (!user) {
         throw new Error('User not found');
       }
 
-      const {data: notifications, meta} = await NotificationAPI.getNotification(user.id, page);
+      const { data: notifications, meta } =
+        await NotificationAPI.getNotification(user.id, page);
 
       dispatch({
         type: constants.FETCH_NOTIFICATION,
@@ -84,12 +94,13 @@ export const fetchNotification: ThunkActionCreator<Actions, RootState> =
   };
 
 export const readNotification: ThunkActionCreator<Actions, RootState> =
-  (notificationId: string, callback?: () => void) => async (dispatch, getState) => {
+  (notificationId: string, callback?: () => void) =>
+  async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     try {
       const {
-        userState: {user},
+        userState: { user },
       } = getState();
 
       if (!user) {
@@ -117,7 +128,7 @@ export const readAllNotifications: ThunkActionCreator<Actions, RootState> =
 
     try {
       const {
-        userState: {user},
+        userState: { user },
       } = getState();
 
       if (!user) {
@@ -146,7 +157,7 @@ export const countNewNotification: ThunkActionCreator<Actions, RootState> =
 
     try {
       const {
-        userState: {user},
+        userState: { user },
       } = getState();
 
       if (!user) {
@@ -169,13 +180,16 @@ export const countNewNotification: ThunkActionCreator<Actions, RootState> =
 export const processNotification: ThunkActionCreator<Actions, RootState> =
   (notification: NotificationProps) => async (dispatch, getState) => {
     const {
-      userState: {user},
+      userState: { user },
     } = getState();
 
     if (!user) return;
 
     if (
-      [NotificationType.FRIEND_REQUEST, NotificationType.FRIEND_ACCEPT].includes(notification.type)
+      [
+        NotificationType.FRIEND_REQUEST,
+        NotificationType.FRIEND_ACCEPT,
+      ].includes(notification.type)
     ) {
       dispatch(fetchFriend(user));
     }

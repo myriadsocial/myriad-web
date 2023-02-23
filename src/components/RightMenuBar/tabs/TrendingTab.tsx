@@ -1,10 +1,10 @@
 import React from 'react';
 
-import {Typography} from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 
-import {useStyles} from './Tab.style';
+import { useStyles } from './Tab.style';
 
-import {TrendingListContainer} from 'src/components/Trending';
+import { TrendingListContainer } from 'src/components/Trending';
 
 export const TrendingTab: React.FC = () => {
   const styles = useStyles();

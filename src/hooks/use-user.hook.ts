@@ -1,13 +1,13 @@
-import {useCallback} from 'react';
-import {useSelector, useDispatch, shallowEqual} from 'react-redux';
+import { useCallback } from 'react';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {SocialsEnum} from 'src/interfaces';
-import {Network} from 'src/interfaces/network';
-import {SocialMedia} from 'src/interfaces/social';
-import {User, UserWallet} from 'src/interfaces/user';
-import type {RootState} from 'src/reducers';
-import {updateUser, deleteSocial} from 'src/reducers/user/actions';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import { SocialsEnum } from 'src/interfaces';
+import { Network } from 'src/interfaces/network';
+import { SocialMedia } from 'src/interfaces/social';
+import { User, UserWallet } from 'src/interfaces/user';
+import type { RootState } from 'src/reducers';
+import { updateUser, deleteSocial } from 'src/reducers/user/actions';
 
 type UserHookProps = {
   user: User;
@@ -26,7 +26,7 @@ export const useUserHook = (): UserHookProps => {
   const dispatch = useDispatch();
   const enqueueSnackbar = useEnqueueSnackbar();
 
-  const {anonymous, alias, user, socials} = useSelector<
+  const { anonymous, alias, user, socials } = useSelector<
     RootState,
     {
       anonymous: boolean;
@@ -35,7 +35,7 @@ export const useUserHook = (): UserHookProps => {
       socials: SocialMedia[];
     }
   >(
-    ({userState}) => ({
+    ({ userState }) => ({
       anonymous: userState.anonymous,
       alias: userState.alias,
       user: userState.user,
@@ -43,7 +43,7 @@ export const useUserHook = (): UserHookProps => {
     }),
     shallowEqual,
   );
-  const {networks, currentWallet, wallets, userWalletAddress} = useSelector<
+  const { networks, currentWallet, wallets, userWalletAddress } = useSelector<
     RootState,
     {
       networks: Network[];
@@ -94,7 +94,7 @@ export const useUserHook = (): UserHookProps => {
       const disableUpdateAlert = true;
 
       if (token && user && user.fcmTokens && !user.fcmTokens.includes(token)) {
-        updateUserDetail({fcmTokens: [token]}, disableUpdateAlert);
+        updateUserDetail({ fcmTokens: [token] }, disableUpdateAlert);
       }
     },
     [user],

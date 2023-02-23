@@ -1,12 +1,12 @@
-import {usePlateEditorRef} from '@udecode/plate-core';
-import {insertMediaEmbed} from '@udecode/plate-media-embed';
-import {ToolbarButton, ToolbarButtonProps} from '@udecode/plate-ui-toolbar';
+import { usePlateEditorRef } from '@udecode/plate-core';
+import { insertMediaEmbed } from '@udecode/plate-media-embed';
+import { ToolbarButton, ToolbarButtonProps } from '@udecode/plate-ui-toolbar';
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-import {Upload} from 'components/Upload';
-import {Modal} from 'components/atoms/Modal';
-import {useToggle} from 'src/hooks/use-toggle.hook';
+import { Upload } from 'components/Upload';
+import { Modal } from 'components/atoms/Modal';
+import { useToggle } from 'src/hooks/use-toggle.hook';
 import * as UploadAPI from 'src/lib/api/upload';
 import i18n from 'src/locale';
 
@@ -14,7 +14,11 @@ export interface MediaEmbedToolbarButtonProps extends ToolbarButtonProps {
   userId: string;
 }
 
-export const MediaEmbedToolbarButton = ({id, userId, ...props}: MediaEmbedToolbarButtonProps) => {
+export const MediaEmbedToolbarButton = ({
+  id,
+  userId,
+  ...props
+}: MediaEmbedToolbarButtonProps) => {
   const editor = usePlateEditorRef(id)!;
 
   const [progress, setProgress] = useState(0);
@@ -24,7 +28,7 @@ export const MediaEmbedToolbarButton = ({id, userId, ...props}: MediaEmbedToolba
     if (files.length === 0) return;
 
     try {
-      const {files: uploadedFiles} = await UploadAPI.video(files[0], {
+      const { files: uploadedFiles } = await UploadAPI.video(files[0], {
         onUploadProgress: (event: ProgressEvent) => {
           const total = Math.round((100 * event.loaded) / event.total);
 
@@ -33,7 +37,7 @@ export const MediaEmbedToolbarButton = ({id, userId, ...props}: MediaEmbedToolba
       });
 
       if (uploadedFiles.length > 0) {
-        insertMediaEmbed(editor, {url: uploadedFiles[0].url});
+        insertMediaEmbed(editor, { url: uploadedFiles[0].url });
       }
 
       setProgress(0);

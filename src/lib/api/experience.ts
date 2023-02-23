@@ -1,7 +1,7 @@
 import MyriadAPI from './base';
-import {PAGINATION_LIMIT} from './constants/pagination';
-import {BaseList} from './interfaces/base-list.interface';
-import {PaginationParams} from './interfaces/pagination-params.interface';
+import { PAGINATION_LIMIT } from './constants/pagination';
+import { BaseList } from './interfaces/base-list.interface';
+import { PaginationParams } from './interfaces/pagination-params.interface';
 
 import {
   Experience,
@@ -9,7 +9,7 @@ import {
   UserExperience,
   ExperienceType,
 } from 'src/interfaces/experience';
-import {Post} from 'src/interfaces/post';
+import { Post } from 'src/interfaces/post';
 
 type ExperienceList = BaseList<Experience>;
 type UserExperienceList = BaseList<UserExperience>;
@@ -20,7 +20,7 @@ export const getExperiences = async (
   isTrending?: boolean,
   postId?: string,
 ): Promise<ExperienceList> => {
-  const {orderField = 'createdAt', sort = 'DESC'} = params;
+  const { orderField = 'createdAt', sort = 'DESC' } = params;
 
   let order: string | string[] = `${orderField} ${sort}`;
   if (isTrending) order = ['trendCount DESC', `${orderField} ${sort}`];
@@ -43,7 +43,7 @@ export const getExperiences = async (
     };
   }
 
-  const {data} = await MyriadAPI().request<ExperienceList>({
+  const { data } = await MyriadAPI().request<ExperienceList>({
     url: `/experiences`,
     method: 'GET',
     params: paramGetExperience,
@@ -52,8 +52,10 @@ export const getExperiences = async (
   return data;
 };
 
-export const searchUserExperience = async (query: string): Promise<UserExperienceList> => {
-  const {data} = await MyriadAPI().request<UserExperienceList>({
+export const searchUserExperience = async (
+  query: string,
+): Promise<UserExperienceList> => {
+  const { data } = await MyriadAPI().request<UserExperienceList>({
     url: `/user/experiences`,
     method: 'GET',
     params: {
@@ -88,8 +90,11 @@ export const searchUserExperience = async (query: string): Promise<UserExperienc
   return data;
 };
 
-export const searchExperiences = async (query: string, page = 1): Promise<ExperienceList> => {
-  const {data} = await MyriadAPI().request<ExperienceList>({
+export const searchExperiences = async (
+  query: string,
+  page = 1,
+): Promise<ExperienceList> => {
+  const { data } = await MyriadAPI().request<ExperienceList>({
     url: `/experiences`,
     method: 'GET',
     params: {
@@ -125,7 +130,7 @@ export const getUserExperiences = async (
     where.subscribed = true;
   }
 
-  const {data} = await MyriadAPI().request<UserExperienceList>({
+  const { data } = await MyriadAPI().request<UserExperienceList>({
     url: `/user/experiences`,
     method: 'GET',
     params: {
@@ -143,7 +148,7 @@ export const getUserExperiences = async (
                 {
                   relation: 'user',
                   scope: {
-                    include: [{relation: 'accountSetting'}],
+                    include: [{ relation: 'accountSetting' }],
                   },
                 },
               ],
@@ -156,14 +161,19 @@ export const getUserExperiences = async (
   return data;
 };
 
-export const subscribeExperience = async (userId: string, experienceId: string): Promise<void> => {
+export const subscribeExperience = async (
+  userId: string,
+  experienceId: string,
+): Promise<void> => {
   await MyriadAPI().request<Experience>({
     url: `/user/experiences/${experienceId}/subscribe`,
     method: 'POST',
   });
 };
 
-export const unsubscribeExperience = async (userExperienceId: string): Promise<void> => {
+export const unsubscribeExperience = async (
+  userExperienceId: string,
+): Promise<void> => {
   await MyriadAPI().request<Experience>({
     url: `/user/experiences/${userExperienceId}`,
     method: 'DELETE',
@@ -193,7 +203,7 @@ export const createExperience = async (
     params.experienceId = experienceId;
   }
 
-  const {data} = await MyriadAPI().request<Experience>({
+  const { data } = await MyriadAPI().request<Experience>({
     url: `/user/experiences`,
     method: 'POST',
     data: experience,
@@ -203,8 +213,10 @@ export const createExperience = async (
   return data;
 };
 
-export const getExperienceDetail = async (experienceId: string): Promise<Experience> => {
-  const {data} = await MyriadAPI().request<Experience>({
+export const getExperienceDetail = async (
+  experienceId: string,
+): Promise<Experience> => {
+  const { data } = await MyriadAPI().request<Experience>({
     url: `/experiences/${experienceId}`,
     method: 'GET',
     params: {
@@ -221,14 +233,14 @@ export const getExperiencePost = async (
   experienceId: string,
   page = 1,
 ): Promise<PostsExperienceList> => {
-  const {data} = await MyriadAPI().request<PostsExperienceList>({
+  const { data } = await MyriadAPI().request<PostsExperienceList>({
     url: `/experience/${experienceId}/posts`,
     method: 'GET',
     params: {
       pageNumber: page,
       pageLimit: PAGINATION_LIMIT,
       filter: {
-        include: [{relation: 'user'}, {relation: 'people'}],
+        include: [{ relation: 'user' }, { relation: 'people' }],
       },
     },
   });
@@ -238,7 +250,7 @@ export const getExperiencePost = async (
 export const getUserExperienceDetail = async (
   userExperienceId: string,
 ): Promise<UserExperience> => {
-  const {data} = await MyriadAPI().request<UserExperience>({
+  const { data } = await MyriadAPI().request<UserExperience>({
     url: `/user/experiences/${userExperienceId}`,
     method: 'GET',
     params: {
@@ -252,7 +264,7 @@ export const getUserExperienceDetail = async (
                 {
                   relation: 'user',
                   scope: {
-                    include: [{relation: 'accountSetting'}],
+                    include: [{ relation: 'accountSetting' }],
                   },
                 },
               ],
@@ -266,8 +278,10 @@ export const getUserExperienceDetail = async (
   return data;
 };
 
-export const deleteExperience = async (experienceId: string): Promise<Experience> => {
-  const {data} = await MyriadAPI().request<Experience>({
+export const deleteExperience = async (
+  experienceId: string,
+): Promise<Experience> => {
+  const { data } = await MyriadAPI().request<Experience>({
     url: `/user/experiences/${experienceId}`,
     method: 'DELETE',
   });
@@ -278,7 +292,7 @@ export const addPostsExperience = async (
   postId: string,
   listExperiences: string[],
 ): Promise<ExperienceList> => {
-  const {data} = await MyriadAPI().request<ExperienceList>({
+  const { data } = await MyriadAPI().request<ExperienceList>({
     url: `/experiences/post`,
     method: 'POST',
     data: {
@@ -289,15 +303,18 @@ export const addPostsExperience = async (
   return data;
 };
 
-export const getExperiencesAdded = async (postId: string, page = 1): Promise<ExperienceList> => {
-  const {data} = await MyriadAPI().request<ExperienceList>({
+export const getExperiencesAdded = async (
+  postId: string,
+  page = 1,
+): Promise<ExperienceList> => {
+  const { data } = await MyriadAPI().request<ExperienceList>({
     url: `/posts/${postId}/experiences`,
     method: 'GET',
     params: {
       pageNumber: page,
       pageLimit: PAGINATION_LIMIT,
       filter: {
-        include: [{relation: 'user'}],
+        include: [{ relation: 'user' }],
       },
     },
   });

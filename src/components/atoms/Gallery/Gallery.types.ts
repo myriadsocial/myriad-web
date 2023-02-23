@@ -1,4 +1,4 @@
-import {Sizes} from '../../../interfaces/assets';
+import { Sizes } from '../../../interfaces/assets';
 
 export type ImageListItemProps = {
   src: string;

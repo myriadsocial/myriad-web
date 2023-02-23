@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import {useMediaQuery, useTheme, IconButton} from '@material-ui/core';
+import { useMediaQuery, useTheme, IconButton } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import List from '@material-ui/core/List';
 import Table from '@material-ui/core/Table';
@@ -11,27 +11,27 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 
-import {Avatar, AvatarSize} from '../atoms/Avatar';
-import {MenuOptions} from '../atoms/DropdownMenu';
-import {DropdownMenu} from '../atoms/DropdownMenu';
-import {Empty} from '../atoms/Empty';
+import { Avatar, AvatarSize } from '../atoms/Avatar';
+import { MenuOptions } from '../atoms/DropdownMenu';
+import { DropdownMenu } from '../atoms/DropdownMenu';
+import { Empty } from '../atoms/Empty';
 import ShowIf from '../common/show-if.component';
-import {useStyles} from './HistoryDetailList.styles';
-import {HistoryFilterModal} from './HistoryFilterModal';
-import {transactionSortOptions, transactionStatusOptions} from './default';
+import { useStyles } from './HistoryDetailList.styles';
+import { HistoryFilterModal } from './HistoryFilterModal';
+import { transactionSortOptions, transactionStatusOptions } from './default';
 
-import {SortIcon} from 'src/components/atoms/Icons';
-import {Loading} from 'src/components/atoms/Loading';
-import {formatUsd} from 'src/helpers/balance';
-import {timeAgo} from 'src/helpers/date';
-import {parseScientificNotatedNumber} from 'src/helpers/number';
-import {useExchangeRate} from 'src/hooks/use-exchange-rate.hook';
-import {Currency} from 'src/interfaces/currency';
-import {NetworkIdEnum} from 'src/interfaces/network';
-import {Transaction, TransactionOrderType} from 'src/interfaces/transaction';
-import {UserWallet} from 'src/interfaces/user';
+import { SortIcon } from 'src/components/atoms/Icons';
+import { Loading } from 'src/components/atoms/Loading';
+import { formatUsd } from 'src/helpers/balance';
+import { timeAgo } from 'src/helpers/date';
+import { parseScientificNotatedNumber } from 'src/helpers/number';
+import { useExchangeRate } from 'src/hooks/use-exchange-rate.hook';
+import { Currency } from 'src/interfaces/currency';
+import { NetworkIdEnum } from 'src/interfaces/network';
+import { Transaction, TransactionOrderType } from 'src/interfaces/transaction';
+import { UserWallet } from 'src/interfaces/user';
 import i18n from 'src/locale';
-import {TransactionFilterProps} from 'src/reducers/transaction/actions';
+import { TransactionFilterProps } from 'src/reducers/transaction/actions';
 
 type HistoryDetailListProps = {
   transactions: Transaction[];
@@ -66,17 +66,19 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
   const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
-  const {loading, exchangeRates} = useExchangeRate();
+  const { loading, exchangeRates } = useExchangeRate();
 
   const [selectedSort, setSelectedSort] = useState(orderType);
-  const [selectedCurrency, setSelectedCurrency] = useState<string>(filter.currencyId ?? 'all');
+  const [selectedCurrency, setSelectedCurrency] = useState<string>(
+    filter.currencyId ?? 'all',
+  );
   const [selectedStatus, setSelectedStatus] = useState<string>(
     filter?.from ? 'sent' : filter.to ? 'received' : 'all',
   );
   const [showFilter, setShowFilter] = useState(false);
 
   const currencyOptions: MenuOptions<string>[] = [
-    {id: 'all', title: i18n.t('Wallet.History.Coin_Opt.All')},
+    { id: 'all', title: i18n.t('Wallet.History.Coin_Opt.All') },
     ...currencies.map(item => ({
       id: item.id,
       title: item.symbol,
@@ -89,7 +91,9 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
       return 0;
     }
 
-    const found = exchangeRates.find(exchangeRate => exchangeRate.id === currencyId);
+    const found = exchangeRates.find(
+      exchangeRate => exchangeRate.id === currencyId,
+    );
 
     if (found) return found.price;
     return 0;
@@ -219,7 +223,7 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                   transactions.map(tx => (
                     <a
                       key={tx.id}
-                      style={{textDecoration: 'none'}}
+                      style={{ textDecoration: 'none' }}
                       href={
                         tx.currency.network.id === NetworkIdEnum.NEAR
                           ? `${tx.currency.network.explorerURL}/transactions/${tx.hash}`
@@ -228,10 +232,17 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                       target="_blank"
                       rel="noopener noreferrer">
                       <TableRow key={tx.id} className={classes.tableRow}>
-                        <TableCell component="th" scope="row" className={classes.tableCell}>
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          className={classes.tableCell}>
                           <Avatar
                             size={AvatarSize.MEDIUM}
-                            alt={tx.toUser?.id === userId ? tx.fromUser?.id : tx.toUser?.id}
+                            alt={
+                              tx.toUser?.id === userId
+                                ? tx.fromUser?.id
+                                : tx.toUser?.id
+                            }
                             src={
                               tx.toUser?.id === userId
                                 ? tx.fromUser?.profilePictureURL ?? DEFAULT_NAME
@@ -254,7 +265,9 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                           />
 
                           <div className={classes.textSenderWrapper}>
-                            <Typography variant="body1" className={classes.textSender}>
+                            <Typography
+                              variant="body1"
+                              className={classes.textSender}>
                               {tx.toUser?.id === userId
                                 ? tx.fromUser?.deletedAt
                                   ? i18n.t('Tipping_History.Modal.User_Banned')
@@ -305,17 +318,28 @@ export const HistoryDetailList: React.FC<HistoryDetailListProps> = props => {
                           <div className={classes.currencyDetailWrapper}>
                             <div>
                               {tx.toUser?.id === userId && (
-                                <Typography variant="h5" className={classes.textAmountReceived}>
-                                  {parseScientificNotatedNumber(+tx.amount)} {tx.currency.symbol}
+                                <Typography
+                                  variant="h5"
+                                  className={classes.textAmountReceived}>
+                                  {parseScientificNotatedNumber(+tx.amount)}{' '}
+                                  {tx.currency.symbol}
                                 </Typography>
                               )}
                               {tx.fromUser?.id === userId && (
-                                <Typography variant="h5" className={classes.textAmountSent}>
-                                  {parseScientificNotatedNumber(+tx.amount)} {tx.currency.symbol}
+                                <Typography
+                                  variant="h5"
+                                  className={classes.textAmountSent}>
+                                  {parseScientificNotatedNumber(+tx.amount)}{' '}
+                                  {tx.currency.symbol}
                                 </Typography>
                               )}
-                              <Typography variant="caption" color="textSecondary">
-                                {`~${formatUsd(tx.amount, getConversion(tx.currencyId))} USD`}
+                              <Typography
+                                variant="caption"
+                                color="textSecondary">
+                                {`~${formatUsd(
+                                  tx.amount,
+                                  getConversion(tx.currencyId),
+                                )} USD`}
                               </Typography>
                             </div>
                             <ShowIf condition={!isMobile}>

@@ -1,16 +1,19 @@
-import {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import {SocialsEnum} from 'src/interfaces/social';
-import {RootState} from 'src/reducers';
-import {verifySocialMediaConnected, resetVerifyingSocial} from 'src/reducers/user/actions';
-import {UserState} from 'src/reducers/user/reducer';
+import { SocialsEnum } from 'src/interfaces/social';
+import { RootState } from 'src/reducers';
+import {
+  verifySocialMediaConnected,
+  resetVerifyingSocial,
+} from 'src/reducers/user/actions';
+import { UserState } from 'src/reducers/user/reducer';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useShareSocial = () => {
   const dispatch = useDispatch();
 
-  const {user, socials, verifying, error} = useSelector<RootState, UserState>(
+  const { user, socials, verifying, error } = useSelector<RootState, UserState>(
     state => state.userState,
   );
   const [platform, setPlatform] = useState<SocialsEnum | null>(null);

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {SvgIcon, SvgIconProps} from '@material-ui/core';
+import { SvgIcon, SvgIconProps } from '@material-ui/core';
 
 import Polkadot24 from 'src/images/network/Polkadot24.svg';
 import CoinbaseDisabled from 'src/images/wallet/coinbase-disabled.svg';

@@ -1,17 +1,20 @@
-import React, {useCallback} from 'react';
-import {useCookies} from 'react-cookie';
-import {shallowEqual, useSelector} from 'react-redux';
+import React, { useCallback } from 'react';
+import { useCookies } from 'react-cookie';
+import { shallowEqual, useSelector } from 'react-redux';
 
-import {useEnqueueSnackbar} from '../Snackbar/useEnqueueSnackbar.hook';
+import { useEnqueueSnackbar } from '../Snackbar/useEnqueueSnackbar.hook';
 import ShowIf from '../show-if.component';
-import {AuthorizationContext} from './Authorization.context';
+import { AuthorizationContext } from './Authorization.context';
 
 import isNil from 'lodash/isNil';
-import {BannedBanner, APP_BANNER_COOKIE_KEY} from 'src/components/common/Banner';
+import {
+  BannedBanner,
+  APP_BANNER_COOKIE_KEY,
+} from 'src/components/common/Banner';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
+import { RootState } from 'src/reducers';
 
-export const AuthorizationProvider: React.ComponentType = ({children}) => {
+export const AuthorizationProvider: React.ComponentType = ({ children }) => {
   const [, setCookie] = useCookies([APP_BANNER_COOKIE_KEY]);
   const enqueueSnackbar = useEnqueueSnackbar();
 
@@ -35,7 +38,7 @@ export const AuthorizationProvider: React.ComponentType = ({children}) => {
 
   return (
     <>
-      <AuthorizationContext.Provider value={{alert, authorized, anonymous}}>
+      <AuthorizationContext.Provider value={{ alert, authorized, anonymous }}>
         {children}
       </AuthorizationContext.Provider>
 

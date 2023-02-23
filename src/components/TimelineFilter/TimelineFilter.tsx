@@ -1,16 +1,20 @@
 import React from 'react';
 
-import {Grid} from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 
-import {DropdownMenu} from '../atoms/DropdownMenu';
-import {TabList} from '../atoms/TabList';
+import { DropdownMenu } from '../atoms/DropdownMenu';
+import { TabList } from '../atoms/TabList';
 import ShowIf from '../common/show-if.component';
-import {useStyles} from './TimelineFilter.styles';
-import {useFilterOption} from './hooks/use-filter-option.hook';
+import { useStyles } from './TimelineFilter.styles';
+import { useFilterOption } from './hooks/use-filter-option.hook';
 
-import {TimelineType, TimelineOrderType, PostOriginType} from 'src/interfaces/timeline';
-import {User} from 'src/interfaces/user';
-import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
+import {
+  TimelineType,
+  TimelineOrderType,
+  PostOriginType,
+} from 'src/interfaces/timeline';
+import { User } from 'src/interfaces/user';
+import { SortType } from 'src/lib/api/interfaces/pagination-params.interface';
 import i18n from 'src/locale';
 
 export type TimelineFilterProps = {
@@ -38,9 +42,10 @@ export const TimelineFilter: React.FC<TimelineFilterProps> = props => {
     filterTimeline,
     filterOrigin,
   } = props;
-  const styles = useStyles({...props, filterType});
+  const styles = useStyles({ ...props, filterType });
 
-  const {sortOptions, orderOptions, originFilterOptions, typeFilterOptions} = useFilterOption();
+  const { sortOptions, orderOptions, originFilterOptions, typeFilterOptions } =
+    useFilterOption();
 
   const handleFilter = (variant: TimelineType) => {
     filterTimeline && filterTimeline(variant);

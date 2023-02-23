@@ -1,6 +1,6 @@
-import axios, {CancelTokenSource} from 'axios';
+import axios, { CancelTokenSource } from 'axios';
 import MyriadAPI from 'src/lib/api/base';
-import {Kind, ResponseFileUpload} from 'src/lib/api/upload';
+import { Kind, ResponseFileUpload } from 'src/lib/api/upload';
 
 export class UploadAdapter {
   protected loader: any;
@@ -35,7 +35,7 @@ export class UploadAdapter {
             },
             data: formData,
           })
-          .then(({data}) => {
+          .then(({ data }) => {
             this.loader.uploaded = 1;
             this.loader.uploadTotal = 1;
 

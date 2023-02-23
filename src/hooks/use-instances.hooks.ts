@@ -1,49 +1,50 @@
-import {useState, useCallback} from 'react';
-import {useCookies} from 'react-cookie';
-import {useDispatch, useSelector} from 'react-redux';
+import { useState, useCallback } from 'react';
+import { useCookies } from 'react-cookie';
+import { useDispatch, useSelector } from 'react-redux';
 
-import {signIn, useSession} from 'next-auth/react';
-import {useRouter} from 'next/router';
+import { signIn, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
-import {numberToHex} from '@polkadot/util/number';
-import {u8aToHex} from '@polkadot/util/u8a';
+import { numberToHex } from '@polkadot/util/number';
+import { u8aToHex } from '@polkadot/util/u8a';
 
-import {useAuthLinkHook} from './auth-link.hook';
-import {useAuthHook} from './auth.hook';
-import {usePolkadotExtension} from './use-polkadot-app.hook';
-import {useUserHook} from './use-user.hook';
+import { useAuthLinkHook } from './auth-link.hook';
+import { useAuthHook } from './auth.hook';
+import { usePolkadotExtension } from './use-polkadot-app.hook';
+import { useUserHook } from './use-user.hook';
 
-import {COOKIE_INSTANCE_URL} from 'components/SelectServer';
+import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
 import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
 import useMyriadInstance from 'components/common/Blockchain/use-myriad-instance.hooks';
 import * as nearAPI from 'near-api-js';
-import {MYRIAD_WALLET_KEY} from 'src/interfaces/blockchain-interface';
-import {ServerListProps} from 'src/interfaces/server-list';
-import {LoginType} from 'src/interfaces/session';
-import {BlockchainPlatform, WalletTypeEnum} from 'src/interfaces/wallet';
+import { MYRIAD_WALLET_KEY } from 'src/interfaces/blockchain-interface';
+import { ServerListProps } from 'src/interfaces/server-list';
+import { LoginType } from 'src/interfaces/session';
+import { BlockchainPlatform, WalletTypeEnum } from 'src/interfaces/wallet';
 import * as NetworkAPI from 'src/lib/api/network';
-import {getCheckEmail} from 'src/lib/api/user';
-import {toHexPublicKey} from 'src/lib/crypto';
-import {Near} from 'src/lib/services/near-api-js';
-import {PolkadotJs} from 'src/lib/services/polkadot-js';
-import {RootState} from 'src/reducers';
-import {setServer} from 'src/reducers/server/actions';
-import {ServerState} from 'src/reducers/server/reducer';
+import { getCheckEmail } from 'src/lib/api/user';
+import { toHexPublicKey } from 'src/lib/crypto';
+import { Near } from 'src/lib/services/near-api-js';
+import { PolkadotJs } from 'src/lib/services/polkadot-js';
+import { RootState } from 'src/reducers';
+import { setServer } from 'src/reducers/server/actions';
+import { ServerState } from 'src/reducers/server/reducer';
 
 export const useInstances = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const {data: session} = useSession();
-  const {switchInstance: onChangeInstance} = useBlockchain();
-  const {provider} = useMyriadInstance();
-  const {fetchUserNonce, getRegisteredAccounts, logout} = useAuthHook();
-  const {requestLink} = useAuthLinkHook();
-  const {anonymous, currentWallet} = useUserHook();
-  const {enablePolkadotExtension} = usePolkadotExtension();
-  const {server: currentServer, apiURL: currentApiURL} = useSelector<RootState, ServerState>(
-    state => state.serverState,
-  );
+  const { data: session } = useSession();
+  const { switchInstance: onChangeInstance } = useBlockchain();
+  const { provider } = useMyriadInstance();
+  const { fetchUserNonce, getRegisteredAccounts, logout } = useAuthHook();
+  const { requestLink } = useAuthLinkHook();
+  const { anonymous, currentWallet } = useUserHook();
+  const { enablePolkadotExtension } = usePolkadotExtension();
+  const { server: currentServer, apiURL: currentApiURL } = useSelector<
+    RootState,
+    ServerState
+  >(state => state.serverState);
 
   const [, setCookies] = useCookies([COOKIE_INSTANCE_URL]);
   const [serverList, setServerList] = useState<ServerListProps[]>([]);
@@ -100,8 +101,11 @@ export const useInstances = () => {
     const withEmail = session?.user?.loginType === LoginType.EMAIL;
     if (withEmail) return loginWithEmail(server.apiUrl, email);
 
-    const {nonce} = await fetchUserNonce(currentWallet.id, server.apiUrl);
-    const network = await NetworkAPI.getNetwork(currentWallet.networkId, server.apiUrl);
+    const { nonce } = await fetchUserNonce(currentWallet.id, server.apiUrl);
+    const network = await NetworkAPI.getNetwork(
+      currentWallet.networkId,
+      server.apiUrl,
+    );
 
     if (!network) throw new Error('NetworkNotExist');
     if (nonce <= 0) throw new Error('AccountNotFound');
@@ -125,18 +129,24 @@ export const useInstances = () => {
         if (!installed) throw new Error('ExtensionNotInstalled');
 
         const accounts = await getRegisteredAccounts();
-        const account = accounts.find(e => toHexPublicKey(e) === currentWallet.id);
+        const account = accounts.find(
+          e => toHexPublicKey(e) === currentWallet.id,
+        );
 
         if (!account) throw new Error('SubstrateAccountNotFound');
 
-        const signature = await PolkadotJs.signWithWallet(account, nonce, ({signerOpened}) => {
-          if (signerOpened) setLoadingSwitch(true);
-        });
+        const signature = await PolkadotJs.signWithWallet(
+          account,
+          nonce,
+          ({ signerOpened }) => {
+            if (signerOpened) setLoadingSwitch(true);
+          },
+        );
 
         if (!signature) throw new Error('FailedSignature');
         const address = toHexPublicKey(account);
-        const data = {address, publicAddress: address, signature, walletType};
-        credentials = {...credentials, ...data};
+        const data = { address, publicAddress: address, signature, walletType };
+        credentials = { ...credentials, ...data };
         break;
       }
 
@@ -155,8 +165,8 @@ export const useInstances = () => {
         const userSignature = keyPair.sign(Buffer.from(numberToHex(nonce)));
         const publicAddress = u8aToHex(userSignature.publicKey.data);
         const signature = u8aToHex(userSignature.signature);
-        const data = {address, publicAddress, signature, walletType};
-        credentials = {...credentials, ...data};
+        const data = { address, publicAddress, signature, walletType };
+        credentials = { ...credentials, ...data };
         break;
       }
 
@@ -172,7 +182,10 @@ export const useInstances = () => {
 
     const pathname = router.pathname;
     const query = router.query;
-    await router.replace({pathname, query: {...query, instance: server.apiUrl}});
+    await router.replace({
+      pathname,
+      query: { ...query, instance: server.apiUrl },
+    });
     onChangeInstance();
     setLoadingSwitch(false);
   };
@@ -183,9 +196,9 @@ export const useInstances = () => {
     const pathname = router.pathname;
     const query = router.query;
 
-    Object.assign(query, {instance: server.apiUrl});
+    Object.assign(query, { instance: server.apiUrl });
 
-    await router.replace({pathname, query: {instance: `${server.apiUrl}`}});
+    await router.replace({ pathname, query: { instance: `${server.apiUrl}` } });
     await dispatch(setServer(server.detail, server.apiUrl));
     return;
   };
@@ -196,7 +209,9 @@ export const useInstances = () => {
 
     await requestLink(email, apiURL);
     setCookies(COOKIE_INSTANCE_URL, apiURL);
-    await logout(`/login?instance=${apiURL}&switchInstance=true&email=${email}`);
+    await logout(
+      `/login?instance=${apiURL}&switchInstance=true&email=${email}`,
+    );
   };
 
   return {

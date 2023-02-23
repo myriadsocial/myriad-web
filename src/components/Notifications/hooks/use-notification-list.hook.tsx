@@ -11,21 +11,21 @@ import React from 'react';
 
 import getConfig from 'next/config';
 
-import {SvgIcon} from '@material-ui/core';
+import { SvgIcon } from '@material-ui/core';
 
-import {useStyles} from '../Notifications.styles';
+import { useStyles } from '../Notifications.styles';
 
-import {parseScientificNotatedNumber} from 'src/helpers/number';
+import { parseScientificNotatedNumber } from 'src/helpers/number';
 import {
   Notification,
   NotificationType,
   UnlockableContentReference,
 } from 'src/interfaces/notification';
-import {PostOrigin} from 'src/interfaces/timeline';
-import {PAGINATION_LIMIT} from 'src/lib/api/constants/pagination';
+import { PostOrigin } from 'src/interfaces/timeline';
+import { PAGINATION_LIMIT } from 'src/lib/api/constants/pagination';
 import i18n from 'src/locale';
 
-const {publicRuntimeConfig} = getConfig();
+const { publicRuntimeConfig } = getConfig();
 
 export type NotificationList = {
   id: string;
@@ -74,9 +74,14 @@ export const useNotificationList = (
 ): NotificationList[] => {
   const style = useStyles({});
 
-  const excludes = [NotificationType.POST_VOTE, NotificationType.COMMENT_VOTE].concat(exclude);
+  const excludes = [
+    NotificationType.POST_VOTE,
+    NotificationType.COMMENT_VOTE,
+  ].concat(exclude);
 
-  const getLockableContentLink = (reference?: UnlockableContentReference): string => {
+  const getLockableContentLink = (
+    reference?: UnlockableContentReference,
+  ): string => {
     if (!reference) return `/404`;
 
     if ('post' in reference && reference.post?.id) {
@@ -92,7 +97,10 @@ export const useNotificationList = (
 
   return notifications
     .filter(notification => !excludes.includes(notification.type))
-    .filter(notification => Boolean(notification.fromUserId) && Boolean(notification.toUserId))
+    .filter(
+      notification =>
+        Boolean(notification.fromUserId) && Boolean(notification.toUserId),
+    )
     .slice(0, infinite ? notifications.length : PAGINATION_LIMIT)
     .map(notification => {
       switch (notification.type) {
@@ -109,7 +117,7 @@ export const useNotificationList = (
               <div className={style.circle}>
                 <SvgIcon
                   component={CheckIcon}
-                  style={{color: '#FFF', fill: 'currentColor'}}
+                  style={{ color: '#FFF', fill: 'currentColor' }}
                   viewBox="-4 -4 34 34"
                 />
               </div>
@@ -132,7 +140,7 @@ export const useNotificationList = (
                 <SvgIcon
                   component={PlusIcon}
                   viewBox="-4 -4 34 34"
-                  style={{color: '#FFF', fill: 'currentColor'}}
+                  style={{ color: '#FFF', fill: 'currentColor' }}
                 />
               </div>
             ),
@@ -154,7 +162,7 @@ export const useNotificationList = (
                 <SvgIcon
                   component={ChatAlt2Icon}
                   viewBox="-4 -4 34 34"
-                  style={{fill: 'currentColor', color: '#FFF'}}
+                  style={{ fill: 'currentColor', color: '#FFF' }}
                 />
               </div>
             ),
@@ -178,7 +186,7 @@ export const useNotificationList = (
                 <SvgIcon
                   component={ChatAlt2Icon}
                   viewBox="-4 -4 34 34"
-                  style={{fill: 'currentColor', color: '#FFF'}}
+                  style={{ fill: 'currentColor', color: '#FFF' }}
                 />
               </div>
             ),
@@ -202,12 +210,14 @@ export const useNotificationList = (
                 <SvgIcon
                   component={AtSymbolIcon}
                   viewBox="-4 -4 34 34"
-                  style={{fill: 'currentColor', color: '#FFF'}}
+                  style={{ fill: 'currentColor', color: '#FFF' }}
                 />
               </div>
             ),
             createdAt: notification.createdAt,
-            href: notification.referenceId ? `/post/${notification.referenceId}` : `/404`,
+            href: notification.referenceId
+              ? `/post/${notification.referenceId}`
+              : `/404`,
           };
 
         case NotificationType.COMMENT_MENTION:
@@ -224,7 +234,7 @@ export const useNotificationList = (
                 <SvgIcon
                   component={AtSymbolIcon}
                   viewBox="-4 -4 34 34"
-                  style={{fill: 'currentColor', color: '#FFF'}}
+                  style={{ fill: 'currentColor', color: '#FFF' }}
                 />
               </div>
             ),
@@ -248,7 +258,7 @@ export const useNotificationList = (
                 <SvgIcon
                   component={ArrowCircleLeftIcon}
                   viewBox="2 2 20 20"
-                  style={{fill: '#47B881', color: '#FFF'}}
+                  style={{ fill: '#47B881', color: '#FFF' }}
                 />
               </div>
             ),
@@ -270,7 +280,7 @@ export const useNotificationList = (
                 <SvgIcon
                   component={ArrowCircleLeftIcon}
                   viewBox="2 2 20 20"
-                  style={{fill: '#47B881', color: '#FFF'}}
+                  style={{ fill: '#47B881', color: '#FFF' }}
                 />
               </div>
             ),
@@ -296,7 +306,7 @@ export const useNotificationList = (
                 <SvgIcon
                   component={ArrowCircleLeftIcon}
                   viewBox="2 2 20 20"
-                  style={{fill: '#47B881', color: '#FFF'}}
+                  style={{ fill: '#47B881', color: '#FFF' }}
                 />
               </div>
             ),
@@ -325,7 +335,7 @@ export const useNotificationList = (
                 <SvgIcon
                   component={ArrowCircleLeftIcon}
                   viewBox="2 2 20 20"
-                  style={{fill: '#47B881', color: '#FFF'}}
+                  style={{ fill: '#47B881', color: '#FFF' }}
                 />
               </div>
             ),
@@ -357,7 +367,7 @@ export const useNotificationList = (
                 <SvgIcon
                   component={ArrowCircleLeftIcon}
                   viewBox="2 2 20 20"
-                  style={{fill: '#47B881', color: '#FFF'}}
+                  style={{ fill: '#47B881', color: '#FFF' }}
                 />
               </div>
             ),
@@ -366,7 +376,8 @@ export const useNotificationList = (
               notification.type === NotificationType.COMMENT_TIPS_UNCLAIMED
                 ? '/wallet?type=tip'
                 : notification.additionalReferenceId
-                ? '/post/' + notification?.additionalReferenceId?.comment?.postId
+                ? '/post/' +
+                  notification?.additionalReferenceId?.comment?.postId
                 : '/wallet?type=history',
           };
 
@@ -384,7 +395,7 @@ export const useNotificationList = (
                 <SvgIcon
                   component={ArrowCircleLeftIcon}
                   viewBox="2 2 20 20"
-                  style={{fill: '#47B881', color: '#FFF'}}
+                  style={{ fill: '#47B881', color: '#FFF' }}
                 />
               </div>
             ),
@@ -406,7 +417,7 @@ export const useNotificationList = (
                 <SvgIcon
                   component={ArrowCircleLeftIcon}
                   viewBox="2 2 20 20"
-                  style={{fill: '#47B881', color: '#FFF'}}
+                  style={{ fill: '#47B881', color: '#FFF' }}
                 />
               </div>
             ),
@@ -428,7 +439,7 @@ export const useNotificationList = (
                 <SvgIcon
                   component={ArrowCircleLeftIcon}
                   viewBox="2 2 20 20"
-                  style={{fill: '#47B881', color: '#FFF'}}
+                  style={{ fill: '#47B881', color: '#FFF' }}
                 />
               </div>
             ),
@@ -450,7 +461,7 @@ export const useNotificationList = (
               <div className={style.circleError}>
                 <SvgIcon
                   component={ExclamationCircleIcon}
-                  style={{color: '#FFF', fill: 'currentColor'}}
+                  style={{ color: '#FFF', fill: 'currentColor' }}
                   viewBox="-4 -4 34 34"
                 />
               </div>
@@ -478,7 +489,7 @@ export const useNotificationList = (
               <div className={style.circleError}>
                 <SvgIcon
                   component={ExclamationCircleIcon}
-                  style={{color: '#FFF', fill: 'currentColor'}}
+                  style={{ color: '#FFF', fill: 'currentColor' }}
                   viewBox="-4 -4 34 34"
                 />
               </div>
@@ -507,7 +518,7 @@ export const useNotificationList = (
               <div className={style.circleError}>
                 <SvgIcon
                   component={ExclamationCircleIcon}
-                  style={{color: '#FFF', fill: 'currentColor'}}
+                  style={{ color: '#FFF', fill: 'currentColor' }}
                   viewBox="-4 -4 34 34"
                 />
               </div>
@@ -523,7 +534,9 @@ export const useNotificationList = (
             read: notification.read,
             userId: notification.fromUserId.id,
             user: i18n.t('Notification.Header.Account_Linked'),
-            avatar: notification.toUserId.profilePictureURL ?? notification.toUserId.name,
+            avatar:
+              notification.toUserId.profilePictureURL ??
+              notification.toUserId.name,
             description: i18n.t('Notification.Description.Connect_Socmed', {
               platform: getPlatform(notification.message),
               username:
@@ -534,7 +547,7 @@ export const useNotificationList = (
               <div className={style.circleError}>
                 <SvgIcon
                   component={ExclamationCircleIcon}
-                  style={{color: '#FFF', fill: 'currentColor'}}
+                  style={{ color: '#FFF', fill: 'currentColor' }}
                   viewBox="-4 -4 34 34"
                 />
               </div>
@@ -551,7 +564,9 @@ export const useNotificationList = (
             read: notification.read,
             userId: notification.fromUserId.id,
             user: i18n.t('Notification.Header.Account_Unlinked'),
-            avatar: notification.toUserId.profilePictureURL ?? notification.toUserId.name,
+            avatar:
+              notification.toUserId.profilePictureURL ??
+              notification.toUserId.name,
             description: i18n.t('Notification.Description.Disconnect_Socmed', {
               platform: getPlatform(notification.message),
               username:
@@ -563,7 +578,7 @@ export const useNotificationList = (
               <div className={style.circleError}>
                 <SvgIcon
                   component={ExclamationCircleIcon}
-                  style={{color: '#FFF', fill: 'currentColor'}}
+                  style={{ color: '#FFF', fill: 'currentColor' }}
                   viewBox="-4 -4 34 34"
                 />
               </div>
@@ -587,13 +602,15 @@ export const useNotificationList = (
                 <SvgIcon
                   component={ArrowCircleLeftIcon}
                   viewBox="2 2 20 20"
-                  style={{fill: '#47B881', color: '#FFF'}}
+                  style={{ fill: '#47B881', color: '#FFF' }}
                 />
               </div>
             ),
             createdAt: notification.createdAt,
             href: notification.additionalReferenceId
-              ? getLockableContentLink(notification.additionalReferenceId?.unlockableContent)
+              ? getLockableContentLink(
+                  notification.additionalReferenceId?.unlockableContent,
+                )
               : `/404`,
           };
 
@@ -613,7 +630,7 @@ export const useNotificationList = (
                 <SvgIcon
                   component={AtSymbolIcon}
                   viewBox="-4 -4 34 34"
-                  style={{fill: 'currentColor', color: '#FFF'}}
+                  style={{ fill: 'currentColor', color: '#FFF' }}
                 />
               </div>
             ),

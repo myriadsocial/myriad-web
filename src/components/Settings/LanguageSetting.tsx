@@ -12,12 +12,12 @@ import {
   useMediaQuery,
 } from '@material-ui/core';
 
-import {DropdownMenu} from '../atoms/DropdownMenu';
-import {useStyles} from './Settings.styles';
-import {settingLanguageOptions} from './default';
+import { DropdownMenu } from '../atoms/DropdownMenu';
+import { useStyles } from './Settings.styles';
+import { settingLanguageOptions } from './default';
 
 import ShowIf from 'components/common/show-if.component';
-import {LanguageSettingType} from 'src/interfaces/setting';
+import { LanguageSettingType } from 'src/interfaces/setting';
 import i18n from 'src/locale';
 
 type LanguageSettingsProps = {
@@ -26,7 +26,7 @@ type LanguageSettingsProps = {
 };
 
 export const LanguageSetting: React.FC<LanguageSettingsProps> = props => {
-  const {value, onSaveSetting} = props;
+  const { value, onSaveSetting } = props;
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
   const [language, setLanguage] = React.useState<LanguageSettingType>(value);
@@ -36,7 +36,9 @@ export const LanguageSetting: React.FC<LanguageSettingsProps> = props => {
   }, [value]);
 
   React.useEffect(() => {
-    const selectedLang = localStorage.getItem('i18nextLng') as LanguageSettingType | null;
+    const selectedLang = localStorage.getItem(
+      'i18nextLng',
+    ) as LanguageSettingType | null;
     if (selectedLang) {
       setLanguage(selectedLang);
     }
@@ -80,7 +82,10 @@ export const LanguageSetting: React.FC<LanguageSettingsProps> = props => {
           {i18n.t('Setting.List_Menu.Language_Subtitle')}
         </Typography>
         <List>
-          <ListItem className={styles.option} alignItems="center" style={{marginLeft: 10}}>
+          <ListItem
+            className={styles.option}
+            alignItems="center"
+            style={{ marginLeft: 10 }}>
             <DropdownMenu<LanguageSettingType>
               title=""
               selected={language}

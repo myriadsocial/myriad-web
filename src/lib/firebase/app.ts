@@ -2,7 +2,7 @@ import getConfig from 'next/config';
 
 import firebase from 'firebase/app';
 
-const {publicRuntimeConfig} = getConfig();
+const { publicRuntimeConfig } = getConfig();
 
 const FirebaseApp = {
   init: () => {

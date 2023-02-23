@@ -1,12 +1,12 @@
-import {XIcon} from '@heroicons/react/solid';
+import { XIcon } from '@heroicons/react/solid';
 
-import {useState} from 'react';
-import {useCookies} from 'react-cookie';
-import {usePWAInstall} from 'react-use-pwa-install';
+import { useState } from 'react';
+import { useCookies } from 'react-cookie';
+import { usePWAInstall } from 'react-use-pwa-install';
 
 import Image from 'next/image';
 
-import {useTheme, useMediaQuery} from '@material-ui/core';
+import { useTheme, useMediaQuery } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Snackbar from '@material-ui/core/Snackbar';
 import Typography from '@material-ui/core/Typography';
@@ -30,12 +30,16 @@ const PwaWrapper = () => {
     setCookie(HIDE_PWA_INSTALL_POPUP_COOKIE_KEY, true);
   };
 
-  if (!isMobileAndTablet || Boolean(cookies[HIDE_PWA_INSTALL_POPUP_COOKIE_KEY]) || !install)
+  if (
+    !isMobileAndTablet ||
+    Boolean(cookies[HIDE_PWA_INSTALL_POPUP_COOKIE_KEY]) ||
+    !install
+  )
     return null;
 
   return (
     <Snackbar
-      anchorOrigin={{horizontal: 'center', vertical: 'top'}}
+      anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
       open={isOpen}
       onClose={onClose}>
       <Box
@@ -51,7 +55,13 @@ const PwaWrapper = () => {
         }}>
         <XIcon
           onClick={onClose}
-          style={{width: '20px', height: '20px', position: 'absolute', top: '5px', right: '7px'}}
+          style={{
+            width: '20px',
+            height: '20px',
+            position: 'absolute',
+            top: '5px',
+            right: '7px',
+          }}
         />
         <Image
           src="/android-chrome-48x48.png"
@@ -69,7 +79,7 @@ const PwaWrapper = () => {
             paddingRight: '40px',
             gridGap: '70px',
           }}>
-          <Box sx={{minWidth: '100px'}}>
+          <Box sx={{ minWidth: '100px' }}>
             <Typography variant="body1">Add Myriad</Typography>
             <Typography variant="body1">To Home Screen</Typography>
           </Box>

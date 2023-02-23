@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const {withSentryConfig} = require('@sentry/nextjs');
+const { withSentryConfig } = require('@sentry/nextjs');
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
 
-const {version} = require('./package.json');
+const { version } = require('./package.json');
 
 /** @type {import('next').NextConfig} */
 const moduleExports = {
@@ -13,8 +13,8 @@ const moduleExports = {
     styledComponent: true,
   },
   generateBuildId: async () => {
-    if (process.env.BUILD_ID) {
-      return process.env.BUILD_ID;
+    if (process.env.NEXT_PUBLIC_APP_BUILD_ID) {
+      return process.env.NEXT_PUBLIC_APP_BUILD_ID;
     } else {
       return version;
     }
@@ -24,27 +24,32 @@ const moduleExports = {
   },
   serverRuntimeConfig: {
     // Will only be available on the server side
-    appSecret: process.env.SECRET ?? 'd98b4af078b46a9984829a72030976e0',
-    myriadAPIURL: process.env.MYRIAD_API_URL ?? 'http://localhost:3001',
+    appSecret: process.env.APP_SECRET ?? 'd98b4af078b46a9984829a72030976e0',
   },
   publicRuntimeConfig: {
     // Will be available on both server and client
     appEnvironment: process.env.NEXT_PUBLIC_APP_ENVIRONMENT ?? 'local',
     appName: process.env.NEXT_PUBLIC_APP_NAME ?? `Myriad Local`,
     appVersion: `v${process.env.NEXT_PUBLIC_APP_VERSION ?? version}`,
-    appAuthURL: process.env.NEXTAUTH_URL ?? 'http://localhost:3000',
-    myriadRPCURL: process.env.NEXT_PUBLIC_MYRIAD_RPC_URL,
-    myriadWebsiteURL: process.env.NEXT_PUBLIC_MYRIAD_WEBSITE_URL ?? 'https://www.myriad.social',
-    myriadSupportMail: process.env.NEXT_PUBLIC_MYRIAD_SUPPORT_MAIL ?? 'support@myriad.social',
+    appAuthURL: process.env.NEXT_PUBLIC_APP_AUTH_URL ?? 'http://localhost:3000',
+    myriadSupportMail:
+      process.env.NEXT_PUBLIC_MYRIAD_SUPPORT_MAIL ?? 'support@myriad.social',
+    myriadWebsiteURL:
+      process.env.NEXT_PUBLIC_MYRIAD_WEBSITE_URL ?? 'https://www.myriad.social',
+    myriadRPCURL:
+      process.env.NEXT_PUBLIC_MYRIAD_RPC_URL ?? 'ws://localhost:9944',
+    myriadAPIURL:
+      process.env.NEXT_PUBLIC_MYRIAD_API_URL ?? 'http://localhost:3001',
+    nearTippingContractId:
+      process.env.NEAR_TIPPING_CONTRACT_ID ?? 'myriadcore.testnet',
     firebaseProjectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
     firebaseAPIKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-    firebaseMessagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    firebaseMessagingSenderId:
+      process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
     firebaseStorageBucket:
-      process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ?? 'myriad-social-development.appspot.com',
+      process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ?? 'dev.appspot.com',
     firebaseAppId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
     firebaseMeasurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
-    nearTippingContractId: process.env.NEAR_TIPPING_CONTRACT_ID ?? 'myriadcore.testnet',
-    myriadAPIURL: process.env.MYRIAD_API_URL ?? 'http://localhost:3001',
   },
   sentry: {
     disableServerWebpackPlugin: true,
@@ -105,4 +110,7 @@ const withPwaWrapper = () => {
   return withPWA(moduleExports);
 };
 
-module.exports = withSentryConfig(withBundleAnalyzer(withPwaWrapper()), sentryWebpackPluginOptions);
+module.exports = withSentryConfig(
+  withBundleAnalyzer(withPwaWrapper()),
+  sentryWebpackPluginOptions,
+);

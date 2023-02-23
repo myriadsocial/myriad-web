@@ -1,4 +1,4 @@
-import {ELEMENT_PARAGRAPH} from '@udecode/plate';
+import { ELEMENT_PARAGRAPH } from '@udecode/plate';
 import {
   getEditorString,
   getPluginType,
@@ -17,14 +17,14 @@ import {
   isSelectionAtBlockEnd,
   getNodeEntry,
 } from '@udecode/plate-core';
-import {withRemoveEmptyNodes} from '@udecode/plate-normalizers';
+import { withRemoveEmptyNodes } from '@udecode/plate-normalizers';
 
-import {ELEMENT_HASHTAG} from './createHashtagPlugin';
-import {upsertHashtag} from './transforms/upsertHashtag';
-import {upsertHashtagAtSelection} from './transforms/upsertHashtagAtSelection';
-import {HashtagPlugin} from './type';
+import { ELEMENT_HASHTAG } from './createHashtagPlugin';
+import { upsertHashtag } from './transforms/upsertHashtag';
+import { upsertHashtagAtSelection } from './transforms/upsertHashtagAtSelection';
+import { HashtagPlugin } from './type';
 
-import {Range} from 'slate';
+import { Range } from 'slate';
 
 const BLANK_SPACE = ' ';
 const hasHashTag = (string: string): boolean => {
@@ -62,11 +62,17 @@ const upsertHashtagIfValid = <V extends Value>(editor: PlateEditor<V>) => {
   }
 };
 
-export const withHashtag = <V extends Value = Value, E extends PlateEditor<V> = PlateEditor<V>>(
+export const withHashtag = <
+  V extends Value = Value,
+  E extends PlateEditor<V> = PlateEditor<V>,
+>(
   editor: E,
-  {type, options: {rangeBeforeOptions}}: WithPlatePlugin<HashtagPlugin, V, E>,
+  {
+    type,
+    options: { rangeBeforeOptions },
+  }: WithPlatePlugin<HashtagPlugin, V, E>,
 ) => {
-  const {insertData, insertText} = editor;
+  const { insertData, insertText } = editor;
 
   editor.insertText = text => {
     if (text === BLANK_SPACE && isCollapsed(editor.selection)) {
@@ -79,7 +85,11 @@ export const withHashtag = <V extends Value = Value, E extends PlateEditor<V> = 
       }
 
       // whitespace but previous char not a hashtag
-      const beforeWordRange = getRangeBefore(editor, selection, rangeBeforeOptions);
+      const beforeWordRange = getRangeBefore(
+        editor,
+        selection,
+        rangeBeforeOptions,
+      );
       if (beforeWordRange) {
         const beforeWordText = getEditorString(editor, beforeWordRange);
         if (beforeWordText && isHashTag(beforeWordText)) {
@@ -101,7 +111,9 @@ export const withHashtag = <V extends Value = Value, E extends PlateEditor<V> = 
 
       if (text) {
         const remaining = currentText.substring(selection.anchor.offset);
-        const arrRemaining = remaining.split(' ').filter(item => item.length > 0);
+        const arrRemaining = remaining
+          .split(' ')
+          .filter(item => item.length > 0);
 
         if (arrRemaining.length > 0) {
           const hashtag = arrRemaining.shift();
@@ -132,20 +144,23 @@ export const withHashtag = <V extends Value = Value, E extends PlateEditor<V> = 
 
     if (text) {
       if (isHashTag(text)) {
-        return upsertHashtagAtSelection(editor, {hashtag: text});
+        return upsertHashtagAtSelection(editor, { hashtag: text });
       }
 
       if (hasHashTag(text)) {
         const selection = editor.selection as Range;
         // eslint-disable-next-line no-control-regex
         const hashtagRule = /([#|＃]+(?:[^\u0000-\u007F]|\w)+)/g;
-        const [node, path] = getBlockAbove(editor, {at: selection, block: true});
+        const [node, path] = getBlockAbove(editor, {
+          at: selection,
+          block: true,
+        });
 
         const children = text.split(hashtagRule).map(slice => {
           if (slice.match(hashtagRule)) {
             return {
               type: getPluginType(editor, ELEMENT_HASHTAG),
-              children: [{text: ''}],
+              children: [{ text: '' }],
               hashtag: slice.replace('#', ''),
             };
           } else {
@@ -156,14 +171,14 @@ export const withHashtag = <V extends Value = Value, E extends PlateEditor<V> = 
         });
 
         if (node?.type === ELEMENT_PARAGRAPH) {
-          removeNodes(editor, {at: path});
+          removeNodes(editor, { at: path });
           insertNodes<TElement>(
             editor,
             {
               type: getPluginType(editor, ELEMENT_PARAGRAPH),
               children: [...node.children, ...children],
             },
-            {at: path},
+            { at: path },
           );
         } else {
           insertNodes<TElement>(
@@ -172,7 +187,7 @@ export const withHashtag = <V extends Value = Value, E extends PlateEditor<V> = 
               type: getPluginType(editor, ELEMENT_PARAGRAPH),
               children: children,
             },
-            {at: path},
+            { at: path },
           );
         }
       }
@@ -184,7 +199,7 @@ export const withHashtag = <V extends Value = Value, E extends PlateEditor<V> = 
   editor = withRemoveEmptyNodes<V, E>(
     editor,
     mockPlugin<{}, V, E>({
-      options: {types: type},
+      options: { types: type },
     }),
   );
 

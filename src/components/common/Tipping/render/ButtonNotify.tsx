@@ -1,24 +1,24 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
-import {TwitterShareButton} from 'react-share';
+import { useSelector } from 'react-redux';
+import { TwitterShareButton } from 'react-share';
 
-import {Link} from '@material-ui/core';
-import {Button} from '@material-ui/core';
+import { Link } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 
-import {BN} from '@polkadot/util';
+import { BN } from '@polkadot/util';
 
-import {useStyles} from './ButtonNotify.styles';
+import { useStyles } from './ButtonNotify.styles';
 
-import {socials} from 'src/components/atoms/Icons/Socials';
-import {formatBalance} from 'src/helpers/balance';
-import {BalanceDetail} from 'src/interfaces/balance';
-import {People} from 'src/interfaces/people';
-import {Post} from 'src/interfaces/post';
-import {SocialsEnum} from 'src/interfaces/social';
-import {User} from 'src/interfaces/user';
+import { socials } from 'src/components/atoms/Icons/Socials';
+import { formatBalance } from 'src/helpers/balance';
+import { BalanceDetail } from 'src/interfaces/balance';
+import { People } from 'src/interfaces/people';
+import { Post } from 'src/interfaces/post';
+import { SocialsEnum } from 'src/interfaces/social';
+import { User } from 'src/interfaces/user';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {UserState} from 'src/reducers/user/reducer';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
 export type ButtonNotifyProps = {
   reference: Post;
@@ -33,7 +33,9 @@ export const ButtonNotify: React.FC<ButtonNotifyProps> = ({
   amount,
   receiver,
 }) => {
-  const {socials: account} = useSelector<RootState, UserState>(state => state.userState);
+  const { socials: account } = useSelector<RootState, UserState>(
+    state => state.userState,
+  );
   const styles = useStyles();
 
   const finalAmount = formatBalance(amount, currency.decimal);
@@ -46,7 +48,9 @@ export const ButtonNotify: React.FC<ButtonNotifyProps> = ({
 
   const getLink = () => {
     const username = getUsername(SocialsEnum.REDDIT);
-    const path = `submit?title=${i18n.t('Tipping.Prompt_Success.Notify_Title')}&text=${textShare}`;
+    const path = `submit?title=${i18n.t(
+      'Tipping.Prompt_Success.Notify_Title',
+    )}&text=${textShare}`;
 
     if (username) {
       return `https://www.reddit.com/user/${username}/${path}`;
@@ -61,7 +65,9 @@ export const ButtonNotify: React.FC<ButtonNotifyProps> = ({
       currencySymbol: currency?.symbol,
     })}` +
     `\n${i18n.t('Tipping.Prompt_Success.Notify_Text_2')}` +
-    `\n${i18n.t('Tipping.Prompt_Success.Notify_Text_3', {platform: reference.platform})}`;
+    `\n${i18n.t('Tipping.Prompt_Success.Notify_Text_3', {
+      platform: reference.platform,
+    })}`;
 
   const TwitterButton = () => {
     return (

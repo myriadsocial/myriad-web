@@ -1,24 +1,27 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
 import getConfig from 'next/config';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {Box, Button, Grid, Typography} from '@material-ui/core';
+import { Box, Button, Grid, Typography } from '@material-ui/core';
 
-import {ButtonNotify} from './ButtonNotify';
+import { ButtonNotify } from './ButtonNotify';
 
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import localforage from 'localforage';
-import {PromptComponent} from 'src/components/atoms/Prompt/prompt.component';
-import {toBigNumber} from 'src/helpers/string';
-import {Comment} from 'src/interfaces/comment';
-import {Currency} from 'src/interfaces/currency';
-import {ReferenceType} from 'src/interfaces/interaction';
-import {People} from 'src/interfaces/people';
-import {Post} from 'src/interfaces/post';
-import {SimpleSendTipProps, TransactionProps} from 'src/interfaces/transaction';
-import {User} from 'src/interfaces/user';
-import {storeTransaction} from 'src/lib/api/transaction';
+import { PromptComponent } from 'src/components/atoms/Prompt/prompt.component';
+import { toBigNumber } from 'src/helpers/string';
+import { Comment } from 'src/interfaces/comment';
+import { Currency } from 'src/interfaces/currency';
+import { ReferenceType } from 'src/interfaces/interaction';
+import { People } from 'src/interfaces/people';
+import { Post } from 'src/interfaces/post';
+import {
+  SimpleSendTipProps,
+  TransactionProps,
+} from 'src/interfaces/transaction';
+import { User } from 'src/interfaces/user';
+import { storeTransaction } from 'src/lib/api/transaction';
 import i18n from 'src/locale';
 
 export type TippingSuccessProps = {
@@ -36,7 +39,7 @@ export type TippingStorageProps = {
 };
 
 export const TIPPING_STORAGE_KEY = '@Tipping_Storage_Key';
-const {publicRuntimeConfig} = getConfig();
+const { publicRuntimeConfig } = getConfig();
 
 export const TippingSuccess = () => {
   const router = useRouter();
@@ -70,7 +73,7 @@ export const TippingSuccess = () => {
       setOpenPrompt(true);
       processTips(transactionHashes);
 
-      router.replace(url, undefined, {shallow: true});
+      router.replace(url, undefined, { shallow: true });
     }
 
     if (errorCode && errorMessage) {
@@ -80,7 +83,7 @@ export const TippingSuccess = () => {
       });
 
       removeStoredTipDetail();
-      router.replace(url, undefined, {shallow: true});
+      router.replace(url, undefined, { shallow: true });
     }
   }, [transactionHashes, errorCode, errorMessage]);
 
@@ -139,7 +142,8 @@ export const TippingSuccess = () => {
             <Button
               href={`${
                 'currency' in options.attributes
-                  ? options?.attributes.currency.network.explorerURL + `/transactions/${trxHash}`
+                  ? options?.attributes.currency.network.explorerURL +
+                    `/transactions/${trxHash}`
                   : null
               }`}
               target="_blank"
@@ -156,11 +160,18 @@ export const TippingSuccess = () => {
               <ButtonNotify
                 reference={options.reference}
                 currency={options.attributes.currency}
-                amount={toBigNumber(options.amount.toString(), options.attributes.currency.decimal)}
+                amount={toBigNumber(
+                  options.amount.toString(),
+                  options.attributes.currency.decimal,
+                )}
                 receiver={options.receiver}
               />
             ) : (
-              <Button size="small" variant="contained" color="primary" onClick={onClosePrompt}>
+              <Button
+                size="small"
+                variant="contained"
+                color="primary"
+                onClick={onClosePrompt}>
                 {i18n.t('Tipping.Prompt_Success.Btn_Return')}
               </Button>
             )}

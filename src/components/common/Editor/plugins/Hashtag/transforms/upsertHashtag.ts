@@ -1,9 +1,9 @@
-import {getPluginType, PlateEditor, unwrapNodes, Value} from '@udecode/plate';
+import { getPluginType, PlateEditor, unwrapNodes, Value } from '@udecode/plate';
 
-import {ELEMENT_HASHTAG} from '../createHashtagPlugin';
-import {wrapHashtag} from './wrapHashtag';
+import { ELEMENT_HASHTAG } from '../createHashtagPlugin';
+import { wrapHashtag } from './wrapHashtag';
 
-import {Range} from 'slate';
+import { Range } from 'slate';
 
 export const upsertHashtag = <V extends Value>(
   editor: PlateEditor<V>,
@@ -17,7 +17,7 @@ export const upsertHashtag = <V extends Value>(
 ) => {
   unwrapNodes(editor, {
     at,
-    match: {type: getPluginType(editor, ELEMENT_HASHTAG)},
+    match: { type: getPluginType(editor, ELEMENT_HASHTAG) },
   });
 
   const newSelection = editor.selection as Range;

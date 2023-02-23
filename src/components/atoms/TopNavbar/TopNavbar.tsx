@@ -1,27 +1,36 @@
-import {ChevronLeftIcon} from '@heroicons/react/outline';
+import { ChevronLeftIcon } from '@heroicons/react/outline';
 
 import React from 'react';
 
 import dynamic from 'next/dynamic';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {Grid, IconButton} from '@material-ui/core';
+import { Grid, IconButton } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
-import {TopNavbarProps} from './TopNavbar.interfaces';
-import {useStyles} from './TopNavbar.styles';
+import { TopNavbarProps } from './TopNavbar.interfaces';
+import { useStyles } from './TopNavbar.styles';
 
-const MenuDrawerComponent = dynamic(() => import('src/components/Mobile/MenuDrawer/MenuDrawer'), {
-  ssr: false,
-});
+const MenuDrawerComponent = dynamic(
+  () => import('src/components/Mobile/MenuDrawer/MenuDrawer'),
+  {
+    ssr: false,
+  },
+);
 
 export const TopNavbarComponent: React.FC<TopNavbarProps> = props => {
-  const {sectionTitle, description, reverse = false, type = 'back', onClick} = props;
+  const {
+    sectionTitle,
+    description,
+    reverse = false,
+    type = 'back',
+    onClick,
+  } = props;
 
   const router = useRouter();
-  const classes = useStyles({...props, type});
+  const classes = useStyles({ ...props, type });
 
   const handleClick = (): void => {
     if (onClick) {
@@ -39,13 +48,17 @@ export const TopNavbarComponent: React.FC<TopNavbarProps> = props => {
         'version',
       ];
 
-      if (router.pathname === '/settings' && section && settings.includes(section)) {
-        router.push('/settings', undefined, {shallow: true});
+      if (
+        router.pathname === '/settings' &&
+        section &&
+        settings.includes(section)
+      ) {
+        router.push('/settings', undefined, { shallow: true });
       } else {
         if (window.history.length > 2) {
           router.back();
         } else {
-          router.push('/', undefined, {shallow: true});
+          router.push('/', undefined, { shallow: true });
         }
       }
     }

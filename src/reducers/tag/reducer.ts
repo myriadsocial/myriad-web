@@ -1,9 +1,9 @@
-import {PaginationState as BasePaginationState} from '../base/state';
-import {Actions} from './actions';
+import { PaginationState as BasePaginationState } from '../base/state';
+import { Actions } from './actions';
 import * as constants from './constants';
 
 import * as Redux from 'redux';
-import {Tag} from 'src/interfaces/experience';
+import { Tag } from 'src/interfaces/experience';
 
 export interface TagState extends BasePaginationState {
   topics: Tag[];
@@ -22,7 +22,10 @@ const initalState: TagState = {
   },
 };
 
-export const TagReducer: Redux.Reducer<TagState, Actions> = (state = initalState, action) => {
+export const TagReducer: Redux.Reducer<TagState, Actions> = (
+  state = initalState,
+  action,
+) => {
   switch (action.type) {
     case constants.FETCH_POPULAR_TOPIC: {
       return {

@@ -1,19 +1,22 @@
 import MyriadAPI from './base';
-import {BaseList} from './interfaces/base-list.interface';
-import {LoopbackWhere} from './interfaces/loopback-query.interface';
+import { BaseList } from './interfaces/base-list.interface';
+import { LoopbackWhere } from './interfaces/loopback-query.interface';
 
-import {SocialMedia, SocialMediaProps} from 'src/interfaces/social';
+import { SocialMedia, SocialMediaProps } from 'src/interfaces/social';
 
 type SocialMediaList = BaseList<SocialMedia>;
 
-export const getUserSocials = async (userId: string, all: boolean): Promise<SocialMediaList> => {
-  const where: LoopbackWhere<SocialMediaProps> = {userId};
+export const getUserSocials = async (
+  userId: string,
+  all: boolean,
+): Promise<SocialMediaList> => {
+  const where: LoopbackWhere<SocialMediaProps> = { userId };
 
   if (!all) {
     where.primary = true;
   }
 
-  const {data} = await MyriadAPI().request<SocialMediaList>({
+  const { data } = await MyriadAPI().request<SocialMediaList>({
     url: `/user/social-medias`,
     method: 'GET',
     params: {
@@ -29,7 +32,7 @@ export const getUserSocials = async (userId: string, all: boolean): Promise<Soci
 };
 
 export const getIdentity = async () => {
-  const {data} = await MyriadAPI().request<{hash: string}>({
+  const { data } = await MyriadAPI().request<{ hash: string }>({
     url: `/user/social-medias/identity`,
     method: 'GET',
   });
@@ -37,7 +40,9 @@ export const getIdentity = async () => {
   return data;
 };
 
-export const updateSocialAsPrimary = async (userSocialId: string): Promise<void> => {
+export const updateSocialAsPrimary = async (
+  userSocialId: string,
+): Promise<void> => {
   await MyriadAPI().request({
     url: `/user/social-medias/${userSocialId}/primary`,
     method: 'PATCH',

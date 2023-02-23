@@ -1,6 +1,6 @@
-import {makeStyles, Theme} from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import {VariantType} from 'notistack';
+import { VariantType } from 'notistack';
 
 interface VariantProps {
   variant: VariantType;

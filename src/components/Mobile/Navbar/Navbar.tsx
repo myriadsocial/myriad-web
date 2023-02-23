@@ -1,21 +1,24 @@
-import {ChevronLeftIcon} from '@heroicons/react/outline';
-import {SearchIcon} from '@heroicons/react/solid';
+import { ChevronLeftIcon } from '@heroicons/react/outline';
+import { SearchIcon } from '@heroicons/react/solid';
 
 import React from 'react';
 
 import dynamic from 'next/dynamic';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {SvgIcon, Grid} from '@material-ui/core';
+import { SvgIcon, Grid } from '@material-ui/core';
 
-import {useStyles} from 'src/components/Mobile/Navbar/navbar.style';
-import {SearchBoxContainer} from 'src/components/atoms/Search/SearchBoxContainer';
+import { useStyles } from 'src/components/Mobile/Navbar/navbar.style';
+import { SearchBoxContainer } from 'src/components/atoms/Search/SearchBoxContainer';
 import ShowIf from 'src/components/common/show-if.component';
-import {useInstances} from 'src/hooks/use-instances.hooks';
+import { useInstances } from 'src/hooks/use-instances.hooks';
 
-const MenuDrawerComponent = dynamic(() => import('src/components/Mobile/MenuDrawer/MenuDrawer'), {
-  ssr: false,
-});
+const MenuDrawerComponent = dynamic(
+  () => import('src/components/Mobile/MenuDrawer/MenuDrawer'),
+  {
+    ssr: false,
+  },
+);
 
 type SearchBoxContainerProps = {
   iconPosition?: 'start' | 'end';
@@ -24,18 +27,18 @@ type SearchBoxContainerProps = {
 };
 
 export const NavbarComponent: React.FC<SearchBoxContainerProps> = props => {
-  const {searched = false} = props;
+  const { searched = false } = props;
 
   const style = useStyles();
   const router = useRouter();
 
-  const {instance} = useInstances();
+  const { instance } = useInstances();
 
   const [isSearch, setIsSearch] = React.useState(searched);
 
   const toggleOpenSearch = () => {
     if (router.pathname === '/search') {
-      router.push('/', undefined, {shallow: true});
+      router.push('/', undefined, { shallow: true });
     } else {
       setIsSearch(!isSearch);
     }
@@ -53,7 +56,7 @@ export const NavbarComponent: React.FC<SearchBoxContainerProps> = props => {
           },
         },
         undefined,
-        {shallow: true},
+        { shallow: true },
       );
     }, DELAY);
   };
@@ -67,12 +70,16 @@ export const NavbarComponent: React.FC<SearchBoxContainerProps> = props => {
       className={style.root}>
       <ShowIf condition={!isSearch}>
         <MenuDrawerComponent />
-        <img src={instance?.images?.logo_banner ?? ''} width={105} height={25} />
+        <img
+          src={instance?.images?.logo_banner ?? ''}
+          width={105}
+          height={25}
+        />
         <SvgIcon
-          classes={{root: style.fill}}
+          classes={{ root: style.fill }}
           component={SearchIcon}
           viewBox="0 0 20 20"
-          style={{width: 25, height: 25}}
+          style={{ width: 25, height: 25 }}
           onClick={toggleOpenSearch}
         />
       </ShowIf>

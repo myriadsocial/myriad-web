@@ -10,10 +10,10 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 
-import {TipClaimReference} from './Tip.claim.reference';
-import {useStyles} from './tip.style';
+import { TipClaimReference } from './Tip.claim.reference';
+import { useStyles } from './tip.style';
 
-import {MenuOptions} from 'src/components/atoms/DropdownMenu';
+import { MenuOptions } from 'src/components/atoms/DropdownMenu';
 import {
   NearNetworkIcon24,
   MyriadCircleIcon,
@@ -21,9 +21,9 @@ import {
   KusamaNetworkIcon,
 } from 'src/components/atoms/Icons';
 import ShowIf from 'src/components/common/show-if.component';
-import {TipsResult} from 'src/interfaces/blockchain-interface';
-import {Network} from 'src/interfaces/network';
-import {UserWallet} from 'src/interfaces/user';
+import { TipsResult } from 'src/interfaces/blockchain-interface';
+import { Network } from 'src/interfaces/network';
+import { UserWallet } from 'src/interfaces/user';
 import i18n from 'src/locale';
 
 type TipProps = {
@@ -35,7 +35,10 @@ type TipProps = {
   txFee?: string;
   onClaim: (networkId: string, ftIdentifier: string) => void;
   onClaimAll: (networkId: string) => void;
-  onHandleVerifyRef: (networkId: string, nativeBalance: string | number) => void;
+  onHandleVerifyRef: (
+    networkId: string,
+    nativeBalance: string | number,
+  ) => void;
   onSwitchNetwork: (network: Network) => void;
 };
 
@@ -123,7 +126,12 @@ export const Tip: React.FC<TipProps> = props => {
     }
 
     return (
-      <Grid container direction="row" justifyContent="flex-start" alignItems="center" spacing={2}>
+      <Grid
+        container
+        direction="row"
+        justifyContent="flex-start"
+        alignItems="center"
+        spacing={2}>
         {tips.map((tip, i) => (
           <Grid item xs={12} md={6} key={i}>
             <div className={style.content}>
@@ -140,7 +148,9 @@ export const Tip: React.FC<TipProps> = props => {
                     !tip.accountId ||
                     loading
                   }
-                  onClick={() => handleClaim(network.id, tip.tipsBalanceInfo.ftIdentifier)}
+                  onClick={() =>
+                    handleClaim(network.id, tip.tipsBalanceInfo.ftIdentifier)
+                  }
                   size="small"
                   className={style.buttonClaim}
                   color="primary"
@@ -152,7 +162,10 @@ export const Tip: React.FC<TipProps> = props => {
                 <Typography variant="h5" component="p" color="textPrimary">
                   {tip.amount}
                 </Typography>
-                <Typography variant="subtitle2" component="p" color="textSecondary">
+                <Typography
+                  variant="subtitle2"
+                  component="p"
+                  color="textSecondary">
                   USD {'~'}
                 </Typography>
               </div>
@@ -166,7 +179,9 @@ export const Tip: React.FC<TipProps> = props => {
   return (
     <>
       <ListItem alignItems="center" className={style.listItem}>
-        <ListItemAvatar>{icons[network.id as keyof typeof icons]}</ListItemAvatar>
+        <ListItemAvatar>
+          {icons[network.id as keyof typeof icons]}
+        </ListItemAvatar>
         <ListItemText>
           <Typography variant="h6" component="span" color="textPrimary">
             {formatNetworkName()}
@@ -184,7 +199,10 @@ export const Tip: React.FC<TipProps> = props => {
               {i18n.t('Wallet.Tip.Switch')}
             </Button>
           </ShowIf>
-          <ShowIf condition={!!currentWallet && currentWallet?.networkId == network.id}>
+          <ShowIf
+            condition={
+              !!currentWallet && currentWallet?.networkId == network.id
+            }>
             <Button
               disabled={isShowVerifyReference()}
               className={style.button}

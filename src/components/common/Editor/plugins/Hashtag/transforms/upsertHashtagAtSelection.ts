@@ -10,9 +10,9 @@ import {
   Value,
 } from '@udecode/plate-core';
 
-import {ELEMENT_HASHTAG} from '../createHashtagPlugin';
-import {THashtagElement} from '../type';
-import {wrapHashtag} from './wrapHashtag';
+import { ELEMENT_HASHTAG } from '../createHashtagPlugin';
+import { THashtagElement } from '../type';
+import { wrapHashtag } from './wrapHashtag';
 
 export const upsertHashtagAtSelection = <V extends Value>(
   editor: PlateEditor<V>,
@@ -35,7 +35,7 @@ export const upsertHashtagAtSelection = <V extends Value>(
     return insertNodes<THashtagElement>(editor, {
       type,
       hashtag: hashtag.replace('#', ''),
-      children: [{text: ''}],
+      children: [{ text: '' }],
     });
   }
 
@@ -46,9 +46,9 @@ export const upsertHashtagAtSelection = <V extends Value>(
     select(editor, inlinePath);
   }
 
-  unwrapNodes(editor, {at: editor.selection, match: {type}});
+  unwrapNodes(editor, { at: editor.selection, match: { type } });
 
-  wrapHashtag(editor, {at: editor.selection, hashtag});
+  wrapHashtag(editor, { at: editor.selection, hashtag });
 
-  collapseSelection(editor, {edge: 'end'});
+  collapseSelection(editor, { edge: 'end' });
 };

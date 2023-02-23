@@ -1,14 +1,14 @@
-import {ExclamationIcon} from '@heroicons/react/solid';
+import { ExclamationIcon } from '@heroicons/react/solid';
 
 import React from 'react';
 
-import {Grid} from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import useStyles from './Banner.style';
 
 import clsx from 'clsx';
-import {Text} from 'components/atoms/Text';
+import { Text } from 'components/atoms/Text';
 
 type BannedBannerProps = {
   open?: boolean;
@@ -29,7 +29,7 @@ export const BannedBanner: React.FC<BannedBannerProps> = props => {
         [style.padding]: true,
       })}>
       <SvgIcon
-        classes={{root: style.icon}}
+        classes={{ root: style.icon }}
         color="secondary"
         component={ExclamationIcon}
         viewBox="0 0 20 20"

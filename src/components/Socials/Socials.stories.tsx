@@ -1,9 +1,9 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
-import {SocialsEnum} from '../../interfaces/social';
-import {Socials as SocialsComponent} from './Socials';
+import { SocialsEnum } from '../../interfaces/social';
+import { Socials as SocialsComponent } from './Socials';
 
 export default {
   title: 'UI Revamp v2.0/components/Socials',
@@ -11,7 +11,9 @@ export default {
   argTypes: {},
 } as ComponentMeta<typeof SocialsComponent>;
 
-const Template: ComponentStory<typeof SocialsComponent> = args => <SocialsComponent {...args} />;
+const Template: ComponentStory<typeof SocialsComponent> = args => (
+  <SocialsComponent {...args} />
+);
 
 export const Socials = Template.bind({});
 Socials.args = {
@@ -46,7 +48,8 @@ Socials.args = {
         name: 'Aaron Ting',
         originUserId: '123',
         platform: SocialsEnum.FACEBOOK,
-        profilePictureURL: 'https://res.cloudinary.com/dsget80gs/icon/Ellipse_445aaron.svg',
+        profilePictureURL:
+          'https://res.cloudinary.com/dsget80gs/icon/Ellipse_445aaron.svg',
         username: 'aaronting',
       },
     },
@@ -83,7 +86,8 @@ Socials.args = {
         name: 'The Cryptowatcher',
         originUserId: '234',
         platform: SocialsEnum.TWITTER,
-        profilePictureURL: 'https://res.cloudinary.com/dsget80gs/icon/Ellipse_445aaron.svg',
+        profilePictureURL:
+          'https://res.cloudinary.com/dsget80gs/icon/Ellipse_445aaron.svg',
         username: 'cryptowatcher',
       },
     },

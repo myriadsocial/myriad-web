@@ -1,15 +1,20 @@
 import React from 'react';
 
-import {List, Paper, CircularProgress, Link} from '@material-ui/core';
-import {createStyles, makeStyles, alpha, Theme} from '@material-ui/core/styles';
+import { List, Paper, CircularProgress, Link } from '@material-ui/core';
+import {
+  createStyles,
+  makeStyles,
+  alpha,
+  Theme,
+} from '@material-ui/core/styles';
 
-import {User} from '../../interfaces/user';
-import {EmptyResult} from '../Search/EmptyResult';
-import {EmptyContentEnum} from '../Search/EmptyResult.interfaces';
-import {AvatarSize} from '../atoms/Avatar';
-import {UsersListItem} from './UsersListItem';
+import { User } from '../../interfaces/user';
+import { EmptyResult } from '../Search/EmptyResult';
+import { EmptyContentEnum } from '../Search/EmptyResult.interfaces';
+import { AvatarSize } from '../atoms/Avatar';
+import { UsersListItem } from './UsersListItem';
 
-import {LoadingDots} from 'src/components/atoms/Loading/LoadingDots';
+import { LoadingDots } from 'src/components/atoms/Loading/LoadingDots';
 import i18n from 'src/locale';
 
 export const useStyles = makeStyles((theme: Theme) =>
@@ -78,7 +83,11 @@ export const UsersList: React.FC<UsersListProps> = ({
             {hasMore ? (
               isSearching ? (
                 <div className={classes.loadMore}>
-                  <CircularProgress size={16} style={{marginRight: 8}} thickness={4} />
+                  <CircularProgress
+                    size={16}
+                    style={{ marginRight: 8 }}
+                    thickness={4}
+                  />
                   <div className={classes.footer}>
                     <Link component="button" className={classes.link}>
                       {i18n.t('Loading.Loading_More')}
@@ -87,9 +96,12 @@ export const UsersList: React.FC<UsersListProps> = ({
                   <LoadingDots />
                 </div>
               ) : (
-                <div style={{paddingBottom: 20}}>
+                <div style={{ paddingBottom: 20 }}>
                   <div className={classes.footer}>
-                    <Link component="button" className={classes.link} onClick={loadNextPage}>
+                    <Link
+                      component="button"
+                      className={classes.link}
+                      onClick={loadNextPage}>
                       {i18n.t('Loading.Load_More')}
                     </Link>
                   </div>

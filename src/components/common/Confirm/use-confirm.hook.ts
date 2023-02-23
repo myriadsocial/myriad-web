@@ -1,6 +1,6 @@
-import {useContext} from 'react';
+import { useContext } from 'react';
 
-import ConfirmContext, {HandleConfirm} from './Confirm.context';
+import ConfirmContext, { HandleConfirm } from './Confirm.context';
 
 const useConfirm = (): HandleConfirm => {
   const confirm = useContext(ConfirmContext);

@@ -1,9 +1,9 @@
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import {BalanceDetail} from 'src/interfaces/balance';
+import { BalanceDetail } from 'src/interfaces/balance';
 import * as TokenAPI from 'src/lib/api/token';
-import {getUserCurrencies} from 'src/reducers/balance/actions';
-import {setDefaultCurrency} from 'src/reducers/user/actions';
+import { getUserCurrencies } from 'src/reducers/balance/actions';
+import { setDefaultCurrency } from 'src/reducers/user/actions';
 
 export const useCurrency = () => {
   const dispatch = useDispatch();

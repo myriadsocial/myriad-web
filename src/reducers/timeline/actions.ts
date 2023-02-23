@@ -1,25 +1,34 @@
-import {Actions as BaseAction, setError, setLoading} from '../base/actions';
-import {RootState} from '../index';
+import { Actions as BaseAction, setError, setLoading } from '../base/actions';
+import { RootState } from '../index';
 import * as constants from './constants';
-import {TimelineFilters} from './reducer';
+import { TimelineFilters } from './reducer';
 
 import axios from 'axios';
-import {ExclusiveContent} from 'components/common/Tipping/Tipping.interface';
-import {Action} from 'redux';
-import {Comment} from 'src/interfaces/comment';
-import {ExclusiveContentPost} from 'src/interfaces/exclusive';
-import {ReferenceType, SectionType, Vote} from 'src/interfaces/interaction';
-import {Post, PostMetric, PostProps, PostVisibility} from 'src/interfaces/post';
-import {TimelineFilterFields, TimelineOrderType, TimelineType} from 'src/interfaces/timeline';
-import {UserProps} from 'src/interfaces/user';
-import {WalletDetail} from 'src/interfaces/wallet';
-import {PostImportError} from 'src/lib/api/errors/post-import.error';
+import { ExclusiveContent } from 'components/common/Tipping/Tipping.interface';
+import { Action } from 'redux';
+import { Comment } from 'src/interfaces/comment';
+import { ExclusiveContentPost } from 'src/interfaces/exclusive';
+import { ReferenceType, SectionType, Vote } from 'src/interfaces/interaction';
+import {
+  Post,
+  PostMetric,
+  PostProps,
+  PostVisibility,
+} from 'src/interfaces/post';
+import {
+  TimelineFilterFields,
+  TimelineOrderType,
+  TimelineType,
+} from 'src/interfaces/timeline';
+import { UserProps } from 'src/interfaces/user';
+import { WalletDetail } from 'src/interfaces/wallet';
+import { PostImportError } from 'src/lib/api/errors/post-import.error';
 import * as InteractionAPI from 'src/lib/api/interaction';
-import {ListMeta} from 'src/lib/api/interfaces/base-list.interface';
-import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
+import { ListMeta } from 'src/lib/api/interfaces/base-list.interface';
+import { SortType } from 'src/lib/api/interfaces/pagination-params.interface';
 import * as PostAPI from 'src/lib/api/post';
 import i18n from 'src/locale';
-import {ThunkActionCreator} from 'src/types/thunk';
+import { ThunkActionCreator } from 'src/types/thunk';
 
 /**
  * Action Types
@@ -164,7 +173,9 @@ export type Actions =
   | BaseAction
   | AddPostsToTimeline;
 
-export const updateFilter = (filter: TimelineFilterFields): UpdateTimelineFilter => ({
+export const updateFilter = (
+  filter: TimelineFilterFields,
+): UpdateTimelineFilter => ({
   type: constants.UPDATE_TIMELINE_FILTER,
   filter,
 });
@@ -182,7 +193,9 @@ export const setPost = (post: Post): FetchDedicatedPost => ({
   post,
 });
 
-export const setDownvoting = (reference: Post | Comment | null): SetDownvoting => ({
+export const setDownvoting = (
+  reference: Post | Comment | null,
+): SetDownvoting => ({
   type: constants.SET_DOWNVOTING,
   reference,
 });
@@ -209,13 +222,19 @@ export const decreaseCommentCount = (
   section,
 });
 
-export const updateMetric = (postId: string, metric: PostMetric): UpdatePostMetric => ({
+export const updateMetric = (
+  postId: string,
+  metric: PostMetric,
+): UpdatePostMetric => ({
   type: constants.UPDATE_POST_METRIC,
   postId,
   metric,
 });
 
-export const setTimelineSort = (order: TimelineOrderType, sort?: SortType): SetTimelineSort => ({
+export const setTimelineSort = (
+  order: TimelineOrderType,
+  sort?: SortType,
+): SetTimelineSort => ({
   type: constants.SET_TIMELINE_SORT,
   order,
   sort,
@@ -235,7 +254,7 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
     dispatch(setTimelineLoading(true));
 
     const {
-      userState: {user},
+      userState: { user },
       timelineState,
     } = getState();
 
@@ -244,15 +263,24 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
       const timelineType = type ?? timelineState.type;
       const timelineFilter = filters ?? timelineState.filters;
 
-      const {data: posts, meta} = await PostAPI.getPost(page, userId, timelineType, timelineFilter);
+      const { data: posts, meta } = await PostAPI.getPost(
+        page,
+        userId,
+        timelineType,
+        timelineFilter,
+      );
 
       dispatch({
         type: constants.LOAD_TIMELINE,
         payload: {
           type,
           posts: posts.map(origin => {
-            const upvoted = origin.votes?.filter(vote => vote.userId === userId && vote.state);
-            const downvoted = origin.votes?.filter(vote => vote.userId === userId && !vote.state);
+            const upvoted = origin.votes?.filter(
+              vote => vote.userId === userId && vote.state,
+            );
+            const downvoted = origin.votes?.filter(
+              vote => vote.userId === userId && !vote.state,
+            );
 
             const post: Post = {
               ...origin,
@@ -275,10 +303,15 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
   };
 
 export const createPost: ThunkActionCreator<Actions, RootState> =
-  (post: PostProps, images: string[], callback: () => void, failedCallback: () => void) =>
+  (
+    post: PostProps,
+    images: string[],
+    callback: () => void,
+    failedCallback: () => void,
+  ) =>
   async (dispatch, getState) => {
     const {
-      userState: {user},
+      userState: { user },
     } = getState();
 
     setLoading(true);
@@ -309,7 +342,9 @@ export const createPost: ThunkActionCreator<Actions, RootState> =
         failedCallback();
       } else {
         if (axios.isAxiosError(error) && error.response?.status === 413) {
-          dispatch(setError(new Error(i18n.t('Post_Create.Error.ImageTooLarge'))));
+          dispatch(
+            setError(new Error(i18n.t('Post_Create.Error.ImageTooLarge'))),
+          );
         } else {
           dispatch(setError(new Error(i18n.t('Post_Create.Error.Default'))));
         }
@@ -330,7 +365,7 @@ export const importPost: ThunkActionCreator<Actions, RootState> =
 
     try {
       const {
-        userState: {user},
+        userState: { user },
       } = getState();
 
       if (!user) {
@@ -366,7 +401,7 @@ export const importPost: ThunkActionCreator<Actions, RootState> =
 export const updatePostPlatformUser: ThunkActionCreator<Actions, RootState> =
   (url: string) => async (dispatch, getState) => {
     const {
-      userState: {user},
+      userState: { user },
     } = getState();
 
     if (user) {
@@ -405,7 +440,7 @@ export const deletePost: ThunkActionCreator<Actions, RootState> =
 
     try {
       const {
-        userState: {user},
+        userState: { user },
       } = getState();
 
       if (!user) {
@@ -428,13 +463,14 @@ export const deletePost: ThunkActionCreator<Actions, RootState> =
   };
 
 export const editPost: ThunkActionCreator<Actions, RootState> =
-  (postId: string, payload: Partial<Post>, callback?: () => void) => async (dispatch, getState) => {
+  (postId: string, payload: Partial<Post>, callback?: () => void) =>
+  async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     try {
       const visibility = payload.visibility as PostVisibility;
       const {
-        userState: {user},
+        userState: { user },
       } = getState();
 
       if (!user) {
@@ -463,13 +499,17 @@ export const getDedicatedPost: ThunkActionCreator<Actions, RootState> =
 
     try {
       const {
-        userState: {user},
+        userState: { user },
       } = getState();
 
       const post = await PostAPI.getPostDetail(postId, user?.id);
 
-      const upvoted = post.votes?.filter(vote => vote.userId === user?.id && vote.state);
-      const downvoted = post.votes?.filter(vote => vote.userId === user?.id && !vote.state);
+      const upvoted = post.votes?.filter(
+        vote => vote.userId === user?.id && vote.state,
+      );
+      const downvoted = post.votes?.filter(
+        vote => vote.userId === user?.id && !vote.state,
+      );
 
       dispatch(
         setPost({
@@ -487,13 +527,17 @@ export const getDedicatedPost: ThunkActionCreator<Actions, RootState> =
   };
 
 export const upvote: ThunkActionCreator<Actions, RootState> =
-  (reference: Post | Comment, section?: SectionType, callback?: (vote: Vote) => void) =>
+  (
+    reference: Post | Comment,
+    section?: SectionType,
+    callback?: (vote: Vote) => void,
+  ) =>
   async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     try {
       const {
-        userState: {user},
+        userState: { user },
       } = getState();
 
       if (!user) {
@@ -519,13 +563,17 @@ export const upvote: ThunkActionCreator<Actions, RootState> =
   };
 
 export const downvote: ThunkActionCreator<Actions, RootState> =
-  (reference: Post | Comment, section?: SectionType, callback?: (vote: Vote) => void) =>
+  (
+    reference: Post | Comment,
+    section?: SectionType,
+    callback?: (vote: Vote) => void,
+  ) =>
   async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     try {
       const {
-        userState: {user},
+        userState: { user },
       } = getState();
 
       if (!user) {
@@ -553,12 +601,13 @@ export const downvote: ThunkActionCreator<Actions, RootState> =
   };
 
 export const removeVote: ThunkActionCreator<Actions, RootState> =
-  (reference: Post | Comment, callback?: () => void) => async (dispatch, getState) => {
+  (reference: Post | Comment, callback?: () => void) =>
+  async (dispatch, getState) => {
     dispatch(setLoading(true));
 
     try {
       const {
-        userState: {user},
+        userState: { user },
       } = getState();
 
       if (!user) {
@@ -595,15 +644,15 @@ export const fetchSearchedPosts: ThunkActionCreator<Actions, RootState> =
     dispatch(setTimelineLoading(true));
 
     const {
-      userState: {user},
-      timelineState: {filters},
+      userState: { user },
+      timelineState: { filters },
     } = getState();
 
     const userId = user?.id as string;
 
     try {
-      const filter = {userId: user?.id, query};
-      const {data: posts, meta} = await PostAPI.findPosts(filter, {
+      const filter = { userId: user?.id, query };
+      const { data: posts, meta } = await PostAPI.findPosts(filter, {
         page,
         orderField: filters.order,
         sort: filters.sort,
@@ -613,8 +662,12 @@ export const fetchSearchedPosts: ThunkActionCreator<Actions, RootState> =
         type: constants.LOAD_TIMELINE,
         payload: {
           posts: posts.map(origin => {
-            const upvoted = origin.votes?.filter(vote => vote.userId === userId && vote.state);
-            const downvoted = origin.votes?.filter(vote => vote.userId === userId && !vote.state);
+            const upvoted = origin.votes?.filter(
+              vote => vote.userId === userId && vote.state,
+            );
+            const downvoted = origin.votes?.filter(
+              vote => vote.userId === userId && !vote.state,
+            );
 
             const post: Post = {
               ...origin,
@@ -639,7 +692,7 @@ export const updatePostMetric: ThunkActionCreator<Actions, RootState> =
   (postId: string) => async (dispatch, getState) => {
     try {
       const {
-        userState: {user},
+        userState: { user },
       } = getState();
 
       const post = await PostAPI.getPostDetail(postId, user?.id);
@@ -653,14 +706,14 @@ export const updatePostMetric: ThunkActionCreator<Actions, RootState> =
 export const checkNewTimeline: ThunkActionCreator<Actions, RootState> =
   (callback: (diff: number) => void) => async (_, getState) => {
     const {
-      userState: {user},
-      timelineState: {filters, type, meta},
+      userState: { user },
+      timelineState: { filters, type, meta },
     } = getState();
 
     try {
       const userId = user?.id as string;
 
-      const {meta: newMeta} = await PostAPI.getPost(1, userId, type, filters);
+      const { meta: newMeta } = await PostAPI.getPost(1, userId, type, filters);
 
       const diffItemCount = newMeta.totalItemCount - meta.totalItemCount;
 
@@ -680,7 +733,7 @@ export const createExclusiveContent: ThunkActionCreator<Actions, RootState> =
   ) =>
   async (dispatch, getState) => {
     const {
-      userState: {user},
+      userState: { user },
     } = getState();
 
     setLoading(true);
@@ -700,7 +753,9 @@ export const createExclusiveContent: ThunkActionCreator<Actions, RootState> =
         failedCallback();
       } else {
         if (axios.isAxiosError(error) && error.response?.status === 413) {
-          dispatch(setError(new Error(i18n.t('Post_Create.Error.ImageTooLarge'))));
+          dispatch(
+            setError(new Error(i18n.t('Post_Create.Error.ImageTooLarge'))),
+          );
         } else {
           dispatch(setError(new Error(i18n.t('Post_Create.Error.Default'))));
         }

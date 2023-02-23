@@ -1,14 +1,14 @@
-import {ChevronDownIcon} from '@heroicons/react/outline';
-import {XIcon} from '@heroicons/react/solid';
+import { ChevronDownIcon } from '@heroicons/react/outline';
+import { XIcon } from '@heroicons/react/solid';
 
-import React, {useState, useEffect} from 'react';
-import {useCookies} from 'react-cookie';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useCookies } from 'react-cookie';
+import { useDispatch, useSelector } from 'react-redux';
 
-import {useSession} from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import getConfig from 'next/config';
 import Image from 'next/image';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
 import {
   Box,
@@ -25,23 +25,23 @@ import {
 } from '@material-ui/core';
 
 import InstanceCard from './InstanceCard';
-import {InstanceCardSkeleton} from './InstanceCardSkeleton';
+import { InstanceCardSkeleton } from './InstanceCardSkeleton';
 import useStyles from './SelectServer.styles';
 
 import clsx from 'clsx';
-import {unionBy} from 'lodash';
+import { unionBy } from 'lodash';
 import ShowIf from 'src/components/common/show-if.component';
-import {useAuthHook} from 'src/hooks/auth.hook';
-import {useInstances} from 'src/hooks/use-instances.hooks';
-import {useUserHook} from 'src/hooks/use-user.hook';
-import {ServerListProps} from 'src/interfaces/server-list';
-import {LoginType} from 'src/interfaces/session';
+import { useAuthHook } from 'src/hooks/auth.hook';
+import { useInstances } from 'src/hooks/use-instances.hooks';
+import { useUserHook } from 'src/hooks/use-user.hook';
+import { ServerListProps } from 'src/interfaces/server-list';
+import { LoginType } from 'src/interfaces/session';
 import initialize from 'src/lib/api/base';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {setServer} from 'src/reducers/server/actions';
-import {ServerState} from 'src/reducers/server/reducer';
-import {fetchNetwork} from 'src/reducers/user/actions';
+import { RootState } from 'src/reducers';
+import { setServer } from 'src/reducers/server/actions';
+import { ServerState } from 'src/reducers/server/reducer';
+import { fetchNetwork } from 'src/reducers/user/actions';
 import theme from 'src/themes/default';
 
 type SelectServerProps = {
@@ -52,7 +52,7 @@ type SelectServerProps = {
   page?: string;
 };
 
-const {publicRuntimeConfig} = getConfig();
+const { publicRuntimeConfig } = getConfig();
 
 export const COOKIE_INSTANCE_URL = 'cookie-instance-url-'.concat(
   publicRuntimeConfig.appEnvironment,
@@ -68,15 +68,18 @@ const SelectServer = ({
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const {server, apiURL} = useSelector<RootState, ServerState>(state => state.serverState);
+  const { server, apiURL } = useSelector<RootState, ServerState>(
+    state => state.serverState,
+  );
 
-  const {data: session} = useSession();
-  const {servers, getAllInstances, loading} = useInstances();
-  const {logout} = useAuthHook();
-  const {currentWallet} = useUserHook();
+  const { data: session } = useSession();
+  const { servers, getAllInstances, loading } = useInstances();
+  const { logout } = useAuthHook();
+  const { currentWallet } = useUserHook();
 
   const [, setCookies] = useCookies([COOKIE_INSTANCE_URL]);
-  const [selectedServer, setSelectedServer] = useState<ServerListProps | null>(null);
+  const [selectedServer, setSelectedServer] =
+    useState<ServerListProps | null>(null);
   const [open, setOpen] = useState(false);
 
   const classes = useStyles();
@@ -87,7 +90,7 @@ const SelectServer = ({
 
   const handleOpen = () => {
     setOpen(!open);
-    console.log({servers});
+    console.log({ servers });
   };
 
   const handleClose = () => {
@@ -98,11 +101,11 @@ const SelectServer = ({
     setSelectedServer(server);
 
     if (page === 'login') {
-      const query = {...router.query, instance: server.apiUrl};
-      await router.replace({query}, undefined, {shallow: true});
+      const query = { ...router.query, instance: server.apiUrl };
+      await router.replace({ query }, undefined, { shallow: true });
       setCookies(COOKIE_INSTANCE_URL, server.apiUrl);
 
-      initialize({apiURL: server.apiUrl});
+      initialize({ apiURL: server.apiUrl });
       dispatch(setServer(server.detail, server.apiUrl));
       dispatch(fetchNetwork());
     }
@@ -161,7 +164,7 @@ const SelectServer = ({
 
           <Box>{server?.name ?? 'Unknown Instance'}</Box>
           <SvgIcon
-            style={{marginLeft: 'auto'}}
+            style={{ marginLeft: 'auto' }}
             component={ChevronDownIcon}
             fontSize="small"
             color={'primary'}
@@ -176,7 +179,7 @@ const SelectServer = ({
         aria-labelledby="list-server-dialog">
         <DialogTitle
           id="list-server-dialog-title"
-          style={{display: 'flex', flexDirection: 'column'}}>
+          style={{ display: 'flex', flexDirection: 'column' }}>
           <div
             style={{
               display: 'flex',
@@ -184,7 +187,7 @@ const SelectServer = ({
               alignItems: 'center',
               position: 'relative',
             }}>
-            <Box style={{fontWeight: 600, fontSize: 16, textAlign: 'center'}}>
+            <Box style={{ fontWeight: 600, fontSize: 16, textAlign: 'center' }}>
               {i18n.t('Login.Options.Prompt_Select_Instance.Title')}{' '}
             </Box>
             <SvgIcon
@@ -229,7 +232,7 @@ const SelectServer = ({
         aria-labelledby="selected-server-dialog">
         <DialogTitle
           id="selected-server-dialog-title"
-          style={{display: 'flex', flexDirection: 'column'}}>
+          style={{ display: 'flex', flexDirection: 'column' }}>
           <div
             style={{
               display: 'flex',
@@ -237,7 +240,7 @@ const SelectServer = ({
               alignItems: 'center',
               position: 'relative',
             }}>
-            <Box style={{fontWeight: 600, fontSize: 16, textAlign: 'center'}}>
+            <Box style={{ fontWeight: 600, fontSize: 16, textAlign: 'center' }}>
               {i18n.t('Login.Options.Prompt_Select_Instance.Title')}{' '}
             </Box>
             <SvgIcon
@@ -255,7 +258,11 @@ const SelectServer = ({
         </DialogTitle>
         <DialogContent>
           <List>
-            <InstanceCard server={selectedServer} selected={true} onSelect={console.log} />
+            <InstanceCard
+              server={selectedServer}
+              selected={true}
+              onSelect={console.log}
+            />
             <ListItem
               style={{
                 display: 'flex',
@@ -263,14 +270,21 @@ const SelectServer = ({
                 alignItems: 'center',
                 maxWidth: 'fit-content',
               }}>
-              <Typography style={{whiteSpace: 'pre-line'}}>
-                {i18n.t('Login.Options.Prompt_Select_Instance.No_Account_Description', {
-                  instance_name: selectedServer?.detail?.name ?? '',
-                })}
+              <Typography style={{ whiteSpace: 'pre-line' }}>
+                {i18n.t(
+                  'Login.Options.Prompt_Select_Instance.No_Account_Description',
+                  {
+                    instance_name: selectedServer?.detail?.name ?? '',
+                  },
+                )}
               </Typography>
             </ListItem>
             <ListItem
-              style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
               <Button
                 onClick={() => {
                   handleCloseCheckAccountModal();
@@ -279,14 +293,18 @@ const SelectServer = ({
                 size="small"
                 variant="outlined"
                 color="secondary">
-                {i18n.t('Login.Options.Prompt_Select_Instance.No_Account_Cancel')}
+                {i18n.t(
+                  'Login.Options.Prompt_Select_Instance.No_Account_Cancel',
+                )}
               </Button>
               <Button
                 onClick={() => onLogout(selectedServer)}
                 size="small"
                 variant="contained"
                 color="primary">
-                {i18n.t('Login.Options.Prompt_Select_Instance.No_Account_Confirm')}
+                {i18n.t(
+                  'Login.Options.Prompt_Select_Instance.No_Account_Confirm',
+                )}
               </Button>
             </ListItem>
           </List>

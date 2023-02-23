@@ -2,7 +2,7 @@ version: '3'
 
 services:
   web:
-    container_name: myriad-web
+    container_name: web
     image: myriadsocial/myriad-web
     build:
       context: ../../
@@ -15,7 +15,7 @@ services:
       myriad:
         ipv4_address: 172.27.4.1
         aliases:
-          - myriad-web
+          - web
 
 networks:
   myriad:

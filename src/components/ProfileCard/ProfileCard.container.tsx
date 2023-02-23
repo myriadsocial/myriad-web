@@ -1,30 +1,41 @@
 import React from 'react';
-import {useCookies} from 'react-cookie';
-import {useSelector} from 'react-redux';
+import { useCookies } from 'react-cookie';
+import { useSelector } from 'react-redux';
 
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {ProfileCard} from './ProfileCard';
+import { ProfileCard } from './ProfileCard';
 
-import {COOKIE_INSTANCE_URL} from 'components/SelectServer';
-import {useAuthHook} from 'src/hooks/auth.hook';
-import {useUserHook} from 'src/hooks/use-user.hook';
-import {RootState} from 'src/reducers';
+import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
+import { useAuthHook } from 'src/hooks/auth.hook';
+import { useUserHook } from 'src/hooks/use-user.hook';
+import { RootState } from 'src/reducers';
 
 type Props = {
   toggleNotification: () => void;
 };
 
-export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
-  const total = useSelector<RootState, number>(state => state.notificationState.total);
+export const ProfileCardContainer: React.FC<Props> = ({
+  toggleNotification,
+}) => {
+  const total = useSelector<RootState, number>(
+    state => state.notificationState.total,
+  );
 
   const router = useRouter();
 
   const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
 
-  const {user, anonymous, alias, currentWallet, wallets, networks, userWalletAddress} =
-    useUserHook();
-  const {logout} = useAuthHook();
+  const {
+    user,
+    anonymous,
+    alias,
+    currentWallet,
+    wallets,
+    networks,
+    userWalletAddress,
+  } = useUserHook();
+  const { logout } = useAuthHook();
 
   const handleViewProfile = () => {
     if (user && !anonymous) {
@@ -41,7 +52,10 @@ export const ProfileCardContainer: React.FC<Props> = ({toggleNotification}) => {
   };
 
   const handleLoginOrCreateAccount = () => {
-    router.push({pathname: '/login', query: {instance: cookies[COOKIE_INSTANCE_URL]}});
+    router.push({
+      pathname: '/login',
+      query: { instance: cookies[COOKIE_INSTANCE_URL] },
+    });
   };
 
   const handleShowNotificationList = () => {

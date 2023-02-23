@@ -1,18 +1,18 @@
-import {ChevronDownIcon} from '@heroicons/react/outline';
+import { ChevronDownIcon } from '@heroicons/react/outline';
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-import {Grid, Typography} from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import ShowIf from '../../common/show-if.component';
-import {useStyles} from './DropdownMenu.styles';
-import {MenuOptions} from './DropdownMenu.types';
+import { useStyles } from './DropdownMenu.styles';
+import { MenuOptions } from './DropdownMenu.types';
 
-import {SortIcon} from 'src/components/atoms/Icons';
+import { SortIcon } from 'src/components/atoms/Icons';
 
 type DropdownMenuProps<T> = {
   title: string;
@@ -24,8 +24,15 @@ type DropdownMenuProps<T> = {
 };
 
 export const DropdownMenu = <T,>(props: DropdownMenuProps<T>): JSX.Element => {
-  const {title, options, onChange, disabled = false, useIconOnMobile = true, selected} = props;
-  const styles = useStyles({useIconOnMobile});
+  const {
+    title,
+    options,
+    onChange,
+    disabled = false,
+    useIconOnMobile = true,
+    selected,
+  } = props;
+  const styles = useStyles({ useIconOnMobile });
 
   const [current, setCurrent] = useState<T>(selected);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -61,7 +68,10 @@ export const DropdownMenu = <T,>(props: DropdownMenuProps<T>): JSX.Element => {
     <div className={styles.root}>
       <Grid container justifyContent="space-between" className={styles.content}>
         <div>
-          <Typography component="span" color="textSecondary" className={styles.title}>
+          <Typography
+            component="span"
+            color="textSecondary"
+            className={styles.title}>
             <ShowIf condition={title.length > 0}>{title}:&nbsp;</ShowIf>
           </Typography>
 
@@ -86,19 +96,25 @@ export const DropdownMenu = <T,>(props: DropdownMenuProps<T>): JSX.Element => {
         </IconButton>
       </Grid>
 
-      <IconButton onClick={handleClick} color="primary" aria-label="expand" className={styles.sort}>
+      <IconButton
+        onClick={handleClick}
+        color="primary"
+        aria-label="expand"
+        className={styles.sort}>
         <SortIcon />
       </IconButton>
 
       <Menu
         anchorEl={anchorEl}
         getContentAnchorEl={null}
-        anchorOrigin={{vertical: 'top', horizontal: 'right'}}
-        transformOrigin={{vertical: 'top', horizontal: 'center'}}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={Boolean(anchorEl)}
         onClose={handleClose}>
         {options.map(option => (
-          <MenuItem key={option.title} onClick={() => handleSelected(option.id)}>
+          <MenuItem
+            key={option.title}
+            onClick={() => handleSelected(option.id)}>
             {option.title}
           </MenuItem>
         ))}

@@ -1,8 +1,8 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
-import {TrendingList as TrendingListComponent} from './TrendingList';
+import { TrendingList as TrendingListComponent } from './TrendingList';
 
 export default {
   title: 'UI Revamp v2.0/components/Trending List',

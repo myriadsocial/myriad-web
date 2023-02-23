@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
-import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
 
@@ -104,7 +104,11 @@ const BannerDemo: React.FC = () => {
           right now, not audited, use at your own risk!
         </Typography>
       </div>
-      <Dialog fullWidth maxWidth="sm" open={open} aria-labelledby="dialog-title">
+      <Dialog
+        fullWidth
+        maxWidth="sm"
+        open={open}
+        aria-labelledby="dialog-title">
         <DialogTitle id="name" onClose={handleClose}>
           Myriad version
         </DialogTitle>
@@ -112,22 +116,29 @@ const BannerDemo: React.FC = () => {
           <div className={style.center}>
             <BannerImage />
           </div>
-          <Typography className={`${style.paragraph} ${style.center} ${style.mb} ${style.primary}`}>
+          <Typography
+            className={`${style.paragraph} ${style.center} ${style.mb} ${style.primary}`}>
             Great Things Take Time
           </Typography>
-          <Typography className={`${style.paragraph} ${style.mb} ${style.center}`}>
-            Welcome to the Myriad MVP (Minimum Viable Product)! The app you are currently viewing is
-            still under heavy development and is not a fully functional product yet. We’re still
-            working on connecting the blocks (blockchains?) which means the app will continuously
-            change and you may come across the occasional bug. You can subscribe to our mailing list
-            where we’ll keep you updated on the latest developments and when we’ve moved to the
-            (hopefully) bug-free Alpha version.
+          <Typography
+            className={`${style.paragraph} ${style.mb} ${style.center}`}>
+            Welcome to the Myriad MVP (Minimum Viable Product)! The app you are
+            currently viewing is still under heavy development and is not a
+            fully functional product yet. We’re still working on connecting the
+            blocks (blockchains?) which means the app will continuously change
+            and you may come across the occasional bug. You can subscribe to our
+            mailing list where we’ll keep you updated on the latest developments
+            and when we’ve moved to the (hopefully) bug-free Alpha version.
           </Typography>
-          <Typography className={`${style.paragraph} ${style.mb} ${style.center}`}>
+          <Typography
+            className={`${style.paragraph} ${style.mb} ${style.center}`}>
             Feel free to click around, and don{"'"}t forget to join our:
           </Typography>
           <div className={`${style.mb} ${style['flex-col']}`}>
-            <a href="https://t.me/myriadsocial" target="_blank" rel="noreferrer">
+            <a
+              href="https://t.me/myriadsocial"
+              target="_blank"
+              rel="noreferrer">
               <Button
                 className={style.button}
                 variant="outlined"
@@ -137,10 +148,12 @@ const BannerDemo: React.FC = () => {
               </Button>
             </a>
           </div>
-          <Typography className={`${style.paragraph} ${style.mb} ${style.center}`}>
-            Contact us if you have any queries, feedback, bug reports or if you just want to say
-            “Hi!”, we’d love to hear from you! Being a Web 3.0 Decentralized Application, any input
-            from our beloved users will help us build a better app. Thank you!
+          <Typography
+            className={`${style.paragraph} ${style.mb} ${style.center}`}>
+            Contact us if you have any queries, feedback, bug reports or if you
+            just want to say “Hi!”, we’d love to hear from you! Being a Web 3.0
+            Decentralized Application, any input from our beloved users will
+            help us build a better app. Thank you!
           </Typography>
           <div className={`${style.center}`}>
             <Button

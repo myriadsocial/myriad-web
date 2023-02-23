@@ -1,4 +1,4 @@
-import {useCallback, useState} from 'react';
+import { useCallback, useState } from 'react';
 
 export type UseToggle = (state: boolean) => [boolean, () => void];
 

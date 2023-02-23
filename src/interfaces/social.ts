@@ -1,5 +1,5 @@
-import {BaseModel} from './base.interface';
-import {People} from './people';
+import { BaseModel } from './base.interface';
+import { People } from './people';
 
 export enum SocialsEnum {
   FACEBOOK = 'facebook',

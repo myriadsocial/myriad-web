@@ -1,36 +1,39 @@
 import React from 'react';
-import {CookiesProvider} from 'react-cookie';
+import { CookiesProvider } from 'react-cookie';
 
-import {SessionProvider} from 'next-auth/react';
-import {AppProps, NextWebVitalsMetric} from 'next/app';
+import { SessionProvider } from 'next-auth/react';
+import { AppProps, NextWebVitalsMetric } from 'next/app';
 import getConfig from 'next/config';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
-import {ThemeProvider} from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/core/styles';
 
-import {SnackbarProvider} from 'notistack';
-import {I18nextProvider} from 'react-i18next';
-import {AppContextProvider} from 'src/context/AppContextProvider';
+import { SnackbarProvider } from 'notistack';
+import { I18nextProvider } from 'react-i18next';
+import { AppContextProvider } from 'src/context/AppContextProvider';
 import i18n from 'src/locale';
-import {wrapper} from 'src/store';
+import { wrapper } from 'src/store';
 import theme from 'src/themes/light-theme';
 
 const MyriadInstanceProvider = dynamic(
   () => import('src/components/common/Blockchain/MyriadInstance.provider'),
-  {ssr: true},
+  { ssr: true },
 );
 
-const {publicRuntimeConfig} = getConfig();
+const { publicRuntimeConfig } = getConfig();
 
 const App = (props: AppProps) => {
-  const {Component, pageProps} = props;
+  const { Component, pageProps } = props;
 
   return (
     <I18nextProvider i18n={i18n}>
       <Head>
-        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+        <meta
+          name="viewport"
+          content="minimum-scale=1, initial-scale=1, width=device-width"
+        />
         <meta property="og:site_name" content={publicRuntimeConfig.appName} />
       </Head>
       <ThemeProvider theme={theme}>

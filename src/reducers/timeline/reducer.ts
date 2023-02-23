@@ -1,17 +1,21 @@
-import {HYDRATE} from 'next-redux-wrapper';
+import { HYDRATE } from 'next-redux-wrapper';
 
-import {PaginationState as BasePaginationState} from '../base/state';
-import {Actions} from './actions';
+import { PaginationState as BasePaginationState } from '../base/state';
+import { Actions } from './actions';
 import * as constants from './constants';
 
 import update from 'immutability-helper';
 import * as Redux from 'redux';
-import {Comment} from 'src/interfaces/comment';
-import {SectionType} from 'src/interfaces/interaction';
-import {Post} from 'src/interfaces/post';
-import {TimelineType, TimelineOrderType, TimelineFilterFields} from 'src/interfaces/timeline';
-import {WalletDetail} from 'src/interfaces/wallet';
-import {SortType} from 'src/lib/api/interfaces/pagination-params.interface';
+import { Comment } from 'src/interfaces/comment';
+import { SectionType } from 'src/interfaces/interaction';
+import { Post } from 'src/interfaces/post';
+import {
+  TimelineType,
+  TimelineOrderType,
+  TimelineFilterFields,
+} from 'src/interfaces/timeline';
+import { WalletDetail } from 'src/interfaces/wallet';
+import { SortType } from 'src/lib/api/interfaces/pagination-params.interface';
 
 export interface TimelineFilters {
   fields?: TimelineFilterFields;
@@ -34,7 +38,7 @@ const initalState: TimelineState = {
   loading: true,
   type: TimelineType.TRENDING,
   filters: {
-    fields: {tags: []},
+    fields: { tags: [] },
     sort: 'DESC',
     order: TimelineOrderType.LATEST,
   },
@@ -61,11 +65,11 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
     }
 
     case constants.LOAD_TIMELINE: {
-      const {meta} = action.payload;
+      const { meta } = action.payload;
 
       return update(state, {
-        type: {$set: action.payload.type ?? state.type},
-        meta: {$set: meta},
+        type: { $set: action.payload.type ?? state.type },
+        meta: { $set: meta },
         filters: {
           $set: {
             ...state.filters,
@@ -83,7 +87,7 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
 
     case constants.ADD_POST_TO_TIMELINE: {
       return update(state, {
-        posts: {$unshift: [action.post]},
+        posts: { $unshift: [action.post] },
         meta: {
           $set: {
             ...state.meta,
@@ -124,8 +128,8 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
 
     case constants.CLEAR_TIMELINE: {
       return update(state, {
-        loading: {$set: true},
-        posts: {$set: []},
+        loading: { $set: true },
+        posts: { $set: [] },
         filters: {
           $set: {
             sort: 'DESC',
@@ -202,12 +206,16 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
           post.metric.downvotes = post.metric.downvotes - 1;
           post.votes = [
             // get all votes not belong to current user
-            ...post.votes.filter(prevVote => prevVote.userId !== action.vote.userId),
+            ...post.votes.filter(
+              prevVote => prevVote.userId !== action.vote.userId,
+            ),
             // append upvote
             action.vote,
           ];
         } else {
-          post.votes = post.votes ? [...post.votes, action.vote] : [action.vote];
+          post.votes = post.votes
+            ? [...post.votes, action.vote]
+            : [action.vote];
         }
       }
 
@@ -221,7 +229,8 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
 
             // get previous downvote info
             const downvote = post.votes?.find(
-              prevVote => !prevVote.state && prevVote.userId === action.vote.userId,
+              prevVote =>
+                !prevVote.state && prevVote.userId === action.vote.userId,
             );
 
             // if user has downvote, decrease count and replace with upvote
@@ -229,12 +238,16 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
               post.metric.downvotes = post.metric.downvotes - 1;
               post.votes = [
                 // get all votes not belong to current user
-                ...post.votes.filter(prevVote => prevVote.userId !== action.vote.userId),
+                ...post.votes.filter(
+                  prevVote => prevVote.userId !== action.vote.userId,
+                ),
                 // append upvote
                 action.vote,
               ];
             } else {
-              post.votes = post.votes ? [...post.votes, action.vote] : [action.vote];
+              post.votes = post.votes
+                ? [...post.votes, action.vote]
+                : [action.vote];
             }
           }
 
@@ -262,12 +275,16 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
           post.metric.upvotes = post.metric.upvotes - 1;
           post.votes = [
             // get all votes not belong to current user
-            ...post.votes.filter(prevVote => prevVote.userId !== action.vote.userId),
+            ...post.votes.filter(
+              prevVote => prevVote.userId !== action.vote.userId,
+            ),
             // append downvote
             action.vote,
           ];
         } else {
-          post.votes = post.votes ? [...post.votes, action.vote] : [action.vote];
+          post.votes = post.votes
+            ? [...post.votes, action.vote]
+            : [action.vote];
         }
       }
 
@@ -281,7 +298,8 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
 
             // get previous downvote info
             const upvote = post.votes?.find(
-              prevVote => prevVote.state && prevVote.userId === action.vote.userId,
+              prevVote =>
+                prevVote.state && prevVote.userId === action.vote.userId,
             );
 
             // if user has upvote, decrease count and replace with downvote
@@ -289,12 +307,16 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
               post.metric.upvotes = post.metric.upvotes - 1;
               post.votes = [
                 // get all votes not belong to current user
-                ...post.votes.filter(prevVote => prevVote.userId !== action.vote.userId),
+                ...post.votes.filter(
+                  prevVote => prevVote.userId !== action.vote.userId,
+                ),
                 // append downvote
                 action.vote,
               ];
             } else {
-              post.votes = post.votes ? [...post.votes, action.vote] : [action.vote];
+              post.votes = post.votes
+                ? [...post.votes, action.vote]
+                : [action.vote];
             }
           }
 
@@ -453,13 +475,13 @@ export const TimelineReducer: Redux.Reducer<TimelineState, Actions> = (
 
     case constants.TIMELINE_LOADING: {
       return update(state, {
-        loading: {$set: action.loading},
+        loading: { $set: action.loading },
       });
     }
 
     case constants.ADD_POSTS_TO_TIMELINE: {
       return update(state, {
-        posts: {$set: action.posts},
+        posts: { $set: action.posts },
       });
     }
 

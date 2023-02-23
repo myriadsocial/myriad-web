@@ -1,34 +1,34 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {shallowEqual, useDispatch, useSelector} from 'react-redux';
+import React, { useCallback, useEffect, useState } from 'react';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
 import dynamic from 'next/dynamic';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {Button, useMediaQuery} from '@material-ui/core';
-import {useTheme} from '@material-ui/core/styles';
+import { Button, useMediaQuery } from '@material-ui/core';
+import { useTheme } from '@material-ui/core/styles';
 
-import {PromptComponent} from '../atoms/Prompt/prompt.component';
+import { PromptComponent } from '../atoms/Prompt/prompt.component';
 
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {Post} from 'src/interfaces/post';
-import {User} from 'src/interfaces/user';
-import {PostImportError} from 'src/lib/api/errors/post-import.error';
-import {getCountPost} from 'src/lib/api/user';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import { Post } from 'src/interfaces/post';
+import { User } from 'src/interfaces/user';
+import { PostImportError } from 'src/lib/api/errors/post-import.error';
+import { getCountPost } from 'src/lib/api/user';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {loadUsers, searchUsers} from 'src/reducers/search/actions';
-import {createPost, importPost} from 'src/reducers/timeline/actions';
+import { RootState } from 'src/reducers';
+import { loadUsers, searchUsers } from 'src/reducers/search/actions';
+import { createPost, importPost } from 'src/reducers/timeline/actions';
 
 type PostCreateContainerType = {
   open: boolean;
   onClose: () => void;
 };
 
-const PostCreate = dynamic(() => import('./PostCreate'), {ssr: false});
+const PostCreate = dynamic(() => import('./PostCreate'), { ssr: false });
 
 export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
-  const {open, onClose} = props;
+  const { open, onClose } = props;
   const confirm = useConfirm();
   const router = useRouter();
   const dispatch = useDispatch();
@@ -36,7 +36,10 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
   const enqueueSnackbar = useEnqueueSnackbar();
 
-  const user = useSelector<RootState, User | null>(state => state.userState.user, shallowEqual);
+  const user = useSelector<RootState, User | null>(
+    state => state.userState.user,
+    shallowEqual,
+  );
   const [dialogFailedImport, setDialogFailedImport] = useState({
     open: false,
     message: '',
@@ -61,7 +64,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
     const count = response.count;
     if (count === 0) {
       confirm({
-        title: i18n.t('LiteVersion.LimitTitlePost', {count}),
+        title: i18n.t('LiteVersion.LimitTitlePost', { count }),
         description: i18n.t('LiteVersion.LimitDescPost'),
         icon: 'warning',
         confirmationText: i18n.t('General.Got_It'),
@@ -78,15 +81,18 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   };
 
   const submitPost = useCallback(
-    (post: string | Partial<Post>, attributes?: Pick<Post, 'NSFWTag' | 'visibility'>) => {
+    (
+      post: string | Partial<Post>,
+      attributes?: Pick<Post, 'NSFWTag' | 'visibility'>,
+    ) => {
       if (typeof post === 'string') {
         dispatch(
           importPost(post, attributes, (error: PostImportError | null) => {
             if (error) {
-              const {statusCode, message: postId} = error.getErrorData();
+              const { statusCode, message: postId } = error.getErrorData();
               if (statusCode === 422) {
                 return confirm({
-                  title: i18n.t('LiteVersion.LimitTitlePost', {count: 0}),
+                  title: i18n.t('LiteVersion.LimitTitlePost', { count: 0 }),
                   description: i18n.t('LiteVersion.LimitDescPost'),
                   icon: 'warning',
                   confirmationText: i18n.t('General.Got_It'),
@@ -102,10 +108,12 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
               }
               let message: string = error.message;
               if ([400, 403, 404, 409].includes(statusCode)) {
-                message = i18n.t(`Home.RichText.Prompt_Import.Error.${statusCode}`);
+                message = i18n.t(
+                  `Home.RichText.Prompt_Import.Error.${statusCode}`,
+                );
               }
 
-              setDialogFailedImport({open: true, message, postId});
+              setDialogFailedImport({ open: true, message, postId });
             } else {
               user.fullAccess
                 ? enqueueSnackbar({
@@ -131,7 +139,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
             },
             () => {
               confirm({
-                title: i18n.t('LiteVersion.LimitTitlePost', {count: 0}),
+                title: i18n.t('LiteVersion.LimitTitlePost', { count: 0 }),
                 description: i18n.t('LiteVersion.LimitDescPost'),
                 icon: 'warning',
                 confirmationText: i18n.t('General.Got_It'),
@@ -172,7 +180,9 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
         subtitle={dialogFailedImport.message}
         open={dialogFailedImport.open}
         icon="warning"
-        onCancel={() => setDialogFailedImport({...dialogFailedImport, open: false})}>
+        onCancel={() =>
+          setDialogFailedImport({ ...dialogFailedImport, open: false })
+        }>
         <div
           style={{
             marginTop: 32,
@@ -184,7 +194,9 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
             size="small"
             variant="outlined"
             color="secondary"
-            onClick={() => setDialogFailedImport({...dialogFailedImport, open: false})}>
+            onClick={() =>
+              setDialogFailedImport({ ...dialogFailedImport, open: false })
+            }>
             {i18n.t('General.OK')}
           </Button>
           {/* TODO: Added translation */}
@@ -192,7 +204,9 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
             size="small"
             variant="contained"
             color="primary"
-            onClick={() => router.push({pathname: `/post/${dialogFailedImport.postId}`})}>
+            onClick={() =>
+              router.push({ pathname: `/post/${dialogFailedImport.postId}` })
+            }>
             See post
           </Button>
         </div>

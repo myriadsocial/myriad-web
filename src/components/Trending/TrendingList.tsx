@@ -9,10 +9,10 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 
-import {useStyles} from './TrendingList.styles';
+import { useStyles } from './TrendingList.styles';
 
-import {Tag} from 'src/interfaces/experience';
-import {v4 as uuid} from 'uuid';
+import { Tag } from 'src/interfaces/experience';
+import { v4 as uuid } from 'uuid';
 
 type TrendingListProps = {
   trendings: Tag[];
@@ -21,7 +21,7 @@ type TrendingListProps = {
 };
 
 export const TrendingList: React.FC<TrendingListProps> = props => {
-  const {trendings, add = false} = props;
+  const { trendings, add = false } = props;
   const style = useStyles();
 
   return (
@@ -42,7 +42,9 @@ export const TrendingList: React.FC<TrendingListProps> = props => {
                   <Typography
                     variant="caption"
                     color="textSecondary"
-                    className={style.subtitle}>{`${trending.count} Posts`}</Typography>
+                    className={
+                      style.subtitle
+                    }>{`${trending.count} Posts`}</Typography>
                 </a>
               </Link>
             </ListItemText>

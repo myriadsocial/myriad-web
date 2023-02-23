@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
-import {Button, List, ListItem, ListItemText} from '@material-ui/core';
+import { Button, List, ListItem, ListItemText } from '@material-ui/core';
 
-import {TagOptions} from '.';
-import {useStyles} from './PostTags.styles';
+import { TagOptions } from '.';
+import { useStyles } from './PostTags.styles';
 
 import i18n from 'src/locale';
 
@@ -14,7 +14,7 @@ type PostTagsProps = {
 };
 
 export const PostTags: React.FC<PostTagsProps> = props => {
-  const {selected, options, onConfirm} = props;
+  const { selected, options, onConfirm } = props;
   const styles = useStyles();
 
   const [tags, setTags] = useState<string[]>([]);
@@ -48,7 +48,11 @@ export const PostTags: React.FC<PostTagsProps> = props => {
           </ListItem>
         ))}
       </List>
-      <Button fullWidth variant="contained" color="primary" onClick={handleConfirm}>
+      <Button
+        fullWidth
+        variant="contained"
+        color="primary"
+        onClick={handleConfirm}>
         {i18n.t('Post_Create.NSFW.Confirm')}
       </Button>
     </div>

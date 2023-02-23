@@ -1,14 +1,18 @@
-import {StorageKey} from '@polkadot/types';
-import {AnyTuple, Codec} from '@polkadot/types/types';
-import {BN, BN_ZERO} from '@polkadot/util';
+import { StorageKey } from '@polkadot/types';
+import { AnyTuple, Codec } from '@polkadot/types/types';
+import { BN, BN_ZERO } from '@polkadot/util';
 
-import {formatBalanceV2} from 'src/helpers/balance';
-import {TipsResultsProps, TipsBalanceData, TipsResult} from 'src/interfaces/blockchain-interface';
-import {Network} from 'src/interfaces/network';
-import {SocialMedia} from 'src/interfaces/social';
-import {Wallet} from 'src/interfaces/user';
-import {Server} from 'src/lib/api/server';
-import {PolkadotJs} from 'src/lib/services/polkadot-js';
+import { formatBalanceV2 } from 'src/helpers/balance';
+import {
+  TipsResultsProps,
+  TipsBalanceData,
+  TipsResult,
+} from 'src/interfaces/blockchain-interface';
+import { Network } from 'src/interfaces/network';
+import { SocialMedia } from 'src/interfaces/social';
+import { Wallet } from 'src/interfaces/user';
+import { Server } from 'src/lib/api/server';
+import { PolkadotJs } from 'src/lib/services/polkadot-js';
 
 export const usePolkadotApi = () => {
   const getClaimTipMyriad = async (
@@ -39,21 +43,29 @@ export const usePolkadotApi = () => {
     const socialTipsPromise = Promise.all(
       socials.map(social => {
         peopleIds.push(social.peopleId);
-        return PolkadotJs.claimTipBalances(provider.provider, serverId, 'people', [
-          social.peopleId,
-        ]);
+        return PolkadotJs.claimTipBalances(
+          provider.provider,
+          serverId,
+          'people',
+          [social.peopleId],
+        );
       }),
     );
 
     const [socialTips, userTips] = await Promise.all([
       socialTipsPromise,
-      PolkadotJs.claimTipBalances(provider.provider, serverId, 'user', [referenceId]),
+      PolkadotJs.claimTipBalances(provider.provider, serverId, 'user', [
+        referenceId,
+      ]),
     ]);
 
     for (const socialTip of socialTips) {
       if (socialTip.length === 0) continue;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      for (const [_, rawTipBalance] of socialTip as [StorageKey<AnyTuple>, Codec][]) {
+      for (const [_, rawTipBalance] of socialTip as [
+        StorageKey<AnyTuple>,
+        Codec,
+      ][]) {
         const tipsBalance = rawTipBalance.toHuman() as unknown as TipsResult;
         const ftIdentifier = tipsBalance.tipsBalanceInfo.ftIdentifier;
         const amount = new BN(tipsBalance.amount.replace(/,/gi, ''));
@@ -79,7 +91,10 @@ export const usePolkadotApi = () => {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    for (const [_, rawTipBalance] of userTips as [StorageKey<AnyTuple>, Codec][]) {
+    for (const [_, rawTipBalance] of userTips as [
+      StorageKey<AnyTuple>,
+      Codec,
+    ][]) {
       const tipsBalance = rawTipBalance.toHuman() as unknown as TipsResult;
       const ftIdentifier = tipsBalance.tipsBalanceInfo.ftIdentifier;
       const amount = new BN(tipsBalance.amount.replace(/,/gi, ''));
@@ -103,10 +118,15 @@ export const usePolkadotApi = () => {
 
     const currencyIds = ['native'];
     const tipsResults = network.currencies.map(currency => {
-      const {native, referenceId, decimal, symbol, image} = currency;
+      const { native, referenceId, decimal, symbol, image } = currency;
       const ftIdentifier = native && !referenceId ? 'native' : referenceId;
       const tipsBalance = data[ftIdentifier] ?? {
-        tipsBalanceInfo: {serverId, referenceType: 'user', referenceId, ftIdentifier},
+        tipsBalanceInfo: {
+          serverId,
+          referenceType: 'user',
+          referenceId,
+          ftIdentifier,
+        },
         accountId,
         amount: new BN(0),
       };
@@ -114,7 +134,8 @@ export const usePolkadotApi = () => {
       if (referenceId) currencyIds.push(referenceId);
       if (wallet?.networkId === network.id) {
         if (native) nativeDecimal = currency.decimal;
-        if (!tipsBalance.accountId && tipsBalance.amount.gt(BN_ZERO)) accountIdExist = false;
+        if (!tipsBalance.accountId && tipsBalance.amount.gt(BN_ZERO))
+          accountIdExist = false;
       }
 
       return {
@@ -129,12 +150,19 @@ export const usePolkadotApi = () => {
     let feeInfo = null;
 
     if (network.id === wallet?.networkId && !accountIdExist) {
-      const fee = await PolkadotJs.claimReferenceFee(provider.provider, wallet.id, {
-        references: {referenceType: 'people', referenceIds: peopleIds},
-        mainReferences: {referenceType: 'user', referenceIds: [referenceId]},
-        currencyIds,
-        server,
-      });
+      const fee = await PolkadotJs.claimReferenceFee(
+        provider.provider,
+        wallet.id,
+        {
+          references: { referenceType: 'people', referenceIds: peopleIds },
+          mainReferences: {
+            referenceType: 'user',
+            referenceIds: [referenceId],
+          },
+          currencyIds,
+          server,
+        },
+      );
 
       const finalTxFee = formatBalanceV2(fee.toString(), nativeDecimal, 4);
 

@@ -1,23 +1,23 @@
-import React, {useCallback, useEffect} from 'react';
-import {useSelector} from 'react-redux';
+import React, { useCallback, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
 import useConfirm from '../common/Confirm/use-confirm.hook';
-import {ProfileEditComponent} from './ProfileEdit';
+import { ProfileEditComponent } from './ProfileEdit';
 
-import {useEnqueueSnackbar} from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import {useProfileHook} from 'src/hooks/use-profile.hook';
-import {User} from 'src/interfaces/user';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import { useProfileHook } from 'src/hooks/use-profile.hook';
+import { User } from 'src/interfaces/user';
 import i18n from 'src/locale';
-import {RootState} from 'src/reducers';
-import {UserState} from 'src/reducers/user/reducer';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
 
 type Props = {
   onClose: () => void;
 };
 
-export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
+export const ProfileEditContainer: React.FC<Props> = ({ onClose }) => {
   const router = useRouter();
   const confirm = useConfirm();
   const {
@@ -32,12 +32,14 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
     usernameStatus,
     usernameAvailable,
   } = useProfileHook();
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const { user } = useSelector<RootState, UserState>(state => state.userState);
   const [profilePic, setProfilePic] = React.useState<File | undefined | string>(
     user?.profilePictureURL,
   );
 
-  const [bannerPic, setBannerPic] = React.useState<File | undefined | string>(user?.bannerImageURL);
+  const [bannerPic, setBannerPic] = React.useState<File | undefined | string>(
+    user?.bannerImageURL,
+  );
   const enqueueSnackbar = useEnqueueSnackbar();
 
   useEffect(() => {
@@ -91,7 +93,7 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
         pathname: `/profile/${user?.id}`,
       },
       undefined,
-      {shallow: true},
+      { shallow: true },
     );
   };
 
@@ -110,7 +112,9 @@ export const ProfileEditContainer: React.FC<Props> = ({onClose}) => {
   }, [redirectToProfile, user]);
 
   const getImageBannerString = () => {
-    return bannerPic instanceof File ? URL.createObjectURL(bannerPic) : user.bannerImageURL;
+    return bannerPic instanceof File
+      ? URL.createObjectURL(bannerPic)
+      : user.bannerImageURL;
   };
 
   if (!user) return null;

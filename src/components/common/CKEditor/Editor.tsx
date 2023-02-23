@@ -1,21 +1,21 @@
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import {CKEditor} from '@ckeditor/ckeditor5-react';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
 
 import React from 'react';
 
-import {EditorProps} from './Editor.interface';
-import {useStyles} from './Editor.style';
-import {CustomAdapterPlugin} from './adapters';
+import { EditorProps } from './Editor.interface';
+import { useStyles } from './Editor.style';
+import { CustomAdapterPlugin } from './adapters';
 
 import * as UserAPI from 'src/lib/api/user';
 
 export const Editor: React.FC<EditorProps> = props => {
-  const {mobile, onChange, isErrorEditor, placeholder} = props;
+  const { mobile, onChange, isErrorEditor, placeholder } = props;
 
-  const styles = useStyles({mobile, counter: true});
+  const styles = useStyles({ mobile, counter: true });
 
   const handleSearch = async (query: string) => {
-    const {data} = await UserAPI.searchUsers(1, query);
+    const { data } = await UserAPI.searchUsers(1, query);
 
     return data.map(item => {
       return {
@@ -68,17 +68,19 @@ export const Editor: React.FC<EditorProps> = props => {
   return (
     <div
       className={`${styles.root} ${styles.large}`}
-      style={{borderColor: isErrorEditor ? '#FE3333' : '#E0E0E0'}}>
+      style={{ borderColor: isErrorEditor ? '#FE3333' : '#E0E0E0' }}>
       <CKEditor
         editor={ClassicEditor}
         config={config}
         onReady={editor => {
-          editor.plugins.get('FileRepository').on('change:uploadTotal', (e, n, value) => {
-            if (value === 0) {
-              const data = editor.getData();
-              onChange(data, true);
-            }
-          });
+          editor.plugins
+            .get('FileRepository')
+            .on('change:uploadTotal', (e, n, value) => {
+              if (value === 0) {
+                const data = editor.getData();
+                onChange(data, true);
+              }
+            });
         }}
         onChange={(event, editor) => {
           const data = editor.getData();
@@ -86,7 +88,7 @@ export const Editor: React.FC<EditorProps> = props => {
           onChange(data, false);
         }}
         onError={(event, editor) => {
-          console.error({event, editor});
+          console.error({ event, editor });
         }}
       />
     </div>

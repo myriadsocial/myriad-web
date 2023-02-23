@@ -1,4 +1,4 @@
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 type NSFWTagsStyleProps = {
   selected: boolean;
@@ -10,7 +10,10 @@ export const useStyles = makeStyles<Theme, NSFWTagsStyleProps>(theme =>
       marginLeft: theme.spacing(5),
     },
     nsfw: {
-      color: props => (props.selected ? theme.status.danger.main : theme.palette.text.secondary),
+      color: props =>
+        props.selected
+          ? theme.status.danger.main
+          : theme.palette.text.secondary,
       marginRight: theme.spacing(1),
     },
     expand: {

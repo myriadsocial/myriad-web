@@ -1,4 +1,8 @@
-import {HeadingToolbar, ToolbarProps, withPlateEventProvider} from '@udecode/plate';
+import {
+  HeadingToolbar,
+  ToolbarProps,
+  withPlateEventProvider,
+} from '@udecode/plate';
 
 import React from 'react';
 

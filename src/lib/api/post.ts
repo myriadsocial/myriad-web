@@ -1,20 +1,29 @@
-import {TimelineFilters} from '../../reducers/timeline/reducer';
+import { TimelineFilters } from '../../reducers/timeline/reducer';
 import MyriadAPI from './base';
-import {PAGINATION_LIMIT} from './constants/pagination';
-import {PostImportError} from './errors/post-import.error';
-import {BaseList} from './interfaces/base-list.interface';
-import {BaseErrorResponse} from './interfaces/error-response.interface';
-import {PaginationParams, FilterParams} from './interfaces/pagination-params.interface';
+import { PAGINATION_LIMIT } from './constants/pagination';
+import { PostImportError } from './errors/post-import.error';
+import { BaseList } from './interfaces/base-list.interface';
+import { BaseErrorResponse } from './interfaces/error-response.interface';
+import {
+  PaginationParams,
+  FilterParams,
+} from './interfaces/pagination-params.interface';
 
-import axios, {AxiosError} from 'axios';
+import axios, { AxiosError } from 'axios';
 import {
   ExclusiveContent,
   ExclusiveContentWithPrices,
 } from 'components/common/Tipping/Tipping.interface';
-import {ExclusiveContentPost} from 'src/interfaces/exclusive';
-import {Post, PostProps, ImportPostProps, PostStatus, PostCustomProps} from 'src/interfaces/post';
-import {TimelineOrderType, TimelineType} from 'src/interfaces/timeline';
-import {WalletDetail} from 'src/interfaces/wallet';
+import { ExclusiveContentPost } from 'src/interfaces/exclusive';
+import {
+  Post,
+  PostProps,
+  ImportPostProps,
+  PostStatus,
+  PostCustomProps,
+} from 'src/interfaces/post';
+import { TimelineOrderType, TimelineType } from 'src/interfaces/timeline';
+import { WalletDetail } from 'src/interfaces/wallet';
 
 type PostList = BaseList<Omit<Post, keyof PostCustomProps>>;
 type PostsFilterParams = FilterParams & {
@@ -30,7 +39,12 @@ export const getPost = async (
   type: TimelineType = TimelineType.TRENDING,
   filters?: TimelineFilters,
 ): Promise<PostList> => {
-  const {sort = 'DESC', order = TimelineOrderType.LATEST, fields, query} = filters;
+  const {
+    sort = 'DESC',
+    order = TimelineOrderType.LATEST,
+    fields,
+    query,
+  } = filters;
   const filterParams: Record<string, any> = {
     include: [
       {
@@ -46,7 +60,7 @@ export const getPost = async (
       {
         relation: 'people',
         scope: {
-          include: [{relation: 'userSocialMedia'}],
+          include: [{ relation: 'userSocialMedia' }],
         },
       },
     ],
@@ -57,7 +71,7 @@ export const getPost = async (
       relation: 'votes',
       scope: {
         where: {
-          userId: {eq: userId},
+          userId: { eq: userId },
         },
       },
     });
@@ -108,13 +122,13 @@ export const getPost = async (
 
   if (query) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const {filter, timelineType, ...restParams} = Object.assign({}, params);
+    const { filter, timelineType, ...restParams } = Object.assign({}, params);
 
     params = restParams;
     params.q = query;
   }
 
-  const {data} = await MyriadAPI().request<PostList>({
+  const { data } = await MyriadAPI().request<PostList>({
     url: '/user/posts',
     method: 'GET',
     params,
@@ -161,7 +175,7 @@ export const findPosts = async (
     {
       relation: 'people',
       scope: {
-        include: [{relation: 'userSocialMedia'}],
+        include: [{ relation: 'userSocialMedia' }],
       },
     },
   ];
@@ -171,13 +185,13 @@ export const findPosts = async (
       relation: 'votes',
       scope: {
         where: {
-          userId: {eq: filter.userId},
+          userId: { eq: filter.userId },
         },
       },
     });
   }
 
-  const {data} = await MyriadAPI().request<PostList>({
+  const { data } = await MyriadAPI().request<PostList>({
     url: path,
     method: 'GET',
     params: {
@@ -204,7 +218,7 @@ export const findPosts = async (
 };
 
 export const createPost = async (values: PostProps): Promise<Post> => {
-  const {data} = await MyriadAPI().request<Post>({
+  const { data } = await MyriadAPI().request<Post>({
     url: '/user/posts',
     method: 'POST',
     data: {
@@ -218,7 +232,7 @@ export const createPost = async (values: PostProps): Promise<Post> => {
 
 export const importPost = async (values: ImportPostProps): Promise<Post> => {
   try {
-    const {data} = await MyriadAPI().request<Post>({
+    const { data } = await MyriadAPI().request<Post>({
       url: `/user/posts/import`,
       method: 'POST',
       data: values,
@@ -231,7 +245,7 @@ export const importPost = async (values: ImportPostProps): Promise<Post> => {
     return data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const {response} = error as AxiosError<BaseErrorResponse>;
+      const { response } = error as AxiosError<BaseErrorResponse>;
 
       throw new PostImportError(response.data.error);
     } else {
@@ -258,7 +272,7 @@ export const getPostDetail = async (
     {
       relation: 'people',
       scope: {
-        include: [{relation: 'userSocialMedia'}],
+        include: [{ relation: 'userSocialMedia' }],
       },
     },
   ];
@@ -268,13 +282,13 @@ export const getPostDetail = async (
       relation: 'votes',
       scope: {
         where: {
-          userId: {eq: currentUserId},
+          userId: { eq: currentUserId },
         },
       },
     });
   }
 
-  const {data} = await MyriadAPI().request<Post>({
+  const { data } = await MyriadAPI().request<Post>({
     url: `/user/posts/${id}`,
     method: 'GET',
     params: {
@@ -292,7 +306,10 @@ export const getPostDetail = async (
   return data;
 };
 
-export const editPost = async (id: string, payload: Partial<PostProps>): Promise<void> => {
+export const editPost = async (
+  id: string,
+  payload: Partial<PostProps>,
+): Promise<void> => {
   await MyriadAPI().request<Post>({
     url: `/user/posts/${id}`,
     method: 'PATCH',
@@ -307,8 +324,10 @@ export const removePost = async (postId: string): Promise<void> => {
   });
 };
 
-export const getWalletAddress = async (postId: string): Promise<WalletDetail> => {
-  const {data} = await MyriadAPI().request<WalletDetail>({
+export const getWalletAddress = async (
+  postId: string,
+): Promise<WalletDetail> => {
+  const { data } = await MyriadAPI().request<WalletDetail>({
     url: `/walletaddress/post/${postId}`,
     method: 'GET',
   });
@@ -319,7 +338,7 @@ export const getWalletAddress = async (postId: string): Promise<WalletDetail> =>
 export const createExclusiveContent = async (
   values: ExclusiveContentPost,
 ): Promise<ExclusiveContent> => {
-  const {data} = await MyriadAPI().request<ExclusiveContent>({
+  const { data } = await MyriadAPI().request<ExclusiveContent>({
     url: '/user/unlockable-contents',
     method: 'POST',
     data: {
@@ -330,8 +349,10 @@ export const createExclusiveContent = async (
   return data;
 };
 
-export const getWalletAddressExclusive = async (contentId: string): Promise<WalletDetail> => {
-  const {data} = await MyriadAPI().request<WalletDetail>({
+export const getWalletAddressExclusive = async (
+  contentId: string,
+): Promise<WalletDetail> => {
+  const { data } = await MyriadAPI().request<WalletDetail>({
     url: `/walletaddress/unlockable-content/${contentId}`,
     method: 'GET',
   });
@@ -348,7 +369,7 @@ export const getExclusiveContent = async (
     : {
         filter: {
           include: [
-            {relation: 'user'}, // showing user detail
+            { relation: 'user' }, // showing user detail
             {
               relation: 'prices', // showing prices detail
               scope: {
@@ -357,7 +378,7 @@ export const getExclusiveContent = async (
                     relation: 'currency', // showing currency detail
                     scope: {
                       include: [
-                        {relation: 'network'}, // showing network detail
+                        { relation: 'network' }, // showing network detail
                       ],
                     },
                   },
@@ -368,7 +389,7 @@ export const getExclusiveContent = async (
         },
       };
 
-  const {data} = await MyriadAPI().request<ExclusiveContentWithPrices>({
+  const { data } = await MyriadAPI().request<ExclusiveContentWithPrices>({
     url: `/user/unlockable-contents/${contentId}`,
     method: 'GET',
     params,

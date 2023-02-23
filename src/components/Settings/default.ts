@@ -1,6 +1,6 @@
-import {MenuOptions} from '../atoms/DropdownMenu';
+import { MenuOptions } from '../atoms/DropdownMenu';
 
-import {LanguageSettingType, PrivacyType} from 'src/interfaces/setting';
+import { LanguageSettingType, PrivacyType } from 'src/interfaces/setting';
 import i18n from 'src/locale';
 
 export const accountPrivacyOptions: MenuOptions<PrivacyType>[] = [

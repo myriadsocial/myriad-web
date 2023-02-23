@@ -1,5 +1,9 @@
-import React, {useState, useEffect} from 'react';
-import {FacebookShareButton, RedditShareButton, TwitterShareButton} from 'react-share';
+import React, { useState, useEffect } from 'react';
+import {
+  FacebookShareButton,
+  RedditShareButton,
+  TwitterShareButton,
+} from 'react-share';
 
 import getConfig from 'next/config';
 import Link from 'next/link';
@@ -20,12 +24,12 @@ import {
   useTheme,
 } from '@material-ui/core';
 
-import {socials} from '../atoms/Icons';
-import {Modal, ModalProps} from '../atoms/Modal';
+import { socials } from '../atoms/Icons';
+import { Modal, ModalProps } from '../atoms/Modal';
 import ShowIf from '../common/show-if.component';
-import {useStyles} from './AddSocialMedia.styles';
+import { useStyles } from './AddSocialMedia.styles';
 
-import {SocialsEnum} from 'src/interfaces/social';
+import { SocialsEnum } from 'src/interfaces/social';
 import i18n from 'src/locale';
 
 type AddSocialMediaProps = Pick<ModalProps, 'onClose' | 'open'> & {
@@ -50,7 +54,15 @@ const prefix: Record<SocialsEnum, string> = {
 };
 
 export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
-  const {social, hash, open, verifying = false, onClose, verify, onDrawer = false} = props;
+  const {
+    social,
+    hash,
+    open,
+    verifying = false,
+    onClose,
+    verify,
+    onDrawer = false,
+  } = props;
 
   const styles = useStyles();
   const theme = useTheme();
@@ -59,7 +71,7 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
   const [shared, setShared] = useState(false);
   const [termApproved, setTermApproved] = useState(false);
 
-  const {publicRuntimeConfig} = getConfig();
+  const { publicRuntimeConfig } = getConfig();
 
   const APP_URL = publicRuntimeConfig.appAuthURL ?? '';
   const message = i18n.t('SocialMedia.Modal.Msg', {
@@ -121,7 +133,9 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
       ) : (
         <div className={styles.title}>
           <Typography component="div" variant="body1">
-            {i18n.t('SocialMedia.Modal.Header', {platform: capitalize(social)})}
+            {i18n.t('SocialMedia.Modal.Header', {
+              platform: capitalize(social),
+            })}
           </Typography>
         </div>
       )}
@@ -129,9 +143,15 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
         <List dense={true}>
           <ListItem>
             <ListItemText disableTypography>
-              <Typography component="h1" variant="body1" gutterBottom className={styles.caption}>
+              <Typography
+                component="h1"
+                variant="body1"
+                gutterBottom
+                className={styles.caption}>
                 <b>{i18n.t('SocialMedia.Modal.Step_1')}</b>{' '}
-                {i18n.t('SocialMedia.Modal.Text_1', {platform: capitalize(social)})}
+                {i18n.t('SocialMedia.Modal.Text_1', {
+                  platform: capitalize(social),
+                })}
               </Typography>
 
               <TextField
@@ -242,7 +262,9 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
             <ListItemText disableTypography>
               <Typography component="h1" variant="body1" gutterBottom>
                 <b>{i18n.t('SocialMedia.Modal.Step_3')}</b>{' '}
-                {i18n.t('SocialMedia.Modal.Text_3', {platform: capitalize(social)})}
+                {i18n.t('SocialMedia.Modal.Text_3', {
+                  platform: capitalize(social),
+                })}
               </Typography>
             </ListItemText>
           </ListItem>
@@ -252,12 +274,20 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
             <ListItemText disableTypography>
               <FormControlLabel
                 onChange={() => setTermApproved(!termApproved)}
-                control={<Checkbox name="term" color="primary" className={styles.icon} />}
+                control={
+                  <Checkbox
+                    name="term"
+                    color="primary"
+                    className={styles.icon}
+                  />
+                }
                 label={
                   <Typography>
                     {i18n.t('SocialMedia.Modal.Aggre_1')}{' '}
                     <Link href="/term-of-use" passHref>
-                      <span className={styles.term}>{i18n.t('SocialMedia.Modal.Aggre_2')}</span>
+                      <span className={styles.term}>
+                        {i18n.t('SocialMedia.Modal.Aggre_2')}
+                      </span>
                     </Link>
                   </Typography>
                 }
@@ -267,11 +297,13 @@ export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
         </div>
         <Button
           onClick={handleShared}
-          disabled={!shared || !termApproved || profileUrl.length === 0 || verifying}
+          disabled={
+            !shared || !termApproved || profileUrl.length === 0 || verifying
+          }
           fullWidth
           variant="contained"
           color="primary">
-          {i18n.t('SocialMedia.Modal.OK', {platform: capitalize(social)})}
+          {i18n.t('SocialMedia.Modal.OK', { platform: capitalize(social) })}
         </Button>
       </div>
 

@@ -1,27 +1,27 @@
-import {configureStore, combineReducers} from '@reduxjs/toolkit';
-import type {PreloadedState} from '@reduxjs/toolkit';
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
+import type { PreloadedState } from '@reduxjs/toolkit';
 
-import {BalanceReducer} from './balance/reducer';
-import {BaseReducer} from './base/reducer';
-import {BlockReducer} from './block/reducer';
-import {CommentReducer} from './comment/reducer';
-import {ConfigReducer} from './config/reducer';
-import {ExchangeRateReducer} from './exchange-rate/reducer';
-import {ECReducer} from './exclusive-content/reducer';
-import {ExperienceReducer} from './experience/reducer';
-import {FriendRequestReducer} from './friend-request/reducer';
-import {FriendReducer} from './friend/reducer';
-import {ImporterReducer} from './importers/reducer';
-import {NotificationReducer} from './notification/reducer';
-import {PeopleReducer} from './people/reducer';
-import {ProfileReducer} from './profile/reducer';
-import {SearchReducer} from './search/reducer';
-import {ServerReducer} from './server/reducer';
-import {TagReducer} from './tag/reducer';
-import {TimelineReducer} from './timeline/reducer';
-import {TipSummaryReducer} from './tip-summary/reducer';
-import {TransactionReducer} from './transaction/reducer';
-import {UserReducer} from './user/reducer';
+import { BalanceReducer } from './balance/reducer';
+import { BaseReducer } from './base/reducer';
+import { BlockReducer } from './block/reducer';
+import { CommentReducer } from './comment/reducer';
+import { ConfigReducer } from './config/reducer';
+import { ExchangeRateReducer } from './exchange-rate/reducer';
+import { ECReducer } from './exclusive-content/reducer';
+import { ExperienceReducer } from './experience/reducer';
+import { FriendRequestReducer } from './friend-request/reducer';
+import { FriendReducer } from './friend/reducer';
+import { ImporterReducer } from './importers/reducer';
+import { NotificationReducer } from './notification/reducer';
+import { PeopleReducer } from './people/reducer';
+import { ProfileReducer } from './profile/reducer';
+import { SearchReducer } from './search/reducer';
+import { ServerReducer } from './server/reducer';
+import { TagReducer } from './tag/reducer';
+import { TimelineReducer } from './timeline/reducer';
+import { TipSummaryReducer } from './tip-summary/reducer';
+import { TransactionReducer } from './transaction/reducer';
+import { UserReducer } from './user/reducer';
 
 const reducers = {
   baseState: BaseReducer,

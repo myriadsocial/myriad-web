@@ -1,16 +1,16 @@
 import React from 'react';
 
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
-import {Badge, Grid} from '@material-ui/core';
+import { Badge, Grid } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 
-import {Avatar, AvatarSize} from '../atoms/Avatar';
-import {DebioNetworkIcon, NotificationIcon} from '../atoms/Icons';
-import {ProfileCardProps} from './ProfileCard.interfaces';
-import {useStyles} from './profileContent.style';
+import { Avatar, AvatarSize } from '../atoms/Avatar';
+import { DebioNetworkIcon, NotificationIcon } from '../atoms/Icons';
+import { ProfileCardProps } from './ProfileCard.interfaces';
+import { useStyles } from './profileContent.style';
 
 import ShowIf from 'components/common/show-if.component';
 import {
@@ -19,11 +19,11 @@ import {
   PolkadotNetworkIcon,
   KusamaNetworkIcon,
 } from 'src/components/atoms/Icons';
-import {Modal} from 'src/components/atoms/Modal';
-import {formatCount} from 'src/helpers/number';
-import {formatNetworkTitle, formatWalletTitle} from 'src/helpers/wallet';
-import {NetworkIdEnum} from 'src/interfaces/network';
-import {WalletTypeEnum} from 'src/interfaces/wallet';
+import { Modal } from 'src/components/atoms/Modal';
+import { formatCount } from 'src/helpers/number';
+import { formatNetworkTitle, formatWalletTitle } from 'src/helpers/wallet';
+import { NetworkIdEnum } from 'src/interfaces/network';
+import { WalletTypeEnum } from 'src/interfaces/wallet';
 import i18n from 'src/locale';
 
 export const ProfileContent: React.FC<ProfileCardProps> = props => {
@@ -38,11 +38,11 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
     handleSignOut,
     currentWallet,
   } = props;
-  const classes = useStyles({...props});
+  const classes = useStyles({ ...props });
 
   const router = useRouter();
 
-  const {wallets} = user || {wallets: []};
+  const { wallets } = user || { wallets: [] };
 
   const isWeb2Users = !wallets.length && !anonymous;
 
@@ -107,14 +107,20 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
               {user?.name || alias || ''}
             </Typography>
 
-            <Typography variant="caption" color="textSecondary" className={classes.username}>
+            <Typography
+              variant="caption"
+              color="textSecondary"
+              className={classes.username}>
               @{user?.username || 'anonymous'}
             </Typography>
           </div>
         </div>
         <ShowIf condition={Boolean(user?.username)}>
           <div className={classes.notification}>
-            <IconButton aria-label="avatar" disabled={!!alias} onClick={onShowNotificationList}>
+            <IconButton
+              aria-label="avatar"
+              disabled={!!alias}
+              onClick={onShowNotificationList}>
               <Badge
                 invisible={notificationCount === 0}
                 badgeContent={formatCount(notificationCount)}
@@ -125,7 +131,10 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
           </div>
         </ShowIf>
       </Grid>
-      <Modal title={i18n.t('Profile_Card.Account')} onClose={handleOpenProfile} open={open}>
+      <Modal
+        title={i18n.t('Profile_Card.Account')}
+        onClose={handleOpenProfile}
+        open={open}>
         <div className={classes.modal}>
           <div className={classes.purple}>
             <div className={classes.flex}>
@@ -146,19 +155,24 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
               </div>
             </div>
             <div className={classes.column}>
-              <Typography component="span">{i18n.t('Profile_Card.Network')}</Typography>
+              <Typography component="span">
+                {i18n.t('Profile_Card.Network')}
+              </Typography>
               <Typography component="span" className={classes.flex}>
                 {isWeb2Users ? (
                   `${i18n.t('Profile_Card.NotConnected')}`
                 ) : (
                   <>
-                    {getSelectedIcon()} {formatNetworkTitle(currentWallet?.network)}
+                    {getSelectedIcon()}{' '}
+                    {formatNetworkTitle(currentWallet?.network)}
                   </>
                 )}
               </Typography>
             </div>
             <div className={classes.column}>
-              <Typography component="span">{i18n.t('Profile_Card.Wallet')}</Typography>
+              <Typography component="span">
+                {i18n.t('Profile_Card.Wallet')}
+              </Typography>
               <Typography component="span" className={classes.flex}>
                 {isWeb2Users ? (
                   `${i18n.t('Profile_Card.NotConnected')}`

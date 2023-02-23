@@ -1,5 +1,5 @@
 import BaseBadge from '@material-ui/core/Badge';
-import {Theme, withStyles, createStyles} from '@material-ui/core/styles';
+import { Theme, withStyles, createStyles } from '@material-ui/core/styles';
 
 export const Badge = withStyles((theme: Theme) =>
   createStyles({

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {SvgIcon, SvgIconProps} from '@material-ui/core';
+import { SvgIcon, SvgIconProps } from '@material-ui/core';
 
 import Kusama from 'src/images/network/Kusama.svg';
 import Near24 from 'src/images/network/Near24.svg';
@@ -28,7 +28,7 @@ export const NearNetworkIcon24: React.FC<SvgIconProps> = props => {
       component={Near24}
       viewBox="0 0 24 24"
       {...props}
-      style={{width: props.width, height: props.height}}
+      style={{ width: props.width, height: props.height }}
     />
   );
 };
@@ -38,7 +38,7 @@ export const PolkadotNetworkIcon: React.FC<SvgIconProps> = props => (
     component={Polkadot24}
     viewBox="0 0 24 24"
     {...props}
-    style={{width: props.width, height: props.height}}
+    style={{ width: props.width, height: props.height }}
   />
 );
 
@@ -51,6 +51,6 @@ export const DebioNetworkIcon: React.FC<SvgIconProps> = props => (
     component={Debio}
     viewBox="0 0 40 40"
     {...props}
-    style={{width: props.width, height: props.height}}
+    style={{ width: props.width, height: props.height }}
   />
 );

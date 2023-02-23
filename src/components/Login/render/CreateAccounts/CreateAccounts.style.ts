@@ -1,4 +1,4 @@
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 export const useStyles = (isMobile: boolean) =>
   makeStyles((theme: Theme) =>
@@ -19,8 +19,13 @@ export const useStyles = (isMobile: boolean) =>
       box: {
         position: 'relative',
       },
-      textEmail: {fontSize: 14, fontWeight: 600, marginLeft: 8, color: 'black'},
-      textTitle: {fontSize: 16, color: 'black', fontWeight: 600},
+      textEmail: {
+        fontSize: 14,
+        fontWeight: 600,
+        marginLeft: 8,
+        color: 'black',
+      },
+      textTitle: { fontSize: 16, color: 'black', fontWeight: 600 },
       wrapperEmail: {
         display: 'flex',
         marginTop: 12,
@@ -37,14 +42,27 @@ export const useStyles = (isMobile: boolean) =>
         marginBottom: 24,
         marginTop: 12,
       },
-      wrapperTextInstance: {marginLeft: 8, flex: 1},
-      textSeeMore: {fontSize: 10, color: '#7342CC', fontWeight: 600, textAlign: 'right'},
-      desc: {fontSize: 12, color: '#0A0A0A'},
-      nameInstance: {fontSize: 14, fontWeight: 600, color: '#7342CC', marginBottom: 4},
-      wrapperTextCharacter: {display: 'flex', justifyContent: 'space-between'},
-      textCharacter: {fontSize: 12, color: '#757575'},
-      wrapperForm: {marginBottom: 24},
-      textSetUsername: {fontSize: 12, color: '#404040', marginBottom: 24},
+      wrapperTextInstance: { marginLeft: 8, flex: 1 },
+      textSeeMore: {
+        fontSize: 10,
+        color: '#7342CC',
+        fontWeight: 600,
+        textAlign: 'right',
+      },
+      desc: { fontSize: 12, color: '#0A0A0A' },
+      nameInstance: {
+        fontSize: 14,
+        fontWeight: 600,
+        color: '#7342CC',
+        marginBottom: 4,
+      },
+      wrapperTextCharacter: {
+        display: 'flex',
+        justifyContent: 'space-between',
+      },
+      textCharacter: { fontSize: 12, color: '#757575' },
+      wrapperForm: { marginBottom: 24 },
+      textSetUsername: { fontSize: 12, color: '#404040', marginBottom: 24 },
       condition: {
         padding: theme.spacing(2, 0),
       },

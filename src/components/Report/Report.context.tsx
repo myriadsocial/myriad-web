@@ -1,7 +1,7 @@
-import {Context, createContext} from 'react';
+import { Context, createContext } from 'react';
 
-import {Comment} from 'src/interfaces/comment';
-import {Post} from 'src/interfaces/post';
+import { Comment } from 'src/interfaces/comment';
+import { Post } from 'src/interfaces/post';
 
 export type HandleReport = {
   reference: Post | Comment | null;
@@ -14,4 +14,5 @@ const defaultContext: HandleReport = {
   open: reference => {},
 };
 
-export const ReportContext: Context<HandleReport> = createContext(defaultContext);
+export const ReportContext: Context<HandleReport> =
+  createContext(defaultContext);

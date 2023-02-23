@@ -2,10 +2,10 @@ import React from 'react';
 
 import Link from 'next/link';
 
-import {Button} from '@material-ui/core';
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import { Button } from '@material-ui/core';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-import {Empty} from 'components/atoms/Empty';
+import { Empty } from 'components/atoms/Empty';
 import i18n from 'src/locale';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -55,7 +55,11 @@ export const EmptyExperience: React.FC = () => {
         height={true}
       />
       <Link href={'/experience/create'} passHref>
-        <Button color="primary" variant="contained" size="small" className={style.button}>
+        <Button
+          color="primary"
+          variant="contained"
+          size="small"
+          className={style.button}>
           {i18n.t('Experience.List.Empty.Btn_Create')}
         </Button>
       </Link>

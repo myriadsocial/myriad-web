@@ -1,28 +1,30 @@
-import {useState} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
-import {useUpload} from 'src/hooks/use-upload.hook';
-import {User} from 'src/interfaces/user';
+import { useUpload } from 'src/hooks/use-upload.hook';
+import { User } from 'src/interfaces/user';
 import * as UserAPI from 'src/lib/api/user';
-import {RootState} from 'src/reducers';
-import {fetchProfileDetail} from 'src/reducers/profile/actions';
-import {ProfileState} from 'src/reducers/profile/reducer';
-import {updateUser} from 'src/reducers/user/actions';
-import {UserState} from 'src/reducers/user/reducer';
+import { RootState } from 'src/reducers';
+import { fetchProfileDetail } from 'src/reducers/profile/actions';
+import { ProfileState } from 'src/reducers/profile/reducer';
+import { updateUser } from 'src/reducers/user/actions';
+import { UserState } from 'src/reducers/user/reducer';
 
 export const useProfileHook = () => {
   const dispatch = useDispatch();
-  const {uploadImage} = useUpload();
+  const { uploadImage } = useUpload();
 
   const [loadingUpdate, setLoadingUpdate] = useState(false);
   const [uploadingBanner, setUploadingBanner] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [usernameStatus, setUsernameStatus] = useState(false);
-  const [usernameAvailable, setUsernameAvailable] = useState<boolean | undefined>();
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
-  const {detail: profileDetail, loading} = useSelector<RootState, ProfileState>(
-    state => state.profileState,
-  );
+  const [usernameAvailable, setUsernameAvailable] =
+    useState<boolean | undefined>();
+  const { user } = useSelector<RootState, UserState>(state => state.userState);
+  const { detail: profileDetail, loading } = useSelector<
+    RootState,
+    ProfileState
+  >(state => state.profileState);
 
   const updateProfile = (attributes: Partial<User>, callback?: () => void) => {
     setLoadingUpdate(true);
@@ -68,7 +70,7 @@ export const useProfileHook = () => {
     if (!user) return;
 
     try {
-      const {data} = await UserAPI.checkUsername(user.id);
+      const { data } = await UserAPI.checkUsername(user.id);
       if (data.length) {
         setUsernameStatus(true);
       }

@@ -1,4 +1,4 @@
-import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 //TODO: split this fx into sub-components
 export const useStyles = makeStyles((theme: Theme) =>

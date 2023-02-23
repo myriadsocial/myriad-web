@@ -1,5 +1,5 @@
-import {BaseModel} from './base.interface';
-import {User} from './user';
+import { BaseModel } from './base.interface';
+import { User } from './user';
 
 export enum FriendStatus {
   PENDING = 'pending',

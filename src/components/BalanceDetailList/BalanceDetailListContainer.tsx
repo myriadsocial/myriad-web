@@ -1,21 +1,21 @@
-import React, {useState} from 'react';
-import {useSelector} from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import NoSsr from '@material-ui/core/NoSsr';
 
-import {BalanceDetailList} from '.';
-import {BoxComponent} from '../atoms/Box';
+import { BalanceDetailList } from '.';
+import { BoxComponent } from '../atoms/Box';
 
-import {AddCoin} from 'src/components/atoms/AddCoin/AddCoin.component';
-import {RootState} from 'src/reducers';
-import {BalanceState} from 'src/reducers/balance/reducer';
-import {UserState} from 'src/reducers/user/reducer';
+import { AddCoin } from 'src/components/atoms/AddCoin/AddCoin.component';
+import { RootState } from 'src/reducers';
+import { BalanceState } from 'src/reducers/balance/reducer';
+import { UserState } from 'src/reducers/user/reducer';
 
 export const BalanceDetailListContainer: React.FC = () => {
-  const {balanceDetails, loading} = useSelector<RootState, BalanceState>(
+  const { balanceDetails, loading } = useSelector<RootState, BalanceState>(
     state => state.balanceState,
   );
-  const {user} = useSelector<RootState, UserState>(state => state.userState);
+  const { user } = useSelector<RootState, UserState>(state => state.userState);
 
   const [showAddCoin, setShowAddCoin] = useState(false);
 

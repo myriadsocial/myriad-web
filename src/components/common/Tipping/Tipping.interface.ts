@@ -1,14 +1,14 @@
-import {BN} from '@polkadot/util';
+import { BN } from '@polkadot/util';
 
-import {BalanceDetail} from 'src/interfaces/balance';
-import {Comment} from 'src/interfaces/comment';
-import {Currency} from 'src/interfaces/currency';
-import {ReferenceType} from 'src/interfaces/interaction';
-import {NetworkIdEnum} from 'src/interfaces/network';
-import {People} from 'src/interfaces/people';
-import {Post} from 'src/interfaces/post';
-import {User} from 'src/interfaces/user';
-import {WalletDetail, WalletTypeEnum} from 'src/interfaces/wallet';
+import { BalanceDetail } from 'src/interfaces/balance';
+import { Comment } from 'src/interfaces/comment';
+import { Currency } from 'src/interfaces/currency';
+import { ReferenceType } from 'src/interfaces/interaction';
+import { NetworkIdEnum } from 'src/interfaces/network';
+import { People } from 'src/interfaces/people';
+import { Post } from 'src/interfaces/post';
+import { User } from 'src/interfaces/user';
+import { WalletDetail, WalletTypeEnum } from 'src/interfaces/wallet';
 
 export interface UserWithWalletDetail extends User {
   walletDetail?: WalletDetail;

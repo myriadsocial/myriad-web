@@ -1,15 +1,20 @@
-import {Account} from 'next-auth';
-import type {Adapter, AdapterSession, AdapterUser, VerificationToken} from 'next-auth/adapters';
+import { Account } from 'next-auth';
+import type {
+  Adapter,
+  AdapterSession,
+  AdapterUser,
+  VerificationToken,
+} from 'next-auth/adapters';
 import jwt from 'next-auth/jwt';
 import getConfig from 'next/config';
 
 import axios from 'axios';
-import {isErrorWithMessage} from 'src/helpers/error';
-import {NetworkIdEnum} from 'src/interfaces/network';
+import { isErrorWithMessage } from 'src/helpers/error';
+import { NetworkIdEnum } from 'src/interfaces/network';
 import * as AuthAPI from 'src/lib/api/ext-auth';
 import * as WalletAPI from 'src/lib/api/wallet';
 
-const {serverRuntimeConfig} = getConfig();
+const { serverRuntimeConfig } = getConfig();
 
 export default function APIAdapter(): Adapter {
   function _debug(...args: Array<any>) {
@@ -36,7 +41,7 @@ export default function APIAdapter(): Adapter {
       try {
         const user = await WalletAPI.getUser();
 
-        return {id: user.id} as AdapterUser;
+        return { id: user.id } as AdapterUser;
       } catch (error) {
         if (axios.isAxiosError(error)) {
           _debug('getUser error', error.response?.data);
@@ -76,11 +81,17 @@ export default function APIAdapter(): Adapter {
       _debug('linkAccount', account);
     },
 
-    async unlinkAccount(account: Pick<Account, 'provider' | 'providerAccountId'>): Promise<void> {
+    async unlinkAccount(
+      account: Pick<Account, 'provider' | 'providerAccountId'>,
+    ): Promise<void> {
       _debug('unlinkAccount', account);
     },
 
-    async createSession({sessionToken, userId, expires}): Promise<AdapterSession> {
+    async createSession({
+      sessionToken,
+      userId,
+      expires,
+    }): Promise<AdapterSession> {
       _debug('createSession', sessionToken, userId, expires);
 
       return {} as AdapterSession;
@@ -108,7 +119,7 @@ export default function APIAdapter(): Adapter {
       }
     },
 
-    async updateSession({sessionToken}): Promise<AdapterSession | null> {
+    async updateSession({ sessionToken }): Promise<AdapterSession | null> {
       _debug('updateSession', sessionToken);
 
       return null;
@@ -118,13 +129,20 @@ export default function APIAdapter(): Adapter {
       _debug('updateSession', sessionToken);
     },
 
-    async createVerificationToken({identifier, expires, token}): Promise<VerificationToken | null> {
+    async createVerificationToken({
+      identifier,
+      expires,
+      token,
+    }): Promise<VerificationToken | null> {
       _debug('createVerificationToken', identifier, expires, token);
 
       return null;
     },
 
-    async useVerificationToken({identifier, token}): Promise<VerificationToken | null> {
+    async useVerificationToken({
+      identifier,
+      token,
+    }): Promise<VerificationToken | null> {
       _debug('createVerificationToken', identifier, token);
 
       return null;

@@ -1,14 +1,16 @@
-import {BN} from '@polkadot/util/bn';
+import { BN } from '@polkadot/util/bn';
 
-import {BalanceDetail} from '../interfaces/balance';
-import {CurrencyId} from '../interfaces/currency';
+import { BalanceDetail } from '../interfaces/balance';
+import { CurrencyId } from '../interfaces/currency';
 
 import remove from 'lodash/remove';
 
 // TODO: check if needs to be removed
 export const formatNumber = (number: number, decimals: number): number => {
   if (number.toString() === '0') return 0;
-  const result = Number((Number(number.toString()) / 10 ** decimals).toFixed(5));
+  const result = Number(
+    (Number(number.toString()) / 10 ** decimals).toFixed(5),
+  );
   return result;
 };
 
@@ -18,7 +20,9 @@ export const formatUsd = (value: number, conversion: number): string => {
   return (value * conversion).toFixed(2);
 };
 
-export const removeMyriad = (balanceDetails: BalanceDetail[]): BalanceDetail[] => {
+export const removeMyriad = (
+  balanceDetails: BalanceDetail[],
+): BalanceDetail[] => {
   const newCoins = [...balanceDetails];
 
   const myriadlessCoins = remove(newCoins, function (n) {
@@ -28,7 +32,11 @@ export const removeMyriad = (balanceDetails: BalanceDetail[]): BalanceDetail[] =
   return myriadlessCoins;
 };
 
-export const formatBalance = (value: BN, decimal: number, length = 10): number => {
+export const formatBalance = (
+  value: BN,
+  decimal: number,
+  length = 10,
+): number => {
   const MAX_DECIMAL = 16;
 
   if (value.lten(0)) return 0;
@@ -57,7 +65,11 @@ export const formatBalance = (value: BN, decimal: number, length = 10): number =
   return +balance.slice(0, length);
 };
 
-export const formatBalanceV2 = (value: string, decimal: number, length = 10): string => {
+export const formatBalanceV2 = (
+  value: string,
+  decimal: number,
+  length = 10,
+): string => {
   if (!decimal) return '0';
   if (value === '0') return '0';
 

@@ -1,4 +1,8 @@
-import {uniqueNamesGenerator, adjectives, colors} from 'unique-names-generator';
+import {
+  uniqueNamesGenerator,
+  adjectives,
+  colors,
+} from 'unique-names-generator';
 
 export const generateAnonymousUser = (): string => {
   const name: string = uniqueNamesGenerator({

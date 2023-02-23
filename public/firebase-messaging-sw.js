@@ -1,6 +1,8 @@
 /* global importScripts, firebase */
 importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js');
+importScripts(
+  'https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js',
+);
 importScripts('sw-env.js');
 
 firebase.initializeApp({
@@ -29,7 +31,7 @@ self.addEventListener('notificationclick', event => {
   }).then(function () {
     // return the promise returned by openWindow, just in case.
     // Opening any origin only works in Chrome 43+.
-    return clients.openWindow(`${NEXTAUTH_URL}/notification`);
+    return clients.openWindow(`${NEXT_PUBLIC_APP_AUTH_URL}/notification`);
   });
 
   // Now wait for the promise to keep the permission alive.
@@ -42,7 +44,7 @@ messaging.onBackgroundMessage(function (payload) {
     payload,
   );
 
-  const {title, body} = payload.data;
+  const { title, body } = payload.data;
 
   const notificationOptions = {
     body,
