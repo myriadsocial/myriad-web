@@ -21,7 +21,7 @@ import {ReferenceType} from 'src/interfaces/interaction';
 import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
 import {stringify} from 'components/PostCreate/formatter';
-import { htmlToJson, isJson } from 'src/helpers/string';
+import { htmlToJson, isJson, stringComment } from 'src/helpers/string';
 import parse from 'html-react-parser';
 
 type CommentHistoryProps = {
@@ -128,8 +128,8 @@ export const CommentHistory: React.FC<CommentHistoryProps> = props => {
               </>
             }
           />
-          <CardContent classes={{ root: styles.content }}>
-            <NodeViewer id={comment.id} text={comment.text} />
+          <CardContent classes={{root: styles.content}}>
+            <NodeViewer id={comment.id} text={stringComment(comment.text)} />
           </CardContent>
         </Card>
       </Grid>

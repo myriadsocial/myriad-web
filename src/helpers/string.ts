@@ -151,8 +151,16 @@ export const htmlToJson = (html: any) => {
   return { img, text };
 };
 
-export const stripTagHtml = (text: string): string => {
-  const tagHtml = /(<([^>]+)>)/ig;
+export const stringComment = (text: string): string => {
+  const isHtmlContent = !isJson(text);
 
-  return text.replace(tagHtml, '');
+  let comment = '';
+
+  if (isHtmlContent) {
+    comment = htmlToJson(parse(text)).text;
+  } else {
+    comment = text;
+  }
+
+  return comment;
 }
