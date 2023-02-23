@@ -15,15 +15,14 @@ import { TimeAgo } from '../common/TimeAgo.component';
 import ShowIf from '../common/show-if.component';
 import { useStyles } from './CommentHistory.style';
 
-import { NodeViewer } from 'components/common/NodeViewer';
-import {
-  deserialize,
-  formatToString,
-} from 'components/common/NodeViewer/formatter';
-import { Comment } from 'src/interfaces/comment';
-import { ReferenceType } from 'src/interfaces/interaction';
-import { User } from 'src/interfaces/user';
+import {NodeViewer} from 'components/common/NodeViewer';
+import {Comment} from 'src/interfaces/comment';
+import {ReferenceType} from 'src/interfaces/interaction';
+import {User} from 'src/interfaces/user';
 import i18n from 'src/locale';
+import {stringify} from 'components/PostCreate/formatter';
+import { htmlToJson, isJson } from 'src/helpers/string';
+import parse from 'html-react-parser';
 
 type CommentHistoryProps = {
   user?: User;
@@ -43,13 +42,18 @@ export const CommentHistory: React.FC<CommentHistoryProps> = props => {
       setPostUser(comment.post.user);
 
       if (comment.post.platform === 'myriad') {
-        const value = deserialize(comment.post.text);
-        const text = value
-          .map(element => formatToString(element))
-          .join('. ')
-          .trim();
+        const {text} = stringify(comment.post);
+        const isHtmlContent = !isJson(comment.post.text);
 
-        setText(text.slice(0, 30));
+        let description = '';
+
+        if (isHtmlContent) {
+          description = htmlToJson(parse(comment.post.text)).text;
+        } else {
+          description = text;
+        }
+
+        setText(description.slice(0, 30));
       } else {
         setText(comment.post.text.slice(0, 30));
       }

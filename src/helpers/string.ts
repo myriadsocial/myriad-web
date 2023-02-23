@@ -150,3 +150,9 @@ export const htmlToJson = (html: any) => {
 
   return { img, text };
 };
+
+export const stripTagHtml = (text: string): string => {
+  const tagHtml = /(<([^>]+)>)/ig;
+
+  return text.replace(tagHtml, '');
+}
