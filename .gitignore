@@ -83,6 +83,9 @@ prisma
 # misc
 *.pem
 
+# husky
+.husky/_
+
 # next.js
 .next
 /public/sw-env.js
