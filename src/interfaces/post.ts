@@ -46,7 +46,6 @@ export enum PostVisibility {
   FRIEND = 'friend',
   PRIVATE = 'private',
   CUSTOM = 'selected_user',
-  TIMELINE = 'timeline',
 }
 
 export type PostProps = {

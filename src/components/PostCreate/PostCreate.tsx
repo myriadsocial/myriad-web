@@ -16,7 +16,6 @@ import { Modal } from '../atoms/Modal';
 import { TabPanel } from '../atoms/TabPanel';
 import { useStyles } from './PostCreate.styles';
 import SettingVisibility from './SettingVisibility';
-import TimelineVisibility from './TimelineVisibility';
 import { menuOptions } from './default';
 import { serialize } from './formatter';
 
@@ -455,20 +454,6 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
             }}>
             <Button
               disabled={false}
-              variant="contained"
-              color="primary"
-              size="small"
-              fullWidth={isMobile}
-              onClick={handleSubmit}>
-              {i18n.t('Post_Create.Confirm')}
-            </Button>
-          </div>
-        </ShowIf>
-        <ShowIf condition={post.visibility === PostVisibility.TIMELINE}>
-          <TimelineVisibility setPost={setPost} pageType="create" />
-          <div style={{ textAlign: 'right' }}>
-            <Button
-              disabled={loading || !post.selectedTimelineIds}
               variant="contained"
               color="primary"
               size="small"

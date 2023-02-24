@@ -102,13 +102,11 @@ const ExperienceCardVisibility: React.FC<ExperienceProps> = props => {
               {`${i18n.t('Post_Create.Visibility.Label')} : `}
               {userExperience.experience.visibility === PostVisibility.FRIEND
                 ? i18n.t('Post_Create.Visibility.Friend_Only')
-                : userExperience.experience.visibility ===
-                  PostVisibility.TIMELINE
+                : ''
                 ? i18n.t('Post_Create.Visibility.Only_Me')
                 : userExperience.experience.visibility === PostVisibility.CUSTOM
                 ? i18n.t('Post_Create.Visibility.Custom')
-                : userExperience.experience.visibility ===
-                  PostVisibility.TIMELINE
+                : ''
                 ? i18n.t('Post_Create.Visibility.Timeline')
                 : i18n.t('Post_Create.Visibility.Public')}
             </Typography>

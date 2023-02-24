@@ -148,7 +148,7 @@ export const PostDetailContainer: React.FC<PostDetailContainerProps> =
                     ),
                   },
                 )
-              : updatedVisibility === Visibility.TIMELINE
+              : ''
               ? i18n.t(
                   'Post_Detail.Post_Options.Post_Visibility_Setting.Confirm_Description',
                   {

@@ -18,7 +18,6 @@ import { useStyles } from './postVisibility.styles';
 import { usePostVisibilityList } from './use-post-visibility-list.hook';
 
 import SettingVisibility from 'components/PostCreate/SettingVisibility';
-import TimelineVisibility from 'components/PostCreate/TimelineVisibility';
 import ShowIf from 'components/common/show-if.component';
 import { Experience } from 'src/interfaces/experience';
 import { Post, PostVisibility as Visibility } from 'src/interfaces/post';
@@ -112,9 +111,7 @@ export const PostVisibility: React.FC<ReportProps> = props => {
   }, [reference]);
 
   const disabledSubmit =
-    type === Visibility.TIMELINE
-      ? !selectedTimeline
-      : type !== Visibility.CUSTOM
+    type !== 'selected_user'
       ? reference.visibility === type
       : selectedUserIds.length < 1 && !isLoadingSelectedUser;
 
@@ -168,14 +165,6 @@ export const PostVisibility: React.FC<ReportProps> = props => {
         <SettingVisibility
           setPost={setSelectedUserIds}
           values={selectedUserIds}
-          page={'edit'}
-        />
-      </ShowIf>
-
-      <ShowIf condition={type === Visibility.TIMELINE}>
-        <TimelineVisibility
-          setPost={setSelectedTimeline}
-          values={selectedTimeline}
           page={'edit'}
         />
       </ShowIf>
