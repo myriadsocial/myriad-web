@@ -88,10 +88,17 @@ export const PostVisibility: React.FC<ReportProps> = props => {
   };
 
   const getSelectedTimeline = async (timelineIds: string[]) => {
+    if (!timelineIds?.[0]) return;
+
     setIsLoadingSelectedUser(true);
-    const response = await TimelineAPI.getExperienceDetail(timelineIds[0]);
-    setSelectedTimeline(response);
-    setIsLoadingSelectedUser(false);
+    try {
+      const response = await TimelineAPI.getExperienceDetail(timelineIds[0]);
+      setSelectedTimeline(response);
+    } catch {
+      // ignore
+    } finally {
+      setIsLoadingSelectedUser(false);
+    }
   };
 
   useEffect(() => {
@@ -102,10 +109,6 @@ export const PostVisibility: React.FC<ReportProps> = props => {
     if (reference.selectedTimelineIds)
       getSelectedTimeline(reference.selectedTimelineIds);
   }, [reference]);
-
-  useEffect(() => {
-    console.log({ selectedTimeline });
-  }, [selectedTimeline]);
 
   const disabledSubmit =
     type !== 'selected_user'

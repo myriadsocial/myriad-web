@@ -31,7 +31,7 @@ const moduleExports = {
     appEnvironment: process.env.NEXT_PUBLIC_APP_ENVIRONMENT ?? 'local',
     appName: process.env.NEXT_PUBLIC_APP_NAME ?? `Myriad Local`,
     appVersion: `v${process.env.NEXT_PUBLIC_APP_VERSION ?? version}`,
-    appAuthURL: process.env.NEXT_PUBLIC_APP_AUTH_URL ?? 'http://localhost:3000',
+    appAuthURL: process.env.NEXTAUTH_URL ?? 'http://localhost:3000',
     myriadSupportMail:
       process.env.NEXT_PUBLIC_MYRIAD_SUPPORT_MAIL ?? 'support@myriad.social',
     myriadWebsiteURL:
