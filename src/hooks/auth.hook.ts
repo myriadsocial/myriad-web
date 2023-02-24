@@ -178,13 +178,13 @@ export const useAuthHook = ({ redirect }: UseAuthHooksArgs = {}) => {
     }
   };
 
-  const logout = async (url?: string) => {
+  const logout = async (path = '') => {
     window.localStorage.removeItem(MYRIAD_WALLET_KEY);
     window.localStorage.removeItem('email');
 
     const promises: Promise<SignOutResponse | void>[] = [
       signOut({
-        callbackUrl: url || publicRuntimeConfig.appAuthURL,
+        callbackUrl: `${publicRuntimeConfig.appAuthURL}/${path}`,
         redirect: true,
       }),
     ];
