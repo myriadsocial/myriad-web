@@ -150,3 +150,17 @@ export const htmlToJson = (html: any) => {
 
   return { img, text };
 };
+
+export const stringComment = (text: string): string => {
+  const isHtmlContent = !isJson(text);
+
+  let comment = '';
+
+  if (isHtmlContent) {
+    comment = htmlToJson(parse(text)).text;
+  } else {
+    comment = text;
+  }
+
+  return comment;
+};

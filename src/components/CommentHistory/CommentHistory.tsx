@@ -15,11 +15,10 @@ import { TimeAgo } from '../common/TimeAgo.component';
 import ShowIf from '../common/show-if.component';
 import { useStyles } from './CommentHistory.style';
 
+import { stringify } from 'components/PostCreate/formatter';
 import { NodeViewer } from 'components/common/NodeViewer';
-import {
-  deserialize,
-  formatToString,
-} from 'components/common/NodeViewer/formatter';
+import parse from 'html-react-parser';
+import { htmlToJson, isJson, stringComment } from 'src/helpers/string';
 import { Comment } from 'src/interfaces/comment';
 import { ReferenceType } from 'src/interfaces/interaction';
 import { User } from 'src/interfaces/user';
@@ -43,13 +42,18 @@ export const CommentHistory: React.FC<CommentHistoryProps> = props => {
       setPostUser(comment.post.user);
 
       if (comment.post.platform === 'myriad') {
-        const value = deserialize(comment.post.text);
-        const text = value
-          .map(element => formatToString(element))
-          .join('. ')
-          .trim();
+        const { text } = stringify(comment.post);
+        const isHtmlContent = !isJson(comment.post.text);
 
-        setText(text.slice(0, 30));
+        let description = '';
+
+        if (isHtmlContent) {
+          description = htmlToJson(parse(comment.post.text)).text;
+        } else {
+          description = text;
+        }
+
+        setText(description.slice(0, 30));
       } else {
         setText(comment.post.text.slice(0, 30));
       }
@@ -125,7 +129,7 @@ export const CommentHistory: React.FC<CommentHistoryProps> = props => {
             }
           />
           <CardContent classes={{ root: styles.content }}>
-            <NodeViewer id={comment.id} text={comment.text} />
+            <NodeViewer id={comment.id} text={stringComment(comment.text)} />
           </CardContent>
         </Card>
       </Grid>
