@@ -70,7 +70,7 @@ export const PostVisibility: React.FC<ReportProps> = props => {
       onVisibilityChanged(
         type,
         selectedUserIds.map(item => item.id),
-        [selectedTimeline.id],
+        selectedTimeline ? [selectedTimeline.id] : [],
       );
     }
   };
