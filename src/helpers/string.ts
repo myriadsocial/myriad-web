@@ -119,13 +119,13 @@ export const htmlToJson = (html: any) => {
       }
     });
   } else {
-    if (html.type === 'figure') {
-      if (html.props.children.type === 'img') {
+    if (html?.type === 'figure') {
+      if (html?.props?.children.type === 'img') {
         const imgs = html.props.children.props.src;
         img.push(imgs);
       }
     } else {
-      if (Array.isArray(html.props.children)) {
+      if (Array.isArray(html?.props?.children)) {
         html.props.children.map(child => {
           if (child.type === 'img') {
             const imgs = child.props.src;
@@ -136,13 +136,13 @@ export const htmlToJson = (html: any) => {
           }
         });
       } else {
-        if (html.type === 'img') {
-          const imgs = html.props.children.src;
+        if (html?.type === 'img') {
+          const imgs = html?.props?.children?.src;
           img.push(imgs);
         } else {
-          if (typeof html.props.children === 'string')
+          if (typeof html?.props?.children === 'string')
             text += html.props.children;
-          else text += html.props.children.props.children;
+          else text += html?.props?.children?.props?.children;
         }
       }
     }
