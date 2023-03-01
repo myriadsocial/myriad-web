@@ -317,7 +317,8 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = props => {
             </MenuItem>
           </ShowIf>
 
-          <ShowIf condition={!isSubscribed && !isOwnExperience && !isHidden()}>
+          <ShowIf
+            condition={!isSubscribed() && !isOwnExperience && !isHidden()}>
             <MenuItem
               onClick={handleSubscribeExperience}
               fallback={handleCloseSettings}>
@@ -325,7 +326,7 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = props => {
             </MenuItem>
           </ShowIf>
 
-          <ShowIf condition={Boolean(isSubscribed) && !isOwnExperience}>
+          <ShowIf condition={Boolean(isSubscribed()) && !isOwnExperience}>
             <MenuItem
               onClick={openUnsubscribeConfirmation}
               fallback={handleCloseSettings}
