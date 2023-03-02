@@ -267,8 +267,8 @@ export class PolkadotJs implements IProvider {
       const assetId = parseInt(referenceId);
       const transferExtrinsic = isWalletAddress
         ? !referenceId
-          ? api.tx.balances.transfer(accountId, amount)
-          : api.tx.octopusAssets.transfer(assetId, accountId, amount)
+          ? api.tx.balances.transferKeepAlive(accountId, amount)
+          : api.tx.octopusAssets.transferKeepAlive(assetId, accountId, amount)
         : api.tx.tipping.sendTip(walletDetail, amount);
 
       // passing the injected account address as the first argument of signAndSend

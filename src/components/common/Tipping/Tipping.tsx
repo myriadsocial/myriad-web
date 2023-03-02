@@ -22,7 +22,6 @@ import { Button, ButtonVariant } from 'src/components/atoms/Button';
 import { CurrencyOptionComponent } from 'src/components/atoms/CurrencyOption';
 import { ListItemComponent } from 'src/components/atoms/ListItem';
 import { formatBalance } from 'src/helpers/balance';
-import { toBigNumber } from 'src/helpers/string';
 import { useWallet } from 'src/hooks/use-wallet-hook';
 import { BalanceDetail } from 'src/interfaces/balance';
 import { TipsBalanceInfo } from 'src/interfaces/blockchain-interface';
@@ -98,21 +97,24 @@ export const Tipping: React.FC<SendTipProps> = props => {
     setLoadingFee(true);
 
     const estimatedFee = new BN((0.0142 * Math.pow(10, 18)).toString());
-    const minBalance = new BN((0.01 * Math.pow(10, 18)).toString());
 
     // TODO: Fixed estimated fee
     // const {estimatedFee, minBalance} = await getEstimatedFee(receiver.walletDetail, selected);
 
     setLoadingFee(false);
     setTransactionFee(estimatedFee);
-    if (isTipping()) setAssetMinBalance(minBalance);
-    else {
-      const exclusiveContentWithPrices =
-        reference as ExclusiveContentWithPrices;
-      setAssetMinBalance(
-        toBigNumber(exclusiveContentWithPrices.prices[0].amount.toString(), 10),
-      );
+
+    if (isTipping() && currency.native) return;
+
+    let decimal = currency.decimal;
+
+    if (!isTipping()) {
+      const contentWithPrices = reference as ExclusiveContentWithPrices;
+      decimal = contentWithPrices.prices[0].currency.decimal;
     }
+
+    const minBalance = new BN((0.01 * Math.pow(10, decimal)).toString());
+    setAssetMinBalance(minBalance);
   };
 
   const handleChangeCurrency = async (selected: BalanceDetail) => {
@@ -282,6 +284,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
               length={10}
               currencyId={currency.symbol}
               onChange={handleAmountChange}
+              minInput={minInput}
             />
 
             <Summary
