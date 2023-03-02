@@ -25,13 +25,14 @@ export const FormatCurrency: React.FC<FormatCurrencyProps> = props => {
     ...restProps
   } = props;
 
-  const amount = formatBalance(value, currency.decimal, length);
+  const decimal = trxFee ? 18 : currency.decimal;
+  const symbol = trxFee ? nativeSymbol : currency.symbol;
+  const amount = formatBalance(value, decimal, length);
   const displayAmount = value.gt(BN_ZERO)
     ? amount > 0
       ? amount
       : '< 0.00000001'
     : 0;
-  const symbol = trxFee ? nativeSymbol : currency.symbol;
 
   return (
     <Typography component="span" {...restProps}>
