@@ -49,9 +49,7 @@ type ButtonUploadProps = {
 
 export const IconButtonUpload: React.FC<ButtonUploadProps> = ({
   onImageSelected,
-  accept,
   loading,
-  user,
 }) => {
   const styles = useStyles();
 
@@ -86,7 +84,7 @@ export const IconButtonUpload: React.FC<ButtonUploadProps> = ({
       />
       <div className={styles.wrapper}>
         <IconButton
-          onClick={user.fullAccess ? selectFile : undefined}
+          onClick={selectFile}
           disabled={loading}
           classes={{ root: styles.action }}
           aria-label="upload-background">
