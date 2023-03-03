@@ -10,6 +10,8 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 
+import { BN } from '@polkadot/util';
+
 import { TipClaimReference } from './Tip.claim.reference';
 import { useStyles } from './tip.style';
 
@@ -32,7 +34,8 @@ type TipProps = {
   loading: boolean;
   nativeToken: string;
   currentWallet?: UserWallet;
-  txFee?: string;
+  // FIXME: use dynamic fee
+  txFee?: BN;
   onClaim: (networkId: string, ftIdentifier: string) => void;
   onClaimAll: (networkId: string) => void;
   onHandleVerifyRef: (
