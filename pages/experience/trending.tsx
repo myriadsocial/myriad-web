@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Session } from 'next-auth';
 import { getSession } from 'next-auth/react';
@@ -9,6 +9,7 @@ import { ExperienceTab } from 'src/components/RightMenuBar/tabs/ExperienceTab';
 import { TopNavbarComponent } from 'src/components/atoms/TopNavbar';
 import { DefaultLayout } from 'src/components/template/Default/DefaultLayout';
 import { useExperienceHook } from 'src/hooks/use-experience-hook';
+import { updateSession } from 'src/lib/api/auth-link';
 import initialize from 'src/lib/api/base';
 import { healthcheck } from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
@@ -34,6 +35,11 @@ type TrendingExperiencePageProps = {
 
 const ExperiencePageComponent: React.FC<TrendingExperiencePageProps> =
   props => {
+    const { session } = props;
+    useEffect(() => {
+      if (!session?.user?.instanceURL) updateSession(session);
+    }, [session]);
+
     const { loadTrendingExperience } = useExperienceHook();
 
     React.useEffect(() => {

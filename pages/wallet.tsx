@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Session } from 'next-auth';
 import { getSession } from 'next-auth/react';
@@ -9,6 +9,7 @@ import Head from 'next/head';
 import { TopNavbarComponent } from 'src/components/atoms/TopNavbar';
 import { DefaultLayout } from 'src/components/template/Default/DefaultLayout';
 import { useUserHook } from 'src/hooks/use-user.hook';
+import { updateSession } from 'src/lib/api/auth-link';
 import { initialize } from 'src/lib/api/base';
 import { healthcheck } from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
@@ -40,6 +41,11 @@ type WalletPageProps = {
 };
 
 const Wallet: React.FC<WalletPageProps> = props => {
+  const { session } = props;
+  useEffect(() => {
+    if (!session?.user?.instanceURL) updateSession(session);
+  }, [session]);
+
   const { user } = useUserHook();
 
   if (!user) return null;
