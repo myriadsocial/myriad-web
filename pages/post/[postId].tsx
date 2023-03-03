@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/nextjs';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 
 import { Session } from 'next-auth';
@@ -22,6 +22,7 @@ import { generateAnonymousUser } from 'src/helpers/auth';
 import { htmlToJson, isJson } from 'src/helpers/string';
 import { Post } from 'src/interfaces/post';
 import { User } from 'src/interfaces/user';
+import { updateSession } from 'src/lib/api/auth-link';
 import { initialize } from 'src/lib/api/base';
 import { healthcheck } from 'src/lib/api/healthcheck';
 import * as PostAPI from 'src/lib/api/post';
@@ -66,7 +67,10 @@ type PostPageParams = {
 };
 
 const PostPage: React.FC<PostPageProps> = props => {
-  const { removed, title, description, image } = props;
+  const { removed, title, description, image, session } = props;
+  useEffect(() => {
+    if (!session?.user?.instanceURL) updateSession(session);
+  }, [session]);
 
   const router = useRouter();
   const user = useSelector<RootState, User>(

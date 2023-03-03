@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Session } from 'next-auth';
 import { getSession } from 'next-auth/react';
@@ -15,6 +15,7 @@ import { AppStatusBanner } from 'src/components/common/Banner';
 import { TippingSuccess } from 'src/components/common/Tipping/render/Tipping.success';
 import { DefaultLayout } from 'src/components/template/Default/DefaultLayout';
 import { generateAnonymousUser } from 'src/helpers/auth';
+import { updateSession } from 'src/lib/api/auth-link';
 import { initialize } from 'src/lib/api/base';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import { healthcheck } from 'src/lib/api/healthcheck';
@@ -48,8 +49,12 @@ type HomePageProps = {
 };
 
 const Index: React.FC<HomePageProps> = props => {
-  const { title, description, image } = props;
+  const { session, title, description, image } = props;
   const router = useRouter();
+  useEffect(() => {
+    if (!session?.user?.instanceURL) updateSession(session);
+  }, [session]);
+
   return (
     <>
       <Head>

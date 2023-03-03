@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Session } from 'next-auth';
 import { getSession } from 'next-auth/react';
@@ -13,6 +13,7 @@ import {
 } from 'src/components/Settings';
 import { TopNavbarComponent } from 'src/components/atoms/TopNavbar';
 import { DefaultLayout } from 'src/components/template/Default/DefaultLayout';
+import { updateSession } from 'src/lib/api/auth-link';
 import { initialize } from 'src/lib/api/base';
 import { healthcheck } from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
@@ -38,6 +39,10 @@ type SettingPageProps = {
 
 const Settings: React.FC<SettingPageProps> = props => {
   const { query } = useRouter();
+  const { session } = props;
+  useEffect(() => {
+    if (!session?.user?.instanceURL) updateSession(session);
+  }, [session]);
 
   const settings = useSettingList();
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import { Session } from 'next-auth';
@@ -9,6 +9,7 @@ import Head from 'next/head';
 
 import { TopNavbarComponent } from 'src/components/atoms/TopNavbar';
 import { DefaultLayout } from 'src/components/template/Default/DefaultLayout';
+import { updateSession } from 'src/lib/api/auth-link';
 import { initialize } from 'src/lib/api/base';
 import { healthcheck } from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
@@ -45,6 +46,10 @@ const Socials: React.FC<SocialPageProps> = props => {
   const { socials } = useSelector<RootState, UserState>(
     state => state.userState,
   );
+  const { session } = props;
+  useEffect(() => {
+    if (!session?.user?.instanceURL) updateSession(session);
+  }, [session]);
 
   return (
     <DefaultLayout isOnProfilePage={false} {...props}>

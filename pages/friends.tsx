@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import { Session } from 'next-auth';
@@ -11,6 +11,7 @@ import { TopNavbarComponent } from 'src/components/atoms/TopNavbar';
 import { TippingSuccess } from 'src/components/common/Tipping/render/Tipping.success';
 import { DefaultLayout } from 'src/components/template/Default/DefaultLayout';
 import { UserMetric } from 'src/interfaces/user';
+import { updateSession } from 'src/lib/api/auth-link';
 import { initialize } from 'src/lib/api/base';
 import { healthcheck } from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
@@ -40,6 +41,10 @@ const Friends: React.FC<FriendsPageProps> = props => {
   const metric = useSelector<RootState, UserMetric | undefined>(
     state => state.userState.user?.metric,
   );
+  const { session } = props;
+  useEffect(() => {
+    if (!session?.user?.instanceURL) updateSession(session);
+  }, [session]);
 
   return (
     <DefaultLayout isOnProfilePage={false} {...props}>
