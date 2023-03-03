@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/nextjs';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Session } from 'next-auth';
 import { getSession } from 'next-auth/react';
@@ -16,6 +16,7 @@ import { ExperiencePreviewContainer } from 'src/components/ExperiencePreview/Exp
 import { DefaultLayout } from 'src/components/template/Default/DefaultLayout';
 import { generateAnonymousUser } from 'src/helpers/auth';
 import { User } from 'src/interfaces/user';
+import { updateSession } from 'src/lib/api/auth-link';
 import { initialize } from 'src/lib/api/base';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import { healthcheck } from 'src/lib/api/healthcheck';
@@ -47,7 +48,10 @@ type ExperiencePageProps = {
 };
 
 const PreviewExperience: React.FC<ExperiencePageProps> = props => {
-  const { title, image, description, hidden } = props;
+  const { title, image, description, hidden, session } = props;
+  useEffect(() => {
+    if (!session?.user?.instanceURL) updateSession(session);
+  }, [session]);
 
   const router = useRouter();
 

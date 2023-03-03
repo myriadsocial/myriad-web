@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/nextjs';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Session } from 'next-auth';
 import { getSession } from 'next-auth/react';
@@ -10,6 +10,7 @@ import Head from 'next/head';
 import { ExperienceCloneContainer } from 'src/components/ExperiencePreview/ExperienceClone.container';
 import { DefaultLayout } from 'src/components/template/Default/DefaultLayout';
 import { User } from 'src/interfaces/user';
+import { updateSession } from 'src/lib/api/auth-link';
 import { initialize } from 'src/lib/api/base';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import { healthcheck } from 'src/lib/api/healthcheck';
@@ -35,6 +36,11 @@ type CloneExperiencePageProps = {
 };
 
 const CloneExperience: React.FC<CloneExperiencePageProps> = props => {
+  const { session } = props;
+  useEffect(() => {
+    if (!session?.user?.instanceURL) updateSession(session);
+  }, [session]);
+
   return (
     <DefaultLayout isOnProfilePage={false} {...props}>
       <Head>

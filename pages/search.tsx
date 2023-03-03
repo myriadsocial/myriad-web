@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import { Session } from 'next-auth';
@@ -9,6 +9,7 @@ import Head from 'next/head';
 import { SearchResultContainer } from 'src/components/Search/SearchResultContainer';
 import { TippingSuccess } from 'src/components/common/Tipping/render/Tipping.success';
 import { DefaultLayout } from 'src/components/template/Default/DefaultLayout';
+import { updateSession } from 'src/lib/api/auth-link';
 import { initialize } from 'src/lib/api/base';
 import { healthcheck } from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
@@ -42,6 +43,11 @@ const Search: React.FC<SearchProps> = props => {
   const { user, anonymous } = useSelector<RootState, UserState>(
     state => state.userState,
   );
+
+  const { session } = props;
+  useEffect(() => {
+    if (!session?.user?.instanceURL) updateSession(session);
+  }, [session]);
 
   if (!user && !anonymous) return null;
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import { Session } from 'next-auth';
@@ -15,6 +15,7 @@ import { DefaultLayout } from 'src/components/template/Default/DefaultLayout';
 import { Experience } from 'src/interfaces/experience';
 import { People } from 'src/interfaces/people';
 import { User } from 'src/interfaces/user';
+import { updateSession } from 'src/lib/api/auth-link';
 import { initialize } from 'src/lib/api/base';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import { healthcheck } from 'src/lib/api/healthcheck';
@@ -53,7 +54,10 @@ type TopicsQueryProps = {
 };
 
 const Topic: React.FC<TopicPageProps> = props => {
-  const { experience } = props;
+  const { experience, session } = props;
+  useEffect(() => {
+    if (!session?.user?.instanceURL) updateSession(session);
+  }, [session]);
   const { query } = useRouter();
 
   const { type, tag } = query as TopicsQueryProps;

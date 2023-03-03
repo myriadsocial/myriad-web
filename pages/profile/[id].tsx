@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/nextjs';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Session } from 'next-auth';
 import { getSession } from 'next-auth/react';
@@ -14,6 +14,7 @@ import { TopNavbarComponent } from 'components/atoms/TopNavbar';
 import { TippingSuccess } from 'src/components/common/Tipping/render/Tipping.success';
 import { DefaultLayout } from 'src/components/template/Default/DefaultLayout';
 import { generateAnonymousUser } from 'src/helpers/auth';
+import { updateSession } from 'src/lib/api/auth-link';
 import { initialize } from 'src/lib/api/base';
 import { healthcheck } from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
@@ -50,7 +51,10 @@ type ProfilePageProps = {
 const { publicRuntimeConfig } = getConfig();
 
 const ProfilePageComponent: React.FC<ProfilePageProps> = props => {
-  const { title, description, image, isBanned } = props;
+  const { title, description, image, isBanned, session } = props;
+  useEffect(() => {
+    if (!session?.user?.instanceURL) updateSession(session);
+  }, [session]);
 
   const router = useRouter();
 

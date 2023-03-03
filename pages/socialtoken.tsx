@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Session } from 'next-auth';
 import { getSession } from 'next-auth/react';
@@ -8,6 +8,7 @@ import Head from 'next/head';
 import SocialTokenContainer from 'src/components/SocialToken/SocialToken.container';
 import { TopNavbarComponent } from 'src/components/atoms/TopNavbar';
 import { DefaultLayout } from 'src/components/template/Default/DefaultLayout';
+import { updateSession } from 'src/lib/api/auth-link';
 import { initialize } from 'src/lib/api/base';
 import { healthcheck } from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
@@ -32,6 +33,10 @@ type SocialTokenPageProps = {
 };
 
 const SocialToken: React.FC<SocialTokenPageProps> = props => {
+  const { session } = props;
+  useEffect(() => {
+    if (!session?.user?.instanceURL) updateSession(session);
+  }, [session]);
   return (
     <DefaultLayout isOnProfilePage={false} {...props}>
       <Head>
