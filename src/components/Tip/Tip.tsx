@@ -23,6 +23,7 @@ import {
   KusamaNetworkIcon,
 } from 'src/components/atoms/Icons';
 import ShowIf from 'src/components/common/show-if.component';
+import { formatBalance } from 'src/helpers/balance';
 import { TipsResult } from 'src/interfaces/blockchain-interface';
 import { Network } from 'src/interfaces/network';
 import { UserWallet } from 'src/interfaces/user';
@@ -123,7 +124,7 @@ export const Tip: React.FC<TipProps> = props => {
           tipsResults={tips}
           onHandleVerifyRef={onHandleVerifyRef}
           token={nativeToken}
-          txFee={txFee}
+          txFee={formatBalance(txFee, 18, 10).toString()}
         />
       );
     }
