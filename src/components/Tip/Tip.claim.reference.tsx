@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import dynamic from 'next/dynamic';
 
 import { Typography, Button } from '@material-ui/core';
 
-import { BN, BN_ZERO } from '@polkadot/util';
-
 import { useStyles } from './tip.style';
 
-import { formatBalance } from 'src/helpers/balance';
 import { TipsResult } from 'src/interfaces/blockchain-interface';
 import i18n from 'src/locale';
 
@@ -19,7 +16,7 @@ const TipTotal = dynamic(() => import('../TotalTips/TipTotal'), {
 type TipClaimReferenceProps = {
   networkId: string;
   token?: string;
-  txFee?: BN;
+  txFee?: string;
   tipsResults: TipsResult[];
   onHandleVerifyRef: (
     networkId: string,
@@ -31,13 +28,12 @@ export const TipClaimReference: React.FC<TipClaimReferenceProps> = ({
   networkId,
   tipsResults,
   onHandleVerifyRef,
-  txFee = BN_ZERO,
+  txFee = '0.00',
   token = '',
 }) => {
   const style = useStyles();
   const [isShowModalTotalTips, setIsShowModalTotalTips] =
     useState<boolean>(false);
-  const [fee, setFee] = useState<number>(0);
 
   const onVerifyReference = () => {
     const tip = tipsResults.find(
@@ -47,13 +43,6 @@ export const TipClaimReference: React.FC<TipClaimReferenceProps> = ({
 
     onHandleVerifyRef(networkId, nativeBalance);
   };
-
-  useEffect(() => {
-    // FIXME: use dynamic fee
-    if (txFee) {
-      setFee(formatBalance(txFee, 18, 10));
-    }
-  }, []);
 
   return (
     <>
@@ -66,7 +55,7 @@ export const TipClaimReference: React.FC<TipClaimReferenceProps> = ({
           className={style.desc}
           color="textPrimary"
           component="p">
-          {i18n.t('Wallet.Tip.Reference.Desc', { fee, token })}
+          {i18n.t('Wallet.Tip.Reference.Desc', { txFee, token })}
         </Typography>
         <Button
           onClick={onVerifyReference}
