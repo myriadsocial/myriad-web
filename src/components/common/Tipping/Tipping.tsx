@@ -47,7 +47,8 @@ export const Tipping: React.FC<SendTipProps> = props => {
   } = props;
 
   const classes = useStyles();
-  const { isSignerLoading, sendTip, payUnlockableContent } = useWallet();
+  const { isSignerLoading, sendTip, payUnlockableContent, getEstimatedFee } =
+    useWallet();
 
   const { currentWallet, currencies } = useSelector<RootState, UserState>(
     state => state.userState,
@@ -101,18 +102,13 @@ export const Tipping: React.FC<SendTipProps> = props => {
 
     setLoadingFee(true);
 
-    const estimatedFee = new BN((0.0142 * Math.pow(10, 18)).toString());
-
-    // TODO: Fixed estimated fee
-    // const {estimatedFee, minBalance} = await getEstimatedFee(receiver.walletDetail, selected);
+    const { estimatedFee, minBalance } = await getEstimatedFee(
+      receiver.walletDetail,
+      selected,
+    );
 
     setLoadingFee(false);
     setTransactionFee(estimatedFee);
-
-    if (isTipping && currency.native) return;
-
-    const decimal = currency.decimal;
-    const minBalance = new BN((0.01 * Math.pow(10, decimal)).toString());
     setAssetMinBalance(minBalance);
   };
 
@@ -124,8 +120,6 @@ export const Tipping: React.FC<SendTipProps> = props => {
     setAmount(INITIAL_AMOUNT);
     setTransactionFee(INITIAL_AMOUNT);
     setAssetMinBalance(BN_ZERO);
-
-    calculateTransactionFee(selected);
   };
 
   const handleAmountChange = (amount: BN, valid: boolean) => {

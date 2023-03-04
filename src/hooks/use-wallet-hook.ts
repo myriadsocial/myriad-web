@@ -25,7 +25,7 @@ export const useWallet = () => {
   const getEstimatedFee = async (
     walletDetail: WalletDetail,
     currency: BalanceDetail,
-  ): Promise<{ estimatedFee: BN | null; minBalance: BN | null }> => {
+  ): Promise<{ estimatedFee: BN; minBalance: BN }> => {
     setIsFetchingFee(true);
 
     try {
