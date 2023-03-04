@@ -1,5 +1,3 @@
-import { StorageKey } from '@polkadot/types';
-import { AnyTuple, Codec } from '@polkadot/types/types';
 import { BN, BN_ZERO } from '@polkadot/util';
 
 import { formatBalanceV2 } from 'src/helpers/balance';
@@ -62,10 +60,7 @@ export const usePolkadotApi = () => {
     for (const socialTip of socialTips) {
       if (socialTip.length === 0) continue;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      for (const [_, rawTipBalance] of socialTip as [
-        StorageKey<AnyTuple>,
-        Codec,
-      ][]) {
+      for (const [_, rawTipBalance] of socialTip) {
         const tipsBalance = rawTipBalance.toHuman() as unknown as TipsResult;
         const ftIdentifier = tipsBalance.tipsBalanceInfo.ftIdentifier;
         const amount = new BN(tipsBalance.amount.replace(/,/gi, ''));
@@ -91,10 +86,7 @@ export const usePolkadotApi = () => {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    for (const [_, rawTipBalance] of userTips as [
-      StorageKey<AnyTuple>,
-      Codec,
-    ][]) {
+    for (const [_, rawTipBalance] of userTips) {
       const tipsBalance = rawTipBalance.toHuman() as unknown as TipsResult;
       const ftIdentifier = tipsBalance.tipsBalanceInfo.ftIdentifier;
       const amount = new BN(tipsBalance.amount.replace(/,/gi, ''));

@@ -135,6 +135,7 @@ export const TipContainer: React.FC = () => {
           break;
         }
 
+        case NetworkIdEnum.DEBIO:
         case NetworkIdEnum.MYRIAD: {
           checkExtensionInstalled();
           setTipsBalanceInfo(tipsBalanceInfo);
@@ -226,6 +227,7 @@ export const TipContainer: React.FC = () => {
       if (!isShow(network)) return;
 
       switch (network.id) {
+        case NetworkIdEnum.DEBIO:
         case NetworkIdEnum.MYRIAD:
         case NetworkIdEnum.NEAR:
           return (

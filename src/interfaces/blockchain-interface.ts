@@ -225,7 +225,6 @@ export interface TipsResultsProps {
 }
 
 export interface FeeInfo {
-  // FIXME: use dynamic fee
-  formattedTrxFee: BN;
+  formattedTrxFee: string;
   trxFee: string;
 }

@@ -1,10 +1,10 @@
 import { WsProvider, ApiPromise } from '@polkadot/api';
+import '@polkadot/api-augment';
 import { SubmittableExtrinsicFunction } from '@polkadot/api/types';
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 import { Keyring } from '@polkadot/keyring';
-import { StorageKey } from '@polkadot/types';
+import '@polkadot/rpc-augment';
 import { AssetBalance, AssetDetails } from '@polkadot/types/interfaces';
-import { AnyTuple, Codec } from '@polkadot/types/types';
 import { numberToHex } from '@polkadot/util';
 import { BN, BN_ZERO } from '@polkadot/util';
 
@@ -101,7 +101,7 @@ export class PolkadotJs implements IProvider {
     referenceType: string,
     referenceIds: string[],
     pageSize = 10,
-  ): Promise<[StorageKey<AnyTuple>, Codec][]> {
+  ) {
     try {
       const result =
         await api.query.tipping.tipsBalanceByReference.entriesPaged({
@@ -206,7 +206,7 @@ export class PolkadotJs implements IProvider {
 
     if (!this.accountId) return { balance: '0' };
     if (referenceId) {
-      const result = await this.provider.query.octopusAssets.account<Codec>(
+      const result = await this.provider.query.octopusAssets.account(
         referenceId,
         this.accountId,
       );
@@ -445,9 +445,7 @@ export class PolkadotJs implements IProvider {
   ): Promise<EstimateFeeResponseProps> {
     const assetId = parseInt(ftIdentifier);
     if (isNaN(assetId)) return { partialFee: BN_ZERO };
-    const result = await this.provider.query.octopusAssets.asset<Codec>(
-      assetId,
-    );
+    const result = await this.provider.query.octopusAssets.asset(assetId);
     if (result.isEmpty) return { partialFee: BN_ZERO };
     const assetDetails = result.toHuman() as unknown as AssetDetails;
     return {
@@ -480,23 +478,19 @@ export class PolkadotJs implements IProvider {
     previousFree: BN,
     callback: (change: BN) => void,
   ) {
-    this.provider.query.octopusAssets.account(
-      assetId,
-      account,
-      (result: Codec) => {
-        if (result.isEmpty) return;
-        const assetBalance = result.toHuman() as unknown as AssetBalance;
-        const balance = assetBalance.balance.toString().replace(/,/gi, '');
-        // Calculate the delta
-        const change = new BN(balance).sub(previousFree);
-        // Only display positive value changes (Since we are pulling `previous` above already,
-        // the initial balance change will also be zero)
-        if (!change.isZero()) {
-          console.log(`New balance change of ${change}`);
-          callback(change);
-        }
-      },
-    );
+    this.provider.query.octopusAssets.account(assetId, account, result => {
+      if (result.isEmpty) return;
+      const assetBalance = result.toHuman() as unknown as AssetBalance;
+      const balance = assetBalance.balance.toString().replace(/,/gi, '');
+      // Calculate the delta
+      const change = new BN(balance).sub(previousFree);
+      // Only display positive value changes (Since we are pulling `previous` above already,
+      // the initial balance change will also be zero)
+      if (!change.isZero()) {
+        console.log(`New balance change of ${change}`);
+        callback(change);
+      }
+    });
   }
 
   async payUnlockableContent(
