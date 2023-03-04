@@ -22,7 +22,6 @@ export type TippingOptions = {
   receiver: UserWithWalletDetail | PeopleWithWalletDetail;
   reference: Post | Comment | User | ExclusiveContentWithPrices;
   referenceType: ReferenceType;
-  currencyContent?: Currency;
   referenceId?: string;
 };
 export interface TippingProviderProps {
@@ -40,7 +39,6 @@ export type SendTipProps = {
   defaultCurrency: BalanceDetail;
   balances: BalanceDetail[];
   currentNetwork: NetworkIdEnum;
-  currencyContent?: Currency;
   onSuccess: (
     currency: BalanceDetail,
     explorerURL: string,

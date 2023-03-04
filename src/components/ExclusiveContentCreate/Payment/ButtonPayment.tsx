@@ -99,7 +99,6 @@ const ButtonPayment = ({
           receiver: { ...exclusiveDetail?.user, walletDetail: walletAddress },
           reference: exclusiveDetail,
           referenceType: ReferenceType.EXCLUSIVE_CONTENT,
-          currencyContent: exclusiveDetail.prices[0]?.currency,
           referenceId: `${exclusiveDetail?.id}/${contentId}`,
         });
       }
