@@ -10,8 +10,6 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 
-import { BN } from '@polkadot/util';
-
 import { TipClaimReference } from './Tip.claim.reference';
 import { useStyles } from './tip.style';
 
@@ -23,7 +21,6 @@ import {
   KusamaNetworkIcon,
 } from 'src/components/atoms/Icons';
 import ShowIf from 'src/components/common/show-if.component';
-import { formatBalance } from 'src/helpers/balance';
 import { TipsResult } from 'src/interfaces/blockchain-interface';
 import { Network } from 'src/interfaces/network';
 import { UserWallet } from 'src/interfaces/user';
@@ -35,8 +32,7 @@ type TipProps = {
   loading: boolean;
   nativeToken: string;
   currentWallet?: UserWallet;
-  // FIXME: use dynamic fee
-  txFee?: BN;
+  txFee?: string;
   onClaim: (networkId: string, ftIdentifier: string) => void;
   onClaimAll: (networkId: string) => void;
   onHandleVerifyRef: (
@@ -124,7 +120,7 @@ export const Tip: React.FC<TipProps> = props => {
           tipsResults={tips}
           onHandleVerifyRef={onHandleVerifyRef}
           token={nativeToken}
-          txFee={formatBalance(txFee, 18, 10).toString()}
+          txFee={txFee}
         />
       );
     }

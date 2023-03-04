@@ -5,7 +5,6 @@ import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
-import { BN, BN_ZERO } from '@polkadot/util';
 
 import { useNearApi } from './use-near-api.hook';
 import { usePolkadotApi } from './use-polkadot-api.hook';
@@ -46,7 +45,7 @@ export const useClaimTip = () => {
   const [tipsEachNetwork, setTipsEachNetwork] = useState<Network[]>(networks);
   const [isSignerLoading, setSignerLoading] = useState<boolean>(false);
   const [feeInfo, setFeeInfo] = useState<FeeInfo>({
-    formattedTrxFee: BN_ZERO,
+    formattedTrxFee: '0.00',
     trxFee: '0',
   });
 
@@ -137,6 +136,7 @@ export const useClaimTip = () => {
         if (!server?.accountId?.[network.id]) return network;
 
         switch (network.id) {
+          case NetworkIdEnum.DEBIO:
           case NetworkIdEnum.MYRIAD: {
             const result = await getClaimTipMyriad(
               server,
@@ -146,16 +146,9 @@ export const useClaimTip = () => {
               network,
             );
 
-            const { tipsResults } = result;
-            const fee = new BN((0.0142 * Math.pow(10, 18)).toString());
-            setFeeInfo({
-              formattedTrxFee: fee,
-              trxFee: fee.toString(),
-            });
-            // FIXME: use dynamic fee
-            // const { tipsResults, feeInfo: fee } = result;
+            const { tipsResults, feeInfo: fee } = result;
 
-            // if (fee) setFeeInfo(fee);
+            if (fee) setFeeInfo(fee);
 
             return {
               ...network,
@@ -175,16 +168,9 @@ export const useClaimTip = () => {
               nativeBalance,
             );
 
-            const { tipsResults } = result;
-            const fee = new BN((0.0142 * Math.pow(10, 18)).toString());
-            setFeeInfo({
-              formattedTrxFee: fee,
-              trxFee: fee.toString(),
-            });
-            // FIXME: use dynamic fee
-            // const { tipsResults, feeInfo: fee } = result;
+            const { tipsResults, feeInfo: fee } = result;
 
-            // if (fee) setFeeInfo(fee);
+            if (fee) setFeeInfo(fee);
 
             return {
               ...network,
