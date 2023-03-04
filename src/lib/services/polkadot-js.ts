@@ -505,23 +505,14 @@ export class PolkadotJs implements IProvider {
     tipsBalanceInfo: TipsBalanceInfo,
     amount: BN,
     accountReference: string,
-    ...args: [InjectedAccountWithMeta, SignTransaction]
+    ...args: [InjectedAccountWithMeta, SignTransaction, boolean]
   ): Promise<string | null> {
-    const [account, callback] = args;
+    const [account, callback, estimateFee] = args;
 
     try {
       if (!this.accountId) throw new Error('AccountNotSet');
 
       const api = this.provider;
-      const { web3FromSource } = await import('@polkadot/extension-dapp');
-
-      const signer = await this.signer(account);
-
-      // to be able to retrieve the signer interface from this account
-      // we can use web3FromSource which will return an InjectedExtension type
-      const injector = await web3FromSource(signer.meta.source);
-
-      callback && callback({ signerOpened: true });
 
       // here we use the api to create a balance transfer to some account of a value of 12345678
       const transferExtrinsic = api.tx.tipping.payContent(
@@ -531,6 +522,23 @@ export class PolkadotJs implements IProvider {
         amount,
         accountReference,
       );
+
+      if (estimateFee) {
+        const { partialFee } = await transferExtrinsic.paymentInfo(
+          this.accountId,
+        );
+        return partialFee?.toString()?.replace(/,/gi, '') ?? '';
+      }
+
+      const { web3FromSource } = await import('@polkadot/extension-dapp');
+
+      const signer = await this.signer(account);
+
+      // to be able to retrieve the signer interface from this account
+      // we can use web3FromSource which will return an InjectedExtension type
+      const injector = await web3FromSource(signer.meta.source);
+
+      callback && callback({ signerOpened: true });
 
       // passing the injected account address as the first argument of signAndSend
       // will allow the api to retrieve the signer and the user will see the extension

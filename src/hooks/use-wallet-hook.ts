@@ -122,8 +122,13 @@ export const useWallet = () => {
     type?: string,
     referenceId?: string,
     callback?: (txHash: string) => void,
-  ) => {
-    setLoading(true);
+    calculateFee = false,
+  ): Promise<[BN, BN] | null> => {
+    if (calculateFee) {
+      setIsFetchingFee(true);
+    } else {
+      setLoading(true);
+    }
 
     try {
       const from = provider.accountId;
@@ -140,7 +145,20 @@ export const useWallet = () => {
             setSignerLoading(true);
           }
         },
+        calculateFee,
       );
+
+      if (calculateFee) {
+        const estimatedFee = !txHash
+          ? BN_ONE.mul(BN_TEN.pow(new BN(currency.decimal))).div(
+              BN_TEN.pow(BN_TWO),
+            )
+          : new BN(txHash);
+        const { partialFee: minBalance } = await provider.assetMinBalance(
+          currency?.referenceId,
+        );
+        return [estimatedFee, minBalance];
+      }
 
       if (txHash) {
         const finalAmount = formatBalance(amount, currency.decimal);
@@ -171,6 +189,7 @@ export const useWallet = () => {
     } finally {
       setLoading(false);
       setSignerLoading(false);
+      setIsFetchingFee(false);
     }
   };
 

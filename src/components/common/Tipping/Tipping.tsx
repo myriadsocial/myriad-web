@@ -102,14 +102,49 @@ export const Tipping: React.FC<SendTipProps> = props => {
 
     setLoadingFee(true);
 
-    const { estimatedFee, minBalance } = await getEstimatedFee(
-      receiver.walletDetail,
-      selected,
+    // Estimate tipping fee
+    if (isTipping) {
+      const { estimatedFee, minBalance } = await getEstimatedFee(
+        receiver.walletDetail,
+        selected,
+      );
+
+      setLoadingFee(false);
+      setTransactionFee(estimatedFee);
+      setAssetMinBalance(minBalance);
+      return;
+    }
+
+    // Estimate pay content fee
+    const [instanceId, unlockableContentId, userId, walletAddress] =
+      receiver?.walletDetail?.referenceId?.split('/') ?? [];
+    const tipsBalanceInfo: TipsBalanceInfo = {
+      serverId: receiver?.walletDetail?.serverId,
+      referenceType: receiver?.walletDetail?.referenceType,
+      referenceId: unlockableContentId,
+      ftIdentifier: currency?.referenceId ?? 'native',
+    };
+
+    const result = await payUnlockableContent(
+      walletAddress ?? null,
+      instanceId,
+      tipsBalanceInfo,
+      new BN(123),
+      currency,
+      userId,
+      referenceType,
+      referenceId,
+      undefined,
+      true,
     );
 
+    if (result) {
+      const [estimatedFee, minBalance] = result;
+      setAssetMinBalance(minBalance);
+      setTransactionFee(estimatedFee);
+    }
+
     setLoadingFee(false);
-    setTransactionFee(estimatedFee);
-    setAssetMinBalance(minBalance);
   };
 
   const handleChangeCurrency = async (selected: BalanceDetail) => {
