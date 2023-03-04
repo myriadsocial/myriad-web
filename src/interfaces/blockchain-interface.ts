@@ -58,7 +58,7 @@ export interface IProvider {
     tipsBalanceInfo: TipsBalanceInfo,
     amount: BN,
     accountReference: string,
-    ...args: [InjectedAccountWithMeta, SignTransaction]
+    ...args: [InjectedAccountWithMeta, SignTransaction, boolean]
   ) => Promise<string | null>;
 }
 
@@ -225,7 +225,6 @@ export interface TipsResultsProps {
 }
 
 export interface FeeInfo {
-  // FIXME: use dynamic fee
-  formattedTrxFee: BN;
+  formattedTrxFee: string;
   trxFee: string;
 }

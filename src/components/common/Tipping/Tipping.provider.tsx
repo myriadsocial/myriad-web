@@ -8,7 +8,11 @@ import { Box, Button, Grid, Typography } from '@material-ui/core';
 import { BN } from '@polkadot/util';
 
 import SendTipContext, { HandleSendTip } from './Tipping.context';
-import { TippingProviderProps, TippingOptions } from './Tipping.interface';
+import {
+  TippingProviderProps,
+  TippingOptions,
+  ExclusiveContentWithPrices,
+} from './Tipping.interface';
 import { ButtonNotify } from './render/ButtonNotify';
 
 import { Modal } from 'src/components/atoms/Modal';
@@ -52,11 +56,23 @@ export const TippingProvider: React.ComponentType<TippingProviderProps> = ({
 
   useEffect(() => {
     setTippingEnabled(balances.length > 0 || anonymous);
-
+    if (!options) return;
     if (balances.length > 0) {
-      setDefaultCurrency(balances[0]);
+      if (options.referenceType !== ReferenceType.EXCLUSIVE_CONTENT) {
+        setDefaultCurrency(balances[0]);
+      } else {
+        const reference = options.reference as ExclusiveContentWithPrices;
+        const prices = reference.prices;
+
+        if (prices.length > 0) {
+          const balance = balances.find(
+            balance => balance.id === prices[0].currency.id,
+          );
+          if (balance) setDefaultCurrency(balance);
+        }
+      }
     }
-  }, [balances, anonymous]);
+  }, [balances, anonymous, options]);
 
   const tipping = useCallback<HandleSendTip>(
     options => {
