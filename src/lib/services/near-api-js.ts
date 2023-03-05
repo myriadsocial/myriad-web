@@ -246,7 +246,7 @@ export class Near implements IProvider {
         account_id: accountId,
       });
       return {
-        balance: formatBalance(new BN(contractBalance), decimal).toString(),
+        balance: formatBalance(contractBalance, decimal),
       };
     }
 
@@ -558,7 +558,7 @@ export const getNearBalanceV2 = async (
         Buffer.from((result as any).result).toString(),
       );
 
-      return { balance: formatBalance(new BN(balance), decimal).toString() };
+      return { balance: formatBalance(balance, decimal) };
     }
 
     const nearAccount = await provider.query({

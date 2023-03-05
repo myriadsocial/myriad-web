@@ -24,7 +24,6 @@ import { ListItemComponent } from 'src/components/atoms/ListItem';
 import { formatBalance } from 'src/helpers/balance';
 import { useWallet } from 'src/hooks/use-wallet-hook';
 import { BalanceDetail } from 'src/interfaces/balance';
-import { TipsBalanceInfo } from 'src/interfaces/blockchain-interface';
 import { ReferenceType } from 'src/interfaces/interaction';
 import { User } from 'src/interfaces/user';
 import i18n from 'src/locale';
@@ -116,23 +115,10 @@ export const Tipping: React.FC<SendTipProps> = props => {
     }
 
     // Estimate pay content fee
-    const [instanceId, unlockableContentId, userId, walletAddress] =
-      receiver?.walletDetail?.referenceId?.split('/') ?? [];
-    const tipsBalanceInfo: TipsBalanceInfo = {
-      serverId: receiver?.walletDetail?.serverId,
-      referenceType: receiver?.walletDetail?.referenceType,
-      referenceId: unlockableContentId,
-      ftIdentifier: currency?.referenceId ?? 'native',
-    };
-
     const result = await payUnlockableContent(
-      walletAddress ?? null,
-      instanceId,
-      tipsBalanceInfo,
+      receiver,
       new BN(123),
       currency,
-      userId,
-      referenceType,
       referenceId,
       undefined,
       true,
@@ -200,7 +186,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
         receiver,
         reference,
         referenceType,
-        amount: formatBalance(amount, currency.decimal),
+        amount: +formatBalance(amount, currency.decimal),
       };
 
       await localforage.setItem(TIPPING_STORAGE_KEY, storageAttribute);
@@ -224,23 +210,10 @@ export const Tipping: React.FC<SendTipProps> = props => {
         },
       );
     } else {
-      const [instanceId, unlockableContentId, userId, walletAddress] =
-        receiver?.walletDetail?.referenceId?.split('/') ?? [];
-      const tipsBalanceInfo: TipsBalanceInfo = {
-        serverId: receiver?.walletDetail?.serverId,
-        referenceType: receiver?.walletDetail?.referenceType,
-        referenceId: unlockableContentId,
-        ftIdentifier: currency?.referenceId ?? 'native',
-      };
-
       payUnlockableContent(
-        walletAddress ?? null,
-        instanceId,
-        tipsBalanceInfo,
+        receiver,
         amount,
         currency,
-        userId,
-        referenceType,
         referenceId,
         (hash: string) => {
           onSuccess(
