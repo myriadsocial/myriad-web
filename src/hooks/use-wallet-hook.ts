@@ -6,9 +6,14 @@ import { BN, BN_ONE, BN_TWO, BN_TEN, BN_ZERO } from '@polkadot/util';
 
 import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
 import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
+import {
+  PeopleWithWalletDetail,
+  UserWithWalletDetail,
+} from 'components/common/Tipping/Tipping.interface';
 import { formatBalance } from 'src/helpers/balance';
 import { BalanceDetail } from 'src/interfaces/balance';
 import { TipsBalanceInfo } from 'src/interfaces/blockchain-interface';
+import { ReferenceType } from 'src/interfaces/interaction';
 import { WalletDetail } from 'src/interfaces/wallet';
 import { storeTransaction } from 'src/lib/api/transaction';
 import i18n from 'src/locale';
@@ -113,14 +118,10 @@ export const useWallet = () => {
   };
 
   const payUnlockableContent = async (
-    walletAddress: string | null,
-    instanceId: string,
-    tipsBalanceInfo: TipsBalanceInfo,
+    receiver: UserWithWalletDetail | PeopleWithWalletDetail,
     amount: BN,
     currency: BalanceDetail,
-    accountReference: string,
-    type?: string,
-    referenceId?: string,
+    referenceId: string,
     callback?: (txHash: string) => void,
     calculateFee = false,
   ): Promise<[BN, BN] | null> => {
@@ -131,14 +132,29 @@ export const useWallet = () => {
     }
 
     try {
+      const walletDetail = receiver.walletDetail;
+
+      if (!walletDetail) throw new Error('ReceiverNotFound');
+
+      const { serverId, referenceType, referenceId: receiverId } = walletDetail;
+      const [instanceId, contentId, userId, address] = receiverId.split('/');
+
+      const ftIdentifier = currency?.referenceId ?? 'native';
+      const tipsBalanceInfo: TipsBalanceInfo = {
+        serverId,
+        referenceType,
+        referenceId: contentId,
+        ftIdentifier,
+      };
+
       const from = provider.accountId;
-      const to = walletAddress ?? accountReference;
+      const to = address ?? userId;
       const txHash = await provider.payUnlockableContent(
-        walletAddress,
+        address ?? null,
         instanceId,
         tipsBalanceInfo,
         amount,
-        accountReference,
+        userId,
         undefined,
         params => {
           if (params?.signerOpened) {
@@ -149,15 +165,17 @@ export const useWallet = () => {
       );
 
       if (calculateFee) {
-        const estimatedFee = !txHash
-          ? BN_ONE.mul(BN_TEN.pow(new BN(currency.decimal))).div(
-              BN_TEN.pow(BN_TWO),
-            )
-          : new BN(txHash);
-        const { partialFee: minBalance } = await provider.assetMinBalance(
-          currency?.referenceId,
-        );
-        return [estimatedFee, minBalance];
+        let estimatedFee: BN;
+
+        if (!txHash) {
+          const multiplier = BN_TEN.pow(new BN(currency.decimal - 2));
+          estimatedFee = BN_ONE.mul(multiplier);
+        } else {
+          estimatedFee = new BN(txHash);
+        }
+
+        const { partialFee } = await provider.assetMinBalance(ftIdentifier);
+        return [estimatedFee, partialFee];
       }
 
       if (txHash) {
@@ -168,10 +186,9 @@ export const useWallet = () => {
           from,
           to,
           currencyId: currency.id,
+          type: ReferenceType.EXCLUSIVE_CONTENT,
+          referenceId,
         };
-
-        if (type) Object.assign(txData, { type });
-        if (referenceId) Object.assign(txData, { referenceId });
 
         // Record the transaction
         await storeTransaction(txData);

@@ -1,6 +1,5 @@
-import '@polkadot/api-augment';
-
 import { WsProvider, ApiPromise } from '@polkadot/api';
+import '@polkadot/api-augment';
 import { SubmittableExtrinsicFunction } from '@polkadot/api/types';
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 import { Keyring } from '@polkadot/keyring';
