@@ -29,8 +29,8 @@ export const FormatCurrency: React.FC<FormatCurrencyProps> = props => {
   const symbol = trxFee ? nativeSymbol : currency.symbol;
   const amount = formatBalance(value, decimal, length);
   const displayAmount = value.gt(BN_ZERO)
-    ? amount > 0
-      ? amount
+    ? +amount > 0
+      ? +amount
       : '< 0.00000001'
     : 0;
 

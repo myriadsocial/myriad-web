@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { TextField } from '@material-ui/core';
 import type { InputProps } from '@material-ui/core';
 
-import { BN, BN_ZERO, isBn } from '@polkadot/util';
+import { BN, BN_ZERO, BN_TEN, isBn } from '@polkadot/util';
 
 import { useStyles } from './InputAmount.style';
 
@@ -67,21 +67,26 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
     } else if (isBn(defaultValue) && defaultValue.gt(BN_ZERO)) {
       const formatted = formatBalance(defaultValue, decimal);
 
-      setValue(formatted.toString());
+      setValue(formatted);
     } else {
       setValue('');
     }
   }, [currencyId]);
 
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
+    let value = event.target.value.replace(/,/gi, '');
 
-    // remove invalid char and convert to dot formatted decimal
-    const input = value.replace(/[^\d.,]+$/, '').replace(/,/, '.');
+    const values = value.split('.');
+    if (values.length > 2) return;
+    if (length && value.length > length) return;
+    if (!value.match(/^[0-9]*\.?[0-9]*$/)) return;
+    if (value[0] === '.') value = '0.';
 
-    const [amount, valid, errorMessage] = validateInput(input);
+    const [amount, valid, errorMessage] = validateInput(values);
 
-    setValue(input);
+    values[0] = (+values[0]).toLocaleString();
+
+    setValue(values.join('.'));
     setValid(valid);
     setError(errorMessage);
     setDirty(true);
@@ -95,8 +100,10 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
     target.blur();
   };
 
-  const validateInput = (amount: string): [BN, boolean, string?] => {
-    const value = toBigNumber(amount, decimal);
+  const validateInput = (values: string[]): [BN, boolean, string?] => {
+    const multiplier = BN_TEN.pow(new BN(decimal - (values[1]?.length ?? 0)));
+    const value = new BN(values.join('')).mul(multiplier);
+    const amount = values.join('.');
     const balance = isBn(maxValue)
       ? maxValue
       : toBigNumber(maxValue.toString(), decimal);
@@ -149,7 +156,7 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
           root: type === 'common' ? styles.input : styles.inputExclusiveAmount,
         }}
         label={placeholder}
-        type="number"
+        type="text"
         variant="outlined"
         InputLabelProps={{ shrink: dirty }}
         inputProps={{ min: 0 }}

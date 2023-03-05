@@ -200,7 +200,7 @@ export const Tipping: React.FC<SendTipProps> = props => {
         receiver,
         reference,
         referenceType,
-        amount: formatBalance(amount, currency.decimal),
+        amount: +formatBalance(amount, currency.decimal),
       };
 
       await localforage.setItem(TIPPING_STORAGE_KEY, storageAttribute);

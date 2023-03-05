@@ -84,7 +84,7 @@ export const useWallet = () => {
         const finalAmount = formatBalance(amount, currency.decimal);
         const txData = {
           hash: txHash,
-          amount: finalAmount,
+          amount: +finalAmount,
           from,
           to,
           currencyId: currency.id,
@@ -164,7 +164,7 @@ export const useWallet = () => {
         const finalAmount = formatBalance(amount, currency.decimal);
         const txData = {
           hash: txHash,
-          amount: finalAmount,
+          amount: +finalAmount,
           from,
           to,
           currencyId: currency.id,

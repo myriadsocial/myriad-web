@@ -1,5 +1,6 @@
-import { WsProvider, ApiPromise } from '@polkadot/api';
 import '@polkadot/api-augment';
+
+import { WsProvider, ApiPromise } from '@polkadot/api';
 import { SubmittableExtrinsicFunction } from '@polkadot/api/types';
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 import { Keyring } from '@polkadot/keyring';
@@ -21,7 +22,7 @@ import { IProvider } from '../../interfaces/blockchain-interface';
 import { NoAccountException } from './errors/NoAccountException';
 import { SignRawException } from './errors/SignRawException';
 
-import { formatBalanceV2 } from 'src/helpers/balance';
+import { formatBalance } from 'src/helpers/balance';
 import { Network } from 'src/interfaces/network';
 import { WalletDetail, WalletReferenceType } from 'src/interfaces/wallet';
 
@@ -223,7 +224,7 @@ export class PolkadotJs implements IProvider {
         callback,
       );
 
-      return { balance: formatBalanceV2(balance, decimal, 18) };
+      return { balance: formatBalance(balance, decimal, 18) };
     }
 
     const { data, nonce } = await this.provider.query.system.account(
@@ -233,7 +234,7 @@ export class PolkadotJs implements IProvider {
     this.listenToSystemBalanceChange(this.accountId, data.free, callback);
 
     return {
-      balance: formatBalanceV2(data.free.toString(), decimal, 18),
+      balance: formatBalance(data.free.toString(), decimal, 18),
       nonce,
     };
   }
@@ -267,8 +268,8 @@ export class PolkadotJs implements IProvider {
       const assetId = parseInt(referenceId);
       const transferExtrinsic = isWalletAddress
         ? !referenceId
-          ? api.tx.balances.transferKeepAlive(accountId, amount)
-          : api.tx.octopusAssets.transferKeepAlive(assetId, accountId, amount)
+          ? api.tx.balances.transfer(accountId, amount)
+          : api.tx.octopusAssets.transfer(assetId, accountId, amount)
         : api.tx.tipping.sendTip(walletDetail, amount);
 
       // passing the injected account address as the first argument of signAndSend
