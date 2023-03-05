@@ -3,11 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { TextField } from '@material-ui/core';
 import type { InputProps } from '@material-ui/core';
 
-import { BN_ZERO } from '@polkadot/util';
+import { BN, BN_ZERO, BN_TEN } from '@polkadot/util';
 
 import { useStyles } from './InputAmount.style';
 
-import { toBigNumber } from 'src/helpers/string';
 import i18n from 'src/locale';
 
 type InputAmountProps = Omit<InputProps, 'onChange'> & {
@@ -36,14 +35,19 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
   }, []);
 
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
+    let value = event.target.value.replace(/,/gi, '');
 
-    // remove invalid char and convert to dot formatted decimal
-    const input = value.replace(/[^\d.,]+$/, '').replace(/,/, '.');
+    const values = value.split('.');
+    if (values.length > 2) return;
+    if (length && value.length > length) return;
+    if (!value.match(/^[0-9]*\.?[0-9]*$/)) return;
+    if (value[0] === '.') value = '0.';
 
-    const [amount, valid, errorMessage] = validateInput(input);
+    const [amount, valid, errorMessage] = validateInput(values);
 
-    setValue(input);
+    values[0] = (+values[0]).toLocaleString();
+
+    setValue(values.join('.'));
     setValid(valid);
     setError(errorMessage);
     setDirty(true);
@@ -57,8 +61,10 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
     target.blur();
   };
 
-  const validateInput = (amount: string): [string, boolean, string?] => {
-    const value = toBigNumber(amount, decimal);
+  const validateInput = (values: string[]): [string, boolean, string?] => {
+    const multiplier = BN_TEN.pow(new BN(decimal - (values[1]?.length ?? 0)));
+    const value = new BN(values.join('')).mul(multiplier);
+    const amount = values.join('.');
 
     if (value.lte(BN_ZERO)) {
       return [amount, false, i18n.t('Tipping.Modal_Main.Error_Digit')];
@@ -75,7 +81,7 @@ export const InputAmount: React.FC<InputAmountProps> = props => {
           root: type === 'common' ? styles.input : styles.inputExclusiveAmount,
         }}
         label={placeholder}
-        type="number"
+        type="text"
         variant="outlined"
         InputLabelProps={{ shrink: dirty }}
         inputProps={{ min: 0 }}

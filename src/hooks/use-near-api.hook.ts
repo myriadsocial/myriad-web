@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 
 import { BN, BN_ZERO, BN_TEN } from '@polkadot/util';
 
-import { formatBalanceV2 } from 'src/helpers/balance';
+import { formatBalance } from 'src/helpers/balance';
 import {
   CallbackURL,
   SignatureProps,
@@ -121,7 +121,7 @@ export const useNearApi = () => {
 
     if (network.id === wallet?.networkId && !accountIdExist) {
       const fee = await Near.claimReferenceFee(network.rpcURL);
-      const finalTxFee = formatBalanceV2(fee.toString(), nativeDecimal, 4);
+      const finalTxFee = formatBalance(fee, nativeDecimal, 4);
 
       feeInfo = {
         formattedTrxFee: finalTxFee,

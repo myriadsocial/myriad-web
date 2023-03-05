@@ -1,6 +1,6 @@
 import { BN, BN_ZERO } from '@polkadot/util';
 
-import { formatBalanceV2 } from 'src/helpers/balance';
+import { formatBalance } from 'src/helpers/balance';
 import {
   TipsResultsProps,
   TipsBalanceData,
@@ -132,7 +132,7 @@ export const usePolkadotApi = () => {
 
       return {
         accountId: tipsBalance.accountId,
-        amount: formatBalanceV2(tipsBalance.amount.toString(), decimal, 3),
+        amount: formatBalance(tipsBalance.amount.toString(), decimal, 3),
         tipsBalanceInfo: tipsBalance.tipsBalanceInfo,
         symbol: symbol ?? 'UNKNOWN',
         imageURL: image ?? '',
@@ -156,7 +156,7 @@ export const usePolkadotApi = () => {
         },
       );
 
-      const finalTxFee = formatBalanceV2(fee.toString(), nativeDecimal, 4);
+      const finalTxFee = formatBalance(fee.toString(), nativeDecimal, 4);
 
       feeInfo = {
         formattedTrxFee: finalTxFee,
