@@ -380,7 +380,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
             />
           </div>
 
-          <ShowIf condition={!showExclusive}>
+          <ShowIf condition={!showExclusive && activeTab === 'create'}>
             {!exclusiveContent ? (
               <>
                 <IconButton
