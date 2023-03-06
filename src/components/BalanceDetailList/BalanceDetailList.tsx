@@ -229,6 +229,7 @@ export const BalanceDetailList: React.FC<BalanceDetailListProps> = props => {
                 </TableRow>
               )}
               {!isLoading &&
+                defaultBalanceDetails &&
                 defaultBalanceDetails.length > 0 &&
                 defaultBalanceDetails.map(balanceDetail => (
                   <TableRow key={balanceDetail.id} className={classes.tableRow}>
