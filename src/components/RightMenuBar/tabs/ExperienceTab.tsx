@@ -11,7 +11,6 @@ import Typography from '@material-ui/core/Typography';
 import { useStyles } from './Tab.style';
 
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
-import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import {
   ExperienceListContainer,
   EmptyExperience,
@@ -43,24 +42,14 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
     shallowEqual,
   );
 
-  const enqueueSnackbar = useEnqueueSnackbar();
-
   const handleCreateExperience = () => {
+    const fullAccess = user?.fullAccess ?? false;
     const totalOwnedExperience =
       userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
 
-    if (user.fullAccess && user.fullAccess !== undefined) {
-      if (totalOwnedExperience >= 10) {
-        enqueueSnackbar({
-          message: i18n.t('Experience.Alert.Max_Exp'),
-          variant: 'warning',
-        });
-      } else {
-        router.push('/experience/create');
-      }
-    } else {
+    if (!fullAccess) {
       if (totalOwnedExperience >= 5) {
-        confirm({
+        return confirm({
           title: i18n.t('LiteVersion.LimitTitleExperience'),
           description: i18n.t('LiteVersion.LimitDescExperience'),
           icon: 'warning',
@@ -73,10 +62,10 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
             undefined;
           },
         });
-      } else {
-        router.push('/experience/create');
       }
     }
+
+    router.push('/experience/create');
   };
 
   const handleLoadNextPage = () => {
