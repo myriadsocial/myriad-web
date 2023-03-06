@@ -46,12 +46,9 @@ export const formatBalance = (
   let mod = val.substring(val.length - decimal).replace(/0+$/, '');
 
   if (val.length <= decimal) {
-    if (val.length === decimal) {
-      div = '0';
-    } else {
-      trailingZero = '0'.repeat(decimal - val.length);
-      mod = trailingZero + mod;
-    }
+    div = '0';
+    trailingZero = '0'.repeat(decimal - val.length);
+    mod = trailingZero + mod;
   }
 
   let maxDecimal = length;
