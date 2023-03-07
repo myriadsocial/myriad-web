@@ -19,6 +19,7 @@ import {
   MyriadCircleIcon,
   PolkadotNetworkIcon,
   KusamaNetworkIcon,
+  DebioNetworkIcon,
 } from 'src/components/atoms/Icons';
 import ShowIf from 'src/components/common/show-if.component';
 import { TipsResult } from 'src/interfaces/blockchain-interface';
@@ -59,6 +60,10 @@ const networkOptions: MenuOptions<string>[] = [
     id: 'myriad',
     title: 'Myriad',
   },
+  {
+    id: 'debio',
+    title: 'Debio',
+  },
 ];
 
 export const Tip: React.FC<TipProps> = props => {
@@ -83,6 +88,7 @@ export const Tip: React.FC<TipProps> = props => {
       kusama: <KusamaNetworkIcon width={'24px'} height={'24px'} />,
       near: <NearNetworkIcon24 width={'24px'} height={'24px'} />,
       myriad: <MyriadCircleIcon width={'24px'} height={'24px'} />,
+      debio: <DebioNetworkIcon width={'24px'} height={'24px'} />,
     }),
     [],
   );
