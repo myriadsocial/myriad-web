@@ -1,5 +1,4 @@
 import {
-  HomeIcon,
   SparklesIcon,
   CogIcon,
   UsersIcon,
@@ -16,7 +15,7 @@ import React, { useMemo } from 'react';
 import i18n from 'src/locale';
 
 export type MenuId =
-  | 'home'
+  // | 'home'
   | 'friends'
   | 'token'
   | 'town'
@@ -41,15 +40,15 @@ export type MenuDetail = {
 export const useMenuList = (selected: MenuId): MenuDetail[] => {
   const menu: MenuDetail[] = useMemo(
     () => [
-      {
-        id: 'home',
-        title: i18n.t('Section.Home'),
-        active: selected === 'home',
-        icon: HomeIcon,
-        url: '/',
-        isDesktop: true,
-        isAnimated: false,
-      },
+      // {
+      //   id: 'home',
+      //   title: i18n.t('Section.Home'),
+      //   active: selected === 'home',
+      //   icon: HomeIcon,
+      //   url: '/',
+      //   isDesktop: true,
+      //   isAnimated: false,
+      // },
       {
         id: 'experience',
         title: i18n.t('Section.Mytimelines'),

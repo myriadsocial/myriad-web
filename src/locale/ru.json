@@ -137,6 +137,12 @@
       "Empty_Subtitle": "Вы еще не создали ни одного опыта",
       "Btn_Confirm": "Подтвердить ",
       "Success_Msg": "Публикация успешно добавлена ​​на временную шкалу"
+    },
+    "Filter": {
+      "Following": "Следующий",
+      "Trending": "В тренде",
+      "CreatedByMe": "Создано мной",
+      "CreatedByOthers": "Создано другими"
     }
   },
   "General": {

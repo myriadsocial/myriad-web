@@ -137,6 +137,12 @@
       "Empty_Subtitle": "Anda belum membuat Timeline apa pun.",
       "Btn_Confirm": "Konfirmasi",
       "Success_Msg": "Berhasil menambahkan postingan ke timeline"
+    },
+    "Filter": {
+      "Following": "Mengikuti",
+      "Trending": "Trending",
+      "CreatedByMe": "Dibuat oleh Saya",
+      "CreatedByOthers": "Dibuat Pengguna lain"
     }
   },
   "General": {

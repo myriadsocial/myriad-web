@@ -49,7 +49,7 @@ export const MenuDrawerComponent: React.FC = () => {
     state => state.notificationState,
   );
 
-  const [selected, setSelected] = React.useState<MenuId>('home');
+  const [selected, setSelected] = React.useState<MenuId>();
   const [openDrawer, setOpenDrawer] = React.useState(false);
   const [openPromptDrawer, setOpenPromptDrawer] = React.useState(false);
   const [cookies] = useCookies([COOKIE_INSTANCE_URL]);

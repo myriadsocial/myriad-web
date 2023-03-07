@@ -30,3 +30,8 @@ export type TimelineFilterFields = {
   importer?: string;
   experienceId?: string;
 };
+
+export enum TimelineFilterCreated {
+  ME = 'me',
+  OTHERS = 'others',
+}

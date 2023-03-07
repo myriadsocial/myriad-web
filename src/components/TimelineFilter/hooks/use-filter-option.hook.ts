@@ -6,6 +6,7 @@ import {
   TimelineOrderType,
   TimelineType,
   PostOriginType,
+  TimelineFilterCreated,
 } from 'src/interfaces/timeline';
 import { SortType } from 'src/lib/api/interfaces/pagination-params.interface';
 import i18n from 'src/locale';
@@ -87,10 +88,22 @@ export const useFilterOption = () => {
     { id: 'ASC', title: i18n.t('Post_Sorting.Sort.Oldest') },
   ];
 
+  const createdFilter: MenuOptions<TimelineFilterCreated>[] = [
+    {
+      id: TimelineFilterCreated.ME,
+      title: i18n.t('Experience.Filter.CreatedByMe'),
+    },
+    {
+      id: TimelineFilterCreated.OTHERS,
+      title: i18n.t('Experience.Filter.CreatedByOthers'),
+    },
+  ];
+
   return {
     originFilterOptions,
     typeFilterOptions,
     orderOptions,
     sortOptions,
+    createdFilter,
   };
 };

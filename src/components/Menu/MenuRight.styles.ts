@@ -37,15 +37,15 @@ export const useStyles = makeStyles((theme: Theme) =>
         //},
       },
 
-      '&::before': {
-        content: '""',
-        position: 'absolute',
-        top: 46,
-        width: 10,
-        height: 60,
-        borderRadius: theme.spacing(0, 1.25, 1.25, 0),
-        background: theme.palette.primary.main,
-      },
+      // '&::before': {
+      //   content: '""',
+      //   position: 'absolute',
+      //   top: 46,
+      //   width: 10,
+      //   height: 60,
+      //   borderRadius: theme.spacing(0, 1.25, 1.25, 0),
+      //   background: theme.palette.primary.main,
+      // },
     },
     head: {
       marginLeft: 30,
@@ -60,12 +60,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     backdrop: {
       zIndex: theme.zIndex.drawer + 1 + 100,
       color: '#fff',
-    },
-    box: {
-      background: '#FFF',
-      paddingBottom: theme.spacing(3),
-      boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.05)',
-      borderRadius: '0px 0px 20px 20px',
     },
   }),
 );

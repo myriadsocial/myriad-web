@@ -5,7 +5,7 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       display: 'flex',
       justifyContent: 'space-between',
-      padding: '10px 30px',
+      padding: '0 30px 10px',
       [theme.breakpoints.down('xs')]: {
         padding: '0px',
       },
@@ -49,6 +49,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
 
     innerSecondColWrapper: {
+      paddingTop: '10px',
       display: 'flex',
       flexDirection: 'column',
       flexWrap: 'wrap',
@@ -79,6 +80,10 @@ const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.down('md')]: {
         width: 290,
       },
+    },
+
+    rightCard: {
+      marginBottom: '12px',
     },
   }),
 );

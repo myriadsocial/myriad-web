@@ -12,6 +12,8 @@ import Typography from '@material-ui/core/Typography';
 import { useStyles } from './Tab.style';
 
 import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
+import { useFilterOption } from 'components/TimelineFilter/hooks/use-filter-option.hook';
+import { DropdownMenu } from 'components/atoms/DropdownMenu';
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import {
   ExperienceListContainer,
@@ -22,6 +24,7 @@ import {
   ExperienceOwner,
   useExperienceHook,
 } from 'src/hooks/use-experience-hook';
+import { TimelineFilterCreated } from 'src/interfaces/timeline';
 import { User } from 'src/interfaces/user';
 import i18n from 'src/locale';
 import { RootState } from 'src/reducers';
@@ -33,6 +36,7 @@ type ExperienceTabProps = {
 export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
   const { experienceType = 'user' } = props;
   const confirm = useConfirm();
+  const { createdFilter } = useFilterOption();
 
   const router = useRouter();
   const styles = useStyles();
@@ -90,7 +94,7 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
   };
 
   return (
-    <div className={styles.box}>
+    <div>
       <div
         style={{
           display: 'flex',
@@ -98,26 +102,34 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
           justifyContent: 'space-between',
           marginBottom: 12,
         }}>
-        <Typography variant={'h4'} className={styles.title}>
-          My Timelines
+        <Typography variant={'h5'} className={styles.title}>
+          {userExperiencesMeta?.totalItemCount ?? 0} Timelines
         </Typography>
 
-        <ShowIf condition={experienceType === 'user'}>
-          <Typography
-            variant={'caption'}
-            color={'primary'}
-            component="div"
-            className={styles.action}
-            onClick={handleCreateExperience}>
-            <SvgIcon
-              component={PlusIcon}
-              viewBox="0 0 24 24"
-              style={{ fontSize: 14 }}
-            />
-            {i18n.t('Experience.Create.Title')}
-          </Typography>
-        </ShowIf>
+        <DropdownMenu<TimelineFilterCreated>
+          title={i18n.t('Post_Sorting.Title_Filter')}
+          options={createdFilter}
+          onChange={() => null}
+          marginTop={false}
+          marginBottom={false}
+          placeholder={'Select'}
+        />
       </div>
+      <ShowIf condition={Boolean(user) && experienceType === 'user'}>
+        <Typography
+          variant={'h5'}
+          color={'primary'}
+          component="div"
+          className={styles.action}
+          onClick={handleCreateExperience}>
+          <SvgIcon
+            component={PlusIcon}
+            viewBox="0 0 24 24"
+            style={{ fontSize: 14 }}
+          />
+          {i18n.t('Experience.Create.Title')}
+        </Typography>
+      </ShowIf>
 
       <ExperienceListContainer
         noButton={true}

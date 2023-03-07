@@ -13,7 +13,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
     },
     content: {
-      padding: theme.spacing(0, 3.75),
+      padding: theme.spacing('24px', 3.75, 0),
       background: '#FFF',
       boxShadow: `0px 2px 10px rgba(0, 0, 0, 0.05)`,
       borderRadius: `20px`,
@@ -33,6 +33,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         fontWeight: theme.typography.fontWeightMedium,
         justifyContent: 'flex-end',
       },
+      paddingBottom: '20px',
     },
     title: {
       [theme.breakpoints.down('xs')]: {

@@ -1,20 +1,17 @@
-import { InformationCircleIcon } from '@heroicons/react/outline';
-
 import React from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 
 import { useRouter } from 'next/router';
 
-import Button from '@material-ui/core/Button';
+import { Button } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import SvgIcon from '@material-ui/core/SvgIcon';
-import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 
 import { Skeleton } from '../../Expericence';
 import { useStyles } from './Tab.style';
 
+import { useFilterOption } from 'components/TimelineFilter/hooks/use-filter-option.hook';
+import { DropdownMenu } from 'components/atoms/DropdownMenu';
 import { ExperienceListContainer } from 'src/components/ExperienceList';
 import ShowIf from 'src/components/common/show-if.component';
 import {
@@ -22,6 +19,8 @@ import {
   useExperienceHook,
 } from 'src/hooks/use-experience-hook';
 import { Experience } from 'src/interfaces/experience';
+import { TimelineFilterCreated } from 'src/interfaces/timeline';
+import { ListMeta } from 'src/lib/api/interfaces/base-list.interface';
 import i18n from 'src/locale';
 import { RootState } from 'src/reducers';
 
@@ -29,12 +28,17 @@ export const TrendingExperienceTab: React.FC = () => {
   const styles = useStyles();
   const router = useRouter();
   const { loadTrendingExperience, loading } = useExperienceHook();
+  const { createdFilter } = useFilterOption();
 
   const trendingExperiences = useSelector<RootState, Experience[]>(
     state => state.experienceState.trendingExperiences,
     shallowEqual,
   );
-  const toolTipText = i18n.t('Tooltip.Trending_Exp');
+
+  const trendingExperiencesMeta = useSelector<RootState, ListMeta>(
+    state => state.experienceState.meta,
+    shallowEqual,
+  );
 
   React.useEffect(() => {
     loadTrendingExperience();
@@ -47,30 +51,17 @@ export const TrendingExperienceTab: React.FC = () => {
   return (
     <div className={styles.box}>
       <div className={styles.flex}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Typography variant={'h4'} style={{ color: '#404040' }}>
-            {i18n.t('Section.Trending_Experience')}
-          </Typography>
-          <Tooltip title={toolTipText} arrow>
-            <IconButton
-              aria-label="info"
-              className={styles.info}
-              style={{ color: '#404040' }}>
-              <SvgIcon
-                style={{ fontSize: 18 }}
-                component={InformationCircleIcon}
-                viewBox="0 0 24 24"
-              />
-            </IconButton>
-          </Tooltip>
-        </div>
-        <Button
-          variant="text"
-          style={{ width: 'auto', height: 'auto', padding: 1 }}
-          color="primary"
-          onClick={handleViewAll}>
-          View all
-        </Button>
+        <Typography variant={'h5'} className={styles.title}>
+          {trendingExperiencesMeta?.totalItemCount ?? 0} Timelines
+        </Typography>
+
+        <DropdownMenu<TimelineFilterCreated>
+          title={i18n.t('Post_Sorting.Title_Filter')}
+          options={createdFilter}
+          onChange={() => null}
+          marginTop={false}
+          marginBottom={false}
+        />
       </div>
       <ExperienceListContainer
         noButton
@@ -80,6 +71,15 @@ export const TrendingExperienceTab: React.FC = () => {
         filterTimeline
         owner={ExperienceOwner.TRENDING}
       />
+      <div style={{ width: '100%', textAlign: 'center' }}>
+        <Button
+          variant="text"
+          style={{ width: 'auto', height: 'auto', padding: 1, margin: 'auto' }}
+          color="primary"
+          onClick={handleViewAll}>
+          View all
+        </Button>
+      </div>
 
       <ShowIf condition={loading && trendingExperiences.length === 0}>
         <Grid container justifyContent="center">

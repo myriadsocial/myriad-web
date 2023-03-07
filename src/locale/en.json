@@ -77,7 +77,7 @@
       }
     },
     "Create": {
-      "Title": "Create Timeline"
+      "Title": "Quick Create Timeline"
     },
     "Editor": {
       "Header": "Set up your customizable timeline",
@@ -137,6 +137,12 @@
       "Empty_Subtitle": "You haven't created any timeline yet.",
       "Btn_Confirm": "Confirm",
       "Success_Msg": "Successfully added post to timeline"
+    },
+    "Filter": {
+      "Following": "Following",
+      "Trending": "Trending",
+      "CreatedByMe": "Created by Me",
+      "CreatedByOthers": "Created by Others"
     }
   },
   "General": {

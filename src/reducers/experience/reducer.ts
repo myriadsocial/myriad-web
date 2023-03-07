@@ -85,6 +85,7 @@ export const ExperienceReducer: Redux.Reducer<ExperienceState, Actions> = (
       return {
         ...state,
         trendingExperiences: action.experiences,
+        meta: action.meta,
       };
     }
 

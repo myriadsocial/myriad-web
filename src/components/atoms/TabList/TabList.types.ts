@@ -13,7 +13,8 @@ export type TabPosition =
   | 'right'
   | 'center'
   | 'space-around'
-  | 'space-evenly';
+  | 'space-evenly'
+  | 'space-between';
 
 export type TabMark = 'underline' | 'cover';
 

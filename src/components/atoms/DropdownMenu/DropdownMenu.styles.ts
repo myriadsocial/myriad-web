@@ -2,14 +2,16 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 type DropdownMenuStyleProp = {
   useIconOnMobile: boolean;
+  marginBottom?: boolean;
+  marginTop?: boolean;
 };
 
 export const useStyles = makeStyles<Theme, DropdownMenuStyleProp>(theme =>
   createStyles({
     root: {
       display: 'flex',
-      marginBottom: theme.spacing(2),
-      marginTop: theme.spacing(1.5),
+      marginBottom: props => (props.marginBottom ? theme.spacing(2) : 0),
+      marginTop: props => (props.marginTop ? theme.spacing(1.5) : 0),
 
       [theme.breakpoints.down('xs')]: {
         marginBottom: 20,
@@ -28,6 +30,10 @@ export const useStyles = makeStyles<Theme, DropdownMenuStyleProp>(theme =>
     },
     selected: {
       fontWeight: 600,
+      maxWidth: '100px',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
     },
     expand: {
       marginLeft: theme.spacing(1),

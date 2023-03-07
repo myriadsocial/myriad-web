@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/router';
 
-import { Menu } from './Menu';
+import { MenuRight } from './MenuRight';
 import { MenuId } from './use-menu-list';
 
 type MenuProps = {
@@ -10,7 +10,7 @@ type MenuProps = {
   anonymous?: boolean;
 };
 
-export const MenuContainer: React.FC<MenuProps> = props => {
+export const MenuRightContainer: React.FC<MenuProps> = props => {
   const router = useRouter();
 
   const [selected, setSelected] = useState<MenuId>();
@@ -23,6 +23,9 @@ export const MenuContainer: React.FC<MenuProps> = props => {
     switch (path) {
       case '/friends':
         setSelected('friends');
+        break;
+      case '/socialtoken':
+        setSelected('token');
         break;
       case '/town':
         setSelected('town');
@@ -44,7 +47,7 @@ export const MenuContainer: React.FC<MenuProps> = props => {
 
   return (
     <div data-testid={'menu-container-test'}>
-      <Menu selected={selected} onChange={handleChangeMenu} {...props} />
+      <MenuRight selected={selected} onChange={handleChangeMenu} {...props} />
     </div>
   );
 };

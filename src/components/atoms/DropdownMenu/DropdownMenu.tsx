@@ -21,6 +21,9 @@ type DropdownMenuProps<T> = {
   disabled?: boolean;
   useIconOnMobile?: boolean;
   onChange: (selected: T) => void;
+  marginBottom?: boolean;
+  marginTop?: boolean;
+  placeholder?: string;
 };
 
 export const DropdownMenu = <T,>(props: DropdownMenuProps<T>): JSX.Element => {
@@ -31,8 +34,11 @@ export const DropdownMenu = <T,>(props: DropdownMenuProps<T>): JSX.Element => {
     disabled = false,
     useIconOnMobile = true,
     selected,
+    marginBottom = true,
+    marginTop = true,
+    placeholder,
   } = props;
-  const styles = useStyles({ useIconOnMobile });
+  const styles = useStyles({ useIconOnMobile, marginBottom, marginTop });
 
   const [current, setCurrent] = useState<T>(selected);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -60,14 +66,15 @@ export const DropdownMenu = <T,>(props: DropdownMenuProps<T>): JSX.Element => {
     if (match) {
       return match?.title;
     } else {
-      return options[0].title;
+      if (placeholder) return placeholder;
+      else return options[0].title;
     }
   };
 
   return (
     <div className={styles.root}>
       <Grid container justifyContent="space-between" className={styles.content}>
-        <div>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
           <Typography
             component="span"
             color="textSecondary"

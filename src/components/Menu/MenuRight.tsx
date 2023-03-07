@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
-import { useCookies } from 'react-cookie';
 
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 import { Backdrop, CircularProgress } from '@material-ui/core';
 
 import { BoxComponent } from '../atoms/Box';
 import { ListItemComponent } from '../atoms/ListItem';
-import { useStyles } from './Menu.styles';
+import { useStyles } from './MenuRight.styles';
 import { useMenuList, MenuDetail, MenuId } from './use-menu-list';
 
-import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import SelectServer, { COOKIE_INSTANCE_URL } from 'src/components/SelectServer';
+import SelectServer from 'src/components/SelectServer';
 import { useInstances } from 'src/hooks/use-instances.hooks';
 import { ServerListProps } from 'src/interfaces/server-list';
 import i18n from 'src/locale';
@@ -25,14 +22,13 @@ type MenuProps = {
   anonymous?: boolean;
 };
 
-export const Menu: React.FC<MenuProps> = props => {
-  const { selected, onChange, logo, anonymous } = props;
+export const MenuRight: React.FC<MenuProps> = props => {
+  const { selected, onChange } = props;
 
   const styles = useStyles();
   const router = useRouter();
 
   const enqueueSnackbar = useEnqueueSnackbar();
-  const confirm = useConfirm();
 
   const { switchInstance, loadingSwitch, onLoadingSwitch } = useInstances();
 
@@ -40,29 +36,9 @@ export const Menu: React.FC<MenuProps> = props => {
 
   const [register, setRegister] = useState(false);
 
-  const gotoHome = () => {
-    if (router.pathname === '/') return;
-    router.push('/', undefined, { shallow: true });
-  };
-
-  const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
-
   const openMenu = (item: MenuDetail) => () => {
     if (router.pathname === item.url) return;
-    if (anonymous && item.url === '/friends') {
-      confirm({
-        icon: 'people',
-        title: i18n.t('Confirm.Anonymous.People.Title'),
-        description: i18n.t('Confirm.Anonymous.People.Desc'),
-        confirmationText: i18n.t('General.SignIn'),
-        cancellationText: i18n.t('LiteVersion.MaybeLater'),
-        onConfirm: () => {
-          router.push(`/login?instance=${cookies[COOKIE_INSTANCE_URL]}`);
-        },
-      });
-    } else {
-      onChange(item.url);
-    }
+    onChange(item.url);
   };
 
   const handleSwitchInstance = async (
@@ -86,24 +62,7 @@ export const Menu: React.FC<MenuProps> = props => {
 
   return (
     <div className={styles.root} data-testid={'menu-test'}>
-      <BoxComponent
-        paddingLeft={0}
-        paddingRight={0}
-        style={{
-          borderTopLeftRadius: 0,
-          borderTopRightRadius: 0,
-          marginBottom: '12px',
-        }}>
-        <div className={styles.head} onClick={gotoHome} aria-hidden="true">
-          <Image
-            loader={() => logo ?? ''}
-            src={logo ?? ''}
-            alt=""
-            width={220}
-            height={48}
-          />
-        </div>
-
+      <BoxComponent paddingLeft={0} paddingRight={0}>
         <div className={styles.instance}>
           <SelectServer
             title={i18n.t('Login.Options.Prompt_Select_Instance.Switch')}
