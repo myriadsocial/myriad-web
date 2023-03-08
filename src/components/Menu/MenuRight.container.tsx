@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { MenuRight } from './MenuRight';
-import { MenuId } from './use-menu-list';
+import { MenuRightId } from './use-menu-list';
 
 type MenuProps = {
   logo: string;
@@ -13,7 +13,7 @@ type MenuProps = {
 export const MenuRightContainer: React.FC<MenuProps> = props => {
   const router = useRouter();
 
-  const [selected, setSelected] = useState<MenuId>();
+  const [selected, setSelected] = useState<MenuRightId>();
 
   useEffect(() => {
     parseSelected(router.pathname);

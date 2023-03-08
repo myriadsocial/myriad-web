@@ -143,6 +143,12 @@
       "Trending": "Trending",
       "CreatedByMe": "Created by Me",
       "CreatedByOthers": "Created by Others"
+    },
+    "New": {
+      "Create": "Create New Timeline",
+      "Discover": "Discover Timeline",
+      "AllOfMyriad": "All Of Myriad",
+      "TimelineIFollow": "All Timelines I Follow"
     }
   },
   "General": {

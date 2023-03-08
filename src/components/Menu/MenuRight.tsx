@@ -7,7 +7,11 @@ import { Backdrop, CircularProgress } from '@material-ui/core';
 import { BoxComponent } from '../atoms/Box';
 import { ListItemComponent } from '../atoms/ListItem';
 import { useStyles } from './MenuRight.styles';
-import { useMenuList, MenuDetail, MenuId } from './use-menu-list';
+import {
+  useMenuRightList,
+  MenuRightId,
+  MenuRightDetail,
+} from './use-menu-list';
 
 import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import SelectServer from 'src/components/SelectServer';
@@ -16,7 +20,7 @@ import { ServerListProps } from 'src/interfaces/server-list';
 import i18n from 'src/locale';
 
 type MenuProps = {
-  selected: MenuId;
+  selected: MenuRightId;
   onChange: (path: string) => void;
   logo: string;
   anonymous?: boolean;
@@ -32,11 +36,11 @@ export const MenuRight: React.FC<MenuProps> = props => {
 
   const { switchInstance, loadingSwitch, onLoadingSwitch } = useInstances();
 
-  const menu = useMenuList(selected);
+  const menu = useMenuRightList(selected);
 
   const [register, setRegister] = useState(false);
 
-  const openMenu = (item: MenuDetail) => () => {
+  const openMenu = (item: MenuRightDetail) => () => {
     if (router.pathname === item.url) return;
     onChange(item.url);
   };

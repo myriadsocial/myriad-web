@@ -21,17 +21,11 @@ export const MenuContainer: React.FC<MenuProps> = props => {
 
   const parseSelected = (path: string) => {
     switch (path) {
-      case '/friends':
-        setSelected('friends');
+      case '/':
+        setSelected('all');
         break;
-      case '/town':
-        setSelected('town');
-        break;
-      case '/nft':
-        setSelected('nft');
-        break;
-      case '/settings':
-        setSelected('settings');
+      case '/timeline':
+        setSelected('timeline');
         break;
       default:
         break;

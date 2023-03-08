@@ -143,6 +143,12 @@
       "Trending": "Trending",
       "CreatedByMe": "Dibuat oleh Saya",
       "CreatedByOthers": "Dibuat Pengguna lain"
+    },
+    "New": {
+      "Create": "Buat Linimasa Baru",
+      "Discover": "Temukan Linimasa",
+      "AllOfMyriad": "All Of Myriad",
+      "TimelineIFollow": "All Timelines I Follow"
     }
   },
   "General": {

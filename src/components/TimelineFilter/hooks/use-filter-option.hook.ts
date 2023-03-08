@@ -44,19 +44,7 @@ export const useFilterOption = () => {
   const typeFilterOptions: TabListItem<TimelineType>[] = [
     {
       id: TimelineType.ALL,
-      title: i18n.t('Post_Sorting.Type_Filter.All'),
-    },
-    {
-      id: TimelineType.FRIEND,
-      title: i18n.t('Post_Sorting.Type_Filter.Friend'),
-    },
-    {
-      id: TimelineType.TRENDING,
-      title: i18n.t('Post_Sorting.Type_Filter.Trending'),
-    },
-    {
-      id: TimelineType.EXPERIENCE,
-      title: i18n.t('Post_Sorting.Type_Filter.Experience'),
+      title: i18n.t('Experience.New.AllOfMyriad'),
     },
   ];
 

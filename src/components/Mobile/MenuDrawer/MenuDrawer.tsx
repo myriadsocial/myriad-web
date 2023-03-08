@@ -26,9 +26,9 @@ import { CommonWalletIcon } from 'components/atoms/Icons';
 import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import ShowIf from 'components/common/show-if.component';
 import {
-  useMenuList,
-  MenuId,
-  MenuDetail,
+  useMenuRightList,
+  MenuRightId,
+  MenuRightDetail,
 } from 'src/components/Menu/use-menu-list';
 import { Metric } from 'src/components/Metric';
 import { useStyles } from 'src/components/Mobile/MenuDrawer/menuDrawer.style';
@@ -49,7 +49,7 @@ export const MenuDrawerComponent: React.FC = () => {
     state => state.notificationState,
   );
 
-  const [selected, setSelected] = React.useState<MenuId>();
+  const [selected, setSelected] = React.useState<MenuRightId>();
   const [openDrawer, setOpenDrawer] = React.useState(false);
   const [openPromptDrawer, setOpenPromptDrawer] = React.useState(false);
   const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
@@ -68,7 +68,7 @@ export const MenuDrawerComponent: React.FC = () => {
   const enqueueSnackbar = useEnqueueSnackbar();
 
   const router = useRouter();
-  const menu = useMenuList(selected);
+  const menu = useMenuRightList(selected);
   const style = useStyles();
 
   const [register, setRegister] = useState(false);
@@ -138,7 +138,7 @@ export const MenuDrawerComponent: React.FC = () => {
     });
   };
 
-  const openMenu = (item: MenuDetail) => () => {
+  const openMenu = (item: MenuRightDetail) => () => {
     if (item.url === '/wallet' && !user) {
       setOpenPromptDrawer(true);
     } else {

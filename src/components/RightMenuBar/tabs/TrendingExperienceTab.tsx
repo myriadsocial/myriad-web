@@ -61,6 +61,7 @@ export const TrendingExperienceTab: React.FC = () => {
           onChange={() => null}
           marginTop={false}
           marginBottom={false}
+          placeholder={'Select'}
         />
       </div>
       <ExperienceListContainer

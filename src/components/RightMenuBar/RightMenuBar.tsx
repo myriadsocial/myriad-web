@@ -16,47 +16,41 @@ const TrendingExperienceTab = dynamic(
   () => import('./tabs/TrendingExperienceTab'),
 );
 
-export const CustomFolderIcon = () => {
-  return (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M22 11V17C22 21 21 22 17 22H7C3 22 2 21 2 17V7C2 3 3 2 7 2H8.5C10 2 10.33 2.44 10.9 3.2L12.4 5.2C12.78 5.7 13 6 14 6H17C21 6 22 7 22 11Z"
-        stroke="#292D32"
-        strokeWidth="1.2"
-        strokeMiterlimit="10"
-      />
-      <path
-        d="M15.7399 12.5785V10.6717C15.7399 10.0795 15.4711 9.84009 14.8033 9.84009H13.1065C12.4387 9.84009 12.1699 10.0795 12.1699 10.6717V12.5743C12.1699 13.1707 12.4387 13.4059 13.1065 13.4059H14.8033C15.4711 13.4101 15.7399 13.1707 15.7399 12.5785Z"
-        stroke="#292D32"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M15.7399 17.3033V15.6065C15.7399 14.9387 15.4711 14.6699 14.8033 14.6699H13.1065C12.4387 14.6699 12.1699 14.9387 12.1699 15.6065V17.3033C12.1699 17.9711 12.4387 18.2399 13.1065 18.2399H14.8033C15.4711 18.2399 15.7399 17.9711 15.7399 17.3033Z"
-        stroke="#292D32"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M10.9098 12.5785V10.6717C10.9098 10.0795 10.641 9.84009 9.97324 9.84009H8.27644C7.60864 9.84009 7.33984 10.0795 7.33984 10.6717V12.5743C7.33984 13.1707 7.60864 13.4059 8.27644 13.4059H9.97324C10.641 13.4101 10.9098 13.1707 10.9098 12.5785Z"
-        stroke="#292D32"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M10.9098 17.3033V15.6065C10.9098 14.9387 10.641 14.6699 9.97324 14.6699H8.27644C7.60864 14.6699 7.33984 14.9387 7.33984 15.6065V17.3033C7.33984 17.9711 7.60864 18.2399 8.27644 18.2399H9.97324C10.641 18.2399 10.9098 17.9711 10.9098 17.3033Z"
-        stroke="#292D32"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-};
+const CustomFolderIcon = () => (
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M22 11V17C22 21 21 22 17 22H7C3 22 2 21 2 17V7C2 3 3 2 7 2H8.5C10 2 10.33 2.44 10.9 3.2L12.4 5.2C12.78 5.7 13 6 14 6H17C21 6 22 7 22 11Z"
+      stroke="#292D32"
+      strokeWidth="1.2"
+      strokeMiterlimit="10"
+    />
+    <path
+      d="M16.3992 12.7214V10.9034C16.3992 10.1879 16.1112 9.8999 15.3957 9.8999H13.5777C12.8622 9.8999 12.5742 10.1879 12.5742 10.9034V12.7214C12.5742 13.4369 12.8622 13.7249 13.5777 13.7249H15.3957C16.1112 13.7249 16.3992 13.4369 16.3992 12.7214Z"
+      stroke="#292D32"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M11.2254 12.8339V10.7909C11.2254 10.1564 10.9374 9.8999 10.2219 9.8999H8.40389C7.68839 9.8999 7.40039 10.1564 7.40039 10.7909V12.8294C7.40039 13.4684 7.68839 13.7204 8.40389 13.7204H10.2219C10.9374 13.7249 11.2254 13.4684 11.2254 12.8339Z"
+      stroke="#292D32"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M11.2254 17.8965V16.0785C11.2254 15.363 10.9374 15.075 10.2219 15.075H8.40389C7.68839 15.075 7.40039 15.363 7.40039 16.0785V17.8965C7.40039 18.612 7.68839 18.9 8.40389 18.9H10.2219C10.9374 18.9 11.2254 18.612 11.2254 17.8965Z"
+      stroke="#292D32"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path d="M13.25 15.9751H15.95" stroke="#292D32" strokeLinecap="round" />
+    <path d="M13.25 17.7749H15.95" stroke="#292D32" strokeLinecap="round" />
+  </svg>
+);
 
 export const RightMenuBar: React.FC = () => {
   const { t } = useTranslation();
@@ -74,7 +68,7 @@ export const RightMenuBar: React.FC = () => {
       icon: (
         <div className={classes.tabContainer}>
           <div className="icon">
-            <CustomFolderIcon />
+            <SvgIcon component={CustomFolderIcon} />
           </div>
           <Typography variant="h4">
             {t('Experience.Filter.Following')}
