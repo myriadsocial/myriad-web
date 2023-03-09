@@ -192,7 +192,7 @@ export const Menu: React.FC<MenuProps> = props => {
           <Button
             variant="outlined"
             color="primary"
-            onClick={() => null}
+            onClick={() => router.push('/experience/discover')}
             startIcon={<SvgIcon component={CustomSearchIcon} />}
             style={{ justifyContent: 'flex-start', paddingLeft: '30px' }}
             fullWidth>
