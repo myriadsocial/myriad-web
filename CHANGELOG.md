@@ -1,5 +1,29 @@
 # Changelog
 
+## [2.3.1](https://github.com/myriadsocial/myriad-web/compare/2.3.0...2.3.1) (2023-03-10)
+
+
+### Bug Fixes
+
+* call function isSubscribe ([#1740](https://github.com/myriadsocial/myriad-web/issues/1740)) ([3214d32](https://github.com/myriadsocial/myriad-web/commit/3214d32a11a59e0ae670119c29895e544ccf7cb1))
+* change add to timeline button style ([#1748](https://github.com/myriadsocial/myriad-web/issues/1748)) ([1f01b0a](https://github.com/myriadsocial/myriad-web/commit/1f01b0ae047bd0256117cbbe136bc3990fd479e9))
+* enable web2 account to edit images ([#1745](https://github.com/myriadsocial/myriad-web/issues/1745)) ([0db5676](https://github.com/myriadsocial/myriad-web/commit/0db56760b807e87eab718eb61781fc1a4a6cdd58))
+* error tab comment ([#1737](https://github.com/myriadsocial/myriad-web/issues/1737)) ([318562b](https://github.com/myriadsocial/myriad-web/commit/318562b8de9977ae6b4126e98700e26784e97d5b))
+* fee claimed ([#1742](https://github.com/myriadsocial/myriad-web/issues/1742)) ([928b532](https://github.com/myriadsocial/myriad-web/commit/928b5325ab1525a5862ed49fb5429e16bbc6fdfa))
+* fixed formatted balance ([#1751](https://github.com/myriadsocial/myriad-web/issues/1751)) ([ac25b49](https://github.com/myriadsocial/myriad-web/commit/ac25b4938a238dad60fbf2af4352880e323ad24d))
+* handle tipping on send tip and content payment ([#1746](https://github.com/myriadsocial/myriad-web/issues/1746)) ([9940232](https://github.com/myriadsocial/myriad-web/commit/994023213b7ad95b81fd3c84df4ec16c39fe6df8))
+* hotfix payment exclusive content ([#1741](https://github.com/myriadsocial/myriad-web/issues/1741)) ([6a0f08f](https://github.com/myriadsocial/myriad-web/commit/6a0f08f2a25d82772510aa64916375980e8573bb))
+* improved formatted balance when inputted ([#1747](https://github.com/myriadsocial/myriad-web/issues/1747)) ([0561bbe](https://github.com/myriadsocial/myriad-web/commit/0561bbe64191d6b8679816142a141fc48239ac40))
+* Post Validation, on search, share timeline link and redirect link change ([#1755](https://github.com/myriadsocial/myriad-web/issues/1755)) ([8a3ed01](https://github.com/myriadsocial/myriad-web/commit/8a3ed018639e6321569c3a8943449fd118084993))
+* remove create timeline limitation ([#1752](https://github.com/myriadsocial/myriad-web/issues/1752)) ([869e220](https://github.com/myriadsocial/myriad-web/commit/869e2207c05f666f4370d2d5ce7c69ba359e57f4))
+* remove text from exclusive content modal ([#1749](https://github.com/myriadsocial/myriad-web/issues/1749)) ([ff9967f](https://github.com/myriadsocial/myriad-web/commit/ff9967f78b0219d970256da9998f8548359ef5c5))
+* set debio tips ([264d80e](https://github.com/myriadsocial/myriad-web/commit/264d80e515e069569fa7e9afd3e0939668e2f224))
+* set debio tips ([#1753](https://github.com/myriadsocial/myriad-web/issues/1753)) ([264d80e](https://github.com/myriadsocial/myriad-web/commit/264d80e515e069569fa7e9afd3e0939668e2f224))
+* show tip ([#1743](https://github.com/myriadsocial/myriad-web/issues/1743)) ([b380140](https://github.com/myriadsocial/myriad-web/commit/b3801407d4a8bea584adc05ff0ca7f8d7fd915d2))
+* show tip fee ([b380140](https://github.com/myriadsocial/myriad-web/commit/b3801407d4a8bea584adc05ff0ca7f8d7fd915d2))
+* take out 'add exclusive content' menu from import tab ([#1750](https://github.com/myriadsocial/myriad-web/issues/1750)) ([cdf1477](https://github.com/myriadsocial/myriad-web/commit/cdf1477712aab87c5257937ed3ce5ee8fe4abfe5))
+* update seassion ([1e5a358](https://github.com/myriadsocial/myriad-web/commit/1e5a35884a4005d895c211639b3a102b14169a97))
+
 ## [2.3.0](https://github.com/myriadsocial/myriad-web/compare/2.2.9...2.3.0) (2023-02-27)
 
 
