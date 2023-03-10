@@ -77,16 +77,15 @@ export const Experience: React.FC<ExperienceProps> = props => {
   const isOwnExperience = userExperience.experience.user.id === user?.id;
   const experienceId = userExperience.experience.id;
   const userExperienceId = userExperience.id;
-  const link = publicRuntimeConfig.appAuthURL + `/experience/${experienceId}`;
+  const link =
+    publicRuntimeConfig.appAuthURL + `/type=experience&id=${experienceId}`;
   const { userExperiencesMeta } = useExperienceHook();
   const totalOwnedExperience =
     userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
   const handleClickExperience = () => {
     handleCloseSettings();
-
-    if (selectable && onSelect) {
-      onSelect(experienceId);
-    }
+    console.log(selectable);
+    onSelect(experienceId);
   };
 
   const handleCloneExperience = () => {
