@@ -269,6 +269,13 @@ export const Editor: React.FC<EditorProps> = props => {
       },
     };
   };
+  const handleChange = useCallback(
+    (value: EditorValue) => {
+      props.onChange(value, false);
+    },
+
+    [props.onChange],
+  );
 
   return (
     <div
@@ -294,6 +301,7 @@ export const Editor: React.FC<EditorProps> = props => {
             autoFocus: autoFocus,
           }}
           plugins={plugins}
+          onChange={handleChange}
           initialValue={initial}>
           <MentionCombobox<MentionDetail>
             onRenderItem={renderComboboxItem}
@@ -306,7 +314,6 @@ export const Editor: React.FC<EditorProps> = props => {
               },
             }}
           />
-
           <Counter className={styles.limit} limit={MAX_CHARACTER_LIMIT} />
         </Plate>
       </div>
