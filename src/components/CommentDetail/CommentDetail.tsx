@@ -1,6 +1,7 @@
 import { DotsVerticalIcon } from '@heroicons/react/outline';
 
 import React, { useEffect, forwardRef } from 'react';
+import { useCookies } from 'react-cookie';
 import { useSelector, useDispatch } from 'react-redux';
 
 import Link from 'next/link';
@@ -33,6 +34,7 @@ import { useStyles } from './CommentDetail.styles';
 import CommentEditor from 'components/CommentEditor/CommentEditor.container';
 import ButtonPayment from 'components/ExclusiveContentCreate/Payment/ButtonPayment';
 import Reveal from 'components/ExclusiveContentCreate/Reveal/Reveal';
+import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
 import { NodeViewer } from 'components/common/NodeViewer';
 import { ExclusiveContent } from 'components/common/Tipping/Tipping.interface';
 import ShowIf from 'src/components/common/show-if.component';
@@ -113,10 +115,21 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>(
       }
     }, [comment.metric.comments]);
 
-    const handleOpenReply = () => {
-      if (!user) return;
+    const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
 
-      setIsReplying(!isReplying);
+    const handleOpenReply = () => {
+      if (!user) {
+        confirm({
+          icon: 'comment',
+          title: i18n.t('Confirm.Anonymous.Comment.Title'),
+          description: i18n.t('Confirm.Anonymous.Comment.Desc'),
+          confirmationText: i18n.t('General.SignIn'),
+          cancellationText: i18n.t('LiteVersion.MaybeLater'),
+          onConfirm: () => {
+            router.push(`/login?instance=${cookies[COOKIE_INSTANCE_URL]}`);
+          },
+        });
+      } else setIsReplying(!isReplying);
     };
 
     const handleSubmitComment = (attributes: Partial<CommentProps>) => {
@@ -360,7 +373,6 @@ export const CommentDetail = forwardRef<HTMLDivElement, CommentDetailProps>(
 
                   <Button
                     classes={{ root: style.button }}
-                    disabled={!user}
                     onClick={handleOpenReply}
                     size="small"
                     variant="text">
