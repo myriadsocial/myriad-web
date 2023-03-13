@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.3.2](https://github.com/myriadsocial/myriad-web/compare/2.3.1...2.3.2) (2023-03-13)
+
+
+### Bug Fixes
+
+* import post ([#1762](https://github.com/myriadsocial/myriad-web/issues/1762)) ([d974b3b](https://github.com/myriadsocial/myriad-web/commit/d974b3baeaa5c6d92c9a57a906fac2a28cb40c19))
+* overlapping link in comment detail ([#1759](https://github.com/myriadsocial/myriad-web/issues/1759)) ([63781e5](https://github.com/myriadsocial/myriad-web/commit/63781e5c4418e748608dc49689ff2aa4c659c7c9))
+* remove attach button wording and change icon to giftIcon ([#1760](https://github.com/myriadsocial/myriad-web/issues/1760)) ([aecada9](https://github.com/myriadsocial/myriad-web/commit/aecada9769bd5f5c1f94c314b8a1bf1616faacdc))
+
 ## [2.3.1](https://github.com/myriadsocial/myriad-web/compare/2.3.0...2.3.1) (2023-03-10)
 
 
