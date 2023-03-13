@@ -20,3 +20,45 @@ export const CustomIconComment = () => {
     </svg>
   );
 };
+
+export const CustomIconUpvote = () => {
+  const styles = useStyles();
+  return (
+    <svg
+      className={styles.root}
+      width="36"
+      height="36"
+      viewBox="0 0 36 36"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M12.75 16.25L18 11M18 11L23.25 16.25M18 11L18 25M18 2.25C26.6985 2.25 33.75 9.30152 33.75 18C33.75 26.6985 26.6985 33.75 18 33.75C9.30152 33.75 2.25 26.6985 2.25 18C2.25 9.30152 9.30152 2.25 18 2.25Z"
+        stroke="#7342CC"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+};
+
+export const CustomIconDownvote = () => {
+  const styles = useStyles();
+  return (
+    <svg
+      className={styles.root}
+      width="36"
+      height="36"
+      viewBox="0 0 36 36"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M23.25 19.75L18 25M18 25L12.75 19.75M18 25L18 11M18 33.75C9.30152 33.75 2.25 26.6985 2.25 18C2.25 9.30152 9.30152 2.25 18 2.25C26.6985 2.25 33.75 9.30152 33.75 18C33.75 26.6985 26.6985 33.75 18 33.75Z"
+        stroke="#FE4747"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+};

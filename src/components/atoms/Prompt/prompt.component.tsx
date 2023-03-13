@@ -9,7 +9,11 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
 
-import { CustomIconComment } from '../Icon/Icon';
+import {
+  CustomIconComment,
+  CustomIconDownvote,
+  CustomIconUpvote,
+} from '../Icon/Icon';
 import { Prompt } from './prompt';
 import { useStyles } from './prompt.style';
 
@@ -33,6 +37,12 @@ export const PromptComponent: React.FC<Prompt> = props => {
       }
       case 'comment': {
         return CustomIconComment;
+      }
+      case 'upvote': {
+        return CustomIconUpvote;
+      }
+      case 'downvote': {
+        return CustomIconDownvote;
       }
     }
   }, [icon]);
