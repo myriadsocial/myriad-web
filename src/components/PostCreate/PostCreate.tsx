@@ -97,6 +97,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
 
   const handlePostUrlChange = (url: string | null) => {
     setImport(url);
+    setEditorValue(url);
   };
 
   const handleConfirmNSFWTags = (tags: string[]) => {
