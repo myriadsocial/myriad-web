@@ -67,7 +67,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
 
   const [activeTab, setActiveTab] = useState<PostCreateType>('create');
   const [post, setPost] = useState<Partial<Post>>(initialPost);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [editorValue, setEditorValue] = useState<string>('');
   const content = useRef('');
 
   const [importUrl, setImport] = useState<string | undefined>();
@@ -250,12 +250,14 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
     setImport(undefined);
     setShowExclusive(false);
     setExclusiveContent(null);
-
+    setEditorValue('');
     onClose();
   };
 
-  const handleContentChange = (data, loading) => {
-    setLoading(loading);
+  const handleContentChange = data => {
+    if (data[0].children[0].text !== '') {
+      setEditorValue(data[0].children[0].text);
+    }
     content.current = data;
   };
 
@@ -431,7 +433,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
         <ShowIf condition={!showExclusive}>
           <ShowIf condition={post.visibility !== 'selected_user'}>
             <Button
-              disabled={loading}
+              disabled={editorValue === ''}
               variant="contained"
               color="primary"
               size="small"

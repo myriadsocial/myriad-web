@@ -53,7 +53,6 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> =
       enableClone,
       enableSubscribe,
       hasMore = false,
-      filterTimeline = false,
       loadNextPage,
       refreshExperience,
       noButton,
@@ -87,17 +86,13 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> =
       type: TimelineType,
       userExperience: WrappedExperience,
     ) => {
-      if (filterTimeline) {
-        router.push(
-          `/?type=experience&id=${userExperience.experience.id}`,
-          undefined,
-          {
-            shallow: true,
-          },
-        );
-      } else {
-        router.push(`/topic/experience?id=${userExperience.experience.id}`);
-      }
+      router.push(
+        `/?type=experience&id=${userExperience.experience.id}`,
+        undefined,
+        {
+          shallow: true,
+        },
+      );
     };
 
     const handleRemoveExperience = (experienceId: string) => {
