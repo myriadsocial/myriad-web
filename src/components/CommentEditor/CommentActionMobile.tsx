@@ -1,7 +1,7 @@
 import { PhotographIcon, TrashIcon } from '@heroicons/react/outline';
 import { FilmIcon } from '@heroicons/react/outline';
 import { PaperAirplaneIcon } from '@heroicons/react/outline';
-import { PaperClipIcon } from '@heroicons/react/outline';
+import { GiftIcon } from '@heroicons/react/outline';
 
 import React from 'react';
 
@@ -73,13 +73,10 @@ export const CommentActionMobile: React.FC<CommentActionProps> = props => {
               disabled={length === 0}
               className={styles.attachButton}>
               <SvgIcon
-                component={PaperClipIcon}
+                component={GiftIcon}
                 viewBox="0 0 24 24"
                 color="primary"
               />
-              <Typography component="span" color="primary" variant="body1">
-                {i18n.t('ExclusiveContent.Attach')}
-              </Typography>
             </IconButton>
           ) : (
             <IconButton
