@@ -11,7 +11,9 @@ export type ConfirmOptions = {
     | 'addTimeline'
     | 'tip'
     | 'createTimeline'
-    | 'followTimeline';
+    | 'followTimeline'
+    | 'createPost'
+    | 'people';
   cancellationText?: React.ReactNode;
   confirmationText?: React.ReactNode;
   hideCancel?: boolean;

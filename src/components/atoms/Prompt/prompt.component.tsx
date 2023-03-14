@@ -16,6 +16,7 @@ import {
   CustomIconCreateTimeline,
   CustomIconDownvote,
   CustomIconFollowTimeline,
+  CustomIconPeople,
   CustomIconSendTipButton,
   CustomIconUpvote,
 } from '../Icon/Icon';
@@ -60,6 +61,9 @@ export const PromptComponent: React.FC<Prompt> = props => {
       }
       case 'followTimeline': {
         return CustomIconFollowTimeline;
+      }
+      case 'people': {
+        return CustomIconPeople;
       }
       case 'createPost': {
         return CustomIconCreatePost;

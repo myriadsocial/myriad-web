@@ -177,8 +177,8 @@
         "Desc": "Timelines are collections of people, posts, and hashtags, that help you keep your content tidy. Sign in now create a Timeline."
       },
       "FollowTimeline": {
-        "Title": "Follow Timeline",
-        "Desc": "Stay up to date with the latest content of this Timeline. Sign in now to follow."
+        "Title": "Subscribe Timeline",
+        "Desc": "Stay up to date with the latest content of this Timeline. Sign in now to subscribe."
       },
       "SendTip": {
         "Title": "Send Tip",
@@ -189,7 +189,7 @@
         "Desc": "Posting to Myriad social could be a great way to earn tips! Sign-in to get started."
       },
       "People": {
-        "Title": "People",
+        "Title": "Friends",
         "Desc": "Start making connections. Sign in now to add and manage your friend list."
       }
     }

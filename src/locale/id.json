@@ -176,8 +176,8 @@
         "Desc": "Linimasa adalah kumpulan orang, kiriman, dan tagar, yang membantu Anda menjaga konten tetap rapi. Masuk sekarang buat Linimasa."
       },
       "FollowTimeline": {
-        "Title": "Ikuti Linimasa",
-        "Desc": "Tetap up to date dengan konten terbaru dari Linimasa ini. Masuk sekarang untuk mengikuti."
+        "Title": "Langganan Linimasa",
+        "Desc": "Tetap up to date dengan konten terbaru dari Linimasa ini. Masuk sekarang untuk berlangganan."
       },
       "SendTip": {
         "Title": "Kirim Tip",
@@ -188,7 +188,7 @@
         "Desc": "Memposting ke Myriad social bisa menjadi cara yang bagus untuk mendapatkan tip! Masuk untuk memulai"
       },
       "People": {
-        "Title": "Orang",
+        "Title": "Teman",
         "Desc": "Mulai buat koneksi. Masuk sekarang untuk menambah dan mengelola daftar teman Anda."
       }
     }
