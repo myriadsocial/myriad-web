@@ -1,10 +1,16 @@
 import * as React from 'react';
+import { useCookies } from 'react-cookie';
+
+import { useRouter } from 'next/router';
 
 import { useStyles } from './AddToTimeline.style';
 
+import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
 import { Button, ButtonVariant } from 'components/atoms/Button';
+import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import useModalAddToPost from 'src/components/Expericence/ModalAddToPost/useModalAddToPost.hook';
 import { Post } from 'src/interfaces/post';
+import { User } from 'src/interfaces/user';
 import i18n from 'src/locale';
 
 const Icon = () => {
@@ -64,25 +70,45 @@ const Icon = () => {
   );
 };
 
-export const ButtonAddToTimeline: React.FC<{ post: Post; mobile: boolean }> =
-  props => {
-    const { post, mobile } = props;
-    const styles = useStyles({ mobile });
-    const addPostToExperience = useModalAddToPost();
+export const ButtonAddToTimeline: React.FC<{
+  post: Post;
+  mobile: boolean;
+  user: User;
+}> = props => {
+  const { post, mobile, user } = props;
+  const confirm = useConfirm();
+  const router = useRouter();
+  const styles = useStyles({ mobile });
+  const addPostToExperience = useModalAddToPost();
 
-    const handleOpenAddPostToExperience = () => {
+  const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
+
+  const handleOpenAddPostToExperience = () => {
+    if (!user) {
+      confirm({
+        icon: 'addTimeline',
+        title: i18n.t('Confirm.Anonymous.AddToTimeline.Title'),
+        description: i18n.t('Confirm.Anonymous.AddToTimeline.Desc'),
+        confirmationText: i18n.t('General.SignIn'),
+        cancellationText: i18n.t('LiteVersion.MaybeLater'),
+        onConfirm: () => {
+          router.push(`/login?instance=${cookies[COOKIE_INSTANCE_URL]}`);
+        },
+      });
+    } else {
       const propsAddToPost = {
         post: post,
       };
       addPostToExperience(propsAddToPost);
-    };
-    return (
-      <Button
-        variant={ButtonVariant.OUTLINED}
-        className={styles.button}
-        onClick={handleOpenAddPostToExperience}>
-        <Icon />
-        {i18n.t('Post_Detail.Post_Options.Add_Post_To_Experience')}
-      </Button>
-    );
+    }
   };
+  return (
+    <Button
+      variant={ButtonVariant.OUTLINED}
+      className={styles.button}
+      onClick={handleOpenAddPostToExperience}>
+      <Icon />
+      {i18n.t('Post_Detail.Post_Options.Add_Post_To_Experience')}
+    </Button>
+  );
+};

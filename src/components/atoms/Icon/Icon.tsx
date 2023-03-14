@@ -62,3 +62,61 @@ export const CustomIconDownvote = () => {
     </svg>
   );
 };
+
+export const CustomIconAddToTimeline = () => {
+  const styles = useStyles();
+  return (
+    <svg
+      className={styles.root}
+      width="40"
+      height="30"
+      viewBox="0 0 40 30"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M32.707 27.3087V7.1253C32.707 4.70447 30.7529 2.7503 28.332 2.7503H23.4904"
+        stroke="#7342CC"
+        strokeWidth="3.78"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M37.3164 22.7003L32.7081 27.3087L28.0997 22.7003"
+        stroke="#7342CC"
+        strokeWidth="3.78"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M7.10754 2.7503L7.10754 22.9337C7.10754 25.3545 9.06171 27.3087 11.4825 27.3087H16.3242"
+        stroke="#7342CC"
+        strokeWidth="3.78"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M2.49817 7.35815L7.10646 2.74982L11.7148 7.35815"
+        stroke="#7342CC"
+        strokeWidth="3.78"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M13 15.0015H27"
+        stroke="#7342CC"
+        strokeWidth="3.15"
+        strokeLinecap="round"
+      />
+      <path
+        d="M19.9961 22.0013L19.9961 8.0013"
+        stroke="#7342CC"
+        strokeWidth="3.15"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+};

@@ -10,6 +10,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
 
 import {
+  CustomIconAddToTimeline,
   CustomIconComment,
   CustomIconDownvote,
   CustomIconUpvote,
@@ -43,6 +44,9 @@ export const PromptComponent: React.FC<Prompt> = props => {
       }
       case 'downvote': {
         return CustomIconDownvote;
+      }
+      case 'addTimeline': {
+        return CustomIconAddToTimeline;
       }
     }
   }, [icon]);
