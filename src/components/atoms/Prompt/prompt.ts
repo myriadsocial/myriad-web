@@ -10,7 +10,9 @@ export type Prompt = {
     | 'addTimeline'
     | 'tip'
     | 'createTimeline'
-    | 'followTimeline';
+    | 'followTimeline'
+    | 'createPost'
+    | 'people';
   title: string | React.ReactNode;
   subtitle: string | React.ReactNode;
   onCancel: () => void;
