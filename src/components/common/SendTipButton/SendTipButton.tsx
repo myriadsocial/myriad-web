@@ -1,6 +1,7 @@
 import { CurrencyDollarIcon } from '@heroicons/react/outline';
 
 import React, { useState } from 'react';
+import { useCookies } from 'react-cookie';
 import { shallowEqual, useSelector } from 'react-redux';
 
 import { useRouter } from 'next/router';
@@ -18,6 +19,7 @@ import useTipping from '../Tipping/use-tipping.hook';
 import ShowIf from '../show-if.component';
 import { useStyles } from './SendTipButton.style';
 
+import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
 import { PromptComponent } from 'src/components/atoms/Prompt/prompt.component';
 import { useUserHook } from 'src/hooks/use-user.hook';
 import { Comment } from 'src/interfaces/comment';
@@ -92,6 +94,12 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
 
   const handleConnectWeb3Wallet = () => {
     router.push(`/wallet?type=manage`);
+  };
+
+  const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
+
+  const handleSignIn = () => {
+    router.push(`/login?instance=${cookies[COOKIE_INSTANCE_URL]}`);
   };
 
   const handleSendTip = async () => {
@@ -172,17 +180,20 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
       </Button>
 
       <PromptComponent
-        icon="warning"
-        title={i18n.t('Tipping.Prompt_Mobile.Title')}
-        subtitle={i18n.t('Tipping.Prompt_Mobile.Subtitle')}
+        icon="tip"
+        title={i18n.t('Confirm.Anonymous.SendTip.Title')}
+        subtitle={i18n.t('Confirm.Anonymous.SendTip.Desc')}
         open={tipInfoOpened}
         onCancel={handleCloseTipInfo}>
-        <div className={styles.wrapperButton}>
+        <div className={styles.wrapperButtonFlex}>
           <Button
-            variant="contained"
-            color="primary"
+            variant="outlined"
+            color="secondary"
             onClick={handleCloseTipInfo}>
-            Back
+            {i18n.t('LiteVersion.MaybeLater')}
+          </Button>
+          <Button variant="contained" color="primary" onClick={handleSignIn}>
+            {i18n.t('General.SignIn')}
           </Button>
         </div>
       </PromptComponent>
