@@ -64,6 +64,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 600,
       lineHeight: '22.59px',
       fontSize: '18px',
+      marginBottom: '8px',
     },
     danger: {
       color: '#FE3636',

@@ -183,8 +183,8 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
 
           {showEmbedded && <LinkPreview embed={post.embeddedURL} />}
 
-          <ShowIf condition={!!user && isMobile}>
-            <ButtonAddToTimeline post={post} mobile={isMobile} />
+          <ShowIf condition={isMobile}>
+            <ButtonAddToTimeline post={post} mobile={isMobile} user={user} />
           </ShowIf>
         </ShowIf>
       </div>
@@ -201,8 +201,8 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           onShowComments={onToggleShowComment}
         />
 
-        <ShowIf condition={!!user && !isMobile}>
-          <ButtonAddToTimeline post={post} mobile={isMobile} />
+        <ShowIf condition={!isMobile}>
+          <ButtonAddToTimeline post={post} mobile={isMobile} user={user} />
         </ShowIf>
 
         <ShowIf condition={showTipButton}>
