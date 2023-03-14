@@ -153,7 +153,45 @@
     "ConnectWallet": "Hubungkan Dompet"
   },
   "Confirm": {
-    "Title": "Apa kamu yakin?"
+    "Title": "Apa kamu yakin?",
+    "Anonymous": {
+      "Comment": {
+        "Title": "Balas untuk bergabung dalam percakapan",
+        "Desc": "Setelah masuk, Anda dapat menanggapi pos ini."
+      },
+      "Upvote": {
+        "Title": "Upvote untuk memberikan dukungan Anda",
+        "Desc": "Suka postingan ini? Masuk sekarang untuk meng-upvote-nya."
+      },
+      "Downvote": {
+        "Title": "Downvote untuk bergabung dalam debat",
+        "Desc": "Masuk sekarang untuk menyuarakan pendapat Anda."
+      },
+      "AddToTimeline": {
+        "Title": "Tambahkan ke Linimasa",
+        "Desc": "Linimasa adalah kumpulan orang, kiriman, dan tagar, yang membantu Anda menjaga konten tetap rapi. Masuk sekarang untuk menambahkan postingan ini ke Linimasa Anda."
+      },
+      "CreateTimeline": {
+        "Title": "Buat Linimasa Baru",
+        "Desc": "Linimasa adalah kumpulan orang, kiriman, dan tagar, yang membantu Anda menjaga konten tetap rapi. Masuk sekarang buat Linimasa."
+      },
+      "FollowTimeline": {
+        "Title": "Langganan Linimasa",
+        "Desc": "Tetap up to date dengan konten terbaru dari Linimasa ini. Masuk sekarang untuk berlangganan."
+      },
+      "SendTip": {
+        "Title": "Kirim Tip",
+        "Desc": "Tunjukkan apresiasi Anda kepada penulis postingan ini dengan mengirimkan tip kepada mereka."
+      },
+      "CreatePost": {
+        "Title": "Buat atau Impor Pos",
+        "Desc": "Memposting ke Myriad social bisa menjadi cara yang bagus untuk mendapatkan tip! Masuk untuk memulai"
+      },
+      "People": {
+        "Title": "Teman",
+        "Desc": "Mulai buat koneksi. Masuk sekarang untuk menambah dan mengelola daftar teman Anda."
+      }
+    }
   },
   "Mobile": {
     "title": "Kami benar-benar minta maaf",

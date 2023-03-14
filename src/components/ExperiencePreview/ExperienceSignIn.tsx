@@ -10,6 +10,7 @@ import { useStyles } from './experience.style';
 import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
 import { PromptComponent as PromptMobile } from 'src/components/Mobile/PromptDrawer/Prompt';
 import { PromptComponent } from 'src/components/atoms/Prompt/prompt.component';
+import i18n from 'src/locale';
 
 export type ExperienceSignInProps = {
   open: boolean;
@@ -32,20 +33,16 @@ export const ExperienceSignIn: React.FC<ExperienceSignInProps> = props => {
   return (
     <>
       <PromptMobile
-        title={'Start your Experience!'}
-        subtitle={
-          'When you join Myriad, you can create, subscribe or clone an experience.'
-        }
+        title={i18n.t('Confirm.Anonymous.FollowTimeline.Title')}
+        subtitle={i18n.t('Confirm.Anonymous.FollowTimeline.Desc')}
         open={open}
         onCancel={onClose}
       />
       <PromptComponent
-        title={'Start your Experience!'}
-        subtitle={
-          'When you join Myriad, you can create, subscribe, or clone \n an experience.'
-        }
+        title={i18n.t('Confirm.Anonymous.FollowTimeline.Title')}
+        subtitle={i18n.t('Confirm.Anonymous.FollowTimeline.Desc')}
         open={open}
-        icon="warning"
+        icon="followTimeline"
         onCancel={onClose}>
         <div className={style.action}>
           <Button
@@ -54,14 +51,14 @@ export const ExperienceSignIn: React.FC<ExperienceSignInProps> = props => {
             color="secondary"
             style={{ marginRight: '12px' }}
             onClick={onClose}>
-            Back
+            {i18n.t('LiteVersion.MaybeLater')}
           </Button>
           <Button
             size="small"
             variant="contained"
             color="primary"
             onClick={handleSignIn}>
-            Sign in
+            {i18n.t('General.SignIn')}
           </Button>
         </div>
       </PromptComponent>

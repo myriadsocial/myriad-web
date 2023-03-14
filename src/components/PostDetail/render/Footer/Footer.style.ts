@@ -86,6 +86,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     comment: {
       fontSize: 14,
       fontWeight: 600,
+      paddingLeft: 4,
     },
     commentLabel: {
       [theme.breakpoints.down('xs')]: {
