@@ -191,3 +191,56 @@ export const CustomIconCreateTimeline = () => {
     </svg>
   );
 };
+
+export const CustomIconFollowTimeline = () => {
+  const styles = useStyles();
+  return (
+    <svg
+      className={styles.root}
+      width="36"
+      height="36"
+      viewBox="0 0 36 36"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M33 16.5V25.5C33 31.5 31.5 33 25.5 33H10.5C4.5 33 3 31.5 3 25.5V10.5C3 4.5 4.5 3 10.5 3H12.75C15 3 15.495 3.66 16.35 4.8L18.6 7.8C19.17 8.55 19.5 9 21 9H25.5C31.5 9 33 10.5 33 16.5Z"
+        stroke="#6E3FC3"
+        strokeWidth="1.8"
+        strokeMiterlimit="10"
+      />
+      <path
+        d="M24.5969 19.0823V16.3553C24.5969 15.282 24.1649 14.85 23.0916 14.85H20.3646C19.2914 14.85 18.8594 15.282 18.8594 16.3553V19.0823C18.8594 20.1555 19.2914 20.5875 20.3646 20.5875H23.0916C24.1649 20.5875 24.5969 20.1555 24.5969 19.0823Z"
+        stroke="#6E3FC3"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M16.8352 19.251V16.1865C16.8352 15.2348 16.4032 14.85 15.3299 14.85H12.6029C11.5297 14.85 11.0977 15.2348 11.0977 16.1865V19.2443C11.0977 20.2028 11.5297 20.5808 12.6029 20.5808H15.3299C16.4032 20.5875 16.8352 20.2028 16.8352 19.251Z"
+        stroke="#6E3FC3"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M16.8352 26.8448V24.1178C16.8352 23.0445 16.4032 22.6125 15.3299 22.6125H12.6029C11.5297 22.6125 11.0977 23.0445 11.0977 24.1178V26.8448C11.0977 27.918 11.5297 28.35 12.6029 28.35H15.3299C16.4032 28.35 16.8352 27.918 16.8352 26.8448Z"
+        stroke="#6E3FC3"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M19.875 23.9625H23.925"
+        stroke="#6E3FC3"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <path
+        d="M19.875 26.6625H23.925"
+        stroke="#6E3FC3"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+};

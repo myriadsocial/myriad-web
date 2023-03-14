@@ -14,6 +14,7 @@ import {
   CustomIconComment,
   CustomIconCreateTimeline,
   CustomIconDownvote,
+  CustomIconFollowTimeline,
   CustomIconSendTipButton,
   CustomIconUpvote,
 } from '../Icon/Icon';
@@ -55,6 +56,9 @@ export const PromptComponent: React.FC<Prompt> = props => {
       }
       case 'createTimeline': {
         return CustomIconCreateTimeline;
+      }
+      case 'followTimeline': {
+        return CustomIconFollowTimeline;
       }
     }
   }, [icon]);

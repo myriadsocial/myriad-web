@@ -2,6 +2,7 @@ import { DotsVerticalIcon } from '@heroicons/react/outline';
 import { DuplicateIcon } from '@heroicons/react/outline';
 
 import React, { useState } from 'react';
+import { useCookies } from 'react-cookie';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
 import getConfig from 'next/config';
@@ -23,6 +24,7 @@ import Typography from '@material-ui/core/Typography';
 import useConfirm from '../common/Confirm/use-confirm.hook';
 import { useStyles } from './Experience.style';
 
+import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
 import { WithAuthorizeAction } from 'components/common/Authorization/WithAuthorizeAction';
 import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import { Modal } from 'src/components/atoms/Modal';
@@ -119,11 +121,26 @@ export const Experience: React.FC<ExperienceProps> = props => {
     }
   };
 
+  const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
+
   const handleSubscribeExperience = () => {
     handleCloseSettings();
 
-    if (onSubscribe) {
-      onSubscribe(experienceId);
+    if (!user) {
+      confirm({
+        icon: 'followTimeline',
+        title: i18n.t('Confirm.Anonymous.FollowTimeline.Title'),
+        description: i18n.t('Confirm.Anonymous.FollowTimeline.Desc'),
+        confirmationText: i18n.t('General.SignIn'),
+        cancellationText: i18n.t('LiteVersion.MaybeLater'),
+        onConfirm: () => {
+          router.push(`/login?instance=${cookies[COOKIE_INSTANCE_URL]}`);
+        },
+      });
+    } else {
+      if (onSubscribe) {
+        onSubscribe(experienceId);
+      }
     }
   };
 
@@ -303,8 +320,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
             }>
             <MenuItem
               onClick={handleSubscribeExperience}
-              fallback={handleCloseSettings}
-              disabled={anonymous}>
+              fallback={handleCloseSettings}>
               {i18n.t('Experience.List.Menu.Subscribe')}
             </MenuItem>
           </ShowIf>
