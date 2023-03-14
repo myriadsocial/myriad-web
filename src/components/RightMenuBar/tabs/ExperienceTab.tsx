@@ -1,6 +1,7 @@
 import { PlusIcon } from '@heroicons/react/outline';
 
 import React from 'react';
+import { useCookies } from 'react-cookie';
 import { shallowEqual, useSelector } from 'react-redux';
 
 import { useRouter } from 'next/router';
@@ -10,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 
 import { useStyles } from './Tab.style';
 
+import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import {
   ExperienceListContainer,
@@ -42,30 +44,45 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
     shallowEqual,
   );
 
+  const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
+
   const handleCreateExperience = () => {
-    const fullAccess = user?.fullAccess ?? false;
-    const totalOwnedExperience =
-      userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
+    if (!user) {
+      confirm({
+        icon: 'createTimeline',
+        title: i18n.t('Confirm.Anonymous.CreateTimeline.Title'),
+        description: i18n.t('Confirm.Anonymous.CreateTimeline.Desc'),
+        confirmationText: i18n.t('General.SignIn'),
+        cancellationText: i18n.t('LiteVersion.MaybeLater'),
+        onConfirm: () => {
+          router.push(`/login?instance=${cookies[COOKIE_INSTANCE_URL]}`);
+        },
+      });
+    } else {
+      const fullAccess = user?.fullAccess ?? false;
+      const totalOwnedExperience =
+        userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
 
-    if (!fullAccess) {
-      if (totalOwnedExperience >= 5) {
-        return confirm({
-          title: i18n.t('LiteVersion.LimitTitleExperience'),
-          description: i18n.t('LiteVersion.LimitDescExperience'),
-          icon: 'warning',
-          confirmationText: i18n.t('LiteVersion.ConnectWallet'),
-          cancellationText: i18n.t('LiteVersion.MaybeLater'),
-          onConfirm: () => {
-            router.push({ pathname: '/wallet', query: { type: 'manage' } });
-          },
-          onCancel: () => {
-            undefined;
-          },
-        });
+      if (!fullAccess) {
+        if (totalOwnedExperience >= 5) {
+          return confirm({
+            title: i18n.t('LiteVersion.LimitTitleExperience'),
+            description: i18n.t('LiteVersion.LimitDescExperience'),
+            icon: 'warning',
+            confirmationText: i18n.t('LiteVersion.ConnectWallet'),
+            cancellationText: i18n.t('LiteVersion.MaybeLater'),
+            onConfirm: () => {
+              router.push({ pathname: '/wallet', query: { type: 'manage' } });
+            },
+            onCancel: () => {
+              undefined;
+            },
+          });
+        }
       }
-    }
 
-    router.push('/experience/create');
+      router.push('/experience/create');
+    }
   };
 
   const handleLoadNextPage = () => {
@@ -85,7 +102,7 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
           My Timelines
         </Typography>
 
-        <ShowIf condition={Boolean(user) && experienceType === 'user'}>
+        <ShowIf condition={experienceType === 'user'}>
           <Typography
             variant={'caption'}
             color={'primary'}

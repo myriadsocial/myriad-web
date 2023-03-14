@@ -138,3 +138,56 @@ export const CustomIconSendTipButton = () => {
     </svg>
   );
 };
+
+export const CustomIconCreateTimeline = () => {
+  const styles = useStyles();
+  return (
+    <svg
+      className={styles.root}
+      width="42"
+      height="42"
+      viewBox="0 0 42 42"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M38.5 19.25V29.75C38.5 36.75 36.75 38.5 29.75 38.5H12.25C5.25 38.5 3.5 36.75 3.5 29.75V12.25C3.5 5.25 5.25 3.5 12.25 3.5H14.875C17.5 3.5 18.0775 4.27 19.075 5.6L21.7 9.1C22.365 9.975 22.75 10.5 24.5 10.5H29.75C36.75 10.5 38.5 12.25 38.5 19.25Z"
+        stroke="#6E3FC3"
+        strokeWidth="2"
+        strokeMiterlimit="10"
+      />
+      <path
+        d="M28.6977 22.2627V19.0812C28.6977 17.829 28.1937 17.325 26.9415 17.325H23.76C22.5079 17.325 22.0039 17.829 22.0039 19.0812V22.2627C22.0039 23.5148 22.5079 24.0188 23.76 24.0188H26.9415C28.1937 24.0188 28.6977 23.5148 28.6977 22.2627Z"
+        stroke="#6E3FC3"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M19.6391 22.4595V18.8843C19.6391 17.7739 19.1351 17.325 17.8829 17.325H14.7014C13.4493 17.325 12.9453 17.7739 12.9453 18.8843V22.4517C12.9453 23.5699 13.4493 24.0109 14.7014 24.0109H17.8829C19.1351 24.0188 19.6391 23.5699 19.6391 22.4595Z"
+        stroke="#6E3FC3"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M19.6391 31.3189V28.1374C19.6391 26.8853 19.1351 26.3813 17.8829 26.3813H14.7014C13.4493 26.3813 12.9453 26.8853 12.9453 28.1374V31.3189C12.9453 32.571 13.4493 33.075 14.7014 33.075H17.8829C19.1351 33.075 19.6391 32.571 19.6391 31.3189Z"
+        stroke="#6E3FC3"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M22.7891 29.5312H27.5141"
+        stroke="#6E3FC3"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M25.1562 31.8937V27.1687"
+        stroke="#6E3FC3"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+};

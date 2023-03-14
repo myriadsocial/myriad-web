@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import {
   CustomIconAddToTimeline,
   CustomIconComment,
+  CustomIconCreateTimeline,
   CustomIconDownvote,
   CustomIconSendTipButton,
   CustomIconUpvote,
@@ -51,6 +52,9 @@ export const PromptComponent: React.FC<Prompt> = props => {
       }
       case 'tip': {
         return CustomIconSendTipButton;
+      }
+      case 'createTimeline': {
+        return CustomIconCreateTimeline;
       }
     }
   }, [icon]);
