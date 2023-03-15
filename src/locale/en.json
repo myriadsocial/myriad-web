@@ -749,6 +749,13 @@
       "Title": "Wallet Not Connected",
       "Subtitle": "You don’t have any wallet connected to your account, let’s try to connect your wallet to send tip"
     },
+    "Prompt_Near": {
+      "Title": "Allow connection to NEAR network?",
+      "Btn": {
+        "Left": "Cancel",
+        "Right": "Allow"
+      }
+    },
     "Prompt_Success": {
       "Title": "Tip sent!",
       "Subtitle_1": "Tip to ",
