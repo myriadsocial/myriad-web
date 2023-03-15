@@ -70,7 +70,7 @@
     "lodash": "^4.17.21",
     "millify": "^4.0.0",
     "mux.js": "^6.0.1",
-    "near-api-js": "^0.44.2",
+    "near-api-js": "^1.1.0",
     "next": "latest",
     "next-auth": "4.10.3",
     "next-http-proxy-middleware": "^1.2.4",
