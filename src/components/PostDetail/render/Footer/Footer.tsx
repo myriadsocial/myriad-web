@@ -87,24 +87,24 @@ export const PostFooter: React.FC<PostFooterProps> = props => {
             component={ChatAltIcon}
             viewBox="0 0 24 24"
           />
-        </IconButton>
-        <Typography
-          component="span"
-          color="primary"
-          variant="body1"
-          className={style.comment}>
-          <Typography component="span" color="primary" variant="body1">
-            {formatCount(discussions + debates)}
-          </Typography>
-          &nbsp;
           <Typography
             component="span"
             color="primary"
             variant="body1"
-            className={style.commentLabel}>
-            {i18n.t('Post_Detail.Post_Action.Comments')}
+            className={style.comment}>
+            <Typography component="span" color="primary" variant="body1">
+              {formatCount(discussions + debates)}
+            </Typography>
+            &nbsp;
+            <Typography
+              component="span"
+              color="primary"
+              variant="body1"
+              className={style.commentLabel}>
+              {i18n.t('Post_Detail.Post_Action.Comments')}
+            </Typography>
           </Typography>
-        </Typography>
+        </IconButton>
       </div>
 
       <ShowIf condition={type !== 'share'}>

@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
 import { useSelector } from 'react-redux';
 
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 
+import { Button } from '@material-ui/core';
+
 import { RichTextComponent } from '.';
 import { useStyles } from './richtext.style';
 
-import { PromptComponent } from 'src/components/Mobile/PromptDrawer/Prompt';
+import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
+import { PromptComponent } from 'src/components/atoms/Prompt/prompt.component';
 import { useQueryParams } from 'src/hooks/use-query-params.hooks';
 import { TimelineType } from 'src/interfaces/timeline';
 import i18n from 'src/locale';
@@ -63,6 +67,12 @@ export const RichTextContainer: React.FC = () => {
     setTextPlaceholder(i18n.t('Home.RichText.Placeholder'));
   }, [settings.language]);
 
+  const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
+
+  const handleSignIn = () => {
+    router.push(`/login?instance=${cookies[COOKIE_INSTANCE_URL]}`);
+  };
+
   return (
     <div className={style.box}>
       <RichTextComponent
@@ -73,13 +83,20 @@ export const RichTextContainer: React.FC = () => {
         placeholder={textPlaceholder}
       />
       <PromptComponent
-        title={'Create or Import Posts'}
-        subtitle={
-          'You can post directly from Myriad or imported post in myriad from other social media platforms'
-        }
+        icon="createPost"
+        title={i18n.t('Confirm.Anonymous.CreatePost.Title')}
+        subtitle={i18n.t('Confirm.Anonymous.CreatePost.Desc')}
         open={openPromptDrawer}
-        onCancel={handleCancel}
-      />
+        onCancel={handleCancel}>
+        <div className={style.wrapperButtonFlex}>
+          <Button variant="outlined" color="secondary" onClick={handleCancel}>
+            {i18n.t('LiteVersion.MaybeLater')}
+          </Button>
+          <Button variant="contained" color="primary" onClick={handleSignIn}>
+            {i18n.t('General.SignIn')}
+          </Button>
+        </div>
+      </PromptComponent>
       <PostCreateContainer
         open={createPostOpened}
         onClose={handleCloseCreatePost}

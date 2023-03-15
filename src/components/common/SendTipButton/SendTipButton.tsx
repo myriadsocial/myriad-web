@@ -1,8 +1,10 @@
 import { CurrencyDollarIcon } from '@heroicons/react/outline';
 
 import React, { useState } from 'react';
+import { useCookies } from 'react-cookie';
 import { shallowEqual, useSelector } from 'react-redux';
 
+import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 
 import {
@@ -18,19 +20,26 @@ import useTipping from '../Tipping/use-tipping.hook';
 import ShowIf from '../show-if.component';
 import { useStyles } from './SendTipButton.style';
 
+import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
+import * as nearAPI from 'near-api-js';
 import { PromptComponent } from 'src/components/atoms/Prompt/prompt.component';
 import { useUserHook } from 'src/hooks/use-user.hook';
 import { Comment } from 'src/interfaces/comment';
 import { ReferenceType } from 'src/interfaces/interaction';
+import { NetworkIdEnum } from 'src/interfaces/network';
 import { People } from 'src/interfaces/people';
 import { Post } from 'src/interfaces/post';
-import { User } from 'src/interfaces/user';
+import { User, Wallet } from 'src/interfaces/user';
 import { WalletDetail } from 'src/interfaces/wallet';
 import * as CommentAPI from 'src/lib/api/comment';
 import * as PostAPI from 'src/lib/api/post';
 import * as UserAPI from 'src/lib/api/user';
+import { Near } from 'src/lib/services/near-api-js';
 import i18n from 'src/locale';
 import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
+
+const { publicRuntimeConfig } = getConfig();
 
 type SendTipButtonProps = ButtonProps & {
   label?: string;
@@ -64,15 +73,22 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
   const [promptFailedTip, setPromptFailedTip] = useState(false);
   const [tipInfoOpened, setTipInfoOpened] = useState(false);
   const [prompWeb2Users, setPrompWeb2Users] = useState(false);
+  const [promptNearConnection, setPromptNearConnection] = useState(false);
 
   const { wallets } = user || { wallets: [] };
+  console.log('wallet', wallets);
 
-  const anonymous = useSelector<RootState, boolean>(
-    state => state.userState.anonymous,
+  const { anonymous, networks } = useSelector<RootState, UserState>(
+    state => state.userState,
     shallowEqual,
   );
 
   const isWeb2Users = !wallets.length && !anonymous;
+
+  const isNear =
+    wallets.length && (wallets[0] as Wallet).blockchainPlatform === 'near';
+
+  console.log('is near', isNear);
 
   const icon = (
     <SvgIcon
@@ -90,8 +106,18 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
     setPrompWeb2Users(false);
   };
 
+  const handleCloseNearWallet = () => {
+    setPromptNearConnection(false);
+  };
+
   const handleConnectWeb3Wallet = () => {
     router.push(`/wallet?type=manage`);
+  };
+
+  const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
+
+  const handleSignIn = () => {
+    router.push(`/login?instance=${cookies[COOKIE_INSTANCE_URL]}`);
   };
 
   const handleSendTip = async () => {
@@ -108,6 +134,20 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
     if (isWeb2Users) {
       setPrompWeb2Users(true);
       return;
+    }
+
+    if (isNear) {
+      const network = networks.find(
+        network => network.id === NetworkIdEnum.NEAR,
+      );
+
+      if (!network) return;
+      const near = await Near.connect(network);
+      const wallet = near.provider.wallet;
+      if (!wallet.isSignedIn()) {
+        setPromptNearConnection(true);
+        return;
+      }
     }
 
     try {
@@ -173,16 +213,63 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
 
       <PromptComponent
         icon="warning"
+        title={i18n.t('Tipping.Prompt_Near.Title')}
+        open={promptNearConnection}
+        subtitle={''}
+        onCancel={handleCloseNearWallet}>
+        <div className={styles.wrapperButtonFlex}>
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={handleCloseNearWallet}>
+            {i18n.t('Tipping.Prompt_Near.Btn.Left')}
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={async () => {
+              const network = networks.find(
+                network => network.id === NetworkIdEnum.NEAR,
+              );
+
+              if (!network) return;
+              const near = await Near.connect(network);
+              const wallet = near.provider.wallet;
+
+              const keyStore =
+                new nearAPI.keyStores.BrowserLocalStorageKeyStore();
+              const signInOptions = {
+                contractId: publicRuntimeConfig.nearTippingContractId,
+                methodNames: ['claim_tip', 'batch_claim_tips'],
+                successUrl: publicRuntimeConfig.appAuthURL + router.asPath,
+                failureUrl: publicRuntimeConfig.appAuthURL + router.asPath,
+              };
+
+              await Promise.all([
+                keyStore.clear(),
+                wallet.requestSignIn(signInOptions),
+              ]);
+            }}>
+            {i18n.t('Tipping.Prompt_Near.Btn.Right')}
+          </Button>
+        </div>
+      </PromptComponent>
+
+      <PromptComponent
+        icon="warning"
         title={i18n.t('Tipping.Prompt_Mobile.Title')}
         subtitle={i18n.t('Tipping.Prompt_Mobile.Subtitle')}
         open={tipInfoOpened}
         onCancel={handleCloseTipInfo}>
-        <div className={styles.wrapperButton}>
+        <div className={styles.wrapperButtonFlex}>
           <Button
-            variant="contained"
-            color="primary"
+            variant="outlined"
+            color="secondary"
             onClick={handleCloseTipInfo}>
-            Back
+            {i18n.t('LiteVersion.MaybeLater')}
+          </Button>
+          <Button variant="contained" color="primary" onClick={handleSignIn}>
+            {i18n.t('General.SignIn')}
           </Button>
         </div>
       </PromptComponent>

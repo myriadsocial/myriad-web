@@ -70,5 +70,11 @@ export const useStyles = makeStyles((theme: Theme) =>
         width: '48px',
       },
     },
+    wrapperButtonFlex: {
+      marginTop: 32,
+      display: 'flex',
+      justifyContent: 'space-between',
+      gap: '8px',
+    },
   }),
 );

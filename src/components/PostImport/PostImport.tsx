@@ -54,11 +54,11 @@ export const PostImport: React.FC<PostImportProps> = props => {
     event: React.ChangeEvent<HTMLInputElement>,
   ): void => {
     const url = event.target.value;
-
     setError(null);
     setUrl(url);
     setSocial(null);
     setPostId(null);
+    onChange(url);
 
     if (isUrl(url)) {
       parseUrl(url);

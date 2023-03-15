@@ -9,6 +9,17 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
 
+import {
+  CustomIconAddToTimeline,
+  CustomIconComment,
+  CustomIconCreatePost,
+  CustomIconCreateTimeline,
+  CustomIconDownvote,
+  CustomIconFollowTimeline,
+  CustomIconPeople,
+  CustomIconSendTipButton,
+  CustomIconUpvote,
+} from '../Icon/Icon';
 import { Prompt } from './prompt';
 import { useStyles } from './prompt.style';
 
@@ -29,6 +40,33 @@ export const PromptComponent: React.FC<Prompt> = props => {
       }
       case 'success': {
         return CheckCircleIcon;
+      }
+      case 'comment': {
+        return CustomIconComment;
+      }
+      case 'upvote': {
+        return CustomIconUpvote;
+      }
+      case 'downvote': {
+        return CustomIconDownvote;
+      }
+      case 'addTimeline': {
+        return CustomIconAddToTimeline;
+      }
+      case 'tip': {
+        return CustomIconSendTipButton;
+      }
+      case 'createTimeline': {
+        return CustomIconCreateTimeline;
+      }
+      case 'followTimeline': {
+        return CustomIconFollowTimeline;
+      }
+      case 'people': {
+        return CustomIconPeople;
+      }
+      case 'createPost': {
+        return CustomIconCreatePost;
       }
     }
   }, [icon]);

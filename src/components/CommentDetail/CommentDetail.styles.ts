@@ -96,6 +96,8 @@ export const useStyles = makeStyles<Theme, CommentDetailProps>(theme =>
       width: 16,
     },
     plain: {
+      whiteSpace: 'inherit',
+      overflowWrap: 'anywhere',
       '& p': {
         marginBlockStart: 0,
         marginBlockEnd: 0,

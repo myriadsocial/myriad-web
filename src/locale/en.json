@@ -150,10 +150,49 @@
     "Amount": "Amount",
     "Summary": "Summary",
     "Got_It": "Got it!",
-    "ConnectWallet": "Connect Wallet"
+    "ConnectWallet": "Connect Wallet",
+    "SignIn": "Sign-In"
   },
   "Confirm": {
-    "Title": "Are you sure?"
+    "Title": "Are you sure?",
+    "Anonymous": {
+      "Comment": {
+        "Title": "Reply to join the conversation",
+        "Desc": "Once you’ve signed in, you’ll be able to respond to this post."
+      },
+      "Upvote": {
+        "Title": "Upvote to give your support",
+        "Desc": "Like this post? Sign in now to upvote it."
+      },
+      "Downvote": {
+        "Title": "Downvote to join the debate",
+        "Desc": "Sign in now to voice your opinion."
+      },
+      "AddToTimeline": {
+        "Title": "Add to Timeline",
+        "Desc": "Timelines are collections of people, posts, and hashtags, that help you keep your content tidy. Sign in now to add this post to your Timeline."
+      },
+      "CreateTimeline": {
+        "Title": "Create New Timeline",
+        "Desc": "Timelines are collections of people, posts, and hashtags, that help you keep your content tidy. Sign in now create a Timeline."
+      },
+      "FollowTimeline": {
+        "Title": "Subscribe Timeline",
+        "Desc": "Stay up to date with the latest content of this Timeline. Sign in now to subscribe."
+      },
+      "SendTip": {
+        "Title": "Send Tip",
+        "Desc": "Show your appreciation to the author of this post by sending them a tip."
+      },
+      "CreatePost": {
+        "Title": "Create or Import a Post",
+        "Desc": "Posting to Myriad social could be a great way to earn tips! Sign-in to get started."
+      },
+      "People": {
+        "Title": "Friends",
+        "Desc": "Start making connections. Sign in now to add and manage your friend list."
+      }
+    }
   },
   "Mobile": {
     "title": "We are truly sorry",
@@ -709,6 +748,13 @@
     "Prompt_Web2": {
       "Title": "Wallet Not Connected",
       "Subtitle": "You don’t have any wallet connected to your account, let’s try to connect your wallet to send tip"
+    },
+    "Prompt_Near": {
+      "Title": "Allow connection to NEAR network?",
+      "Btn": {
+        "Left": "Cancel",
+        "Right": "Allow"
+      }
     },
     "Prompt_Success": {
       "Title": "Tip sent!",
