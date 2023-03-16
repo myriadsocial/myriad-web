@@ -1296,7 +1296,7 @@
     },
     "Text": {
       "NetworkError": "Payment only available in {{accept}} now you are in {{current}}. Switch network to proceed",
-      "NotLogin": "This is paid content. Sign in with your crypto wallet to view it.",
+      "NotLogin": "This is a paid content. Sign in with your crypto wallet to view it.",
       "Web2User": "You don’t have any wallet connected to your account. Let’s try to connect your wallet to reveal this exclusive content."
     },
     "Prompt_Success": {
