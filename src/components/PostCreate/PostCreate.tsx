@@ -256,8 +256,13 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
   };
 
   const handleContentChange = data => {
-    if (data[0].children[0].text !== '') {
-      setEditorValue(data[0].children[0].text);
+    if (!isMobile) {
+      if (data[0].children[0].text !== '') {
+        setEditorValue(data[0].children[0].text);
+      }
+    }
+    if (data.length > 0 && isMobile) {
+      setEditorValue(data);
     }
     content.current = data;
   };
@@ -456,7 +461,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
               justifyContent: 'flex-end',
             }}>
             <Button
-              disabled={false}
+              disabled={editorValue === ''}
               variant="contained"
               color="primary"
               size="small"
