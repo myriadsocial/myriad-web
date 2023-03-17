@@ -6,6 +6,8 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+
 import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
 import { Timeline } from 'components/Timeline/Timeline.layout';
 import { SearchBoxContainer } from 'components/atoms/Search/SearchBoxContainer';
@@ -48,9 +50,21 @@ type HomePageProps = {
   image: string;
 };
 
+export const useStyles = makeStyles<Theme>(theme =>
+  createStyles({
+    sticky: {
+      position: 'sticky',
+      top: 0,
+      left: 0,
+      zIndex: 99,
+    },
+  }),
+);
+
 const Index: React.FC<HomePageProps> = props => {
   const { session, title, description, image } = props;
   const router = useRouter();
+  const style = useStyles();
   useEffect(() => {
     if (!session?.user?.instanceURL) updateSession(session);
   }, [session]);
@@ -79,9 +93,11 @@ const Index: React.FC<HomePageProps> = props => {
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
       <DefaultLayout isOnProfilePage={false} {...props}>
-        <NavbarComponent {...props} />
+        <div className={style.sticky}>
+          <NavbarComponent {...props} />
 
-        <SearchBoxContainer hidden={true} />
+          <SearchBoxContainer hidden={true} />
+        </div>
 
         <RichTextContainer />
 
