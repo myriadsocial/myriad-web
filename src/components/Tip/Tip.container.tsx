@@ -68,7 +68,7 @@ export const TipContainer: React.FC = () => {
 
   const handleClaimTip = (networkId: string, ftIdentifier: string) => {
     claim(networkId, ftIdentifier, ({ claimSuccess, errorMessage }) => {
-      if (networkId === NetworkIdEnum.MYRIAD) {
+      if (networkId !== NetworkIdEnum.NEAR) {
         // TODO: Register translation
         const variant = claimSuccess ? 'success' : 'warning';
         const message = claimSuccess
@@ -82,7 +82,7 @@ export const TipContainer: React.FC = () => {
 
   const handleClaimTipAll = (networkId: string) => {
     claimAll(networkId, ({ claimSuccess, errorMessage }) => {
-      if (networkId === NetworkIdEnum.MYRIAD) {
+      if (networkId !== NetworkIdEnum.NEAR) {
         // TODO: Register translation
         const variant = claimSuccess ? 'success' : 'warning';
         const message = claimSuccess
@@ -114,10 +114,13 @@ export const TipContainer: React.FC = () => {
         throw new Error('Insufficient Gas Fee');
       }
 
-      if (!server?.accountId?.[currentWallet?.networkId])
-        throw new Error('Server not exists');
+      const serverId =
+        currentWallet.networkId === NetworkIdEnum.NEAR
+          ? server?.accountId?.[currentWallet.networkId]
+          : server?.accountId?.[NetworkIdEnum.MYRIAD];
 
-      const serverId = server.accountId[currentWallet?.networkId];
+      if (!serverId) throw new Error('Server not exists');
+
       const tipsBalanceInfo = {
         serverId: serverId,
         referenceType: 'user',

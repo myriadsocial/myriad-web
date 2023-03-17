@@ -14,6 +14,7 @@ import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackba
 import { VariantType } from 'notistack';
 import { FeeInfo, TipsBalanceInfo } from 'src/interfaces/blockchain-interface';
 import { Network, NetworkIdEnum } from 'src/interfaces/network';
+import { BlockchainPlatform } from 'src/interfaces/wallet';
 import * as TransactionAPI from 'src/lib/api/transaction';
 import * as WalletAPI from 'src/lib/api/wallet';
 import i18n from 'src/locale';
@@ -35,7 +36,7 @@ export const useClaimTip = () => {
     state => state.userState,
   );
   const { getClaimTipNear } = useNearApi();
-  const { getClaimTipMyriad } = usePolkadotApi();
+  const { getClaimTipSubstrate } = usePolkadotApi();
   const { server, provider } = useBlockchain();
 
   const [loading, setLoading] = useState(true);
@@ -133,12 +134,10 @@ export const useClaimTip = () => {
 
     try {
       const networkCallback = async (network: Network) => {
-        if (!server?.accountId?.[network.id]) return network;
-
         switch (network.id) {
           case NetworkIdEnum.DEBIO:
           case NetworkIdEnum.MYRIAD: {
-            const result = await getClaimTipMyriad(
+            const result = await getClaimTipSubstrate(
               server,
               user.id,
               currentWallet,
@@ -157,6 +156,7 @@ export const useClaimTip = () => {
           }
 
           case NetworkIdEnum.NEAR: {
+            if (!server?.accountId?.[network.id]) return network;
             const referenceIds = socials.map(social => social.peopleId);
             const result = await getClaimTipNear(
               server.accountId[network.id],
@@ -218,14 +218,18 @@ export const useClaimTip = () => {
     let errorMessage = null;
     let claimSuccess = true;
 
-    setClaiming(true);
-
     try {
-      if (!server?.accountId?.[selectedNetwork.id]) {
+      const serverId =
+        selectedNetwork.blockchainPlatform === BlockchainPlatform.SUBSTRATE
+          ? server?.accountId?.[NetworkIdEnum.MYRIAD]
+          : server?.accountId?.[selectedNetwork.id];
+
+      if (!serverId) {
         throw new Error('ServerNotExists');
       }
 
-      const serverId = server?.accountId?.[selectedNetwork.id];
+      setClaiming(true);
+
       const currency = selectedNetwork.currencies?.find(
         ({ native, referenceId }) => {
           if (ftIdentifier === 'native' && native) return true;
@@ -268,11 +272,17 @@ export const useClaimTip = () => {
     let errorMessage = null;
     let claimSuccess = true;
 
+    const walletId = currentWallet.id;
+    const selectedNetwork = networks.find(network => network.id == networkId);
+    const serverId =
+      selectedNetwork.blockchainPlatform === BlockchainPlatform.SUBSTRATE
+        ? server?.accountId?.[NetworkIdEnum.MYRIAD]
+        : server?.accountId?.[selectedNetwork.id];
+
+    if (!serverId) return;
+
     setClaimingAll(true);
 
-    const walletId = currentWallet.id;
-    const serverId = server?.accountId?.[networkId];
-    const selectedNetwork = networks.find(network => network.id == networkId);
     const userId = user.id;
     const currencyIds = [];
     const ftIdentifiers = ['native'];

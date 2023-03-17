@@ -6,21 +6,21 @@ import {
   TipsBalanceData,
   TipsResult,
 } from 'src/interfaces/blockchain-interface';
-import { Network } from 'src/interfaces/network';
+import { Network, NetworkIdEnum } from 'src/interfaces/network';
 import { SocialMedia } from 'src/interfaces/social';
 import { Wallet } from 'src/interfaces/user';
 import { Server } from 'src/lib/api/server';
 import { PolkadotJs } from 'src/lib/services/polkadot-js';
 
 export const usePolkadotApi = () => {
-  const getClaimTipMyriad = async (
+  const getClaimTipSubstrate = async (
     server: Server,
     referenceId: string,
     wallet: Wallet,
     socials: SocialMedia[],
     network: Network,
   ): Promise<TipsResultsProps> => {
-    const serverId = server.accountId[network.id];
+    const serverId = server.accountId[NetworkIdEnum.MYRIAD];
     const accountId = wallet?.id ?? null;
     const peopleIds: string[] = [];
     const data: TipsBalanceData = {
@@ -173,6 +173,6 @@ export const usePolkadotApi = () => {
   };
 
   return {
-    getClaimTipMyriad,
+    getClaimTipSubstrate,
   };
 };
