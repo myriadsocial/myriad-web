@@ -170,7 +170,7 @@ const ButtonPayment = ({
             {i18n.t('General.Cancel')}
           </Button>
           <Button variant="contained" color="primary" onClick={handleLogin}>
-            {i18n.t('Login.Layout.Btn_Signin')}
+            {i18n.t('General.SignIn')}
           </Button>
         </div>
       </PromptComponent>
