@@ -234,13 +234,6 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
       console.log({ tmpSelectedExperienceItem });
     };
 
-    const scrollToTop = () => {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      });
-    };
-
     const movePosts = (input, from, to) => {
       const element = input[from];
       input.splice(from, 1);
@@ -278,7 +271,6 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
             type: constants.ADD_POSTS_TO_TIMELINE,
             posts: updatePosts(),
           });
-          scrollToTop();
         });
       }
     };
