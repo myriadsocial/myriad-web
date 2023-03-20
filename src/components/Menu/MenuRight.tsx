@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useCookies } from 'react-cookie';
 
 import { useRouter } from 'next/router';
@@ -15,10 +15,8 @@ import {
 } from './use-menu-list';
 
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
-import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import SelectServer, { COOKIE_INSTANCE_URL } from 'src/components/SelectServer';
+import { COOKIE_INSTANCE_URL } from 'src/components/SelectServer';
 import { useInstances } from 'src/hooks/use-instances.hooks';
-import { ServerListProps } from 'src/interfaces/server-list';
 import i18n from 'src/locale';
 
 type MenuProps = {
@@ -34,16 +32,13 @@ export const MenuRight: React.FC<MenuProps> = props => {
   const styles = useStyles();
   const router = useRouter();
 
-  const enqueueSnackbar = useEnqueueSnackbar();
-
-  const { switchInstance, loadingSwitch, onLoadingSwitch } = useInstances();
   const confirm = useConfirm();
 
   const menu = useMenuRightList(selected);
 
-  const [register, setRegister] = useState(false);
-
   const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
+
+  const { loadingSwitch } = useInstances();
 
   const openMenu = (item: MenuRightDetail) => () => {
     if (router.pathname === item.url) return;
@@ -63,38 +58,9 @@ export const MenuRight: React.FC<MenuProps> = props => {
     }
   };
 
-  const handleSwitchInstance = async (
-    server: ServerListProps,
-    callback?: () => void,
-  ) => {
-    try {
-      await switchInstance(server);
-
-      callback && callback();
-    } catch (err) {
-      if (err.message === 'AccountNotFound') {
-        setRegister(true);
-      } else {
-        enqueueSnackbar({ message: err.message, variant: 'error' });
-      }
-
-      onLoadingSwitch(false);
-    }
-  };
-
   return (
     <div className={styles.root} data-testid={'menu-test'}>
       <BoxComponent paddingLeft={0} paddingRight={0}>
-        <div className={styles.instance}>
-          <SelectServer
-            title={i18n.t('Login.Options.Prompt_Select_Instance.Switch')}
-            onSwitchInstance={handleSwitchInstance}
-            register={register}
-            setRegister={value => setRegister(value)}
-            page="layout"
-          />
-        </div>
-
         {menu
           .filter(ar => ar.isDesktop === true)
           .map(item => (
