@@ -1,4 +1,5 @@
 import React from 'react';
+import { useCookies } from 'react-cookie';
 
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -10,6 +11,8 @@ import { ListItemComponent } from '../atoms/ListItem';
 import { useStyles } from './Menu.styles';
 import { useMenuList, MenuDetail, MenuId } from './use-menu-list';
 
+import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
+import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import i18n from 'src/locale';
 
 type MenuProps = {
@@ -122,10 +125,11 @@ export const CustomSearchIcon = () => (
 );
 
 export const Menu: React.FC<MenuProps> = props => {
-  const { selected, onChange, logo } = props;
+  const { selected, onChange, logo, anonymous } = props;
 
   const styles = useStyles();
   const router = useRouter();
+  const confirm = useConfirm();
 
   const menu = useMenuList(selected);
 
@@ -137,6 +141,25 @@ export const Menu: React.FC<MenuProps> = props => {
   const openMenu = (item: MenuDetail) => () => {
     if (router.pathname === item.url) return;
     onChange(item.url);
+  };
+
+  const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
+
+  const handleCreateTimeline = () => {
+    if (anonymous) {
+      confirm({
+        icon: 'createTimeline',
+        title: i18n.t('Confirm.Anonymous.CreateTimeline.Title'),
+        description: i18n.t('Confirm.Anonymous.CreateTimeline.Desc'),
+        confirmationText: i18n.t('General.SignIn'),
+        cancellationText: i18n.t('LiteVersion.MaybeLater'),
+        onConfirm: () => {
+          router.push(`/login?instance=${cookies[COOKIE_INSTANCE_URL]}`);
+        },
+      });
+    } else {
+      router.push('/experience/create');
+    }
   };
 
   return (
@@ -179,7 +202,7 @@ export const Menu: React.FC<MenuProps> = props => {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => router.push('/experience/create')}
+            onClick={handleCreateTimeline}
             startIcon={<SvgIcon component={CustomCreateTimelineIcon} />}
             style={{
               marginBottom: '10px',

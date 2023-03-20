@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useCookies } from 'react-cookie';
 
 import { useRouter } from 'next/router';
 
@@ -13,8 +14,9 @@ import {
   MenuRightDetail,
 } from './use-menu-list';
 
+import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
-import SelectServer from 'src/components/SelectServer';
+import SelectServer, { COOKIE_INSTANCE_URL } from 'src/components/SelectServer';
 import { useInstances } from 'src/hooks/use-instances.hooks';
 import { ServerListProps } from 'src/interfaces/server-list';
 import i18n from 'src/locale';
@@ -27,7 +29,7 @@ type MenuProps = {
 };
 
 export const MenuRight: React.FC<MenuProps> = props => {
-  const { selected, onChange } = props;
+  const { selected, onChange, anonymous } = props;
 
   const styles = useStyles();
   const router = useRouter();
@@ -35,14 +37,30 @@ export const MenuRight: React.FC<MenuProps> = props => {
   const enqueueSnackbar = useEnqueueSnackbar();
 
   const { switchInstance, loadingSwitch, onLoadingSwitch } = useInstances();
+  const confirm = useConfirm();
 
   const menu = useMenuRightList(selected);
 
   const [register, setRegister] = useState(false);
 
+  const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
+
   const openMenu = (item: MenuRightDetail) => () => {
     if (router.pathname === item.url) return;
-    onChange(item.url);
+    if (anonymous && item.url === '/friends') {
+      confirm({
+        icon: 'people',
+        title: i18n.t('Confirm.Anonymous.People.Title'),
+        description: i18n.t('Confirm.Anonymous.People.Desc'),
+        confirmationText: i18n.t('General.SignIn'),
+        cancellationText: i18n.t('LiteVersion.MaybeLater'),
+        onConfirm: () => {
+          router.push(`/login?instance=${cookies[COOKIE_INSTANCE_URL]}`);
+        },
+      });
+    } else {
+      onChange(item.url);
+    }
   };
 
   const handleSwitchInstance = async (
