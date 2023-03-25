@@ -15,6 +15,11 @@ export type TagProps = {
   hide?: boolean;
 };
 
+export interface SelectedUserIds {
+  userId: string;
+  addedAt: number;
+}
+
 export interface Tag extends TagProps, Omit<BaseModel, 'id'> {}
 
 export interface Topic extends Searchable {
@@ -37,7 +42,7 @@ export interface ExperienceProps extends Searchable {
   prohibitedTags?: string[];
   people: People[];
   visibility: string;
-  selectedUserIds: string[];
+  selectedUserIds: SelectedUserIds[];
 }
 
 export interface Experience extends ExperienceProps, BaseModel {

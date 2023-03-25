@@ -33,6 +33,7 @@ import {
   ExperienceProps,
   VisibilityItem,
   Tag,
+  SelectedUserIds,
 } from '../../interfaces/experience';
 import { People } from '../../interfaces/people';
 import { PostDetailExperience } from '../PostDetailExperience/PostDetailExperience';
@@ -474,7 +475,15 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   const mappingUserIds = () => {
     console.log({ selectedVisibility });
     if (selectedVisibility?.id === 'selected_user') {
-      const mapIds = Object.values(selectedUserIds.map(option => option.id));
+      const timestamp = Date.now();
+      const mapIds = Object.values(
+        selectedUserIds.map(option => {
+          return {
+            userId: option.id,
+            addedAt: timestamp,
+          };
+        }),
+      );
       setNewExperience(prevExperience => ({
         ...prevExperience,
         selectedUserIds: mapIds,
@@ -493,8 +502,9 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedUserIds, experience]);
 
-  const getSelectedIds = async (userIds: string[]) => {
+  const getSelectedIds = async (selected: SelectedUserIds[]) => {
     setIsLoadingSelectedUser(true);
+    const userIds = selected.map(e => e.userId);
     const response = await UserAPI.getUserByIds(userIds, pageUserIds);
     setSelectedUserIds([
       ...selectedUserIds,
@@ -508,6 +518,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   React.useEffect(() => {
     getSelectedIds(experience?.selectedUserIds);
   }, [experience, pageUserIds]);
+
   useEffect(() => {
     if (experience) {
       const visibility = visibilityList.find(
