@@ -147,11 +147,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
         if (anonymous) hidden = true;
 
         const user = (await dispatch(fetchUser())) as unknown as User;
-        if (
-          !experience?.selectedUserIds?.includes(user?.id) &&
-          experience?.createdBy !== user?.id
-        )
-          hidden = true;
+        const found = experience?.selectedUserIds?.find(
+          e => e.userId === user?.id,
+        );
+        if (!found && experience?.createdBy !== user?.id) hidden = true;
       }
 
       if (experience?.visibility === 'private') {
