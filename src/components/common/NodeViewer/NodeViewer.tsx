@@ -18,8 +18,10 @@ import {
   createUnderlinePlugin,
   ELEMENT_MEDIA_EMBED,
   ELEMENT_MENTION,
+  ELEMENT_MENTION_INPUT,
   ImageElement,
   MentionElement,
+  MentionInputElement,
   Plate,
   withProps,
 } from '@udecode/plate';
@@ -126,6 +128,9 @@ export const NodeViewer: React.FC<NodeViewerProps> = props => {
               cursor: 'pointer',
             },
           },
+        }),
+        [ELEMENT_MENTION_INPUT]: withProps(MentionInputElement, {
+          renderLabel: mentionable => '@' + mentionable.children[0].text,
         }),
         [ELEMENT_SHOW_MORE]: withProps(ShowMoreElement, {
           onToggle: toggleShowMore,

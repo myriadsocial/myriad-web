@@ -2,6 +2,7 @@ import {
   ELEMENT_IMAGE,
   ELEMENT_MEDIA_EMBED,
   ELEMENT_MENTION,
+  ELEMENT_MENTION_INPUT,
   ELEMENT_PARAGRAPH,
   getNodeString,
 } from '@udecode/plate';
@@ -71,6 +72,10 @@ export const formatToString = (
       }
 
       if (children.type === ELEMENT_MENTION) {
+        return children.username;
+      }
+
+      if (children.type === ELEMENT_MENTION_INPUT) {
         return children.username;
       }
 
