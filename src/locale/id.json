@@ -121,7 +121,8 @@
       "Visibility": {
         "Public": "Publik",
         "OnlyMe": "Hanya Saya",
-        "Custom": "Kustom"
+        "Custom": "Kustom",
+        "Friend_Only": "Hanya teman"
       }
     },
     "Modal_Add_Post": {

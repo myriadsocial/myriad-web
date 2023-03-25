@@ -409,6 +409,10 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
       id: 'selected_user',
       name: i18n.t('Experience.Editor.Visibility.Custom'),
     },
+    {
+      id: 'friend',
+      name: i18n.t('Experience.Editor.Visibility.Friend_Only'),
+    },
   ];
 
   const handleVisibilityChange = (
