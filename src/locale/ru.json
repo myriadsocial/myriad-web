@@ -121,7 +121,8 @@
       "Visibility": {
         "Public": "Общественный",
         "OnlyMe": "Только я",
-        "Custom": "Обычай"
+        "Custom": "Обычай",
+        "Friend_Only": "Только друзья"
       }
     },
     "Modal_Add_Post": {

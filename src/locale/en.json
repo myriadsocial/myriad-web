@@ -121,7 +121,8 @@
       "Visibility": {
         "Public": "Public",
         "OnlyMe": "Only Me",
-        "Custom": "Custom"
+        "Custom": "Custom",
+        "Friend_Only": "Friend Only"
       }
     },
     "Modal_Add_Post": {

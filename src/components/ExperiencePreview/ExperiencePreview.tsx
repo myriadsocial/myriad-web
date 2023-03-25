@@ -23,7 +23,11 @@ import ShowIf from 'components/common/show-if.component';
 import { ListItemPeopleComponent } from 'src/components/atoms/ListItem/ListItemPeople';
 import { acronym } from 'src/helpers/string';
 import { useExperienceHook } from 'src/hooks/use-experience-hook';
-import { Experience, WrappedExperience } from 'src/interfaces/experience';
+import {
+  Experience,
+  SelectedUserIds,
+  WrappedExperience,
+} from 'src/interfaces/experience';
 import { People } from 'src/interfaces/people';
 import { SocialsEnum } from 'src/interfaces/social';
 import { User } from 'src/interfaces/user';
@@ -205,8 +209,9 @@ export const ExperiencePreview: React.FC<Props> = props => {
       return i18n.t('Experience.Editor.Visibility.Custom');
   };
 
-  const getSelectedIds = async (userIds: string[]) => {
+  const getSelectedIds = async (selected: SelectedUserIds[]) => {
     setIsLoadingSelectedUser(true);
+    const userIds = selected.map(e => e.userId);
     const response = await UserAPI.getUserByIds(userIds, pageUserIds);
     setSelectedUserIds([
       ...selectedUserIds,
