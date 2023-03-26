@@ -46,6 +46,10 @@ export const useFilterOption = () => {
       id: TimelineType.ALL,
       title: i18n.t('Experience.New.AllOfMyriad'),
     },
+    {
+      id: TimelineType.EXPERIENCE,
+      title: i18n.t('Experience.New.TimelineIFollow'),
+    },
   ];
 
   const orderOptions: MenuOptions<TimelineOrderType>[] = [

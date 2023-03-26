@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useCookies } from 'react-cookie';
+import { useDispatch } from 'react-redux';
 
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -13,7 +14,10 @@ import { useMenuList, MenuDetail, MenuId } from './use-menu-list';
 
 import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
+import { useQueryParams } from 'src/hooks/use-query-params.hooks';
+import { TimelineType } from 'src/interfaces/timeline';
 import i18n from 'src/locale';
+import { clearTimeline } from 'src/reducers/timeline/actions';
 
 type MenuProps = {
   selected: MenuId;
@@ -125,23 +129,44 @@ export const CustomSearchIcon = () => (
 );
 
 export const Menu: React.FC<MenuProps> = props => {
-  const { selected, onChange, logo, anonymous } = props;
+  const { logo, anonymous } = props;
 
   const styles = useStyles();
   const router = useRouter();
   const confirm = useConfirm();
+  const dispatch = useDispatch();
+  const { query, replace } = useQueryParams();
 
-  const menu = useMenuList(selected);
+  const menu = useMenuList(query.type === 'experience' ? 'timeline' : 'all');
 
   const gotoHome = () => {
     if (router.pathname === '/') return;
     router.push('/', undefined, { shallow: true });
   };
 
-  const openMenu = (item: MenuDetail) => () => {
-    if (router.pathname === item.url) return;
-    onChange(item.url);
-  };
+  const openMenu = useCallback(
+    async (item: MenuDetail) => {
+      await dispatch(clearTimeline());
+
+      // automatically select first experience as timeline filter
+      if (item.url === '/timeline') {
+        replace({
+          path: 'home',
+          query: {
+            type: TimelineType.EXPERIENCE,
+          },
+        });
+      } else {
+        replace({
+          path: 'home',
+          query: {
+            type: TimelineType.ALL,
+          },
+        });
+      }
+    },
+    [query],
+  );
 
   const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
 
@@ -192,7 +217,7 @@ export const Menu: React.FC<MenuProps> = props => {
               title={item.title}
               icon={item.icon}
               active={item.active}
-              onClick={openMenu(item)}
+              onClick={async () => openMenu(item)}
               url={item.url}
               isAnimated={item.isAnimated}
             />

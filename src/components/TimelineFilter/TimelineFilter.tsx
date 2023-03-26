@@ -1,13 +1,16 @@
+import { GlobeAltIcon } from '@heroicons/react/outline';
+
 import React from 'react';
 
-import { Grid } from '@material-ui/core';
+import { Grid, SvgIcon, Typography } from '@material-ui/core';
 
 import { DropdownMenu } from '../atoms/DropdownMenu';
-import { TabList } from '../atoms/TabList';
 import ShowIf from '../common/show-if.component';
 import { useStyles } from './TimelineFilter.styles';
 import { useFilterOption } from './hooks/use-filter-option.hook';
 
+import { CustomFolderIcon } from 'components/Menu';
+import { useQueryParams } from 'src/hooks/use-query-params.hooks';
 import {
   TimelineType,
   TimelineOrderType,
@@ -32,24 +35,18 @@ export type TimelineFilterProps = {
 
 export const TimelineFilter: React.FC<TimelineFilterProps> = props => {
   const {
-    type,
     order,
     originType,
     filterType,
     selectionType,
     sortTimeline,
     orderTimeline,
-    filterTimeline,
     filterOrigin,
   } = props;
   const styles = useStyles({ ...props, filterType });
+  const { query } = useQueryParams();
 
-  const { sortOptions, orderOptions, originFilterOptions, typeFilterOptions } =
-    useFilterOption();
-
-  const handleFilter = (variant: TimelineType) => {
-    filterTimeline && filterTimeline(variant);
-  };
+  const { sortOptions, orderOptions, originFilterOptions } = useFilterOption();
 
   const handleFilterOrigin = (origin: PostOriginType) => {
     filterOrigin && filterOrigin(origin);
@@ -58,14 +55,20 @@ export const TimelineFilter: React.FC<TimelineFilterProps> = props => {
   return (
     <Grid container alignItems="center" className={styles.root}>
       <ShowIf condition={filterType === 'type'}>
-        <TabList<TimelineType>
-          tabs={typeFilterOptions}
-          selected={type}
-          mark="underline"
-          size="small"
-          onChangeTab={handleFilter}
-          className={styles.tabs}
-        />
+        <div className={styles.itemContainer}>
+          <div>
+            <SvgIcon
+              component={query.type === 'all' ? GlobeAltIcon : CustomFolderIcon}
+            />
+            <div className={styles.border}></div>
+          </div>
+
+          <Typography className={styles.text}>
+            {query.type === 'all'
+              ? i18n.t('Experience.New.AllOfMyriad')
+              : i18n.t('Experience.New.TimelineIFollow')}
+          </Typography>
+        </div>
       </ShowIf>
 
       <ShowIf condition={filterType === 'origin'}>

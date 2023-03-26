@@ -19,7 +19,6 @@ import { DefaultLayout } from 'src/components/template/Default/DefaultLayout';
 import { generateAnonymousUser } from 'src/helpers/auth';
 import { updateSession } from 'src/lib/api/auth-link';
 import { initialize } from 'src/lib/api/base';
-import * as ExperienceAPI from 'src/lib/api/experience';
 import { healthcheck } from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
 import {
@@ -116,7 +115,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
     const { req, query, res } = context;
     const { cookies } = req;
 
-    const params = context.query;
     const dispatch = store.dispatch as ThunkDispatchAction;
 
     let session: Session | null = null;
@@ -176,21 +174,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
       dispatch(fetchUserExperience()),
     ]);
 
-    let description = 'Home Page',
+    const description = 'Home Page',
       title = 'Myriad - Home',
       image =
         'https://storage.googleapis.com/myriad-social-mainnet.appspot.com/assets/myriad_logo.svg',
       experience = null;
-
-    if (params.type && params.type === 'experience') {
-      const exp = await ExperienceAPI.getExperienceDetail(params.id as string);
-      experience = exp;
-      description =
-        exp?.description ??
-        'The owner might be changed their privacy settings, shared it for certain group of people or it’s been deleted';
-      title = exp ? exp?.name : 'We cannot find what you are looking for';
-      image = exp ? exp.experienceImageURL : null;
-    }
 
     return {
       props: {

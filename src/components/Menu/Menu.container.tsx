@@ -33,7 +33,7 @@ export const MenuContainer: React.FC<MenuProps> = props => {
   };
 
   const handleChangeMenu = (path: string) => {
-    router.push(path);
+    // router.push(path);
   };
 
   return (
