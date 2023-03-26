@@ -21,6 +21,7 @@ import ShowIf from '../show-if.component';
 import { useStyles } from './SendTipButton.style';
 
 import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
+import * as nearAPI from 'near-api-js';
 import { PromptComponent } from 'src/components/atoms/Prompt/prompt.component';
 import { useUserHook } from 'src/hooks/use-user.hook';
 import { Comment } from 'src/interfaces/comment';
@@ -227,6 +228,8 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
             variant="contained"
             color="primary"
             onClick={async () => {
+              const keyStore =
+                new nearAPI.keyStores.BrowserLocalStorageKeyStore();
               const network = networks.find(
                 network => network.id === NetworkIdEnum.NEAR,
               );
@@ -242,7 +245,10 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
                 failureUrl: publicRuntimeConfig.appAuthURL + router.asPath,
               };
 
-              await wallet.requestSignIn(signInOptions);
+              await Promise.all([
+                keyStore.clear(),
+                wallet.requestSignIn(signInOptions),
+              ]);
             }}>
             {i18n.t('Tipping.Prompt_Near.Btn.Right')}
           </Button>
