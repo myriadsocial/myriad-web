@@ -49,6 +49,8 @@ export const useDate = (value: string | Date) => {
           return (result = i18n.t('Date.Just_Now'));
         if (count === 1 && token === 'xDays')
           return (result = i18n.t('Date.Yesterday'));
+        if (count === 1 && token !== 'xDays')
+          return i18n.t('Date.Result', { date: result.slice(0, -1) });
         return i18n.t('Date.Result', { date: result });
       }
     }
