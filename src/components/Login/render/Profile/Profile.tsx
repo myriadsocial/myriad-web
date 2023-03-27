@@ -444,6 +444,7 @@ export const Profile: React.FC<ProfileProps> = props => {
                 }}>
                 <Image
                   alt={instance.id}
+                  loader={() => instance?.serverImageURL ?? ''}
                   src={instance.serverImageURL ?? ''}
                   placeholder="empty"
                   height={30}
