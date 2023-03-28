@@ -896,7 +896,8 @@
       },
       "Connect_Socmed": "Ваш аккаунт {{platform}} @{{username}} успешно объединены в Myriad",
       "Disconnect_Socmed": "Ваш аккаунт {{platform}} @{{username}} успешно отсоединены от Myriad пользователем @{{user}}",
-      "UnlockedContent": "Unlocked your exclusive content."
+      "UnlockedContent": "Unlocked your exclusive content.",
+      "Upvote": "Your post is getting {{amount}} upvotes"
     },
     "Footer": {
       "View": "Посмотреть все уведомления"
