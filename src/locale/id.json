@@ -904,7 +904,8 @@
       },
       "Connect_Socmed": "Akun {{platform}} Anda @{{username}} berhasil terhubung ke Myriad",
       "Disconnect_Socmed": "Akun {{platform}} Anda @{{username}} berhasil diputuskan dari Myriad oleh @{{user}}",
-      "UnlockedContent": "Membuka kunci konten eksklusif Anda."
+      "UnlockedContent": "Membuka kunci konten eksklusif Anda.",
+      "Upvote": "Postingan anda mendapat {{amount}} upvotes"
     },
     "Footer": {
       "View": "Lihat semua notifikasi"
