@@ -28,6 +28,7 @@ import {
 } from './hooks/use-notification-list.hook';
 
 import clsx from 'clsx';
+import { MyriadCircleIcon } from 'components/atoms/Icons';
 import { Loading } from 'src/components/atoms/Loading';
 import { timeAgo } from 'src/helpers/date';
 import { acronym } from 'src/helpers/string';
@@ -145,15 +146,19 @@ export const Notifications: React.FC<NotificationsProps> = props => {
                     />
                   ) : (
                     <StyledBadge badgeContent={notification.badge}>
-                      <Avatar
-                        name={
-                          notification.avatar
-                            ? acronym(notification.avatar)
-                            : acronym(notification.user)
-                        }
-                        src={notification.avatar}
-                        size={AvatarSize.MEDIUM}
-                      />
+                      {notification.avatar === 'default' ? (
+                        <MyriadCircleIcon width={40} height={40} />
+                      ) : (
+                        <Avatar
+                          name={
+                            notification.avatar
+                              ? acronym(notification.avatar)
+                              : acronym(notification.user)
+                          }
+                          src={notification.avatar}
+                          size={AvatarSize.MEDIUM}
+                        />
+                      )}
                     </StyledBadge>
                   )}
                 </ListItemAvatar>

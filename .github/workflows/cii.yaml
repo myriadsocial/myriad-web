@@ -23,7 +23,7 @@ jobs:
     name: OpenSSF Scorecards
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@24cb9080177205b6e8c946b17badbe402adc938f
+        uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3
       - name: Analize
         uses: ossf/scorecard-action@e38b1902ae4f44df626f11ba0734b14fb91f8f86
         with:
@@ -37,6 +37,6 @@ jobs:
           path: results.sarif
           retention-days: 5
       - name: Upload Result to Code-Scanning
-        uses: github/codeql-action/upload-sarif@67a35a08586135a9573f4327e904ecbf517a882d
+        uses: github/codeql-action/upload-sarif@04df1262e6247151b5ac09cd2c303ac36ad3f62b
         with:
           sarif_file: results.sarif

@@ -614,6 +614,24 @@ export const useNotificationList = (
               : `/404`,
           };
 
+        case NotificationType.VOTE_COUNT:
+          return {
+            id: notification.id,
+            type: NotificationType.VOTE_COUNT,
+            read: notification.read,
+            userId: notification.fromUserId.id,
+            user: notification.fromUserId.name,
+            avatar: 'default',
+            description: i18n.t('Notification.Description.Upvote', {
+              amount: notification.message ?? 0,
+            }),
+            badge: null,
+            createdAt: notification.createdAt,
+            href: notification.additionalReferenceId
+              ? `/post/${notification.referenceId}`
+              : `/404`,
+          };
+
         default:
           return {
             id: notification.id,
