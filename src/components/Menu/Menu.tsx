@@ -88,7 +88,13 @@ export const Menu: React.FC<MenuProps> = props => {
     <div className={styles.root} data-testid={'menu-test'}>
       <BoxComponent paddingLeft={0} paddingRight={0}>
         <div className={styles.head} onClick={gotoHome} aria-hidden="true">
-          <Image src={logo} alt="" width={220} height={48} />
+          <Image
+            loader={() => logo ?? ''}
+            src={logo ?? ''}
+            alt=""
+            width={220}
+            height={48}
+          />
         </div>
 
         <div className={styles.instance}>

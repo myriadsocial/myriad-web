@@ -342,6 +342,7 @@ export default function CreateAccounts(props: ProfileProps) {
           }}>
           <Image
             alt={instance?.id}
+            loader={() => instance?.serverImageURL ?? ''}
             src={instance?.serverImageURL ?? ''}
             placeholder="empty"
             height={30}

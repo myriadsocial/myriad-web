@@ -106,7 +106,8 @@ export const Multiple: React.FC<PreviewMultipleProps> = props => {
       {previews.map((preview, i) => (
         <Grid item key={i} xs={cols} className={styles.image}>
           <NextImage
-            src={preview.url}
+            loader={() => preview.url ?? ''}
+            src={preview.url ?? ''}
             width={colWidth}
             height={colHeight}
             layout="responsive"
