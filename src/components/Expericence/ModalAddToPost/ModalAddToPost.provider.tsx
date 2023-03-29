@@ -391,10 +391,7 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
             color="primary"
             fullWidth
             onClick={handleConfirm}
-            disabled={
-              loading ||
-              userExperiences.filter(ar => ar.userId === user?.id).length === 0
-            }>
+            disabled={loading || selectedExperience.length === 0}>
             {i18n.t('Experience.Modal_Add_Post.Btn_Confirm')}
           </Button>
         </Modal>
