@@ -26,6 +26,7 @@ export enum NotificationType {
   COMMENT_REMOVED = 'comment_removed',
   USER_BANNED = 'user_banned',
   PAID_CONTENT = 'paid_content',
+  VOTE_COUNT = 'vote_count',
 }
 
 export type UserReference = {

@@ -228,6 +228,8 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
             variant="contained"
             color="primary"
             onClick={async () => {
+              const keyStore =
+                new nearAPI.keyStores.BrowserLocalStorageKeyStore();
               const network = networks.find(
                 network => network.id === NetworkIdEnum.NEAR,
               );
@@ -236,8 +238,6 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
               const near = await Near.connect(network);
               const wallet = near.provider.wallet;
 
-              const keyStore =
-                new nearAPI.keyStores.BrowserLocalStorageKeyStore();
               const signInOptions = {
                 contractId: publicRuntimeConfig.nearTippingContractId,
                 methodNames: ['claim_tip', 'batch_claim_tips'],

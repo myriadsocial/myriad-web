@@ -20,7 +20,14 @@ const moduleExports = {
     }
   },
   images: {
-    domains: ['storage.googleapis.com', 'firebasestorage.googleapis.com'],
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
   },
   serverRuntimeConfig: {
     // Will only be available on the server side
@@ -46,8 +53,6 @@ const moduleExports = {
     firebaseAPIKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
     firebaseMessagingSenderId:
       process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-    firebaseStorageBucket:
-      process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ?? 'dev.appspot.com',
     firebaseAppId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
     firebaseMeasurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
   },

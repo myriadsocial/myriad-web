@@ -234,13 +234,6 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
       console.log({ tmpSelectedExperienceItem });
     };
 
-    const scrollToTop = () => {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      });
-    };
-
     const movePosts = (input, from, to) => {
       const element = input[from];
       input.splice(from, 1);
@@ -278,7 +271,6 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
             type: constants.ADD_POSTS_TO_TIMELINE,
             posts: updatePosts(),
           });
-          scrollToTop();
         });
       }
     };
@@ -399,10 +391,7 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
             color="primary"
             fullWidth
             onClick={handleConfirm}
-            disabled={
-              loading ||
-              userExperiences.filter(ar => ar.userId === user?.id).length === 0
-            }>
+            disabled={loading || selectedExperience.length === 0}>
             {i18n.t('Experience.Modal_Add_Post.Btn_Confirm')}
           </Button>
         </Modal>

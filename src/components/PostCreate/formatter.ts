@@ -1,4 +1,8 @@
-import { ELEMENT_MENTION, getNodeString } from '@udecode/plate';
+import {
+  ELEMENT_MENTION,
+  ELEMENT_MENTION_INPUT,
+  getNodeString,
+} from '@udecode/plate';
 
 import {
   EditorValue,
@@ -29,13 +33,34 @@ export const serialize = (nodes: EditorValue): Partial<Post> => {
 
   const checkAttributes = (children: RootBlock) => {
     switch (children.type) {
+      case ELEMENT_MENTION_INPUT: {
+        const username = children.children[0].text.trim();
+        if (!post.mentions) {
+          post.mentions = [
+            {
+              id: username,
+              name: username,
+              username: username,
+            },
+          ];
+        }
+
+        if (!post.mentions.map(mention => mention.id).includes(username)) {
+          post.mentions.push({
+            id: username,
+            name: username,
+            username: username,
+          });
+        }
+        break;
+      }
       case ELEMENT_MENTION:
         if (!post.mentions) {
           post.mentions = [
             {
               id: children.value,
               name: children.name as string,
-              username: children.name as string,
+              username: children.username as string,
             },
           ];
         }
@@ -46,7 +71,7 @@ export const serialize = (nodes: EditorValue): Partial<Post> => {
           post.mentions.push({
             id: children.value,
             name: children.name as string,
-            username: children.name as string,
+            username: children.username as string,
           });
         }
         break;

@@ -228,6 +228,9 @@ export const Experience: React.FC<ExperienceProps> = props => {
             {userExperience.experience.experienceImageURL ? (
               <NextImage
                 alt={userExperience.experience.name}
+                loader={() =>
+                  userExperience.experience.experienceImageURL ?? DEFAULT_IMAGE
+                }
                 src={
                   userExperience.experience.experienceImageURL ?? DEFAULT_IMAGE
                 }

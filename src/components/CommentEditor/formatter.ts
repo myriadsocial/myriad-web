@@ -17,7 +17,7 @@ export const serialize = (nodes: EditorValue): CommentSerializedProps => {
         comment.mentions.push({
           id: children.value,
           name: children.name,
-          username: children.name,
+          username: children.username,
         });
         break;
       default:

@@ -51,6 +51,8 @@ import {
   TTodoListItemElement,
   WithOverride,
   TComboboxItem,
+  TMentionInputElement,
+  ELEMENT_MENTION_INPUT,
 } from '@udecode/plate';
 
 import { ELEMENT_EMOJI, TEmojiElement } from './plugins/EmojiPicker';
@@ -114,6 +116,11 @@ export interface HashtagElement extends THashtagElement {
 export interface ShowMoreElement extends TElement {
   type: typeof ELEMENT_SHOW_MORE;
   children: [EmptyText];
+}
+
+export interface MentionInputElement extends TMentionInputElement {
+  type: typeof ELEMENT_MENTION_INPUT;
+  children: [PlainText];
 }
 
 export type InlineElement =
@@ -255,7 +262,8 @@ export type RootBlock =
   | HashtagElement
   | EmojiElement
   | ImageListElement
-  | ShowMoreElement;
+  | ShowMoreElement
+  | MentionInputElement;
 
 export type EditorValue = RootBlock[];
 

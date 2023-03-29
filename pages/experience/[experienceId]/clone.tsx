@@ -111,10 +111,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
       if (experience?.visibility === 'selected_user') {
         const user = (await dispatch(fetchUser())) as unknown as User;
-        if (
-          !experience?.selectedUserIds?.includes(user?.id) &&
-          experience?.createdBy !== user?.id
-        )
+        const found = experience?.selectedUserIds?.find(
+          e => e.userId === user?.id,
+        );
+        if (!found && experience?.createdBy !== user?.id)
           return {
             notFound: true,
           };
