@@ -1,13 +1,7 @@
-import getConfig from 'next/config';
-
-import path from 'path';
 import { Sizes } from 'src/interfaces/assets';
 
-const STORAGE_BASE_URL = 'https://storage.googleapis.com';
-
 export const generateImageSizes = (url: string | Sizes): Sizes => {
-  const { publicRuntimeConfig } = getConfig();
-
+  // Image klo di generate menjadi object
   if (typeof url === 'object') {
     return {
       thumbnail: url.thumbnail,
@@ -17,27 +11,12 @@ export const generateImageSizes = (url: string | Sizes): Sizes => {
     };
   }
 
-  const external = !url.includes(publicRuntimeConfig.firebaseStorageBucket);
-  const filename = url.split(/[\\/]/).pop();
-
-  if (!filename || external) {
-    return {
-      thumbnail: url,
-      small: url,
-      medium: url,
-      large: url,
-    };
-  }
-
-  const extension = path.parse(url).ext;
-  const fileId = filename.split('.').slice(0, -1).join('.');
-  const pathname = url.replace(STORAGE_BASE_URL, '').replace(filename, '');
-
+  // Image dari source manapun
   return {
-    thumbnail: `${STORAGE_BASE_URL}${pathname}${fileId}_thumbnail${extension}`,
-    small: `${STORAGE_BASE_URL}${pathname}${fileId}_small${extension}`,
-    medium: `${STORAGE_BASE_URL}${pathname}${fileId}_medium${extension}`,
-    large: `${STORAGE_BASE_URL}${pathname}${fileId}${extension}`,
+    thumbnail: url,
+    small: url,
+    medium: url,
+    large: url,
   };
 };
 

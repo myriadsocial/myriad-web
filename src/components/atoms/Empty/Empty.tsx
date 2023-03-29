@@ -21,7 +21,15 @@ export const Empty: React.FC<EmptyProps> = props => {
 
   return (
     <div className={styles.root}>
-      {withImage && <Image src={image} alt="" height={151} width={218} />}
+      {withImage && (
+        <Image
+          loader={() => image ?? ''}
+          src={image}
+          alt=""
+          height={151}
+          width={218}
+        />
+      )}
       <Typography variant="h4" className={styles.title} component="p">
         {title}
       </Typography>

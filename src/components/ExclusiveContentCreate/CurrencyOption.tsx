@@ -61,8 +61,8 @@ export const CurrencyOption: React.FC<CurrencyOptionProps> = ({
         startIcon={
           currentCurrency ? (
             <Image
-              loader={() => currentCurrency?.image}
-              src={currentCurrency?.image}
+              loader={() => currentCurrency?.image ?? ''}
+              src={currentCurrency?.image ?? ''}
               alt={currentCurrency?.symbol}
               width={20}
               height={20}
