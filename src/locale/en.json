@@ -882,7 +882,9 @@
       "Post_Removed": "Post removed",
       "Reward": "Tips reward",
       "Claimed": "Tips claimed",
-      "Tips_received": "Tips received"
+      "Tips_received": "Tips received",
+      "Upvote": "New Upvotes",
+      "Follower": "New Follower"
     },
     "Description": {
       "Friend_Accept": "Accepted your friend request",
@@ -909,7 +911,8 @@
       "Connect_Socmed": "Your {{platform}} account @{{username}} successfully connected to Myriad",
       "Disconnect_Socmed": "Your {{platform}} account @{{username}} successfully disconnected from @{{user}} Myriad account.",
       "UnlockedContent": "Unlocked your exclusive content.",
-      "Upvote": "Your post is getting {{amount}} upvotes"
+      "Upvote": "Your post is getting {{amount}} upvotes",
+      "Follower": "Your timeline is getting {{amount}} followers"
     },
     "Footer": {
       "View": "View all notifications"
