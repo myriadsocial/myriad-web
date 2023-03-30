@@ -878,7 +878,9 @@
       "Post_Removed": "Pos dihapus",
       "Reward": "Hadiah tip",
       "Claimed": "Tip diklaim",
-      "Tips_received": "Tips diterima"
+      "Tips_received": "Tips diterima",
+      "Upvote": "Upvote Baru",
+      "Follower": "Pengikut Baru"
     },
     "Description": {
       "Friend_Accept": "Menerima permintaan pertemanan Anda",
@@ -905,7 +907,8 @@
       "Connect_Socmed": "Akun {{platform}} Anda @{{username}} berhasil terhubung ke Myriad",
       "Disconnect_Socmed": "Akun {{platform}} Anda @{{username}} berhasil diputuskan dari Myriad oleh @{{user}}",
       "UnlockedContent": "Membuka kunci konten eksklusif Anda.",
-      "Upvote": "Postingan anda mendapat {{amount}} upvotes"
+      "Upvote": "Postingan anda mendapat {{amount}} upvote",
+      "Follower": "Linimasa anda mendapat {{amount}} pengikut"
     },
     "Footer": {
       "View": "Lihat semua notifikasi"
