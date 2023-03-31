@@ -1,16 +1,18 @@
 import { PlusIcon } from '@heroicons/react/outline';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useCookies } from 'react-cookie';
-import { shallowEqual, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
 import { useRouter } from 'next/router';
 
+import { Grid } from '@material-ui/core';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
 import { useStyles } from './Tab.style';
 
+import { Skeleton } from 'components/Expericence';
 import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
 import { useFilterOption } from 'components/TimelineFilter/hooks/use-filter-option.hook';
 import { DropdownMenu } from 'components/atoms/DropdownMenu';
@@ -28,6 +30,7 @@ import { TimelineFilterCreated } from 'src/interfaces/timeline';
 import { User } from 'src/interfaces/user';
 import i18n from 'src/locale';
 import { RootState } from 'src/reducers';
+import { fetchUserExperience } from 'src/reducers/user/actions';
 
 type ExperienceTabProps = {
   experienceType?: 'user' | 'trending';
@@ -35,13 +38,19 @@ type ExperienceTabProps = {
 
 export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
   const { experienceType = 'user' } = props;
+  const [loading, setLoading] = useState<boolean>(false);
   const confirm = useConfirm();
   const { createdFilter } = useFilterOption();
 
   const router = useRouter();
+  const dispatch = useDispatch();
   const styles = useStyles();
-  const { userExperiences, userExperiencesMeta, loadNextUserExperience } =
-    useExperienceHook();
+  const {
+    userExperiences,
+    userExperiencesMeta,
+    loadNextUserExperience,
+    clearUserExperience,
+  } = useExperienceHook();
 
   const user = useSelector<RootState, User | undefined>(
     state => state.userState.user,
@@ -93,6 +102,14 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
     loadNextUserExperience();
   };
 
+  const handleFilter = async filter => {
+    await clearUserExperience();
+    setLoading(true);
+    const type = filter === TimelineFilterCreated.ME ? 'personal' : 'other';
+    await dispatch(fetchUserExperience(1, type));
+    setLoading(false);
+  };
+
   return (
     <div>
       <div
@@ -109,7 +126,7 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
         <DropdownMenu<TimelineFilterCreated>
           title={i18n.t('Post_Sorting.Title_Filter')}
           options={createdFilter}
-          onChange={() => null}
+          onChange={handleFilter}
           marginTop={false}
           marginBottom={false}
           placeholder={'Select'}
@@ -151,8 +168,19 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
         loadNextPage={handleLoadNextPage}
       />
 
+      <ShowIf condition={loading && userExperiences.length === 0}>
+        <Grid container justifyContent="center">
+          <Skeleton />
+          <Skeleton />
+          <Skeleton />
+          <Skeleton />
+        </Grid>
+      </ShowIf>
+
       <ShowIf
-        condition={userExperiences.length === 0 && experienceType === 'user'}>
+        condition={
+          !loading && userExperiences.length === 0 && experienceType === 'user'
+        }>
         <EmptyExperience />
       </ShowIf>
     </div>

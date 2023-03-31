@@ -30,7 +30,10 @@ import {
   fetchTrendingExperience,
 } from 'src/reducers/experience/actions';
 import { ExperienceState } from 'src/reducers/experience/reducer';
-import { fetchUserExperience } from 'src/reducers/user/actions';
+import {
+  clearUserExperiences,
+  fetchUserExperience,
+} from 'src/reducers/user/actions';
 
 export enum ExperienceOwner {
   ALL = 'all',
@@ -253,6 +256,10 @@ export const useExperienceHook = () => {
     dispatch(clearExperiences());
   };
 
+  const clearUserExperience = () => {
+    dispatch(clearUserExperiences());
+  };
+
   return {
     loading,
     page: meta.currentPage,
@@ -287,5 +294,6 @@ export const useExperienceHook = () => {
     unsubscribeExperience: beUnsubscribeExperience,
     clearExperiences: clear,
     loadTrendingExperience,
+    clearUserExperience,
   };
 };
