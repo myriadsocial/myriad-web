@@ -4,37 +4,37 @@
       "Confirmation_Unsub": {
         "Title": "Berhenti berlangganan?",
         "Desc_1": "Apakah Anda ingin berhenti berlangganan?",
-        "Desc_2": "Anda tidak akan melihat lebih banyak pos dari pengalaman ini",
+        "Desc_2": "Anda tidak akan melihat lebih banyak pos dari Timeline ini",
         "Btn": "Berhenti berangganan"
       },
-      "Max_Exp": "Anda hanya dapat menambahkan maksimal 10 pengalaman"
+      "Max_Exp": "Anda hanya dapat menambahkan maksimal 10 Timeline"
     },
     "Clone": {
-      "Title": "Klon Pengalaman",
+      "Title": "Klon Timeline",
       "Type": "Klon"
     },
     "Edit": {
-      "Title": "Ubah Pengalaman",
+      "Title": "Ubah Timeline",
       "Type": "Ubah"
     },
     "List": {
-      "Alert": "Anda hanya dapat menambahkan maksimal 10 pengalaman",
-      "Copy": "Tautan pengalaman berhasil disalin",
+      "Alert": "Anda hanya dapat menambahkan maksimal 10 Timeline",
+      "Copy": "Tautan Timeline berhasil disalin",
       "Prompt_Delete": {
-        "Title": "Hapus Pengalaman?",
-        "Desc": "Apakah Anda yakin ingin menghapus pengalaman ini? Anda tidak dapat membatalkan ini di masa mendatang.",
+        "Title": "Hapus Timeline?",
+        "Desc": "Apakah Anda yakin ingin menghapus Timeline ini? Anda tidak dapat membatalkan ini di masa mendatang.",
         "Btn_Yes": "Ya, lanjutkan untuk menghapus"
       },
       "Prompt_Unsub": {
         "Title": "Berhenti berlangganan?",
         "Desc_1": "Apakah Anda ingin berhenti berlangganan?",
-        "Desc_2": "Anda tidak bisa melihat lebih banyak pos dari pengalaman ini",
+        "Desc_2": "Anda tidak bisa melihat lebih banyak pos dari Timeline ini",
         "Btn_Yes": "Berhenti berlangganan"
       },
       "You": "(anda)",
       "Menu": {
         "View": "Lihat rincian",
-        "Edit": "Ubah pengalaman",
+        "Edit": "Ubah Timeline",
         "Clone": "Klon",
         "Subscribe": "Berlangganan",
         "Unsubscribe": "Berhenti berlangganan",
@@ -43,23 +43,23 @@
       },
       "Modal": {
         "Title": "Bagikan",
-        "Subtitle": "Beri tahu orang lain tentang Pengalaman ini di Myriad.Social"
+        "Subtitle": "Beri tahu orang lain tentang Timeline ini di Myriad.Social"
       },
       "Empty": {
         "Text_1": "Uh-oh!",
-        "Text_2": "Anda belum membuat pengalaman apa pun. Pengalaman memungkinkan Anda untuk menyesuaikan berbagai tag dan orang untuk ditampilkan di timeline Anda.",
-        "Btn_Create": "Buat Pengalaman"
+        "Text_2": "Anda belum membuat Timeline apa pun. Timeline memungkinkan Anda untuk menyesuaikan berbagai tag dan orang untuk ditampilkan di timeline Anda.",
+        "Btn_Create": "Buat Timeline"
       }
     },
     "Preview": {
-      "Title": "Pratinjau Pengalaman",
+      "Title": "Pratinjau Timeline",
       "Text_1": "pelanggan",
       "Text_2": "kloners",
       "Button": {
-        "Edit": "Ubah pengalaman",
+        "Edit": "Ubah Timeline",
         "Subscribe": "Berlangganan",
         "Unsubscribe": "Berhenti berlangganan",
-        "Clone": "Clone"
+        "Clone": "Klon"
       },
       "Subheader": {
         "Author": "Pengarang",
@@ -73,21 +73,21 @@
         "Privacy": "Privasi"
       },
       "Post": {
-        "Empty": "Pos yang ditambahkan akan muncul di sini. Anda dapat menambahkan postingan ke pengalaman dengan memilih 'tambahkan postingan ke pengalaman' pada opsi lainnya."
+        "Empty": "Pos yang ditambahkan akan muncul di sini. Anda dapat menambahkan postingan ke timeline dengan memilih 'tambahkan postingan ke timeline' pada opsi lainnya."
       }
     },
     "Create": {
-      "Title": "Buat Pengalaman"
+      "Title": "Buat Timeline"
     },
     "Editor": {
       "Header": "Atur dan sesuaikan timeline mu",
-      "Sub_Header": "Isi detail pengalaman untuk membuat pengalaman.",
+      "Sub_Header": "Isi detail timeline untuk membuat timeline.",
       "Title": {
-        "Clone": "Klon Pengalaman",
-        "Create": "Buat Pengalaman",
-        "Edit": "Ubah Pengalaman"
+        "Clone": "Klon Timeline",
+        "Create": "Buat Timeline",
+        "Edit": "Ubah Timeline"
       },
-      "Subtitle_1": "Nama pengalaman",
+      "Subtitle_1": "Nama Timeline",
       "Subtitle_2": "Deskripsi",
       "Subtitle_3": "Foto",
       "Label_1": "Tag yang diikuti",
@@ -102,15 +102,15 @@
       "Placeholder_5": "Pilih siapa saja yang dapat melihat",
       "Post": {
         "Title": "Pos",
-        "Desc": "Pos yang ditambahkan akan muncul di sini. Anda dapat menambahkan postingan ke pengalaman dengan memilih 'tambahkan postingan ke pengalaman' pada opsi lainnya."
+        "Desc": "Pos yang ditambahkan akan muncul di sini. Anda dapat menambahkan postingan ke Timeline dengan memilih 'tambahkan postingan ke Timeline' pada opsi lainnya."
       },
       "Btn": {
-        "Clone": "Klon",
-        "Create": "Buat",
-        "Edit": "Simpan"
+        "Clone": "Klon Timeline",
+        "Create": "Buat Timeline",
+        "Edit": "Simpan Timeline"
       },
       "Menu_Post": {
-        "Remove": "Hapus dari pengalaman"
+        "Remove": "Hapus dari timeline"
       },
       "Helper": {
         "Name": "Harus diantara 1-50 karakter",
@@ -126,15 +126,15 @@
       }
     },
     "Modal_Add_Post": {
-      "Title": "Pilih pengalaman",
-      "Subtitle_1": "Tambahkan pos ke pengalaman di bawah ini. Kamu",
-      "Subtitle_2": "dapat membatalkan pilihan untuk menghapus dari pengalaman",
-      "Tooltip": "Pengalaman",
+      "Title": "Pilih timeline",
+      "Subtitle_1": "Tambahkan pos ke Timeline di bawah ini. Kamu",
+      "Subtitle_2": "dapat membatalkan pilihan untuk menghapus dari timeline",
+      "Tooltip": "Timeline",
       "Tooltip_Text": "Beberapa postingan tidak akan terlihat oleh pengguna lain karena batasan visibilitas oleh pemiliknya.",
       "Select_All": "Pilih semua",
       "Card_Own": "(anda)",
       "Empty_Title": "Uh-oh",
-      "Empty_Subtitle": "Anda belum membuat pengalaman apa pun.",
+      "Empty_Subtitle": "Anda belum membuat Timeline apa pun.",
       "Btn_Confirm": "Konfirmasi",
       "Success_Msg": "Berhasil menambahkan postingan ke timeline"
     }
@@ -372,7 +372,7 @@
         "Post": "Pos",
         "Kudos": "Kudos",
         "Friends": "Teman",
-        "Experience": "Pengalaman"
+        "Experience": "Timeline"
       }
     },
     "Banned": {
@@ -405,7 +405,7 @@
     "Tab": {
       "Post": "Pos",
       "Comments": "Komentar",
-      "Experience": "Pengalaman",
+      "Experience": "Timeline",
       "Friends": "Teman",
       "Social_Media": "Media Sosial",
       "Wallet_Address": "Alamat Dompet"
@@ -424,13 +424,13 @@
     "Experience": {
       "Empty": {
         "Title": "Tidak ada yang bisa dilihat di sini!",
-        "Subtitle": "Pengguna ini belum membuat Pengalaman apa pun."
+        "Subtitle": "Pengguna ini belum membuat Timeline apa pun."
       },
       "Sort": {
         "Title": "Filter menurut",
-        "All": "Semua Pengalaman",
-        "Personal": "Pengalaman Personal",
-        "Subscribed": "Pengalaman Berlangganan"
+        "All": "Semua Timeline",
+        "Personal": "Timeline Personal",
+        "Subscribed": "Timeline Berlangganan"
       }
     },
     "Friend": {
@@ -470,7 +470,7 @@
       "Subtitle_3": "jika kamu merasa ini adalah kesalahan"
     },
     "Search": {
-      "Placeholder": "Cari orang, topik, atau pengalaman di Myriad"
+      "Placeholder": "Cari orang, topik, atau timeline di Myriad"
     },
     "RichText": {
       "Placeholder": "Apa yang ada dalam pikiranmu?",
@@ -563,9 +563,9 @@
     "Experience": {
       "Added": "ditambahkan ke",
       "And": "dan",
-      "Other_Exp": "{{number}} pengalaman lainnya",
-      "Modal_Title": "Posting di Pengalaman",
-      "Modal_Sub": "Pos ini sudah ditambahkan ke pengalaman ini"
+      "Other_Exp": "{{number}} timeline lainnya",
+      "Modal_Title": "Posting di Timeline",
+      "Modal_Sub": "Pos ini sudah ditambahkan ke timeline ini"
     }
   },
   "Post_Create": {
@@ -665,7 +665,7 @@
       "All": "Semua",
       "Friend": "Teman",
       "Trending": "Trending",
-      "Experience": "Pengalaman"
+      "Experience": "Timeline"
     },
     "Order": {
       "Latest": "Terbaru",
@@ -924,33 +924,28 @@
     "Helper_Text": "Hasil pencarian untuk ",
     "Post_Tab": "Postingan",
     "Users_Tab": "Pengguna",
-    "Experience_Tab": "Pengalaman"
+    "Experience_Tab": "Timeline"
   },
   "Section": {
     "Home": "Beranda",
     "Friends": "Teman",
     "Social_Media": "Media Sosial",
     "Wallet": "Dompet",
-    "Trending_Experience": "Pengalaman Tren",
-    "Trending_Experience_Desc": "10 Pengalaman Terbaik",
+    "Trending_Experience": "Timeline Tren",
+    "Trending_Experience_Desc": "10 Timeline Terbaik",
     "Mytimelines": "My Timelines",
     "Profile": "Profil",
     "Settings": "Pengaturan",
     "Notification": "Notifikasi",
     "Timeline": "Linimasa",
-    "NFT": "NFT",
-    "Social_Token": "Token sosial",
+    "NFT": "NFT & Token Sosial",
     "Myriad_Town": "Myriad.Town",
     "Trends": "Tren",
     "Trends_Desc": "10 tagar trending teratas",
     "Topic": "Topik"
   },
   "NFT": {
-    "Text_1": "NFT sedang berlangsung!",
-    "Text_2": "Kami akan segera memberi tahu Anda"
-  },
-  "Social_Token": {
-    "Text_1": "Token sosial sedang berlangsung!",
+    "Text_1": "NFT & Token Sosial sedang berlangsung!",
     "Text_2": "Kami akan segera memberi tahu Anda"
   },
   "Setting": {
@@ -1005,7 +1000,7 @@
       "About_Title": "Tentang Myriad",
       "About_Subtitle": "Ketahui lebih banyak tentang Myriad",
       "Feedback_Title": "Berikan Tanggapan",
-      "Feedback_Subtitle": "Silahkan berikan pengalaman kamu melalui email",
+      "Feedback_Subtitle": "Silahkan berikan timeline kamu melalui email",
       "Version_Title": "Versi Myriad"
     }
   },
@@ -1044,9 +1039,6 @@
       "Aggre_2": "Persyaratan Layanan Myriad",
       "OK": "Verifikasi Akun {{platform}} Saya"
     }
-  },
-  "SocialToken": {
-    "Title": "{{appname}} - Token Sosial"
   },
   "TermOfUse": {
     "Title": "{{appname}} - Aturan Penggunaan"
@@ -1172,13 +1164,12 @@
       "Friends": "Teman",
       "Social_Media": "Media Sosial",
       "Wallet": "Dompet",
-      "Experience": "Pengalaman",
+      "Experience": "Timeline",
       "Profile": "Profil",
       "Settings": "Pengaturan",
       "Notification": "Notifikasi",
       "Timeline": "Linimasa",
-      "NFT": "NFT",
-      "Social_Token": "Sosial Token",
+      "NFT": "NFT & Sosial Token",
       "Trends": "Trending"
     },
     "Subtitle": {
@@ -1187,11 +1178,10 @@
       "SocialMedia": "{{total}} akun terhubung",
       "Wallet": "Lihat atau kelola saldo Anda",
       "Profile": "Detail Profil",
-      "Experience_Create": "Buat Pengalaman",
-      "Experience_Clone": "Klon Pengalaman",
-      "Experience_Edit": "Ubah Pengalaman",
+      "Experience_Create": "Buat Timeline",
+      "Experience_Clone": "Klon Timeline",
+      "Experience_Edit": "Ubah Timeline",
       "NFT": "Sedang berjalan",
-      "Social_Token": "Sedang berjalan",
       "Myriad_Town": "Myriad terletak di persimpangan kehidupan nyata dan interaksi digital"
     }
   },
@@ -1242,14 +1232,14 @@
   },
   "Tooltip": {
     "Chat": "Fitur obrolan, segera hadir",
-    "Trending_Exp": "Tampilkan 10 pengalaman teratas berdasarkan total pelanggan dan kloning dalam 24 jam."
+    "Trending_Exp": "Tampilkan 10 timeline teratas berdasarkan total pelanggan dan kloning dalam 24 jam."
   },
   "Myriad_Town": {
     "Title_Head": "{{appname}} - Myriad.Town",
     "Visit": "Kunjungi Myriad.Town",
     "Fullscreen": "Mainkan pada layar penuh",
     "Toaster_Esc": "Tekan Esc untuk keluar dari layar penuh",
-    "Disclaimer": "Integrasi Myriad Metaverse masih dalam tahap beta. Jika Anda mengalami masalah, atau jika Anda menginginkan pengalaman terbaik di Myriad Metaverse, kunjungi"
+    "Disclaimer": "Integrasi Myriad Metaverse masih dalam tahap beta. Jika Anda mengalami masalah, atau jika Anda menginginkan timeline terbaik di Myriad Metaverse, kunjungi"
   },
   "LiteVersion": {
     "Cancel": "Batal",
@@ -1257,7 +1247,7 @@
     "CreateAccountEmail": "Buat Akun Baru",
     "CreateAccountEmailDesc": "Anda akan membuat akun baru. Anda masih dapat menambahkan dompet kripto nanti.",
     "LimitDescProfile": "menggunakan Myriad versi lite. Anda hanya dapat mengirim permintaan pertemanan kepada pengguna dengan dompet aktif.",
-    "LimitTitleExperience": "Batas Buat Pengalaman Tercapai!",
+    "LimitTitleExperience": "Batas Buat Timeline Tercapai!",
     "LimitTitleFriends": "Tidak bisa menambah teman",
     "LimitDescExperience": "Anda sedang menggunakan Myriad versi lite. Anda hanya dapat membuat hingga 5 linimasa! Hubungkan Dompet Web 3.0 untuk menciptakan lebih banyak linimasa",
     "LimitDescFriends": "Ups! Anda perlu menghubungkan dompet Anda untuk melakukan itu. Atau, Anda dapat mengikuti linimasa yang dikuratori oleh {{username}}",
