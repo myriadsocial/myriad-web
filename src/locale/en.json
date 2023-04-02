@@ -943,19 +943,14 @@
     "Settings": "Settings",
     "Notification": "Notification",
     "Timeline": "Timeline",
-    "NFT": "NFT",
-    "Social_Token": "Social Token",
+    "NFT": "NFT & Social Token",
     "Myriad_Town": "Myriad.Town",
     "Trends": "Trends",
     "Trends_Desc": "Top 10 trending hashtags",
     "Topic": "Topic"
   },
   "NFT": {
-    "Text_1": "NFT is underway!",
-    "Text_2": "We will let you know very soon"
-  },
-  "Social_Token": {
-    "Text_1": "Social token is underway!",
+    "Text_1": "NFT & Social Token is underway!",
     "Text_2": "We will let you know very soon"
   },
   "Setting": {
@@ -1049,9 +1044,6 @@
       "Aggre_2": "Terms of Service",
       "OK": "Verify My {{platform}} Account"
     }
-  },
-  "SocialToken": {
-    "Title": "{{appname}} - Social Token"
   },
   "TermOfUse": {
     "Title": "{{appname}} - Terms of Use"
@@ -1182,8 +1174,7 @@
       "Settings": "Settings",
       "Notification": "Notification",
       "Timeline": "Timeline",
-      "NFT": "NFT",
-      "Social_Token": "Social Token",
+      "NFT": "NFT & Social Token",
       "Trends": "Trends"
     },
     "Subtitle": {
@@ -1196,7 +1187,6 @@
       "Experience_Clone": "Clone Timeline",
       "Experience_Edit": "Edit Timeline",
       "NFT": "Underway",
-      "Social_Token": "Underway",
       "Myriad_Town": "Myriad lies at the crossroads of real life and digital interaction"
     }
   },

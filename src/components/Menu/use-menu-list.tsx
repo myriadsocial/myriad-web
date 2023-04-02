@@ -1,6 +1,5 @@
 import {
   HomeIcon,
-  CurrencyDollarIcon,
   SparklesIcon,
   CogIcon,
   UsersIcon,
@@ -75,15 +74,6 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         active: selected === 'friends',
         icon: UsersIcon,
         url: '/friends',
-        isDesktop: true,
-        isAnimated: false,
-      },
-      {
-        id: 'token',
-        title: i18n.t('Section.Social_Token'),
-        active: selected === 'token',
-        icon: CurrencyDollarIcon,
-        url: '/socialtoken',
         isDesktop: true,
         isAnimated: false,
       },

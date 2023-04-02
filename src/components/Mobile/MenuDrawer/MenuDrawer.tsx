@@ -99,9 +99,6 @@ export const MenuDrawerComponent: React.FC = () => {
       case '/friends':
         setSelected('friends');
         break;
-      case '/socialtoken':
-        setSelected('token');
-        break;
       case '/town':
         setSelected('town');
         break;
