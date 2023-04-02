@@ -938,19 +938,14 @@
     "Settings": "Pengaturan",
     "Notification": "Notifikasi",
     "Timeline": "Linimasa",
-    "NFT": "NFT",
-    "Social_Token": "Token sosial",
+    "NFT": "NFT & Token Sosial",
     "Myriad_Town": "Myriad.Town",
     "Trends": "Tren",
     "Trends_Desc": "10 tagar trending teratas",
     "Topic": "Topik"
   },
   "NFT": {
-    "Text_1": "NFT sedang berlangsung!",
-    "Text_2": "Kami akan segera memberi tahu Anda"
-  },
-  "Social_Token": {
-    "Text_1": "Token sosial sedang berlangsung!",
+    "Text_1": "NFT & Token Sosial sedang berlangsung!",
     "Text_2": "Kami akan segera memberi tahu Anda"
   },
   "Setting": {
@@ -1044,9 +1039,6 @@
       "Aggre_2": "Persyaratan Layanan Myriad",
       "OK": "Verifikasi Akun {{platform}} Saya"
     }
-  },
-  "SocialToken": {
-    "Title": "{{appname}} - Token Sosial"
   },
   "TermOfUse": {
     "Title": "{{appname}} - Aturan Penggunaan"
@@ -1177,8 +1169,7 @@
       "Settings": "Pengaturan",
       "Notification": "Notifikasi",
       "Timeline": "Linimasa",
-      "NFT": "NFT",
-      "Social_Token": "Sosial Token",
+      "NFT": "NFT & Sosial Token",
       "Trends": "Trending"
     },
     "Subtitle": {
@@ -1191,7 +1182,6 @@
       "Experience_Clone": "Klon Timeline",
       "Experience_Edit": "Ubah Timeline",
       "NFT": "Sedang berjalan",
-      "Social_Token": "Sedang berjalan",
       "Myriad_Town": "Myriad terletak di persimpangan kehidupan nyata dan interaksi digital"
     }
   },
