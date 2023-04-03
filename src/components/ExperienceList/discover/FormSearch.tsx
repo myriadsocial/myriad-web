@@ -6,7 +6,13 @@ import {
 
 import React, { useState } from 'react';
 
-import { IconButton, SvgIcon, TextField, Typography } from '@material-ui/core';
+import {
+  Button,
+  IconButton,
+  SvgIcon,
+  TextField,
+  Typography,
+} from '@material-ui/core';
 import {
   Autocomplete,
   AutocompleteChangeReason,
@@ -17,7 +23,6 @@ import { useStyles } from './FormSearch.style';
 
 import { BoxComponent } from 'components/atoms/Box';
 import { ListItemPeopleComponent } from 'components/atoms/ListItem/ListItemPeople';
-import { SearchBox } from 'components/atoms/Search';
 import ShowIf from 'components/common/show-if.component';
 import { debounce, isEmpty } from 'lodash';
 import { useExperienceHook } from 'src/hooks/use-experience-hook';
@@ -171,13 +176,13 @@ export const FormSearch = () => {
     }));
   };
 
+  const handleSearch = () => {
+    return null;
+  };
+
   return (
     <BoxComponent radiusStr="10px">
       <Typography variant="h4">{i18n.t('Experience.New.Discover')}</Typography>
-
-      <div className={styles.searchBox}>
-        <SearchBox onSubmit={() => null} placeholder="Search" outlined={true} />
-      </div>
 
       <Autocomplete<string, true, true, true>
         className={styles.fill}
@@ -364,6 +369,19 @@ export const FormSearch = () => {
             ))}
         </div>
       </ShowIf>
+
+      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleSearch}
+          style={{
+            width: 'max-content',
+          }}
+          fullWidth>
+          {i18n.t('Experience.New.SearchTimeline')}
+        </Button>
+      </div>
     </BoxComponent>
   );
 };
