@@ -137,7 +137,9 @@ export const Menu: React.FC<MenuProps> = props => {
   const dispatch = useDispatch();
   const { query, replace } = useQueryParams();
 
-  const menu = useMenuList('timeline');
+  const menu = useMenuList(
+    query.type && query.type === 'all' ? 'all' : 'timeline',
+  );
 
   const gotoHome = () => {
     if (router.pathname === '/') return;
@@ -159,7 +161,7 @@ export const Menu: React.FC<MenuProps> = props => {
           });
         } else {
           replace({
-            path: 'home',
+            path: '/',
             query: {
               type: TimelineType.ALL,
             },
@@ -224,7 +226,7 @@ export const Menu: React.FC<MenuProps> = props => {
               key={item.id}
               title={item.title}
               icon={item.icon}
-              active={item.active}
+              active={router.pathname === '/' ? item.active : false}
               onClick={async () => openMenu(item)}
               url={item.url}
               isAnimated={item.isAnimated}

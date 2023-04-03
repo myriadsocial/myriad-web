@@ -22,18 +22,18 @@ export const MenuContainer: React.FC<MenuProps> = props => {
   const parseSelected = (path: string) => {
     switch (path) {
       case '/':
-        setSelected('all');
-        break;
-      case '/timeline':
         setSelected('timeline');
+        break;
+      case '/all':
+        setSelected('all');
         break;
       default:
         break;
     }
   };
 
-  const handleChangeMenu = (path: string) => {
-    // router.push(path);
+  const handleChangeMenu = (path: MenuId) => {
+    parseSelected(path);
   };
 
   return (
