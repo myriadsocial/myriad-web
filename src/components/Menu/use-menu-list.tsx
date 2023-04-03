@@ -146,20 +146,20 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
   const menu: MenuDetail[] = useMemo(
     () => [
       {
+        id: 'timeline',
+        title: i18n.t('Experience.New.TimelineIFollow'),
+        active: selected === 'timeline',
+        icon: CustomFolderIcon,
+        url: '/',
+        isDesktop: true,
+        isAnimated: false,
+      },
+      {
         id: 'all',
         title: i18n.t('Experience.New.AllOfMyriad'),
         active: selected === 'all',
         icon: GlobeAltIcon,
         url: '/all',
-        isDesktop: true,
-        isAnimated: false,
-      },
-      {
-        id: 'timeline',
-        title: i18n.t('Experience.New.TimelineIFollow'),
-        active: selected === 'timeline',
-        icon: CustomFolderIcon,
-        url: '/timeline',
         isDesktop: true,
         isAnimated: false,
       },

@@ -52,7 +52,7 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
   };
   const handleCloseCreatePost = () => {
     setCreatePostOpened(false);
-    if (query.type && query.type !== TimelineType.ALL) {
+    if (query.type && query.type === TimelineType.ALL) {
       router.push('/', undefined, { shallow: true });
     }
   };

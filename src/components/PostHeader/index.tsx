@@ -124,7 +124,7 @@ export const HeaderComponent: React.FC<PostHeaderProps> = props => {
   };
 
   const openPost = () => {
-    router.push(`/post/${post.id}`);
+    router.push(`/post/${post.id}`, undefined, { shallow: true });
 
     handleClosePostSetting();
   };

@@ -137,7 +137,7 @@ export const Menu: React.FC<MenuProps> = props => {
   const dispatch = useDispatch();
   const { query, replace } = useQueryParams();
 
-  const menu = useMenuList(query.type === 'experience' ? 'timeline' : 'all');
+  const menu = useMenuList('timeline');
 
   const gotoHome = () => {
     if (router.pathname === '/') return;
@@ -149,20 +149,28 @@ export const Menu: React.FC<MenuProps> = props => {
       await dispatch(clearTimeline());
 
       // automatically select first experience as timeline filter
-      if (item.url === '/timeline') {
-        replace({
-          path: 'home',
-          query: {
-            type: TimelineType.EXPERIENCE,
-          },
-        });
+      if (router.pathname === '/') {
+        if (item.url === '/') {
+          replace({
+            path: '/',
+            query: {
+              type: TimelineType.EXPERIENCE,
+            },
+          });
+        } else {
+          replace({
+            path: 'home',
+            query: {
+              type: TimelineType.ALL,
+            },
+          });
+        }
       } else {
-        replace({
-          path: 'home',
-          query: {
-            type: TimelineType.ALL,
-          },
-        });
+        if (item.url === '/') {
+          router.push(`/?type=${TimelineType.EXPERIENCE}`);
+        } else {
+          router.push(`/?type=${TimelineType.ALL}`);
+        }
       }
     },
     [query],
