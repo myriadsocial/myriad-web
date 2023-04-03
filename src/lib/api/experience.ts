@@ -323,11 +323,10 @@ export const getExperiencesAdded = async (
 };
 
 export const getAdvanceExperiences = async (
-  allowedTags,
-  prohibitedTags,
-  people,
+  params,
   page = 1,
 ): Promise<ExperienceList> => {
+  const { allowedTags, prohibitedTags, people, order } = params;
   const { data } = await MyriadAPI().request<ExperienceList>({
     url: `/experiences/advances`,
     method: 'GET',
@@ -339,6 +338,7 @@ export const getAdvanceExperiences = async (
       people,
       filter: {
         include: [{ relation: 'user' }],
+        order,
       },
     },
   });

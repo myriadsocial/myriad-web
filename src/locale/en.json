@@ -150,6 +150,13 @@
       "AllOfMyriad": "All Of Myriad",
       "TimelineIFollow": "All Timelines I Follow",
       "SearchTimeline": "Search Timeline"
+    },
+    "AdvanceFilter": {
+      "Followed": "Most Followed",
+      "NameAsc": "Name (Ascending)",
+      "NameDesc": "Name (Descending)",
+      "DateAsc": "Date Created (Ascending)",
+      "DateDesc": "Date Created (Descending)"
     }
   },
   "General": {

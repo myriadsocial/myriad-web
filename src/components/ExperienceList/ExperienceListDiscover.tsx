@@ -31,7 +31,6 @@ export const ExperienceListDiscover: React.FC<ExperienceListDiscoverProps> =
       user,
       anonymous = false,
       selectable,
-      viewPostList,
       onDelete,
       onUnsubscribe,
       onSubscribe,
@@ -55,15 +54,9 @@ export const ExperienceListDiscover: React.FC<ExperienceListDiscoverProps> =
       }
     }, [router, experiences]);
 
-    //TODO: still unable to only select one experience card
     const handleSelectExperience =
       (userExperience: WrappedExperience) => () => {
-        if (userExperience) setSelectedExperienceId(userExperience.id);
-        if (userExperience.id && userExperience.id === selectedExperienceId) {
-          setSelectedExperienceId(undefined);
-        }
-
-        viewPostList(TimelineType.EXPERIENCE, userExperience);
+        router.push(`/experience/${userExperience.experience.id}`);
       };
 
     return (

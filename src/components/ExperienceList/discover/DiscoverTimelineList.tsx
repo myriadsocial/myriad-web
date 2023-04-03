@@ -14,14 +14,20 @@ import {
   ExperienceOwner,
   useExperienceHook,
 } from 'src/hooks/use-experience-hook';
-import { TimelineOrderType } from 'src/interfaces/timeline';
+import { DiscoverTimelineInterface } from 'src/interfaces/experience';
+import { AdvanceFilter } from 'src/interfaces/timeline';
 import i18n from 'src/locale';
 
 export const DiscoverTimelineList: React.FC = () => {
   const styles = useStyles();
-  const [allowedTags, setAllowedTags] = useState<string[]>([]);
-  const [prohibitedTags, setProhibitedTags] = useState<string[]>([]);
-  const [people, setPeople] = useState<string[]>([]);
+  const defaultFilter = {
+    allowedTags: [],
+    prohibitedTags: [],
+    people: [],
+  };
+  const [order, setOrder] = useState<string>('subscribedCount DESC');
+  const [filter, setFilter] =
+    useState<DiscoverTimelineInterface>(defaultFilter);
   const {
     loading,
     page,
@@ -29,28 +35,40 @@ export const DiscoverTimelineList: React.FC = () => {
     advanceSearchExperience,
     clearAdvancesExperience,
   } = useExperienceHook();
-  const { orderOptions } = useFilterOption();
+  const { advanceFilter } = useFilterOption();
 
   const handleLoadNextPage = () => {
-    advanceSearchExperience(allowedTags, prohibitedTags, people, page, true);
+    advanceSearchExperience({ ...filter, order }, page, true);
   };
 
   React.useEffect(() => {
-    advanceSearchExperience(allowedTags, prohibitedTags, people, page, false);
-  }, []);
+    advanceSearchExperience({ ...filter, order }, 1, false);
+  }, [order]);
+
+  const handleOrder = order => {
+    switch (order) {
+      case AdvanceFilter.FOLLOWED:
+        setOrder('subscribedCount DESC');
+        break;
+      case AdvanceFilter.NAME_ASC:
+        setOrder('name ASC');
+        break;
+      case AdvanceFilter.NAME_DESC:
+        setOrder('name DESC');
+        break;
+      case AdvanceFilter.DATE_ASC:
+        setOrder('createdAt ASC');
+        break;
+      case AdvanceFilter.DATE_DESC:
+        setOrder('createdAt DESC');
+        break;
+    }
+  };
 
   const handleSearch = async experience => {
     await clearAdvancesExperience();
-    setAllowedTags(experience.allowedTags);
-    setProhibitedTags(experience.prohibitedTags);
-    setPeople(experience.people);
-    advanceSearchExperience(
-      experience.allowedTags,
-      experience.prohibitedTags,
-      experience.people,
-      1,
-      false,
-    );
+    setFilter(experience);
+    advanceSearchExperience({ ...experience, order }, 1, false);
   };
 
   return (
@@ -60,11 +78,11 @@ export const DiscoverTimelineList: React.FC = () => {
       </div>
 
       <div className={styles.flex}>
-        <DropdownMenu<TimelineOrderType>
+        <DropdownMenu<AdvanceFilter>
           title={i18n.t('Post_Sorting.Title_Sort')}
-          selected={TimelineOrderType.LATEST}
-          options={orderOptions}
-          onChange={() => null}
+          selected={AdvanceFilter.FOLLOWED}
+          options={advanceFilter}
+          onChange={handleOrder}
         />
       </div>
       <ExperienceListContainer

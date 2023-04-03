@@ -150,6 +150,13 @@
       "AllOfMyriad": "все мириады",
       "TimelineIFollow": "Все сроки, которым я следую",
       "SearchTimeline": "Хронология поиска"
+    },
+    "AdvanceFilter": {
+      "Followed": "Most Followed",
+      "NameAsc": "Name (Ascending)",
+      "NameDesc": "Name (Descending)",
+      "DateAsc": "Date Created (Ascending)",
+      "DateDesc": "Date Created (Descending)"
     }
   },
   "General": {

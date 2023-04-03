@@ -269,16 +269,12 @@ export const useExperienceHook = () => {
   };
 
   const advanceSearchExperience = async (
-    allowedTags = [],
-    prohibitedTags = [],
-    people = [],
+    params,
     page = 1,
     nextPage: boolean,
   ) => {
     const newPage = nextPage ? meta.currentPage + 1 : page;
-    dispatch(
-      searchAdvancesExperiences(allowedTags, prohibitedTags, people, newPage),
-    );
+    dispatch(searchAdvancesExperiences(params, newPage));
   };
 
   return {

@@ -510,18 +510,13 @@ export const unsubscribeExperience: ThunkActionCreator<Actions, RootState> =
 
 export const searchAdvancesExperiences: ThunkActionCreator<Actions, RootState> =
 
-    (allowedTags = [], prohibitedTags = [], people = [], page = 1) =>
+    (params, page = 1) =>
     async (dispatch, getState) => {
       dispatch(setExperienceLoading(true));
 
       try {
         const { data: experiences, meta } =
-          await ExperienceAPI.getAdvanceExperiences(
-            allowedTags,
-            prohibitedTags,
-            people,
-            page,
-          );
+          await ExperienceAPI.getAdvanceExperiences(params, page);
         dispatch({
           type: constants.SEARCH_ADVANCES_EXPERIENCE,
           experiences,

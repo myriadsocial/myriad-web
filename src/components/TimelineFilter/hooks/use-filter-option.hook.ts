@@ -7,6 +7,7 @@ import {
   TimelineType,
   PostOriginType,
   TimelineFilterCreated,
+  AdvanceFilter,
 } from 'src/interfaces/timeline';
 import { SortType } from 'src/lib/api/interfaces/pagination-params.interface';
 import i18n from 'src/locale';
@@ -91,11 +92,35 @@ export const useFilterOption = () => {
     },
   ];
 
+  const advanceFilter: MenuOptions<AdvanceFilter>[] = [
+    {
+      id: AdvanceFilter.FOLLOWED,
+      title: i18n.t('Experience.AdvanceFilter.Followed'),
+    },
+    {
+      id: AdvanceFilter.NAME_ASC,
+      title: i18n.t('Experience.AdvanceFilter.NameAsc'),
+    },
+    {
+      id: AdvanceFilter.NAME_DESC,
+      title: i18n.t('Experience.AdvanceFilter.NameDesc'),
+    },
+    {
+      id: AdvanceFilter.DATE_ASC,
+      title: i18n.t('Experience.AdvanceFilter.DateAsc'),
+    },
+    {
+      id: AdvanceFilter.DATE_DESC,
+      title: i18n.t('Experience.AdvanceFilter.DateDesc'),
+    },
+  ];
+
   return {
     originFilterOptions,
     typeFilterOptions,
     orderOptions,
     sortOptions,
     createdFilter,
+    advanceFilter,
   };
 };
