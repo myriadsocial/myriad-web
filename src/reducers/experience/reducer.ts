@@ -18,11 +18,13 @@ export interface ExperienceState extends BasePaginationState {
   hasMore: boolean;
   filter?: string;
   detail?: Experience;
+  discover: Experience[];
 }
 
 const initialState: ExperienceState = {
   loading: false,
   experiences: [],
+  discover: [],
   experiencePosts: [],
   trendingExperiences: [],
   searchPeople: [],
@@ -131,6 +133,30 @@ export const ExperienceReducer: Redux.Reducer<ExperienceState, Actions> = (
       return update(state, {
         loading: { $set: action.loading },
       });
+    }
+
+    case constants.SEARCH_ADVANCES_EXPERIENCE: {
+      if (!action.meta.currentPage || action.meta.currentPage === 1) {
+        return {
+          ...state,
+          discover: action.experiences,
+          meta: action.meta,
+          hasMore: action.meta.currentPage < action.meta.totalPageCount,
+        };
+      }
+      return {
+        ...state,
+        discover: [...state.discover, ...action.experiences],
+        meta: action.meta,
+        hasMore: action.meta.currentPage < action.meta.totalPageCount,
+      };
+    }
+
+    case constants.CLEAR_ADVANCES_EXPERIENCES: {
+      return {
+        ...state,
+        experiences: state.discover,
+      };
     }
 
     default: {

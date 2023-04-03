@@ -28,6 +28,8 @@ import {
   unsubscribeExperience,
   clearExperiences,
   fetchTrendingExperience,
+  searchAdvancesExperiences,
+  clearAdvancesExperiences,
 } from 'src/reducers/experience/actions';
 import { ExperienceState } from 'src/reducers/experience/reducer';
 import {
@@ -40,6 +42,7 @@ export enum ExperienceOwner {
   CURRENT_USER = 'current_user',
   PROFILE = 'profile',
   TRENDING = 'trending',
+  DISCOVER = 'DISCOVER',
 }
 
 //TODO: isn't it better to rename this to something more general like, useSearchHook?
@@ -59,6 +62,7 @@ export const useExperienceHook = () => {
     hasMore,
     meta,
     loading,
+    discover,
   } = useSelector<RootState, ExperienceState>(state => state.experienceState);
   const profileExperiences = useSelector<RootState, WrappedExperience[]>(
     state => state.profileState.experience.data,
@@ -260,6 +264,23 @@ export const useExperienceHook = () => {
     dispatch(clearUserExperiences());
   };
 
+  const clearAdvancesExperience = () => {
+    dispatch(clearAdvancesExperiences());
+  };
+
+  const advanceSearchExperience = async (
+    allowedTags = [],
+    prohibitedTags = [],
+    people = [],
+    page = 1,
+    nextPage: boolean,
+  ) => {
+    const newPage = nextPage ? meta.currentPage + 1 : page;
+    dispatch(
+      searchAdvancesExperiences(allowedTags, prohibitedTags, people, newPage),
+    );
+  };
+
   return {
     loading,
     page: meta.currentPage,
@@ -274,6 +295,7 @@ export const useExperienceHook = () => {
     selectedExperience,
     tags,
     people,
+    discover,
     loadExperience,
     loadExperienceAdded,
     loadExperiencePostList,
@@ -295,5 +317,7 @@ export const useExperienceHook = () => {
     clearExperiences: clear,
     loadTrendingExperience,
     clearUserExperience,
+    advanceSearchExperience,
+    clearAdvancesExperience,
   };
 };

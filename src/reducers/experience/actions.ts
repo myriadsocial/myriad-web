@@ -63,6 +63,15 @@ export interface ClearExperiences extends Action {
   type: constants.CLEAR_EXPERIENCES;
 }
 
+export interface SearchAdvancesExperience extends PaginationAction {
+  type: constants.SEARCH_ADVANCES_EXPERIENCE;
+  experiences: Experience[];
+}
+
+export interface ClearAdvancesExperience extends Action {
+  type: constants.CLEAR_ADVANCES_EXPERIENCES;
+}
+
 /**
  * Union Action Types
  */
@@ -77,7 +86,9 @@ export type Actions =
   | SearchTags
   | ExperienceLoading
   | ClearExperiences
-  | BaseAction;
+  | BaseAction
+  | SearchAdvancesExperience
+  | ClearAdvancesExperience;
 
 /**
  *
@@ -496,3 +507,33 @@ export const unsubscribeExperience: ThunkActionCreator<Actions, RootState> =
       dispatch(setLoading(false));
     }
   };
+
+export const searchAdvancesExperiences: ThunkActionCreator<Actions, RootState> =
+
+    (allowedTags = [], prohibitedTags = [], people = [], page = 1) =>
+    async (dispatch, getState) => {
+      dispatch(setExperienceLoading(true));
+
+      try {
+        const { data: experiences, meta } =
+          await ExperienceAPI.getAdvanceExperiences(
+            allowedTags,
+            prohibitedTags,
+            people,
+            page,
+          );
+        dispatch({
+          type: constants.SEARCH_ADVANCES_EXPERIENCE,
+          experiences,
+          meta,
+        });
+      } catch (error) {
+        dispatch(setError(error));
+      } finally {
+        dispatch(setExperienceLoading(false));
+      }
+    };
+
+export const clearAdvancesExperiences = (): ClearAdvancesExperience => ({
+  type: constants.CLEAR_ADVANCES_EXPERIENCES,
+});

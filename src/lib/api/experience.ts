@@ -321,3 +321,26 @@ export const getExperiencesAdded = async (
 
   return data;
 };
+
+export const getAdvanceExperiences = async (
+  allowedTags,
+  prohibitedTags,
+  people,
+  page = 1,
+): Promise<ExperienceList> => {
+  const { data } = await MyriadAPI().request<ExperienceList>({
+    url: `/experiences/advances`,
+    method: 'GET',
+    params: {
+      pageNumber: page,
+      pageLimit: PAGINATION_LIMIT,
+      allowedTags,
+      prohibitedTags,
+      people,
+      filter: {
+        include: [{ relation: 'user' }],
+      },
+    },
+  });
+  return data;
+};

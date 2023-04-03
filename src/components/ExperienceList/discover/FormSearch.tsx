@@ -35,15 +35,20 @@ enum TagsProps {
   PROHIBITED = 'prohibited',
 }
 
-export const FormSearch = () => {
+type FormSearchProps = {
+  handleSearch: (experience) => void;
+};
+
+export const FormSearch: React.FC<FormSearchProps> = props => {
+  const { handleSearch } = props;
   const styles = useStyles();
   const { tags, people, searchTags, searchPeople } = useExperienceHook();
   const defaultExperience = {
-    name: '',
     allowedTags: [],
     prohibitedTags: [],
     people: [],
   };
+
   const [experience, setExperience] =
     useState<DiscoverTimelineInterface>(defaultExperience);
 
@@ -176,14 +181,12 @@ export const FormSearch = () => {
     }));
   };
 
-  const handleSearch = () => {
-    return null;
+  const handleSubmit = () => {
+    handleSearch(experience);
   };
 
   return (
     <BoxComponent radiusStr="10px">
-      <Typography variant="h4">{i18n.t('Experience.New.Discover')}</Typography>
-
       <Autocomplete<string, true, true, true>
         className={styles.fill}
         id="experience-tags-include"
@@ -374,7 +377,7 @@ export const FormSearch = () => {
         <Button
           variant="contained"
           color="primary"
-          onClick={handleSearch}
+          onClick={handleSubmit}
           style={{
             width: 'max-content',
           }}
