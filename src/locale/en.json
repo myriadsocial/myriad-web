@@ -49,6 +49,11 @@
         "Text_1": "Uh-oh!",
         "Text_2": "You haven't created any Timeline yet. Timelines are collections of people, posts, and hashtags, that help you keep your content tidy.",
         "Btn_Create": "Create Timeline"
+      },
+      "EmptyFollow": {
+        "Text_1": "Follow Timelines to Stay Up-to-Date",
+        "Text_2": "Looks like you're not following any timelines yet! By following timelines, you can see all the latest updates from the people and topics that matter to you.",
+        "Btn": "Discover Timeline"
       }
     },
     "Preview": {

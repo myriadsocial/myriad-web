@@ -49,6 +49,11 @@
         "Text_1": "О - о!",
         "Text_2": "Вы еще не создали опытов. Добавление опыта позволит Вам настраивать тэги и пользователей чтобы они отображались в вашей ленте.",
         "Btn_Create": "Создание опыта"
+      },
+      "EmptyFollow": {
+        "Text_1": "Follow Timelines to Stay Up-to-Date",
+        "Text_2": "Looks like you're not following any timelines yet! By following timelines, you can see all the latest updates from the people and topics that matter to you.",
+        "Btn": "Discover Timeline"
       }
     },
     "Preview": {

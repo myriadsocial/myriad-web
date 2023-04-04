@@ -76,7 +76,16 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
       </Grid>
     );
 
-  if (empty) return <EmptyResult emptyContent={EmptyContentEnum.POST} />;
+  if (empty)
+    return (
+      <EmptyResult
+        emptyContent={
+          query.type && query.type === TimelineType.ALL
+            ? EmptyContentEnum.POST
+            : EmptyContentEnum.DISCOVER
+        }
+      />
+    );
 
   return (
     <div className={styles.root}>

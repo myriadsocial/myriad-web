@@ -47,8 +47,13 @@
       },
       "Empty": {
         "Text_1": "Uh-oh!",
-        "Text_2": "Anda belum membuat Timeline apa pun. Timeline memungkinkan Anda untuk menyesuaikan berbagai tag dan orang untuk ditampilkan di timeline Anda.",
-        "Btn_Create": "Buat Timeline"
+        "Text_2": "Anda belum membuat pengalaman apa pun. Pengalaman memungkinkan Anda untuk menyesuaikan berbagai tag dan orang untuk ditampilkan di timeline Anda.",
+        "Btn_Create": "Buat Pengalaman"
+      },
+      "EmptyFollow": {
+        "Text_1": "Ikuti Linimasa untuk tetap update",
+        "Text_2": "Sepertinya Anda belum mengikuti linimasa mana pun! Dengan mengikuti linimasa, Anda dapat melihat semua pembaruan terkini dari orang dan topik yang penting bagi Anda.",
+        "Btn": "Temukan Linimasa"
       }
     },
     "Preview": {
