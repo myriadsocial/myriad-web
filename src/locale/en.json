@@ -964,13 +964,18 @@
     "Notification": "Notification",
     "Timeline": "Timeline",
     "NFT": "NFT & Social Token",
+    "Social_Token": "Social Token",
     "Myriad_Town": "Myriad.Town",
     "Trends": "Trends",
     "Trends_Desc": "Top 10 trending hashtags",
     "Topic": "Topic"
   },
   "NFT": {
-    "Text_1": "NFT & Social Token is underway!",
+    "Text_1": "NFT & Social Tokens is underway!",
+    "Text_2": "We will let you know very soon"
+  },
+  "Social_Token": {
+    "Text_1": "Social token is underway!",
     "Text_2": "We will let you know very soon"
   },
   "Setting": {

@@ -24,14 +24,11 @@ export const MenuRightContainer: React.FC<MenuProps> = props => {
       case '/friends':
         setSelected('friends');
         break;
-      case '/socialtoken':
-        setSelected('token');
+      case '/nft':
+        setSelected('nft');
         break;
       case '/town':
         setSelected('town');
-        break;
-      case '/nft':
-        setSelected('nft');
         break;
       case '/settings':
         setSelected('settings');

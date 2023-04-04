@@ -959,13 +959,18 @@
     "Notification": "Notifikasi",
     "Timeline": "Linimasa",
     "NFT": "NFT & Token Sosial",
+    "Social_Token": "Token sosial",
     "Myriad_Town": "Myriad.Town",
     "Trends": "Tren",
     "Trends_Desc": "10 tagar trending teratas",
     "Topic": "Topik"
   },
   "NFT": {
-    "Text_1": "NFT & Token Sosial sedang berlangsung!",
+    "Text_1": "NFT dan Token Sosial sedang berlangsung!",
+    "Text_2": "Kami akan segera memberi tahu Anda"
+  },
+  "Social_Token": {
+    "Text_1": "Token sosial sedang berlangsung!",
     "Text_2": "Kami akan segera memberi tahu Anda"
   },
   "Setting": {

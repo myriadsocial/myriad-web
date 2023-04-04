@@ -70,15 +70,6 @@ export const useMenuRightList = (selected: MenuRightId): MenuRightDetail[] => {
         isAnimated: false,
       },
       {
-        id: 'town',
-        title: i18n.t('Section.Myriad_Town'),
-        active: selected === 'town',
-        icon: SparklesIcon,
-        url: '/town',
-        isDesktop: true,
-        isAnimated: true,
-      },
-      {
         id: 'nft',
         title: i18n.t('Section.NFT'),
         active: selected === 'nft',
@@ -87,6 +78,16 @@ export const useMenuRightList = (selected: MenuRightId): MenuRightDetail[] => {
         isDesktop: true,
         isAnimated: false,
       },
+      {
+        id: 'town',
+        title: i18n.t('Section.Myriad_Town'),
+        active: selected === 'town',
+        icon: SparklesIcon,
+        url: '/town',
+        isDesktop: true,
+        isAnimated: true,
+      },
+
       {
         id: 'socials',
         title: i18n.t('Section.Social_Media'),
