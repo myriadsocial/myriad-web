@@ -65,10 +65,15 @@ export const DiscoverTimelineList: React.FC = () => {
     }
   };
 
-  const handleSearch = async experience => {
+  const handleSearch = async (experience: DiscoverTimelineInterface) => {
     await clearAdvancesExperience();
-    setFilter(experience);
-    advanceSearchExperience({ ...experience, order }, 1, false);
+    const mappingPeople = experience.people.map(p => p.id);
+    setFilter({ ...experience, people: mappingPeople as any });
+    advanceSearchExperience(
+      { ...experience, people: mappingPeople, order },
+      1,
+      false,
+    );
   };
 
   return (
