@@ -58,15 +58,18 @@ export const ExperienceListRightBar: React.FC<ExperienceListProps> = props => {
 
   //TODO: still unable to only select one experience card
   const handleSelectExperience = (userExperience: WrappedExperience) => () => {
-    if (userExperience) setSelectedExperienceId(userExperience.experience.id);
-    if (
-      userExperience.experience.id &&
-      userExperience.experience.id === selectedExperienceId
-    ) {
-      setSelectedExperienceId(undefined);
+    if (userExperience) {
+      if (
+        userExperience.experience.id &&
+        userExperience.experience.id === selectedExperienceId
+      ) {
+        setSelectedExperienceId(undefined);
+        viewPostList(TimelineType.EXPERIENCE, undefined);
+      } else {
+        setSelectedExperienceId(userExperience.experience.id);
+        viewPostList(TimelineType.EXPERIENCE, userExperience);
+      }
     }
-
-    viewPostList(TimelineType.EXPERIENCE, userExperience);
   };
 
   return (

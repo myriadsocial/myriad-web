@@ -40,7 +40,7 @@ type PostsListContainerProps = {
 export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
   const { query, filters, user } = props;
   const styles = useStyles();
-  const { posts, loading, empty, hasMore, filterTimeline, nextPage } =
+  const { posts, loading, empty, hasMore, filterTimeline, nextPage, clear } =
     useTimelineFilter(filters);
   const { loadAll: loadAllBlockedUser } = useBlockList(user);
 
@@ -58,6 +58,7 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
   };
 
   useEffect(() => {
+    clear();
     filterTimeline(query);
 
     loadAllBlockedUser();
