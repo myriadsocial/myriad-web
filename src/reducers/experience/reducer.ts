@@ -86,7 +86,10 @@ export const ExperienceReducer: Redux.Reducer<ExperienceState, Actions> = (
     case constants.FETCH_TRENDING_EXPERIENCE: {
       return {
         ...state,
-        trendingExperiences: action.experiences,
+        trendingExperiences: [
+          ...state.trendingExperiences,
+          ...action.experiences,
+        ],
         meta: action.meta,
       };
     }
@@ -156,6 +159,13 @@ export const ExperienceReducer: Redux.Reducer<ExperienceState, Actions> = (
       return {
         ...state,
         experiences: state.discover,
+      };
+    }
+
+    case constants.CLEAR_TRENDING_EXPERIENCES: {
+      return {
+        ...state,
+        trendingExperiences: [],
       };
     }
 

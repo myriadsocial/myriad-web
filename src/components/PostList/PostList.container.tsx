@@ -80,9 +80,9 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
     return (
       <EmptyResult
         emptyContent={
-          query.type && query.type === TimelineType.ALL
-            ? EmptyContentEnum.POST
-            : EmptyContentEnum.DISCOVER
+          query.type && query.type === TimelineType.EXPERIENCE
+            ? EmptyContentEnum.DISCOVER
+            : EmptyContentEnum.POST
         }
       />
     );

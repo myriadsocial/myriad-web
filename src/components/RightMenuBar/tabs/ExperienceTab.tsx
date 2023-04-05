@@ -39,6 +39,7 @@ type ExperienceTabProps = {
 export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
   const { experienceType = 'user' } = props;
   const [loading, setLoading] = useState<boolean>(false);
+  const [type, setType] = useState<TimelineFilterCreated>();
   const confirm = useConfirm();
   const { createdFilter } = useFilterOption();
 
@@ -99,11 +100,12 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
   };
 
   const handleLoadNextPage = () => {
-    loadNextUserExperience();
+    loadNextUserExperience(type);
   };
 
-  const handleFilter = async filter => {
+  const handleFilter = async (filter: TimelineFilterCreated) => {
     await clearUserExperience();
+    setType(filter);
     setLoading(true);
     const type = filter === TimelineFilterCreated.ME ? 'personal' : 'other';
     await dispatch(fetchUserExperience(1, type));

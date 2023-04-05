@@ -72,6 +72,10 @@ export interface ClearAdvancesExperience extends Action {
   type: constants.CLEAR_ADVANCES_EXPERIENCES;
 }
 
+export interface ClearTrendingExperience extends Action {
+  type: constants.CLEAR_TRENDING_EXPERIENCES;
+}
+
 /**
  * Union Action Types
  */
@@ -88,7 +92,8 @@ export type Actions =
   | ClearExperiences
   | BaseAction
   | SearchAdvancesExperience
-  | ClearAdvancesExperience;
+  | ClearAdvancesExperience
+  | ClearTrendingExperience;
 
 /**
  *
@@ -207,13 +212,13 @@ export const addPostsExperience: ThunkActionCreator<Actions, RootState> =
   };
 
 export const fetchTrendingExperience: ThunkActionCreator<Actions, RootState> =
-  (page = 1) =>
+  (page = 1, createdBy) =>
   async dispatch => {
     dispatch(setExperienceLoading(true));
 
     try {
       const { data: experiences, meta } = await ExperienceAPI.getExperiences(
-        { page },
+        { page, createdBy },
         true,
       );
 
@@ -531,4 +536,8 @@ export const searchAdvancesExperiences: ThunkActionCreator<Actions, RootState> =
 
 export const clearAdvancesExperiences = (): ClearAdvancesExperience => ({
   type: constants.CLEAR_ADVANCES_EXPERIENCES,
+});
+
+export const clearTrendingExperiences = (): ClearTrendingExperience => ({
+  type: constants.CLEAR_TRENDING_EXPERIENCES,
 });

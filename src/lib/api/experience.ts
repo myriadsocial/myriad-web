@@ -15,8 +15,12 @@ type ExperienceList = BaseList<Experience>;
 type UserExperienceList = BaseList<UserExperience>;
 type PostsExperienceList = BaseList<Post>;
 
+interface CustomParams extends PaginationParams {
+  createdBy?: string;
+}
+
 export const getExperiences = async (
-  params: PaginationParams,
+  params: CustomParams,
   isTrending?: boolean,
   postId?: string,
 ): Promise<ExperienceList> => {
@@ -44,7 +48,7 @@ export const getExperiences = async (
   }
 
   const { data } = await MyriadAPI().request<ExperienceList>({
-    url: `/experiences`,
+    url: params.createdBy ? `/experiences?${params.createdBy}` : `/experiences`,
     method: 'GET',
     params: paramGetExperience,
   });

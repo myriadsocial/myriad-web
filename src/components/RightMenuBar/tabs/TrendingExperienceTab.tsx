@@ -1,9 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 
-import { useRouter } from 'next/router';
-
-import { Button } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
@@ -20,18 +17,25 @@ import {
 } from 'src/hooks/use-experience-hook';
 import { Experience } from 'src/interfaces/experience';
 import { TimelineFilterCreated } from 'src/interfaces/timeline';
+import { User } from 'src/interfaces/user';
 import { ListMeta } from 'src/lib/api/interfaces/base-list.interface';
 import i18n from 'src/locale';
 import { RootState } from 'src/reducers';
 
 export const TrendingExperienceTab: React.FC = () => {
   const styles = useStyles();
-  const router = useRouter();
-  const { loadTrendingExperience, loading } = useExperienceHook();
+  const [type, setType] = useState<TimelineFilterCreated>();
+  const { loadTrendingExperience, loading, clearTrendingExperience } =
+    useExperienceHook();
   const { createdFilter } = useFilterOption();
 
   const trendingExperiences = useSelector<RootState, Experience[]>(
     state => state.experienceState.trendingExperiences,
+    shallowEqual,
+  );
+
+  const user = useSelector<RootState, User | undefined>(
+    state => state.userState.user,
     shallowEqual,
   );
 
@@ -41,11 +45,27 @@ export const TrendingExperienceTab: React.FC = () => {
   );
 
   React.useEffect(() => {
-    loadTrendingExperience();
+    loadTrendingExperience(1);
   }, []);
 
-  const handleViewAll = () => {
-    router.push('/search?type=experience&q=', undefined, { shallow: true });
+  const handleLoadNextPage = () => {
+    const createdBy =
+      type === TimelineFilterCreated.ME
+        ? `createdBy=${user.id}`
+        : `createdBy[neq]=${user.id}`;
+    if (type)
+      loadTrendingExperience(trendingExperiencesMeta.nextPage, createdBy);
+    else loadTrendingExperience(trendingExperiencesMeta.nextPage);
+  };
+
+  const handleFilter = async (filter: TimelineFilterCreated) => {
+    await clearTrendingExperience();
+    setType(filter);
+    const createdBy =
+      filter === TimelineFilterCreated.ME
+        ? `createdBy=${user.id}`
+        : `createdBy[neq]=${user.id}`;
+    loadTrendingExperience(1, createdBy);
   };
 
   return (
@@ -58,7 +78,7 @@ export const TrendingExperienceTab: React.FC = () => {
         <DropdownMenu<TimelineFilterCreated>
           title={i18n.t('Post_Sorting.Title_Filter')}
           options={createdFilter}
-          onChange={() => null}
+          onChange={handleFilter}
           marginTop={false}
           marginBottom={false}
           placeholder={'Select'}
@@ -71,16 +91,14 @@ export const TrendingExperienceTab: React.FC = () => {
         enableSubscribe
         filterTimeline
         owner={ExperienceOwner.TRENDING}
+        hasMore={
+          Boolean(user)
+            ? trendingExperiencesMeta.currentPage <
+              trendingExperiencesMeta.totalPageCount
+            : false
+        }
+        loadNextPage={handleLoadNextPage}
       />
-      <div style={{ width: '100%', textAlign: 'center' }}>
-        <Button
-          variant="text"
-          style={{ width: 'auto', height: 'auto', padding: 1, margin: 'auto' }}
-          color="primary"
-          onClick={handleViewAll}>
-          View all
-        </Button>
-      </div>
 
       <ShowIf condition={loading && trendingExperiences.length === 0}>
         <Grid container justifyContent="center">

@@ -72,7 +72,6 @@ export const useExperienceList = (owner: ExperienceOwner) => {
         break;
 
       case ExperienceOwner.DISCOVER:
-        console.log({ discover });
         setList(
           discover.map(experience => ({
             id:
