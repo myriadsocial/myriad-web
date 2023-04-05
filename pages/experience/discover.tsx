@@ -6,6 +6,7 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 
 import DiscoverTimelineList from 'components/ExperienceList/discover/DiscoverTimelineList';
+import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
 import { TopNavbarComponent } from 'src/components/atoms/TopNavbar';
 import { DefaultLayout } from 'src/components/template/Default/DefaultLayout';
 import { updateSession } from 'src/lib/api/auth-link';
@@ -56,7 +57,8 @@ const DiscoverTimeline: React.FC<ExperiencePageProps> = props => {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store => async context => {
-    const { req } = context;
+    const { query, req, res } = context;
+    const { cookies } = req;
 
     const dispatch = store.dispatch as ThunkDispatchAction;
 
@@ -77,9 +79,19 @@ export const getServerSideProps = wrapper.getServerSideProps(
       };
     }
 
+    const queryInstanceURL = query.instance;
     const sessionInstanceURL = session?.user?.instanceURL;
+    const cookiesInstanceURL = cookies[COOKIE_INSTANCE_URL];
+    const defaultInstanceURL = publicRuntimeConfig.myriadAPIURL;
 
-    const available = await healthcheck(sessionInstanceURL);
+    const anonymous = !session?.user;
+    const apiURL =
+      sessionInstanceURL ??
+      queryInstanceURL ??
+      cookiesInstanceURL ??
+      defaultInstanceURL;
+
+    const available = await healthcheck(apiURL);
 
     if (!available) {
       return {
@@ -90,7 +102,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
       };
     }
 
-    initialize({ cookie: req.headers.cookie });
+    initialize({ cookie: req.headers.cookie }, anonymous);
+
+    res.setHeader('set-cookie', [`${COOKIE_INSTANCE_URL}=${apiURL}`]);
 
     await dispatch(fetchUser());
     await Promise.all([
