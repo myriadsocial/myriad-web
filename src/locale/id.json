@@ -2,8 +2,8 @@
   "Experience": {
     "Alert": {
       "Confirmation_Unsub": {
-        "Title": "Berhenti berlangganan?",
-        "Desc_1": "Apakah Anda ingin berhenti berlangganan?",
+        "Title": "Berhenti mengikuti?",
+        "Desc_1": "Apakah Anda ingin berhenti mengikuti?",
         "Desc_2": "Anda tidak akan melihat lebih banyak pos dari Timeline ini",
         "Btn": "Berhenti berangganan"
       },
@@ -26,18 +26,18 @@
         "Btn_Yes": "Ya, lanjutkan untuk menghapus"
       },
       "Prompt_Unsub": {
-        "Title": "Berhenti berlangganan?",
-        "Desc_1": "Apakah Anda ingin berhenti berlangganan?",
+        "Title": "Berhenti mengikuti?",
+        "Desc_1": "Apakah Anda ingin berhenti mengikuti?",
         "Desc_2": "Anda tidak bisa melihat lebih banyak pos dari Timeline ini",
-        "Btn_Yes": "Berhenti berlangganan"
+        "Btn_Yes": "Berhenti mengikuti"
       },
       "You": "(anda)",
       "Menu": {
         "View": "Lihat rincian",
         "Edit": "Ubah Timeline",
         "Clone": "Klon",
-        "Subscribe": "Berlangganan",
-        "Unsubscribe": "Berhenti berlangganan",
+        "Subscribe": "Mengikuti",
+        "Unsubscribe": "Berhenti mengikuti",
         "Delete": "Hapus",
         "Share": "Bagikan"
       },
@@ -62,8 +62,8 @@
       "Text_2": "kloners",
       "Button": {
         "Edit": "Ubah Timeline",
-        "Subscribe": "Berlangganan",
-        "Unsubscribe": "Berhenti berlangganan",
+        "Subscribe": "Mengikuti",
+        "Unsubscribe": "Berhenti mengikuti",
         "Clone": "Klon"
       },
       "Subheader": {
@@ -203,7 +203,7 @@
       },
       "FollowTimeline": {
         "Title": "Langganan Linimasa",
-        "Desc": "Tetap up to date dengan konten terbaru dari Linimasa ini. Masuk sekarang untuk berlangganan."
+        "Desc": "Tetap up to date dengan konten terbaru dari Linimasa ini. Masuk sekarang untuk Mengikuti."
       },
       "SendTip": {
         "Title": "Kirim Tip",
@@ -455,7 +455,7 @@
         "Title": "Filter menurut",
         "All": "Semua Timeline",
         "Personal": "Timeline Personal",
-        "Subscribed": "Timeline Berlangganan"
+        "Subscribed": "Timeline Mengikuti"
       }
     },
     "Friend": {
@@ -953,7 +953,7 @@
   },
   "Section": {
     "Home": "Beranda",
-    "Friends": "Teman",
+    "Friends": "People",
     "Social_Media": "Media Sosial",
     "Wallet": "Dompet",
     "Trending_Experience": "Timeline Tren",

@@ -2,10 +2,10 @@
   "Experience": {
     "Alert": {
       "Confirmation_Unsub": {
-        "Title": "Unsubscribe?",
-        "Desc_1": "Do you want to unsubscribe?",
+        "Title": "Unfollow?",
+        "Desc_1": "Do you want to unfollow?",
         "Desc_2": "Unsubscribing will remove {{experience_name}} from your Timeline list.",
-        "Btn": "Unsubscribe"
+        "Btn": "Unfollow"
       },
       "Max_Exp": "You can only add up to 10 timelines max"
     },
@@ -26,18 +26,18 @@
         "Btn_Yes": "Yes, Delete"
       },
       "Prompt_Unsub": {
-        "Title": "Unsubscribe?",
-        "Desc_1": "Do you want to unsubscribe?",
+        "Title": "Unfollow?",
+        "Desc_1": "Do you want to unfollow?",
         "Desc_2": "Unsubscribing will remove {{experience_name}} from your Timeline list.",
-        "Btn_Yes": "Unsubscribe"
+        "Btn_Yes": "Unfollow"
       },
       "You": "(you)",
       "Menu": {
         "View": "View Details",
         "Edit": "Edit Timeline",
         "Clone": "Clone",
-        "Subscribe": "Subscribe",
-        "Unsubscribe": "Unsubscribe",
+        "Subscribe": "Follow",
+        "Unsubscribe": "Unfollow",
         "Delete": "Delete",
         "Share": "Share"
       },
@@ -58,12 +58,12 @@
     },
     "Preview": {
       "Title": "Preview Timeline",
-      "Text_1": "subscribers",
+      "Text_1": "followers",
       "Text_2": "cloners",
       "Button": {
         "Edit": "Edit timeline",
-        "Subscribe": "Subscribe",
-        "Unsubscribe": "Unsubscribe",
+        "Subscribe": "Follow",
+        "Unsubscribe": "Unfollow",
         "Clone": "Clone"
       },
       "Subheader": {
@@ -957,7 +957,7 @@
   },
   "Section": {
     "Home": "Home",
-    "Friends": "Friends",
+    "Friends": "People",
     "Social_Media": "Social Media",
     "Wallet": "Wallet",
     "Trending_Experience": "Trending Timelines",
