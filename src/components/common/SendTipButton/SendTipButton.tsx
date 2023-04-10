@@ -238,10 +238,27 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
               const near = await Near.connect(network);
               const wallet = near.provider.wallet;
 
+              let pathSuccessRedirect = '';
+
+              if ('username' in reference) {
+                pathSuccessRedirect = `/profile/${
+                  reference.username || reference.id
+                }`;
+              }
+
+              if ('section' in reference) {
+                pathSuccessRedirect = `/post/${reference.postId}`;
+              }
+
+              if ('platform' in reference) {
+                pathSuccessRedirect = `/post/${reference.id}`;
+              }
+
               const signInOptions = {
                 contractId: publicRuntimeConfig.nearTippingContractId,
                 methodNames: ['claim_tip', 'batch_claim_tips'],
-                successUrl: publicRuntimeConfig.appAuthURL + router.asPath,
+                successUrl:
+                  publicRuntimeConfig.appAuthURL + pathSuccessRedirect,
                 failureUrl: publicRuntimeConfig.appAuthURL + router.asPath,
               };
 
