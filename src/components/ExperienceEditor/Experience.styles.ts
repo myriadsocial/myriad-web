@@ -5,7 +5,11 @@ import {
   alpha,
 } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles((theme: Theme) =>
+type ExperienceEditorStyleProp = {
+  quick?: boolean;
+};
+
+export const useStyles = makeStyles<Theme, ExperienceEditorStyleProp>(theme =>
   createStyles({
     '@global': {
       ' .MuiAutocomplete-option[aria-selected="true"]': {
@@ -28,10 +32,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
     },
     root: {
-      padding: 30,
+      padding: props => (props.quick ? 0 : 30),
       background: '#FFF',
       borderRadius: 10,
       marginBottom: 24,
+      width: props => (props.quick ? 650 : '100%'),
 
       '& .MuiAutocomplete-popupIndicatorOpen': {
         transform: 'none',
@@ -174,6 +179,15 @@ export const useStyles = makeStyles((theme: Theme) =>
       border: '1px solid #FFD24D',
       borderRadius: '4px',
       padding: '0 10px',
+    },
+    advancedSettings: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      marginBottom: 20,
+      '& .advancedText': {
+        display: 'flex',
+        alignItems: 'center',
+      },
     },
   }),
 );

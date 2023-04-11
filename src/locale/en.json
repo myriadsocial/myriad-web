@@ -82,7 +82,12 @@
       }
     },
     "Create": {
-      "Title": "Quick Create Timeline"
+      "Title": "Quick Create Timeline",
+      "Success": {
+        "Title": "Timeline successfully created",
+        "Subtitle": "You can now add posts to this timeline.",
+        "Btn": "Continue create post"
+      }
     },
     "Editor": {
       "Header": "Set up your customizable timeline",
@@ -112,7 +117,8 @@
       "Btn": {
         "Clone": "Clone",
         "Create": "Create",
-        "Edit": "Save"
+        "Edit": "Save",
+        "AdvancedSettings": "Advanced Settings"
       },
       "Menu_Post": {
         "Remove": "Remove from timeline"

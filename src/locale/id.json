@@ -82,7 +82,12 @@
       }
     },
     "Create": {
-      "Title": "Buat Timeline"
+      "Title": "Buat Timeline",
+      "Success": {
+        "Title": "Timeline berhasil dibuat",
+        "Subtitle": "Sekarang anda bisa menambahkan timeline ini ke postingan anda",
+        "Btn": "Lanjutkan membuat post"
+      }
     },
     "Editor": {
       "Header": "Atur dan sesuaikan timeline mu",
@@ -112,7 +117,8 @@
       "Btn": {
         "Clone": "Klon Timeline",
         "Create": "Buat Timeline",
-        "Edit": "Simpan Timeline"
+        "Edit": "Simpan Timeline",
+        "AdvancedSettings": "Pengaturan Lanjutan"
       },
       "Menu_Post": {
         "Remove": "Hapus dari timeline"

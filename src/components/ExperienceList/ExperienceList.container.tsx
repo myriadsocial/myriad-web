@@ -80,6 +80,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> =
       unsubscribeExperience,
       subscribeExperience,
       userExperiencesMeta,
+      clearUserExperience,
     } = useExperienceHook();
     const { list: experiences } = useExperienceList(owner);
     const totalOwnedExperience =
@@ -102,6 +103,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> =
 
     const handleRemoveExperience = (experienceId: string) => {
       removeExperience(experienceId, () => {
+        clearUserExperience();
         loadExperience();
       });
     };

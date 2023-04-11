@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import { useStyles } from './Tab.style';
 
 import { Skeleton } from 'components/Expericence';
+import { ExperienceQuickContainer } from 'components/ExperienceQuick/ExperienceQuick.container';
 import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
 import { useFilterOption } from 'components/TimelineFilter/hooks/use-filter-option.hook';
 import { DropdownMenu } from 'components/atoms/DropdownMenu';
@@ -40,6 +41,7 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
   const { experienceType = 'user' } = props;
   const [loading, setLoading] = useState<boolean>(false);
   const [type, setType] = useState<TimelineFilterCreated>();
+  const [createTimeline, setCreateTimeline] = useState<boolean>(false);
   const confirm = useConfirm();
   const { createdFilter } = useFilterOption();
 
@@ -95,7 +97,7 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
         }
       }
 
-      router.push('/experience/create');
+      handleShowCreateTimeline();
     }
   };
 
@@ -109,6 +111,21 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
     setLoading(true);
     const type = filter === TimelineFilterCreated.ME ? 'personal' : 'other';
     await dispatch(fetchUserExperience(1, type));
+    setLoading(false);
+  };
+
+  const handleShowCreateTimeline = () => {
+    setCreateTimeline(!createTimeline);
+  };
+
+  const handleCloseCreateTimeline = () => {
+    setCreateTimeline(false);
+  };
+
+  const handleReload = async () => {
+    await clearUserExperience();
+    setLoading(true);
+    await dispatch(fetchUserExperience(1));
     setLoading(false);
   };
 
@@ -185,6 +202,12 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
         }>
         <EmptyExperience />
       </ShowIf>
+
+      <ExperienceQuickContainer
+        open={createTimeline}
+        onClose={handleCloseCreateTimeline}
+        onSuccess={handleReload}
+      />
     </div>
   );
 };

@@ -77,7 +77,12 @@
       }
     },
     "Create": {
-      "Title": "Создание опыта"
+      "Title": "Создание опыта",
+      "Success": {
+        "Title": "Timeline successfully created",
+        "Subtitle": "You can now add posts to this timeline.",
+        "Btn": "Continue create post"
+      }
     },
     "Editor": {
       "Header": "Настройте вашу ленту по вашему вкусу ",
@@ -107,7 +112,8 @@
       "Btn": {
         "Clone": "Клонировать опыт",
         "Create": "Создание опыта",
-        "Edit": "Подтвердить"
+        "Edit": "Подтвердить",
+        "AdvancedSettings": "Advanced Settings"
       },
       "Menu_Post": {
         "Remove": "Исключить из опыта"
