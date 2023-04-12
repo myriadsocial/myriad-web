@@ -212,7 +212,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
                   />
                 </div>
                 <div>
-                  <RightMenuBar />
+                  <RightMenuBar anonymous={anonymous} />
                 </div>
               </div>
             </div>

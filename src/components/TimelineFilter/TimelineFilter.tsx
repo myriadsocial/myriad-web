@@ -35,6 +35,7 @@ export type TimelineFilterProps = {
 
 export const TimelineFilter: React.FC<TimelineFilterProps> = props => {
   const {
+    user,
     order,
     originType,
     filterType,
@@ -58,13 +59,15 @@ export const TimelineFilter: React.FC<TimelineFilterProps> = props => {
         <div className={styles.itemContainer}>
           <div>
             <SvgIcon
-              component={query.type === 'all' ? GlobeAltIcon : CustomFolderIcon}
+              component={
+                query.type === 'all' || !user ? GlobeAltIcon : CustomFolderIcon
+              }
             />
             <div className={styles.border}></div>
           </div>
 
           <Typography className={styles.text}>
-            {query.type === 'all'
+            {query.type === 'all' || !user
               ? i18n.t('Experience.New.AllOfMyriad')
               : i18n.t('Experience.New.TimelineIFollow')}
           </Typography>

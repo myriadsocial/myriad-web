@@ -52,11 +52,18 @@ const CustomFolderIcon = () => (
   </svg>
 );
 
-export const RightMenuBar: React.FC = () => {
+interface RightMenuBarProps {
+  anonymous?: boolean;
+}
+
+export const RightMenuBar: React.FC<RightMenuBarProps> = props => {
   const { t } = useTranslation();
+  const { anonymous } = props;
   const classes = useStyles();
 
-  const [activeTab, setActiveTab] = useState('experienceTabMenu');
+  const [activeTab, setActiveTab] = useState(
+    anonymous ? 'trendingExperienceTabPanel' : 'experienceTabMenu',
+  );
 
   const handleChangeTab = (tab: string) => {
     setActiveTab(tab);
@@ -76,6 +83,7 @@ export const RightMenuBar: React.FC = () => {
         </div>
       ),
       component: <ExperienceTab />,
+      allowAnonymous: false,
     },
     {
       id: 'trendingExperienceTabPanel',
@@ -90,6 +98,7 @@ export const RightMenuBar: React.FC = () => {
         </div>
       ),
       component: <TrendingExperienceTab />,
+      allowAnonymous: true,
     },
   ];
 
@@ -97,12 +106,14 @@ export const RightMenuBar: React.FC = () => {
     <div className={classes.root}>
       <TabsComponent
         selected={activeTab}
-        tabs={iconTabs}
+        tabs={
+          anonymous ? iconTabs.filter(item => item.allowAnonymous) : iconTabs
+        }
         position="space-between"
         mark="cover"
         size="medium"
         onChangeTab={handleChangeTab}
-        width={'48%'}
+        width={anonymous ? '100%' : '48%'}
       />
     </div>
   );

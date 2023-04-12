@@ -138,7 +138,7 @@ export const Menu: React.FC<MenuProps> = props => {
   const { query, replace } = useQueryParams();
 
   const menu = useMenuList(
-    query.type && query.type === 'all' ? 'all' : 'timeline',
+    anonymous ? 'all' : query.type && query.type === 'all' ? 'all' : 'timeline',
   );
 
   const gotoHome = () => {
@@ -219,19 +219,22 @@ export const Menu: React.FC<MenuProps> = props => {
 
         {menu
           .filter(ar => ar.isDesktop === true)
-          .map(item => (
-            <ListItemComponent
-              data-testid={`list-item-${item.id}`}
-              id={item.id}
-              key={item.id}
-              title={item.title}
-              icon={item.icon}
-              active={router.pathname === '/' ? item.active : false}
-              onClick={async () => openMenu(item)}
-              url={item.url}
-              isAnimated={item.isAnimated}
-            />
-          ))}
+          .map(item => {
+            if (anonymous && !item.allowAnonymous) return;
+            return (
+              <ListItemComponent
+                data-testid={`list-item-${item.id}`}
+                id={item.id}
+                key={item.id}
+                title={item.title}
+                icon={item.icon}
+                active={router.pathname === '/' ? item.active : false}
+                onClick={async () => openMenu(item)}
+                url={item.url}
+                isAnimated={item.isAnimated}
+              />
+            );
+          })}
 
         <div style={{ padding: '0 30px', marginTop: '20px' }}>
           <Button

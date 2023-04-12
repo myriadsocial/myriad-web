@@ -61,7 +61,7 @@ export const useTimelineFilter = (filters?: TimelineFilterFields) => {
 
   const filterTimeline = useCallback(
     async (query?: ParsedUrlQuery) => {
-      let timelineType = TimelineType.EXPERIENCE;
+      let timelineType = query.timelineType ?? TimelineType.EXPERIENCE;
       let timelineOrder = TimelineOrderType.LATEST;
       let tags: string[] = [];
       let search: string;
@@ -111,7 +111,7 @@ export const useTimelineFilter = (filters?: TimelineFilterFields) => {
         // TODO: anonymous user should only see trending posts
       }
 
-      if (query?.type === TimelineType.EXPERIENCE && query?.id) {
+      if (query?.type === TimelineType.ALL && query?.id) {
         const expFilterFields: TimelineFilterFields = {
           ...filterFields,
           experienceId: query.id as string,
@@ -125,7 +125,7 @@ export const useTimelineFilter = (filters?: TimelineFilterFields) => {
               order: timelineOrder,
               query: search,
             },
-            timelineType,
+            TimelineType.EXPERIENCE,
           ),
         );
       } else {
