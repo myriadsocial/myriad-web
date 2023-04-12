@@ -1,5 +1,3 @@
-import * as Sentry from '@sentry/nextjs';
-
 import React, { useEffect } from 'react';
 
 import { Session } from 'next-auth';
@@ -7,13 +5,12 @@ import { getSession } from 'next-auth/react';
 import getConfig from 'next/config';
 import Head from 'next/head';
 
+import DiscoverTimelineList from 'components/ExperienceList/discover/DiscoverTimelineList';
 import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
-import { ExperienceEditContainer } from 'src/components/ExperiencePreview/ExperienceEdit.container';
+import { TopNavbarComponent } from 'src/components/atoms/TopNavbar';
 import { DefaultLayout } from 'src/components/template/Default/DefaultLayout';
-import { User } from 'src/interfaces/user';
 import { updateSession } from 'src/lib/api/auth-link';
-import { initialize } from 'src/lib/api/base';
-import * as ExperienceAPI from 'src/lib/api/experience';
+import initialize from 'src/lib/api/base';
 import { healthcheck } from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
 import { fetchAvailableToken } from 'src/reducers/config/actions';
@@ -32,12 +29,11 @@ import { ThunkDispatchAction } from 'src/types/thunk';
 
 const { publicRuntimeConfig } = getConfig();
 
-type EditExperiencePageProps = {
+type ExperiencePageProps = {
   session: Session;
-  logo: string;
 };
 
-const EditExperience: React.FC<EditExperiencePageProps> = props => {
+const DiscoverTimeline: React.FC<ExperiencePageProps> = props => {
   const { session } = props;
   useEffect(() => {
     if (!session?.user?.instanceURL) updateSession(session);
@@ -45,23 +41,24 @@ const EditExperience: React.FC<EditExperiencePageProps> = props => {
   return (
     <DefaultLayout isOnProfilePage={false} {...props}>
       <Head>
-        <title>
-          {i18n.t('Experience.Edit.Title', {
-            appname: publicRuntimeConfig.appName,
-          })}
-        </title>
+        <title>{publicRuntimeConfig.appName} - Experience</title>
       </Head>
-      <ExperienceEditContainer />
+
+      <TopNavbarComponent
+        description={i18n.t('TopNavbar.Title.Timeline')}
+        sectionTitle={i18n.t('Experience.New.Discover')}
+        type={'menu'}
+      />
+
+      <DiscoverTimelineList />
     </DefaultLayout>
   );
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store => async context => {
-    const { query, params, req, res } = context;
+    const { query, req, res } = context;
     const { cookies } = req;
-
-    const experienceId = params?.experienceId as string;
 
     const dispatch = store.dispatch as ThunkDispatchAction;
 
@@ -109,6 +106,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     res.setHeader('set-cookie', [`${COOKIE_INSTANCE_URL}=${apiURL}`]);
 
+    await dispatch(fetchUser());
     await Promise.all([
       dispatch(fetchServer(sessionInstanceURL)),
       dispatch(fetchNetwork()),
@@ -120,28 +118,12 @@ export const getServerSideProps = wrapper.getServerSideProps(
       dispatch(countNewNotification()),
     ]);
 
-    try {
-      const experience = await ExperienceAPI.getExperienceDetail(experienceId);
-      const user = (await dispatch(fetchUser())) as unknown as User;
-
-      if (experience?.createdBy !== user?.id)
-        return {
-          notFound: true,
-        };
-
-      return {
-        props: {
-          session,
-        },
-      };
-    } catch (error) {
-      Sentry.captureException(error);
-
-      return {
-        notFound: true,
-      };
-    }
+    return {
+      props: {
+        session,
+      },
+    };
   },
 );
 
-export default EditExperience;
+export default DiscoverTimeline;

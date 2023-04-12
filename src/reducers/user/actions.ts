@@ -113,6 +113,10 @@ export interface SetFullAccess extends Action {
   type: constants.SET_FULLACCESS;
 }
 
+export interface ClearUserExperience extends Action {
+  type: constants.CLEAR_USER_EXPERIENCE;
+}
+
 /**
  * Union Action Types
  */
@@ -135,6 +139,7 @@ export type Actions =
   | SetVerifyingSocial
   | ResetVerifyingSocial
   | SetFullAccess
+  | ClearUserExperience
   | BaseAction;
 
 /**
@@ -243,7 +248,7 @@ export const fetchConnectedSocials: ThunkActionCreator<Actions, RootState> =
   };
 
 export const fetchUserExperience: ThunkActionCreator<Actions, RootState> =
-  (page = 1) =>
+  (page = 1, type) =>
   async (dispatch, getState) => {
     dispatch(setLoading(true));
 
@@ -268,7 +273,7 @@ export const fetchUserExperience: ThunkActionCreator<Actions, RootState> =
 
       if (user) {
         const { meta, data: experiences } =
-          await ExperienceAPI.getUserExperiences(user.id, undefined, page);
+          await ExperienceAPI.getUserExperiences(user.id, type, page);
 
         dispatch({
           type: constants.FETCH_USER_EXPERIENCE,
@@ -541,3 +546,7 @@ export const fetchNetwork: ThunkActionCreator<Actions, RootState> =
       dispatch(setLoading(false));
     }
   };
+
+export const clearUserExperiences = (): ClearUserExperience => ({
+  type: constants.CLEAR_USER_EXPERIENCE,
+});

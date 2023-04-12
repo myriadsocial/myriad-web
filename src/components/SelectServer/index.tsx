@@ -137,7 +137,7 @@ const SelectServer = ({
     <React.Fragment>
       <div className={classes.root}>
         <div className={classes.title}>
-          <Typography variant="h5">
+          <Typography>
             {title ?? i18n.t('Login.Options.Prompt_Select_Instance.Title')}
           </Typography>
         </div>
