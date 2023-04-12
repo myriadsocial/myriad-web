@@ -211,7 +211,7 @@ export const ExperiencePreview: React.FC<Props> = props => {
 
   const getSelectedIds = async (selected: SelectedUserIds[]) => {
     setIsLoadingSelectedUser(true);
-    const userIds = selected.map(e => e.userId);
+    const userIds = selected?.map(e => e.userId);
     const response = await UserAPI.getUserByIds(userIds, pageUserIds);
     setSelectedUserIds([
       ...selectedUserIds,

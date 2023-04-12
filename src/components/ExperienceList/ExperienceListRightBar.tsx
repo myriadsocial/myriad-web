@@ -44,7 +44,7 @@ export const ExperienceListRightBar: React.FC<ExperienceListProps> = props => {
   const [selectedExperienceId, setSelectedExperienceId] = useState<string>();
 
   useEffect(() => {
-    const experienceId = getIdByType('experience');
+    const experienceId = getIdByType('all');
     const exists = experiences.find(
       item => item.experience.id === experienceId,
     );
