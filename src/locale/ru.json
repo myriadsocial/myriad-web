@@ -1072,7 +1072,7 @@
   "Wallet": {
     "Title": "{{appname}} - Кошелек",
     "Header": "Кошелек",
-    "Anonymous": "Пожалуйста войдите чтобы воспользоваться",
+    "Anonymous": "You are signed-out. Sign-in with crypto wallet to access this feature.",
     "Tab": {
       "Balance": "Баланс",
       "History": "История",

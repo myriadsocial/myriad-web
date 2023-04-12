@@ -59,6 +59,7 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
 
   useEffect(() => {
     clear();
+    if (!user) filterTimeline({ ...query, timelineType: TimelineType.ALL });
     filterTimeline(query);
 
     loadAllBlockedUser();
@@ -81,7 +82,8 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
     return (
       <EmptyResult
         emptyContent={
-          query.type && query.type === TimelineType.EXPERIENCE
+          (query.type && query.type === TimelineType.EXPERIENCE) ||
+          (!query.type && user)
             ? EmptyContentEnum.DISCOVER
             : EmptyContentEnum.POST
         }
