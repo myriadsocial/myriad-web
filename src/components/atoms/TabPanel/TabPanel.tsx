@@ -23,7 +23,7 @@ const useStyles = makeStyles<Theme, TabPanelStyleProps>(theme =>
       paddingLeft: props => props.paddingLeft,
       paddingRight: props => props.paddingRight,
       [theme.breakpoints.down('xs')]: {
-        background: () => 'none',
+        background: () => '#FFF',
       },
     },
   }),

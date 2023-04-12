@@ -11,6 +11,8 @@ import { Container } from '@material-ui/core';
 
 import useStyles from './DefaultLayout.styles';
 
+import { MenuRightContainer } from 'components/Menu/MenuRight.container';
+import TrendingTab from 'components/RightMenuBar/tabs/TrendingTab';
 import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
 import { withError, WithErrorProps } from 'src/components/Error';
 import { MenuContainer } from 'src/components/Menu';
@@ -210,10 +212,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
                   />
                 </div>
                 <div>
-                  <SocialMediaListContainer />
-                </div>
-                <div>
-                  <WalletBalancesContainer />
+                  <RightMenuBar />
                 </div>
               </div>
             </div>
@@ -229,7 +228,21 @@ const Default: React.FC<DefaultLayoutProps> = props => {
                 />
 
                 <ShowIf condition={!showNotification}>
-                  <RightMenuBar />
+                  <div className={classes.rightCard}>
+                    <MenuRightContainer
+                      logo={instance?.images?.logo_banner ?? ''}
+                      anonymous={anonymous}
+                    />
+                  </div>
+                  <div className={classes.rightCard}>
+                    <SocialMediaListContainer />
+                  </div>
+                  <div className={classes.rightCard}>
+                    <WalletBalancesContainer />
+                  </div>
+                  <div className={classes.rightCard}>
+                    <TrendingTab />
+                  </div>
                 </ShowIf>
 
                 <ShowIf condition={showNotification}>

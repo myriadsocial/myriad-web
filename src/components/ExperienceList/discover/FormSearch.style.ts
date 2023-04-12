@@ -5,11 +5,7 @@ import {
   alpha,
 } from '@material-ui/core/styles';
 
-type ExperienceEditorStyleProp = {
-  quick?: boolean;
-};
-
-export const useStyles = makeStyles<Theme, ExperienceEditorStyleProp>(theme =>
+export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     '@global': {
       ' .MuiAutocomplete-option[aria-selected="true"]': {
@@ -30,20 +26,11 @@ export const useStyles = makeStyles<Theme, ExperienceEditorStyleProp>(theme =>
           fontSize: 12,
         },
       },
-    },
-    root: {
-      padding: props => (props.quick ? 0 : 30),
-      background: '#FFF',
-      borderRadius: 10,
-      marginBottom: 24,
-      width: props => (props.quick ? 650 : '100%'),
-
-      '& .MuiAutocomplete-popupIndicatorOpen': {
-        transform: 'none',
+      ' .MuiAutocomplete-popupIndicatorOpen': {
+        transform: 'none !important',
       },
-
-      [theme.breakpoints.down('xs')]: {
-        padding: '20px',
+      ' .MuiFormControl-root': {
+        marginBottom: 20,
       },
     },
     header: {
@@ -180,13 +167,14 @@ export const useStyles = makeStyles<Theme, ExperienceEditorStyleProp>(theme =>
       borderRadius: '4px',
       padding: '0 10px',
     },
-    advancedSettings: {
-      display: 'flex',
-      justifyContent: 'space-between',
+    searchBox: {
+      marginTop: 20,
       marginBottom: 20,
-      '& .advancedText': {
-        display: 'flex',
-        alignItems: 'center',
+      '& .MuiGrid-container': {
+        border: '1px solid rgba(0, 0, 0, 0.23)',
+      },
+      '& .MuiGrid-container:has(.Mui-focused)': {
+        border: '2px solid #7342CC ',
       },
     },
   }),

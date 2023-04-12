@@ -40,7 +40,7 @@ type PostsListContainerProps = {
 export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
   const { query, filters, user } = props;
   const styles = useStyles();
-  const { posts, loading, empty, hasMore, filterTimeline, nextPage } =
+  const { posts, loading, empty, hasMore, filterTimeline, nextPage, clear } =
     useTimelineFilter(filters);
   const { loadAll: loadAllBlockedUser } = useBlockList(user);
 
@@ -52,12 +52,13 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
   };
   const handleCloseCreatePost = () => {
     setCreatePostOpened(false);
-    if (query.type && query.type !== TimelineType.ALL) {
+    if (query.type && query.type === TimelineType.ALL) {
       router.push('/', undefined, { shallow: true });
     }
   };
 
   useEffect(() => {
+    clear();
     filterTimeline(query);
 
     loadAllBlockedUser();
@@ -76,7 +77,16 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
       </Grid>
     );
 
-  if (empty) return <EmptyResult emptyContent={EmptyContentEnum.POST} />;
+  if (empty)
+    return (
+      <EmptyResult
+        emptyContent={
+          query.type && query.type === TimelineType.EXPERIENCE
+            ? EmptyContentEnum.DISCOVER
+            : EmptyContentEnum.POST
+        }
+      />
+    );
 
   return (
     <div className={styles.root}>

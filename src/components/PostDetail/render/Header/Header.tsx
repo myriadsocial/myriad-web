@@ -186,7 +186,11 @@ export const PostHeader: React.FC<PostHeaderProps> = props => {
 
           <ShowIf condition={!owned}>
             <BaseMenuItem className={style.link}>
-              <Link href={`/post/${post.id}`} passHref prefetch={false}>
+              <Link
+                href={`/post/${post.id}`}
+                passHref
+                prefetch={false}
+                shallow={true}>
                 {i18n.t('Post_Detail.Post_Options.View_Post')}
               </Link>
             </BaseMenuItem>

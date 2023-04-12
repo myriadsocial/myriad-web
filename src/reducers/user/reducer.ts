@@ -197,6 +197,13 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (
       };
     }
 
+    case constants.CLEAR_USER_EXPERIENCE: {
+      return {
+        ...state,
+        experiences: initalState.experiences,
+      };
+    }
+
     default: {
       return state;
     }

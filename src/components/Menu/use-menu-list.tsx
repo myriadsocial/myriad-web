@@ -1,5 +1,4 @@
 import {
-  HomeIcon,
   SparklesIcon,
   CogIcon,
   UsersIcon,
@@ -9,14 +8,16 @@ import {
   TrendingUpIcon,
   ViewGridIcon,
   CreditCardIcon,
+  GlobeAltIcon,
 } from '@heroicons/react/outline';
 
 import React, { useMemo } from 'react';
 
+import { CustomFolderIcon } from './Menu';
+
 import i18n from 'src/locale';
 
-export type MenuId =
-  | 'home'
+export type MenuRightId =
   | 'friends'
   | 'token'
   | 'town'
@@ -28,8 +29,8 @@ export type MenuId =
   | 'trends'
   | 'socials';
 
-export type MenuDetail = {
-  id: MenuId;
+export type MenuRightDetail = {
+  id: MenuRightId;
   title: string;
   active: boolean;
   icon: React.ReactNode;
@@ -38,18 +39,9 @@ export type MenuDetail = {
   isAnimated: boolean;
 };
 
-export const useMenuList = (selected: MenuId): MenuDetail[] => {
-  const menu: MenuDetail[] = useMemo(
+export const useMenuRightList = (selected: MenuRightId): MenuRightDetail[] => {
+  const menu: MenuRightDetail[] = useMemo(
     () => [
-      {
-        id: 'home',
-        title: i18n.t('Section.Home'),
-        active: selected === 'home',
-        icon: HomeIcon,
-        url: '/',
-        isDesktop: true,
-        isAnimated: false,
-      },
       {
         id: 'experience',
         title: i18n.t('Section.Mytimelines'),
@@ -78,15 +70,6 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         isAnimated: false,
       },
       {
-        id: 'town',
-        title: i18n.t('Section.Myriad_Town'),
-        active: selected === 'town',
-        icon: SparklesIcon,
-        url: '/town',
-        isDesktop: true,
-        isAnimated: true,
-      },
-      {
         id: 'nft',
         title: i18n.t('Section.NFT'),
         active: selected === 'nft',
@@ -95,6 +78,16 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         isDesktop: true,
         isAnimated: false,
       },
+      {
+        id: 'town',
+        title: i18n.t('Section.Myriad_Town'),
+        active: selected === 'town',
+        icon: SparklesIcon,
+        url: '/town',
+        isDesktop: true,
+        isAnimated: true,
+      },
+
       {
         id: 'socials',
         title: i18n.t('Section.Social_Media'),
@@ -128,6 +121,46 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         active: selected === 'settings',
         icon: CogIcon,
         url: '/settings',
+        isDesktop: true,
+        isAnimated: false,
+      },
+    ],
+    [selected],
+  );
+
+  return menu;
+};
+
+export type MenuId = 'all' | 'timeline';
+
+export type MenuDetail = {
+  id: MenuId;
+  title: string;
+  active: boolean;
+  icon: React.ReactNode;
+  url: string;
+  isDesktop: boolean;
+  isAnimated: boolean;
+};
+
+export const useMenuList = (selected: MenuId): MenuDetail[] => {
+  const menu: MenuDetail[] = useMemo(
+    () => [
+      {
+        id: 'timeline',
+        title: i18n.t('Experience.New.TimelineIFollow'),
+        active: selected === 'timeline',
+        icon: CustomFolderIcon,
+        url: '/',
+        isDesktop: true,
+        isAnimated: false,
+      },
+      {
+        id: 'all',
+        title: i18n.t('Experience.New.AllOfMyriad'),
+        active: selected === 'all',
+        icon: GlobeAltIcon,
+        url: '/all',
         isDesktop: true,
         isAnimated: false,
       },

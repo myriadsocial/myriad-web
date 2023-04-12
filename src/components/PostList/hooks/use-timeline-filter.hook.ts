@@ -61,7 +61,7 @@ export const useTimelineFilter = (filters?: TimelineFilterFields) => {
 
   const filterTimeline = useCallback(
     async (query?: ParsedUrlQuery) => {
-      let timelineType = TimelineType.ALL;
+      let timelineType = TimelineType.EXPERIENCE;
       let timelineOrder = TimelineOrderType.LATEST;
       let tags: string[] = [];
       let search: string;

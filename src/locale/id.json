@@ -2,8 +2,8 @@
   "Experience": {
     "Alert": {
       "Confirmation_Unsub": {
-        "Title": "Berhenti berlangganan?",
-        "Desc_1": "Apakah Anda ingin berhenti berlangganan?",
+        "Title": "Berhenti mengikuti?",
+        "Desc_1": "Apakah Anda ingin berhenti mengikuti?",
         "Desc_2": "Anda tidak akan melihat lebih banyak pos dari Timeline ini",
         "Btn": "Berhenti berangganan"
       },
@@ -26,18 +26,18 @@
         "Btn_Yes": "Ya, lanjutkan untuk menghapus"
       },
       "Prompt_Unsub": {
-        "Title": "Berhenti berlangganan?",
-        "Desc_1": "Apakah Anda ingin berhenti berlangganan?",
+        "Title": "Berhenti mengikuti?",
+        "Desc_1": "Apakah Anda ingin berhenti mengikuti?",
         "Desc_2": "Anda tidak bisa melihat lebih banyak pos dari Timeline ini",
-        "Btn_Yes": "Berhenti berlangganan"
+        "Btn_Yes": "Berhenti mengikuti"
       },
       "You": "(anda)",
       "Menu": {
         "View": "Lihat rincian",
         "Edit": "Ubah Timeline",
         "Clone": "Klon",
-        "Subscribe": "Berlangganan",
-        "Unsubscribe": "Berhenti berlangganan",
+        "Subscribe": "Mengikuti",
+        "Unsubscribe": "Berhenti mengikuti",
         "Delete": "Hapus",
         "Share": "Bagikan"
       },
@@ -47,8 +47,13 @@
       },
       "Empty": {
         "Text_1": "Uh-oh!",
-        "Text_2": "Anda belum membuat Timeline apa pun. Timeline memungkinkan Anda untuk menyesuaikan berbagai tag dan orang untuk ditampilkan di timeline Anda.",
-        "Btn_Create": "Buat Timeline"
+        "Text_2": "Anda belum membuat pengalaman apa pun. Pengalaman memungkinkan Anda untuk menyesuaikan berbagai tag dan orang untuk ditampilkan di timeline Anda.",
+        "Btn_Create": "Buat Pengalaman"
+      },
+      "EmptyFollow": {
+        "Text_1": "Ikuti Linimasa untuk tetap update",
+        "Text_2": "Sepertinya Anda belum mengikuti linimasa mana pun! Dengan mengikuti linimasa, Anda dapat melihat semua pembaruan terkini dari orang dan topik yang penting bagi Anda.",
+        "Btn": "Temukan Linimasa"
       }
     },
     "Preview": {
@@ -57,8 +62,8 @@
       "Text_2": "kloners",
       "Button": {
         "Edit": "Ubah Timeline",
-        "Subscribe": "Berlangganan",
-        "Unsubscribe": "Berhenti berlangganan",
+        "Subscribe": "Mengikuti",
+        "Unsubscribe": "Berhenti mengikuti",
         "Clone": "Klon"
       },
       "Subheader": {
@@ -77,7 +82,12 @@
       }
     },
     "Create": {
-      "Title": "Buat Timeline"
+      "Title": "Buat Timeline",
+      "Success": {
+        "Title": "Timeline berhasil dibuat",
+        "Subtitle": "Sekarang anda bisa menambahkan timeline ini ke postingan anda",
+        "Btn": "Lanjutkan membuat post"
+      }
     },
     "Editor": {
       "Header": "Atur dan sesuaikan timeline mu",
@@ -107,7 +117,8 @@
       "Btn": {
         "Clone": "Klon Timeline",
         "Create": "Buat Timeline",
-        "Edit": "Simpan Timeline"
+        "Edit": "Simpan Timeline",
+        "AdvancedSettings": "Pengaturan Lanjutan"
       },
       "Menu_Post": {
         "Remove": "Hapus dari timeline"
@@ -137,6 +148,26 @@
       "Empty_Subtitle": "Anda belum membuat Timeline apa pun.",
       "Btn_Confirm": "Konfirmasi",
       "Success_Msg": "Berhasil menambahkan postingan ke timeline"
+    },
+    "Filter": {
+      "Following": "Mengikuti",
+      "Trending": "Trending",
+      "CreatedByMe": "Dibuat oleh Saya",
+      "CreatedByOthers": "Dibuat Pengguna lain"
+    },
+    "New": {
+      "Create": "Buat Linimasa Baru",
+      "Discover": "Temukan Linimasa",
+      "AllOfMyriad": "All Of Myriad",
+      "TimelineIFollow": "All Timelines I Follow",
+      "SearchTimeline": "Cari Linimasa"
+    },
+    "AdvanceFilter": {
+      "Followed": "Most Followed",
+      "NameAsc": "Name (Ascending)",
+      "NameDesc": "Name (Descending)",
+      "DateAsc": "Date Created (Ascending)",
+      "DateDesc": "Date Created (Descending)"
     }
   },
   "General": {
@@ -178,7 +209,7 @@
       },
       "FollowTimeline": {
         "Title": "Langganan Linimasa",
-        "Desc": "Tetap up to date dengan konten terbaru dari Linimasa ini. Masuk sekarang untuk berlangganan."
+        "Desc": "Tetap up to date dengan konten terbaru dari Linimasa ini. Masuk sekarang untuk Mengikuti."
       },
       "SendTip": {
         "Title": "Kirim Tip",
@@ -430,7 +461,7 @@
         "Title": "Filter menurut",
         "All": "Semua Timeline",
         "Personal": "Timeline Personal",
-        "Subscribed": "Timeline Berlangganan"
+        "Subscribed": "Timeline Mengikuti"
       }
     },
     "Friend": {
@@ -928,7 +959,7 @@
   },
   "Section": {
     "Home": "Beranda",
-    "Friends": "Teman",
+    "Friends": "People",
     "Social_Media": "Media Sosial",
     "Wallet": "Dompet",
     "Trending_Experience": "Timeline Tren",
@@ -939,13 +970,18 @@
     "Notification": "Notifikasi",
     "Timeline": "Linimasa",
     "NFT": "NFT & Token Sosial",
+    "Social_Token": "Token sosial",
     "Myriad_Town": "Myriad.Town",
     "Trends": "Tren",
     "Trends_Desc": "10 tagar trending teratas",
     "Topic": "Topik"
   },
   "NFT": {
-    "Text_1": "NFT & Token Sosial sedang berlangsung!",
+    "Text_1": "NFT dan Token Sosial sedang berlangsung!",
+    "Text_2": "Kami akan segera memberi tahu Anda"
+  },
+  "Social_Token": {
+    "Text_1": "Token sosial sedang berlangsung!",
     "Text_2": "Kami akan segera memberi tahu Anda"
   },
   "Setting": {

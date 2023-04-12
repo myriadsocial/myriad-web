@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import dynamic from 'next/dynamic';
 
@@ -11,10 +11,15 @@ import { ProfileCardProps } from './ProfileCard.interfaces';
 import { useStyles } from './ProfileCard.style';
 import { ProfileContent } from './index';
 
+import SelectServer from 'components/SelectServer';
 import { CommonWalletIcon } from 'components/atoms/Icons';
 import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
+import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import ShowIf from 'src/components/common/show-if.component';
 import { formatAddress } from 'src/helpers/wallet';
+import { useInstances } from 'src/hooks/use-instances.hooks';
+import { ServerListProps } from 'src/interfaces/server-list';
+import i18n from 'src/locale';
 
 const NetworkOption = dynamic(() => import('./NetworkOption/NetworkOption'), {
   ssr: false,
@@ -39,6 +44,30 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
 
   const { loadingBlockchain: loading } = useBlockchain();
   const classes = useStyles();
+
+  const enqueueSnackbar = useEnqueueSnackbar();
+
+  const { switchInstance, onLoadingSwitch } = useInstances();
+  const [register, setRegister] = useState(false);
+
+  const handleSwitchInstance = async (
+    server: ServerListProps,
+    callback?: () => void,
+  ) => {
+    try {
+      await switchInstance(server);
+
+      callback && callback();
+    } catch (err) {
+      if (err.message === 'AccountNotFound') {
+        setRegister(true);
+      } else {
+        enqueueSnackbar({ message: err.message, variant: 'error' });
+      }
+
+      onLoadingSwitch(false);
+    }
+  };
 
   return (
     <div className={classes.root}>
@@ -93,6 +122,15 @@ export const ProfileCard: React.FC<ProfileCardProps> = props => {
               <NetworkSkeleton />
             </ShowIf>
           </ShowIf>
+        </div>
+        <div className={classes.instance}>
+          <SelectServer
+            title={i18n.t('Login.Options.Prompt_Select_Instance.Switch')}
+            onSwitchInstance={handleSwitchInstance}
+            register={register}
+            setRegister={value => setRegister(value)}
+            page="layout"
+          />
         </div>
       </div>
     </div>
