@@ -56,7 +56,7 @@ export const ExperienceListDiscover: React.FC<ExperienceListDiscoverProps> =
 
     const handleSelectExperience =
       (userExperience: WrappedExperience) => () => {
-        router.push(`/experience/${userExperience.experience.id}`);
+        router.push(`/?type=all&id=${userExperience.experience.id}`);
       };
 
     return (

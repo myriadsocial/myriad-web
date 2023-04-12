@@ -92,8 +92,8 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> =
     ) => {
       router.push(
         userExperience
-          ? `/?type=experience&id=${userExperience.experience.id}`
-          : `/?type=experience`,
+          ? `/?type=all&id=${userExperience.experience.id}`
+          : `/?type=all`,
         undefined,
         {
           shallow: true,

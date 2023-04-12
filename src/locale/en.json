@@ -1090,7 +1090,7 @@
   "Wallet": {
     "Title": "{{appname}} - Wallet",
     "Header": "Wallet",
-    "Anonymous": "Please Log-in to access this feature",
+    "Anonymous": "You are signed-out. Sign-in with crypto wallet to access this feature.",
     "Tab": {
       "Balance": "Balance",
       "History": "History",

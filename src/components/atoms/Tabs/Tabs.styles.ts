@@ -16,6 +16,9 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
         justifyContent: props => props.position ?? null,
         gap: props => (props.position === 'left' ? 20 : null),
       },
+      '& .MuiTab-root': {
+        maxWidth: '100%',
+      },
     },
   }),
 );

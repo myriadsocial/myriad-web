@@ -141,6 +141,7 @@ export type MenuDetail = {
   url: string;
   isDesktop: boolean;
   isAnimated: boolean;
+  allowAnonymous: boolean;
 };
 
 export const useMenuList = (selected: MenuId): MenuDetail[] => {
@@ -154,6 +155,7 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         url: '/',
         isDesktop: true,
         isAnimated: false,
+        allowAnonymous: false,
       },
       {
         id: 'all',
@@ -163,6 +165,7 @@ export const useMenuList = (selected: MenuId): MenuDetail[] => {
         url: '/all',
         isDesktop: true,
         isAnimated: false,
+        allowAnonymous: true,
       },
     ],
     [selected],

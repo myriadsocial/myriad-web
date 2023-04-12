@@ -1085,7 +1085,7 @@
   "Wallet": {
     "Title": "{{appname}} - Dompet",
     "Header": "Dompet",
-    "Anonymous": "Please Login to access this feature",
+    "Anonymous": "Anda belum masuk. Masuk dengan dompet kripto untuk menggunakan fitur ini",
     "Tab": {
       "Balance": "Saldo",
       "History": "Riwayat",
