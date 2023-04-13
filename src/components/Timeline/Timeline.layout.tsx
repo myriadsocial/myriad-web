@@ -52,6 +52,7 @@ export const Timeline: React.FC<TimelineContainerProps> = props => {
         </Grid>
 
         <TimelineAutoReloader />
+
         {query.type === 'experience' && experience && (
           <ExperienceCard
             experience={experience}

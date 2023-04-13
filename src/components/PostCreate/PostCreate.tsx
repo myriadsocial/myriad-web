@@ -1,7 +1,7 @@
 import { ArrowLeftIcon, GiftIcon, TrashIcon } from '@heroicons/react/outline';
 
 import React, { useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
 import dynamic from 'next/dynamic';
 
@@ -21,15 +21,28 @@ import { serialize } from './formatter';
 
 import ExclusiveCreate from 'components/ExclusiveContentCreate/ExclusiveCreate';
 import Reveal from 'components/ExclusiveContentCreate/Reveal/Reveal';
+import ExperienceListBarCreatePost from 'components/ExperienceList/ExperienceListBarCreatePost';
+import { useExperienceList } from 'components/ExperienceList/hooks/use-experience-list.hook';
+import { ExperiencePost } from 'components/ExperiencePost';
+import { SearchBox } from 'components/atoms/Search';
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import { getEditorSelectors } from 'components/common/Editor/store';
 import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import { ExclusiveContent } from 'components/common/Tipping/Tipping.interface';
+import { debounce } from 'lodash';
 import ShowIf from 'src/components/common/show-if.component';
+import { ExperienceOwner } from 'src/hooks/use-experience-hook';
+import { useExperienceHook } from 'src/hooks/use-experience-hook';
+import { useSearchHook } from 'src/hooks/use-search.hooks';
+import { useUpload } from 'src/hooks/use-upload.hook';
+import { InfoIconYellow } from 'src/images/Icons';
 import { ExclusiveContentPost } from 'src/interfaces/exclusive';
+import { ExperienceProps, WrappedExperience } from 'src/interfaces/experience';
 import { Post, PostVisibility } from 'src/interfaces/post';
+import { TimelineType } from 'src/interfaces/timeline';
 import { User } from 'src/interfaces/user';
 import i18n from 'src/locale';
+import { RootState } from 'src/reducers';
 import { createExclusiveContent } from 'src/reducers/timeline/actions';
 
 const CKEditor = dynamic(() => import('../common/CKEditor/Editor'), {
@@ -74,6 +87,12 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
   const [exclusiveContent, setExclusiveContent] =
     useState<ExclusiveContentPost | null>(null);
   const [showExclusive, setShowExclusive] = useState<boolean>(false);
+  const [showTimelineCreate, setShowTimelineCreate] = useState<boolean>(false);
+  const [timelineId, setTimelineId] = useState<string[]>([]);
+  const [experiencesVisibility, setExperienceVisibility] = useState<string[]>(
+    [],
+  );
+  const [commonUser, setCommonUser] = useState<string[]>([]);
 
   const Editor = isMobile ? CKEditor : PlateEditor;
 
@@ -183,7 +202,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
           selectedUserIds: post.selectedUserIds,
           NSFWTag: post.NSFWTag,
           visibility: post.visibility ?? PostVisibility.PUBLIC,
-          selectedTimelineIds: post.selectedTimelineIds,
+          selectedTimelineIds: timelineId,
         });
       }
     }
@@ -252,6 +271,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
     setShowExclusive(false);
     setExclusiveContent(null);
     setEditorValue('');
+    setTimelineId([]);
     onClose();
   };
 
@@ -295,6 +315,82 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
       title,
       subtitle,
     };
+  };
+  const {
+    selectedExperience,
+    tags,
+    people,
+    searchTags,
+    searchPeople,
+    saveExperience,
+    removeExperience,
+    loadExperience,
+    unsubscribeExperience,
+  } = useExperienceHook();
+  const anonymous = useSelector<RootState, boolean>(
+    state => state.userState.anonymous,
+    shallowEqual,
+  );
+  const { list: experiences } = useExperienceList(ExperienceOwner.CURRENT_USER);
+  const { searchUsers, users } = useSearchHook();
+  const { uploadImage } = useUpload();
+  const onImageUpload = async (files: File[]) => {
+    const url = await uploadImage(files[0]);
+
+    return url ?? '';
+  };
+  const handleSearchTags = debounce((query: string) => {
+    searchTags(query);
+  }, 300);
+
+  const handleSearchPeople = debounce((query: string) => {
+    searchPeople(query);
+  }, 300);
+
+  const handleCloseExperience = () => {
+    setShowTimelineCreate(false);
+  };
+  const handleSearchUser = debounce((query: string) => {
+    searchUsers(query);
+  }, 300);
+  const onSave = (attributes: ExperienceProps) => {
+    saveExperience(attributes);
+    handleCloseExperience();
+  };
+
+  const handleRemoveExperience = (experienceId: string) => {
+    removeExperience(experienceId, () => {
+      loadExperience();
+    });
+  };
+  const handleUnsubscribeExperience = (userExperienceId: string) => {
+    unsubscribeExperience(userExperienceId);
+  };
+
+  const handleViewPostList = (
+    type: TimelineType,
+    userExperience: WrappedExperience,
+  ) => {
+    if (timelineId.includes(userExperience.experience.id)) {
+      setTimelineId(
+        timelineId.filter(id => id !== userExperience.experience.id),
+      );
+      setExperienceVisibility(
+        experiencesVisibility.filter(
+          visibility => visibility !== userExperience.experience.visibility,
+        ),
+      );
+      setCommonUser(
+        commonUser.filter(user => user !== userExperience.experience.user.name),
+      );
+    } else {
+      setTimelineId([...timelineId, userExperience.experience.id]);
+      setExperienceVisibility([
+        ...experiencesVisibility,
+        userExperience.experience.visibility,
+      ]);
+      setCommonUser([...commonUser, userExperience.experience.user.name]);
+    }
   };
 
   return (
@@ -370,24 +466,8 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
           onError={handleErrorImport}
         />
       </TabPanel>
-
-      <div className={styles.action}>
+      <div className="flex flex-row">
         <div className={styles.option}>
-          <div style={{ display: showExclusive ? 'none' : 'flex' }}>
-            <DropdownMenu<PostVisibility>
-              title={i18n.t('Post_Create.Visibility.Label')}
-              options={menuOptions}
-              useIconOnMobile={false}
-              onChange={handleVisibilityChange}
-            />
-
-            <NSFWTags
-              maxWidth={isMobile ? 'xs' : 'md'}
-              tags={post.NSFWTag?.split(',') || []}
-              onConfirm={handleConfirmNSFWTags}
-            />
-          </div>
-
           <ShowIf condition={!showExclusive && activeTab === 'create'}>
             {!exclusiveContent ? (
               <>
@@ -429,13 +509,100 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
               </>
             )}
           </ShowIf>
-
-          <ShowIf condition={false}>
-            <Button color="primary" size="small" className={styles.markdown}>
-              Markdown Mode
-            </Button>
-          </ShowIf>
+          <NSFWTags
+            maxWidth={isMobile ? 'xs' : 'md'}
+            tags={post.NSFWTag?.split(',') || []}
+            onConfirm={handleConfirmNSFWTags}
+          />
         </div>
+      </div>
+      <div className={styles.timelineVisibility}>
+        <Typography
+          component="span"
+          variant="h5"
+          style={{ lineHeight: 1.8, fontWeight: 700 }}>
+          Select Timeline to Post
+        </Typography>
+        <DropdownMenu<PostVisibility>
+          title={'Filter Timeline'}
+          options={menuOptions}
+          useIconOnMobile={false}
+          onChange={handleVisibilityChange}
+        />
+      </div>
+      <div className={styles.timelineVisibility}>
+        <SearchBox placeholder="Search Timeline" />
+      </div>
+      <div className={styles.warningVisibility}>
+        <InfoIconYellow />
+        <Typography
+          component="span"
+          variant="body1"
+          style={{
+            fontWeight: 700,
+            marginLeft: '10px',
+          }}>
+          Your post visibility will be visible to{' '}
+          {experiencesVisibility.includes('private')
+            ? 'Only Me'
+            : experiencesVisibility.includes('selected_user')
+            ? 'Custom'
+            : experiencesVisibility.includes('friend')
+            ? 'Friends'
+            : 'Public'}{' '}
+        </Typography>
+      </div>
+      <div className={styles.timelineVisibility}>
+        <Typography
+          component="span"
+          variant="body1"
+          style={{ lineHeight: 1.8, fontWeight: 700 }}>
+          {timelineId.length} of {experiences.length} Selected Timelines
+        </Typography>
+        <Button
+          disabled={showTimelineCreate}
+          variant="contained"
+          color="primary"
+          size="small"
+          fullWidth={isMobile}
+          onClick={() => {
+            setShowTimelineCreate(true);
+          }}>
+          Create Timeline
+        </Button>
+      </div>
+      <ShowIf condition={showTimelineCreate}>
+        <div className={styles.experienceCreate}>
+          <ExperiencePost
+            isEdit={false}
+            experience={selectedExperience}
+            tags={tags}
+            people={people}
+            onSearchTags={handleSearchTags}
+            onImageUpload={onImageUpload}
+            onSearchPeople={handleSearchPeople}
+            onSave={onSave}
+            onSearchUser={handleSearchUser}
+            users={users}
+            onCancel={handleCloseExperience}
+          />
+        </div>
+      </ShowIf>
+      {/* Select Timeline */}
+      {/* Timeline list */}
+      <div className={styles.timelineVisibility}>
+        <ExperienceListBarCreatePost
+          onDelete={handleRemoveExperience}
+          onUnsubscribe={handleUnsubscribeExperience}
+          experiences={experiences}
+          selectable={true}
+          viewPostList={handleViewPostList}
+          user={user}
+          anonymous={anonymous}
+          {...props}
+        />
+      </div>
+      <div className={styles.action}>
         <ShowIf condition={!showExclusive}>
           <ShowIf condition={post.visibility !== 'selected_user'}>
             <Button
