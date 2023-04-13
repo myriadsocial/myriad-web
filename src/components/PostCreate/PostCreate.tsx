@@ -106,7 +106,6 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
       subtitle: i18n.t('Post_Import.Subtitle'),
     },
   };
-
   const handleTabChange = (
     event: React.ChangeEvent<{}>,
     tab: PostCreateType,
@@ -272,13 +271,16 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
     setExclusiveContent(null);
     setEditorValue('');
     setTimelineId([]);
+    setExperienceVisibility([]);
+    setCommonUser([]);
     onClose();
   };
 
   const handleContentChange = data => {
+    console.log(data, 'ini data');
     if (!isMobile) {
-      if (data[0].children[0].text !== '') {
-        setEditorValue(data[0].children[0].text);
+      if (data[0].children[0].text !== '' || data[0].children.length > 1) {
+        setEditorValue('not empty');
       }
     }
     if (data.length > 0 && isMobile) {
