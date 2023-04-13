@@ -316,7 +316,7 @@ export const getExperiencesAdded = async (
     method: 'GET',
     params: {
       pageNumber: page,
-      pageLimit: PAGINATION_LIMIT,
+      pageLimit: 100,
       filter: {
         include: [{ relation: 'user' }],
       },

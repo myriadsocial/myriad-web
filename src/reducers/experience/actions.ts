@@ -177,7 +177,7 @@ export const loadExperiencesPostList: ThunkActionCreator<Actions, RootState> =
       }
 
       const { data: experiences } = await ExperienceAPI.getExperiences(
-        { page: 1 },
+        { page: 1, limit: 100 },
         false,
         postId,
       );
