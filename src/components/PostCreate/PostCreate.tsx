@@ -277,7 +277,6 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
   };
 
   const handleContentChange = data => {
-    console.log(data, 'ini data');
     if (!isMobile) {
       if (data[0].children[0].text !== '' || data[0].children.length > 1) {
         setEditorValue('not empty');
