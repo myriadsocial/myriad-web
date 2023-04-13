@@ -189,6 +189,7 @@ export const Editor: React.FC<EditorProps> = props => {
     isErrorEditor = false,
     placeholder,
     autoFocus = false,
+    onChange,
   } = props;
 
   const styles = useStyles({ mobile, counter: true });
@@ -271,10 +272,9 @@ export const Editor: React.FC<EditorProps> = props => {
   };
   const handleChange = useCallback(
     (value: EditorValue) => {
-      props.onChange(value, false);
+      onChange(value, false);
     },
-
-    [props.onChange],
+    [onChange],
   );
 
   return (

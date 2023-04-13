@@ -80,7 +80,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
   const experienceId = userExperience.experience.id;
   const userExperienceId = userExperience.id;
   const link =
-    publicRuntimeConfig.appAuthURL + `/type=experience&id=${experienceId}`;
+    publicRuntimeConfig.appAuthURL + `/?type=experience&id=${experienceId}`;
   const { userExperiencesMeta } = useExperienceHook();
   const totalOwnedExperience =
     userExperiencesMeta.additionalData?.totalOwnedExperience ?? 0;
