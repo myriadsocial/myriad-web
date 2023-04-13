@@ -43,7 +43,20 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
     },
     action: {
-      padding: 30,
+      padding: '30px 15px',
+      display: 'flex',
+      justifyContent: 'flex-end',
+      alignItems: 'center',
+      position: 'relative',
+      [theme.breakpoints.down('xs')]: {
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        padding: 0,
+      },
+    },
+    timelineVisibility: {
+      padding: '0px 15px',
+      margin: '20px 0px',
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
@@ -53,6 +66,36 @@ export const useStyles = makeStyles((theme: Theme) =>
         alignItems: 'flex-start',
         padding: 0,
       },
+    },
+    timelineCreate: {
+      padding: '0px 15px',
+      margin: '20px 0px',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      position: 'relative',
+      [theme.breakpoints.down('xs')]: {
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        padding: 0,
+      },
+    },
+    experienceCreate: {
+      margin: '20px auto',
+    },
+    warningVisibility: {
+      padding: '10px 15px',
+      margin: '20px 0px',
+      display: 'flex',
+      alignItems: 'center',
+      position: 'relative',
+      [theme.breakpoints.down('xs')]: {
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        padding: 0,
+      },
+      backgroundColor: 'rgba(255, 210, 77, 0.2)',
+      borderRadius: '10px',
     },
     option: {
       display: 'flex',
