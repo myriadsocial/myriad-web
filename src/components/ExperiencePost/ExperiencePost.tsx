@@ -95,7 +95,7 @@ export const ExperiencePost: React.FC<ExperienceEditorProps> = props => {
   const { clearUsers } = useSearchHook();
 
   const ref = useRef(null);
-  const [experienceId, setExperienceId] = useState<string | undefined>();
+  const [setExperienceId] = useState<string | undefined>();
   const [newExperience, setNewExperience] =
     useState<ExperienceProps>(experience);
   const [image, setImage] = useState<string | undefined>(
