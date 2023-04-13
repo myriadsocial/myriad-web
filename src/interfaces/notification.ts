@@ -27,6 +27,7 @@ export enum NotificationType {
   USER_BANNED = 'user_banned',
   PAID_CONTENT = 'paid_content',
   VOTE_COUNT = 'vote_count',
+  FOLLOWER_COUNT = 'follower_count',
 }
 
 export type UserReference = {

@@ -2,6 +2,7 @@ enum EmptyContentEnum {
   POST = 'post',
   USER = 'user',
   EXPERIENCE = 'experience',
+  DISCOVER = 'discover',
 }
 
 type EmptyResultProps = {

@@ -63,6 +63,19 @@ export interface ClearExperiences extends Action {
   type: constants.CLEAR_EXPERIENCES;
 }
 
+export interface SearchAdvancesExperience extends PaginationAction {
+  type: constants.SEARCH_ADVANCES_EXPERIENCE;
+  experiences: Experience[];
+}
+
+export interface ClearAdvancesExperience extends Action {
+  type: constants.CLEAR_ADVANCES_EXPERIENCES;
+}
+
+export interface ClearTrendingExperience extends Action {
+  type: constants.CLEAR_TRENDING_EXPERIENCES;
+}
+
 /**
  * Union Action Types
  */
@@ -77,7 +90,10 @@ export type Actions =
   | SearchTags
   | ExperienceLoading
   | ClearExperiences
-  | BaseAction;
+  | BaseAction
+  | SearchAdvancesExperience
+  | ClearAdvancesExperience
+  | ClearTrendingExperience;
 
 /**
  *
@@ -196,13 +212,13 @@ export const addPostsExperience: ThunkActionCreator<Actions, RootState> =
   };
 
 export const fetchTrendingExperience: ThunkActionCreator<Actions, RootState> =
-  (page = 1) =>
+  (page = 1, createdBy) =>
   async dispatch => {
     dispatch(setExperienceLoading(true));
 
     try {
       const { data: experiences, meta } = await ExperienceAPI.getExperiences(
-        { page },
+        { page, createdBy },
         true,
       );
 
@@ -496,3 +512,32 @@ export const unsubscribeExperience: ThunkActionCreator<Actions, RootState> =
       dispatch(setLoading(false));
     }
   };
+
+export const searchAdvancesExperiences: ThunkActionCreator<Actions, RootState> =
+
+    (params, page = 1) =>
+    async (dispatch, getState) => {
+      dispatch(setExperienceLoading(true));
+
+      try {
+        const { data: experiences, meta } =
+          await ExperienceAPI.getAdvanceExperiences(params, page);
+        dispatch({
+          type: constants.SEARCH_ADVANCES_EXPERIENCE,
+          experiences,
+          meta,
+        });
+      } catch (error) {
+        dispatch(setError(error));
+      } finally {
+        dispatch(setExperienceLoading(false));
+      }
+    };
+
+export const clearAdvancesExperiences = (): ClearAdvancesExperience => ({
+  type: constants.CLEAR_ADVANCES_EXPERIENCES,
+});
+
+export const clearTrendingExperiences = (): ClearTrendingExperience => ({
+  type: constants.CLEAR_TRENDING_EXPERIENCES,
+});

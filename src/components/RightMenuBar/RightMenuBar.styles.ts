@@ -8,5 +8,12 @@ export const useStyles = makeStyles((theme: Theme) =>
         paddingRight: 0,
       },
     },
+    tabContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      columnGap: '8px',
+      padding: '0 5px',
+      width: '100%',
+    },
   }),
 );

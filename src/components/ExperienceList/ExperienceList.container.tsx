@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 import { ExperienceList } from './ExperienceList';
+import ExperienceListDiscover from './ExperienceListDiscover';
 import { ExperienceListRightBar } from './ExperienceListRightBar';
 import { useExperienceList } from './hooks/use-experience-list.hook';
 
@@ -34,6 +35,7 @@ type ExperienceListContainerProps = {
   loadNextPage?: () => void;
   refreshExperience?: () => void;
   noButton?: boolean;
+  discover?: boolean;
 };
 
 export const useStyles = makeStyles<Theme, ExperienceListContainerProps>(
@@ -56,6 +58,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> =
       loadNextPage,
       refreshExperience,
       noButton,
+      discover = false,
     } = props;
 
     const style = useStyles(props);
@@ -77,6 +80,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> =
       unsubscribeExperience,
       subscribeExperience,
       userExperiencesMeta,
+      clearUserExperience,
     } = useExperienceHook();
     const { list: experiences } = useExperienceList(owner);
     const totalOwnedExperience =
@@ -87,7 +91,9 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> =
       userExperience: WrappedExperience,
     ) => {
       router.push(
-        `/?type=experience&id=${userExperience.experience.id}`,
+        userExperience
+          ? `/?type=all&id=${userExperience.experience.id}`
+          : `/?type=all`,
         undefined,
         {
           shallow: true,
@@ -97,6 +103,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> =
 
     const handleRemoveExperience = (experienceId: string) => {
       removeExperience(experienceId, () => {
+        clearUserExperience();
         loadExperience();
       });
     };
@@ -160,7 +167,19 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> =
           hasMore={hasMore}
           next={handleLoadNextPage}
           loader={<LoadMoreComponent loadmore={handleLoadNextPage} />}>
-          {noButton ? (
+          {discover ? (
+            <ExperienceListDiscover
+              onDelete={handleRemoveExperience}
+              onUnsubscribe={handleUnsubscribeExperience}
+              onSubscribe={handleSubscribeExperience}
+              onClone={handleCloneExperience}
+              viewPostList={handleViewPostList}
+              experiences={experiences}
+              user={user}
+              anonymous={anonymous}
+              {...props}
+            />
+          ) : noButton ? (
             <ExperienceListRightBar
               onDelete={handleRemoveExperience}
               onUnsubscribe={handleUnsubscribeExperience}

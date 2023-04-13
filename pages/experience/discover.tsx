@@ -5,11 +5,12 @@ import { getSession } from 'next-auth/react';
 import getConfig from 'next/config';
 import Head from 'next/head';
 
-import SocialTokenContainer from 'src/components/SocialToken/SocialToken.container';
+import DiscoverTimelineList from 'components/ExperienceList/discover/DiscoverTimelineList';
+import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
 import { TopNavbarComponent } from 'src/components/atoms/TopNavbar';
 import { DefaultLayout } from 'src/components/template/Default/DefaultLayout';
 import { updateSession } from 'src/lib/api/auth-link';
-import { initialize } from 'src/lib/api/base';
+import initialize from 'src/lib/api/base';
 import { healthcheck } from 'src/lib/api/healthcheck';
 import i18n from 'src/locale';
 import { fetchAvailableToken } from 'src/reducers/config/actions';
@@ -28,11 +29,11 @@ import { ThunkDispatchAction } from 'src/types/thunk';
 
 const { publicRuntimeConfig } = getConfig();
 
-type SocialTokenPageProps = {
+type ExperiencePageProps = {
   session: Session;
 };
 
-const SocialToken: React.FC<SocialTokenPageProps> = props => {
+const DiscoverTimeline: React.FC<ExperiencePageProps> = props => {
   const { session } = props;
   useEffect(() => {
     if (!session?.user?.instanceURL) updateSession(session);
@@ -40,26 +41,24 @@ const SocialToken: React.FC<SocialTokenPageProps> = props => {
   return (
     <DefaultLayout isOnProfilePage={false} {...props}>
       <Head>
-        <title>
-          {i18n.t('SocialToken.Title', {
-            appname: publicRuntimeConfig.appName,
-          })}
-        </title>
+        <title>{publicRuntimeConfig.appName} - Experience</title>
       </Head>
+
       <TopNavbarComponent
-        description={i18n.t('TopNavbar.Subtitle.Social_Token')}
-        sectionTitle={i18n.t('Section.Social_Token')}
+        description={i18n.t('TopNavbar.Title.Timeline')}
+        sectionTitle={i18n.t('Experience.New.Discover')}
         type={'menu'}
       />
 
-      <SocialTokenContainer />
+      <DiscoverTimelineList />
     </DefaultLayout>
   );
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store => async context => {
-    const { req } = context;
+    const { query, req, res } = context;
+    const { cookies } = req;
 
     const dispatch = store.dispatch as ThunkDispatchAction;
 
@@ -74,15 +73,25 @@ export const getServerSideProps = wrapper.getServerSideProps(
     if (!session?.user) {
       return {
         redirect: {
-          destination: '/',
+          destination: '/login',
           permanent: false,
         },
       };
     }
 
+    const queryInstanceURL = query.instance;
     const sessionInstanceURL = session?.user?.instanceURL;
+    const cookiesInstanceURL = cookies[COOKIE_INSTANCE_URL];
+    const defaultInstanceURL = publicRuntimeConfig.myriadAPIURL;
 
-    const available = await healthcheck(sessionInstanceURL);
+    const anonymous = !session?.user;
+    const apiURL =
+      sessionInstanceURL ??
+      queryInstanceURL ??
+      cookiesInstanceURL ??
+      defaultInstanceURL;
+
+    const available = await healthcheck(apiURL);
 
     if (!available) {
       return {
@@ -93,18 +102,20 @@ export const getServerSideProps = wrapper.getServerSideProps(
       };
     }
 
-    initialize({ cookie: req.headers.cookie });
+    initialize({ cookie: req.headers.cookie }, anonymous);
+
+    res.setHeader('set-cookie', [`${COOKIE_INSTANCE_URL}=${apiURL}`]);
 
     await dispatch(fetchUser());
     await Promise.all([
-      dispatch(fetchUserWallets()),
-      dispatch(fetchConnectedSocials()),
-      dispatch(countNewNotification()),
       dispatch(fetchServer(sessionInstanceURL)),
       dispatch(fetchNetwork()),
       dispatch(fetchAvailableToken()),
       dispatch(fetchExchangeRates()),
       dispatch(fetchUserExperience()),
+      dispatch(fetchUserWallets()),
+      dispatch(fetchConnectedSocials()),
+      dispatch(countNewNotification()),
     ]);
 
     return {
@@ -115,4 +126,4 @@ export const getServerSideProps = wrapper.getServerSideProps(
   },
 );
 
-export default SocialToken;
+export default DiscoverTimeline;

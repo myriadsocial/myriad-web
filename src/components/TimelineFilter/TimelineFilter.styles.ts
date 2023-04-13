@@ -24,5 +24,16 @@ export const useStyles = makeStyles<Theme, TimelineFilterProps>(theme =>
         },
       },
     },
+    itemContainer: {
+      display: 'flex',
+      alignItems: 'center',
+    },
+    border: {
+      borderBottom: '3px solid #FFD24D',
+      marginTop: '-4px',
+    },
+    text: {
+      paddingLeft: '6px',
+    },
   }),
 );

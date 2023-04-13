@@ -12,13 +12,20 @@ export const useExperienceList = (owner: ExperienceOwner) => {
     userExperiences,
     profileExperiences,
     trendingExperiences,
+    discover,
   } = useExperienceHook();
 
   const [list, setList] = useState<WrappedExperience[]>([]);
 
   useEffect(() => {
     generateExperienceList();
-  }, [experiences, userExperiences, profileExperiences, trendingExperiences]);
+  }, [
+    experiences,
+    userExperiences,
+    profileExperiences,
+    trendingExperiences,
+    discover,
+  ]);
 
   const generateExperienceList = () => {
     const subscribedExperiencesIds = userExperiences.map(
@@ -55,6 +62,18 @@ export const useExperienceList = (owner: ExperienceOwner) => {
       case ExperienceOwner.TRENDING:
         setList(
           trendingExperiences.map(experience => ({
+            id:
+              userExperiences.find(item => item.experience.id === experience.id)
+                ?.id ?? undefined,
+            subscribed: subscribedExperiencesIds.includes(experience.id),
+            experience,
+          })),
+        );
+        break;
+
+      case ExperienceOwner.DISCOVER:
+        setList(
+          discover.map(experience => ({
             id:
               userExperiences.find(item => item.experience.id === experience.id)
                 ?.id ?? undefined,

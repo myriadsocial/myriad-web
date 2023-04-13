@@ -65,8 +65,7 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = props => {
     useState<null | HTMLElement>(null);
   const { userExperiencesMeta, removeExperience, loadExperience } =
     useExperienceHook();
-  const link =
-    publicRuntimeConfig.appAuthURL + `?type=experience&id=${experience.id}`;
+  const link = publicRuntimeConfig.appAuthURL + `?type=all&id=${experience.id}`;
   const isOwnExperience = experience?.createdBy === user?.id;
   const isHidden = () => {
     if (experience.private && !experience.friend) return true;

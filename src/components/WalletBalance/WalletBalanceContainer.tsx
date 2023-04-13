@@ -6,6 +6,7 @@ import { Typography } from '@material-ui/core';
 import { WalletBalances as WalletBalancesComponent } from '.';
 import { BoxComponent } from '../atoms/Box';
 
+import { InfoIconYellow } from 'src/images/Icons';
 import i18n from 'src/locale';
 import { RootState } from 'src/reducers';
 import { BalanceState } from 'src/reducers/balance/reducer';
@@ -22,7 +23,21 @@ export const WalletBalancesContainer: React.FC = () => {
   if (anonymous)
     return (
       <BoxComponent title={i18n.t('Wallet.Header')}>
-        <Typography>{i18n.t('Wallet.Anonymous')}</Typography>
+        <div
+          style={{
+            backgroundColor: '#ffc85726',
+            padding: 10,
+            borderRadius: 8,
+            fontSize: 14,
+            display: 'flex',
+            alignItems: 'start',
+            marginBottom: 16,
+          }}>
+          <div style={{ marginRight: 8, marginTop: 4 }}>
+            <InfoIconYellow />
+          </div>
+          <Typography>{i18n.t('Wallet.Anonymous')}</Typography>
+        </div>
       </BoxComponent>
     );
 

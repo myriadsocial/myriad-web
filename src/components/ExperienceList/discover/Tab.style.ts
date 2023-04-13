@@ -63,5 +63,8 @@ export const useStyles = makeStyles((theme: Theme) =>
         fill: 'none',
       },
     },
+    formSearch: {
+      marginBottom: 10,
+    },
   }),
 );

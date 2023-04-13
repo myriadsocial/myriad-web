@@ -14,6 +14,7 @@ type TabListProps<T> = TabsProps & {
   mark?: TabMark;
   size?: TabSize;
   background?: string;
+  width?: string;
   onChangeTab: (currentTab: T) => void;
 };
 
@@ -25,11 +26,12 @@ export const TabList = <T,>(props: TabListProps<T>): JSX.Element => {
     textColor = 'primary',
     size = 'medium',
     background,
+    width,
     onChangeTab,
     ...tabsProps
   } = props;
 
-  const styles = useStyles({ mark, size, background });
+  const styles = useStyles({ mark, size, background, width });
 
   const [selectedTab, setSelectedTab] = useState<T>(selected);
 
