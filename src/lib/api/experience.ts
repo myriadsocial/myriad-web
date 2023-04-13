@@ -15,8 +15,12 @@ type ExperienceList = BaseList<Experience>;
 type UserExperienceList = BaseList<UserExperience>;
 type PostsExperienceList = BaseList<Post>;
 
+interface CustomParams extends PaginationParams {
+  createdBy?: string;
+}
+
 export const getExperiences = async (
-  params: PaginationParams,
+  params: CustomParams,
   isTrending?: boolean,
   postId?: string,
 ): Promise<ExperienceList> => {
@@ -44,7 +48,7 @@ export const getExperiences = async (
   }
 
   const { data } = await MyriadAPI().request<ExperienceList>({
-    url: `/experiences`,
+    url: params.createdBy ? `/experiences?${params.createdBy}` : `/experiences`,
     method: 'GET',
     params: paramGetExperience,
   });
@@ -319,5 +323,28 @@ export const getExperiencesAdded = async (
     },
   });
 
+  return data;
+};
+
+export const getAdvanceExperiences = async (
+  params,
+  page = 1,
+): Promise<ExperienceList> => {
+  const { allowedTags, prohibitedTags, people, order } = params;
+  const { data } = await MyriadAPI().request<ExperienceList>({
+    url: `/experiences/advances`,
+    method: 'GET',
+    params: {
+      pageNumber: page,
+      pageLimit: PAGINATION_LIMIT,
+      allowedTags,
+      prohibitedTags,
+      people,
+      filter: {
+        include: [{ relation: 'user' }],
+        order,
+      },
+    },
+  });
   return data;
 };

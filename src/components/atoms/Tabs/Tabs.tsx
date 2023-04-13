@@ -17,6 +17,7 @@ type TabsComponentProps<T> = TabsProps & {
   padding?: number;
   paddingLeft?: number;
   paddingRight?: number;
+  width?: string;
   onChangeTab: (currentTab: T) => void;
 };
 

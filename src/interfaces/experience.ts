@@ -77,3 +77,10 @@ export interface VisibilityItem {
   id: string;
   name: string;
 }
+
+export interface DiscoverTimelineInterface {
+  name?: string;
+  allowedTags?: string[];
+  prohibitedTags?: string[];
+  people?: People[];
+}

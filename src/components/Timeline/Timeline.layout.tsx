@@ -39,7 +39,7 @@ export const Timeline: React.FC<TimelineContainerProps> = props => {
   }, []);
 
   useEffect(() => {
-    if (query.type === 'experience') {
+    if (query.type === 'all') {
       query.id && getExperienceDetail(query.id);
     }
   }, [query.id]);
@@ -52,8 +52,7 @@ export const Timeline: React.FC<TimelineContainerProps> = props => {
         </Grid>
 
         <TimelineAutoReloader />
-
-        {query.type === 'experience' && experience && (
+        {query.type === 'all' && query.id && experience && (
           <ExperienceCard
             experience={experience}
             userExperiences={userExperiences}

@@ -13,7 +13,7 @@ type MenuProps = {
 export const MenuContainer: React.FC<MenuProps> = props => {
   const router = useRouter();
 
-  const [selected, setSelected] = useState<MenuId>('home');
+  const [selected, setSelected] = useState<MenuId>();
 
   useEffect(() => {
     parseSelected(router.pathname);
@@ -21,28 +21,19 @@ export const MenuContainer: React.FC<MenuProps> = props => {
 
   const parseSelected = (path: string) => {
     switch (path) {
-      case '/friends':
-        setSelected('friends');
+      case '/':
+        setSelected('timeline');
         break;
-      case '/socialtoken':
-        setSelected('token');
-        break;
-      case '/town':
-        setSelected('town');
-        break;
-      case '/nft':
-        setSelected('nft');
-        break;
-      case '/settings':
-        setSelected('settings');
+      case '/all':
+        setSelected('all');
         break;
       default:
         break;
     }
   };
 
-  const handleChangeMenu = (path: string) => {
-    router.push(path);
+  const handleChangeMenu = (path: MenuId) => {
+    parseSelected(path);
   };
 
   return (

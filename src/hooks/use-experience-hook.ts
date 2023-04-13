@@ -28,15 +28,22 @@ import {
   unsubscribeExperience,
   clearExperiences,
   fetchTrendingExperience,
+  searchAdvancesExperiences,
+  clearAdvancesExperiences,
+  clearTrendingExperiences,
 } from 'src/reducers/experience/actions';
 import { ExperienceState } from 'src/reducers/experience/reducer';
-import { fetchUserExperience } from 'src/reducers/user/actions';
+import {
+  clearUserExperiences,
+  fetchUserExperience,
+} from 'src/reducers/user/actions';
 
 export enum ExperienceOwner {
   ALL = 'all',
   CURRENT_USER = 'current_user',
   PROFILE = 'profile',
   TRENDING = 'trending',
+  DISCOVER = 'DISCOVER',
 }
 
 //TODO: isn't it better to rename this to something more general like, useSearchHook?
@@ -56,6 +63,7 @@ export const useExperienceHook = () => {
     hasMore,
     meta,
     loading,
+    discover,
   } = useSelector<RootState, ExperienceState>(state => state.experienceState);
   const profileExperiences = useSelector<RootState, WrappedExperience[]>(
     state => state.profileState.experience.data,
@@ -101,8 +109,8 @@ export const useExperienceHook = () => {
     dispatch(fetchPostsExperience(experienceId, page));
   };
 
-  const loadTrendingExperience = () => {
-    dispatch(fetchTrendingExperience());
+  const loadTrendingExperience = (page = 1, createdBy?: string) => {
+    dispatch(fetchTrendingExperience(page, createdBy));
   };
 
   const nextPage = async () => {
@@ -244,13 +252,34 @@ export const useExperienceHook = () => {
     );
   };
 
-  const loadNextUserExperience = () => {
+  const loadNextUserExperience = (type?: string) => {
     const page = userExperiencesMeta.currentPage + 1;
-    dispatch(fetchUserExperience(page));
+    dispatch(fetchUserExperience(page, type));
   };
 
   const clear = () => {
     dispatch(clearExperiences());
+  };
+
+  const clearUserExperience = () => {
+    dispatch(clearUserExperiences());
+  };
+
+  const clearAdvancesExperience = () => {
+    dispatch(clearAdvancesExperiences());
+  };
+
+  const clearTrendingExperience = () => {
+    dispatch(clearTrendingExperiences());
+  };
+
+  const advanceSearchExperience = async (
+    params,
+    page = 1,
+    nextPage: boolean,
+  ) => {
+    const newPage = nextPage ? meta.currentPage + 1 : page;
+    dispatch(searchAdvancesExperiences(params, newPage));
   };
 
   return {
@@ -267,6 +296,7 @@ export const useExperienceHook = () => {
     selectedExperience,
     tags,
     people,
+    discover,
     loadExperience,
     loadExperienceAdded,
     loadExperiencePostList,
@@ -287,5 +317,9 @@ export const useExperienceHook = () => {
     unsubscribeExperience: beUnsubscribeExperience,
     clearExperiences: clear,
     loadTrendingExperience,
+    clearUserExperience,
+    advanceSearchExperience,
+    clearAdvancesExperience,
+    clearTrendingExperience,
   };
 };

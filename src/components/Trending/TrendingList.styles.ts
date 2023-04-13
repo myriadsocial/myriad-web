@@ -4,9 +4,9 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'block',
-      '& .MuiList-padding': {
-        paddingTop: 30,
-      },
+      // '& .MuiList-padding': {
+      //   paddingTop: 30,
+      // },
     },
     list: {
       '& .MuiListItem-gutters': {

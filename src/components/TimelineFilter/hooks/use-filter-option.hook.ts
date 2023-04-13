@@ -6,6 +6,8 @@ import {
   TimelineOrderType,
   TimelineType,
   PostOriginType,
+  TimelineFilterCreated,
+  AdvanceFilter,
 } from 'src/interfaces/timeline';
 import { SortType } from 'src/lib/api/interfaces/pagination-params.interface';
 import i18n from 'src/locale';
@@ -43,19 +45,11 @@ export const useFilterOption = () => {
   const typeFilterOptions: TabListItem<TimelineType>[] = [
     {
       id: TimelineType.ALL,
-      title: i18n.t('Post_Sorting.Type_Filter.All'),
-    },
-    {
-      id: TimelineType.FRIEND,
-      title: i18n.t('Post_Sorting.Type_Filter.Friend'),
-    },
-    {
-      id: TimelineType.TRENDING,
-      title: i18n.t('Post_Sorting.Type_Filter.Trending'),
+      title: i18n.t('Experience.New.AllOfMyriad'),
     },
     {
       id: TimelineType.EXPERIENCE,
-      title: i18n.t('Post_Sorting.Type_Filter.Experience'),
+      title: i18n.t('Experience.New.TimelineIFollow'),
     },
   ];
 
@@ -87,10 +81,46 @@ export const useFilterOption = () => {
     { id: 'ASC', title: i18n.t('Post_Sorting.Sort.Oldest') },
   ];
 
+  const createdFilter: MenuOptions<TimelineFilterCreated>[] = [
+    {
+      id: TimelineFilterCreated.ME,
+      title: i18n.t('Experience.Filter.CreatedByMe'),
+    },
+    {
+      id: TimelineFilterCreated.OTHERS,
+      title: i18n.t('Experience.Filter.CreatedByOthers'),
+    },
+  ];
+
+  const advanceFilter: MenuOptions<AdvanceFilter>[] = [
+    {
+      id: AdvanceFilter.FOLLOWED,
+      title: i18n.t('Experience.AdvanceFilter.Followed'),
+    },
+    {
+      id: AdvanceFilter.NAME_ASC,
+      title: i18n.t('Experience.AdvanceFilter.NameAsc'),
+    },
+    {
+      id: AdvanceFilter.NAME_DESC,
+      title: i18n.t('Experience.AdvanceFilter.NameDesc'),
+    },
+    {
+      id: AdvanceFilter.DATE_ASC,
+      title: i18n.t('Experience.AdvanceFilter.DateAsc'),
+    },
+    {
+      id: AdvanceFilter.DATE_DESC,
+      title: i18n.t('Experience.AdvanceFilter.DateDesc'),
+    },
+  ];
+
   return {
     originFilterOptions,
     typeFilterOptions,
     orderOptions,
     sortOptions,
+    createdFilter,
+    advanceFilter,
   };
 };

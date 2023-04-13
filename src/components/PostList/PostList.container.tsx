@@ -1,7 +1,14 @@
-import React, { useEffect } from 'react';
+import { PencilIcon } from '@heroicons/react/outline';
+
+import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
+
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import SvgIcon from '@material-ui/core/SvgIcon';
 
 import { Skeleton as PostSkeleton } from '../PostDetail';
 import { EmptyResult } from '../Search/EmptyResult';
@@ -14,7 +21,15 @@ import { PostDetailContainer } from 'components/PostDetail/PostDetail.container'
 import { ParsedUrlQuery } from 'querystring';
 import { useBlockList } from 'src/hooks/use-blocked-list.hook';
 import { TimelineFilterFields } from 'src/interfaces/timeline';
+import { TimelineType } from 'src/interfaces/timeline';
 import { User } from 'src/interfaces/user';
+
+const PostCreateContainer = dynamic(
+  () => import('../PostCreate/PostCreate.container'),
+  {
+    ssr: false,
+  },
+);
 
 type PostsListContainerProps = {
   query?: ParsedUrlQuery;
@@ -25,11 +40,26 @@ type PostsListContainerProps = {
 export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
   const { query, filters, user } = props;
   const styles = useStyles();
-  const { posts, loading, empty, hasMore, filterTimeline, nextPage } =
+  const { posts, loading, empty, hasMore, filterTimeline, nextPage, clear } =
     useTimelineFilter(filters);
   const { loadAll: loadAllBlockedUser } = useBlockList(user);
 
+  const router = useRouter();
+  const [createPostOpened, setCreatePostOpened] = useState(false);
+
+  const handleOpenCreatePost = () => {
+    setCreatePostOpened(true);
+  };
+  const handleCloseCreatePost = () => {
+    setCreatePostOpened(false);
+    if (query.type && query.type === TimelineType.ALL) {
+      router.push('/', undefined, { shallow: true });
+    }
+  };
+
   useEffect(() => {
+    clear();
+    if (!user) filterTimeline({ ...query, timelineType: TimelineType.ALL });
     filterTimeline(query);
 
     loadAllBlockedUser();
@@ -48,10 +78,37 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
       </Grid>
     );
 
-  if (empty) return <EmptyResult emptyContent={EmptyContentEnum.POST} />;
+  if (empty)
+    return (
+      <EmptyResult
+        emptyContent={
+          (query.type && query.type === TimelineType.EXPERIENCE) ||
+          (!query.type && user)
+            ? EmptyContentEnum.DISCOVER
+            : EmptyContentEnum.POST
+        }
+      />
+    );
 
   return (
     <div className={styles.root}>
+      <PostCreateContainer
+        open={createPostOpened}
+        onClose={handleCloseCreatePost}
+      />
+
+      <div className={styles.button}>
+        <IconButton
+          onClick={handleOpenCreatePost}
+          className={styles.iconbutton}>
+          <SvgIcon
+            className={styles.fill}
+            component={PencilIcon}
+            viewBox="0 0 28 28"
+          />
+        </IconButton>
+      </div>
+
       <InfiniteScroll
         dataLength={posts.length}
         hasMore={hasMore}

@@ -25,7 +25,7 @@ export const ExperienceContainer: React.FC = () => {
     loadExperience,
   } = useExperienceHook();
   const { searchUsers, users } = useSearchHook();
-  const style = useStyles();
+  const style = useStyles({ quick: false });
 
   const { uploadImage } = useUpload();
   const router = useRouter();

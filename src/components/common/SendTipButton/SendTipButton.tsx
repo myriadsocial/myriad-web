@@ -1,6 +1,6 @@
 import { CurrencyDollarIcon } from '@heroicons/react/outline';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { shallowEqual, useSelector } from 'react-redux';
 
@@ -191,6 +191,26 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
     }
   };
 
+  useEffect(() => {
+    if (router.isReady) {
+      const { tip_type } = router.query;
+
+      if (
+        ('username' in reference || 'platform' in reference) &&
+        ((tip_type as string) === 'post' || (tip_type as string) === 'profile')
+      ) {
+        handleSendTip();
+        router.push(
+          {
+            query: {},
+          },
+          undefined,
+          { shallow: true },
+        );
+      }
+    }
+  }, [router.isReady]);
+
   return (
     <>
       <Button
@@ -238,10 +258,30 @@ export const SendTipButton: React.FC<SendTipButtonProps> = props => {
               const near = await Near.connect(network);
               const wallet = near.provider.wallet;
 
+              let pathSuccessRedirect = '';
+
+              // if tipping to User
+              if ('username' in reference) {
+                pathSuccessRedirect = `/profile/${
+                  reference.username || reference.id
+                }?tip_type=profile`;
+              }
+
+              // if tipping to Comment
+              if ('section' in reference) {
+                pathSuccessRedirect = `/post/${reference.postId}?tip_type=comment&comment=${reference.id}`;
+              }
+
+              // if tipping to Post
+              if ('platform' in reference) {
+                pathSuccessRedirect = `/post/${reference.id}?tip_type=post`;
+              }
+
               const signInOptions = {
                 contractId: publicRuntimeConfig.nearTippingContractId,
                 methodNames: ['claim_tip', 'batch_claim_tips'],
-                successUrl: publicRuntimeConfig.appAuthURL + router.asPath,
+                successUrl:
+                  publicRuntimeConfig.appAuthURL + pathSuccessRedirect,
                 failureUrl: publicRuntimeConfig.appAuthURL + router.asPath,
               };
 

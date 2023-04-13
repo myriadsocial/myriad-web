@@ -234,16 +234,17 @@ export const Experience: React.FC<ExperienceProps> = props => {
                   placeholder="empty"
                   objectFit="cover"
                   objectPosition="center"
-                  width={40}
-                  height={40}
-                  quality={90}
+                  width={68}
+                  height={68}
+                  quality={100}
                   className={styles.image}
                 />
               ) : (
                 <Avatar
                   alt={userExperience.experience.name}
                   variant="rounded"
-                  className={styles.image}>
+                  className={styles.image}
+                  style={{ width: '68px', height: '68px' }}>
                   {userExperience.experience.name.charAt(0)}
                 </Avatar>
               )}
@@ -253,15 +254,16 @@ export const Experience: React.FC<ExperienceProps> = props => {
               <Typography className={styles.title} variant="body1">
                 {userExperience.experience.name}
               </Typography>
+              <Typography noWrap color="textSecondary">
+                {userExperience.experience.description}
+              </Typography>
               <Typography
-                variant="caption"
+                variant="subtitle2"
                 color="primary"
                 className={styles.subtitle}>
                 {userExperience.experience.user.name}
               </Typography>
-              <Typography noWrap color="textSecondary">
-                {userExperience.experience.description}
-              </Typography>
+
               <Typography>
                 {userExperience.experience.subscribedCount}{' '}
                 <Typography color="textSecondary" component="span">

@@ -43,10 +43,7 @@ export const ExperienceInfo: React.FC<ExperienceInfo> = props => {
       &nbsp;• {i18n.t('Post_Detail.Experience.Added')}&nbsp;
       {!!experiences && !!experiences.length && (
         <>
-          <Link
-            href={`/?type=experience&id=${experiences[0].id}`}
-            shallow
-            passHref>
+          <Link href={`/?type=all&id=${experiences[0].id}`} shallow passHref>
             <span className={style.link}>{experiences[0].name}</span>
           </Link>
           <ShowIf condition={totalExperience > 1}>

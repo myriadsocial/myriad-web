@@ -2,10 +2,10 @@
   "Experience": {
     "Alert": {
       "Confirmation_Unsub": {
-        "Title": "Unsubscribe?",
-        "Desc_1": "Do you want to unsubscribe?",
+        "Title": "Unfollow?",
+        "Desc_1": "Do you want to unfollow?",
         "Desc_2": "Unsubscribing will remove {{experience_name}} from your Timeline list.",
-        "Btn": "Unsubscribe"
+        "Btn": "Unfollow"
       },
       "Max_Exp": "You can only add up to 10 timelines max"
     },
@@ -26,18 +26,18 @@
         "Btn_Yes": "Yes, Delete"
       },
       "Prompt_Unsub": {
-        "Title": "Unsubscribe?",
-        "Desc_1": "Do you want to unsubscribe?",
+        "Title": "Unfollow?",
+        "Desc_1": "Do you want to unfollow?",
         "Desc_2": "Unsubscribing will remove {{experience_name}} from your Timeline list.",
-        "Btn_Yes": "Unsubscribe"
+        "Btn_Yes": "Unfollow"
       },
       "You": "(you)",
       "Menu": {
         "View": "View Details",
         "Edit": "Edit Timeline",
         "Clone": "Clone",
-        "Subscribe": "Subscribe",
-        "Unsubscribe": "Unsubscribe",
+        "Subscribe": "Follow",
+        "Unsubscribe": "Unfollow",
         "Delete": "Delete",
         "Share": "Share"
       },
@@ -49,16 +49,21 @@
         "Text_1": "Uh-oh!",
         "Text_2": "You haven't created any Timeline yet. Timelines are collections of people, posts, and hashtags, that help you keep your content tidy.",
         "Btn_Create": "Create Timeline"
+      },
+      "EmptyFollow": {
+        "Text_1": "Follow Timelines to Stay Up-to-Date",
+        "Text_2": "Looks like you're not following any timelines yet! By following timelines, you can see all the latest updates from the people and topics that matter to you.",
+        "Btn": "Discover Timeline"
       }
     },
     "Preview": {
       "Title": "Preview Timeline",
-      "Text_1": "subscribers",
+      "Text_1": "followers",
       "Text_2": "cloners",
       "Button": {
         "Edit": "Edit timeline",
-        "Subscribe": "Subscribe",
-        "Unsubscribe": "Unsubscribe",
+        "Subscribe": "Follow",
+        "Unsubscribe": "Unfollow",
         "Clone": "Clone"
       },
       "Subheader": {
@@ -77,7 +82,12 @@
       }
     },
     "Create": {
-      "Title": "Create Timeline"
+      "Title": "Quick Create Timeline",
+      "Success": {
+        "Title": "Timeline successfully created",
+        "Subtitle": "You can now add posts to this timeline.",
+        "Btn": "Continue create post"
+      }
     },
     "Editor": {
       "Header": "Set up your customizable timeline",
@@ -107,7 +117,8 @@
       "Btn": {
         "Clone": "Clone",
         "Create": "Create",
-        "Edit": "Save"
+        "Edit": "Save",
+        "AdvancedSettings": "Advanced Settings"
       },
       "Menu_Post": {
         "Remove": "Remove from timeline"
@@ -137,6 +148,26 @@
       "Empty_Subtitle": "You haven't created any timeline yet.",
       "Btn_Confirm": "Confirm",
       "Success_Msg": "Successfully added post to timeline"
+    },
+    "Filter": {
+      "Following": "Following",
+      "Trending": "Trending",
+      "CreatedByMe": "Created by Me",
+      "CreatedByOthers": "Created by Others"
+    },
+    "New": {
+      "Create": "Create New Timeline",
+      "Discover": "Discover Timeline",
+      "AllOfMyriad": "All Of Myriad",
+      "TimelineIFollow": "All Timelines I Follow",
+      "SearchTimeline": "Search Timeline"
+    },
+    "AdvanceFilter": {
+      "Followed": "Most Followed",
+      "NameAsc": "Name (Ascending)",
+      "NameDesc": "Name (Descending)",
+      "DateAsc": "Date Created (Ascending)",
+      "DateDesc": "Date Created (Descending)"
     }
   },
   "General": {
@@ -882,7 +913,9 @@
       "Post_Removed": "Post removed",
       "Reward": "Tips reward",
       "Claimed": "Tips claimed",
-      "Tips_received": "Tips received"
+      "Tips_received": "Tips received",
+      "Upvote": "New Upvotes",
+      "Follower": "New Follower"
     },
     "Description": {
       "Friend_Accept": "Accepted your friend request",
@@ -909,7 +942,8 @@
       "Connect_Socmed": "Your {{platform}} account @{{username}} successfully connected to Myriad",
       "Disconnect_Socmed": "Your {{platform}} account @{{username}} successfully disconnected from @{{user}} Myriad account.",
       "UnlockedContent": "Unlocked your exclusive content.",
-      "Upvote": "Your post is getting {{amount}} upvotes"
+      "Upvote": "Your post is getting {{amount}} upvotes",
+      "Follower": "Your timeline is getting {{amount}} followers"
     },
     "Footer": {
       "View": "View all notifications"
@@ -929,7 +963,7 @@
   },
   "Section": {
     "Home": "Home",
-    "Friends": "Friends",
+    "Friends": "People",
     "Social_Media": "Social Media",
     "Wallet": "Wallet",
     "Trending_Experience": "Trending Timelines",
@@ -940,7 +974,7 @@
     "Settings": "Settings",
     "Notification": "Notification",
     "Timeline": "Timeline",
-    "NFT": "NFT",
+    "NFT": "NFT & Social Token",
     "Social_Token": "Social Token",
     "Myriad_Town": "Myriad.Town",
     "Trends": "Trends",
@@ -948,7 +982,7 @@
     "Topic": "Topic"
   },
   "NFT": {
-    "Text_1": "NFT is underway!",
+    "Text_1": "NFT & Social Tokens is underway!",
     "Text_2": "We will let you know very soon"
   },
   "Social_Token": {
@@ -1047,9 +1081,6 @@
       "OK": "Verify My {{platform}} Account"
     }
   },
-  "SocialToken": {
-    "Title": "{{appname}} - Social Token"
-  },
   "TermOfUse": {
     "Title": "{{appname}} - Terms of Use"
   },
@@ -1059,7 +1090,7 @@
   "Wallet": {
     "Title": "{{appname}} - Wallet",
     "Header": "Wallet",
-    "Anonymous": "Please Log-in to access this feature",
+    "Anonymous": "You are signed-out. Sign-in with crypto wallet to access this feature.",
     "Tab": {
       "Balance": "Balance",
       "History": "History",
@@ -1179,8 +1210,7 @@
       "Settings": "Settings",
       "Notification": "Notification",
       "Timeline": "Timeline",
-      "NFT": "NFT",
-      "Social_Token": "Social Token",
+      "NFT": "NFT & Social Token",
       "Trends": "Trends"
     },
     "Subtitle": {
@@ -1193,7 +1223,6 @@
       "Experience_Clone": "Clone Timeline",
       "Experience_Edit": "Edit Timeline",
       "NFT": "Underway",
-      "Social_Token": "Underway",
       "Myriad_Town": "Myriad lies at the crossroads of real life and digital interaction"
     }
   },

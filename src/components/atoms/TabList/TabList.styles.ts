@@ -6,6 +6,7 @@ type StylesProps = {
   mark: TabMark;
   size: TabSize;
   background?: string;
+  width?: string;
 };
 
 export const useStyles = makeStyles<Theme, StylesProps>(theme =>
@@ -30,15 +31,26 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
 
       '& .Mui-selected': {
         backgroundColor: props =>
-          props.mark === 'underline'
-            ? 'transparent'
-            : theme.palette.secondary.main,
-        borderRadius: 5,
+          props.mark === 'underline' ? 'transparent' : '#FFF',
+        borderRadius: 8,
         color: '#12130F',
+
+        '& .icon': {
+          backgroundColor: props =>
+            props.mark === 'underline'
+              ? 'transparent'
+              : theme.palette.secondary.main,
+        },
 
         '& .MuiTab-wrapper': {
           fontWeight: 600,
         },
+      },
+
+      '& .icon': {
+        display: 'flex',
+        padding: '4px',
+        borderRadius: 6,
       },
 
       '& .MuiTabs-indicator': {
@@ -59,6 +71,14 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
       [theme.breakpoints.down('xs')]: {
         padding: theme.spacing(0.5, 1),
       },
+      backgroundColor: props =>
+        props.mark === 'underline' ? 'transparent' : '#FFF',
+      width: props => (props.width ? props.width : 'auto'),
+      borderRadius: props => (props.mark === 'underline' ? '0' : 8),
+      boxShadow: props =>
+        props.mark === 'underline'
+          ? 'none'
+          : '0px 6px 10px rgba(0, 0, 0, 0.05)',
     },
     indicator: {
       marginLeft: 4,

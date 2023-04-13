@@ -47,6 +47,9 @@ export const RichTextContainer: React.FC = () => {
       setOpenPromptDrawer(true);
     } else {
       setCreatePostOpened(true);
+      if (query.createPost) {
+        router.replace('/', undefined, { shallow: true });
+      }
     }
   };
 
@@ -72,6 +75,12 @@ export const RichTextContainer: React.FC = () => {
   const handleSignIn = () => {
     router.push(`/login?instance=${cookies[COOKIE_INSTANCE_URL]}`);
   };
+
+  useEffect(() => {
+    if (router.pathname === '/' && query.createPost) {
+      handleOpenCreatePost();
+    }
+  }, [router]);
 
   return (
     <div className={style.box}>

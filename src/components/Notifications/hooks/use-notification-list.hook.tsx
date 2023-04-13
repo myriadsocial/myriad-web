@@ -619,16 +619,32 @@ export const useNotificationList = (
             id: notification.id,
             type: NotificationType.VOTE_COUNT,
             read: notification.read,
-            userId: notification.fromUserId.id,
-            user: notification.fromUserId.name,
+            user: i18n.t('Notification.Header.Upvote'),
             avatar: 'default',
             description: i18n.t('Notification.Description.Upvote', {
               amount: notification.message ?? 0,
             }),
             badge: null,
             createdAt: notification.createdAt,
-            href: notification.additionalReferenceId
+            href: notification.referenceId
               ? `/post/${notification.referenceId}`
+              : `/404`,
+          };
+
+        case NotificationType.FOLLOWER_COUNT:
+          return {
+            id: notification.id,
+            type: NotificationType.FOLLOWER_COUNT,
+            read: notification.read,
+            user: i18n.t('Notification.Header.Follower'),
+            avatar: 'default',
+            description: i18n.t('Notification.Description.Follower', {
+              amount: notification.message ?? 0,
+            }),
+            badge: null,
+            createdAt: notification.createdAt,
+            href: notification.referenceId
+              ? `/experience/${notification.referenceId}`
               : `/404`,
           };
 

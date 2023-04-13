@@ -18,6 +18,7 @@ export const useStyles = makeStyles(() =>
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
+      padding: '0 20px',
     },
     title: {
       fontWeight: 700,
@@ -27,6 +28,7 @@ export const useStyles = makeStyles(() =>
     subtitle: {
       marginBottom: '40px',
       fontSize: '14px',
+      textAlign: 'center',
     },
   }),
 );
