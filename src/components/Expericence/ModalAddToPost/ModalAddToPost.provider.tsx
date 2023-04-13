@@ -7,7 +7,6 @@ import {
   Button,
   CardActionArea,
   CardContent,
-  CardMedia,
   Checkbox,
   Grid,
   IconButton,
@@ -23,6 +22,7 @@ import { ModalAddPostExperienceProps } from './ModalAddToPost.interface';
 import { useStyles } from './ModalAddToPost.styles';
 
 import { useTimelineFilter } from 'components/PostList/hooks/use-timeline-filter.hook';
+import { Avatar } from 'components/atoms/Avatar';
 import { Empty } from 'components/atoms/Empty';
 import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import ShowIf from 'components/common/show-if.component';
@@ -54,9 +54,6 @@ const ExperienceItem = ({
   handleSelectExperienceItem,
 }: ExperienceItemProps) => {
   const styles = useStyles();
-
-  const DEFAULT_IMAGE =
-    'https://pbs.twimg.com/profile_images/1407599051579617281/-jHXi6y5_400x400.jpg';
 
   return (
     <div className={styles.experienceCard}>
@@ -91,10 +88,11 @@ const ExperienceItem = ({
           alignItems="center"
           justifyContent="space-between"
           wrap="nowrap">
-          <CardMedia
-            component="img"
+          <Avatar
+            name={item.experience.name}
+            src={item.experience.experienceImageURL}
+            variant="rounded"
             className={styles.image}
-            image={item.experience.experienceImageURL ?? DEFAULT_IMAGE}
           />
           <CardContent classes={{ root: styles.cardContent }}>
             <Typography className={styles.title} variant="body1">
@@ -140,6 +138,8 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
     );
     const [page, setPage] = useState<number>(1);
     const [loading, setLoading] = useState<boolean>(true);
+    const [otherExperience, setOtherExperience] = useState<Experience[]>([]);
+    const [changed, setChanged] = useState<boolean>(false);
 
     const toolTipText = i18n.t('Experience.Modal_Add_Post.Tooltip_Text');
 
@@ -148,6 +148,7 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
         setOpen(true);
         const tmpAddedExperience: string[] = [];
         await loadExperienceAdded(props.post.id, postsExperiences => {
+          setOtherExperience(postsExperiences);
           postsExperiences.map(item => {
             tmpAddedExperience.push(item.id);
           });
@@ -166,8 +167,6 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
           setSelectedExperience(tmpSelectedExperience);
           setSelectedExperienceItem(tmpSelectedExperienceItem);
         });
-
-        console.log({ userExperiences });
       },
       [userExperiences],
     );
@@ -211,7 +210,6 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
         tmpSelectedExperience.push(propsSelectedExperience);
       }
       setSelectedExperience(tmpSelectedExperience);
-      console.log({ tmpSelectedExperience });
     };
 
     const handleSelectExperienceItem = (
@@ -231,7 +229,6 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
         tmpSelectedExperienceItem.push(propsSelectedExperienceItem);
       }
       setSelectedExperienceItem(tmpSelectedExperienceItem);
-      console.log({ tmpSelectedExperienceItem });
     };
 
     const movePosts = (input, from, to) => {
@@ -245,8 +242,12 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
     const updatePosts = () => {
       const updated = posts.map(post => {
         if (post.id === postId) {
+          const others = otherExperience.filter(item => {
+            const check = selectedExperience.find(exp => exp === item.id);
+            if (!check) return item;
+          });
+          post.totalExperience = others.length + selectedExperience.length;
           post.experiences = selectedExperienceItem;
-          post.totalExperience = selectedExperience.length;
         }
 
         return post;
@@ -260,7 +261,6 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
 
     const handleConfirm = () => {
       if (postId) {
-        console.log(updatePosts(), posts);
         addPostsToExperience(postId, selectedExperience, () => {
           setOpen(false);
           enqueueSnackbar({
@@ -281,6 +281,7 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
         await ExperienceAPI.getUserExperiences(user.id, undefined, page);
 
       setUserExperiences([...userExperiences, ...experiences]);
+
       setLoading(false);
       if (meta.currentPage < meta.totalPageCount) setPage(page + 1);
     };
@@ -294,6 +295,27 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
       if (open) fetchUserExperiences();
       else resetExperiences();
     }, [open, page]);
+
+    useEffect(() => {
+      const current = otherExperience
+        .filter(item => {
+          const check = selectedExperience.find(exp => exp === item.id);
+          if (check) return item;
+        })
+        .map(item => item.id);
+      current.sort((a, b) => {
+        return a >= b ? 1 : -1;
+      });
+      selectedExperience.sort((a, b) => {
+        return a >= b ? 1 : -1;
+      });
+
+      console.log({ current, selectedExperience });
+
+      setChanged(
+        JSON.stringify(selectedExperience) !== JSON.stringify(current),
+      );
+    }, [userExperiences, selectedExperience]);
 
     return (
       <>
@@ -391,7 +413,7 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
             color="primary"
             fullWidth
             onClick={handleConfirm}
-            disabled={loading || selectedExperience.length === 0}>
+            disabled={loading || selectedExperience.length === 0 || !changed}>
             {i18n.t('Experience.Modal_Add_Post.Btn_Confirm')}
           </Button>
         </Modal>
