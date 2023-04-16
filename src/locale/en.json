@@ -1245,7 +1245,7 @@
   },
   "Date": {
     "Secs": "secs",
-    "Minute": "min",
+    "Minute": "mins",
     "Hours": "hours",
     "Days": "days",
     "Weeks": "weeks",
