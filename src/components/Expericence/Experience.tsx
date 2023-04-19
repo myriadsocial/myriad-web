@@ -285,7 +285,9 @@ export const Experience: React.FC<ExperienceProps> = props => {
                   size="small"
                   variant="contained"
                   color="primary"
-                  onClick={() => {
+                  onClick={e => {
+                    e.stopPropagation();
+
                     router.push(`/experience/${experienceId}/edit`);
                   }}>
                   {i18n.t('Experience.Preview.Button.Edit')}
@@ -296,11 +298,13 @@ export const Experience: React.FC<ExperienceProps> = props => {
                   variant="contained"
                   color="primary"
                   size="small"
-                  onClick={() =>
+                  onClick={e => {
+                    e.stopPropagation();
+
                     isSubscribed
                       ? confirmUnsubscribe()
-                      : handleSubscribeExperience()
-                  }>
+                      : handleSubscribeExperience();
+                  }}>
                   {isSubscribed
                     ? i18n.t('Experience.Preview.Button.Unsubscribe')
                     : i18n.t('Experience.Preview.Button.Subscribe')}
