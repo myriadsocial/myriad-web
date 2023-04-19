@@ -1018,6 +1018,8 @@
         "Mention": "Mention",
         "Friend_Requests": "Friend Request",
         "Tips": "Tips",
+        "Followers": "Followers",
+        "Upvotes": "Upvotes",
         "Confirm": "Save changes"
       },
       "Blocked_Title": "Blocked User Settings",

@@ -39,6 +39,8 @@ const initalState: ConfigState = {
       tips: true,
       mentions: true,
       friendRequests: true,
+      followers: true,
+      upvotes: true,
     },
     language: 'en',
   },
