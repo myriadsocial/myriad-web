@@ -74,5 +74,10 @@ export const useStyles = makeStyles((theme: Theme) =>
     instance: {
       padding: '0 20px',
     },
+    iconbutton: {
+      width: '34px',
+      height: '34px',
+      padding: '4px !important',
+    },
   }),
 );

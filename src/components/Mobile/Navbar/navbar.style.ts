@@ -9,7 +9,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         width: '100%',
         background: '#FFF',
         height: '56px',
-        padding: theme.spacing(0, 4),
+        padding: theme.spacing(0, 2.5),
       },
     },
     fill: {
@@ -19,6 +19,16 @@ export const useStyles = makeStyles((theme: Theme) =>
     icon: {
       color: '#404040',
       marginRight: theme.spacing(1),
+    },
+    notification: {
+      width: 40,
+
+      '& .MuiIconButton-root': {
+        padding: 8,
+      },
+      '& .MuiBadge-dot': {
+        backgroundColor: theme.status.danger.main,
+      },
     },
   }),
 );

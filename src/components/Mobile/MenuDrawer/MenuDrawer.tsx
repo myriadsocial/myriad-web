@@ -1,5 +1,4 @@
 import { LogoutIcon } from '@heroicons/react/outline';
-import { MenuIcon } from '@heroicons/react/solid';
 
 import React, { useState } from 'react';
 import { useCookies } from 'react-cookie';
@@ -18,7 +17,10 @@ import {
   Typography,
   Backdrop,
   CircularProgress,
+  IconButton,
 } from '@material-ui/core';
+
+import { CustomMyriadIcon } from '../Bottombar/Bottombar';
 
 import { NetworkOption } from 'components/ProfileCard/NetworkOption/NetworkOption';
 import SelectServer, { COOKIE_INSTANCE_URL } from 'components/SelectServer';
@@ -177,13 +179,9 @@ export const MenuDrawerComponent: React.FC = () => {
 
   return (
     <>
-      <SvgIcon
-        classes={{ root: style.fill }}
-        component={MenuIcon}
-        viewBox="0 0 20 20"
-        style={{ width: 25, height: 25 }}
-        onClick={handleOpenDrawer}
-      />
+      <IconButton onClick={handleOpenDrawer} className={style.iconbutton}>
+        <SvgIcon component={CustomMyriadIcon} />
+      </IconButton>
       <Drawer anchor={'left'} open={openDrawer} onClose={handleOpenDrawer}>
         <Grid
           container

@@ -12,6 +12,7 @@ import { Container } from '@material-ui/core';
 import useStyles from './DefaultLayout.styles';
 
 import { MenuRightContainer } from 'components/Menu/MenuRight.container';
+import { BottombarComponent } from 'components/Mobile/Bottombar/Bottombar';
 import TrendingTab from 'components/RightMenuBar/tabs/TrendingTab';
 import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
 import { withError, WithErrorProps } from 'src/components/Error';
@@ -250,6 +251,8 @@ const Default: React.FC<DefaultLayoutProps> = props => {
                 </ShowIf>
               </div>
             </div>
+
+            <BottombarComponent />
           </div>
         </Container>
 

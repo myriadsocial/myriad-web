@@ -2,7 +2,6 @@ import { ChevronLeftIcon } from '@heroicons/react/outline';
 
 import React from 'react';
 
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 
 import { Grid, IconButton } from '@material-ui/core';
@@ -12,13 +11,6 @@ import Typography from '@material-ui/core/Typography';
 
 import { TopNavbarProps } from './TopNavbar.interfaces';
 import { useStyles } from './TopNavbar.styles';
-
-const MenuDrawerComponent = dynamic(
-  () => import('src/components/Mobile/MenuDrawer/MenuDrawer'),
-  {
-    ssr: false,
-  },
-);
 
 export const TopNavbarComponent: React.FC<TopNavbarProps> = props => {
   const {
@@ -76,7 +68,11 @@ export const TopNavbarComponent: React.FC<TopNavbarProps> = props => {
       </IconButton>
 
       <div className={classes.drawer}>
-        <MenuDrawerComponent />
+        <SvgIcon
+          component={ChevronLeftIcon}
+          viewBox="0 0 24 24"
+          onClick={() => router.back()}
+        />
       </div>
 
       <Grid container direction={reverse ? 'column-reverse' : 'column'}>

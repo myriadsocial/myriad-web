@@ -1,24 +1,18 @@
-import { ChevronLeftIcon } from '@heroicons/react/outline';
-import { SearchIcon } from '@heroicons/react/solid';
-
 import React from 'react';
+import { useSelector } from 'react-redux';
 
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 
-import { SvgIcon, Grid } from '@material-ui/core';
+import { Grid, IconButton, Badge } from '@material-ui/core';
 
+import { NotificationIcon } from 'components/atoms/Icons';
 import { useStyles } from 'src/components/Mobile/Navbar/navbar.style';
 import { SearchBoxContainer } from 'src/components/atoms/Search/SearchBoxContainer';
 import ShowIf from 'src/components/common/show-if.component';
-import { useInstances } from 'src/hooks/use-instances.hooks';
-
-const MenuDrawerComponent = dynamic(
-  () => import('src/components/Mobile/MenuDrawer/MenuDrawer'),
-  {
-    ssr: false,
-  },
-);
+import { formatCount } from 'src/helpers/number';
+import { useUserHook } from 'src/hooks/use-user.hook';
+import { RootState } from 'src/reducers';
+import { NotificationState } from 'src/reducers/notification/reducer';
 
 type SearchBoxContainerProps = {
   iconPosition?: 'start' | 'end';
@@ -27,22 +21,14 @@ type SearchBoxContainerProps = {
 };
 
 export const NavbarComponent: React.FC<SearchBoxContainerProps> = props => {
-  const { searched = false } = props;
+  const { total } = useSelector<RootState, NotificationState>(
+    state => state.notificationState,
+  );
 
   const style = useStyles();
   const router = useRouter();
 
-  const { instance } = useInstances();
-
-  const [isSearch, setIsSearch] = React.useState(searched);
-
-  const toggleOpenSearch = () => {
-    if (router.pathname === '/search') {
-      router.push('/', undefined, { shallow: true });
-    } else {
-      setIsSearch(!isSearch);
-    }
-  };
+  const { user, alias } = useUserHook();
 
   const performSearch = (query: string) => {
     const DELAY = 100;
@@ -61,6 +47,10 @@ export const NavbarComponent: React.FC<SearchBoxContainerProps> = props => {
     }, DELAY);
   };
 
+  const handleShowNotification = () => {
+    router.push(`/notification`);
+  };
+
   return (
     <Grid
       container
@@ -68,30 +58,22 @@ export const NavbarComponent: React.FC<SearchBoxContainerProps> = props => {
       wrap="nowrap"
       justifyContent="space-between"
       className={style.root}>
-      <ShowIf condition={!isSearch}>
-        <MenuDrawerComponent />
-        <img
-          src={instance?.images?.logo_banner ?? ''}
-          width={105}
-          height={25}
-        />
-        <SvgIcon
-          classes={{ root: style.fill }}
-          component={SearchIcon}
-          viewBox="0 0 20 20"
-          style={{ width: 25, height: 25 }}
-          onClick={toggleOpenSearch}
-        />
-      </ShowIf>
       {/* Search Components */}
-      <ShowIf condition={isSearch}>
-        <SvgIcon
-          component={ChevronLeftIcon}
-          viewBox="0 0 24 24"
-          className={style.icon}
-          onClick={toggleOpenSearch}
-        />
-        <SearchBoxContainer onSubmitSearch={performSearch} />
+      <SearchBoxContainer onSubmitSearch={performSearch} />
+      <ShowIf condition={Boolean(user?.username)}>
+        <div className={style.notification}>
+          <IconButton
+            aria-label="avatar"
+            disabled={!!alias}
+            onClick={handleShowNotification}>
+            <Badge
+              invisible={total === 0}
+              badgeContent={formatCount(total)}
+              color="error">
+              <NotificationIcon width={20} height={20} />
+            </Badge>
+          </IconButton>
+        </div>
       </ShowIf>
     </Grid>
   );
