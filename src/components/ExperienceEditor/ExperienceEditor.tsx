@@ -68,6 +68,8 @@ type ExperienceEditorProps = {
   onSearchUser?: (query: string) => void;
   users?: User[];
   quick?: boolean;
+  showAdvance?: boolean;
+  experienceVisibility?: VisibilityItem;
 };
 
 enum TagsProps {
@@ -97,6 +99,8 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     onSearchUser,
     users,
     quick = false,
+    showAdvance = false,
+    experienceVisibility,
   } = props;
   const styles = useStyles({ quick });
 
@@ -119,13 +123,13 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   const [newExperience, setNewExperience] =
     useState<ExperienceProps>(experience);
   const [image, setImage] = useState<string | undefined>(
-    experience.experienceImageURL,
+    experience?.experienceImageURL,
   );
   const [, setDetailChanged] = useState<boolean>(false);
   const [isLoading, setIsloading] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [selectedVisibility, setSelectedVisibility] =
-    useState<VisibilityItem>();
+    useState<VisibilityItem>(experienceVisibility);
   const [selectedUserIds, setSelectedUserIds] = useState<User[]>([]);
   const [pageUserIds, setPageUserIds] = React.useState<number>(1);
   const [isLoadingSelectedUser, setIsLoadingSelectedUser] =
@@ -138,7 +142,8 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     visibility: false,
     selectedUserId: false,
   });
-  const [showAdvanceSetting, setShowAdvanceSetting] = useState<boolean>(false);
+  const [showAdvanceSetting, setShowAdvanceSetting] =
+    useState<boolean>(showAdvance);
 
   useEffect(() => {
     const experienceId = router.query.experienceId as string | null;
@@ -1039,22 +1044,22 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
 
       <ShowIf condition={quick}>
         <div className={styles.header}>
-          <Button
-            color="primary"
-            variant="outlined"
-            style={{ width: 'auto' }}
-            onClick={handleAdvanceSetting}>
-            {i18n.t(`Experience.Editor.Btn.AdvancedSettings`)}
-          </Button>
-          <FormControl classes={{ root: styles.formControl }}>
+          <ShowIf condition={!showAdvanceSetting}>
             <Button
               color="primary"
-              variant="contained"
+              variant="outlined"
               style={{ width: 'auto' }}
-              onClick={saveExperience}>
-              {i18n.t(`Experience.Editor.Btn.${type}`)}
+              onClick={handleAdvanceSetting}>
+              {i18n.t(`Experience.Editor.Btn.AdvancedSettings`)}
             </Button>
-          </FormControl>
+          </ShowIf>
+          <Button
+            color="primary"
+            variant="contained"
+            style={{ width: 'auto', marginLeft: 'auto' }}
+            onClick={saveExperience}>
+            {i18n.t(`Experience.Editor.Btn.${type}`)}
+          </Button>
         </div>
       </ShowIf>
     </div>

@@ -78,6 +78,7 @@
     },
     "Create": {
       "Title": "Создание опыта",
+      "Quick": "Создание опыта",
       "Success": {
         "Title": "Timeline successfully created",
         "Subtitle": "You can now add posts to this timeline.",

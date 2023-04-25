@@ -24,6 +24,7 @@ type DropdownMenuProps<T> = {
   marginBottom?: boolean;
   marginTop?: boolean;
   placeholder?: string;
+  experience?: boolean;
 };
 
 export const DropdownMenu = <T,>(props: DropdownMenuProps<T>): JSX.Element => {
@@ -37,8 +38,14 @@ export const DropdownMenu = <T,>(props: DropdownMenuProps<T>): JSX.Element => {
     marginBottom = true,
     marginTop = true,
     placeholder,
+    experience = false,
   } = props;
-  const styles = useStyles({ useIconOnMobile, marginBottom, marginTop });
+  const styles = useStyles({
+    useIconOnMobile,
+    marginBottom,
+    marginTop,
+    experience,
+  });
 
   const [current, setCurrent] = useState<T>(selected);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -77,14 +84,20 @@ export const DropdownMenu = <T,>(props: DropdownMenuProps<T>): JSX.Element => {
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <Typography
             component="span"
-            color="textSecondary"
+            color={experience ? 'textPrimary' : 'textSecondary'}
             className={styles.title}>
             <ShowIf condition={title.length > 0}>{title}:&nbsp;</ShowIf>
           </Typography>
 
           <Typography
             component="span"
-            color={disabled ? 'textSecondary' : 'textPrimary'}
+            color={
+              disabled
+                ? 'textSecondary'
+                : experience
+                ? 'primary'
+                : 'textPrimary'
+            }
             className={styles.selected}>
             {getSelectedText()}
           </Typography>

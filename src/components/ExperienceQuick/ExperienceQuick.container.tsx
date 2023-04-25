@@ -11,7 +11,7 @@ import debounce from 'lodash/debounce';
 import { useExperienceHook } from 'src/hooks/use-experience-hook';
 import { useSearchHook } from 'src/hooks/use-search.hooks';
 import { useUpload } from 'src/hooks/use-upload.hook';
-import { ExperienceProps } from 'src/interfaces/experience';
+import { ExperienceProps, VisibilityItem } from 'src/interfaces/experience';
 import i18n from 'src/locale';
 import theme from 'src/themes/default';
 
@@ -19,21 +19,17 @@ type ExperienceQuickContainerType = {
   open: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  experience?: ExperienceProps;
+  selectedVisibility?: VisibilityItem;
 };
 
 export const ExperienceQuickContainer: React.FC<ExperienceQuickContainerType> =
   props => {
-    const { open, onClose, onSuccess } = props;
+    const { open, onClose, onSuccess, experience, selectedVisibility } = props;
     const [showPrompt, setShowPrompt] = useState<boolean>(false);
     // TODO: separate hook for tag, people and experience
-    const {
-      selectedExperience,
-      tags,
-      people,
-      saveExperience,
-      searchTags,
-      searchPeople,
-    } = useExperienceHook();
+    const { tags, people, saveExperience, searchTags, searchPeople } =
+      useExperienceHook();
     const { searchUsers, users } = useSearchHook();
 
     const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
@@ -79,7 +75,7 @@ export const ExperienceQuickContainer: React.FC<ExperienceQuickContainerType> =
     return (
       <>
         <Modal
-          title={i18n.t('Experience.Create.Title')}
+          title={i18n.t('Experience.Create.Quick')}
           subtitle={i18n.t('TopNavbar.Title.Experience')}
           onClose={onClose}
           open={open}
@@ -87,7 +83,7 @@ export const ExperienceQuickContainer: React.FC<ExperienceQuickContainerType> =
           maxWidth="sm">
           <ExperienceEditor
             isEdit={false}
-            experience={selectedExperience}
+            experience={experience}
             tags={tags}
             people={people}
             onSearchTags={handleSearchTags}
@@ -97,6 +93,8 @@ export const ExperienceQuickContainer: React.FC<ExperienceQuickContainerType> =
             onSearchUser={handleSearchUser}
             users={users}
             quick
+            showAdvance
+            experienceVisibility={selectedVisibility}
           />
         </Modal>
 
