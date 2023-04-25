@@ -76,6 +76,7 @@ export interface WrappedExperience {
 export interface VisibilityItem {
   id: string;
   name: string;
+  title?: string;
 }
 
 export interface DiscoverTimelineInterface {

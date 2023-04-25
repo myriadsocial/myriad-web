@@ -82,7 +82,8 @@
       }
     },
     "Create": {
-      "Title": "Quick Create Timeline",
+      "Title": "Create Timeline",
+      "Quick": "Quick Create Timeline",
       "Success": {
         "Title": "Timeline successfully created",
         "Subtitle": "You can now add posts to this timeline.",

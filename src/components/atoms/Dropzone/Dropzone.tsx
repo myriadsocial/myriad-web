@@ -135,7 +135,14 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
         <input {...getInputProps()} />
 
         <ShowIf condition={type === 'image' && !multiple && preview.length > 0}>
-          <SingleImagePreview src={preview[0]} width={width} height={height} />
+          <SingleImagePreview
+            loader={() => preview[0]}
+            src={preview[0]}
+            width={width}
+            height={height}
+            onClick={handleReuploadImage}
+            style={{ cursor: 'pointer', borderRadius: 5 }}
+          />
         </ShowIf>
 
         <ShowIf condition={type === 'image' && multiple && preview.length > 0}>
@@ -152,7 +159,7 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
 
         <ShowIf condition={preview.length === 0}>
           <ShowIf condition={usage === 'experience'}>
-            <div className={styles.boxImage}>
+            <div className={styles.boxImage} onClick={handleReuploadImage}>
               <SvgIcon component={CameraIcon} viewBox="0 0 24 24" />
             </div>
           </ShowIf>
@@ -176,7 +183,11 @@ export const Dropzone: React.FC<DropzoneProps> = props => {
                 {formatButtonLable()}
               </Button>
             </ShowIf>
-            <ShowIf condition={usage === 'experience'}>
+            <ShowIf
+              condition={
+                usage === 'experience' &&
+                label !== i18n.t('Dropzone.Btn_Upload')
+              }>
               <Typography
                 style={{ cursor: 'pointer', marginTop: 8 }}
                 color="primary"
