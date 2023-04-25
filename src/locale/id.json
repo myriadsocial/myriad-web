@@ -83,6 +83,7 @@
     },
     "Create": {
       "Title": "Buat Timeline",
+      "Quick": "Buat Timeline Cepat",
       "Success": {
         "Title": "Timeline berhasil dibuat",
         "Subtitle": "Sekarang anda bisa menambahkan timeline ini ke postingan anda",

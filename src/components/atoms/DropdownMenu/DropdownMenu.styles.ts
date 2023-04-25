@@ -4,6 +4,7 @@ type DropdownMenuStyleProp = {
   useIconOnMobile: boolean;
   marginBottom?: boolean;
   marginTop?: boolean;
+  experience?: boolean;
 };
 
 export const useStyles = makeStyles<Theme, DropdownMenuStyleProp>(theme =>
@@ -24,11 +25,13 @@ export const useStyles = makeStyles<Theme, DropdownMenuStyleProp>(theme =>
       },
     },
     title: {
+      fontSize: props => (props.experience ? 13 : 14),
       [theme.breakpoints.down('xs')]: {
         display: 'none',
       },
     },
     selected: {
+      fontSize: props => (props.experience ? 13 : 14),
       fontWeight: 600,
       maxWidth: '100px',
       whiteSpace: 'nowrap',

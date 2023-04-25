@@ -4,6 +4,8 @@ type StylesProps = {
   border?: 'solid' | 'dashed';
   error?: boolean;
   usage?: string;
+  width?: number;
+  height?: number;
 };
 
 export const useStyles = makeStyles<Theme, StylesProps>(theme =>
@@ -47,8 +49,8 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
       },
     },
     boxImage: {
-      width: 100,
-      height: 100,
+      width: props => props.width ?? 100,
+      height: props => props.height ?? 100,
       borderRadius: 10,
       border: '2px dashed #C2C2C2',
       backgroundColor: '#F5F5F5',
@@ -56,6 +58,7 @@ export const useStyles = makeStyles<Theme, StylesProps>(theme =>
       alignItems: 'center',
       justifyContent: 'center',
       color: 'rgba(117, 117, 117, 1)',
+      cursor: 'pointer',
     },
     fill: {
       fill: 'none',

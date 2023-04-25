@@ -13,7 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import { useStyles } from './Tab.style';
 
 import { Skeleton } from 'components/Expericence';
-import { ExperienceQuickContainer } from 'components/ExperienceQuick/ExperienceQuick.container';
+import ExperienceQuickRightBar from 'components/ExperienceQuick/ExperienceQuickRightBar';
 import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
 import { useFilterOption } from 'components/TimelineFilter/hooks/use-filter-option.hook';
 import { DropdownMenu } from 'components/atoms/DropdownMenu';
@@ -115,7 +115,7 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
   };
 
   const handleShowCreateTimeline = () => {
-    setCreateTimeline(!createTimeline);
+    setCreateTimeline(true);
   };
 
   const handleCloseCreateTimeline = () => {
@@ -151,7 +151,10 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
           placeholder={'Select'}
         />
       </div>
-      <ShowIf condition={Boolean(user) && experienceType === 'user'}>
+      <ShowIf
+        condition={
+          Boolean(user) && experienceType === 'user' && !createTimeline
+        }>
         <Typography
           variant={'h5'}
           color={'primary'}
@@ -163,8 +166,15 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
             viewBox="0 0 24 24"
             style={{ fontSize: 14 }}
           />
-          {i18n.t('Experience.Create.Title')}
+          {i18n.t('Experience.Create.Quick')}
         </Typography>
+      </ShowIf>
+
+      <ShowIf condition={createTimeline}>
+        <ExperienceQuickRightBar
+          onClose={handleCloseCreateTimeline}
+          onSuccess={handleReload}
+        />
       </ShowIf>
 
       <ExperienceListContainer
@@ -202,12 +212,6 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
         }>
         <EmptyExperience />
       </ShowIf>
-
-      <ExperienceQuickContainer
-        open={createTimeline}
-        onClose={handleCloseCreateTimeline}
-        onSuccess={handleReload}
-      />
     </div>
   );
 };
