@@ -45,6 +45,7 @@ type ExperienceProps = {
   onSubscribe?: (experienceId: string) => void;
   onUnsubscribe?: (experienceId: string) => void;
   onDelete?: (experienceId: string) => void;
+  menuDrawer?: boolean;
 };
 
 const MenuItem = WithAuthorizeAction(BaseMenuItem);
@@ -65,9 +66,11 @@ export const Experience: React.FC<ExperienceProps> = props => {
     onDelete,
     onSubscribe,
     onUnsubscribe,
+    menuDrawer = false,
   } = props;
+
   const router = useRouter();
-  const styles = useStyles(props);
+  const styles = useStyles({ ...props, menuDrawer });
   const confirm = useConfirm();
   const enqueueSnackbar = useEnqueueSnackbar();
 
@@ -225,22 +228,30 @@ export const Experience: React.FC<ExperienceProps> = props => {
             justifyContent="space-between"
             wrap="nowrap">
             {userExperience.experience.experienceImageURL ? (
-              <NextImage
-                alt={userExperience.experience.name}
-                loader={() =>
-                  userExperience.experience.experienceImageURL ?? DEFAULT_IMAGE
-                }
-                src={
-                  userExperience.experience.experienceImageURL ?? DEFAULT_IMAGE
-                }
-                placeholder="empty"
-                objectFit="cover"
-                objectPosition="center"
-                width={68}
-                height={68}
-                quality={90}
-                className={styles.image}
-              />
+              <div
+                style={{
+                  maxWidth: menuDrawer ? 40 : 68,
+                  maxHeight: menuDrawer ? 40 : 68,
+                }}>
+                <NextImage
+                  alt={userExperience.experience.name}
+                  loader={() =>
+                    userExperience.experience.experienceImageURL ??
+                    DEFAULT_IMAGE
+                  }
+                  src={
+                    userExperience.experience.experienceImageURL ??
+                    DEFAULT_IMAGE
+                  }
+                  placeholder="empty"
+                  objectFit="cover"
+                  objectPosition="center"
+                  width={'100%'}
+                  height={'100%'}
+                  quality={90}
+                  className={styles.image}
+                />
+              </div>
             ) : (
               <Avatar
                 alt={userExperience.experience.name}
@@ -265,7 +276,12 @@ export const Experience: React.FC<ExperienceProps> = props => {
               </Typography>
             </CardContent>
 
-            <IconButton aria-label="settings" onClick={handleClickSettings}>
+            <IconButton
+              aria-label="settings"
+              onClick={handleClickSettings}
+              style={{
+                padding: menuDrawer ? 0 : 12,
+              }}>
               <SvgIcon
                 component={DotsVerticalIcon}
                 viewBox="0 0 24 24"

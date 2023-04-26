@@ -47,12 +47,14 @@ const ExperiencePageComponent: React.FC<ExperiencePageProps> = props => {
       </Head>
 
       <TopNavbarComponent
-        description={'Custom timeline'}
+        description={'List of my timelines'}
         sectionTitle={SectionTitle.MY_TIMELINE}
         type={'menu'}
       />
 
-      <ExperienceTab />
+      <div style={{ marginBottom: 80 }}>
+        <ExperienceTab showFilter={false} />
+      </div>
     </DefaultLayout>
   );
 };

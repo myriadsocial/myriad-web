@@ -6,9 +6,8 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 
+import { IconButton, SvgIcon, useMediaQuery } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import SvgIcon from '@material-ui/core/SvgIcon';
 
 import { Skeleton as PostSkeleton } from '../PostDetail';
 import { EmptyResult } from '../Search/EmptyResult';
@@ -18,11 +17,13 @@ import { useStyles } from './PostList.styles';
 import { useTimelineFilter } from './hooks/use-timeline-filter.hook';
 
 import { PostDetailContainer } from 'components/PostDetail/PostDetail.container';
+import ShowIf from 'components/common/show-if.component';
 import { ParsedUrlQuery } from 'querystring';
 import { useBlockList } from 'src/hooks/use-blocked-list.hook';
 import { TimelineFilterFields } from 'src/interfaces/timeline';
 import { TimelineType } from 'src/interfaces/timeline';
 import { User } from 'src/interfaces/user';
+import theme from 'src/themes/default';
 
 const PostCreateContainer = dynamic(
   () => import('../PostCreate/PostCreate.container'),
@@ -44,12 +45,15 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
     useTimelineFilter(filters);
   const { loadAll: loadAllBlockedUser } = useBlockList(user);
 
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   const router = useRouter();
   const [createPostOpened, setCreatePostOpened] = useState(false);
 
   const handleOpenCreatePost = () => {
     setCreatePostOpened(true);
   };
+
   const handleCloseCreatePost = () => {
     setCreatePostOpened(false);
     if (query.type && query.type === TimelineType.ALL) {
@@ -97,17 +101,19 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
         onClose={handleCloseCreatePost}
       />
 
-      <div className={styles.button}>
-        <IconButton
-          onClick={handleOpenCreatePost}
-          className={styles.iconbutton}>
-          <SvgIcon
-            className={styles.fill}
-            component={PencilIcon}
-            viewBox="0 0 28 28"
-          />
-        </IconButton>
-      </div>
+      <ShowIf condition={!isMobile}>
+        <div className={styles.button}>
+          <IconButton
+            onClick={handleOpenCreatePost}
+            className={styles.iconbutton}>
+            <SvgIcon
+              className={styles.fill}
+              component={PencilIcon}
+              viewBox="0 0 28 28"
+            />
+          </IconButton>
+        </div>
+      </ShowIf>
 
       <InfiniteScroll
         dataLength={posts.length}
