@@ -30,7 +30,7 @@ jobs:
     name: Test on Node.js 16 ( ${{ matrix.command }} )
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@83b7061638ee4956cf7545a6f7efe594e5ad0247
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
         with:
           fetch-depth: 0
       - name: Set Up Node.js
@@ -49,7 +49,7 @@ jobs:
     name: Build
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@83b7061638ee4956cf7545a6f7efe594e5ad0247
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
         with:
           fetch-depth: 0
       - name: Set Up QEMU
@@ -96,7 +96,7 @@ jobs:
     name: Release Please
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@83b7061638ee4956cf7545a6f7efe594e5ad0247
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
         with:
           fetch-depth: 0
       - name: Release
@@ -164,11 +164,11 @@ jobs:
     name: Deploy to ${{ matrix.environment }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@83b7061638ee4956cf7545a6f7efe594e5ad0247
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
         with:
           fetch-depth: 0
       - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@ef5d53e30bbcd8d0836f4288f5e50ff3e086997d
+        uses: google-github-actions/auth@e8df18b60c5dd38ba618c121b779307266153fbf
         with:
           workload_identity_provider: ${{ secrets[format('{0}_{1}', matrix.environment, 'GCP_WORKLOAD_IDENTITY_PROVIDER')] }}
           service_account: ${{ secrets[format('{0}_{1}', matrix.environment, 'GCP_WORKLOAD_IDENTITY_SERVICE_ACCOUNT')] }}

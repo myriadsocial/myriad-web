@@ -82,7 +82,8 @@
       }
     },
     "Create": {
-      "Title": "Quick Create Timeline",
+      "Title": "Create Timeline",
+      "Quick": "Quick Create Timeline",
       "Success": {
         "Title": "Timeline successfully created",
         "Subtitle": "You can now add posts to this timeline.",
@@ -1018,6 +1019,8 @@
         "Mention": "Mention",
         "Friend_Requests": "Friend Request",
         "Tips": "Tips",
+        "Followers": "Followers",
+        "Upvotes": "Upvotes",
         "Confirm": "Save changes"
       },
       "Blocked_Title": "Blocked User Settings",
@@ -1245,7 +1248,7 @@
   },
   "Date": {
     "Secs": "secs",
-    "Minute": "min",
+    "Minute": "mins",
     "Hours": "hours",
     "Days": "days",
     "Weeks": "weeks",

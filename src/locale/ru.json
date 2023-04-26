@@ -78,6 +78,7 @@
     },
     "Create": {
       "Title": "Создание опыта",
+      "Quick": "Создание опыта",
       "Success": {
         "Title": "Timeline successfully created",
         "Subtitle": "You can now add posts to this timeline.",
@@ -1000,6 +1001,8 @@
         "Mention": "Упоминания",
         "Friend_Requests": "Запросы в Друзья",
         "Tips": "Чаевые",
+        "Followers": "Последователи",
+        "Upvotes": "плюсы",
         "Confirm": "Подтвердить"
       },
       "Blocked_Title": "Настройки Черного списка",

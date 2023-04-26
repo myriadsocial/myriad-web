@@ -83,6 +83,7 @@
     },
     "Create": {
       "Title": "Buat Timeline",
+      "Quick": "Buat Timeline Cepat",
       "Success": {
         "Title": "Timeline berhasil dibuat",
         "Subtitle": "Sekarang anda bisa menambahkan timeline ini ke postingan anda",
@@ -1013,6 +1014,8 @@
         "Mention": "Sebutan",
         "Friend_Requests": "Ajakan Berteman",
         "Tips": "Tip",
+        "Followers": "Pengikut",
+        "Upvotes": "Upvotes",
         "Confirm": "Simpan perubahan"
       },
       "Blocked_Title": "Pengguna Diblokir",

@@ -6,7 +6,9 @@ export type NotificationSettingType =
   | 'comments'
   | 'mentions'
   | 'friendRequests'
-  | 'tips';
+  | 'tips'
+  | 'followers'
+  | 'upvotes';
 export type LanguageSettingType = 'en' | 'id' | 'ru';
 
 export type PrivacySettings = Record<PrivacySettingType, PrivacyType>;

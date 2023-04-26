@@ -35,8 +35,7 @@ type ExperienceProps = {
   selectedTimeline?: Experience;
 };
 
-const DEFAULT_IMAGE =
-  'https://pbs.twimg.com/profile_images/1407599051579617281/-jHXi6y5_400x400.jpg';
+const DEFAULT_IMAGE = '';
 
 const ExperienceCardVisibility: React.FC<ExperienceProps> = props => {
   const { userExperience, user, selectTimeline, selectedTimeline } = props;

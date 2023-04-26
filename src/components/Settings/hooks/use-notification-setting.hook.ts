@@ -36,6 +36,16 @@ export const useNotificationSetting = (setting: NotificationSetting) => {
       title: i18n.t('Setting.List_Menu.Notification_Setting.Tips'),
       enabled: notificationSettings.tips,
     },
+    {
+      id: 'followers',
+      title: i18n.t('Setting.List_Menu.Notification_Setting.Followers'),
+      enabled: notificationSettings.followers,
+    },
+    {
+      id: 'upvotes',
+      title: i18n.t('Setting.List_Menu.Notification_Setting.Upvotes'),
+      enabled: notificationSettings.upvotes,
+    },
   ];
 
   const changeSetting = (type: NotificationSettingType, enabled: boolean) => {
