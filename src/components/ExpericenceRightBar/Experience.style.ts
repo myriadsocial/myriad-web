@@ -8,6 +8,7 @@ import {
 type ExperienceStyleProps = {
   selected: boolean;
   selectable: boolean;
+  menuDrawer: boolean;
 };
 
 export const useStyles = makeStyles<Theme, ExperienceStyleProps>(theme =>
@@ -17,7 +18,7 @@ export const useStyles = makeStyles<Theme, ExperienceStyleProps>(theme =>
       border: '1px solid',
       borderColor: props => (props.selected ? '#6E3FC3' : '#FFF'),
       borderRadius: 10,
-      padding: 20,
+      padding: props => (props.menuDrawer ? '5px 10px' : 20),
       width: '100%',
       boxShadow: `0px 2px 10px rgba(0, 0, 0, 0.05)`,
       position: 'relative',
@@ -49,8 +50,8 @@ export const useStyles = makeStyles<Theme, ExperienceStyleProps>(theme =>
       },
     },
     image: {
-      width: 68,
-      height: 68,
+      width: props => (props.menuDrawer ? 40 : 68),
+      height: props => (props.menuDrawer ? 40 : 68),
       opacity: 0.9,
       borderRadius: 5,
     },
@@ -58,6 +59,9 @@ export const useStyles = makeStyles<Theme, ExperienceStyleProps>(theme =>
       width: 140,
       padding: '0px 0px 0px 20px',
       flexGrow: 1,
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
 
       '&:last-child': {
         paddingBottom: 0,

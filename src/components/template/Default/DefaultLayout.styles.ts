@@ -58,6 +58,9 @@ const useStyles = makeStyles((theme: Theme) =>
       '& > div': {
         width: '100%',
       },
+      [theme.breakpoints.down('xs')]: {
+        paddingTop: '0',
+      },
     },
 
     thirdCol: {

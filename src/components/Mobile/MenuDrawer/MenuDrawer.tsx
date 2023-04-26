@@ -1,8 +1,7 @@
-import { LogoutIcon } from '@heroicons/react/outline';
+import { DotsHorizontalIcon, LogoutIcon } from '@heroicons/react/outline';
 
 import React, { useState } from 'react';
 import { useCookies } from 'react-cookie';
-import { useSelector } from 'react-redux';
 
 import { useRouter } from 'next/router';
 
@@ -22,7 +21,10 @@ import {
 
 import { CustomMyriadIcon } from '../Bottombar/Bottombar';
 
+import { CustomSearchIcon } from 'components/Menu';
 import { NetworkOption } from 'components/ProfileCard/NetworkOption/NetworkOption';
+import ExperienceTab from 'components/RightMenuBar/tabs/ExperienceTab';
+import TrendingExperienceTab from 'components/RightMenuBar/tabs/TrendingExperienceTab';
 import SelectServer, { COOKIE_INSTANCE_URL } from 'components/SelectServer';
 import { CommonWalletIcon } from 'components/atoms/Icons';
 import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
@@ -32,10 +34,8 @@ import {
   MenuRightId,
   MenuRightDetail,
 } from 'src/components/Menu/use-menu-list';
-import { Metric } from 'src/components/Metric';
 import { useStyles } from 'src/components/Mobile/MenuDrawer/menuDrawer.style';
 import { PromptComponent } from 'src/components/Mobile/PromptDrawer/Prompt';
-import { ProfileContent } from 'src/components/ProfileCard';
 import { ListItemComponent } from 'src/components/atoms/ListItem';
 import { formatAddress } from 'src/helpers/wallet';
 import { useAuthHook } from 'src/hooks/auth.hook';
@@ -43,15 +43,10 @@ import { useInstances } from 'src/hooks/use-instances.hooks';
 import { useUserHook } from 'src/hooks/use-user.hook';
 import { ServerListProps } from 'src/interfaces/server-list';
 import i18n from 'src/locale';
-import { RootState } from 'src/reducers';
-import { NotificationState } from 'src/reducers/notification/reducer';
 
 export const MenuDrawerComponent: React.FC = () => {
-  const { total } = useSelector<RootState, NotificationState>(
-    state => state.notificationState,
-  );
-
   const [selected, setSelected] = React.useState<MenuRightId>();
+  const [showMenu, setShowMenu] = React.useState(false);
   const [openDrawer, setOpenDrawer] = React.useState(false);
   const [openPromptDrawer, setOpenPromptDrawer] = React.useState(false);
   const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
@@ -60,7 +55,6 @@ export const MenuDrawerComponent: React.FC = () => {
   const { logout } = useAuthHook();
   const {
     user,
-    alias,
     anonymous,
     userWalletAddress,
     networks,
@@ -148,16 +142,6 @@ export const MenuDrawerComponent: React.FC = () => {
     }
   };
 
-  const handleShowNotification = () => {
-    router.push(`/notification`);
-  };
-
-  const handleViewProfile = () => {
-    if (user && !anonymous) {
-      router.push(`/profile/${user.id}`);
-    }
-  };
-
   const handleSwitchInstance = async (
     server: ServerListProps,
     callback?: () => void,
@@ -192,17 +176,6 @@ export const MenuDrawerComponent: React.FC = () => {
           className={style.root}>
           <div className={style.content}>
             <div className={style.profileCard}>
-              {/* profileCard */}
-              <ProfileContent
-                user={user}
-                alias={alias}
-                networks={networks}
-                notificationCount={total}
-                onShowNotificationList={handleShowNotification}
-                onViewProfile={handleViewProfile}
-                isMobile={true}
-                userWalletAddress={userWalletAddress}
-              />
               {/* network */}
               <div className={style.wallet}>
                 <ShowIf condition={anonymous}>
@@ -239,12 +212,6 @@ export const MenuDrawerComponent: React.FC = () => {
                   </ShowIf>
                 </ShowIf>
               </div>
-              {/* metric */}
-              <Metric
-                official={false}
-                data={user?.metric}
-                anonymous={anonymous}
-              />
             </div>
 
             <div className={style.instance}>
@@ -256,45 +223,144 @@ export const MenuDrawerComponent: React.FC = () => {
                 page="layout"
               />
             </div>
-            {/* Menu list */}
-            <div className={style.menu}>
-              {menu.map(item => (
-                <ListItemComponent
-                  id={item.id}
-                  key={item.id}
-                  title={item.title}
-                  icon={item.icon}
-                  active={item.active}
-                  onClick={openMenu(item)}
-                  url={item.url}
-                  isAnimated={item.isAnimated}
-                />
-              ))}
+
+            <div>
+              {/* timeline */}
+              <ShowIf condition={!anonymous}>
+                <div>
+                  <Grid
+                    container
+                    wrap="nowrap"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    style={{ padding: '0px 20px', marginBottom: 14 }}>
+                    <Typography
+                      variant={'h6'}
+                      color={'textPrimary'}
+                      component="span">
+                      {i18n.t(`Section.Mytimelines`)}
+                    </Typography>
+                    <Typography
+                      variant={'h6'}
+                      color={'primary'}
+                      component="span"
+                      onClick={() => router.push('/experience')}>
+                      {i18n.t(`General.ViewMore`)}
+                    </Typography>
+                  </Grid>
+                  <ExperienceTab menuDrawer />
+                </div>
+              </ShowIf>
+              <div style={{ padding: '0px 20px', margin: '12px 0 20px 0' }}>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={() => router.push('/experience/discover')}
+                  startIcon={<SvgIcon component={CustomSearchIcon} />}
+                  style={{
+                    justifyContent: 'flex-start',
+                    paddingLeft: '30px',
+                    backgroundColor: 'transparent',
+                  }}
+                  fullWidth>
+                  {i18n.t('Experience.New.Discover')}
+                </Button>
+              </div>
+
+              <div>
+                <Grid
+                  container
+                  wrap="nowrap"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  style={{ padding: '0px 20px', marginBottom: 14 }}>
+                  <Typography
+                    variant={'h6'}
+                    color={'textPrimary'}
+                    component="span">
+                    {i18n.t('Section.Trending_Experience')}
+                  </Typography>
+                  <Typography
+                    variant={'h6'}
+                    color={'primary'}
+                    component="span"
+                    onClick={() => router.push('/experience/trending')}>
+                    {i18n.t(`General.ViewMore`)}
+                  </Typography>
+                </Grid>
+                <TrendingExperienceTab menuDrawer />
+              </div>
             </div>
+            {/* Menu list */}
+            <ShowIf condition={!showMenu}>
+              <div className={style.more}>
+                <ListItem
+                  component="div"
+                  className={style.logoutListItem}
+                  ContainerComponent="div"
+                  onClick={() => setShowMenu(true)}>
+                  <ListItemIcon className={iconStyles.join(' ')}>
+                    <SvgIcon component={DotsHorizontalIcon} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={
+                      <Typography
+                        component="div"
+                        variant="h5"
+                        color="textPrimary">
+                        {i18n.t(`General.More`)}
+                      </Typography>
+                    }
+                  />
+                </ListItem>
+              </div>
+            </ShowIf>
+
+            <ShowIf condition={showMenu}>
+              <div className={style.menu}>
+                {menu.map(item => {
+                  if (item.id !== 'town')
+                    return (
+                      <ListItemComponent
+                        id={item.id}
+                        key={item.id}
+                        title={item.title}
+                        icon={item.icon}
+                        active={item.active}
+                        onClick={openMenu(item)}
+                        url={item.url}
+                        isAnimated={item.isAnimated}
+                      />
+                    );
+                })}
+              </div>
+            </ShowIf>
           </div>
 
           {/* Logout */}
-          <div className={style.logout}>
-            <ListItem
-              component="div"
-              className={style.logoutListItem}
-              ContainerComponent="div"
-              disabled={anonymous ? true : false}
-              onClick={
-                anonymous ? () => console.log('disabled!') : handleSignOut
-              }>
-              <ListItemIcon className={iconStyles.join(' ')}>
-                <SvgIcon color="error" component={LogoutIcon} />
-              </ListItemIcon>
-              <ListItemText
-                primary={
-                  <Typography component="div" variant="h5" color="error">
-                    Logout
-                  </Typography>
-                }
-              />
-            </ListItem>
-          </div>
+          <ShowIf condition={!anonymous}>
+            <div className={style.logout}>
+              <ListItem
+                component="div"
+                className={style.logoutListItem}
+                ContainerComponent="div"
+                disabled={anonymous ? true : false}
+                onClick={
+                  anonymous ? () => console.log('disabled!') : handleSignOut
+                }>
+                <ListItemIcon className={iconStyles.join(' ')}>
+                  <SvgIcon color="error" component={LogoutIcon} />
+                </ListItemIcon>
+                <ListItemText
+                  primary={
+                    <Typography component="div" variant="h5" color="error">
+                      Logout
+                    </Typography>
+                  }
+                />
+              </ListItem>
+            </div>
+          </ShowIf>
         </Grid>
         <PromptComponent
           title={'Wallet'}

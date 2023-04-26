@@ -27,7 +27,7 @@ import { useUserHook } from 'src/hooks/use-user.hook';
 import { TimelineType } from 'src/interfaces/timeline';
 import { clearTimeline } from 'src/reducers/timeline/actions';
 
-export const CustomMyriadIcon = ({ fill = '#404040' }) => (
+export const CustomMyriadIcon = ({ fill = '#000' }) => (
   <svg
     width="28"
     height="23"
@@ -118,6 +118,7 @@ export const BottombarComponent: React.FC<SearchBoxContainerProps> = props => {
   );
 
   const openProfile = () => {
+    if (anonymous) return;
     router.push(`/profile/${user.id}`);
   };
 
@@ -139,9 +140,11 @@ export const BottombarComponent: React.FC<SearchBoxContainerProps> = props => {
         </div>
         <div className={style.button}>
           <IconButton
-            onClick={() => openMenu(TimelineType.EXPERIENCE)}
+            onClick={() =>
+              !Boolean(user) ? null : openMenu(TimelineType.EXPERIENCE)
+            }
             className={
-              (router.pathname === '/' && !query.type) ||
+              (router.pathname === '/' && !query.type && !anonymous) ||
               query.type === TimelineType.EXPERIENCE
                 ? style.active
                 : style.iconbutton
@@ -149,11 +152,12 @@ export const BottombarComponent: React.FC<SearchBoxContainerProps> = props => {
             <SvgIcon
               component={() =>
                 CustomFolderIcon({
-                  fill:
-                    (router.pathname === '/' && !query.type) ||
-                    query.type === TimelineType.EXPERIENCE
-                      ? '#FFF'
-                      : '#000',
+                  fill: anonymous
+                    ? '#9E9E9E'
+                    : (router.pathname === '/' && !query.type) ||
+                      query.type === TimelineType.EXPERIENCE
+                    ? '#FFF'
+                    : '#000',
                 })
               }
             />
@@ -171,7 +175,10 @@ export const BottombarComponent: React.FC<SearchBoxContainerProps> = props => {
           <IconButton
             onClick={() => openMenu(TimelineType.ALL)}
             className={
-              query.type === TimelineType.ALL ? style.active : style.iconbutton
+              query.type === TimelineType.ALL ||
+              (router.pathname === '/' && !query.type && anonymous)
+                ? style.active
+                : style.iconbutton
             }>
             <SvgIcon component={GlobeAltIcon} />
           </IconButton>

@@ -6,7 +6,7 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
 import { useRouter } from 'next/router';
 
-import { Grid } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 
@@ -35,10 +35,18 @@ import { fetchUserExperience } from 'src/reducers/user/actions';
 
 type ExperienceTabProps = {
   experienceType?: 'user' | 'trending';
+  menuDrawer?: boolean;
+  showQuick?: boolean;
+  showFilter?: boolean;
 };
 
 export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
-  const { experienceType = 'user' } = props;
+  const {
+    experienceType = 'user',
+    menuDrawer = false,
+    showQuick = false,
+    showFilter = true,
+  } = props;
   const [loading, setLoading] = useState<boolean>(false);
   const [type, setType] = useState<TimelineFilterCreated>();
   const [createTimeline, setCreateTimeline] = useState<boolean>(false);
@@ -130,51 +138,78 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
   };
 
   return (
-    <div>
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginBottom: 12,
-        }}>
-        <Typography variant={'h5'} className={styles.title}>
-          {userExperiencesMeta?.totalItemCount ?? 0} Timelines
-        </Typography>
+    <div className={styles.root}>
+      <ShowIf condition={!menuDrawer}>
+        <ShowIf condition={showFilter}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: 12,
+            }}>
+            <Typography variant={'h5'} className={styles.title}>
+              {userExperiencesMeta?.totalItemCount ?? 0} Timelines
+            </Typography>
 
-        <DropdownMenu<TimelineFilterCreated>
-          title={i18n.t('Post_Sorting.Title_Filter')}
-          options={createdFilter}
-          onChange={handleFilter}
-          marginTop={false}
-          marginBottom={false}
-          placeholder={'Select'}
-        />
-      </div>
-      <ShowIf
-        condition={
-          Boolean(user) && experienceType === 'user' && !createTimeline
-        }>
-        <Typography
-          variant={'h5'}
-          color={'primary'}
-          component="div"
-          className={styles.action}
-          onClick={handleCreateExperience}>
-          <SvgIcon
-            component={PlusIcon}
-            viewBox="0 0 24 24"
-            style={{ fontSize: 14 }}
+            <DropdownMenu<TimelineFilterCreated>
+              title={i18n.t('Post_Sorting.Title_Filter')}
+              options={createdFilter}
+              onChange={handleFilter}
+              marginTop={false}
+              marginBottom={false}
+              placeholder={'Select'}
+            />
+          </div>
+        </ShowIf>
+
+        <ShowIf condition={!showQuick && experienceType === 'user'}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              marginBottom: 16,
+            }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => router.push('/experience/create')}
+              style={{
+                width: 'max-content',
+              }}>
+              {i18n.t('Experience.New.Create')}
+            </Button>
+          </div>
+        </ShowIf>
+
+        <ShowIf
+          condition={
+            Boolean(user) &&
+            experienceType === 'user' &&
+            !createTimeline &&
+            showQuick
+          }>
+          <Typography
+            variant={'h5'}
+            color={'primary'}
+            component="div"
+            className={styles.action}
+            onClick={handleCreateExperience}>
+            <SvgIcon
+              component={PlusIcon}
+              viewBox="0 0 24 24"
+              style={{ fontSize: 14 }}
+            />
+            {i18n.t('Experience.Create.Quick')}
+          </Typography>
+        </ShowIf>
+
+        <ShowIf condition={createTimeline}>
+          <ExperienceQuickRightBar
+            onClose={handleCloseCreateTimeline}
+            onSuccess={handleReload}
           />
-          {i18n.t('Experience.Create.Quick')}
-        </Typography>
-      </ShowIf>
-
-      <ShowIf condition={createTimeline}>
-        <ExperienceQuickRightBar
-          onClose={handleCloseCreateTimeline}
-          onSuccess={handleReload}
-        />
+        </ShowIf>
       </ShowIf>
 
       <ExperienceListContainer
@@ -189,20 +224,20 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
         enableClone={experienceType === 'trending' || experienceType === 'user'}
         enableSubscribe={experienceType === 'trending'}
         hasMore={
-          Boolean(user)
+          !menuDrawer && Boolean(user)
             ? userExperiencesMeta.currentPage <
               userExperiencesMeta.totalPageCount
             : false
         }
         loadNextPage={handleLoadNextPage}
+        menuDrawer={menuDrawer}
       />
 
       <ShowIf condition={loading && userExperiences.length === 0}>
         <Grid container justifyContent="center">
-          <Skeleton />
-          <Skeleton />
-          <Skeleton />
-          <Skeleton />
+          <Skeleton menuDrawer={menuDrawer} />
+          <Skeleton menuDrawer={menuDrawer} />
+          <Skeleton menuDrawer={menuDrawer} />
         </Grid>
       </ShowIf>
 

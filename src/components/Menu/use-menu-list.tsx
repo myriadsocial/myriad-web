@@ -4,8 +4,6 @@ import {
   UsersIcon,
   PhotographIcon,
   HashtagIcon,
-  VariableIcon,
-  TrendingUpIcon,
   ViewGridIcon,
   CreditCardIcon,
   GlobeAltIcon,
@@ -43,20 +41,11 @@ export const useMenuRightList = (selected: MenuRightId): MenuRightDetail[] => {
   const menu: MenuRightDetail[] = useMemo(
     () => [
       {
-        id: 'experience',
-        title: i18n.t('Section.Mytimelines'),
-        active: selected === 'experience',
-        icon: VariableIcon,
-        url: '/experience',
-        isDesktop: false,
-        isAnimated: false,
-      },
-      {
-        id: 'experience-trend',
-        title: i18n.t('Section.Trending_Experience'),
-        active: selected === 'experience-trend',
-        icon: TrendingUpIcon,
-        url: '/experience/trending',
+        id: 'trends',
+        title: i18n.t('Section.Trends'),
+        active: selected === 'trends',
+        icon: HashtagIcon,
+        url: '/topic',
         isDesktop: false,
         isAnimated: false,
       },
@@ -106,15 +95,7 @@ export const useMenuRightList = (selected: MenuRightId): MenuRightDetail[] => {
         isDesktop: true,
         isAnimated: false,
       },
-      {
-        id: 'trends',
-        title: i18n.t('Section.Trends'),
-        active: selected === 'trends',
-        icon: HashtagIcon,
-        url: '/topic',
-        isDesktop: false,
-        isAnimated: false,
-      },
+
       {
         id: 'settings',
         title: i18n.t('Section.Settings'),

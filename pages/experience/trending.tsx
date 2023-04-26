@@ -5,8 +5,8 @@ import { getSession } from 'next-auth/react';
 import getConfig from 'next/config';
 import Head from 'next/head';
 
+import TrendingExperienceTab from 'components/RightMenuBar/tabs/TrendingExperienceTab';
 import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
-import { ExperienceTab } from 'src/components/RightMenuBar/tabs/ExperienceTab';
 import { TopNavbarComponent } from 'src/components/atoms/TopNavbar';
 import { DefaultLayout } from 'src/components/template/Default/DefaultLayout';
 import { useExperienceHook } from 'src/hooks/use-experience-hook';
@@ -59,7 +59,9 @@ const ExperiencePageComponent: React.FC<TrendingExperiencePageProps> =
           type={'menu'}
         />
 
-        <ExperienceTab experienceType="trending" />
+        <div style={{ marginBottom: 80 }}>
+          <TrendingExperienceTab showFilter={false} />
+        </div>
       </DefaultLayout>
     );
   };

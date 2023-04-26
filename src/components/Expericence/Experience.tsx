@@ -45,6 +45,7 @@ type ExperienceProps = {
   onSubscribe?: (experienceId: string) => void;
   onUnsubscribe?: (experienceId: string) => void;
   onDelete?: (experienceId: string) => void;
+  menuDrawer?: boolean;
 };
 
 const MenuItem = WithAuthorizeAction(BaseMenuItem);
@@ -65,9 +66,11 @@ export const Experience: React.FC<ExperienceProps> = props => {
     onDelete,
     onSubscribe,
     onUnsubscribe,
+    menuDrawer = false,
   } = props;
+
   const router = useRouter();
-  const styles = useStyles(props);
+  const styles = useStyles({ ...props, menuDrawer });
   const confirm = useConfirm();
   const enqueueSnackbar = useEnqueueSnackbar();
 
@@ -220,24 +223,30 @@ export const Experience: React.FC<ExperienceProps> = props => {
           <Grid container justifyContent="space-between" wrap="nowrap">
             <div>
               {userExperience.experience.experienceImageURL ? (
-                <NextImage
-                  loader={() =>
-                    userExperience.experience.experienceImageURL ??
-                    DEFAULT_IMAGE
-                  }
-                  alt={userExperience.experience.name}
-                  src={
-                    userExperience.experience.experienceImageURL ??
-                    DEFAULT_IMAGE
-                  }
-                  placeholder="empty"
-                  objectFit="cover"
-                  objectPosition="center"
-                  width={68}
-                  height={68}
-                  quality={100}
-                  className={styles.image}
-                />
+                <div
+                  style={{
+                    maxWidth: menuDrawer ? 40 : 68,
+                    maxHeight: menuDrawer ? 40 : 68,
+                  }}>
+                  <NextImage
+                    alt={userExperience.experience.name}
+                    loader={() =>
+                      userExperience.experience.experienceImageURL ??
+                      DEFAULT_IMAGE
+                    }
+                    src={
+                      userExperience.experience.experienceImageURL ??
+                      DEFAULT_IMAGE
+                    }
+                    placeholder="empty"
+                    objectFit="cover"
+                    objectPosition="center"
+                    width={'100%'}
+                    height={'100%'}
+                    quality={90}
+                    className={styles.image}
+                  />
+                </div>
               ) : (
                 <Avatar
                   alt={userExperience.experience.name}

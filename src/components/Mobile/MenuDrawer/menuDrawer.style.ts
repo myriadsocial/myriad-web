@@ -25,7 +25,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     wallet: {
       marginTop: theme.spacing(-1),
-      marginBottom: theme.spacing(2.5),
       display: 'flex',
       flexWrap: 'nowrap',
       justifyContent: 'space-between',
@@ -78,6 +77,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: '34px',
       height: '34px',
       padding: '4px !important',
+    },
+    more: {
+      paddingRight: '20px',
+      paddingLeft: '20px',
+      width: '100%',
+      height: 52,
     },
   }),
 );
