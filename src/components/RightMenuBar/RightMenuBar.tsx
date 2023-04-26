@@ -82,7 +82,7 @@ export const RightMenuBar: React.FC<RightMenuBarProps> = props => {
           </Typography>
         </div>
       ),
-      component: <ExperienceTab />,
+      component: <ExperienceTab showFilter showQuick />,
       allowAnonymous: false,
     },
     {
@@ -97,7 +97,7 @@ export const RightMenuBar: React.FC<RightMenuBarProps> = props => {
           </Typography>
         </div>
       ),
-      component: <TrendingExperienceTab />,
+      component: <TrendingExperienceTab showFilter />,
       allowAnonymous: true,
     },
   ];

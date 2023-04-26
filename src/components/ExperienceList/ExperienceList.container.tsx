@@ -36,6 +36,7 @@ type ExperienceListContainerProps = {
   refreshExperience?: () => void;
   noButton?: boolean;
   discover?: boolean;
+  menuDrawer?: boolean;
 };
 
 export const useStyles = makeStyles<Theme, ExperienceListContainerProps>(
@@ -59,6 +60,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> =
       refreshExperience,
       noButton,
       discover = false,
+      menuDrawer = false,
     } = props;
 
     const style = useStyles(props);
@@ -174,7 +176,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> =
               onSubscribe={handleSubscribeExperience}
               onClone={handleCloneExperience}
               viewPostList={handleViewPostList}
-              experiences={experiences}
+              experiences={menuDrawer ? experiences.slice(0, 3) : experiences}
               user={user}
               anonymous={anonymous}
               {...props}
@@ -186,7 +188,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> =
               onSubscribe={handleSubscribeExperience}
               onClone={handleCloneExperience}
               viewPostList={handleViewPostList}
-              experiences={experiences}
+              experiences={menuDrawer ? experiences.slice(0, 3) : experiences}
               user={user}
               anonymous={anonymous}
               {...props}
@@ -198,7 +200,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> =
               onSubscribe={handleSubscribeExperience}
               onClone={handleCloneExperience}
               viewPostList={handleViewPostList}
-              experiences={experiences}
+              experiences={menuDrawer ? experiences.slice(0, 3) : experiences}
               user={user}
               anonymous={anonymous}
               {...props}

@@ -184,7 +184,9 @@
     "Summary": "Summary",
     "Got_It": "Got it!",
     "ConnectWallet": "Connect Wallet",
-    "SignIn": "Sign-In"
+    "SignIn": "Sign-In",
+    "ViewMore": "View More",
+    "More": "More"
   },
   "Confirm": {
     "Title": "Are you sure?",

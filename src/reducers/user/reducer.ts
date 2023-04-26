@@ -123,7 +123,7 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (
       return {
         ...state,
         experiences: {
-          data: [...action.experiences],
+          data: [...state.experiences.data, ...action.experiences],
           meta: action.meta,
         },
       };

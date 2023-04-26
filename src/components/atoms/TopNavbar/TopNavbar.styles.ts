@@ -13,7 +13,7 @@ export const useStyles = makeStyles<Theme, TopNavbarProps>(theme =>
       justifyContent: 'flex-start',
       columnGap: theme.spacing(2.125),
       [theme.breakpoints.down('xs')]: {
-        padding: theme.spacing(0, 4),
+        padding: theme.spacing(0, 2.5),
         borderRadius: `0px`,
         height: '56px',
       },

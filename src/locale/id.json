@@ -183,7 +183,9 @@
     "Amount": "Jumlah",
     "Summary": "Ringkasan",
     "Got_It": "Mengerti!",
-    "ConnectWallet": "Hubungkan Dompet"
+    "ConnectWallet": "Hubungkan Dompet",
+    "ViewMore": "Lebih Banyak",
+    "More": "More"
   },
   "Confirm": {
     "Title": "Apa kamu yakin?",
