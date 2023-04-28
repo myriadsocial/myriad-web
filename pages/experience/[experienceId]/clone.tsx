@@ -109,6 +109,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     res.setHeader('set-cookie', [`${COOKIE_INSTANCE_URL}=${apiURL}`]);
 
+    const user = (await dispatch(fetchUser())) as unknown as User;
     await Promise.all([
       dispatch(fetchServer(sessionInstanceURL)),
       dispatch(fetchNetwork()),
@@ -124,7 +125,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const experience = await ExperienceAPI.getExperienceDetail(experienceId);
 
       if (experience?.visibility === 'selected_user') {
-        const user = (await dispatch(fetchUser())) as unknown as User;
         const found = experience?.selectedUserIds?.find(
           e => e.userId === user?.id,
         );
@@ -135,7 +135,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
       }
 
       if (experience?.visibility === 'private') {
-        const user = (await dispatch(fetchUser())) as unknown as User;
         if (experience?.createdBy !== user?.id)
           return {
             notFound: true,
