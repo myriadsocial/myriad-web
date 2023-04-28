@@ -12,7 +12,6 @@ import { ExperienceListRightBar } from './ExperienceListRightBar';
 import { useExperienceList } from './hooks/use-experience-list.hook';
 
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
-import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import { LoadMoreComponent } from 'src/components/atoms/LoadMore/LoadMore';
 import {
   ExperienceOwner,
@@ -65,7 +64,6 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> =
 
     const style = useStyles(props);
     const router = useRouter();
-    const enqueueSnackbar = useEnqueueSnackbar();
     const confirm = useConfirm();
     const user = useSelector<RootState, User | undefined>(
       state => state.userState.user,
@@ -132,14 +130,7 @@ export const ExperienceListContainer: React.FC<ExperienceListContainerProps> =
           },
         });
       } else {
-        if (totalOwnedExperience >= 10) {
-          enqueueSnackbar({
-            message: i18n.t('Experience.List.Alert'),
-            variant: 'warning',
-          });
-        } else {
-          router.push(`/experience/${experienceId}/clone`);
-        }
+        router.push(`/experience/${experienceId}/clone`);
       }
     };
 
