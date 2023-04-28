@@ -109,6 +109,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     res.setHeader('set-cookie', [`${COOKIE_INSTANCE_URL}=${apiURL}`]);
 
+    const user = (await dispatch(fetchUser())) as unknown as User;
     await Promise.all([
       dispatch(fetchServer(sessionInstanceURL)),
       dispatch(fetchNetwork()),
@@ -122,7 +123,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     try {
       const experience = await ExperienceAPI.getExperienceDetail(experienceId);
-      const user = (await dispatch(fetchUser())) as unknown as User;
 
       if (experience?.createdBy !== user?.id)
         return {
