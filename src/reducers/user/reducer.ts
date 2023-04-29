@@ -120,13 +120,23 @@ export const UserReducer: Redux.Reducer<UserState, Actions> = (
     }
 
     case constants.FETCH_USER_EXPERIENCE: {
-      return {
-        ...state,
-        experiences: {
-          data: [...state.experiences.data, ...action.experiences],
-          meta: action.meta,
-        },
-      };
+      if (!action.meta.currentPage || action.meta.currentPage === 1) {
+        return {
+          ...state,
+          experiences: {
+            data: action.experiences,
+            meta: action.meta,
+          },
+        };
+      } else {
+        return {
+          ...state,
+          experiences: {
+            data: [...state.experiences.data, ...action.experiences],
+            meta: action.meta,
+          },
+        };
+      }
     }
 
     case constants.FETCH_CURRENT_USER_WALLETS: {

@@ -150,6 +150,8 @@ export const fetchNotificationSetting: ThunkActionCreator<Action, RootState> =
           comments: data.comments,
           friendRequests: data.friendRequests,
           tips: data.tips,
+          followers: data.followers,
+          upvotes: data.upvotes,
         },
       });
     } catch (error) {
