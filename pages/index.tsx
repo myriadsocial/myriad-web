@@ -6,11 +6,13 @@ import getConfig from 'next/config';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
+import { useMediaQuery } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
 import { Timeline } from 'components/Timeline/Timeline.layout';
 import { SearchBoxContainer } from 'components/atoms/Search/SearchBoxContainer';
+import ShowIf from 'components/common/show-if.component';
 import { NavbarComponent } from 'src/components/Mobile/Navbar/Navbar';
 import { RichTextContainer } from 'src/components/Richtext/RichTextContainer';
 import { AppStatusBanner } from 'src/components/common/Banner';
@@ -38,6 +40,7 @@ import {
   fetchNetwork,
 } from 'src/reducers/user/actions';
 import { wrapper } from 'src/store';
+import theme from 'src/themes/default';
 import { ThunkDispatchAction } from 'src/types/thunk';
 
 const { publicRuntimeConfig } = getConfig();
@@ -67,6 +70,7 @@ const Index: React.FC<HomePageProps> = props => {
   useEffect(() => {
     if (!session?.user?.instanceURL) updateSession(session);
   }, [session]);
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
     <>
@@ -98,7 +102,9 @@ const Index: React.FC<HomePageProps> = props => {
           <SearchBoxContainer hidden={true} />
         </div>
 
-        <RichTextContainer />
+        <ShowIf condition={!isMobile}>
+          <RichTextContainer />
+        </ShowIf>
 
         <Timeline />
 

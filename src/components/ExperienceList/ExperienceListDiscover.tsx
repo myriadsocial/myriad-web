@@ -22,6 +22,7 @@ type ExperienceListDiscoverProps = {
   onPreview?: (experienceId: string) => void;
   onDelete?: (experienceId: string) => void;
   onUnsubscribe?: (experienceId: string) => void;
+  menuDrawer?: boolean;
 };
 
 export const ExperienceListDiscover: React.FC<ExperienceListDiscoverProps> =
@@ -35,6 +36,7 @@ export const ExperienceListDiscover: React.FC<ExperienceListDiscoverProps> =
       onUnsubscribe,
       onSubscribe,
       onClone,
+      menuDrawer,
     } = props;
 
     const classes = useStyles();
@@ -77,6 +79,7 @@ export const ExperienceListDiscover: React.FC<ExperienceListDiscoverProps> =
               onUnsubscribe={onUnsubscribe}
               onSubscribe={onSubscribe}
               onClone={onClone}
+              menuDrawer={menuDrawer}
             />
           </div>
         ))}
