@@ -219,7 +219,7 @@ export const useExperienceHook = () => {
 
         enqueueSnackbar({
           variant: 'success',
-          message: 'subscribed successfully!',
+          message: 'Followed successfully!',
         });
       }),
     );
@@ -246,7 +246,7 @@ export const useExperienceHook = () => {
 
         enqueueSnackbar({
           variant: 'success',
-          message: 'unsubscribed successfully!',
+          message: 'Unfollowed successfully!',
         });
       }),
     );
