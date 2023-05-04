@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 
 import Grid from '@material-ui/core/Grid';
@@ -18,7 +18,6 @@ import {
 import { Experience } from 'src/interfaces/experience';
 import { TimelineFilterCreated } from 'src/interfaces/timeline';
 import { User } from 'src/interfaces/user';
-import { ListMeta } from 'src/lib/api/interfaces/base-list.interface';
 import i18n from 'src/locale';
 import { RootState } from 'src/reducers';
 
@@ -31,7 +30,6 @@ export const TrendingExperienceTab: React.FC<TrendingExperienceTabProps> =
   props => {
     const { menuDrawer = false, showFilter = true } = props;
     const styles = useStyles();
-    const [type, setType] = useState<TimelineFilterCreated>();
     const { loadTrendingExperience, loading, clearTrendingExperience } =
       useExperienceHook();
     const { createdFilter } = useFilterOption();
@@ -46,28 +44,13 @@ export const TrendingExperienceTab: React.FC<TrendingExperienceTabProps> =
       shallowEqual,
     );
 
-    const trendingExperiencesMeta = useSelector<RootState, ListMeta>(
-      state => state.experienceState.meta,
-      shallowEqual,
-    );
-
     React.useEffect(() => {
+      clearTrendingExperience();
       loadTrendingExperience(1);
     }, []);
 
-    const handleLoadNextPage = () => {
-      const createdBy =
-        type === TimelineFilterCreated.ME
-          ? `createdBy=${user.id}`
-          : `createdBy[neq]=${user.id}`;
-      if (type)
-        loadTrendingExperience(trendingExperiencesMeta.nextPage, createdBy);
-      else loadTrendingExperience(trendingExperiencesMeta.nextPage);
-    };
-
     const handleFilter = async (filter: TimelineFilterCreated) => {
       await clearTrendingExperience();
-      setType(filter);
       const createdBy =
         filter === TimelineFilterCreated.ME
           ? `createdBy=${user.id}`
@@ -81,7 +64,7 @@ export const TrendingExperienceTab: React.FC<TrendingExperienceTabProps> =
           <ShowIf condition={showFilter}>
             <div className={styles.flex}>
               <Typography variant={'h5'} className={styles.title}>
-                {trendingExperiencesMeta?.totalItemCount ?? 0} Timelines
+                {trendingExperiences.length ?? 0} Timelines
               </Typography>
 
               <DropdownMenu<TimelineFilterCreated>
@@ -103,13 +86,6 @@ export const TrendingExperienceTab: React.FC<TrendingExperienceTabProps> =
           enableSubscribe
           filterTimeline
           owner={ExperienceOwner.TRENDING}
-          hasMore={
-            !menuDrawer && Boolean(user)
-              ? trendingExperiencesMeta.currentPage <
-                trendingExperiencesMeta.totalPageCount
-              : false
-          }
-          loadNextPage={handleLoadNextPage}
           menuDrawer={menuDrawer}
         />
 
