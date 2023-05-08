@@ -175,7 +175,7 @@ jobs:
       - name: Set Up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@62d4898025f6041e16b1068643bfc5a696863587
       - name: Get GKE Credentials
-        uses: google-github-actions/get-gke-credentials@894c221960ab1bc16a69902f29f090638cca753f
+        uses: google-github-actions/get-gke-credentials@35ab0d2b2d48792c19f09325413bd185c8d44394
         with:
           cluster_name: ${{ secrets[format('{0}_{1}', matrix.environment, 'GKE_CLUSTER_NAME')] }}
           location: ${{ secrets[format('{0}_{1}', matrix.environment, 'GKE_LOCATION')] }}
