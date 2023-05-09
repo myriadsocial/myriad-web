@@ -1,6 +1,6 @@
 import { ArrowLeftIcon, GiftIcon, TrashIcon } from '@heroicons/react/outline';
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
 import dynamic from 'next/dynamic';
@@ -23,8 +23,7 @@ import ExclusiveCreate from 'components/ExclusiveContentCreate/ExclusiveCreate';
 import Reveal from 'components/ExclusiveContentCreate/Reveal/Reveal';
 import ExperienceListBarCreatePost from 'components/ExperienceList/ExperienceListBarCreatePost';
 import { useExperienceList } from 'components/ExperienceList/hooks/use-experience-list.hook';
-import { ExperiencePost } from 'components/ExperiencePost';
-import { SearchBox } from 'components/atoms/Search';
+import { ExperienceTimelinePost } from 'components/ExperienceTimelinePost';
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import { getEditorSelectors } from 'components/common/Editor/store';
 import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
@@ -37,10 +36,15 @@ import { useSearchHook } from 'src/hooks/use-search.hooks';
 import { useUpload } from 'src/hooks/use-upload.hook';
 import { InfoIconYellow } from 'src/images/Icons';
 import { ExclusiveContentPost } from 'src/interfaces/exclusive';
-import { ExperienceProps, WrappedExperience } from 'src/interfaces/experience';
+import {
+  ExperienceProps,
+  UserExperience,
+  WrappedExperience,
+} from 'src/interfaces/experience';
 import { Post, PostVisibility } from 'src/interfaces/post';
 import { TimelineType } from 'src/interfaces/timeline';
 import { User } from 'src/interfaces/user';
+import * as ExperienceAPI from 'src/lib/api/experience';
 import i18n from 'src/locale';
 import { RootState } from 'src/reducers';
 import { createExclusiveContent } from 'src/reducers/timeline/actions';
@@ -93,6 +97,8 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
     [],
   );
   const [commonUser, setCommonUser] = useState<string[]>([]);
+  const [userExperiences, setUserExperiences] = useState<UserExperience[]>([]);
+  const [page, setPage] = useState<number>(1);
 
   const Editor = isMobile ? CKEditor : PlateEditor;
 
@@ -332,7 +338,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
     state => state.userState.anonymous,
     shallowEqual,
   );
-  const { list: experiences } = useExperienceList(ExperienceOwner.CURRENT_USER);
+  const { list: experiences } = useExperienceList(ExperienceOwner.PERSONAL);
   const { searchUsers, users } = useSearchHook();
   const { uploadImage } = useUpload();
   const onImageUpload = async (files: File[]) => {
@@ -358,6 +364,28 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
     saveExperience(attributes);
     handleCloseExperience();
   };
+
+  const fetchUserExperiences = async () => {
+    const { meta, data: experiences } = await ExperienceAPI.getUserExperiences(
+      user.id,
+      'personal',
+      page,
+    );
+
+    setUserExperiences([...userExperiences, ...experiences]);
+
+    if (meta.currentPage < meta.totalPageCount) setPage(page + 1);
+  };
+
+  const resetExperiences = () => {
+    setPage(1);
+    setUserExperiences([]);
+  };
+
+  useEffect(() => {
+    if (open) fetchUserExperiences();
+    else resetExperiences();
+  }, [open, page]);
 
   const handleRemoveExperience = (experienceId: string) => {
     removeExperience(experienceId, () => {
@@ -531,16 +559,13 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
           onChange={handleVisibilityChange}
         />
       </div>
-      <div className={styles.timelineVisibility}>
-        <SearchBox placeholder="Search Timeline" />
-      </div>
       <div className={styles.warningVisibility}>
         <InfoIconYellow />
         <Typography
           component="span"
           variant="body1"
           style={{
-            fontWeight: 700,
+            fontWeight: 500,
             marginLeft: '10px',
           }}>
           Your post visibility will be visible to{' '}
@@ -574,7 +599,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
       </div>
       <ShowIf condition={showTimelineCreate}>
         <div className={styles.experienceCreate}>
-          <ExperiencePost
+          <ExperienceTimelinePost
             isEdit={false}
             experience={selectedExperience}
             tags={tags}
@@ -591,11 +616,11 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
       </ShowIf>
       {/* Select Timeline */}
       {/* Timeline list */}
-      <div className={styles.timelineVisibility}>
+      <div>
         <ExperienceListBarCreatePost
           onDelete={handleRemoveExperience}
           onUnsubscribe={handleUnsubscribeExperience}
-          experiences={experiences}
+          experiences={userExperiences}
           selectable={true}
           viewPostList={handleViewPostList}
           user={user}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Experience as ExperienceCard } from '../ExpericenceRightBar';
+import { Experience as ExperienceCard } from '../ExperienceTimelineCard';
 import { useStyles } from './ExperienceList.style';
 
 import { WrappedExperience } from 'src/interfaces/experience';
