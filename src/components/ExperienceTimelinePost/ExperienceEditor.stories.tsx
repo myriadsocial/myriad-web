@@ -2,17 +2,17 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import React from 'react';
 
-import { ExperiencePost } from '.';
 import { SocialsEnum } from '../../interfaces/social';
+import { ExperienceTimelinePost } from './ExperienceTimelinePost';
 
 export default {
   title: 'UI Revamp v2.0/components/Experience Editor',
-  component: ExperiencePost,
+  component: ExperienceTimelinePost,
   argTypes: {},
-} as ComponentMeta<typeof ExperiencePost>;
+} as ComponentMeta<typeof ExperienceTimelinePost>;
 
-const Template: ComponentStory<typeof ExperiencePost> = args => (
-  <ExperiencePost {...args} />
+const Template: ComponentStory<typeof ExperienceTimelinePost> = args => (
+  <ExperienceTimelinePost {...args} />
 );
 
 export const CreateExperience = Template.bind({});
