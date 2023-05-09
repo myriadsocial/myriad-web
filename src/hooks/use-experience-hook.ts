@@ -44,6 +44,7 @@ export enum ExperienceOwner {
   PROFILE = 'profile',
   TRENDING = 'trending',
   DISCOVER = 'DISCOVER',
+  PERSONAL = 'personal',
 }
 
 //TODO: isn't it better to rename this to something more general like, useSearchHook?
@@ -73,6 +74,8 @@ export const useExperienceHook = () => {
     RootState,
     { data: WrappedExperience[]; meta: ListMeta }
   >(state => state.userState.experiences, shallowEqual);
+
+  console.log(experiences, 'dataaa');
 
   const loadExperience = () => {
     dispatch(loadExperiences());
