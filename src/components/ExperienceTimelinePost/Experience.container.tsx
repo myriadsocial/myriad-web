@@ -3,7 +3,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 
 import { useStyles } from './Experience.styles';
-import { ExperiencePost } from './ExperiencePost';
+import { ExperienceTimelinePost } from './ExperienceTimelinePost';
 
 import debounce from 'lodash/debounce';
 import { TopNavbarComponent } from 'src/components/atoms/TopNavbar';
@@ -65,7 +65,7 @@ export const ExperienceContainer: React.FC = () => {
         />
       </div>
       <div className={style.box}>
-        <ExperiencePost
+        <ExperienceTimelinePost
           isEdit={false}
           experience={selectedExperience}
           tags={tags}
