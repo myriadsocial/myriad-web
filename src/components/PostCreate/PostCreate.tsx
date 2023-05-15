@@ -136,6 +136,12 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
     setPost(prevPost => ({ ...prevPost, visibility }));
   };
 
+  const handleImagePaste = event => {
+    if (event.clipboardData.getData('image') != '') {
+      event.preventDefault();
+    }
+  };
+
   const handleSubmit = () => {
     if (activeTab === 'import' && importUrl) {
       onSubmit(importUrl, {
@@ -427,6 +433,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
       title={handleTitleModal().title}
       subtitle={handleTitleModal().subtitle}
       onClose={handleClose}
+      onPaste={handleImagePaste}
       open={open}
       fullScreen={isMobile}
       maxWidth="md"
