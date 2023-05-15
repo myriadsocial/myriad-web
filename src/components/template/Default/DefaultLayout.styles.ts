@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     firstCol: {
       width: 312,
-
+      position: 'sticky',
       [theme.breakpoints.down('md')]: {
         width: 290,
       },
