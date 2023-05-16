@@ -110,7 +110,9 @@ export const ExperienceTab: React.FC<ExperienceTabProps> = props => {
   };
 
   const handleLoadNextPage = () => {
-    loadNextUserExperience(type);
+    loadNextUserExperience(
+      type === TimelineFilterCreated.ME ? 'personal' : 'other',
+    );
   };
 
   const handleFilter = async (filter: TimelineFilterCreated) => {

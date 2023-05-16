@@ -65,6 +65,7 @@ export interface UserExperience extends BaseModel {
 }
 
 export interface WrappedExperience {
+  newPostCount?: number;
   userId?: string;
   id?: string;
   subscribed?: boolean;
