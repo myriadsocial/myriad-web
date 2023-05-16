@@ -46,6 +46,7 @@ type ExperienceProps = {
   onUnsubscribe?: (experienceId: string) => void;
   onDelete?: (experienceId: string) => void;
   menuDrawer?: boolean;
+  postCount?: boolean;
 };
 
 const MenuItem = WithAuthorizeAction(BaseMenuItem);
@@ -67,6 +68,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
     onSubscribe,
     onUnsubscribe,
     menuDrawer = false,
+    postCount = false,
   } = props;
 
   const router = useRouter();
@@ -78,6 +80,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
     useState<null | HTMLElement>(null);
   const [shareAnchorElement, setShareAnchorElement] =
     useState<null | HTMLElement>(null);
+  const [showNewPostCount, setShowNewPostCount] = useState<boolean>(postCount);
 
   const isOwnExperience = userExperience.experience.user.id === user?.id;
   const experienceId = userExperience.experience.id;
@@ -92,6 +95,7 @@ export const Experience: React.FC<ExperienceProps> = props => {
 
     if (selectable && onSelect) {
       onSelect(experienceId);
+      setShowNewPostCount(false);
     }
   };
 
@@ -274,6 +278,11 @@ export const Experience: React.FC<ExperienceProps> = props => {
               <Typography variant="caption" color="textSecondary">
                 {isOwnExperience ? ` ${i18n.t('Experience.List.You')}` : ''}
               </Typography>
+              <ShowIf condition={showNewPostCount}>
+                <div className={styles.newPost}>
+                  {userExperience.newPostCount}
+                </div>
+              </ShowIf>
             </CardContent>
 
             <IconButton
