@@ -119,5 +119,16 @@ export const useStyles = makeStyles<Theme, ExperienceStyleProps>(theme =>
         width: '100%',
       },
     },
+    newPost: {
+      backgroundColor: '#FE3333',
+      display: 'flex',
+      width: 20,
+      height: 20,
+      borderRadius: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontSize: '10px',
+      color: '#FFF',
+    },
   }),
 );
