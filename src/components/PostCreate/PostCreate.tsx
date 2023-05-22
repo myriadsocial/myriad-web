@@ -22,17 +22,13 @@ import { serialize } from './formatter';
 import ExclusiveCreate from 'components/ExclusiveContentCreate/ExclusiveCreate';
 import Reveal from 'components/ExclusiveContentCreate/Reveal/Reveal';
 import ExperienceListBarCreatePost from 'components/ExperienceList/ExperienceListBarCreatePost';
-import { useExperienceList } from 'components/ExperienceList/hooks/use-experience-list.hook';
 import { ExperienceTimelinePost } from 'components/ExperienceTimelinePost';
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import { getEditorSelectors } from 'components/common/Editor/store';
 import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import { ExclusiveContent } from 'components/common/Tipping/Tipping.interface';
-import { debounce } from 'lodash';
 import ShowIf from 'src/components/common/show-if.component';
-import { ExperienceOwner } from 'src/hooks/use-experience-hook';
 import { useExperienceHook } from 'src/hooks/use-experience-hook';
-import { useSearchHook } from 'src/hooks/use-search.hooks';
 import { useUpload } from 'src/hooks/use-upload.hook';
 import { InfoIconYellow } from 'src/images/Icons';
 import { ExclusiveContentPost } from 'src/interfaces/exclusive';
@@ -140,6 +136,10 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
     if (event.clipboardData.getData('image') != '') {
       event.preventDefault();
     }
+  };
+
+  const handleCloseExperience = () => {
+    setShowTimelineCreate(false);
   };
 
   const handleSubmit = () => {
@@ -331,10 +331,6 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
   };
   const {
     selectedExperience,
-    tags,
-    people,
-    searchTags,
-    searchPeople,
     saveExperience,
     removeExperience,
     loadExperience,
@@ -344,28 +340,12 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
     state => state.userState.anonymous,
     shallowEqual,
   );
-  const { list: experiences } = useExperienceList(ExperienceOwner.PERSONAL);
-  const { searchUsers, users } = useSearchHook();
   const { uploadImage } = useUpload();
   const onImageUpload = async (files: File[]) => {
     const url = await uploadImage(files[0]);
 
     return url ?? '';
   };
-  const handleSearchTags = debounce((query: string) => {
-    searchTags(query);
-  }, 300);
-
-  const handleSearchPeople = debounce((query: string) => {
-    searchPeople(query);
-  }, 300);
-
-  const handleCloseExperience = () => {
-    setShowTimelineCreate(false);
-  };
-  const handleSearchUser = debounce((query: string) => {
-    searchUsers(query);
-  }, 300);
   const onSave = (attributes: ExperienceProps) => {
     saveExperience(attributes);
     handleCloseExperience();
@@ -427,7 +407,6 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
       setCommonUser([...commonUser, userExperience.experience.user.name]);
     }
   };
-
   return (
     <Modal
       title={handleTitleModal().title}
@@ -552,78 +531,78 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
           />
         </div>
       </div>
-      <div className={styles.timelineVisibility}>
-        <Typography
-          component="span"
-          variant="h5"
-          style={{ lineHeight: 1.8, fontWeight: 700 }}>
-          Select Timeline to Post
-        </Typography>
-        <DropdownMenu<PostVisibility>
-          title={'Filter Timeline'}
-          options={menuOptions}
-          useIconOnMobile={false}
-          onChange={handleVisibilityChange}
-        />
-      </div>
-      <div className={styles.warningVisibility}>
-        <InfoIconYellow />
-        <Typography
-          component="span"
-          variant="body1"
-          style={{
-            fontWeight: 500,
-            marginLeft: '10px',
-          }}>
-          Your post visibility will be visible to{' '}
-          {experiencesVisibility.includes('private')
-            ? 'Only Me'
-            : experiencesVisibility.includes('selected_user')
-            ? 'Custom'
-            : experiencesVisibility.includes('friend')
-            ? 'Friends'
-            : 'Public'}{' '}
-        </Typography>
-      </div>
-      <div className={styles.timelineVisibility}>
-        <Typography
-          component="span"
-          variant="body1"
-          style={{ lineHeight: 1.8, fontWeight: 700 }}>
-          {timelineId.length} of {experiences.length} Selected Timelines
-        </Typography>
-        <Button
-          disabled={showTimelineCreate}
-          variant="contained"
-          color="primary"
-          size="small"
-          fullWidth={isMobile}
-          onClick={() => {
-            setShowTimelineCreate(true);
-          }}>
-          Create Timeline
-        </Button>
-      </div>
-      <ShowIf condition={showTimelineCreate}>
+      {!showExclusive && (
+        <div className={styles.timelineVisibility}>
+          <Typography
+            component="span"
+            variant="h5"
+            style={{ lineHeight: 1.8, fontWeight: 700 }}>
+            Select Timeline to Post
+          </Typography>
+          <DropdownMenu<PostVisibility>
+            title={'Filter Timeline'}
+            options={menuOptions}
+            useIconOnMobile={false}
+            onChange={handleVisibilityChange}
+          />
+        </div>
+      )}
+      {!showExclusive && (
+        <div className={styles.warningVisibility}>
+          <InfoIconYellow />
+          <Typography
+            component="span"
+            variant="body1"
+            style={{
+              fontWeight: 500,
+              marginLeft: '10px',
+            }}>
+            Your post visibility will be visible to{' '}
+            {experiencesVisibility.includes('private')
+              ? 'Only Me'
+              : experiencesVisibility.includes('selected_user')
+              ? 'Custom'
+              : experiencesVisibility.includes('friend')
+              ? 'Friends'
+              : 'Public'}{' '}
+          </Typography>
+        </div>
+      )}
+      {!showExclusive && (
+        <div className={styles.timelineVisibility}>
+          <Typography
+            component="span"
+            variant="body1"
+            style={{ lineHeight: 1.8, fontWeight: 700 }}>
+            {timelineId.length} of {userExperiences.length} Selected Timelines
+          </Typography>
+          <Button
+            disabled={showTimelineCreate}
+            variant="contained"
+            color="primary"
+            size="small"
+            fullWidth={isMobile}
+            onClick={() => {
+              setShowTimelineCreate(true);
+            }}>
+            Create Timeline
+          </Button>
+        </div>
+      )}
+      <ShowIf condition={showTimelineCreate && !showExclusive}>
         <div className={styles.experienceCreate}>
           <ExperienceTimelinePost
-            isEdit={false}
             experience={selectedExperience}
-            tags={tags}
-            people={people}
-            onSearchTags={handleSearchTags}
             onImageUpload={onImageUpload}
-            onSearchPeople={handleSearchPeople}
             onSave={onSave}
-            onSearchUser={handleSearchUser}
-            users={users}
+            user={user}
             onCancel={handleCloseExperience}
           />
         </div>
       </ShowIf>
       {/* Select Timeline */}
       {/* Timeline list */}
-      <div>
+      <ShowIf condition={!showExclusive}>
         <ExperienceListBarCreatePost
           onDelete={handleRemoveExperience}
           onUnsubscribe={handleUnsubscribeExperience}
@@ -634,7 +613,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
           anonymous={anonymous}
           {...props}
         />
-      </div>
+      </ShowIf>
       <div className={styles.action}>
         <ShowIf condition={!showExclusive}>
           <ShowIf condition={post.visibility !== 'selected_user'}>
