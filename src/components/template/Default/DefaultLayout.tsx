@@ -206,13 +206,13 @@ const Default: React.FC<DefaultLayoutProps> = props => {
           <div className={classes.root}>
             <div className={classes.firstCol}>
               <div className={classes.innerFirstColWrapper}>
-                <div style={{ position: 'fixed' }}>
+                <div>
                   <MenuContainer
                     logo={instance?.images?.logo_banner ?? ''}
                     anonymous={anonymous}
                   />
                 </div>
-                <div style={{ position: 'fixed' }}>
+                <div>
                   <RightMenuBar anonymous={anonymous} />
                 </div>
               </div>
