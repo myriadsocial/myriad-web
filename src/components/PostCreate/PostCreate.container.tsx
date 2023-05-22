@@ -35,6 +35,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
   const enqueueSnackbar = useEnqueueSnackbar();
+  const [redirect, setRedirect] = useState(false);
 
   const user = useSelector<RootState, User | null>(
     state => state.userState.user,
@@ -111,6 +112,15 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
                 message = i18n.t(
                   `Home.RichText.Prompt_Import.Error.${statusCode}`,
                 );
+                if (statusCode === 409) {
+                  setRedirect(true);
+                  user.fullAccess
+                    ? enqueueSnackbar({
+                        message: message,
+                        variant: 'success',
+                      })
+                    : _handlePostNotFullAccess();
+                }
               }
 
               setDialogFailedImport({ open: true, message, postId });
@@ -175,6 +185,8 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
         onSubmit={submitPost}
         isMobile={isMobile}
       />
+      {redirect &&
+        router.push({ pathname: `/post/${dialogFailedImport.postId}` })}
       <PromptComponent
         title={i18n.t('Home.RichText.Prompt_Import.Title')}
         subtitle={dialogFailedImport.message}
