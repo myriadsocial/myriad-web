@@ -75,8 +75,6 @@ export const useExperienceHook = () => {
     { data: WrappedExperience[]; meta: ListMeta }
   >(state => state.userState.experiences, shallowEqual);
 
-  console.log(experiences, 'dataaa');
-
   const loadExperience = () => {
     dispatch(loadExperiences());
   };
