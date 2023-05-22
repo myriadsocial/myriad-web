@@ -108,7 +108,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
                 });
               }
               let message: string = error.message;
-              if ([400, 403, 404].includes(statusCode)) {
+              if ([400, 403, 404, 409].includes(statusCode)) {
                 message = i18n.t(
                   `Home.RichText.Prompt_Import.Error.${statusCode}`,
                 );
