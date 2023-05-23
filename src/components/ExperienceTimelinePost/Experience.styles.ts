@@ -1,178 +1,103 @@
-import {
-  createStyles,
-  makeStyles,
-  Theme,
-  alpha,
-} from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles((theme: Theme) =>
+export const useStyles = makeStyles<Theme>(theme =>
   createStyles({
-    '@global': {
-      ' .MuiAutocomplete-option[aria-selected="true"]': {
-        background: 'none',
-      },
-      ' .MuiAutocomplete-option[data-focus="true"]': {
-        backgroundColor: alpha('#FFC857', 0.15),
-      },
-      ' .MuiAutocomplete-tag .MuiSvgIcon-root': {
-        width: 14,
-        height: 14,
-      },
-
-      ' .MuiFormHelperText-root': {
-        marginLeft: 0,
-
-        [theme.breakpoints.down('xs')]: {
-          fontSize: 12,
-        },
-      },
-    },
     root: {
-      background: '#FFF',
+      marginBottom: theme.spacing(1),
+      border: '1px solid',
+      borderColor: '#FFF',
       borderRadius: 10,
-      marginBottom: 24,
-
-      '& .MuiAutocomplete-popupIndicatorOpen': {
-        transform: 'none',
-      },
-
-      [theme.breakpoints.down('xs')]: {
-        padding: '20px',
-      },
-    },
-    header: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginBottom: theme.spacing(2),
-    },
-    content: {
-      display: 'flex',
-      flexDirection: 'row',
-      gap: theme.spacing(3),
-    },
-    row1: {
-      minWidth: 100,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      paddingTop: 8,
-      gap: 8,
-    },
-    boxImage: {
-      width: 100,
-      height: 100,
-      borderRadius: 10,
-      border: '2px dashed #C2C2C2',
-      backgroundColor: '#F5F5F5',
-    },
-    row2: {
+      padding: 20,
       width: '100%',
-      overflow: 'hidden',
-      paddingTop: 8,
+      boxShadow: `0px 2px 10px rgba(0, 0, 0, 0.3)`,
+      position: 'relative',
+
+      '&::before': {
+        content: '""',
+        position: 'absolute',
+        width: 8,
+        top: 0,
+        left: 0,
+        height: '100%',
+        backgroundColor: '#FFF',
+        borderTopLeftRadius: 10,
+        borderBottomLeftRadius: 10,
+      },
+    },
+    image: {
+      width: 68,
+      height: 68,
+      opacity: 0.9,
+      borderRadius: 5,
+    },
+    cardContent: {
+      width: 140,
+      padding: '0px 0px 0px 20px',
+      flexGrow: 1,
+
+      '&:last-child': {
+        paddingBottom: 0,
+      },
     },
     title: {
-      marginBottom: 30,
-      fontSize: theme.typography.h5.fontSize,
-      fontWeight: 400,
-    },
-    preview: {
-      marginBottom: 30,
-
-      '& .MuiListItem-root:hover': {
-        backgroundColor: alpha('#FFC857', 0.15),
-
-        '&::before,&::after': {
-          content: '""',
-          position: 'absolute',
-          width: 30,
-          height: '100%',
-          top: 0,
-          backgroundColor: alpha('#FFC857', 0.15),
-        },
-        '&::before': {
-          left: -30,
-        },
-        '&::after': {
-          right: -30,
-        },
-      },
-    },
-    postTextContainer: {
-      border: '1px solid #E5E5E5',
-      width: '100%',
-      padding: '20px',
-      borderRadius: '5px',
-      justifyContent: 'center',
-      alignItems: 'center',
-      textAlign: 'center',
-      marginBottom: 36,
-    },
-    textPost: {
-      fontWeight: 600,
-      fontSize: 18,
-    },
-    textPostDetail: {
-      fontWeight: 400,
-      fontSize: 14,
-      marginTop: 9,
-    },
-    label: {
-      background: '#FFF',
-      paddingLeft: 6,
-      paddingRight: 6,
-    },
-    social: {
-      color: theme.palette.primary.main,
-    },
-    people: {},
-    removePeople: {
-      '& .MuiSvgIcon-root': {
-        fill: 'currentColor',
-      },
-    },
-    mb: {
-      marginBottom: '10px',
-    },
-    loading: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      position: 'absolute',
-      zIndex: 999,
-      width: '100%',
-      height: '100%',
-      textAlign: 'center',
-    },
-    option: {
-      width: '100%',
-    },
-    counter: {
-      position: 'absolute',
-      right: 0,
-      bottom: 0,
-      color: '#898888',
-    },
-    box: {
+      wordBreak: 'break-word',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
       [theme.breakpoints.down('xs')]: {
-        padding: '0px 20px 20px 20px',
+        fontSize: '14px',
       },
     },
-    fill: {
-      fill: 'currentColor',
-      '& .MuiSvgIcon-root': {
-        fill: 'currentColor',
+    subtitle: {
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '12px',
+        fontWeight: 500,
       },
     },
-    formControl: {
+    icon: {
+      [theme.breakpoints.down('xs')]: {
+        color: '#404040',
+      },
+    },
+    menu: {
+      borderRadius: 10,
+      marginTop: 8,
+    },
+    delete: {
+      color: '#FE3636',
+    },
+    error: {
+      background: '#FE3636',
+      color: '#FFF',
+      '&:hover': {
+        color: theme.palette.text.primary,
+      },
+    },
+    modal: {
+      paddingBottom: 10,
+    },
+    input: {
+      width: 560,
       marginBottom: 0,
+      marginTop: 10,
+
+      '& .MuiInputLabel-root, .MuiInputBase-root': {
+        color: '#616161',
+      },
+      [theme.breakpoints.down('xs')]: {
+        width: '100%',
+      },
     },
-    customVisibility: {
-      maxHeight: '300px',
-      overflowY: 'scroll',
-      border: '1px solid #FFD24D',
-      borderRadius: '4px',
-      padding: '0 10px',
+    inputText: {
+      flex: 1,
+      height: 20,
+    },
+    action: {
+      cursor: 'pointer',
+      flex: 1,
     },
   }),
 );
