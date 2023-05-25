@@ -38,6 +38,7 @@ import * as ExperienceAPI from 'src/lib/api/experience';
 import i18n from 'src/locale';
 import { RootState } from 'src/reducers';
 import * as constants from 'src/reducers/timeline/constants';
+import { fetchUserExperience } from 'src/reducers/user/actions';
 import { UserState } from 'src/reducers/user/reducer';
 
 type ExperienceItemProps = {
@@ -121,6 +122,7 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
       loadExperiencePostList,
       loadExperienceAdded,
       addPostsToExperience,
+      clearUserExperience,
     } = useExperienceHook();
     const { posts } = useTimelineFilter();
     const enqueueSnackbar = useEnqueueSnackbar();
@@ -272,6 +274,11 @@ export const ModalAddToPostProvider: React.ComponentType<ModalAddPostExperienceP
             posts: updatePosts(),
           });
         });
+
+        clearUserExperience();
+        setTimeout(() => {
+          dispatch(fetchUserExperience(1, 'personal'));
+        }, 500);
       }
     };
 
