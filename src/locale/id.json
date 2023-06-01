@@ -159,8 +159,8 @@
     "New": {
       "Create": "Buat Linimasa Baru",
       "Discover": "Temukan Linimasa",
-      "AllOfMyriad": "All Of Myriad",
-      "TimelineIFollow": "All Timelines I Follow",
+      "AllOfMyriad": "Seluruh Myriad",
+      "TimelineIFollow": "Seluruh Timeline yang diikuti",
       "SearchTimeline": "Cari Linimasa"
     },
     "AdvanceFilter": {
@@ -1332,6 +1332,20 @@
     },
     "Prompt_Success": {
       "Title": "Konten Berhasil Dibuka"
+    }
+  },
+  "Sign_In": {
+    "method": "Metode sign-in",
+    "choose": "Pilih metode sign-in",
+    "Wallet": {
+      "title": "Dompet Crypto",
+      "desc": "Sign in melalui Web 3.0",
+      "tooltip": "Sign-in melalui dompet crypto untuk membuka seluruh fitur Myriad-Social."
+    },
+    "Email": {
+      "title": "Email",
+      "desc": "Sign in melalui Web 2.0",
+      "tooltip": "Sign-in melalui email untuk mendapatkan banyak fitur dari myriad. Anda dapat mendapatkan seluruhnya nanti dengan menambahkan dompet pada pengaturan dompet. Kami tidak akan menggunakan email anda demi kepentingan komersial."
     }
   }
 }
