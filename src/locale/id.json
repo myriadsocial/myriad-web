@@ -47,8 +47,8 @@
       },
       "Empty": {
         "Text_1": "Uh-oh!",
-        "Text_2": "Anda belum membuat pengalaman apa pun. Pengalaman memungkinkan Anda untuk menyesuaikan berbagai tag dan orang untuk ditampilkan di timeline Anda.",
-        "Btn_Create": "Buat Pengalaman"
+        "Text_2": "Anda belum membuat Timeline apa pun. Timeline memungkinkan Anda untuk menyesuaikan berbagai tag dan orang untuk ditampilkan di timeline Anda.",
+        "Btn_Create": "Buat Timeline"
       },
       "EmptyFollow": {
         "Text_1": "Ikuti Linimasa untuk tetap update",
@@ -164,11 +164,11 @@
       "SearchTimeline": "Cari Linimasa"
     },
     "AdvanceFilter": {
-      "Followed": "Most Followed",
-      "NameAsc": "Name (Ascending)",
-      "NameDesc": "Name (Descending)",
-      "DateAsc": "Date Created (Ascending)",
-      "DateDesc": "Date Created (Descending)"
+      "Followed": "Paling Banyak Diikuti",
+      "NameAsc": "Nama (Ascending)",
+      "NameDesc": "nama (Descending)",
+      "DateAsc": "Tanggal Dibuat (Ascending)",
+      "DateDesc": "Tanggal Dibuat (Descending)"
     }
   },
   "General": {
@@ -247,7 +247,7 @@
       "Subtitle_1": "Kami telah mengirimi Anda email ke alamatnya",
       "Subtitle_2": "Periksa kotak masuk Anda dan klik tautan itu untuk masuk. Jangan lupa untuk memeriksa folder spam Anda!",
       "Button_Text": "Kirim Ulang Tautan Masuk",
-      "Timer_Text": "Anda dapat mengirim kembali tautan masuk Anda setelah {{time}} detik(s)",
+      "Timer_Text": "Anda dapat mengirim kembali tautan masuk Anda setelah {{time}} detik",
       "From": "dari"
     },
     "Description": "Platform sosial yang sepenuhnya berada di bawah kendali Anda. Tetap anonim, cari topik Anda sendiri, pilih antarmuka Anda dan kendalikan apa yang Anda lihat.",
@@ -777,14 +777,14 @@
       "Subtitle": "Hargai orang lain dengan mengirimkan tip dengan cryptocurrency"
     },
     "Prompt_Web2": {
-      "Title": "Wallet Not Connected",
-      "Subtitle": "You don’t have any wallet connected to your account, let’s try to connect your wallet to send tip"
+      "Title": "Dompet tidak terhubung",
+      "Subtitle": "Anda tidak memiliki dompet yang terhubung dengan akun ada, mari menghubungkan dompet untuk mengirim tip"
     },
     "Prompt_Near": {
-      "Title": "Allow connection to NEAR network?",
+      "Title": "Izinkan hubungan dengan NEAR Network?",
       "Btn": {
-        "Left": "Cancel",
-        "Right": "Allow"
+        "Left": "Batal",
+        "Right": "Izinkan"
       }
     },
     "Prompt_Success": {
@@ -838,7 +838,7 @@
     },
     "Alert": {
       "Removed": "{{name}} telah dihapus dari daftar teman Anda",
-      "Block": "User successfully blocked"
+      "Block": "User telah diblokir"
     },
     "Prompt_Wallet": {
       "Title": "Akun dompet tidak ditemukan",
