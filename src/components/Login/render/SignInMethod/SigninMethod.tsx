@@ -63,9 +63,11 @@ export default function SigninMethod({
   return (
     <>
       <div className={styles.root}>
-        <Typography className={styles.textSign}>{i18n.t('Sign_In.method')}</Typography>
+        <Typography className={styles.textSign}>
+          {i18n.t('Sign_In.method')}
+        </Typography>
         <Typography className={styles.textSubtitle}>
-        {i18n.t('Sign_In.choose')}
+          {i18n.t('Sign_In.choose')}
         </Typography>
         <div className={styles.wrapperCards}>
           <CardSign
