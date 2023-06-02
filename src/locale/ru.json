@@ -1319,5 +1319,19 @@
     "Prompt_Success": {
       "Title": "Разблокируйте успех контента"
     }
+  },
+  "Sign_In": {
+    "method": "Sign-in Methods",
+    "choose": "Choose your sign-in methods",
+    "Wallet": {
+      "title": "Crypto Wallet",
+      "desc": "Sign in via Web 3.0",
+      "tooltip": "Sign-in with a crypto wallet to unlock all the features of Myriad-Social."
+    },
+    "Email": {
+      "title": "Email",
+      "desc": "Sign in via Web 2.0",
+      "tooltip": "Sign-in via email lets you use many of Myriad’s features. You can get the real deal later by adding a crypto wallet address in your wallet settings. We will not use your email for commercial purposes."
+    }
   }
 }
