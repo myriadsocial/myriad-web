@@ -230,8 +230,8 @@ Don’t forget to check your spam folder!`}
             <TextField
               variant="outlined"
               fullWidth
-              label="Email Address"
-              placeholder="Add Email Address"
+              label={i18n.t('Setting.List_Menu.Email_Address')}
+              placeholder={i18n.t('Setting.List_Menu.Email_Placeholder')}
               value={emailValue}
               style={{ marginBottom: 'unset' }}
               onChange={onChangeEmail}

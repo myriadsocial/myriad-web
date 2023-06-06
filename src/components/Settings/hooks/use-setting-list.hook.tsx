@@ -80,8 +80,8 @@ export const useSettingList = (): SettingsOption<SettingsType>[] => {
       },
       {
         id: 'email',
-        title: 'Email Configuration',
-        subtitle: 'Set email address for another method of login',
+        title: i18n.t('Setting.List_Menu.Email_Title'),
+        subtitle: i18n.t('Setting.List_Menu.Email_Subtitle'),
         component: <EmailSettings />,
       },
       {
