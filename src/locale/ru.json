@@ -1029,7 +1029,11 @@
       "About_Subtitle": "Читать больше о Myriad",
       "Feedback_Title": "Обратная связь готова",
       "Feedback_Subtitle": "Будем рады получить Вашу обратную связь, отправленную по email",
-      "Version_Title": "Версия Myriad"
+      "Version_Title": "Версия Myriad",
+      "Email_Title": "Email Configuration",
+      "Email_Subtitle": "Set email address for another method of login",
+      "Email_Address": "Email Address",
+      "Email_Placeholder": "Add Email Address"
     }
   },
   "SocialMedia": {
