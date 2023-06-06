@@ -1,0 +1,1360 @@
+{
+  "Experience": {
+    "Alert": {
+      "Confirmation_Unsub": {
+        "Title": "Unfollow?",
+        "Desc_1": "Do you want to unfollow?",
+        "Desc_2": "Unsubscribing will remove {{experience_name}} from your Timeline list.",
+        "Btn": "Unfollow"
+      },
+      "Max_Exp": "You can only add up to 10 timelines max"
+    },
+    "Clone": {
+      "Title": "Clone Timeline",
+      "Type": "Clone"
+    },
+    "Edit": {
+      "Title": "Edit Timeline",
+      "Type": "Edit"
+    },
+    "List": {
+      "Alert": "You can only add up to 10 timelines max",
+      "Copy": "Timeline link copied to clipboard!",
+      "Prompt_Delete": {
+        "Title": "Delete Timeline?",
+        "Desc": "Are you sure you want to delete this Timeline? You will not be able to undo this.",
+        "Btn_Yes": "Yes, Delete"
+      },
+      "Prompt_Unsub": {
+        "Title": "Unfollow?",
+        "Desc_1": "Do you want to unfollow?",
+        "Desc_2": "Unsubscribing will remove {{experience_name}} from your Timeline list.",
+        "Btn_Yes": "Unfollow"
+      },
+      "You": "(you)",
+      "Menu": {
+        "View": "View Details",
+        "Edit": "Edit Timeline",
+        "Clone": "Clone",
+        "Subscribe": "Follow",
+        "Unsubscribe": "Unfollow",
+        "Delete": "Delete",
+        "Share": "Share"
+      },
+      "Modal": {
+        "Title": "Share",
+        "Subtitle": "Let others know about this Timeline on Myriad.Social"
+      },
+      "Empty": {
+        "Text_1": "Uh-oh!",
+        "Text_2": "You haven't created any Timeline yet. Timelines are collections of people, posts, and hashtags, that help you keep your content tidy.",
+        "Btn_Create": "Create Timeline"
+      },
+      "EmptyFollow": {
+        "Text_1": "Follow Timelines to Stay Up-to-Date",
+        "Text_2": "Looks like you're not following any timelines yet! By following timelines, you can see all the latest updates from the people and topics that matter to you.",
+        "Btn": "Discover Timeline"
+      }
+    },
+    "Preview": {
+      "Title": "Preview Timeline",
+      "Text_1": "followers",
+      "Text_2": "cloners",
+      "Button": {
+        "Edit": "Edit timeline",
+        "Subscribe": "Follow",
+        "Unsubscribe": "Unfollow",
+        "Clone": "Clone"
+      },
+      "Subheader": {
+        "Author": "Author",
+        "Tags": {
+          "Title": "Tags",
+          "Sub_Included": "Included tags",
+          "Sub_Excluded": "Excluded tags"
+        },
+        "People": "People",
+        "Post": "Post",
+        "Privacy": "Privacy"
+      },
+      "Post": {
+        "Empty": "Added posts will appear here. You can add a post to your Timelines by selecting 'add post to Timeline' (three dots menu on the top right of each post)."
+      }
+    },
+    "Create": {
+      "Title": "Create Timeline",
+      "Quick": "Quick Create Timeline",
+      "Success": {
+        "Title": "Timeline successfully created",
+        "Subtitle": "You can now add posts to this timeline.",
+        "Btn": "Continue create post"
+      }
+    },
+    "Editor": {
+      "Header": "Set up your customizable timeline",
+      "Sub_Header": "Fill-in the blank, save, and enjoy your new Timeline.",
+      "Title": {
+        "Clone": "Clone Timeline",
+        "Create": "Create Timeline",
+        "Edit": "Edit Timeline"
+      },
+      "Subtitle_1": "Timeline Name",
+      "Subtitle_2": "Description",
+      "Subtitle_3": "Picture",
+      "Label_1": "Included tags",
+      "Label_2": "Excluded tags",
+      "Label_3": "People",
+      "Label_4": "Privacy",
+      "Label_5": "Custom People",
+      "Placeholder_1": "topics you want to follow",
+      "Placeholder_2": "topics you want to exclude",
+      "Placeholder_3": "Search people here",
+      "Placeholder_4": "Select Type of Privacy",
+      "Placeholder_5": "Custom People Who Can View",
+      "Post": {
+        "Title": "Post",
+        "Desc": "Manually added posts will appear here. You can manually add a post to an Timeline by selecting 'add post to Timeline' on the top-right menu of each post."
+      },
+      "Btn": {
+        "Clone": "Clone",
+        "Create": "Create",
+        "Edit": "Save",
+        "AdvancedSettings": "Advanced Settings"
+      },
+      "Menu_Post": {
+        "Remove": "Remove from timeline"
+      },
+      "Helper": {
+        "Name": "Must be between 1-50 character",
+        "Image": "Required",
+        "Tag": "Add at least one tag",
+        "People": "Add at least one people"
+      },
+      "Visibility": {
+        "Public": "Public",
+        "OnlyMe": "Only Me",
+        "Custom": "Custom",
+        "Friend_Only": "Friend Only"
+      }
+    },
+    "Modal_Add_Post": {
+      "Title": "Select timeline",
+      "Subtitle_1": "Add post to timeline below. You",
+      "Subtitle_2": "can unselect it to remove it from Timeline",
+      "Tooltip": "Timeline",
+      "Tooltip_Text": "Some posts will not be visible to other users due to visibility restrictions from their owners.",
+      "Select_All": "Select all",
+      "Card_Own": "(you)",
+      "Empty_Title": "Uh-oh",
+      "Empty_Subtitle": "You haven't created any timeline yet.",
+      "Btn_Confirm": "Confirm",
+      "Success_Msg": "Successfully added post to timeline"
+    },
+    "Filter": {
+      "Following": "Following",
+      "Trending": "Trending",
+      "CreatedByMe": "Created by Me",
+      "CreatedByOthers": "Created by Others"
+    },
+    "New": {
+      "Create": "Create New Timeline",
+      "Discover": "Discover Timeline",
+      "AllOfMyriad": "All Of Myriad",
+      "TimelineIFollow": "All Timelines I Follow",
+      "SearchTimeline": "Search Timeline"
+    },
+    "AdvanceFilter": {
+      "Followed": "Most Followed",
+      "NameAsc": "Name (Ascending)",
+      "NameDesc": "Name (Descending)",
+      "DateAsc": "Date Created (Ascending)",
+      "DateDesc": "Date Created (Descending)"
+    }
+  },
+  "General": {
+    "Close": "Close",
+    "OK": "OK",
+    "Back": "Back",
+    "Next": "Next",
+    "Cancel": "Cancel",
+    "Loading": "Loading",
+    "See_More": "See More",
+    "Save": "Save",
+    "Amount": "Amount",
+    "Summary": "Summary",
+    "Got_It": "Got it!",
+    "ConnectWallet": "Connect Wallet",
+    "SignIn": "Sign-In",
+    "ViewMore": "View More",
+    "More": "More"
+  },
+  "Confirm": {
+    "Title": "Are you sure?",
+    "Anonymous": {
+      "Comment": {
+        "Title": "Reply to join the conversation",
+        "Desc": "Once you’ve signed in, you’ll be able to respond to this post."
+      },
+      "Upvote": {
+        "Title": "Upvote to give your support",
+        "Desc": "Like this post? Sign in now to upvote it."
+      },
+      "Downvote": {
+        "Title": "Downvote to join the debate",
+        "Desc": "Sign in now to voice your opinion."
+      },
+      "AddToTimeline": {
+        "Title": "Add to Timeline",
+        "Desc": "Timelines are collections of people, posts, and hashtags, that help you keep your content tidy. Sign in now to add this post to your Timeline."
+      },
+      "CreateTimeline": {
+        "Title": "Create New Timeline",
+        "Desc": "Timelines are collections of people, posts, and hashtags, that help you keep your content tidy. Sign in now create a Timeline."
+      },
+      "FollowTimeline": {
+        "Title": "Subscribe Timeline",
+        "Desc": "Stay up to date with the latest content of this Timeline. Sign in now to subscribe."
+      },
+      "SendTip": {
+        "Title": "Send Tip",
+        "Desc": "Show your appreciation to the author of this post by sending them a tip."
+      },
+      "CreatePost": {
+        "Title": "Create or Import a Post",
+        "Desc": "Posting to Myriad social could be a great way to earn tips! Sign-in to get started."
+      },
+      "People": {
+        "Title": "Friends",
+        "Desc": "Start making connections. Sign in now to add and manage your friend list."
+      }
+    }
+  },
+  "Mobile": {
+    "title": "We are truly sorry",
+    "subtitle": "Sign-in on mobile is not available yet",
+    "subtitle_2": "To access Myriad, you need to view in desktop mode and install",
+    "subtitle_3": "Sign-in on mobile is not available yet. To access Myriad, you need to use desktop browser and install Polakdot.js",
+    "button_label": "Visit Myriad Social",
+    "button_label_sign_in": "Try demo version",
+    "Alert_Connect": {
+      "Title": "Connect your Social Media!",
+      "Subtitle": "Get rewards by connecting your Twitter or Reddit account."
+    },
+    "Polkadot_Alert": "Polkadot is currently only available for desktop browsers."
+  },
+  "Login": {
+    "Description": "A social platform that’s entirely under your control. Remain anonymous, look for your own topics, control what you see.",
+    "Alert": {
+      "Title": "Login failed",
+      "Message": "Something wrong when trying to log-in",
+      "Invalid_OTP": "Your sign in link is invalid. Please try again."
+    },
+    "Layout": {
+      "Title_left": "Social Media with ",
+      "Title_right": "no boundaries",
+      "Carousel_Title_1_left": "Limitless",
+      "Carousel_Title_1_right": "Conversation",
+      "Carousel_Subtitle_1a": "No limitations on what you say in Myriad",
+      "Carousel_Subtitle_1b": "Freedom of speech is our vision",
+      "Carousel_Title_2_left": "Monetize",
+      "Carousel_Title_2_right": "your Idea",
+      "Carousel_Subtitle_2": "Speak what's inside your mind and get a chance to earn coins",
+      "Carousel_Title_3": "Keep secure",
+      "Carousel_Subtitle_3": "Decentralization provide safety and no personal data collected.",
+      "Text_Try_1": "Or try our",
+      "Text_Try_2": "first",
+      "Footer_Text_1": "To access Myriad, you need to have",
+      "Footer_Text_2": " installed in your browser or",
+      "Footer_Text_3": "you can also use a",
+      "Footer_Text_4": " account.",
+      "Btn_Signin": "Sign in",
+      "Btn_Demo": "demo"
+    },
+    "Email": {
+      "LoginByEmail": {
+        "Title": "Sign-in with email",
+        "Subtitle": "You will receive a sign-in link in your inbox.",
+        "Email_Placeholder": "Add your email",
+        "Back": "Back",
+        "Next": "Next"
+      }
+    },
+    "Options": {
+      "Network": "Select Network",
+      "Wallet": "Select Wallet",
+      "Text_Terms_1": "I have already read, and I accept Myriad",
+      "Text_Terms_2": "Terms of Service",
+      "Text_Terms_3": "and",
+      "Text_Terms_4": "Privacy Policy",
+      "Connect": "Connect",
+      "Prompt_Extension": {
+        "Title": "Extension Not Found",
+        "Subtitle_1": "Kindly check if you have ",
+        "Subtitle_2": "Polkadot.js"
+      },
+      "Prompt_Account": {
+        "Title": "Account Not Found",
+        "Subtitle": "There is no account in the wallet you selected."
+      },
+      "Tooltip_Wallet": "Coming soon",
+      "Prompt_Select_Instance": {
+        "Title": "Select Instance",
+        "See_More": "See more",
+        "See_Less": "See less",
+        "No_Account_Description": "You don't seem to have an account on {{instance_name}}. Do you wish to create a new account on {{instance_name}}?",
+        "No_Account_Cancel": "No, Select Others",
+        "No_Account_Confirm": "Sign Out",
+        "Switch": "Switch Instance"
+      }
+    },
+    "Profile": {
+      "Wallet": "Wallet Used",
+      "Instance": "Selected Federated Instance",
+      "Title": "Create new account",
+      "Subtitle": "You can only set your username once and it will be unique for each instance.",
+      "Helper_Text_Name": "You can use {{min_length}} or more characters.",
+      "Helper_Text_Username": "You can use {{min_length}} or more characters.",
+      "Helper_Validate_Name_Min": "Display name must be provided and contain at least {{min_length}} character",
+      "Helper_Validate_Name_Char": "Display name cannot contain disallowed character.",
+      "Helper_Validate_Username_Min": "Username must be provided and contain at least {{min_length}} character",
+      "Helper_Validate_Username_Char": "Username cannot contain disallowed character.",
+      "Helper_Validate_Username_Taken": "Username already taken",
+      "Placeholder_Display_Name": "Display name",
+      "Placeholder_Username": "Username",
+      "Btn_Change_Wallet": "Change Wallet",
+      "Btn_Register": "Register",
+      "Prompt": {
+        "Title": "Create a new account",
+        "Subtitle": "You will create a new account, not related to any previously existing Myriad account. You can connect other wallets from the 'manage' tab.",
+        "Btn_No": "Cancel",
+        "Btn_Yes": "Confirm"
+      }
+    },
+    "Magic_Link": {
+      "Title": "Your sign-in link has been sent.",
+      "Subtitle_1": "We have sent you an email to the address ",
+      "Subtitle_2": "Check your inbox and click that link in order to sign-in. Don’t forget to check your spam folder!",
+      "Button_Text": "Resend Login Link",
+      "Timer_Text": "You can send your sign-in link again after {{time}} second(s)",
+      "From": "from"
+    }
+  },
+  "Profile_Card": {
+    "Account": "Account",
+    "Profile": "Profile",
+    "Logout": "Log out",
+    "Network": "Network",
+    "NotConnected": "Not Connected",
+    "Wallet": "Wallet"
+  },
+  "Profile": {
+    "Private": {
+      "Title": "Nothing to see here!",
+      "Subtitle": "This account is private. Send them a friend request to see their full profile."
+    },
+    "Empty": {
+      "Title_Own": "Nothing to see here!",
+      "Subtitle_Own": "You haven't posted anything yet.",
+      "Title": "Nothing to see here!",
+      "Subtitle": "This user hasn't posted anything yet."
+    },
+    "Block": {
+      "User": {
+        "Title": "You have blocked this user",
+        "Subtitle": "You will not see them or their content anymore. Go to setting to manage your block list."
+      },
+      "Other": {
+        "Title": "Sorry, you have been blocked by this user",
+        "Subtitle": "You can’t see their posts or send them a friend request."
+      }
+    },
+    "Header": {
+      "Tooltip": {
+        "Official": "Official Account"
+      },
+      "Alert": {
+        "Success_Block": "User successfully blocked",
+        "Success_Req": "Friend request confirmed",
+        "Unfriend": "{{name}} has been removed from your friend lists",
+        "Copy": "Profile link copied!"
+      },
+      "Prompt": {
+        "Block": {
+          "Title": "Block User?",
+          "Desc": "You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?",
+          "Btn": "Block Now"
+        },
+        "Unfriend": {
+          "Title": "Unfriend {{name}}?",
+          "Desc": "You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?",
+          "Btn": "Unfriend Now"
+        }
+      },
+      "Menu": {
+        "TipHistory": "Tip History",
+        "Copy": "Copy link profile",
+        "Report": "Report account",
+        "Block": "Block this person",
+        "Unfriend": "Unfriend",
+        "Acc": "Accept",
+        "Reject": "Reject"
+      },
+      "Btn_Edit": "Edit Profile",
+      "Btn_Add": "Add Friend",
+      "Status": {
+        "Friends": "Friends",
+        "Respond": "Respond",
+        "Requested": "Requested"
+      },
+      "Metric": {
+        "Post": "Post",
+        "Kudos": "Kudos",
+        "Friends": "Friends",
+        "Experience": "Timeline"
+      }
+    },
+    "Banned": {
+      "Title": "Account banned",
+      "Description": "This account has been banned for breaking our community rule. "
+    },
+    "Edit": {
+      "Title": "Edit Profile",
+      "Subtitle_1": "Profile Picture",
+      "Subtitle_2": "Background Image",
+      "Subtitle_3": "Username",
+      "Subtitle_4": "Display name",
+      "Subtitle_5": "Bio",
+      "Subtitle_6": "Website",
+      "Required": "Required min 2 characters",
+      "Btn_Save": "Save changes",
+      "Alert": "something went wrong!",
+      "Prompt": {
+        "Title": "Profile saved!",
+        "Desc": "You have saved your changes.",
+        "Btn": "See Profile"
+      },
+      "Prompt_Cancel": {
+        "Title": "Are you sure?",
+        "Desc": "You already made some changes,\nsure you want to leave it?",
+        "Btn_Yes": "Yes, Leave it",
+        "Btn_Cancel": "No, let me rethink"
+      }
+    },
+    "Tab": {
+      "Post": "Post",
+      "Comments": "Comments",
+      "Experience": "Timelines",
+      "Friends": "Friends",
+      "Social_Media": "Social Media",
+      "Wallet_Address": "Wallet Address"
+    },
+    "Comments": {
+      "Empty": {
+        "Title": "Nothing to see here!",
+        "Subtitle": "This user hasn't created any comment yet.",
+        "Subtitle_Own": "You haven't created any comment yet."
+      },
+      "Sort": "Sort by",
+      "See": "See Post",
+      "Comment": "You commented on “{{text}}...” Posted by {{name}}.",
+      "Reply": "You reply a comment on “{{text}}...” Posted by {{name}}."
+    },
+    "Experience": {
+      "Empty": {
+        "Title": "Nothing to see here!",
+        "Subtitle": "This user hasn't created any Timeline yet."
+      },
+      "Sort": {
+        "Title": "Filter by",
+        "All": "All Timelines",
+        "Personal": "Personal Timelines",
+        "Subscribed": "Subscribed Timelines"
+      }
+    },
+    "Friend": {
+      "Empty": {
+        "Title": "Nothing to see here!",
+        "Subtitle": "This account is private. Send them a friend request to see their full profile."
+      }
+    },
+    "Social_Media": {
+      "Empty": {
+        "Title": "Nothing to see here!",
+        "Private": "This account is private. Send them a friend request to see their full profile.",
+        "Not_Connect": "This user hasn't connected to any social media yet.",
+        "Owner_Not_Connect": "You haven't connected to any social media yet."
+      }
+    },
+    "Setting": {
+      "Copy": "Wallet address copied!"
+    },
+    "Modal_Report": {
+      "Title": "Report User",
+      "Subtitle_1": "Why are you reporting",
+      "Subtitle_2": "Help us understand the problem",
+      "Description_Placeholder": "Description",
+      "Description_Validation": "Must be between 4 to 200 characters",
+      "Btn_Submit": "Submit",
+      "Error_Login": "Please login to continue your report",
+      "Toaster_Success": "User has been reported"
+    }
+  },
+  "Home": {
+    "Title": "{{appname}} - Home",
+    "Prompt_Banned": {
+      "Title": "You have been banned",
+      "Subtitle_1": "This account has been banned due to break our community rule. \n Please ",
+      "Subtitle_2": "contact us ",
+      "Subtitle_3": "if you think this was a mistake"
+    },
+    "Search": {
+      "Placeholder": "Search for people, topics, or timelines in Myriad"
+    },
+    "RichText": {
+      "Placeholder": "What's on your mind?",
+      "Prompt_Import": {
+        "Title": "Import Failed!",
+        "Error": {
+          "400": "Sorry, You can not import this post because the link is invalid",
+          "404": "Sorry, You can not import this post because the link is invalid",
+          "403": "Sorry, You can not import this post because the account is private",
+          "409": "You have already imported this post"
+        }
+      }
+    }
+  },
+  "Post_Lists": {
+    "Sort_By": "Sort by",
+    "Load_New_Posts": "Load new posts",
+    "New_Posts": "New Posts"
+  },
+  "Post_Share": {
+    "Action": "Share",
+    "Title": "Copy post link",
+    "Post_URL": "Post URL",
+    "Embed_Link": "Embed Link",
+    "Embed_Link_PLaceholder": "Copy and paste this code into your website or blog",
+    "Copy_URL_Message": "Link copied!",
+    "Confirmation_Message": "This post was successfully shared to your Timeline"
+  },
+  "Post_Detail": {
+    "Imported_Post": "Imported",
+    "by": "by",
+    "and": "and",
+    "other": "other",
+    "others": "others",
+    "via": "via",
+    "Navbar": {
+      "Title": "Post Detail",
+      "Removed": {
+        "Title": "Unknown Post",
+        "Description": "Post not found"
+      }
+    },
+    "Post_Action": {
+      "Comments": "Comments",
+      "Share": "Share",
+      "Send_tip": "Send tip"
+    },
+    "Post_Options": {
+      "Tip_History": "Tip History",
+      "View_Post": "View Post",
+      "View_Source_Post": "View Source Post",
+      "Visit_Myriad_Profile": "Visit Myriad Profile",
+      "Visit_Post_Platform": "Visit {{postPlatform}} Account",
+      "Visit_Profile": "Visit Profile",
+      "Post_Visibility": "Post Visibility",
+      "Post_Visibility_Setting": {
+        "Header": "Post Visibility",
+        "Title": "Define who can see this post.",
+        "Visibility_Friend": "Only you and your friends can see this post.",
+        "Visibility_Private": "Only you can see this post.",
+        "Visibility_Everyone": "This post is visible to everyone.",
+        "Public": "Public",
+        "Friend_Only": "Friend Only",
+        "Only_Me": "Only Me",
+        "Custom": "Custom",
+        "Timeline": "My Timeline",
+        "Tipping_Warning": "By limiting audience exposure to this post, the number of users who can tip you will also get smaller.",
+        "Cancel": "Cancel",
+        "Confirm": "Confirm",
+        "Confirm_Title": "Post visibility changed!",
+        "Confirm_Description": "Post visibility successfully changed to {{visibility}}",
+        "Confirm_Text": "Back to timeline",
+        "Confirm_Private_Title": "Are you sure?",
+        "Confirm_Private_Description": "By setting the visibility setting to 'Only Me', this post will not be able to receive any tips from other users",
+        "Confirm_Private_Text": "Yes, let's go",
+        "Cancel_Private_Text": "No, let me rethink"
+      },
+      "Add_Post_To_Experience": "Add to Timeline",
+      "Report": "Report",
+      "Delete_Post": "Delete Post"
+    },
+    "Discussion": {
+      "Title": "Discussion",
+      "Text_Placeholder": "Write a discussion..."
+    },
+    "Debate": {
+      "Title": "Debate",
+      "Text_Placeholder": "Your downvote will be submitted after you post a comment"
+    },
+    "Experience": {
+      "Added": "added to",
+      "And": "and",
+      "Other_Exp": "{{number}} other timeline",
+      "Modal_Title": "Post in Timeline",
+      "Modal_Sub": "This post is already added to this timeline"
+    }
+  },
+  "Post_Create": {
+    "Success_Toaster": "Post successfully created!",
+    "Text_Placeholder": "Type...",
+    "Title": "Create Post",
+    "Subtitle": "Create your own post",
+    "Tab_Label": "Create",
+    "Confirm": "Create Post",
+    "Visibility": {
+      "Label": "Visibility",
+      "Public": "Public",
+      "Friend_Only": "Friend Only",
+      "Only_Me": "Only Me",
+      "Timeline": "My Timeline",
+      "Custom": "Custom",
+      "AlertTimeline": "Only people you added to this timeline will be able to see this post",
+      "SelectedTimeline": "Selected Timeline"
+    },
+    "NSFW": {
+      "Label": "NSFW",
+      "Nudity": "Nudity",
+      "Violent": "Violent",
+      "Profanity": "Profanity",
+      "Violence_and_Gore": "Violence and Gore",
+      "Race_and_Religion": "Race and Religion",
+      "Pornography": "Pornography",
+      "Other": "Other",
+      "Confirm": "Confirm"
+    },
+    "Toolbar_Media": {
+      "Menu": {
+        "Upload": "Upload Image",
+        "Link": "Image Link"
+      }
+    },
+    "Upload": {
+      "Btn_Confirm": "Confirm",
+      "Video": {
+        "Title": "Upload Video",
+        "Placeholder": "Upload .mp4 video file with size less than 100Mb"
+      },
+      "Image": {
+        "Title": "Upload Picture"
+      },
+      "Embed": {
+        "Hyperlink": {
+          "Title": "Insert Hyperlink",
+          "Subtitle": "Highlight text as an embedded link"
+        },
+        "Image": {
+          "Title": "Embed Image"
+        },
+        "Placeholder": "{{prefix}} Link URL",
+        "Btn_Confirm": "Confirm"
+      }
+    },
+    "Error": {
+      "Default": "Failed to create post, try again later",
+      "ImageTooLarge": "Failed to create post, image too large",
+      "Empty": "Failed to create post, cannot be empty"
+    }
+  },
+  "Post_Delete": {
+    "Title": "Remove Post",
+    "Description": "Are you sure to remove this post?",
+    "Confirmation_Text": "Yes, proceed to delete",
+    "Cancellation_Text": "No, let me rethink"
+  },
+  "Post_Import": {
+    "Success_Toaster": "Post successfully imported!",
+    "Text_Placeholder": "Link to post",
+    "Title": "Import Post",
+    "Subtitle": "Import post from another social media",
+    "Tab_Label": "Import",
+    "Importer_List_Title": "Who else imported this post?",
+    "Importer_List_Subtitle": "users imported this post",
+    "Post_Preview": "Post Preview",
+    "Validation_Message": {
+      "unsupported": "Currently, you can only import post from Reddit and Twitter",
+      "invalid": "Sorry, You can not import this post because the link is invalid"
+    }
+  },
+  "Post_Sorting": {
+    "Title_Filter": "Filter by",
+    "Title_Sort": "Sort by",
+    "Sort": {
+      "Latest": "Latest",
+      "Oldest": "Oldest"
+    },
+    "Origin_Filter": {
+      "All": "All",
+      "Myriad": "{{name}} Post",
+      "Imported": "Imported Posts"
+    },
+    "Type_Filter": {
+      "All": "All",
+      "Friend": "Friends",
+      "Trending": "Trending",
+      "Experience": "Timeline"
+    },
+    "Order": {
+      "Latest": "Latest",
+      "Popular": "Popularity",
+      "Liked": "Most liked",
+      "Comment": "Most commented",
+      "Tip": "Most tipped"
+    }
+  },
+  "Post_Comment": {
+    "User_Banned": "[user banned]",
+    "Reply": "Reply",
+    "Reply_Placeholder": "Write a Reply ...",
+    "Report": "Report",
+    "Delete": "Delete",
+    "Tip_History": "Tip History",
+    "Show_Comment": "show comment",
+    "Blocked_User": "Blocked user",
+    "Deleted_Comment": "Comment deleted by user.",
+    "Send_Tip": "Send tip",
+    "Confirm_Delete": {
+      "Title": "Delete Comment",
+      "Description": "Are you sure you want to remove this comment?",
+      "Confirm_Text": "Yes, remove it",
+      "Cancel_Text": "No, let me rethink"
+    },
+    "Private_Account": "[This comment is from a private account]",
+    "Banned_Account": "[comment removed by Myriad admin due to {{reportingLabel}}]",
+    "Modal_Report": {
+      "Title": "Report Post",
+      "Subtitle_1": "Why are you reporting this post?",
+      "Subtitle_2": "Help us understand the problem",
+      "Reason_Trademark": "Unauthorized trademark",
+      "Reason_Copyright": "Unauthorized use of copyrighted materials",
+      "Reason_Child_Sexual": "Child sexual exploitation",
+      "Reason_Porn": "Pornography (No NSFW Tag)",
+      "Reason_Private": "Private information posted on Myriad",
+      "Reason_Abuse": "Abusive behavior and violent threats",
+      "Reason_Spam": "Spam and system abuse",
+      "Description_Placeholder": "Description",
+      "Description_Validation": "Must be between 4 to 200 characters",
+      "Footer": "Not sure if something breaking the rules?",
+      "Review_Content_Policy": "Review Myriad’s content policy",
+      "Btn_Confirm": "Confirm",
+      "Error_Login": "Please login to continue your report",
+      "Toaster_Success": "Post report has been submitted"
+    },
+    "Load_More": "View more replies",
+    "ExclusiveContent": "{{type}} Exclusive Content"
+  },
+  "Tipping": {
+    "Modal_Main": {
+      "Title": "Send Tip",
+      "Subtitle": "Finding this post insightful? Send a tip!",
+      "Balance": "Balance",
+      "Tooltip": "If the receiver's balance is below the existential deposit after the tipping was done, the account will be reaped. ",
+      "Tooltip_Read_More": "Read more",
+      "Currency_Options": "Change currency",
+      "Search_Coin": "Search Coin",
+      "Coin": "Coin",
+      "Tip_Amount": "Tip Amount",
+      "Error_Digit": "Digit only",
+      "Error_Insufficient_Balance": "Insufficient balance",
+      "Error_Amount_Max": "{{length}} char maximum",
+      "Will_Receive": "will receive",
+      "Tip_Summary": "Tip Summary",
+      "Tip_Label": "Tip",
+      "Estimated_Gas_Fee": "Estimated Gas Fee",
+      "Total": "Total",
+      "About": "Tipping",
+      "Btn_Send_Tip": "Send my tips"
+    },
+    "Prompt_Mobile": {
+      "Title": "Send Tip",
+      "Subtitle": "Appreciate others by sending tips with cryptocurrencies."
+    },
+    "Prompt_Web2": {
+      "Title": "Wallet Not Connected",
+      "Subtitle": "You don’t have any wallet connected to your account, let’s try to connect your wallet to send tip"
+    },
+    "Prompt_Near": {
+      "Title": "Allow connection to NEAR network?",
+      "Btn": {
+        "Left": "Cancel",
+        "Right": "Allow"
+      }
+    },
+    "Prompt_Success": {
+      "Title": "Tip sent!",
+      "Subtitle_1": "Tip to ",
+      "Subtitle_2": " sent successfully",
+      "Btn_Trx_Detail": "Transaction details",
+      "Btn_Return": "Return",
+      "Notify_Title": "You’ve been tipped on Myriad!",
+      "Notify_Text_1": "Hey @{{receiverUsername}}, I just sent you {{finalAmount}} {{currencySymbol}} on @myriad_social!",
+      "Notify_Text_2": "Myriad.Social is a web3 layer on top of web2 social media, decentralized and federated.",
+      "Notify_Text_3": "You can claim it by joining app.myriad.social and connecting your {{platform}} account.",
+      "Notify_Btn": "Notify on"
+    },
+    "Toaster": {
+      "Cancelled": "Transaction signing cancelled",
+      "Rejected": "Transaction rejected by user"
+    },
+    "Send_Tip_Error": {
+      "Not_Connected": "This user is unable to receive tips because their {{wallet}} wallet is not connected yet. Try using another network"
+    }
+  },
+  "Tipping_History": {
+    "Modal": {
+      "Title": "Tip History",
+      "Sort": "Sort by",
+      "Sort_Highest": "Highest Tip",
+      "Sort_Latest": "Latest Tip",
+      "Coin": "Coin",
+      "All_Coin": "All Coin",
+      "Search_Coin": "Search Coin",
+      "Empty": "Tip empty",
+      "User_Banned": "User Banned",
+      "Send_Tip": "I want to send tip too"
+    }
+  },
+  "TOS": {
+    "Text_1": "I agree to the Myriad ",
+    "Text_2": "Terms of Service",
+    "Text_3": " about {{about}}"
+  },
+  "Friends": {
+    "Title": "{{appname}} - Friends",
+    "Container": {
+      "Title": "Friends",
+      "Tab_Panel_1": "Friend List",
+      "Tab_Panel_2": "Friend Request"
+    },
+    "List": {
+      "Mutual": "{{total}} mutual friends"
+    },
+    "Alert": {
+      "Removed": "{{name}} has been removed from your friend lists",
+      "Block": "User successfully blocked"
+    },
+    "Prompt_Wallet": {
+      "Title": "Wallet account not found",
+      "Desc": "This comment wallet address is unavailable",
+      "Btn": "Close"
+    },
+    "Prompt_Unfriend": {
+      "Title": "Unfriend {{name}}?",
+      "Desc": "You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?",
+      "Btn": "Unfriend Now"
+    },
+    "Prompt_Block": {
+      "Title": "Block {{name}}?",
+      "Desc": "You won't be shown their posts in your timeline anymore and you might not be able to see their complete profile. Are you sure?",
+      "Btn": "Block Now"
+    },
+    "Search": {
+      "Placeholder": "Search Friend"
+    },
+    "Menu": {
+      "Visit": "Visit profile",
+      "Send_Tip": "Send direct tip",
+      "Unfriend": "Unfriend",
+      "Block": "Block this person"
+    },
+    "Empty": {
+      "Friend_List": {
+        "Title": "Friend list is empty",
+        "Subtitle": "Find or invite your friends to Myriad 😉"
+      },
+      "Friend_Request": {
+        "Title": "Friend request is empty",
+        "Subtitle": "You don't have any pending requests"
+      }
+    },
+    "Button": {
+      "Accept": "Accept",
+      "Decline": "Decline"
+    },
+    "Sort": {
+      "Title": "Sort by",
+      "Latest": "Latest",
+      "Oldest": "Oldest"
+    },
+    "Filter": {
+      "Title": "Filter by",
+      "Mutual": "Mutual Friends",
+      "All": "All Friends"
+    }
+  },
+  "Maintenance": {
+    "Title_Head": "{{appname}} - Maintenance",
+    "Title": "Shucks, there's no one here!",
+    "Subtitle": "Our website is currently under maintenance, please comeback later.",
+    "Btn_Web": "Myriad web"
+  },
+  "404": {
+    "Title": "Whoops! You've moved so fast and you got lost",
+    "Subtitle": "The page you are looking for is not found 😢. Please check the URL or maybe this page was deleted or might never exist.",
+    "Btn_Back": "Back home"
+  },
+  "Notification": {
+    "Title": "{{appname}} - Notification",
+    "Header": {
+      "Title": "Notification",
+      "Read": "Mark all as read",
+      "Account_Linked": "Account linked",
+      "Account_Unlinked": "Account unlinked",
+      "User_Reported": "User reported",
+      "Comment_Removed": "Comment removed",
+      "Post_Removed": "Post removed",
+      "Reward": "Tips reward",
+      "Claimed": "Tips claimed",
+      "Tips_received": "Tips received",
+      "Upvote": "New Upvotes",
+      "Follower": "New Follower"
+    },
+    "Description": {
+      "Friend_Accept": "Accepted your friend request",
+      "Friend_Request": "Wants to be your friend",
+      "Post_Comment": "Commented on your Post",
+      "Comment_Comment": "Commented on your reply",
+      "Post_Mention": "Mentioned you in a post",
+      "Comment_Mention": "Mentioned you in a comment",
+      "User_Tip": "You received tip from {{name}} ({{amount}})",
+      "Post_Tip": "Your post received tip from {{name}} ({{amount}})",
+      "Comment_Tip": "Your comment received tip from {{name}} ({{amount}})",
+      "Report": {
+        "Approved": "Report has been approved",
+        "Removed": "Post has been removed"
+      },
+      "Comment_Removed": {
+        "Other": "{{name}}'s comment has been removed based on your report",
+        "User": "Your comment has been removed due to breaking our community guideline"
+      },
+      "User_Banned": {
+        "Other": "{{name}} account has been banned by admin based on your report",
+        "User": "You have been banned for breaking our community rule"
+      },
+      "Connect_Socmed": "Your {{platform}} account @{{username}} successfully connected to Myriad",
+      "Disconnect_Socmed": "Your {{platform}} account @{{username}} successfully disconnected from @{{user}} Myriad account.",
+      "UnlockedContent": "Unlocked your exclusive content.",
+      "Upvote": "Your post is getting {{amount}} upvotes",
+      "Follower": "Your timeline is getting {{amount}} followers"
+    },
+    "Footer": {
+      "View": "View all notifications"
+    }
+  },
+  "PrivacyPolicy": {
+    "Title": "{{appname}} - Privacy Policy"
+  },
+  "Search": {
+    "Title": "{{appname}} - Search Result"
+  },
+  "Search_Result": {
+    "Helper_Text": "Search results for ",
+    "Post_Tab": "Post",
+    "Users_Tab": "User",
+    "Experience_Tab": "Timeline"
+  },
+  "Section": {
+    "Home": "Home",
+    "Friends": "People",
+    "Social_Media": "Social Media",
+    "Wallet": "Wallet",
+    "Trending_Experience": "Trending Timelines",
+    "Trending_Experience_Desc": "Top 10 Timeline",
+    "Experience": "Timeline",
+    "Mytimelines": "My Timelines",
+    "Profile": "Profile",
+    "Settings": "Settings",
+    "Notification": "Notification",
+    "Timeline": "Timeline",
+    "NFT": "NFT & Social Token",
+    "Social_Token": "Social Token",
+    "Myriad_Town": "Myriad.Town",
+    "Trends": "Trends",
+    "Trends_Desc": "Top 10 trending hashtags",
+    "Topic": "Topic"
+  },
+  "NFT": {
+    "Text_1": "NFT & Social Tokens is underway!",
+    "Text_2": "We will let you know very soon"
+  },
+  "Social_Token": {
+    "Text_1": "Social token is underway!",
+    "Text_2": "We will let you know very soon"
+  },
+  "Setting": {
+    "Title": "{{appname}} - Settings",
+    "Default_Title": "Set Privacy and Notification settings",
+    "Header": "Settings",
+    "List_Menu": {
+      "Account_Title": "Privacy Settings",
+      "Account_Subtitle": "Account privacy, social media privacy",
+      "Account_Setting": {
+        "Account_Privacy": {
+          "Title": "Account privacy",
+          "Subtitle": "Change whether people other than friends can see your posts"
+        },
+        "Social_Media_Privacy": {
+          "Title": "Social media privacy",
+          "Subtitle": "Change whether people other than friends can see your social media"
+        },
+        "Options": {
+          "Private": "Private",
+          "Public": "Public"
+        },
+        "Confirm": "Save changes"
+      },
+      "Notification_Title": "Notification Settings",
+      "Notification_Subtitle": "Manage your notification",
+      "Notification_Setting": {
+        "Comments": "Comments",
+        "Mention": "Mention",
+        "Friend_Requests": "Friend Request",
+        "Tips": "Tips",
+        "Followers": "Followers",
+        "Upvotes": "Upvotes",
+        "Confirm": "Save changes"
+      },
+      "Blocked_Title": "Blocked User Settings",
+      "Blocked_Subtitle": "Manage your blocked list",
+      "Blocked_Setting": {
+        "Description": "People you block won't be able to view your profile and post, add you as a friend, tag you or message you and you won't see post or notification from them.",
+        "Empty_Block": "You haven't blocked anyone yet"
+      },
+      "Language_Title": "Language Settings",
+      "Language_Subtitle": "Change the language used in the user interface",
+      "Language_Setting": {
+        "Confirm": "Save changes"
+      },
+      "Help_Title": "Help",
+      "Help_Subtitle": "Terms and conditions, privacy policy, contact us",
+      "Help_Setting": {
+        "Terms_and_conditions": "Terms and conditions",
+        "Privacy_and_policy": "Privacy and Policy",
+        "Contact_us": "Contact us"
+      },
+      "About_Title": "About Myriad",
+      "About_Subtitle": "Read more about Myriad",
+      "Feedback_Title": "Submit Feedback",
+      "Feedback_Subtitle": "Please feel free to provide feedback by sending us an email.",
+      "Version_Title": "Myriad version",
+      "Email_Title": "Email Configuration",
+      "Email_Subtitle": "Set email address for another method of login",
+      "Email_Address": "Email Address",
+      "Email_Placeholder": "Add Email Address"
+    }
+  },
+  "SocialMedia": {
+    "Title": "{{appname}} - Social Media",
+    "Alert": {
+      "Verify": "Your {{social}} account successfully connected!",
+      "Error": "Failed to verify",
+      "Disconnect": {
+        "Title": "Disconnect social account",
+        "Description": "Are you sure to remove {{username}}?",
+        "Btn_No": "No, let me rethink",
+        "Btn_Yes": "Yes, proceed to delete"
+      }
+    },
+    "Header": "Connected Accounts",
+    "Subheader": "Connect social accounts to receive rewards!",
+    "Add": "+ Add {{platform}} account",
+    "Primary_Account": "(Primary account)",
+    "Modal": {
+      "Title": "Add social media",
+      "Header": "Connect your {{platform}} account",
+      "Step_1": "Step 1:",
+      "Step_2": "Step 2:",
+      "Step_3": "Step 3:",
+      "Text_1": "Fill in your {{platform}} account URL",
+      "Text_2": {
+        "Reddit": "Copy the text below and post it on your Reddit profile. Do not post the text on a Subreddit.",
+        "Other": "Copy the text below and post it on your Timeline. Make sure your account is not protected."
+      },
+      "Msg": "I'm part of the @myriad_social {{address}}\n\n{{url}}",
+      "Text_3": "Verify your {{platform}} account, repeat step 2 if it’s not verified",
+      "Btn_Twitter": "Tweet Now",
+      "Btn_Reddit": "Share",
+      "Aggre_1": "I agree to the Myriad",
+      "Aggre_2": "Terms of Service",
+      "OK": "Verify My {{platform}} Account"
+    }
+  },
+  "TermOfUse": {
+    "Title": "{{appname}} - Terms of Use"
+  },
+  "Topics": {
+    "Title": "{{appname}} - Topics"
+  },
+  "Wallet": {
+    "Title": "{{appname}} - Wallet",
+    "Header": "Wallet",
+    "Anonymous": "You are signed-out. Sign-in with crypto wallet to access this feature.",
+    "Tab": {
+      "Balance": "Balance",
+      "History": "History",
+      "Tip": "Tip",
+      "Manage": "Manage"
+    },
+    "Balance": {
+      "Search_Plc": "Search coin",
+      "Hide_0": "Hide 0 balance",
+      "Search_Empty": {
+        "Title": "No results",
+        "Subtitle": "Please make sure your keywords match with the the network of your current wallet."
+      },
+      "Sort": "Sort",
+      "Sort_Opt": {
+        "Highest": "Highest",
+        "Lowest": "Lowest"
+      },
+      "Empty": {
+        "Title": "You don't have any crypto assets",
+        "Subtitle": "You can add crypto assets by depositing money in your wallet."
+      },
+      "Manage": "Manage assets"
+    },
+    "Primary_Coin": {
+      "Alert": {
+        "Msg": "You have saved your changes."
+      },
+      "Text_1": "Primary coin",
+      "Text_2": "Click and drag to change wallet order",
+      "Btn_Apply": "Apply Changes"
+    },
+    "History": {
+      "Header": "Tap to view on explorer",
+      "Empty": {
+        "Title": "You don't have any transaction",
+        "Subtitle": "Start to send tips in a post!"
+      },
+      "Received": "Received",
+      "Sent": "Sent",
+      "Sort": "Sort",
+      "Sort_Opt": {
+        "Latest": "Latest",
+        "Highest": "Highest",
+        "Lowest": "Lowest"
+      },
+      "Coin": "Coin",
+      "Coin_Opt": {
+        "All": "All"
+      },
+      "Transaction": "Transaction",
+      "Tsx_Opt": {
+        "All": "All",
+        "Received": "Received",
+        "Sent": "Sent"
+      },
+      "Filter": {
+        "Btn_Apply": "Apply",
+        "Btn_Reset": "Reset"
+      }
+    },
+    "Tip": {
+      "Alert": {
+        "Insufficient": "Insufficient balance",
+        "Success": "Tips will be sent to your wallet shortly."
+      },
+      "Empty": {
+        "Title": "Oof. Your tipping jar is empty. ",
+        "Subtitle": "Start posting or importing social media content, tips are coming your way!"
+      },
+      "Claim_All": "Claim all",
+      "Claim": "Claim",
+      "Switch": "Switch network to claim",
+      "Reference": {
+        "Title": "Reference verification",
+        "Desc": "Verify your reference and start claiming your tips. To be processed, you need to pay a maximum gas fee of {{txFee}} {{token}}.",
+        "Button": "Verify reference",
+        "Button_View": "View total Tips"
+      },
+      "Total_Tip": {
+        "Title": "Total Tips",
+        "Subtitle": "You can claim those tips after verifying your reference."
+      }
+    },
+    "Manage": {
+      "Alert": {
+        "Copy_Msg": "Wallet address copied to clipboard!",
+        "Connect": "Your wallet account successfully connected!",
+        "Disconnect": {
+          "Confirm": {
+            "Title": "Disconnect Wallet",
+            "Subtitle_Polkadot": "Are you sure you want to disconnect {{name}} wallet from your account?",
+            "Subtitle_Near": "You will be redirected to {{name}} wallet page. After being redirected, select wallet you wish to disconnect, and sign the transaction.",
+            "Btn_Confirm": "Disconnect Wallet",
+            "Btn_Cancel": "Cancel"
+          },
+          "Success": {
+            "Title": "Wallet Disconnected",
+            "Subtitle": "Selected wallets have been disconnected successfully",
+            "Btn_Dismiss": "Dismiss"
+          }
+        },
+        "ErrorConnect": "This wallet is connected to another account.",
+        "ErrorDisconnect": "The wallet account is failed to disconnect!"
+      },
+      "Btn_Connect": "Connect",
+      "Btn_Disconnect": "Disconnect"
+    }
+  },
+  "TopNavbar": {
+    "Title": {
+      "Friends": "Friends",
+      "Social_Media": "Social Media",
+      "Wallet": "Wallet",
+      "Experience": "Timeline",
+      "Profile": "Profile",
+      "Settings": "Settings",
+      "Notification": "Notification",
+      "Timeline": "Timeline",
+      "NFT": "NFT & Social Token",
+      "Trends": "Trends"
+    },
+    "Subtitle": {
+      "Friends": "{{total}} Friends",
+      "Notification": "{{total}} new notifications",
+      "SocialMedia": "{{total}} account connected",
+      "Wallet": "View your balance or manage your wallet",
+      "Profile": "Profile Detail",
+      "Experience_Create": "Create Timeline",
+      "Experience_Clone": "Clone Timeline",
+      "Experience_Edit": "Edit Timeline",
+      "NFT": "Underway",
+      "Myriad_Town": "Myriad lies at the crossroads of real life and digital interaction"
+    }
+  },
+  "Dropzone": {
+    "Placeholder": "File must be .jpeg or .png",
+    "Btn_Upload": "Upload Image",
+    "Btn_Reupload": "Reupload Picture",
+    "Btn_Add_Image": "Add Image",
+    "Btn_Upload_Video": "Add {{type}}",
+    "Btn_Replace_Video": "Replace {{type}}",
+    "Btn": {
+      "Exp_Add": "Add picture",
+      "Exp_Change": "Change picture"
+    },
+    "Error_File_Large": "File is larger than {{maxSize}}Mb",
+    "Video": {
+      "Not_Preview": "Video preview will be available after you confirm its upload.",
+      "Not_Support": "Video encoding not supported."
+    }
+  },
+  "Date": {
+    "Secs": "secs",
+    "Minute": "mins",
+    "Hours": "hours",
+    "Days": "days",
+    "Weeks": "weeks",
+    "Months": "months",
+    "Years": "years",
+    "Just_Now": "just now",
+    "Yesterday": "yesterday",
+    "Result": "{{date}} ago"
+  },
+  "Loading": {
+    "Load_More": "Load more",
+    "Loading_More": "Loading more"
+  },
+  "Cookies": {
+    "Text_1": "This website uses cookies to enhance your online timeline.",
+    "Text_2": "Terms and Conditions"
+  },
+  "Banner": {
+    "Demo1": "Your posts will be regularly deleted from Myriad Testnet. Visit",
+    "Demo2": "to connect with the real world.",
+    "Banned": "Your account has been temporarily banned because after we review the reports, you are violating the rules. Therefore, you are restricted from taking action in Myriad."
+  },
+  "Authorization": {
+    "Forbidden": "You are forbidden to do this action."
+  },
+  "Tooltip": {
+    "Chat": "Chat feature, coming soon",
+    "Trending_Exp": "Show the top 10 timelines based on total subscribers and clone in 24 hours."
+  },
+  "Myriad_Town": {
+    "Title_Head": "{{appname}} - Myriad.Town",
+    "Visit": "Visit Myriad.Town",
+    "Fullscreen": "Play in fullscreen",
+    "Toaster_Esc": "Press Esc to exit from fullscreen",
+    "Disclaimer": "The Myriad Metaverse integration is an early beta feature. If you encounter problems, or if you want the best timeline on the Myriad Metaverse, go to"
+  },
+  "LiteVersion": {
+    "Cancel": "Cancel",
+    "Confirm": "Confirm",
+    "CreateAccountEmail": "Create a new account",
+    "CreateAccountEmailDesc": "You will create a new account. You can still add a crypto wallet later.",
+    "LimitDescProfile": "is using lite version of Myriad. You can only send a friend request to users with active wallet.",
+    "LimitTitleExperience": "Create Timeline Limit Reached!",
+    "LimitTitleFriends": "Unable to Add Friend",
+    "LimitDescExperience": "You are currently using lite version of Myriad. You can only create up to 5 timelines! Connect Web 3.0 Wallet to create more timeline",
+    "LimitDescFriends": "Oops! You need to connect your wallet to do that. Alternatively, you can follow timelines curated by {{username}}",
+    "ViewTimelines": "View timelines",
+    "MaybeLater": "Maybe Later",
+    "ConnectWallet": "Connect Web 3.0 Wallet",
+    "LimitTitlePost": "Wow! That's a lot of posting! ",
+    "LimitDescPost": "To prevent spam, we are temporarily limiting posts to 15 per day. You can still browse Myriad to your heart's content!"
+  },
+  "Visibilities": {
+    "PostVisibilities": "This post is only visible to its author and added people",
+    "Custom": "Custom",
+    "Hidden": "The owner might be changed their privacy settings, shared it for certain group of people or it’s been deleted",
+    "Back": "Back to Home"
+  },
+  "ExclusiveContent": {
+    "Create": "Create Exclusive Content",
+    "Add": "Add Exclusive Content",
+    "Attach": "Attach Exclusive Content",
+    "Remove": "Remove Exclusive Content",
+    "Available": "Reveal Exclusive Content",
+    "Label": {
+      "Attach": "Attach",
+      "ExclusiveContent": "Exclusive Content",
+      "ExclusiveContentPrice": "Exclusive Content Price",
+      "ChangeCurrency": "Change Currency",
+      "Fee": "5% platform fee will be deducted from your payment",
+      "NetworkError": "Network Error",
+      "Rethink": "No, Let me rethink",
+      "SwitchNetwork": "Switch Network",
+      "UnlockNow": "Unlock Now"
+    },
+    "Placeholder": {
+      "AddPrice": "Add Price",
+      "Editor": "The content you add here will be revealed to your audience upon payment."
+    },
+    "Text": {
+      "NetworkError": "Payment only available in {{accept}} now you are in {{current}}. Switch network to proceed",
+      "NotLogin": "This is a paid content. Sign in with your crypto wallet to view it.",
+      "Web2User": "You don’t have any wallet connected to your account. Let’s try to connect your wallet to reveal this exclusive content."
+    },
+    "Prompt_Success": {
+      "Title": "Unlock Content Success"
+    }
+  },
+  "Sign_In": {
+    "method": "Sign-in Methods",
+    "choose": "Choose your sign-in methods",
+    "Wallet": {
+      "title": "Crypto Wallet",
+      "desc": "Sign in via Web 3.0",
+      "tooltip": "Sign-in with a crypto wallet to unlock all the features of Myriad-Social."
+    },
+    "Email": {
+      "title": "Email",
+      "desc": "Sign in via Web 2.0",
+      "tooltip": "Sign-in via email lets you use many of Myriad’s features. You can get the real deal later by adding a crypto wallet address in your wallet settings. We will not use your email for commercial purposes."
+    }
+  }
+}

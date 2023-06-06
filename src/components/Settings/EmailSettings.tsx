@@ -23,6 +23,7 @@ import { useStyles } from './Settings.styles';
 
 import { PromptComponent } from 'src/components/atoms/Prompt/prompt.component';
 import { useUserHook } from 'src/hooks/use-user.hook';
+import i18n from 'src/locale';
 import { RootState } from 'src/reducers';
 import {
   sendVerificationEmail,
