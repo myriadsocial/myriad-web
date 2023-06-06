@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme: Theme) =>
       width: 312,
       position: 'sticky',
       top: 5,
+      bottom: 20,
       [theme.breakpoints.down('md')]: {
         width: 290,
       },
@@ -30,6 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
       rowGap: 12,
       position: 'sticky',
       top: 5,
+      bottom: 20,
 
       [theme.breakpoints.down('md')]: {
         width: 290,
@@ -70,6 +72,7 @@ const useStyles = makeStyles((theme: Theme) =>
       width: 312,
       position: 'sticky',
       top: 5,
+      bottom: 20,
 
       [theme.breakpoints.down('md')]: {
         width: 290,
@@ -86,6 +89,7 @@ const useStyles = makeStyles((theme: Theme) =>
       rowGap: theme.spacing(1),
       position: 'sticky',
       top: 5,
+      bottom: 20,
 
       [theme.breakpoints.down('md')]: {
         width: 290,
