@@ -12,9 +12,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     firstCol: {
       width: 312,
-      position: 'sticky',
-      top: 5,
-      bottom: 20,
       [theme.breakpoints.down('md')]: {
         width: 290,
       },
@@ -29,9 +26,10 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'column',
       rowGap: 12,
-      position: 'sticky',
+      position: 'fixed',
       top: 5,
       bottom: 20,
+      overflowY: 'scroll',
 
       [theme.breakpoints.down('md')]: {
         width: 290,
@@ -70,9 +68,9 @@ const useStyles = makeStyles((theme: Theme) =>
 
     thirdCol: {
       width: 312,
-      position: 'sticky',
-      top: 5,
-      bottom: 20,
+      // position: 'sticky',
+      // top: 5,
+      // bottom: 20,
 
       [theme.breakpoints.down('md')]: {
         width: 290,
@@ -87,10 +85,11 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'column',
       rowGap: theme.spacing(1),
-      position: 'sticky',
+      position: 'fixed',
       top: 5,
       bottom: 20,
-
+      overflowY: 'scroll',
+      overflowX: 'hidden',
       [theme.breakpoints.down('md')]: {
         width: 290,
       },
