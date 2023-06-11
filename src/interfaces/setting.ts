@@ -9,7 +9,7 @@ export type NotificationSettingType =
   | 'tips'
   | 'followers'
   | 'upvotes';
-export type LanguageSettingType = 'en' | 'id' | 'ru';
+export type LanguageSettingType = 'en' | 'id' | 'ru' | 'fra';
 
 export type PrivacySettings = Record<PrivacySettingType, PrivacyType>;
 export type NotificationSettingItems = Record<NotificationSettingType, boolean>;
