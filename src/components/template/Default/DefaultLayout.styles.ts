@@ -30,6 +30,9 @@ const useStyles = makeStyles((theme: Theme) =>
       top: 5,
       bottom: 20,
       overflowY: 'scroll',
+      scrollbarWidth: 'none',
+      msOverflowStyle: 'none',
+      '&::-webkit-scrollbar': { display: 'none' },
 
       [theme.breakpoints.down('md')]: {
         width: 290,
@@ -90,6 +93,9 @@ const useStyles = makeStyles((theme: Theme) =>
       bottom: 20,
       overflowY: 'scroll',
       overflowX: 'hidden',
+      scrollbarWidth: 'none',
+      msOverflowStyle: 'none',
+      '&::-webkit-scrollbar': { display: 'none' },
       [theme.breakpoints.down('md')]: {
         width: 290,
       },
