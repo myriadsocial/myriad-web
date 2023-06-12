@@ -27,4 +27,8 @@ export const settingLanguageOptions: MenuOptions<LanguageSettingType>[] = [
     id: 'ru',
     title: 'русский язык',
   },
+  {
+    id: 'fra',
+    title: 'Français',
+  },
 ];
