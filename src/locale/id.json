@@ -1042,7 +1042,11 @@
       "About_Subtitle": "Ketahui lebih banyak tentang Myriad",
       "Feedback_Title": "Berikan Tanggapan",
       "Feedback_Subtitle": "Silahkan berikan timeline kamu melalui email",
-      "Version_Title": "Versi Myriad"
+      "Version_Title": "Versi Myriad",
+      "Email_Title": "Pengaturan Email",
+      "Email_Subtitle": "Atur alamat email sebagai metode lain untuk login",
+      "Email_Address": "Alamat Email",
+      "Email_Placeholder": "Tambah Alamat Email"
     }
   },
   "SocialMedia": {
@@ -1347,5 +1351,6 @@
       "desc": "Sign in melalui Web 2.0",
       "tooltip": "Sign-in melalui email untuk mendapatkan banyak fitur dari myriad. Anda dapat mendapatkan seluruhnya nanti dengan menambahkan dompet pada pengaturan dompet. Kami tidak akan menggunakan email anda demi kepentingan komersial."
     }
-  }
+  },
+  "TrendingHashtag": "Hashtag Trending Mingguan"
 }

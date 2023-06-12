@@ -53,7 +53,7 @@
       "EmptyFollow": {
         "Text_1": "Follow Timelines to Stay Up-to-Date",
         "Text_2": "Looks like you're not following any timelines yet! By following timelines, you can see all the latest updates from the people and topics that matter to you.",
-        "Btn": "Discover Timeline"
+        "Btn": "Discover Timelines"
       }
     },
     "Preview": {
@@ -225,7 +225,7 @@
       },
       "People": {
         "Title": "Friends",
-        "Desc": "Start making connections. Sign in now to add and manage your friend list."
+        "Desc": "Start making connections. Sign in now to add and manage your friends list."
       }
     }
   },
@@ -304,7 +304,7 @@
         "No_Account_Description": "You don't seem to have an account on {{instance_name}}. Do you wish to create a new account on {{instance_name}}?",
         "No_Account_Cancel": "No, Select Others",
         "No_Account_Confirm": "Sign Out",
-        "Switch": "Switch Instance"
+        "Switch": "Switch Instances"
       }
     },
     "Profile": {
@@ -375,7 +375,7 @@
       "Alert": {
         "Success_Block": "User successfully blocked",
         "Success_Req": "Friend request confirmed",
-        "Unfriend": "{{name}} has been removed from your friend lists",
+        "Unfriend": "{{name}} has been removed from your friends list",
         "Copy": "Profile link copied!"
       },
       "Prompt": {
@@ -834,14 +834,14 @@
     "Title": "{{appname}} - Friends",
     "Container": {
       "Title": "Friends",
-      "Tab_Panel_1": "Friend List",
+      "Tab_Panel_1": "Friends List",
       "Tab_Panel_2": "Friend Request"
     },
     "List": {
       "Mutual": "{{total}} mutual friends"
     },
     "Alert": {
-      "Removed": "{{name}} has been removed from your friend lists",
+      "Removed": "{{name}} has been removed from your friends list",
       "Block": "User successfully blocked"
     },
     "Prompt_Wallet": {
@@ -870,7 +870,7 @@
     },
     "Empty": {
       "Friend_List": {
-        "Title": "Friend list is empty",
+        "Title": "Friends list is empty",
         "Subtitle": "Find or invite your friends to Myriad 😉"
       },
       "Friend_Request": {
@@ -1047,7 +1047,11 @@
       "About_Subtitle": "Read more about Myriad",
       "Feedback_Title": "Submit Feedback",
       "Feedback_Subtitle": "Please feel free to provide feedback by sending us an email.",
-      "Version_Title": "Myriad version"
+      "Version_Title": "Myriad version",
+      "Email_Title": "Email Configuration",
+      "Email_Subtitle": "Set email address for another method of login",
+      "Email_Address": "Email Address",
+      "Email_Placeholder": "Add Email Address"
     }
   },
   "SocialMedia": {
@@ -1352,5 +1356,6 @@
       "desc": "Sign in via Web 2.0",
       "tooltip": "Sign-in via email lets you use many of Myriad’s features. You can get the real deal later by adding a crypto wallet address in your wallet settings. We will not use your email for commercial purposes."
     }
-  }
+  },
+  "TrendingHashtag": "Top Weekly Hashtags"
 }

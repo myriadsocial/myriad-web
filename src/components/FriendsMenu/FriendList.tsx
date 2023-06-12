@@ -277,7 +277,7 @@ export const FriendListComponent: React.FC<FriendListProps> = props => {
         />
       );
     return (
-      <Empty title={'Nothing to see here!'} subtitle="Friend list is empty." />
+      <Empty title={'Nothing to see here!'} subtitle="Friends list is empty." />
     );
   }
 

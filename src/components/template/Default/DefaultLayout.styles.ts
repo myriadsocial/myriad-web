@@ -96,6 +96,7 @@ const useStyles = makeStyles((theme: Theme) =>
       scrollbarWidth: 'none',
       msOverflowStyle: 'none',
       '&::-webkit-scrollbar': { display: 'none' },
+
       [theme.breakpoints.down('md')]: {
         width: 290,
       },

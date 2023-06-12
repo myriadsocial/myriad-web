@@ -1,4 +1,5 @@
 import enMessages from './en.json';
+import fraMessages from './fra.json';
 import idMessages from './id.json';
 import ruMessages from './ru.json';
 
@@ -8,6 +9,7 @@ import { initReactI18next } from 'react-i18next';
 
 export const allMessage = {
   en: enMessages,
+  fra: fraMessages,
   id: idMessages,
   ru: ruMessages,
 };
@@ -18,6 +20,7 @@ export const optionDetection = {
 
 const resources = {
   en: { translation: enMessages },
+  fra: { translation: fraMessages },
   id: { translation: idMessages },
   ru: { translation: ruMessages },
 };

@@ -1029,7 +1029,11 @@
       "About_Subtitle": "Читать больше о Myriad",
       "Feedback_Title": "Обратная связь готова",
       "Feedback_Subtitle": "Будем рады получить Вашу обратную связь, отправленную по email",
-      "Version_Title": "Версия Myriad"
+      "Version_Title": "Версия Myriad",
+      "Email_Title": "Email Configuration",
+      "Email_Subtitle": "Set email address for another method of login",
+      "Email_Address": "Email Address",
+      "Email_Placeholder": "Add Email Address"
     }
   },
   "SocialMedia": {
@@ -1333,5 +1337,6 @@
       "desc": "Sign in via Web 2.0",
       "tooltip": "Sign-in via email lets you use many of Myriad’s features. You can get the real deal later by adding a crypto wallet address in your wallet settings. We will not use your email for commercial purposes."
     }
-  }
+  },
+  "TrendingHashtag": "Top Weekly Hashtags"
 }
