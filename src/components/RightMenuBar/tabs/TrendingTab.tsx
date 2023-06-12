@@ -4,9 +4,8 @@ import { Typography } from '@material-ui/core';
 
 import { useStyles } from './Tab.style';
 
-import i18n from 'src/locale';
-
 import { TrendingListContainer } from 'src/components/Trending';
+import i18n from 'src/locale';
 
 export const TrendingTab: React.FC = () => {
   const styles = useStyles();
