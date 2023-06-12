@@ -1337,5 +1337,6 @@
       "desc": "Sign in via Web 2.0",
       "tooltip": "Sign-in via email lets you use many of Myriad’s features. You can get the real deal later by adding a crypto wallet address in your wallet settings. We will not use your email for commercial purposes."
     }
-  }
+  },
+  "TrendingHashtag": "Top Weekly Hashtags"
 }
