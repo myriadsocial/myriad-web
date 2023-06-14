@@ -9,12 +9,12 @@ import { PrivateProfile } from '../PrivateProfile';
 import { PostsListContainer } from 'components/PostList';
 import { TimelineFilterContainer } from 'components/TimelineFilter';
 import ShowIf from 'components/common/show-if.component';
+import { useQueryParams } from 'src/hooks/use-query-params.hooks';
 import { PrivacySettings } from 'src/interfaces/setting';
 import { TimelineFilterFields } from 'src/interfaces/timeline';
 import { User } from 'src/interfaces/user';
 import { RootState } from 'src/reducers';
 import { ProfileState } from 'src/reducers/profile/reducer';
-import { useQueryParams } from 'src/hooks/use-query-params.hooks';
 
 type ProfilePostsTabProps = {
   anonymous?: boolean;
@@ -26,7 +26,7 @@ type ProfilePostsTabProps = {
 
 export const ProfilePostsTab: React.FC<ProfilePostsTabProps> = props => {
   const { filters, filterType, user } = props;
-  const {query} = useQueryParams()
+  const { query } = useQueryParams();
   const [timelinePost, setTimelinePost] = useState(0); // this one used with total post to prevent race condition
   const { detail: profile } = useSelector<RootState, ProfileState>(
     state => state.profileState,
