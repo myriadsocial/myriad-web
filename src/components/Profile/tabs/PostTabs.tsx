@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 
 import { Grid } from '@material-ui/core';
+
 import { EmptyProfilePost } from '../EmptyProfilePost';
 import { PrivateProfile } from '../PrivateProfile';
 
@@ -24,7 +25,7 @@ type ProfilePostsTabProps = {
 
 export const ProfilePostsTab: React.FC<ProfilePostsTabProps> = props => {
   const { filters, filterType, user } = props;
-  const [timelinePost , setTimelinePost] = useState(0); // this one used with total post to prevent race condition
+  const [timelinePost, setTimelinePost] = useState(0); // this one used with total post to prevent race condition
   const { detail: profile } = useSelector<RootState, ProfileState>(
     state => state.profileState,
   );
@@ -32,18 +33,14 @@ export const ProfilePostsTab: React.FC<ProfilePostsTabProps> = props => {
     state => state.configState.settings.privacy,
     shallowEqual,
   );
-  const totalPost = useSelector<RootState, number>(
-    state => {
-      if (state.timelineState.meta.totalItemCount > timelinePost) {
-        setTimelinePost(state.timelineState.meta.totalItemCount);
-        return state.timelineState.meta.totalItemCount
-      }
-      else {
-        return timelinePost
-      }
-    },
-    shallowEqual,
-  );
+  const totalPost = useSelector<RootState, number>(state => {
+    if (state.timelineState.meta.totalItemCount > timelinePost) {
+      setTimelinePost(state.timelineState.meta.totalItemCount);
+      return state.timelineState.meta.totalItemCount;
+    } else {
+      return timelinePost;
+    }
+  }, shallowEqual);
 
   /* const totalPost = useSelector<RootState, number>(
     state => state.timelineState.meta.totalItemCount,
