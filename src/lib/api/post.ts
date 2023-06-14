@@ -145,12 +145,12 @@ export const getPost = async (
 
     return post;
   });
-  if (fields.owner) {
+  if (fields?.owner) {
     console.log(fields.owner);
-  data.data.filter(post => {
-    return (post.createdBy === fields.owner);
-  });
-}
+    data.data.filter(post => {
+      return post.createdBy === fields.owner;
+    });
+  }
 
   return data;
 };
