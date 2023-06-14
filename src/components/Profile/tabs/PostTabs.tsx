@@ -9,6 +9,7 @@ import { PrivateProfile } from '../PrivateProfile';
 import { PostsListContainer } from 'components/PostList';
 import { TimelineFilterContainer } from 'components/TimelineFilter';
 import ShowIf from 'components/common/show-if.component';
+import { useQueryParams } from 'src/hooks/use-query-params.hooks';
 import { PrivacySettings } from 'src/interfaces/setting';
 import { TimelineFilterFields } from 'src/interfaces/timeline';
 import { User } from 'src/interfaces/user';
@@ -25,6 +26,7 @@ type ProfilePostsTabProps = {
 
 export const ProfilePostsTab: React.FC<ProfilePostsTabProps> = props => {
   const { filters, filterType, user } = props;
+  const { query } = useQueryParams();
   const [timelinePost, setTimelinePost] = useState(0); // this one used with total post to prevent race condition
   const { detail: profile } = useSelector<RootState, ProfileState>(
     state => state.profileState,
@@ -70,7 +72,7 @@ export const ProfilePostsTab: React.FC<ProfilePostsTabProps> = props => {
       </ShowIf>
 
       <ShowIf condition={totalPost > 0}>
-        <PostsListContainer filters={filters} user={user} />
+        <PostsListContainer filters={filters} query={query} user={user} />
       </ShowIf>
     </>
   );

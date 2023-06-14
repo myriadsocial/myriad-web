@@ -47,7 +47,7 @@ const DEFAULT_EXPERIENCE: ExperienceProps = {
   allowedTags: [],
   people: [],
   prohibitedTags: [],
-  visibility: '',
+  visibility: 'public',
   selectedUserIds: [],
 };
 
@@ -118,7 +118,7 @@ export const ExperienceTimelinePost: React.FC<ExperienceEditorProps> =
       setNewExperience({ ...newExperience, name: event.target.value });
     };
     const handleVisibility = selected => {
-      setNewExperience({ ...newExperience, visibility: selected });
+      setNewExperience({ ...newExperience, visibility: selected ?? 'public' });
       setSelectedVisibility(visibilityList.find(v => v.id === selected));
     };
 
@@ -132,14 +132,7 @@ export const ExperienceTimelinePost: React.FC<ExperienceEditorProps> =
         selectedVisibility && selectedVisibility?.id === 'selected_user'
           ? selectedUserIds.length > 0
           : !isEmpty(selectedVisibility?.id);
-      const validVisibility = !isEmpty(selectedVisibility?.id);
-      return (
-        validName &&
-        validTags &&
-        validPeople &&
-        validVisibility &&
-        validSelectedUserIds
-      );
+      return validName && validTags && validPeople && validSelectedUserIds;
     };
 
     const handleEnabledSave = () => {
