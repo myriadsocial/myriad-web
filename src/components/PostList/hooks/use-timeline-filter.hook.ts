@@ -35,7 +35,7 @@ export const useTimelineFilter = (filters?: TimelineFilterFields) => {
     { posts: Post[]; empty: boolean; loading: boolean; hasMore: boolean }
   >(
     state => ({
-      posts: state.timelineState.posts,
+      posts: filters?.owner ? state.timelineState.posts.filter(posts => (posts.createdBy === filters?.owner)) : state.timelineState.posts,
       empty:
         state.timelineState.meta.totalItemCount === 0 &&
         !state.timelineState.loading,
