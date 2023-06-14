@@ -60,7 +60,7 @@ type PostCreateProps = {
   onSearchPeople: (query: string) => void;
   onSubmit: (
     post: Partial<Post> | string,
-    attributes?: Pick<Post, 'NSFWTag' | 'visibility'>,
+    attributes?: Pick<Post, 'NSFWTag' | 'visibility' | 'selectedTimelineIds'>,
   ) => void;
 };
 
@@ -138,15 +138,12 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
     }
   };
 
-  const handleCloseExperience = () => {
-    setShowTimelineCreate(false);
-  };
-
   const handleSubmit = () => {
     if (activeTab === 'import' && importUrl) {
       onSubmit(importUrl, {
         NSFWTag: post.NSFWTag,
         visibility: post.visibility ?? PostVisibility.PUBLIC,
+        selectedTimelineIds: timelineId,
       });
 
       setImport(undefined);
@@ -281,6 +278,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
     setImport(undefined);
     setShowExclusive(false);
     setExclusiveContent(null);
+    setShowTimelineCreate(false);
     setEditorValue('');
     setTimelineId([]);
     setExperienceVisibility([]);
@@ -348,7 +346,8 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
   };
   const onSave = (attributes: ExperienceProps) => {
     saveExperience(attributes);
-    handleCloseExperience();
+    fetchUserExperiences();
+    setShowTimelineCreate(false);
   };
 
   const fetchUserExperiences = async () => {
@@ -358,7 +357,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
       page,
     );
 
-    setUserExperiences([...userExperiences, ...experiences]);
+    setUserExperiences([...experiences]);
 
     if (meta.currentPage < meta.totalPageCount) setPage(page + 1);
   };
@@ -596,7 +595,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
             onImageUpload={onImageUpload}
             onSave={onSave}
             user={user}
-            onCancel={handleCloseExperience}
+            onCancel={() => setShowTimelineCreate(false)}
           />
         </div>
       </ShowIf>
