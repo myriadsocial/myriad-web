@@ -40,9 +40,6 @@ type PostsListContainerProps = {
 
 export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
   const { query, filters, user } = props;
-  console.log(query);
-  console.log(filters);
-  console.log(user);
   const styles = useStyles();
   const { posts, loading, empty, hasMore, filterTimeline, nextPage, clear } =
     useTimelineFilter(filters);
@@ -84,18 +81,6 @@ export const PostsListContainer: React.FC<PostsListContainerProps> = props => {
         <PostSkeleton />
       </Grid>
     );
-
-  // if (empty)
-  //   return (
-  //     <EmptyResult
-  //       emptyContent={
-  //         (query.type && query.type === TimelineType.EXPERIENCE) ||
-  //         (!query.type && user)
-  //           ? EmptyContentEnum.DISCOVER
-  //           : EmptyContentEnum.POST
-  //       }
-  //     />
-  //   );
 
   return (
     <div className={styles.root}>
