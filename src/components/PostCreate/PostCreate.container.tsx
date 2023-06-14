@@ -50,6 +50,12 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   useEffect(() => {
     dispatch(loadUsers());
   }, []);
+  useEffect(() => {
+    if (redirect) {
+      console.log(dialogFailedImport.postId);
+      router.push({ pathname: `/post/${dialogFailedImport.postId}` });
+    }
+  }, [redirect]);
 
   const handleSearchPeople = useCallback(
     (query: string) => {
@@ -113,6 +119,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
                   `Home.RichText.Prompt_Import.Error.${statusCode}`,
                 );
                 if (statusCode === 409) {
+                  setDialogFailedImport({ open: true, message, postId });
                   setRedirect(true);
                   user.fullAccess
                     ? enqueueSnackbar({
@@ -174,7 +181,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   );
 
   if (!user) return null;
-
+  if (!redirect) {
   return (
     <>
       <PostCreate
@@ -185,8 +192,6 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
         onSubmit={submitPost}
         isMobile={isMobile}
       />
-      {redirect &&
-        router.push({ pathname: `/post/${dialogFailedImport.postId}` })}
       <PromptComponent
         title={i18n.t('Home.RichText.Prompt_Import.Title')}
         subtitle={dialogFailedImport.message}
@@ -225,6 +230,10 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
       </PromptComponent>
     </>
   );
+          }
+          else {
+            return null ;
+          }
 };
 
 export default PostCreateContainer;
