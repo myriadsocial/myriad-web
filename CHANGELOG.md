@@ -1,5 +1,69 @@
 # Changelog
 
+## [2.4.0](https://github.com/myriadsocial/myriad-web/compare/2.3.3...2.4.0) (2023-06-15)
+
+
+### Features
+
+* add floating button to create post ([#1790](https://github.com/myriadsocial/myriad-web/issues/1790)) ([c88b0c8](https://github.com/myriadsocial/myriad-web/commit/c88b0c8de850c37ed0a652b8b8f98e1a891693cf))
+* add post directly to timeline ([#1802](https://github.com/myriadsocial/myriad-web/issues/1802)) ([5be34cb](https://github.com/myriadsocial/myriad-web/commit/5be34cbb9163505722c3ddcaae687bc0170c9ff5))
+* dynamic image url ([#1783](https://github.com/myriadsocial/myriad-web/issues/1783)) ([8794df3](https://github.com/myriadsocial/myriad-web/commit/8794df3a32d8093cd6491e6fd7a336896172e913))
+* followers notification ([#1789](https://github.com/myriadsocial/myriad-web/issues/1789)) ([237091a](https://github.com/myriadsocial/myriad-web/commit/237091a1bf84c906fac793694cfdb3743459ea9a))
+* indicator new post timeline ([#1828](https://github.com/myriadsocial/myriad-web/issues/1828)) ([483d1ad](https://github.com/myriadsocial/myriad-web/commit/483d1ad2fdfa25e16a03ebb156342c84c3525221))
+* new quick create timeline ([#1812](https://github.com/myriadsocial/myriad-web/issues/1812)) ([2aee838](https://github.com/myriadsocial/myriad-web/commit/2aee8380639412e655fa8c175cafd3116c23e2ae))
+* notification setting ([#1809](https://github.com/myriadsocial/myriad-web/issues/1809)) ([71a4cea](https://github.com/myriadsocial/myriad-web/commit/71a4cea154140c006f9be9dca24ce320eab26147))
+* redirect url for success near connected ([#1796](https://github.com/myriadsocial/myriad-web/issues/1796)) ([9a7258f](https://github.com/myriadsocial/myriad-web/commit/9a7258fb5515175aabc78c0945d66428ae01aab8))
+* refetch user timeline after add to timeline ([#1833](https://github.com/myriadsocial/myriad-web/issues/1833)) ([41b91d4](https://github.com/myriadsocial/myriad-web/commit/41b91d45a053d263dc69b83fafb7509a75ad8754))
+* revamp ui mobile home ([#1813](https://github.com/myriadsocial/myriad-web/issues/1813)) ([155c9bf](https://github.com/myriadsocial/myriad-web/commit/155c9bfa3e86d775e0180892827afe380233ca08))
+* update indonesia translation ([3d23e65](https://github.com/myriadsocial/myriad-web/commit/3d23e65cbc6ca5f449361a7fa02952d17621fc27))
+* update indonesian translation ([#1792](https://github.com/myriadsocial/myriad-web/issues/1792)) ([3d23e65](https://github.com/myriadsocial/myriad-web/commit/3d23e65cbc6ca5f449361a7fa02952d17621fc27))
+* upvotes notification ([#1786](https://github.com/myriadsocial/myriad-web/issues/1786)) ([93130ef](https://github.com/myriadsocial/myriad-web/commit/93130ef852f717a6372ff64851504ed8770d985c))
+
+
+### Bug Fixes
+
+* add post to timeline ([#1803](https://github.com/myriadsocial/myriad-web/issues/1803)) ([4265a55](https://github.com/myriadsocial/myriad-web/commit/4265a553e752471d3f37368b9aa32e71990d5001))
+* add selected timeline id on import post ([#1859](https://github.com/myriadsocial/myriad-web/issues/1859)) ([cdcde1f](https://github.com/myriadsocial/myriad-web/commit/cdcde1fb3b224307a22040ad7f024e9bde285548))
+* add selected timeline id on import post, remove view details timeline on post ([cdcde1f](https://github.com/myriadsocial/myriad-web/commit/cdcde1fb3b224307a22040ad7f024e9bde285548))
+* add timeline on mobile post ([#1863](https://github.com/myriadsocial/myriad-web/issues/1863)) ([c415e5d](https://github.com/myriadsocial/myriad-web/commit/c415e5d443a4826e86879b2353229323d545f035))
+* Adjustment on Create Post to Timeline ([#1824](https://github.com/myriadsocial/myriad-web/issues/1824)) ([2c20069](https://github.com/myriadsocial/myriad-web/commit/2c20069a9017f07a027cfc98a3530aa67831e728))
+* anonymous ([#1800](https://github.com/myriadsocial/myriad-web/issues/1800)) ([0d953a9](https://github.com/myriadsocial/myriad-web/commit/0d953a9088fceac9f532046328c3596ffe45e735))
+* behaviour subscribe/unsubscribe discoverd ([#1808](https://github.com/myriadsocial/myriad-web/issues/1808)) ([2accc05](https://github.com/myriadsocial/myriad-web/commit/2accc0561220e6b391961e8fbd76c5d3f7dbe9f6))
+* change create timeline directly ([#1832](https://github.com/myriadsocial/myriad-web/issues/1832)) ([3d5c104](https://github.com/myriadsocial/myriad-web/commit/3d5c104779484c88649876fe163adcd4785b8c8c))
+* change layout create timeline direct post ([3d5c104](https://github.com/myriadsocial/myriad-web/commit/3d5c104779484c88649876fe163adcd4785b8c8c))
+* change message notification ([#1819](https://github.com/myriadsocial/myriad-web/issues/1819)) ([ef8cd16](https://github.com/myriadsocial/myriad-web/commit/ef8cd160080d61351c6ba6ab26d4bf51f24ad4fd))
+* Disable Image Paste on Post Create ([#1827](https://github.com/myriadsocial/myriad-web/issues/1827)) ([919d78e](https://github.com/myriadsocial/myriad-web/commit/919d78e4cc9b7cb66284096a9c03556d5b76a407))
+* fixed mentions data on post creation ([#1779](https://github.com/myriadsocial/myriad-web/issues/1779)) ([de866c2](https://github.com/myriadsocial/myriad-web/commit/de866c2b2e1fd395f9995f0ab3f8149c66b2b7dc))
+* french localization ([#1853](https://github.com/myriadsocial/myriad-web/issues/1853)) ([78f79ca](https://github.com/myriadsocial/myriad-web/commit/78f79cae8de9589753e4ef954d508301d955bb58))
+* grammatical error when time is singular ([#1782](https://github.com/myriadsocial/myriad-web/issues/1782)) ([9a863d6](https://github.com/myriadsocial/myriad-web/commit/9a863d69442254f12d9a6313c2259c6cc23592a7))
+* handle claim tip with debio ([#1773](https://github.com/myriadsocial/myriad-web/issues/1773)) ([2405c04](https://github.com/myriadsocial/myriad-web/commit/2405c04a605509d514884618a07f522b17494ae8))
+* localization ([#1843](https://github.com/myriadsocial/myriad-web/issues/1843)) ([1607db3](https://github.com/myriadsocial/myriad-web/commit/1607db370cf818a08408a1916c17991ef1d234a3))
+* localization ([#1844](https://github.com/myriadsocial/myriad-web/issues/1844)) ([cbdf3e3](https://github.com/myriadsocial/myriad-web/commit/cbdf3e3378c59baa63df11c9a2f3e96f03364077))
+* near tip redirect ([#1777](https://github.com/myriadsocial/myriad-web/issues/1777)) ([8941358](https://github.com/myriadsocial/myriad-web/commit/8941358d501a208f9fe800aff4d5aa8761a8f1db))
+* post date & add post to timeline ([#1787](https://github.com/myriadsocial/myriad-web/issues/1787)) ([30ec63e](https://github.com/myriadsocial/myriad-web/commit/30ec63e16e9a604adef2ef2163941bf107dd1783))
+* post not filtered on profile ([#1861](https://github.com/myriadsocial/myriad-web/issues/1861)) ([72484a0](https://github.com/myriadsocial/myriad-web/commit/72484a047ac5391b86721530d9250918b278b899))
+* profile post not appearing ([#1857](https://github.com/myriadsocial/myriad-web/issues/1857)) ([35f736d](https://github.com/myriadsocial/myriad-web/commit/35f736def9514d0993677e6287f2cb12d93b115d))
+* redirect if post already imported ([#1829](https://github.com/myriadsocial/myriad-web/issues/1829)) ([6535adc](https://github.com/myriadsocial/myriad-web/commit/6535adc16019b725778d8aa2d5ecc0d4d20ccc91))
+* redirect if post already imported ([#1862](https://github.com/myriadsocial/myriad-web/issues/1862)) ([65cddb8](https://github.com/myriadsocial/myriad-web/commit/65cddb8fc03f88ffea0332691120b5c46861bf41))
+* remove limitation when clone experience ([#1815](https://github.com/myriadsocial/myriad-web/issues/1815)) ([d229c16](https://github.com/myriadsocial/myriad-web/commit/d229c16ca5d3478a9699673e80b826dcbb00f52e))
+* remove scroll to top after add to timeline ([#1776](https://github.com/myriadsocial/myriad-web/issues/1776)) ([9219ed4](https://github.com/myriadsocial/myriad-web/commit/9219ed43a71b3d4b2cf4c9508674fb3d0f911422))
+* resolve user not found when edit experience ([a153285](https://github.com/myriadsocial/myriad-web/commit/a1532850a15e751a3e0bbfccbce1dc828800368e))
+* selected user ids interfaces on experience ([#1780](https://github.com/myriadsocial/myriad-web/issues/1780)) ([08e86f0](https://github.com/myriadsocial/myriad-web/commit/08e86f0b2a6391e4f5843a507b45f1d3eb0df3aa))
+* send tip modal ([#1781](https://github.com/myriadsocial/myriad-web/issues/1781)) ([d986045](https://github.com/myriadsocial/myriad-web/commit/d986045c5bddc458b50d1a3ec31cc7db221d8147))
+* setting notification ([#1816](https://github.com/myriadsocial/myriad-web/issues/1816)) ([d759066](https://github.com/myriadsocial/myriad-web/commit/d75906600213bf441be1e28538ecd965e227ab64))
+* share url timeline ([#1810](https://github.com/myriadsocial/myriad-web/issues/1810)) ([7a2ea73](https://github.com/myriadsocial/myriad-web/commit/7a2ea73e779accc2d0e8514a4c24da4622c52e87))
+* sticky ([#1830](https://github.com/myriadsocial/myriad-web/issues/1830)) ([7d7b83a](https://github.com/myriadsocial/myriad-web/commit/7d7b83a8f7ac0468b7ee7333d655e9868884d6da))
+* sticky ([#1835](https://github.com/myriadsocial/myriad-web/issues/1835)) ([5566385](https://github.com/myriadsocial/myriad-web/commit/55663856e84779494f6ae0edcb0d063ff6d9083f))
+* Sticky ([#1851](https://github.com/myriadsocial/myriad-web/issues/1851)) ([a5ef014](https://github.com/myriadsocial/myriad-web/commit/a5ef014d7705087ee20d77988689c000cb631cdc))
+* sticky ([#1854](https://github.com/myriadsocial/myriad-web/issues/1854)) ([dffb4a1](https://github.com/myriadsocial/myriad-web/commit/dffb4a11450a7aeec14c129d53dc55b1599a560f))
+* sticky navbar ([#1774](https://github.com/myriadsocial/myriad-web/issues/1774)) ([5b260d7](https://github.com/myriadsocial/myriad-web/commit/5b260d76140946e9d63e4ba5aafc32d42c5b75ec))
+* trending tab timeline count ([#1818](https://github.com/myriadsocial/myriad-web/issues/1818)) ([b4e24c1](https://github.com/myriadsocial/myriad-web/commit/b4e24c1337bce9588549fd42776259e08b3e31c8))
+* typo in mins ([#1806](https://github.com/myriadsocial/myriad-web/issues/1806)) ([9536acd](https://github.com/myriadsocial/myriad-web/commit/9536acdef25464002e9eb6aafaa470ead1caaec0))
+* update NFT & Social Token page ([#1793](https://github.com/myriadsocial/myriad-web/issues/1793)) ([c95e2c8](https://github.com/myriadsocial/myriad-web/commit/c95e2c820e598a17b953affc3377a352d5a27f7e))
+* use sticky ([#1826](https://github.com/myriadsocial/myriad-web/issues/1826)) ([f0f1236](https://github.com/myriadsocial/myriad-web/commit/f0f1236224965f39ef180f8fe1b11ff3e00701fa))
+* user not found on edit experience ([#1817](https://github.com/myriadsocial/myriad-web/issues/1817)) ([a153285](https://github.com/myriadsocial/myriad-web/commit/a1532850a15e751a3e0bbfccbce1dc828800368e))
+* weekly trending topic ([#1840](https://github.com/myriadsocial/myriad-web/issues/1840)) ([5652cf0](https://github.com/myriadsocial/myriad-web/commit/5652cf03f14c80f37765a333e75e90cc03699522))
+
 ## [2.3.3](https://github.com/myriadsocial/myriad-web/compare/2.3.2...2.3.3) (2023-03-17)
 
 
