@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 
 import { Grid } from '@material-ui/core';
@@ -9,6 +9,7 @@ import { PrivateProfile } from '../PrivateProfile';
 import { PostsListContainer } from 'components/PostList';
 import { TimelineFilterContainer } from 'components/TimelineFilter';
 import ShowIf from 'components/common/show-if.component';
+import { useQueryParams } from 'src/hooks/use-query-params.hooks';
 import { PrivacySettings } from 'src/interfaces/setting';
 import { TimelineFilterFields } from 'src/interfaces/timeline';
 import { User } from 'src/interfaces/user';
@@ -25,7 +26,8 @@ type ProfilePostsTabProps = {
 
 export const ProfilePostsTab: React.FC<ProfilePostsTabProps> = props => {
   const { filters, filterType, user } = props;
-
+  const { query } = useQueryParams();
+  const [timelinePost, setTimelinePost] = useState(0); // this one used with total post to prevent race condition
   const { detail: profile } = useSelector<RootState, ProfileState>(
     state => state.profileState,
   );
@@ -33,10 +35,19 @@ export const ProfilePostsTab: React.FC<ProfilePostsTabProps> = props => {
     state => state.configState.settings.privacy,
     shallowEqual,
   );
-  const totalPost = useSelector<RootState, number>(
+  const totalPost = useSelector<RootState, number>(state => {
+    if (state.timelineState.meta.totalItemCount > timelinePost) {
+      setTimelinePost(state.timelineState.meta.totalItemCount);
+      return state.timelineState.meta.totalItemCount;
+    } else {
+      return timelinePost;
+    }
+  }, shallowEqual);
+
+  /* const totalPost = useSelector<RootState, number>(
     state => state.timelineState.meta.totalItemCount,
     shallowEqual,
-  );
+  ); */ // this function caused race condition, causing post not rendered. A more thorough fix needed
 
   const isFriend = profile?.friendInfo?.status === 'friends';
   const isProfileOwner = profile?.id == user?.id;
@@ -61,7 +72,7 @@ export const ProfilePostsTab: React.FC<ProfilePostsTabProps> = props => {
       </ShowIf>
 
       <ShowIf condition={totalPost > 0}>
-        <PostsListContainer filters={filters} user={user} />
+        <PostsListContainer filters={filters} query={query} user={user} />
       </ShowIf>
     </>
   );
