@@ -52,7 +52,6 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   }, []);
   useEffect(() => {
     if (redirect) {
-      console.log(dialogFailedImport.postId);
       router.push({ pathname: `/post/${dialogFailedImport.postId}` });
     }
   }, [redirect]);
