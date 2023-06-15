@@ -284,14 +284,6 @@ export const Experience: React.FC<ExperienceProps> = props => {
                     ? 'Custom'
                     : capitalize(userExperience.experience.visibility)}
                 </Typography>
-                <Link
-                  href={`/experience/[experienceId]`}
-                  as={`/experience/${experienceId}`}
-                  passHref>
-                  <Typography variant="body2" color="primary">
-                    {i18n.t('Experience.List.Menu.View')}
-                  </Typography>
-                </Link>
               </div>
             </CardContent>
           </Grid>

@@ -86,3 +86,23 @@ export const video = async (
 
   return data;
 };
+
+export const videoMobile = async (
+  file: File,
+  options: UploadOptions,
+): Promise<ResponseFileUpload> => {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const { data } = await MyriadAPI().request<ResponseFileUpload>({
+    url: `/upload/video`,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    data: formData,
+    onUploadProgress: options.onUploadProgress,
+  });
+
+  return data;
+};

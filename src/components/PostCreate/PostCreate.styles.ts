@@ -90,7 +90,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       position: 'relative',
       [theme.breakpoints.down('xs')]: {
-        flexDirection: 'column',
+        flexDirection: 'row',
         alignItems: 'flex-start',
         padding: 0,
       },
