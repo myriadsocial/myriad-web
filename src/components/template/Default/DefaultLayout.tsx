@@ -252,7 +252,6 @@ const Default: React.FC<DefaultLayoutProps> = props => {
               </div>
             </div>
             <BottombarComponent />
-            
           </div>
         </Container>
 
