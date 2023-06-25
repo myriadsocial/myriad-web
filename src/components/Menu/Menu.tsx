@@ -142,8 +142,9 @@ export const Menu: React.FC<MenuProps> = props => {
   );
 
   const gotoHome = () => {
-    if (router.pathname === '/') return;
-    router.push('/', undefined, { shallow: true });
+    if (router.pathname !== '/') router.push('/', undefined, { shallow: true });
+    if (router.query?.type === 'all') router.push('/', undefined, { shallow: true });
+    return ;
   };
 
   const openMenu = useCallback(
