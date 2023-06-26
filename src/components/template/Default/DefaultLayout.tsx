@@ -251,10 +251,7 @@ const Default: React.FC<DefaultLayoutProps> = props => {
                 </ShowIf>
               </div>
             </div>
-
-            <ShowIf condition={router.pathname === '/'}>
-              <BottombarComponent />
-            </ShowIf>
+            <BottombarComponent />
           </div>
         </Container>
 
