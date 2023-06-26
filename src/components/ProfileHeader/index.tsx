@@ -239,7 +239,7 @@ export const ProfileHeaderComponent: React.FC<Props> = props => {
                 variant="body1"
                 component="p"
                 className={style.username}>
-                @{person.username || 'username'} halo
+                @{person.username || 'username'}
               </Typography>
             </div>
           </Grid>
