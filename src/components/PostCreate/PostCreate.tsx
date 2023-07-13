@@ -617,7 +617,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
         <ShowIf condition={!showExclusive}>
           <ShowIf condition={post.visibility !== 'selected_user'}>
             <Button
-              disabled={editorValue === ''}
+              disabled={editorValue === '' || timelineId.length === 0}
               variant="contained"
               color="primary"
               size="small"
