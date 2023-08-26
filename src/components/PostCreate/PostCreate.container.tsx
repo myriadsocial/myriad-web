@@ -50,6 +50,11 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   useEffect(() => {
     dispatch(loadUsers());
   }, []);
+  useEffect(() => {
+    if (redirect) {
+      router.push({ pathname: `/post/${dialogFailedImport.postId}` });
+    }
+  }, [redirect]);
 
   const handleSearchPeople = useCallback(
     (query: string) => {
@@ -113,6 +118,7 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
                   `Home.RichText.Prompt_Import.Error.${statusCode}`,
                 );
                 if (statusCode === 409) {
+                  setDialogFailedImport({ open: true, message, postId });
                   setRedirect(true);
                   user.fullAccess
                     ? enqueueSnackbar({
@@ -174,57 +180,58 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
   );
 
   if (!user) return null;
-
-  return (
-    <>
-      <PostCreate
-        user={user}
-        open={open}
-        onClose={onClose}
-        onSearchPeople={handleSearchPeople}
-        onSubmit={submitPost}
-        isMobile={isMobile}
-      />
-      {redirect &&
-        router.push({ pathname: `/post/${dialogFailedImport.postId}` })}
-      <PromptComponent
-        title={i18n.t('Home.RichText.Prompt_Import.Title')}
-        subtitle={dialogFailedImport.message}
-        open={dialogFailedImport.open}
-        icon="warning"
-        onCancel={() =>
-          setDialogFailedImport({ ...dialogFailedImport, open: false })
-        }>
-        <div
-          style={{
-            marginTop: 32,
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '20px',
-          }}>
-          <Button
-            size="small"
-            variant="outlined"
-            color="secondary"
-            onClick={() =>
-              setDialogFailedImport({ ...dialogFailedImport, open: false })
-            }>
-            {i18n.t('General.OK')}
-          </Button>
-          {/* TODO: Added translation */}
-          <Button
-            size="small"
-            variant="contained"
-            color="primary"
-            onClick={() =>
-              router.push({ pathname: `/post/${dialogFailedImport.postId}` })
-            }>
-            See post
-          </Button>
-        </div>
-      </PromptComponent>
-    </>
-  );
+  if (!redirect) {
+    return (
+      <>
+        <PostCreate
+          user={user}
+          open={open}
+          onClose={onClose}
+          onSearchPeople={handleSearchPeople}
+          onSubmit={submitPost}
+          isMobile={isMobile}
+        />
+        <PromptComponent
+          title={i18n.t('Home.RichText.Prompt_Import.Title')}
+          subtitle={dialogFailedImport.message}
+          open={dialogFailedImport.open}
+          icon="warning"
+          onCancel={() =>
+            setDialogFailedImport({ ...dialogFailedImport, open: false })
+          }>
+          <div
+            style={{
+              marginTop: 32,
+              display: 'flex',
+              justifyContent: 'center',
+              gap: '20px',
+            }}>
+            <Button
+              size="small"
+              variant="outlined"
+              color="secondary"
+              onClick={() =>
+                setDialogFailedImport({ ...dialogFailedImport, open: false })
+              }>
+              {i18n.t('General.OK')}
+            </Button>
+            {/* TODO: Added translation */}
+            <Button
+              size="small"
+              variant="contained"
+              color="primary"
+              onClick={() =>
+                router.push({ pathname: `/post/${dialogFailedImport.postId}` })
+              }>
+              See post
+            </Button>
+          </div>
+        </PromptComponent>
+      </>
+    );
+  } else {
+    return null;
+  }
 };
 
 export default PostCreateContainer;
