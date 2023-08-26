@@ -37,6 +37,7 @@ export const Editor: React.FC<EditorProps> = props => {
   const styles = useStyles({ mobile, counter: true });
   const [modalOpen, setModalOpen] = useState(false);
   const [uploadedVideos, setUploadedVideos] = useState([]);
+  const [editorData, setEditorData] = useState('') ;
   const handleUploadButtonClick = () => {
     setModalOpen(true);
   };
@@ -96,6 +97,8 @@ export const Editor: React.FC<EditorProps> = props => {
 
     setUploadedVideos([...uploadedVideos, videoURL]);
     setModalOpen(false);
+    const dataWithVideo = editorData + `<video controls src='${videoURL}'>your browser does not support video</video>` ;
+    onChange(dataWithVideo , false)
   };
 
   return (
@@ -116,7 +119,11 @@ export const Editor: React.FC<EditorProps> = props => {
             });
         }}
         onChange={(event, editor) => {
-          const data = editor.getData();
+          var data = editor.getData();
+          if (uploadedVideos.length !== 0) {         
+            data = data + `<video controls src='${uploadedVideos[0]}'>your browser does not support video</video>` ;
+          }
+          setEditorData(data);
 
           onChange(data, false);
         }}
