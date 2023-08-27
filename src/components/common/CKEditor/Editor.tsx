@@ -121,7 +121,7 @@ export const Editor: React.FC<EditorProps> = props => {
             });
         }}
         onChange={(event, editor) => {
-          var data = editor.getData();
+          let data = editor.getData();
           if (uploadedVideos.length !== 0) {
             data =
               data +
