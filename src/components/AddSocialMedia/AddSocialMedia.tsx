@@ -51,6 +51,7 @@ const prefix: Record<SocialsEnum, string> = {
   [SocialsEnum.VK]: '',
   [SocialsEnum.WECHAT]: '',
   [SocialsEnum.WEIBO]: '',
+  [SocialsEnum.X]: '',
 };
 
 export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
