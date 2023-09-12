@@ -28,8 +28,7 @@ type ErrorType = 'unsupported' | 'invalid';
 const regex = {
   [SocialsEnum.TWITTER]:
     /^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(es)?\/(\d+)/,
-  [SocialsEnum.X]:
-    /^https?:\/\/x\.com\/(?:#!\/)?(\w+)\/status(es)?\/(\d+)/,
+  [SocialsEnum.X]: /^https?:\/\/x\.com\/(?:#!\/)?(\w+)\/status(es)?\/(\d+)/,
   [SocialsEnum.FACEBOOK]:
     /^(?:https?:\/\/)?(?:www\.|m\.|mobile\.|touch\.|mbasic\.)?(?:facebook\.com|fb(?:\.me|\.com))\/(?!$)(?:(?:\w)*#!\/)?(?:pages\/)?(?:photo\.php\?fbid=)?(?:[\w\-]*\/)*?(?:\/)?(?:profile\.php\?id=)?([^\/?&\s]*)(?:\/|&|\?)?.*$/s,
   [SocialsEnum.REDDIT]:
@@ -53,8 +52,8 @@ export const PostImport: React.FC<PostImportProps> = props => {
   }, [value]);
 
   const handleSanitizeUrl = () => {
-    return url.replace(/x\.com/ , "twitter.com");
-    }
+    return url.replace(/x\.com/, 'twitter.com');
+  };
 
   const handleUrlChange = (
     event: React.ChangeEvent<HTMLInputElement>,
