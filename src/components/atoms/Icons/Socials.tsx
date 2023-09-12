@@ -44,4 +44,5 @@ export const socials: Record<SocialsEnum, JSX.Element> = {
   [SocialsEnum.FOURCHAN]: <FourChan />,
   [SocialsEnum.VK]: <VK />,
   [SocialsEnum.WEIBO]: <Weibo />,
+  [SocialsEnum.X]: <Twitter />,
 };

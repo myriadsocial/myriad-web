@@ -11,6 +11,7 @@ export enum SocialsEnum {
   TELEGRAM = 'telegram',
   VK = 'vk',
   WEIBO = 'weibo',
+  X = 'x',
 }
 
 export type SocialMediaProps = {
