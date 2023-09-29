@@ -9,6 +9,8 @@ import Sort from 'src/images/Icons/Sort.svg';
 import Upload from 'src/images/Icons/Upload.svg';
 import Magnifier from 'src/images/Icons/magnifierIcon.svg';
 import MyriadCircle from 'src/images/Icons/myriad-circle.svg';
+import MyriadOctopus from 'src/images/Icons/myriad-octopus.svg';
+import MyriadRococo from 'src/images/Icons/myriad-rococo.svg';
 import MyriadFullBlack from 'src/images/Icons/myriad-full-black.svg';
 import MyriadGrey from 'src/images/Icons/myriad-grey.svg';
 import MyriadFull from 'src/images/Icons/myriad-logo-full.svg';
@@ -20,6 +22,24 @@ type IconProps = Omit<SvgIconProps, 'component'>;
 export const MyriadCircleIcon: React.FC<IconProps> = props => (
   <SvgIcon
     component={MyriadCircle}
+    viewBox="0 0 30 30"
+    style={{ width: props.width, height: props.height, fill: 'none' }}
+    {...props}
+  />
+);
+
+export const MyriadOctopusIcon: React.FC<IconProps> = props => (
+  <SvgIcon
+    component={MyriadOctopus}
+    viewBox="0 0 30 30"
+    style={{ width: props.width, height: props.height, fill: 'none' }}
+    {...props}
+  />
+);
+
+export const MyriadRococoIcon: React.FC<IconProps> = props => (
+  <SvgIcon
+    component={MyriadRococo}
     viewBox="0 0 30 30"
     style={{ width: props.width, height: props.height, fill: 'none' }}
     {...props}
