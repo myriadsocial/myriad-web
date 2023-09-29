@@ -49,7 +49,7 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({
       polkadot: <PolkadotNetworkIcon />,
       kusama: <KusamaNetworkIcon />,
       near: <NearNetworkIcon24 />,
-      octopus: <MyriadOctopusIcon />,
+      myriad: <MyriadOctopusIcon />,
       rococo: <MyriadRococoIcon />,
       debio: <DebioNetworkIcon />,
     }),
