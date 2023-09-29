@@ -9,11 +9,11 @@ import Sort from 'src/images/Icons/Sort.svg';
 import Upload from 'src/images/Icons/Upload.svg';
 import Magnifier from 'src/images/Icons/magnifierIcon.svg';
 import MyriadCircle from 'src/images/Icons/myriad-circle.svg';
-import MyriadOctopus from 'src/images/Icons/myriad-octopus.svg';
-import MyriadRococo from 'src/images/Icons/myriad-rococo.svg';
 import MyriadFullBlack from 'src/images/Icons/myriad-full-black.svg';
 import MyriadGrey from 'src/images/Icons/myriad-grey.svg';
 import MyriadFull from 'src/images/Icons/myriad-logo-full.svg';
+import MyriadOctopus from 'src/images/Icons/myriad-octopus.svg';
+import MyriadRococo from 'src/images/Icons/myriad-rococo.svg';
 import Notification from 'src/images/Icons/notif-default.svg';
 import OfficialBadge from 'src/images/Icons/official-badge.svg';
 
