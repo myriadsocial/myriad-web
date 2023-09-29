@@ -15,7 +15,8 @@ import { useStyles } from './networkOption.style';
 import useBlockchain from 'components/common/Blockchain/use-blockchain.hook';
 import {
   NearNetworkIcon24,
-  MyriadCircleIcon,
+  MyriadOctopusIcon,
+  MyriadRococoIcon,
   PolkadotNetworkIcon,
   KusamaNetworkIcon,
   DebioNetworkIcon,
@@ -48,7 +49,8 @@ export const NetworkOption: React.FC<NetworkOptionProps> = ({
       polkadot: <PolkadotNetworkIcon />,
       kusama: <KusamaNetworkIcon />,
       near: <NearNetworkIcon24 />,
-      myriad: <MyriadCircleIcon />,
+      myriad: <MyriadOctopusIcon />,
+      rococo: <MyriadRococoIcon />,
       debio: <DebioNetworkIcon />,
     }),
     [],
