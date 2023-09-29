@@ -20,7 +20,7 @@ export const usePolkadotApi = () => {
     socials: SocialMedia[],
     network: Network,
   ): Promise<TipsResultsProps> => {
-    const serverId = server.accountId[NetworkIdEnum.MYRIAD];
+    const serverId = server.accountId[NetworkIdEnum.MYRIADOCTOPUS];
     const accountId = wallet?.id ?? null;
     const peopleIds: string[] = [];
     const data: TipsBalanceData = {
