@@ -136,7 +136,7 @@ export const useClaimTip = () => {
       const networkCallback = async (network: Network) => {
         switch (network.id) {
           case NetworkIdEnum.DEBIO:
-          case NetworkIdEnum.MYRIAD: {
+          case NetworkIdEnum.MYRIADOCTOPUS: {
             const result = await getClaimTipSubstrate(
               server,
               user.id,
@@ -221,7 +221,7 @@ export const useClaimTip = () => {
     try {
       const serverId =
         selectedNetwork.blockchainPlatform === BlockchainPlatform.SUBSTRATE
-          ? server?.accountId?.[NetworkIdEnum.MYRIAD]
+          ? server?.accountId?.[NetworkIdEnum.MYRIADOCTOPUS]
           : server?.accountId?.[selectedNetwork.id];
 
       if (!serverId) {
@@ -276,7 +276,7 @@ export const useClaimTip = () => {
     const selectedNetwork = networks.find(network => network.id == networkId);
     const serverId =
       selectedNetwork.blockchainPlatform === BlockchainPlatform.SUBSTRATE
-        ? server?.accountId?.[NetworkIdEnum.MYRIAD]
+        ? server?.accountId?.[NetworkIdEnum.MYRIADOCTOPUS]
         : server?.accountId?.[selectedNetwork.id];
 
     if (!serverId) return;

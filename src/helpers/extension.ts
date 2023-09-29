@@ -52,7 +52,11 @@ export const convertToPolkadotAddress = (
 ): string => {
   if (isHex(address)) {
     switch (currentWallet.networkId) {
-      case NetworkIdEnum.MYRIAD: {
+      case NetworkIdEnum.MYRIADROCOCO: {
+        return encodeAddress(hexToU8a(address), 42);
+      }
+
+      case NetworkIdEnum.MYRIADOCTOPUS: {
         return encodeAddress(hexToU8a(address), 42);
       }
 

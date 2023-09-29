@@ -117,7 +117,7 @@ export const TipContainer: React.FC = () => {
       const serverId =
         currentWallet.networkId === NetworkIdEnum.NEAR
           ? server?.accountId?.[currentWallet.networkId]
-          : server?.accountId?.[NetworkIdEnum.MYRIAD];
+          : server?.accountId?.[NetworkIdEnum.MYRIADOCTOPUS];
 
       if (!serverId) throw new Error('Server not exists');
 
@@ -139,7 +139,7 @@ export const TipContainer: React.FC = () => {
         }
 
         case NetworkIdEnum.DEBIO:
-        case NetworkIdEnum.MYRIAD: {
+        case NetworkIdEnum.MYRIADOCTOPUS: {
           checkExtensionInstalled();
           setTipsBalanceInfo(tipsBalanceInfo);
           break;
@@ -231,7 +231,7 @@ export const TipContainer: React.FC = () => {
 
       switch (network.id) {
         case NetworkIdEnum.DEBIO:
-        case NetworkIdEnum.MYRIAD:
+        case NetworkIdEnum.MYRIADOCTOPUS:
         case NetworkIdEnum.NEAR:
           return (
             <div style={{ marginTop: 20 }} key={network.id}>
