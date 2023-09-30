@@ -15,7 +15,8 @@ import { useStyles } from './profileContent.style';
 import ShowIf from 'components/common/show-if.component';
 import {
   NearNetworkIcon24,
-  MyriadCircleIcon,
+  MyriadOctopusIcon,
+  MyriadRococoIcon,
   PolkadotNetworkIcon,
   KusamaNetworkIcon,
 } from 'src/components/atoms/Icons';
@@ -51,7 +52,8 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
       polkadot: <PolkadotNetworkIcon />,
       kusama: <KusamaNetworkIcon />,
       near: <NearNetworkIcon24 />,
-      myriad: <MyriadCircleIcon />,
+      myriad_octopus: <MyriadOctopusIcon />,
+      myriad_rococo: <MyriadRococoIcon />,
       debio: <DebioNetworkIcon />,
     }),
     [],

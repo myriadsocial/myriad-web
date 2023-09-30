@@ -528,7 +528,7 @@ export const fetchNetwork: ThunkActionCreator<Actions, RootState> =
           tips: [],
         };
 
-        if (network.id === NetworkIdEnum.MYRIAD) {
+        if (network.id === NetworkIdEnum.MYRIADOCTOPUS) {
           filterNetwork.unshift(networkWithTips);
         } else {
           filterNetwork.push(networkWithTips);
