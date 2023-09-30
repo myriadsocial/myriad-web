@@ -39,6 +39,14 @@ export const formatNetworkTitle = (
     case NetworkIdEnum.NEAR:
       return id.toUpperCase();
     default:
+      if (id.includes('_')) {
+        return id
+          .split('_')
+          .map(
+            word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+          )
+          .join(' ');
+      }
       return capitalize(id ?? 'unknown');
   }
 };
