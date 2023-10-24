@@ -29,7 +29,7 @@ export default function APIAdapter(): Adapter {
         name: '',
         username: '',
         address: '',
-        network: NetworkIdEnum.MYRIAD,
+        network: NetworkIdEnum.MYRIADOCTOPUS,
       });
 
       return user as AdapterUser;

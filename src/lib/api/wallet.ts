@@ -179,6 +179,7 @@ export const getNetworks = async (): Promise<Networks> => {
     url: `/networks`,
     method: 'GET',
     params: {
+      pageLimit: 10,
       filter: {
         include: [
           {

@@ -16,10 +16,11 @@ import { useStyles } from './tip.style';
 import { MenuOptions } from 'src/components/atoms/DropdownMenu';
 import {
   NearNetworkIcon24,
-  MyriadCircleIcon,
+  MyriadOctopusIcon,
   PolkadotNetworkIcon,
   KusamaNetworkIcon,
   DebioNetworkIcon,
+  MyriadRococoIcon,
 } from 'src/components/atoms/Icons';
 import ShowIf from 'src/components/common/show-if.component';
 import { TipsResult } from 'src/interfaces/blockchain-interface';
@@ -57,8 +58,12 @@ const networkOptions: MenuOptions<string>[] = [
     title: 'NEAR',
   },
   {
+    id: 'rococo',
+    title: 'Myriad Rococo',
+  },
+  {
     id: 'myriad',
-    title: 'Myriad',
+    title: 'Myriad Octopus',
   },
   {
     id: 'debio',
@@ -87,7 +92,8 @@ export const Tip: React.FC<TipProps> = props => {
       polkadot: <PolkadotNetworkIcon width={'24px'} height={'24px'} />,
       kusama: <KusamaNetworkIcon width={'24px'} height={'24px'} />,
       near: <NearNetworkIcon24 width={'24px'} height={'24px'} />,
-      myriad: <MyriadCircleIcon width={'24px'} height={'24px'} />,
+      myriad: <MyriadOctopusIcon width={'24px'} height={'24px'} />,
+      rococo: <MyriadRococoIcon width={'24px'} height={'24px'} />,
       debio: <DebioNetworkIcon width={'24px'} height={'24px'} />,
     }),
     [],

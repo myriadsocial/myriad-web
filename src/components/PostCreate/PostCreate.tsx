@@ -174,7 +174,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
                 selectedUserIds: post.selectedUserIds,
                 NSFWTag: post.NSFWTag,
                 visibility: post.visibility ?? PostVisibility.PUBLIC,
-                selectedTimelineIds: post.selectedTimelineIds,
+                selectedTimelineIds: post.selectedTimelineIds ?? timelineId,
               };
 
               if (resp?.id) {
@@ -228,7 +228,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
                 selectedUserIds: post.selectedUserIds,
                 NSFWTag: post.NSFWTag,
                 visibility: post.visibility ?? PostVisibility.PUBLIC,
-                selectedTimelineIds: post.selectedTimelineIds,
+                selectedTimelineIds: post.selectedTimelineIds ?? timelineId,
               };
 
               if (resp?.id) {

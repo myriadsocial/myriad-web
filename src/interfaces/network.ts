@@ -10,7 +10,8 @@ export enum NetworkIdEnum {
   BINANCE = 'binance',
   POLYGON = 'polygon',
   NEAR = 'near',
-  MYRIAD = 'myriad',
+  MYRIADOCTOPUS = 'myriad',
+  MYRIADROCOCO = 'rococo',
   KUSAMA = 'kusama',
   DEBIO = 'debio',
 }
