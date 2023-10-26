@@ -44,7 +44,11 @@ export const CurrencyOption: React.FC<CurrencyOptionProps> = ({
   };
 
   const filterCurrency = balances.filter(balance => {
-    if (balance.networkId === 'myriad' || balance.networkId === 'debio')
+    if (
+      balance.networkId === 'myriad' ||
+      balance.networkId === 'debio' ||
+      balance.networkId === 'rococo'
+    )
       return balance;
   });
 
