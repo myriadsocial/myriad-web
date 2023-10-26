@@ -189,7 +189,6 @@ export const fetchFilteredToken: ThunkActionCreator<Actions, RootState> =
           or: [
             { networkId: 'myriad' },
             { networkId: 'debio' },
-            ,
             { networkId: 'rococo' },
           ],
         },
