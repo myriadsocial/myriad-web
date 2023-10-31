@@ -5,6 +5,7 @@ import getConfig from 'next/config';
 
 import { AccountSettingsContainer } from '../AccountSettingsContainer';
 import EmailSettings from '../EmailSettings';
+import SharingSetting from '../SharingSettings';
 import { LanguageSettingsContainer } from '../LanguageSettingsContainer';
 import { NotificationSettingsContainer } from '../NotificationSettings.container';
 import { BlockListContainer } from '../render/BlockList';
@@ -95,7 +96,7 @@ export const useSettingList = (): SettingsOption<SettingsType>[] => {
         id: 'sharing',
         title: i18n.t('Setting.List_Menu.Sharing_Title'),
         subtitle: i18n.t('Setting.List_Menu.Sharing_Subtitle'),
-        component: <EmailSettings />,
+        component: <SharingSetting />,
       },
       {
         id: 'block',
