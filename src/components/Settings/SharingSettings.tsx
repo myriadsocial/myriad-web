@@ -57,10 +57,8 @@ const SharingSetting = () => {
     }
     setToken(event.target.value);
   };
-  
-  const onClickAddToken = () => {
 
-  }
+  const onClickAddToken = () => {};
 
   if (loading)
     return (
@@ -79,27 +77,37 @@ const SharingSetting = () => {
           justifyContent: 'space-between',
           alignItems: 'center',
         }}>
-          <>
-            <TextField
-              variant="outlined"
-              fullWidth
-              label={i18n.t('Setting.List_Menu.Token_Code')}
-              placeholder={i18n.t('Setting.List_Menu.Token_Code')}
-              value={tokenValue}
-              style={{ marginBottom: 'unset' }}
-              onChange={onChangeToken}
-              error={error.isError}
-              helperText={error.isError ? error.message : ''}
-            />
-            <Button
-              size="small"
-              variant="contained"
-              color="primary"
-              style={{ marginLeft: '24px', marginRight: '17px' }}
-              onClick={onClickAddToken}>
-              Add
-            </Button>
-          </>
+        <>
+          <TextField
+            variant="outlined"
+            fullWidth
+            label={i18n.t('Setting.List_Menu.Token_Code')}
+            placeholder={i18n.t('Setting.List_Menu.Token_Code')}
+            value={tokenValue}
+            style={{ marginBottom: 'unset' }}
+            onChange={onChangeToken}
+            error={error.isError}
+            helperText={error.isError ? error.message : ''}
+          />
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            style={{ marginLeft: '24px', marginRight: '17px' }}
+            onClick={onClickAddToken}>
+            Add
+          </Button>
+        </>
+      </div>
+      <div>
+        <Button
+          size="medium"
+          variant="contained"
+          color="primary"
+          style={{ marginLeft: '24px', marginRight: '17px', marginTop: '15px' }}
+          onClick={onClickAddToken}>
+          Generate Token
+        </Button>
       </div>
     </Paper>
   );
