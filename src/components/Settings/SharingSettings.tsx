@@ -38,7 +38,9 @@ const SharingSetting = () => {
     setToken(event.target.value);
   };
 
-  const onClickAddToken = () => {};
+  const onClickAddToken = () => {
+    setToken('');
+  };
 
   if (loading)
     return (
