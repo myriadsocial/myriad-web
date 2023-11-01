@@ -5,9 +5,9 @@ import getConfig from 'next/config';
 
 import { AccountSettingsContainer } from '../AccountSettingsContainer';
 import EmailSettings from '../EmailSettings';
-import SharingSetting from '../SharingSettings';
 import { LanguageSettingsContainer } from '../LanguageSettingsContainer';
 import { NotificationSettingsContainer } from '../NotificationSettings.container';
+import SharingSetting from '../SharingSettings';
 import { BlockListContainer } from '../render/BlockList';
 import { HelpComponent } from '../render/Help';
 
