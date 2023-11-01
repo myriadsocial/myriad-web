@@ -1035,7 +1035,8 @@
       "Email_Title": "Email Configuration",
       "Email_Subtitle": "Set email address for another method of login",
       "Email_Address": "Email Address",
-      "Email_Placeholder": "Add Email Address"
+      "Email_Placeholder": "Add Email Address",
+      "Token_Code": "Add Token Code"
     }
   },
   "SocialMedia": {
