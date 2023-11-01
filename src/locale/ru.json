@@ -998,6 +998,8 @@
       },
       "Notification_Title": "Настройка уведомлений",
       "Notification_Subtitle": "Управление уведомлениями",
+      "Sharing_Title": "Account Sharing Setting",
+      "Sharing_Subtitle": "TBA",
       "Notification_Setting": {
         "Comments": "Комментарии",
         "Mention": "Упоминания",
@@ -1033,7 +1035,8 @@
       "Email_Title": "Email Configuration",
       "Email_Subtitle": "Set email address for another method of login",
       "Email_Address": "Email Address",
-      "Email_Placeholder": "Add Email Address"
+      "Email_Placeholder": "Add Email Address",
+      "Token_Code": "Add Token Code"
     }
   },
   "SocialMedia": {

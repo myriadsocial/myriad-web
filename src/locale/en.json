@@ -1016,6 +1016,8 @@
       },
       "Notification_Title": "Notification Settings",
       "Notification_Subtitle": "Manage your notification",
+      "Sharing_Title": "Account Sharing Setting",
+      "Sharing_Subtitle": "TBA",
       "Notification_Setting": {
         "Comments": "Comments",
         "Mention": "Mention",
@@ -1051,7 +1053,8 @@
       "Email_Title": "Email Configuration",
       "Email_Subtitle": "Set email address for another method of login",
       "Email_Address": "Email Address",
-      "Email_Placeholder": "Add Email Address"
+      "Email_Placeholder": "Add Email Address",
+      "Token_Code": "Add Token Code"
     }
   },
   "SocialMedia": {
