@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -15,6 +14,7 @@ import {
 } from '@material-ui/core';
 
 import { useStyles } from './Settings.styles';
+
 import i18n from 'src/locale';
 import { RootState } from 'src/reducers';
 
