@@ -111,6 +111,7 @@
       "Placeholder_3": "Rechercher des personnes ici",
       "Placeholder_4": "Select Type of Privacy",
       "Placeholder_5": "Custom People Who Can View",
+      "Placeholder_6": "Who can edit timeline",
       "Post": {
         "Title": "Publier",
         "Desc": "Les messages ajoutés manuellement apparaîtront ici. Vous pouvez ajouter manuellement une publication à une Timeline en sélectionnant 'Ajouter une publication à la Timeline' dans le menu en haut à droite de chaque publication."

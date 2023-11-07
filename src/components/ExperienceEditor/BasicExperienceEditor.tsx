@@ -372,7 +372,7 @@ import {
                 variant="contained"
                 style={{ width: 'auto' }}
                 onClick={handleNext}>
-                {i18n.t(`Experience.Editor.Btn.${type}`)}
+                Next
               </Button>
             </FormControl>
           </div>

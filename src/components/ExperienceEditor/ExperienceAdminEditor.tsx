@@ -89,6 +89,7 @@ import {
       quick = false,
       showAdvance = false,
       experienceVisibility,
+      onChange
     } = props;
     const styles = useStyles({ quick });
   
@@ -146,6 +147,14 @@ import {
         validateExperience();
       }
     }, [isSubmitted, newExperience]);
+
+    const handleBack = () => {
+        onChange(1);
+    }
+
+    const handleNext = () => {
+        onChange(3);
+    }
   
     const handleImageUpload = async (files: File[]) => {
       if (files.length > 0) {
@@ -339,6 +348,15 @@ import {
         <ShowIf condition={!quick}>
           <div className={styles.header}>
             <div>
+            <FormControl classes={{ root: styles.formControl }}>
+              <Button
+                color="primary"
+                variant="contained"
+                style={{ width: 'auto' }}
+                onClick={handleBack}>
+                Back
+              </Button>
+            </FormControl>  
               <Typography variant="h4">
                 {i18n.t(`Experience.Editor.Header`)}
               </Typography>
@@ -351,38 +369,14 @@ import {
                 color="primary"
                 variant="contained"
                 style={{ width: 'auto' }}
-                onClick={saveExperience}>
-                {i18n.t(`Experience.Editor.Btn.${type}`)}
+                onClick={handleNext}>
+                Next
               </Button>
             </FormControl>
           </div>
         </ShowIf>
   
         <div className={styles.content}>
-          <div className={styles.row1}>
-            <FormControl
-              fullWidth
-              variant="outlined"
-              style={{ position: 'relative', zIndex: 100 }}
-              error={errors.picture}>
-              <Dropzone
-                error={errors.picture}
-                onImageSelected={handleImageUpload}
-                value={image}
-                border="solid"
-                maxSize={3}
-                width={100}
-                height={100}
-                usage="experience"
-                label={i18n.t('Dropzone.Btn.Exp_Add')}
-              />
-              <ShowIf condition={isLoading}>
-                <div className={styles.loading}>
-                  <CircularProgress size={32} color="primary" />
-                </div>
-              </ShowIf>
-            </FormControl>
-          </div>
           <div className={styles.row2}>
               <>
                 <Autocomplete
@@ -410,8 +404,8 @@ import {
                     <TextField
                       {...params}
                       error={errors.selectedUserId}
-                      label={i18n.t('Experience.Editor.Placeholder_5')}
-                      placeholder={i18n.t('Experience.Editor.Placeholder_5')}
+                      label={i18n.t('Experience.Editor.Placeholder_6')}
+                      placeholder={i18n.t('Experience.Editor.Placeholder_6')}
                       variant="outlined"
                       onChange={handleSearchUser}
                       InputProps={{
