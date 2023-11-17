@@ -186,7 +186,11 @@ export const fetchFilteredToken: ThunkActionCreator<Actions, RootState> =
     try {
       const filter = {
         where: {
-          or: [{ networkId: 'myriad' }, { networkId: 'debio' }],
+          or: [
+            { networkId: 'myriad' },
+            { networkId: 'debio' },
+            { networkId: 'rococo' },
+          ],
         },
       };
       const { data: currencies } = await TokenAPI.getFilteredTokens(
