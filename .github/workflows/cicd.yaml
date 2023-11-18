@@ -239,25 +239,7 @@ jobs:
             --set-string config.firebase.appId=${{ steps.secrets.outputs.WEB_FIREBASE_APP_ID }} \
             --set-string config.firebase.measurementId=${{ steps.secrets.outputs.WEB_FIREBASE_MEASUREMENT_ID }} \
             --set-string config.sentry.dsn=${{ steps.secrets.outputs.WEB_SENTRY_DSN }} \
-            --set ingress.enabled=true \
-            --set-string ingress.className=nginx \
-            --set-string ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
-            --set-string ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-body-size"="100m" \
-            --set-string ingress.annotations."nginx\.org/client-max-body-size"="100m" \
-            --set-string ingress.hosts[0].host=${{ steps.secrets.outputs.WEB_DNS }} \
-            --set-string ingress.hosts[0].paths[0].path=/ \
-            --set-string ingress.hosts[0].paths[0].pathType=ImplementationSpecific \
-            --set-string ingress.tls[0].secretName=${{ steps.secrets.outputs.WEB_DNS }}-letsencrypt-tls \
-            --set-string ingress.tls[0].hosts[0]=${{ steps.secrets.outputs.WEB_DNS }} \
-            --set-string resources.requests.cpu=300m \
-            --set-string resources.requests.memory=512Mi \
-            --set-string resources.limits.cpu=500m \
-            --set-string resources.limits.memory=1024Mi \
-            --set replicaCount=1 \
-            --set autoscaling.enabled=true \
-            --set autoscaling.minReplicas=1 \
-            --set autoscaling.maxReplicas=1 \
-            --set-string nodeSelector.pool=general \
+            --set-string nodeSelector.node_pool=general \
             --set-string nodeSelector.'iam\.gke\.io/gke-metadata-server-enabled'='true'
           HTTPS_PROXY=127.0.0.1:8888 kubectl rollout status deployment/${{ github.event.repository.name }}
       - name: Clean Up Tunneling SSH Connections
