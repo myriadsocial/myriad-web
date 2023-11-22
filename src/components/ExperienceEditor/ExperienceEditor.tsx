@@ -56,6 +56,7 @@ import { RootState } from 'src/reducers';
 import { UserState } from 'src/reducers/user/reducer';
 import { BasicExperienceEditor } from './BasicExperienceEditor';
 import { AdminExperienceEditor } from './ExperienceAdminEditor';
+import { ExperienceAdditionalEditor } from './ExperienceAdditionalEditor';
 
 type ExperienceEditorProps = {
   type?: 'Clone' | 'Edit' | 'Create';
@@ -239,7 +240,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     }
   };
 
-  const onChange = (value: Number) => {
+  const onStage = (value: Number) => {
     setStage(value);
   }
 
@@ -558,7 +559,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   if (stage === 1) {return (
     <BasicExperienceEditor
       onSave={onSave}
-      onChange={onChange}
+      onStage={onStage}
       onImageUpload={onImageUpload}
       onSearchUser={onSearchUser}
       users={users}
@@ -570,10 +571,23 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     return (
       <AdminExperienceEditor
         onSave={onSave}
-        onChange={onChange}
+        onStage={onStage}
         onImageUpload={onImageUpload}
         onSearchUser={onSearchUser}
         users={users}
+      />
+    )
+  }
+
+  if (stage === 3) {
+    return (
+      <ExperienceAdditionalEditor
+        onSave={onSave}
+        onStage={onStage}
+        onSearchTags={onSearchTags}
+        tags={tags}
+        people={people}
+        onSearchPeople={onSearchPeople}
       />
     )
   }

@@ -61,7 +61,7 @@ import {
     experience?: ExperienceProps;
     onSave: (experience: ExperienceProps) => void;
     onImageUpload: (files: File[]) => Promise<string>;
-    onChange: (value: Number) => void;
+    onStage: (value: Number) => void;
     onSearchUser?: (query: string) => void;
     users?: User[];
     quick?: boolean;
@@ -89,7 +89,7 @@ import {
       quick = false,
       showAdvance = false,
       experienceVisibility,
-      onChange
+      onStage
     } = props;
     const styles = useStyles({ quick });
   
@@ -149,11 +149,11 @@ import {
     }, [isSubmitted, newExperience]);
 
     const handleBack = () => {
-        onChange(1);
+        onStage(1);
     }
 
     const handleNext = () => {
-        onChange(3);
+        onStage(3);
     }
   
     const handleImageUpload = async (files: File[]) => {
@@ -347,8 +347,7 @@ import {
       <div className={styles.root} ref={ref}>
         <ShowIf condition={!quick}>
           <div className={styles.header}>
-            <div>
-            <FormControl classes={{ root: styles.formControl }}>
+          <FormControl classes={{ root: styles.formControl }}>
               <Button
                 color="primary"
                 variant="contained"
@@ -356,7 +355,8 @@ import {
                 onClick={handleBack}>
                 Back
               </Button>
-            </FormControl>  
+            </FormControl>
+            <div>  
               <Typography variant="h4">
                 {i18n.t(`Experience.Editor.Header`)}
               </Typography>

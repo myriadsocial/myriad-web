@@ -55,7 +55,7 @@ import {
     experience?: ExperienceProps;
     onSave: (experience: ExperienceProps) => void;
     onImageUpload: (files: File[]) => Promise<string>;
-    onChange: (value: Number) => void;
+    onStage: (value: Number) => void;
     onSearchUser?: (query: string) => void;
     users?: User[];
     quick?: boolean;
@@ -79,7 +79,7 @@ import {
       onSave,
       onImageUpload,
       onSearchUser,
-      onChange,
+      onStage,
       users,
       quick = false,
       showAdvance = false,
@@ -164,7 +164,7 @@ import {
 
     const handleNext = () => {
         const number : Number = 2;
-        onChange(number);
+        onStage(number);
     }
   
     const validateExperience = (): boolean => {
