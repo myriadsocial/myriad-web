@@ -2,13 +2,9 @@ import {
     SearchIcon,
     XCircleIcon,
     PlusCircleIcon,
-    ChevronDownIcon,
-    CogIcon,
-    ChevronUpIcon,
   } from '@heroicons/react/solid';
   
-  import React, { useState, useEffect, useRef } from 'react';
-  import InfiniteScroll from 'react-infinite-scroll-component';
+  import React, { useState, useRef } from 'react';
   import { useSelector } from 'react-redux';
   
   import { useRouter } from 'next/router';
@@ -34,15 +30,12 @@ import {
     SelectedUserIds,
   } from '../../interfaces/experience';
   import { People } from '../../interfaces/people';
-  import { PostDetailExperience } from '../PostDetailExperience/PostDetailExperience';
   import { ListItemPeopleComponent } from '../atoms/ListItem/ListItemPeople';
-  import { Loading } from '../atoms/Loading';
   import ShowIf from '../common/show-if.component';
   import { useStyles } from './Experience.styles';
   
   import { debounce, isEmpty } from 'lodash';
   import { useExperienceHook } from 'src/hooks/use-experience-hook';
-  import { Post } from 'src/interfaces/post';
   import { User } from 'src/interfaces/user';
   import * as UserAPI from 'src/lib/api/user';
   import i18n from 'src/locale';
@@ -58,10 +51,13 @@ import {
     onSearchTags: (query: string) => void;
     onSearchPeople: (query: string) => void;
     onSave: (experience: ExperienceProps) => void;
+    onExperience: (value: any) => void;
     onStage: (value: Number) => void;
     quick?: boolean;
     showAdvance?: boolean;
     experienceVisibility?: VisibilityItem;
+    newExperience: ExperienceProps;
+    saveExperience: () => void;
   };
   
   enum TagsProps {
@@ -90,7 +86,10 @@ import {
       quick = false,
       showAdvance = false,
       experienceVisibility,
-      onStage
+      onStage,
+      onExperience,
+      newExperience,
+      saveExperience
     } = props;
     const styles = useStyles({ quick });
   
@@ -109,8 +108,6 @@ import {
       state => state.userState,
     );
     const [experienceId, setExperienceId] = useState<string | undefined>();
-    const [newExperience, setNewExperience] =
-      useState<ExperienceProps>(experience);
     const [, setDetailChanged] = useState<boolean>(false);
     const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
     const [selectedVisibility, setSelectedVisibility] =
@@ -129,20 +126,6 @@ import {
     });
     const [showAdvanceSetting, setShowAdvanceSetting] =
       useState<boolean>(showAdvance);
-  
-    useEffect(() => {
-      const experienceId = router.query.experienceId as string | null;
-      if (experienceId) {
-        setExperienceId(experienceId);
-        loadPostExperience(experienceId);
-      }
-    }, []);
-  
-    useEffect(() => {
-      if (isSubmitted) {
-        validateExperience();
-      }
-    }, [isSubmitted, newExperience]);
   
     const handleSearchTags = (event: React.ChangeEvent<HTMLInputElement>) => {
       const debounceSubmit = debounce(() => {
@@ -219,12 +202,12 @@ import {
   
       if (reason === 'remove-option') {
         if (type === TagsProps.ALLOWED) {
-          setNewExperience(prevExperience => ({
+          onExperience(prevExperience => ({
             ...prevExperience,
             allowedTags: data,
           }));
         } else if (type === TagsProps.PROHIBITED) {
-          setNewExperience(prevExperience => ({
+          onExperience(prevExperience => ({
             ...prevExperience,
             prohibitedTags: data,
           }));
@@ -233,12 +216,12 @@ import {
   
       if (reason === 'create-option') {
         if (type === TagsProps.ALLOWED) {
-          setNewExperience(prevExperience => ({
+          onExperience(prevExperience => ({
             ...prevExperience,
             allowedTags: data,
           }));
         } else if (type === TagsProps.PROHIBITED) {
-          setNewExperience(prevExperience => ({
+          onExperience(prevExperience => ({
             ...prevExperience,
             prohibitedTags: data,
           }));
@@ -247,12 +230,12 @@ import {
   
       if (reason === 'select-option') {
         if (type === TagsProps.ALLOWED) {
-          setNewExperience(prevExperience => ({
+          onExperience(prevExperience => ({
             ...prevExperience,
             allowedTags: data,
           }));
         } else if (type === TagsProps.PROHIBITED) {
-          setNewExperience(prevExperience => ({
+          onExperience(prevExperience => ({
             ...prevExperience,
             prohibitedTags: data,
           }));
@@ -268,7 +251,7 @@ import {
     ) => {
       const people = newExperience?.people ? newExperience.people : [];
       if (reason === 'select-option') {
-        setNewExperience(prevExperience => ({
+        onExperience(prevExperience => ({
           ...prevExperience,
           people: [
             ...people,
@@ -279,132 +262,6 @@ import {
       }
   
       setDetailChanged(true);
-    };
-  
-    const validateExperience = (): boolean => {
-      const validName = newExperience.name.length > 0;
-      // const validPicture = Boolean(newExperience.experienceImageURL);
-      const validTags = newExperience.allowedTags.length >= 0;
-      const validPeople =
-        newExperience.people.filter(people => !isEmpty(people.id)).length >= 0;
-      const validSelectedUserIds =
-        selectedVisibility && selectedVisibility?.id === 'selected_user'
-          ? selectedUserIds.length > 0
-          : !isEmpty(selectedVisibility?.id);
-      const validVisibility = !isEmpty(selectedVisibility?.id);
-  
-      setErrors({
-        name: !validName,
-        picture: false,
-        tags: !validTags,
-        people: !validPeople,
-        visibility: !validVisibility,
-        selectedUserId: !validSelectedUserIds,
-      });
-  
-      return (
-        validName &&
-        validTags &&
-        validPeople &&
-        validVisibility &&
-        validSelectedUserIds
-      );
-    };
-  
-    const saveExperience = () => {
-      setIsSubmitted(true);
-  
-      const valid = validateExperience();
-  
-      if (valid) {
-        onSave(newExperience);
-      } else {
-        ref.current?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        });
-      }
-    };
-  
-    const visibilityList: VisibilityItem[] = [
-      {
-        id: 'public',
-        name: i18n.t('Experience.Editor.Visibility.Public'),
-      },
-      {
-        id: 'private',
-        name: i18n.t('Experience.Editor.Visibility.OnlyMe'),
-      },
-      {
-        id: 'selected_user',
-        name: i18n.t('Experience.Editor.Visibility.Custom'),
-      },
-      {
-        id: 'friend',
-        name: i18n.t('Experience.Editor.Visibility.Friend_Only'),
-      },
-    ];
-  
-    const mappingUserIds = () => {
-      console.log({ selectedVisibility });
-      if (selectedVisibility?.id === 'selected_user') {
-        const timestamp = Date.now();
-        const mapIds = Object.values(
-          selectedUserIds.map(option => {
-            return {
-              userId: option.id,
-              addedAt: timestamp,
-            };
-          }),
-        );
-        setNewExperience(prevExperience => ({
-          ...prevExperience,
-          selectedUserIds: mapIds,
-        }));
-      } else {
-        setNewExperience(prevExperience => ({
-          ...prevExperience,
-          selectedUserIds: [],
-        }));
-      }
-    };
-  
-    useEffect(() => {
-      mappingUserIds();
-      setDetailChanged(true);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedUserIds, experience]);
-  
-    const getSelectedIds = async (selected: SelectedUserIds[]) => {
-      setIsLoadingSelectedUser(true);
-      const userIds = selected.map(e => e.userId);
-      const response = await UserAPI.getUserByIds(userIds, pageUserIds);
-      setSelectedUserIds([
-        ...selectedUserIds,
-        ...(response?.data as unknown as User[]),
-      ]);
-      setIsLoadingSelectedUser(false);
-      if (pageUserIds < response.meta.totalPageCount)
-        setPageUserIds(pageUserIds + 1);
-    };
-  
-    React.useEffect(() => {
-      getSelectedIds(experience?.selectedUserIds);
-    }, [experience, pageUserIds]);
-  
-    useEffect(() => {
-      if (experience) {
-        const visibility = visibilityList.find(
-          option => option.id === experience?.visibility,
-        );
-        setSelectedVisibility(visibility);
-  
-        getSelectedIds(experience?.selectedUserIds);
-      }
-    }, [experience]);
-  
-    const handleAdvanceSetting = () => {
-      setShowAdvanceSetting(!showAdvanceSetting);
     };
 
     const handleBack = () => {
@@ -607,27 +464,6 @@ import {
  
           </div>
         </div>
-  
-        <ShowIf condition={quick}>
-          <div className={styles.header}>
-            <ShowIf condition={!showAdvanceSetting}>
-              <Button
-                color="primary"
-                variant="outlined"
-                style={{ width: 'auto' }}
-                onClick={handleAdvanceSetting}>
-                {i18n.t(`Experience.Editor.Btn.AdvancedSettings`)}
-              </Button>
-            </ShowIf>
-            <Button
-              color="primary"
-              variant="contained"
-              style={{ width: 'auto', marginLeft: 'auto' }}
-              onClick={saveExperience}>
-              {i18n.t(`Experience.Editor.Btn.${type}`)}
-            </Button>
-          </div>
-        </ShowIf>
       </div>
     );
   };

@@ -350,10 +350,10 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     const validPeople =
       newExperience.people.filter(people => !isEmpty(people.id)).length >= 0;
     const validSelectedUserIds =
-      selectedVisibility && selectedVisibility?.id === 'selected_user'
+      newExperience.visibility === 'selected_user'
         ? selectedUserIds.length > 0
-        : !isEmpty(selectedVisibility?.id);
-    const validVisibility = !isEmpty(selectedVisibility?.id);
+        : !isEmpty(newExperience.visibility);
+    const validVisibility = !isEmpty(newExperience.visibility);
 
     setErrors({
       name: !validName,
@@ -433,21 +433,6 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     },
   ];
 
-  const handleVisibilityChange = (
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    event: React.ChangeEvent<{}>,
-    value: VisibilityItem,
-    reason: AutocompleteChangeReason,
-  ) => {
-    setSelectedVisibility(value);
-    setNewExperience(prevExperience => ({
-      ...prevExperience,
-      visibility: value?.id,
-    }));
-
-    setDetailChanged(true);
-  };
-
   const handleSearchUser = (event: React.ChangeEvent<HTMLInputElement>) => {
     const debounceSubmit = debounce(() => {
       onSearchUser(event.target.value);
@@ -518,6 +503,14 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     }
   };
 
+  const onExperience = (value) => {
+    setNewExperience(value)
+  };
+
+  const onVisibility = (value) => {
+    setSelectedVisibility(value)
+  }
+
   useEffect(() => {
     mappingUserIds();
     setDetailChanged(true);
@@ -558,11 +551,17 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
 
   if (stage === 1) {return (
     <BasicExperienceEditor
-      onSave={onSave}
       onStage={onStage}
-      onImageUpload={onImageUpload}
       onSearchUser={onSearchUser}
       users={users}
+      onExperience={onExperience}
+      newExperience={newExperience}
+      onVisibility={onVisibility}
+      selectedVisibility={selectedVisibility}
+      image={image}
+      handleImageUpload={handleImageUpload}
+      selectedUserIds={selectedUserIds}
+      onSelectedUserIds={setSelectedUserIds}
     />
 
   );}
@@ -588,7 +587,35 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         tags={tags}
         people={people}
         onSearchPeople={onSearchPeople}
+        onExperience={onExperience}
+        newExperience={newExperience}
+        saveExperience={saveExperience}
       />
     )
   }
+
+  return (
+    <>
+    <ShowIf condition={quick}>
+          <div className={styles.header}>
+            <ShowIf condition={!showAdvanceSetting}>
+              <Button
+                color="primary"
+                variant="outlined"
+                style={{ width: 'auto' }}
+                onClick={handleAdvanceSetting}>
+                {i18n.t(`Experience.Editor.Btn.AdvancedSettings`)}
+              </Button>
+            </ShowIf>
+            <Button
+              color="primary"
+              variant="contained"
+              style={{ width: 'auto', marginLeft: 'auto' }}
+              onClick={saveExperience}>
+              {i18n.t(`Experience.Editor.Btn.${type}`)}
+            </Button>
+          </div>
+        </ShowIf>
+    </>
+  )
 };

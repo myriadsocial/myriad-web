@@ -5,8 +5,7 @@ import {
     ChevronDownIcon,
   } from '@heroicons/react/solid';
   
-  import React, { useState, useEffect, useRef } from 'react';
-  import { useSelector } from 'react-redux';
+  import React, { useState, useRef } from 'react';
   
   import { useRouter } from 'next/router';
   
@@ -51,16 +50,20 @@ import {
   import { UserState } from 'src/reducers/user/reducer';
   
   type BasicExperienceEditorProps = {
-    type?: 'Clone' | 'Edit' | 'Create';
     experience?: ExperienceProps;
-    onSave: (experience: ExperienceProps) => void;
-    onImageUpload: (files: File[]) => Promise<string>;
+    handleImageUpload: (files: File[]) => Promise<void>;
     onStage: (value: Number) => void;
+    onExperience: (value: any) => void;
     onSearchUser?: (query: string) => void;
     users?: User[];
     quick?: boolean;
-    showAdvance?: boolean;
     experienceVisibility?: VisibilityItem;
+    newExperience: ExperienceProps;
+    onVisibility: (value: any) => void;
+    image: string;
+    selectedVisibility: VisibilityItem;
+    selectedUserIds: User[];
+    onSelectedUserIds: (value: any) => void;
   };
   
   const DEFAULT_EXPERIENCE: ExperienceProps = {
@@ -74,39 +77,28 @@ import {
   
   export const BasicExperienceEditor: React.FC<BasicExperienceEditorProps> = props => {
     const {
-      type = 'Create',
       experience = DEFAULT_EXPERIENCE,
-      onSave,
-      onImageUpload,
+      handleImageUpload,
       onSearchUser,
       onStage,
+      onExperience,
       users,
       quick = false,
-      showAdvance = false,
       experienceVisibility,
+      newExperience,
+      image,
+      onVisibility,
+      selectedVisibility,
+      selectedUserIds,
+      onSelectedUserIds
     } = props;
     const styles = useStyles({ quick });
-  
-    const {
-      loadPostExperience,
-    } = useExperienceHook();
     const router = useRouter();
     const { clearUsers } = useSearchHook();
   
     const ref = useRef(null);
-    const [experienceId, setExperienceId] = useState<string | undefined>();
-    const [newExperience, setNewExperience] =
-      useState<ExperienceProps>(experience);
-    const [image, setImage] = useState<string | undefined>(
-      experience?.experienceImageURL,
-    );
     const [, setDetailChanged] = useState<boolean>(false);
     const [isLoading, setIsloading] = useState<boolean>(false);
-    const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-    const [selectedVisibility, setSelectedVisibility] =
-      useState<VisibilityItem>(experienceVisibility);
-    const [selectedUserIds, setSelectedUserIds] = useState<User[]>([]);
-    const [pageUserIds, setPageUserIds] = React.useState<number>(1);
     const [isLoadingSelectedUser, setIsLoadingSelectedUser] =
       useState<boolean>(false);
     const [errors, setErrors] = useState({
@@ -117,44 +109,13 @@ import {
       visibility: false,
       selectedUserId: false,
     });
-    const [showAdvanceSetting, setShowAdvanceSetting] =
-      useState<boolean>(showAdvance);
-  
-    useEffect(() => {
-      const experienceId = router.query.experienceId as string | null;
-      if (experienceId) {
-        setExperienceId(experienceId);
-        loadPostExperience(experienceId);
-      }
-    }, []);
-  
-    useEffect(() => {
-      if (isSubmitted) {
-        validateExperience();
-      }
-    }, [isSubmitted, newExperience]);
-  
-    const handleImageUpload = async (files: File[]) => {
-      if (files.length > 0) {
-        setIsloading(true);
-        const url = await onImageUpload(files);
-  
-        setIsloading(false);
-        setImage(url);
-        setNewExperience({ ...newExperience, experienceImageURL: url });
-      } else {
-        setNewExperience({ ...newExperience, experienceImageURL: undefined });
-      }
-  
-      setDetailChanged(true);
-    };
   
     const handleChange =
       (field: keyof ExperienceProps) =>
       (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value.trimStart();
   
-        setNewExperience(prevExperience => ({
+        onExperience(prevExperience => ({
           ...prevExperience,
           [field]: value,
         }));
@@ -166,51 +127,6 @@ import {
         const number : Number = 2;
         onStage(number);
     }
-  
-    const validateExperience = (): boolean => {
-      const validName = newExperience.name.length > 0;
-      // const validPicture = Boolean(newExperience.experienceImageURL);
-      const validTags = newExperience.allowedTags.length >= 0;
-      const validPeople =
-        newExperience.people.filter(people => !isEmpty(people.id)).length >= 0;
-      const validSelectedUserIds =
-        selectedVisibility && selectedVisibility?.id === 'selected_user'
-          ? selectedUserIds.length > 0
-          : !isEmpty(selectedVisibility?.id);
-      const validVisibility = !isEmpty(selectedVisibility?.id);
-  
-      setErrors({
-        name: !validName,
-        picture: false,
-        tags: !validTags,
-        people: !validPeople,
-        visibility: !validVisibility,
-        selectedUserId: !validSelectedUserIds,
-      });
-  
-      return (
-        validName &&
-        validTags &&
-        validPeople &&
-        validVisibility &&
-        validSelectedUserIds
-      );
-    };
-  
-    const saveExperience = () => {
-      setIsSubmitted(true);
-  
-      const valid = validateExperience();
-  
-      if (valid) {
-        onSave(newExperience);
-      } else {
-        ref.current?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        });
-      }
-    };
   
     const visibilityList: VisibilityItem[] = [
       {
@@ -237,8 +153,8 @@ import {
       value: VisibilityItem,
       reason: AutocompleteChangeReason,
     ) => {
-      setSelectedVisibility(value);
-      setNewExperience(prevExperience => ({
+      onVisibility(value);
+      onExperience(prevExperience => ({
         ...prevExperience,
         visibility: value?.id,
       }));
@@ -271,7 +187,7 @@ import {
       const people = selectedUserIds ? selectedUserIds : [];
       console.log({ value });
       if (reason === 'select-option') {
-        setSelectedUserIds([
+        onSelectedUserIds([
           ...people,
           ...value.filter(option => people.indexOf(option) === -1),
         ]);
@@ -283,75 +199,13 @@ import {
     };
   
     const removeVisibilityPeople = (selected: User) => () => {
-      setSelectedUserIds(
+      onSelectedUserIds(
         selectedUserIds
           ? selectedUserIds.filter(people => people.id != selected.id)
           : [],
       );
   
       setDetailChanged(true);
-    };
-  
-    const mappingUserIds = () => {
-      console.log({ selectedVisibility });
-      if (selectedVisibility?.id === 'selected_user') {
-        const timestamp = Date.now();
-        const mapIds = Object.values(
-          selectedUserIds.map(option => {
-            return {
-              userId: option.id,
-              addedAt: timestamp,
-            };
-          }),
-        );
-        setNewExperience(prevExperience => ({
-          ...prevExperience,
-          selectedUserIds: mapIds,
-        }));
-      } else {
-        setNewExperience(prevExperience => ({
-          ...prevExperience,
-          selectedUserIds: [],
-        }));
-      }
-    };
-  
-    useEffect(() => {
-      mappingUserIds();
-      setDetailChanged(true);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedUserIds, experience]);
-  
-    const getSelectedIds = async (selected: SelectedUserIds[]) => {
-      setIsLoadingSelectedUser(true);
-      const userIds = selected.map(e => e.userId);
-      const response = await UserAPI.getUserByIds(userIds, pageUserIds);
-      setSelectedUserIds([
-        ...selectedUserIds,
-        ...(response?.data as unknown as User[]),
-      ]);
-      setIsLoadingSelectedUser(false);
-      if (pageUserIds < response.meta.totalPageCount)
-        setPageUserIds(pageUserIds + 1);
-    };
-  
-    React.useEffect(() => {
-      getSelectedIds(experience?.selectedUserIds);
-    }, [experience, pageUserIds]);
-  
-    useEffect(() => {
-      if (experience) {
-        const visibility = visibilityList.find(
-          option => option.id === experience?.visibility,
-        );
-        setSelectedVisibility(visibility);
-  
-        getSelectedIds(experience?.selectedUserIds);
-      }
-    }, [experience]);
-  
-    const handleAdvanceSetting = () => {
-      setShowAdvanceSetting(!showAdvanceSetting);
     };
   
     return (
@@ -597,27 +451,6 @@ import {
             </FormControl>
           </div>
         </div>
-  
-        <ShowIf condition={quick}>
-          <div className={styles.header}>
-            <ShowIf condition={!showAdvanceSetting}>
-              <Button
-                color="primary"
-                variant="outlined"
-                style={{ width: 'auto' }}
-                onClick={handleAdvanceSetting}>
-                {i18n.t(`Experience.Editor.Btn.AdvancedSettings`)}
-              </Button>
-            </ShowIf>
-            <Button
-              color="primary"
-              variant="contained"
-              style={{ width: 'auto', marginLeft: 'auto' }}
-              onClick={saveExperience}>
-              {i18n.t(`Experience.Editor.Btn.${type}`)}
-            </Button>
-          </div>
-        </ShowIf>
       </div>
     );
   };

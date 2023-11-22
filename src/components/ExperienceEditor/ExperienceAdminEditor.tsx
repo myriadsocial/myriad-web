@@ -7,7 +7,7 @@ import {
     ChevronUpIcon,
   } from '@heroicons/react/solid';
   
-  import React, { useState, useEffect, useRef } from 'react';
+  import React, { useState, useRef } from 'react';
   import InfiniteScroll from 'react-infinite-scroll-component';
   import { useSelector } from 'react-redux';
   
@@ -89,7 +89,7 @@ import {
       quick = false,
       showAdvance = false,
       experienceVisibility,
-      onStage
+      onStage,
     } = props;
     const styles = useStyles({ quick });
   
@@ -131,22 +131,6 @@ import {
       visibility: false,
       selectedUserId: false,
     });
-    const [showAdvanceSetting, setShowAdvanceSetting] =
-      useState<boolean>(showAdvance);
-  
-    useEffect(() => {
-      const experienceId = router.query.experienceId as string | null;
-      if (experienceId) {
-        setExperienceId(experienceId);
-        loadPostExperience(experienceId);
-      }
-    }, []);
-  
-    useEffect(() => {
-      if (isSubmitted) {
-        validateExperience();
-      }
-    }, [isSubmitted, newExperience]);
 
     const handleBack = () => {
         onStage(1);
@@ -155,66 +139,6 @@ import {
     const handleNext = () => {
         onStage(3);
     }
-  
-    const handleImageUpload = async (files: File[]) => {
-      if (files.length > 0) {
-        setIsloading(true);
-        const url = await onImageUpload(files);
-  
-        setIsloading(false);
-        setImage(url);
-        setNewExperience({ ...newExperience, experienceImageURL: url });
-      } else {
-        setNewExperience({ ...newExperience, experienceImageURL: undefined });
-      }
-  
-      setDetailChanged(true);
-    };
-  
-    const validateExperience = (): boolean => {
-      const validName = newExperience.name.length > 0;
-      // const validPicture = Boolean(newExperience.experienceImageURL);
-      const validTags = newExperience.allowedTags.length >= 0;
-      const validPeople =
-        newExperience.people.filter(people => !isEmpty(people.id)).length >= 0;
-      const validSelectedUserIds =
-        selectedVisibility && selectedVisibility?.id === 'selected_user'
-          ? selectedUserIds.length > 0
-          : !isEmpty(selectedVisibility?.id);
-      const validVisibility = !isEmpty(selectedVisibility?.id);
-  
-      setErrors({
-        name: !validName,
-        picture: false,
-        tags: !validTags,
-        people: !validPeople,
-        visibility: !validVisibility,
-        selectedUserId: !validSelectedUserIds,
-      });
-  
-      return (
-        validName &&
-        validTags &&
-        validPeople &&
-        validVisibility &&
-        validSelectedUserIds
-      );
-    };
-  
-    const saveExperience = () => {
-      setIsSubmitted(true);
-  
-      const valid = validateExperience();
-  
-      if (valid) {
-        onSave(newExperience);
-      } else {
-        ref.current?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        });
-      }
-    };
   
     const visibilityList: VisibilityItem[] = [
       {
@@ -305,12 +229,6 @@ import {
       }
     };
   
-    useEffect(() => {
-      mappingUserIds();
-      setDetailChanged(true);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedUserIds, experience]);
-  
     const getSelectedIds = async (selected: SelectedUserIds[]) => {
       setIsLoadingSelectedUser(true);
       const userIds = selected.map(e => e.userId);
@@ -322,25 +240,6 @@ import {
       setIsLoadingSelectedUser(false);
       if (pageUserIds < response.meta.totalPageCount)
         setPageUserIds(pageUserIds + 1);
-    };
-  
-    React.useEffect(() => {
-      getSelectedIds(experience?.selectedUserIds);
-    }, [experience, pageUserIds]);
-  
-    useEffect(() => {
-      if (experience) {
-        const visibility = visibilityList.find(
-          option => option.id === experience?.visibility,
-        );
-        setSelectedVisibility(visibility);
-  
-        getSelectedIds(experience?.selectedUserIds);
-      }
-    }, [experience]);
-  
-    const handleAdvanceSetting = () => {
-      setShowAdvanceSetting(!showAdvanceSetting);
     };
   
     return (
@@ -496,27 +395,6 @@ import {
               </>
           </div>
         </div>
-  
-        <ShowIf condition={quick}>
-          <div className={styles.header}>
-            <ShowIf condition={!showAdvanceSetting}>
-              <Button
-                color="primary"
-                variant="outlined"
-                style={{ width: 'auto' }}
-                onClick={handleAdvanceSetting}>
-                {i18n.t(`Experience.Editor.Btn.AdvancedSettings`)}
-              </Button>
-            </ShowIf>
-            <Button
-              color="primary"
-              variant="contained"
-              style={{ width: 'auto', marginLeft: 'auto' }}
-              onClick={saveExperience}>
-              {i18n.t(`Experience.Editor.Btn.${type}`)}
-            </Button>
-          </div>
-        </ShowIf>
       </div>
     );
   };
