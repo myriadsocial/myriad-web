@@ -180,27 +180,6 @@ jobs:
           cluster_name: ${{ secrets[format('{0}_{1}', matrix.environment, 'GKE_CLUSTER_NAME')] }}
           location: ${{ secrets[format('{0}_{1}', matrix.environment, 'GKE_LOCATION')] }}
           use_internal_ip: true
-      - name: Get Secrets from Google Secret Manager
-        id: secrets
-        uses: google-github-actions/get-secretmanager-secrets@4d6d3dfd94110800dda8d84109cb6da0f6a5919d
-        with:
-          secrets: |-
-            WEB_APP_ENVIRONMENT:${{ secrets[format('{0}_{1}', matrix.environment, 'GCP_PROJECT_ID')] }}/WEB_APP_ENVIRONMENT
-            WEB_APP_NAME:${{ secrets[format('{0}_{1}', matrix.environment, 'GCP_PROJECT_ID')] }}/WEB_APP_NAME
-            WEB_APP_SECRET:${{ secrets[format('{0}_{1}', matrix.environment, 'GCP_PROJECT_ID')] }}/WEB_APP_SECRET
-            SUPPORT_MAIL:${{ secrets[format('{0}_{1}', matrix.environment, 'GCP_PROJECT_ID')] }}/SUPPORT_MAIL
-            WEBSITE_URL:${{ secrets[format('{0}_{1}', matrix.environment, 'GCP_PROJECT_ID')] }}/WEBSITE_URL
-            NEAR_TIPPING_CONTRACT_ADDRESS:${{ secrets[format('{0}_{1}', matrix.environment, 'GCP_PROJECT_ID')] }}/NEAR_TIPPING_CONTRACT_ADDRESS
-            FIREBASE_PROJECT_ID:${{ secrets[format('{0}_{1}', matrix.environment, 'GCP_PROJECT_ID')] }}/FIREBASE_PROJECT_ID
-            FIREBASE_API_KEY:${{ secrets[format('{0}_{1}', matrix.environment, 'GCP_PROJECT_ID')] }}/FIREBASE_API_KEY
-            FIREBASE_MESSAGING_SENDER_ID:${{ secrets[format('{0}_{1}', matrix.environment, 'GCP_PROJECT_ID')] }}/FIREBASE_MESSAGING_SENDER_ID
-            FIREBASE_STORAGE_BUCKET:${{ secrets[format('{0}_{1}', matrix.environment, 'GCP_PROJECT_ID')] }}/FIREBASE_STORAGE_BUCKET
-            WEB_FIREBASE_APP_ID:${{ secrets[format('{0}_{1}', matrix.environment, 'GCP_PROJECT_ID')] }}/WEB_FIREBASE_APP_ID
-            WEB_FIREBASE_MEASUREMENT_ID:${{ secrets[format('{0}_{1}', matrix.environment, 'GCP_PROJECT_ID')] }}/WEB_FIREBASE_MEASUREMENT_ID
-            WEB_SENTRY_DSN:${{ secrets[format('{0}_{1}', matrix.environment, 'GCP_PROJECT_ID')] }}/WEB_SENTRY_DSN
-            WEB_DNS:${{ secrets[format('{0}_{1}', matrix.environment, 'GCP_PROJECT_ID')] }}/WEB_DNS
-            NODE_RPC_WS_DNS:${{ secrets[format('{0}_{1}', matrix.environment, 'GCP_PROJECT_ID')] }}/NODE_RPC_WS_DNS
-            API_DNS:${{ secrets[format('{0}_{1}', matrix.environment, 'GCP_PROJECT_ID')] }}/API_DNS
       - name: Tunneling SSH connections
         run: |
           gcloud compute ssh ${{ secrets[format('{0}_{1}', matrix.environment, 'GCE_BASTION_INSTANCE_NAME')] }} \
@@ -222,23 +201,9 @@ jobs:
             --set-string image.tag=${{ needs.release-please.outputs.tag_name || github.sha }} \
             --set-string serviceAccount.name=${{ github.event.repository.name }} \
             --set-string serviceAccount.annotations.'iam\.gke\.io/gcp-service-account'=${{ github.event.repository.name }}@${{ secrets[format('{0}_{1}', matrix.environment, 'GCP_PROJECT_ID')] }}.iam.gserviceaccount.com \
-            --set-string config.app.environment=${{ steps.secrets.outputs.WEB_APP_ENVIRONMENT }} \
-            --set-string config.app.name="${{ steps.secrets.outputs.WEB_APP_NAME }}" \
-            --set-string config.app.version=${{ needs.release-please.outputs.tag_name || github.sha }} \
-            --set-string config.app.authURL=https://${{ steps.secrets.outputs.WEB_DNS }} \
-            --set-string config.app.secret=${{ steps.secrets.outputs.WEB_APP_SECRET }} \
-            --set-string config.supportMail=${{ steps.secrets.outputs.SUPPORT_MAIL }} \
-            --set-string config.websiteURL=${{ steps.secrets.outputs.WEBSITE_URL }} \
-            --set-string config.rpcURL=wss://${{ steps.secrets.outputs.NODE_RPC_WS_DNS }} \
-            --set-string config.apiURL=https://${{ steps.secrets.outputs.API_DNS }} \
-            --set-string config.near.tippingContractAddress=${{ steps.secrets.outputs.NEAR_TIPPING_CONTRACT_ADDRESS }} \
-            --set-string config.firebase.projectId=${{ steps.secrets.outputs.FIREBASE_PROJECT_ID }} \
-            --set-string config.firebase.apiKey=${{ steps.secrets.outputs.FIREBASE_API_KEY }} \
-            --set-string config.firebase.messagingSenderId=${{ steps.secrets.outputs.FIREBASE_MESSAGING_SENDER_ID }} \
-            --set-string config.firebase.storageBucket=${{ steps.secrets.outputs.FIREBASE_STORAGE_BUCKET }} \
-            --set-string config.firebase.appId=${{ steps.secrets.outputs.WEB_FIREBASE_APP_ID }} \
-            --set-string config.firebase.measurementId=${{ steps.secrets.outputs.WEB_FIREBASE_MEASUREMENT_ID }} \
-            --set-string config.sentry.dsn=${{ steps.secrets.outputs.WEB_SENTRY_DSN }} \
+            --set config.secretsStore.enabled=true \
+            --set-string config.secretsStore.providerClass=${{ github.event.repository.name }}-secrets-store-provider \
+            --set-string config.secretsStore.name=${{ github.event.repository.name }}-secrets-store \
             --set-string nodeSelector.node_pool=general \
             --set-string nodeSelector.'iam\.gke\.io/gke-metadata-server-enabled'='true'
           HTTPS_PROXY=127.0.0.1:8888 kubectl rollout status deployment/${{ github.event.repository.name }}
