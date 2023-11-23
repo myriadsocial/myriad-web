@@ -19,6 +19,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
     },
     buttonCreate: {
+      position: 'relative',
       cursor: 'pointer',
       zIndex: 99,
       marginTop: -50,
@@ -31,6 +32,15 @@ export const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: '#862AE9',
         opacity: 0.8,
       },
+    },
+    popoverbuttonCreate: {
+      width: '40px',
+      height: '40px',
+    },
+    popover: {
+      position: 'absolute',
+      top: -40
+
     },
     fillButtonCreate: {
       color: '#fff',

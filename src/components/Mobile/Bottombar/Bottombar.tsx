@@ -13,7 +13,7 @@ import { useDispatch } from 'react-redux';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 
-import { SvgIcon, Grid, IconButton } from '@material-ui/core';
+import { SvgIcon, Grid, IconButton, Popover } from '@material-ui/core';
 
 import { CustomFolderIcon } from 'components/Menu';
 import { Avatar, AvatarSize } from 'components/atoms/Avatar';
@@ -71,6 +71,7 @@ export const BottombarComponent: React.FC<SearchBoxContainerProps> = props => {
   const router = useRouter();
 
   const { user, anonymous } = useUserHook();
+  const [popOpen, setPopOpen] = React.useState(false)
 
   const { instance } = useInstances();
 
@@ -78,8 +79,17 @@ export const BottombarComponent: React.FC<SearchBoxContainerProps> = props => {
   const [actived, setActived] = React.useState<TimelineType>();
 
   const handleOpenCreatePost = () => {
+    setPopOpen(false);
     setCreatePostOpened(true);
   };
+
+  const handleOpenPopover = () => {
+    setPopOpen(true);
+  }
+
+  const handleClose = (event) => {
+    setPopOpen(false);
+  }
 
   const handleCloseCreatePost = () => {
     setCreatePostOpened(false);
@@ -166,10 +176,22 @@ export const BottombarComponent: React.FC<SearchBoxContainerProps> = props => {
 
         <div className={style.buttonCreate}>
           <IconButton
-            onClick={handleOpenCreatePost}
+            onClick={handleOpenPopover}
             className={style.iconbuttonCreate}>
             <SvgIcon className={style.fillButtonCreate} component={PlusIcon} />
           </IconButton>
+          <Popover 
+            open={popOpen}  
+            onClose={handleClose}  
+            className={style.popover}  
+          >
+            <IconButton
+              onClick={handleOpenCreatePost}
+              className={style.popoverbuttonCreate}>
+              <SvgIcon className={style.fillButtonCreate} component={PlusIcon} />
+            </IconButton>
+          </Popover>
+
         </div>
         <div className={style.button}>
           <IconButton
