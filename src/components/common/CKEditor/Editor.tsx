@@ -1,5 +1,6 @@
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
+import customEditor from 'ckeditor5/build/ckeditor';
 
 import React, { useState } from 'react';
 
@@ -57,7 +58,6 @@ export const Editor: React.FC<EditorProps> = props => {
   const config = {
     licenseKey: '',
     placeholder: placeholder ?? 'Type...',
-    extraPlugins: [CustomAdapterPlugin],
     // toolbar: {
     //   items: [
     //     'bold',
@@ -73,9 +73,6 @@ export const Editor: React.FC<EditorProps> = props => {
     //     'imageUpload',
     //   ],
     // },
-    alignment: {
-      options: ['left', 'right', 'center', 'justify'],
-    },
     mention: {
       feeds: [
         {
@@ -83,12 +80,6 @@ export const Editor: React.FC<EditorProps> = props => {
           feed: handleSearch,
         },
       ],
-    },
-    image: {
-      upload: {
-        types: ['png', 'jpeg', 'webp', 'gif', 'mp4'],
-      },
-      toolbar: [],
     },
   };
 
@@ -108,17 +99,10 @@ export const Editor: React.FC<EditorProps> = props => {
       className={`${styles.root} ${styles.large}`}
       style={{ borderColor: isErrorEditor ? '#FE3333' : '#E0E0E0' }}>
       <CKEditor
-        editor={ClassicEditor}
+        editor={customEditor}
         config={config}
         onReady={editor => {
-          editor.plugins
-            .get('FileRepository')
-            .on('change:uploadTotal', (e, n, value) => {
-              if (value === 0) {
-                const data = editor.getData();
-                onChange(data, true);
-              }
-            });
+          console.log("Editor is ready")
         }}
         onChange={(event, editor) => {
           let data = editor.getData();
