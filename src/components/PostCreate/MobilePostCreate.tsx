@@ -5,16 +5,17 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
 import dynamic from 'next/dynamic';
 
-import { Box, Button, IconButton, SvgIcon, Typography } from '@material-ui/core';
+import { Box, Button, IconButton, Paper, SvgIcon, Typography } from '@material-ui/core';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
+import { SocialAvatar } from 'components/atoms/SocialAvatar';
 
 import { NSFWTags } from '../NSFWTags';
 import { PostImport } from '../PostImport';
 import { DropdownMenu } from '../atoms/DropdownMenu';
 import { Modal } from '../atoms/Modal';
 import { TabPanel } from '../atoms/TabPanel';
-import { useStyles } from './PostCreate.styles';
+import { useStyles } from './MobilePostCreate.styles';
 import SettingVisibility from './SettingVisibility';
 import { menuOptions } from './default';
 import { serialize } from './formatter';
@@ -95,6 +96,7 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
   const [commonUser, setCommonUser] = useState<string[]>([]);
   const [userExperiences, setUserExperiences] = useState<UserExperience[]>([]);
   const [page, setPage] = useState<number>(1);
+  const [currentExperience, setCurrentExperience] = useState<number>(0);
 
   const Editor = isMobile ? CKEditor : PlateEditor;
 
@@ -419,6 +421,30 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
 
         <div>
             <button className={styles.postbutton}>post</button>
+        </div>
+        <div>
+          <Paper className={styles.timelinePaper}>
+            <div className={styles.avatar}>
+            <SocialAvatar
+            avatar={user.profilePictureURL}
+            origin="myriad"
+            onClick={()=> {}}
+            name="avatar"
+            />
+            </div>
+            <div className={styles.cardUserName}>
+              <Typography>Timeline Name</Typography>
+            </div>
+          </Paper>
+        </div>
+        <div className={styles.editor}>
+        <Editor
+            userId={user.id}
+            mobile={isMobile}
+            onSearchMention={onSearchPeople}
+            onChange={handleContentChange}
+            autoFocus={!showExclusive}
+          />
         </div>
       {/* Select Timeline */}
       {/* Timeline list */}

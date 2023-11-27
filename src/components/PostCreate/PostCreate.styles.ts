@@ -180,16 +180,5 @@ export const useStyles = makeStyles((theme: Theme) =>
       top: 109,
       bottom: 182,
     },
-    postbutton: {
-      position: "absolute",
-      width: 79,
-      height: 24.35,
-      right: 20,
-      top: 16,
-    },
-    trialbutton: {
-      position: "relative",
-      bottom: 20,
-    },
   }),
 );

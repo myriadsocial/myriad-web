@@ -58,21 +58,21 @@ export const Editor: React.FC<EditorProps> = props => {
     licenseKey: '',
     placeholder: placeholder ?? 'Type...',
     extraPlugins: [CustomAdapterPlugin],
-    toolbar: {
-      items: [
-        'bold',
-        'italic',
-        'blockQuote',
-        'alignment',
-        '|',
-        'bulletedList',
-        'numberedList',
-        'indent',
-        'outdent',
-        'link',
-        'imageUpload',
-      ],
-    },
+    // toolbar: {
+    //   items: [
+    //     'bold',
+    //     'italic',
+    //     'blockQuote',
+    //     'alignment',
+    //     '|',
+    //     'bulletedList',
+    //     'numberedList',
+    //     'indent',
+    //     'outdent',
+    //     'link',
+    //     'imageUpload',
+    //   ],
+    // },
     alignment: {
       options: ['left', 'right', 'center', 'justify'],
     },
@@ -122,11 +122,6 @@ export const Editor: React.FC<EditorProps> = props => {
         }}
         onChange={(event, editor) => {
           let data = editor.getData();
-          if (uploadedVideos.length !== 0) {
-            data =
-              data +
-              `<video controls src='${uploadedVideos[0]}'>your browser does not support video</video>`;
-          }
           setEditorData(data);
 
           onChange(data, false);
@@ -135,36 +130,6 @@ export const Editor: React.FC<EditorProps> = props => {
           console.error({ event, editor });
         }}
       />
-
-      <Button
-        variant="contained"
-        color="primary"
-        size="small"
-        fullWidth
-        onClick={handleUploadButtonClick}
-        style={{ margin: '10px auto' }}>
-        Upload Video
-      </Button>
-
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, 150px)',
-          gridGap: '10px',
-        }}>
-        {uploadedVideos.map((videoURL, index) => (
-          <VideoPreview key={index} videoURL={videoURL} />
-        ))}
-      </div>
-
-      {modalOpen && (
-        <MediaEmbedToolbarButton
-          userId={userId} // Pass the required props to the MediaEmbedToolbarButton component
-          onFileSelected={handleFileSelected}
-          modalOpen={modalOpen}
-          onClose={() => setModalOpen(false)}
-        />
-      )}
     </div>
   );
 };
