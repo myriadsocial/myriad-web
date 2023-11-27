@@ -19,6 +19,7 @@ import i18n from 'src/locale';
 import { RootState } from 'src/reducers';
 import { loadUsers, searchUsers } from 'src/reducers/search/actions';
 import { createPost, importPost } from 'src/reducers/timeline/actions';
+import MobilePostCreate from './MobilePostCreate';
 
 type PostCreateContainerType = {
   open: boolean;
@@ -178,6 +179,56 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
+  if (!redirect && isMobile) {
+    return (
+      <>
+        <MobilePostCreate
+          user={user}
+          open={open}
+          onClose={onClose}
+          onSearchPeople={handleSearchPeople}
+          onSubmit={submitPost}
+          isMobile={isMobile}
+        />
+        <PromptComponent
+          title={i18n.t('Home.RichText.Prompt_Import.Title')}
+          subtitle={dialogFailedImport.message}
+          open={dialogFailedImport.open}
+          icon="warning"
+          onCancel={() =>
+            setDialogFailedImport({ ...dialogFailedImport, open: false })
+          }>
+          <div
+            style={{
+              marginTop: 32,
+              display: 'flex',
+              justifyContent: 'center',
+              gap: '20px',
+            }}>
+            <Button
+              size="small"
+              variant="outlined"
+              color="secondary"
+              onClick={() =>
+                setDialogFailedImport({ ...dialogFailedImport, open: false })
+              }>
+              {i18n.t('General.OK')}
+            </Button>
+            {/* TODO: Added translation */}
+            <Button
+              size="small"
+              variant="contained"
+              color="primary"
+              onClick={() =>
+                router.push({ pathname: `/post/${dialogFailedImport.postId}` })
+              }>
+              See post
+            </Button>
+          </div>
+        </PromptComponent>
+      </>
+    );
+  }
 
   if (!user) return null;
   if (!redirect) {

@@ -166,5 +166,30 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginRight: '10px !important',
       color: '#C2C2C2',
     },
+    buttongroup: {
+      position: "absolute",
+      width: 455,
+      height: 24.4,
+      left: 13,
+      top: 3,
+    },
+    editor: {
+      position: "absolute",
+      left: 13,
+      right: 14,
+      top: 109,
+      bottom: 182,
+    },
+    postbutton: {
+      position: "absolute",
+      width: 79,
+      height: 24.35,
+      right: 20,
+      top: 16,
+    },
+    trialbutton: {
+      position: "relative",
+      bottom: 20,
+    },
   }),
 );
