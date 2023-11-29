@@ -1,5 +1,6 @@
 import React from 'react';
 import { CookiesProvider } from 'react-cookie';
+import "../ckeditor.css"
 
 import { SessionProvider } from 'next-auth/react';
 import { AppProps, NextWebVitalsMetric } from 'next/app';
