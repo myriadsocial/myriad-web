@@ -1,6 +1,5 @@
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
-import customEditor from 'ckeditor5/build/ckeditor';
 
 import React, { useState } from 'react';
 
@@ -11,6 +10,7 @@ import { useStyles } from './Editor.style';
 import { MediaEmbedToolbarButton } from './MediaEmbedButton';
 import { CustomAdapterPlugin } from './adapters';
 
+import customEditor from 'ckeditor5/build/ckeditor';
 import * as UserAPI from 'src/lib/api/user';
 
 type File = {
@@ -102,7 +102,7 @@ export const Editor: React.FC<EditorProps> = props => {
         editor={customEditor}
         config={config}
         onReady={editor => {
-          console.log("Editor is ready")
+          console.log('Editor is ready');
         }}
         onChange={(event, editor) => {
           let data = editor.getData();

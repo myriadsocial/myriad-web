@@ -71,7 +71,7 @@ export const BottombarComponent: React.FC<SearchBoxContainerProps> = props => {
   const router = useRouter();
 
   const { user, anonymous } = useUserHook();
-  const [popOpen, setPopOpen] = React.useState(false)
+  const [popOpen, setPopOpen] = React.useState(false);
 
   const { instance } = useInstances();
 
@@ -85,11 +85,11 @@ export const BottombarComponent: React.FC<SearchBoxContainerProps> = props => {
 
   const handleOpenPopover = () => {
     setPopOpen(true);
-  }
+  };
 
-  const handleClose = (event) => {
+  const handleClose = event => {
     setPopOpen(false);
-  }
+  };
 
   const handleCloseCreatePost = () => {
     setCreatePostOpened(false);
@@ -180,18 +180,19 @@ export const BottombarComponent: React.FC<SearchBoxContainerProps> = props => {
             className={style.iconbuttonCreate}>
             <SvgIcon className={style.fillButtonCreate} component={PlusIcon} />
           </IconButton>
-          <Popover 
-            open={popOpen}  
-            onClose={handleClose}  
-            className={style.popover}  
-          >
+          <Popover
+            open={popOpen}
+            onClose={handleClose}
+            className={style.popover}>
             <IconButton
               onClick={handleOpenCreatePost}
               className={style.popoverbuttonCreate}>
-              <SvgIcon className={style.fillButtonCreate} component={PlusIcon} />
+              <SvgIcon
+                className={style.fillButtonCreate}
+                component={PlusIcon}
+              />
             </IconButton>
           </Popover>
-
         </div>
         <div className={style.button}>
           <IconButton

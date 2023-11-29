@@ -5,10 +5,16 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
 import dynamic from 'next/dynamic';
 
-import { Box, Button, IconButton, Paper, SvgIcon, Typography } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  IconButton,
+  Paper,
+  SvgIcon,
+  Typography,
+} from '@material-ui/core';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
-import { SocialAvatar } from 'components/atoms/SocialAvatar';
 
 import { NSFWTags } from '../NSFWTags';
 import { PostImport } from '../PostImport';
@@ -24,6 +30,7 @@ import ExclusiveCreate from 'components/ExclusiveContentCreate/ExclusiveCreate';
 import Reveal from 'components/ExclusiveContentCreate/Reveal/Reveal';
 import ExperienceListBarCreatePost from 'components/ExperienceList/ExperienceListBarCreatePost';
 import { ExperienceTimelinePost } from 'components/ExperienceTimelinePost';
+import { SocialAvatar } from 'components/atoms/SocialAvatar';
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import { getEditorSelectors } from 'components/common/Editor/store';
 import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
@@ -418,34 +425,33 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
       fullScreen={isMobile}
       maxWidth="md"
       className={styles.root}>
-
-        <div>
-            <button className={styles.postbutton}>post</button>
-        </div>
-        <div>
-          <Paper className={styles.timelinePaper}>
-            <div className={styles.avatar}>
+      <div>
+        <button className={styles.postbutton}>post</button>
+      </div>
+      <div>
+        <Paper className={styles.timelinePaper}>
+          <div className={styles.avatar}>
             <SocialAvatar
-            avatar={user.profilePictureURL}
-            origin="myriad"
-            onClick={()=> {}}
-            name="avatar"
+              avatar={user.profilePictureURL}
+              origin="myriad"
+              onClick={() => {}}
+              name="avatar"
             />
-            </div>
-            <div className={styles.cardUserName}>
-              <Typography>Timeline Name</Typography>
-            </div>
-          </Paper>
-        </div>
-        <div className={styles.editor}>
+          </div>
+          <div className={styles.cardUserName}>
+            <Typography>Timeline Name</Typography>
+          </div>
+        </Paper>
+      </div>
+      <div className={styles.editor}>
         <Editor
-            userId={user.id}
-            mobile={isMobile}
-            onSearchMention={onSearchPeople}
-            onChange={handleContentChange}
-            autoFocus={!showExclusive}
-          />
-        </div>
+          userId={user.id}
+          mobile={isMobile}
+          onSearchMention={onSearchPeople}
+          onChange={handleContentChange}
+          autoFocus={!showExclusive}
+        />
+      </div>
       {/* Select Timeline */}
       {/* Timeline list */}
     </Modal>

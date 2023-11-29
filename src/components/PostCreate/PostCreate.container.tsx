@@ -8,6 +8,7 @@ import { Button, useMediaQuery } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 
 import { PromptComponent } from '../atoms/Prompt/prompt.component';
+import MobilePostCreate from './MobilePostCreate';
 
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
@@ -19,7 +20,6 @@ import i18n from 'src/locale';
 import { RootState } from 'src/reducers';
 import { loadUsers, searchUsers } from 'src/reducers/search/actions';
 import { createPost, importPost } from 'src/reducers/timeline/actions';
-import MobilePostCreate from './MobilePostCreate';
 
 type PostCreateContainerType = {
   open: boolean;

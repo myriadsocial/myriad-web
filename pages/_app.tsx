@@ -1,6 +1,5 @@
 import React from 'react';
 import { CookiesProvider } from 'react-cookie';
-import "../ckeditor.css"
 
 import { SessionProvider } from 'next-auth/react';
 import { AppProps, NextWebVitalsMetric } from 'next/app';
@@ -10,6 +9,8 @@ import Head from 'next/head';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
+
+import '../ckeditor.css';
 
 import { SnackbarProvider } from 'notistack';
 import { I18nextProvider } from 'react-i18next';

@@ -167,14 +167,14 @@ export const useStyles = makeStyles((theme: Theme) =>
       color: '#C2C2C2',
     },
     buttongroup: {
-      position: "absolute",
+      position: 'absolute',
       width: 455,
       height: 24.4,
       left: 13,
       top: 3,
     },
     editor: {
-      position: "absolute",
+      position: 'absolute',
       left: 13,
       right: 14,
       top: 109,
