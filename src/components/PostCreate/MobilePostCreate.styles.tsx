@@ -16,11 +16,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       top: 16,
     },
     timelinePaper: {
-      position: 'absolute',
+      position: 'relative',
       height: 55,
-      left: 13,
-      right: 14,
-      top: 65,
+      top: 6,
     },
     avatar: {
       position: 'relative',
@@ -33,11 +31,20 @@ export const useStyles = makeStyles((theme: Theme) =>
       left: 56,
     },
     editor: {
-      position: 'absolute',
-      left: 13,
-      right: 14,
-      top: 131,
-      bottom: 182,
+      position: 'relative',
+      top: 20,
+    },
+    grid: {
+      position: 'relative',
+      top: 8,
+    },
+    privacySettingsButton: {
+      position: 'relative',
+      top: 12,
+    },
+    privacyPaper: {
+      position: 'relative',
+      top: 15,
     },
   }),
 );

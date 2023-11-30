@@ -12,6 +12,7 @@ import {
   Paper,
   SvgIcon,
   Typography,
+  Grid
 } from '@material-ui/core';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
@@ -38,7 +39,7 @@ import { ExclusiveContent } from 'components/common/Tipping/Tipping.interface';
 import ShowIf from 'src/components/common/show-if.component';
 import { useExperienceHook } from 'src/hooks/use-experience-hook';
 import { useUpload } from 'src/hooks/use-upload.hook';
-import { InfoIconYellow } from 'src/images/Icons';
+import { LogoMyriadCircle } from 'src/images/Icons';
 import { ExclusiveContentPost } from 'src/interfaces/exclusive';
 import {
   ExperienceProps,
@@ -52,11 +53,9 @@ import * as ExperienceAPI from 'src/lib/api/experience';
 import i18n from 'src/locale';
 import { RootState } from 'src/reducers';
 import { createExclusiveContent } from 'src/reducers/timeline/actions';
+import { PrimaryCoinMenu } from 'components/PrimaryCoinMenu';
 
 const CKEditor = dynamic(() => import('../common/CKEditor/Editor'), {
-  ssr: false,
-});
-const PlateEditor = dynamic(() => import('../common/Editor/Editor'), {
   ssr: false,
 });
 
@@ -105,7 +104,7 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
   const [page, setPage] = useState<number>(1);
   const [currentExperience, setCurrentExperience] = useState<number>(0);
 
-  const Editor = isMobile ? CKEditor : PlateEditor;
+  const Editor = CKEditor
 
   const header: Record<PostCreateType, { title: string; subtitle: string }> = {
     create: {
@@ -116,12 +115,6 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
       title: i18n.t('Post_Import.Title'),
       subtitle: i18n.t('Post_Import.Subtitle'),
     },
-  };
-  const handleTabChange = (
-    event: React.ChangeEvent<{}>,
-    tab: PostCreateType,
-  ) => {
-    setActiveTab(tab);
   };
 
   const handlePostUrlChange = (url: string | null) => {
@@ -451,7 +444,32 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
           onChange={handleContentChange}
           autoFocus={!showExclusive}
         />
+        <div className={styles.grid}>
+        <Grid container spacing={2}>
+          <Grid md>
+            <IconButton>
+              <LogoMyriadCircle/>    
+            </IconButton>
+          </Grid>
+        </Grid>
       </div>
+        <button
+        className={styles.privacySettingsButton}
+        >
+          privacy settings
+        </button>
+        <div
+        className={styles.privacyPaper}>
+        <Paper>
+          <div>
+            <Typography>Everyone can see this posts</Typography>
+          </div>
+        </Paper>
+        
+        </div>
+        
+      </div>
+      
       {/* Select Timeline */}
       {/* Timeline list */}
     </Modal>
