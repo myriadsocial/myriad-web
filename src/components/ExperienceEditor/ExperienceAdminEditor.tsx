@@ -2,58 +2,34 @@ import {
   SearchIcon,
   XCircleIcon,
   PlusCircleIcon,
-  ChevronDownIcon,
-  CogIcon,
-  ChevronUpIcon,
 } from '@heroicons/react/solid';
 
 import React, { useState, useRef } from 'react';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import { useSelector } from 'react-redux';
-
-import { useRouter } from 'next/router';
 
 import {
   Button,
   FormControl,
-  FormHelperText,
   IconButton,
-  InputLabel,
-  OutlinedInput,
   SvgIcon,
   TextField,
   Typography,
 } from '@material-ui/core';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import {
   Autocomplete,
   AutocompleteChangeReason,
   AutocompleteRenderOptionState,
 } from '@material-ui/lab';
 
-import {
-  ExperienceProps,
-  VisibilityItem,
-  Tag,
-  SelectedUserIds,
-} from '../../interfaces/experience';
-import { People } from '../../interfaces/people';
-import { PostDetailExperience } from '../PostDetailExperience/PostDetailExperience';
-import { Dropzone } from '../atoms/Dropzone';
+import { ExperienceProps } from '../../interfaces/experience';
 import { ListItemPeopleComponent } from '../atoms/ListItem/ListItemPeople';
 import { Loading } from '../atoms/Loading';
 import ShowIf from '../common/show-if.component';
 import { useStyles } from './Experience.styles';
 
 import { debounce, isEmpty } from 'lodash';
-import { useExperienceHook } from 'src/hooks/use-experience-hook';
 import { useSearchHook } from 'src/hooks/use-search.hooks';
-import { Post } from 'src/interfaces/post';
 import { User } from 'src/interfaces/user';
-import * as UserAPI from 'src/lib/api/user';
 import i18n from 'src/locale';
-import { RootState } from 'src/reducers';
-import { UserState } from 'src/reducers/user/reducer';
 
 type AdminExperienceEditorProps = {
   type?: 'Clone' | 'Edit' | 'Create';
@@ -64,66 +40,30 @@ type AdminExperienceEditorProps = {
   users?: User[];
   quick?: boolean;
   showAdvance?: boolean;
-  experienceVisibility?: VisibilityItem;
   editors: User[];
   setEditors: (editors: User[]) => void;
   onExperience: (value: any) => void;
 };
 
-const DEFAULT_EXPERIENCE: ExperienceProps = {
-  name: '',
-  allowedTags: [],
-  people: [],
-  prohibitedTags: [],
-  visibility: '',
-  selectedUserIds: [],
-};
-
 export const AdminExperienceEditor: React.FC<AdminExperienceEditorProps> =
   props => {
     const {
-      type = 'Create',
-      experience = DEFAULT_EXPERIENCE,
       onSearchUser,
       users,
       quick = false,
-      showAdvance = false,
-      experienceVisibility,
       onStage,
       editors,
       setEditors,
       onExperience,
     } = props;
     const styles = useStyles({ quick });
-
-    const {
-      experiencePosts,
-      hasMore,
-      loadPostExperience,
-      loadNextPostExperience,
-      loadExperiencePostList,
-      addPostsToExperience,
-    } = useExperienceHook();
-    const router = useRouter();
     const { clearUsers } = useSearchHook();
 
     const ref = useRef(null);
-    const { anonymous, user } = useSelector<RootState, UserState>(
-      state => state.userState,
-    );
-    const [experienceId, setExperienceId] = useState<string | undefined>();
-    const [newExperience, setNewExperience] =
-      useState<ExperienceProps>(experience);
     const [, setDetailChanged] = useState<boolean>(false);
-    const [isLoading, setIsloading] = useState<boolean>(false);
-    const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-    const [selectedVisibility, setSelectedVisibility] =
-      useState<VisibilityItem>(experienceVisibility);
-    const [selectedUserIds, setSelectedUserIds] = useState<User[]>([]);
-    const [pageUserIds, setPageUserIds] = React.useState<number>(1);
-    const [isLoadingSelectedUser, setIsLoadingSelectedUser] =
+    const [isLoadingSelectedUser] =
       useState<boolean>(false);
-    const [errors, setErrors] = useState({
+    const [errors] = useState({
       name: false,
       picture: false,
       tags: false,
@@ -147,25 +87,6 @@ export const AdminExperienceEditor: React.FC<AdminExperienceEditorProps> =
       }));
       onStage(3);
     };
-
-    const visibilityList: VisibilityItem[] = [
-      {
-        id: 'public',
-        name: i18n.t('Experience.Editor.Visibility.Public'),
-      },
-      {
-        id: 'private',
-        name: i18n.t('Experience.Editor.Visibility.OnlyMe'),
-      },
-      {
-        id: 'selected_user',
-        name: i18n.t('Experience.Editor.Visibility.Custom'),
-      },
-      {
-        id: 'friend',
-        name: i18n.t('Experience.Editor.Visibility.Friend_Only'),
-      },
-    ];
 
     const handleSearchUser = (event: React.ChangeEvent<HTMLInputElement>) => {
       const debounceSubmit = debounce(() => {
@@ -209,43 +130,6 @@ export const AdminExperienceEditor: React.FC<AdminExperienceEditorProps> =
       );
 
       setDetailChanged(true);
-    };
-
-    const mappingUserIds = () => {
-      console.log({ selectedVisibility });
-      if (selectedVisibility?.id === 'selected_user') {
-        const timestamp = Date.now();
-        const mapIds = Object.values(
-          selectedUserIds.map(option => {
-            return {
-              userId: option.id,
-              addedAt: timestamp,
-            };
-          }),
-        );
-        setNewExperience(prevExperience => ({
-          ...prevExperience,
-          selectedUserIds: mapIds,
-        }));
-      } else {
-        setNewExperience(prevExperience => ({
-          ...prevExperience,
-          selectedUserIds: [],
-        }));
-      }
-    };
-
-    const getSelectedIds = async (selected: SelectedUserIds[]) => {
-      setIsLoadingSelectedUser(true);
-      const userIds = selected.map(e => e.userId);
-      const response = await UserAPI.getUserByIds(userIds, pageUserIds);
-      setSelectedUserIds([
-        ...selectedUserIds,
-        ...(response?.data as unknown as User[]),
-      ]);
-      setIsLoadingSelectedUser(false);
-      if (pageUserIds < response.meta.totalPageCount)
-        setPageUserIds(pageUserIds + 1);
     };
 
     return (

@@ -3,12 +3,7 @@ import {
   XCircleIcon,
   PlusCircleIcon,
 } from '@heroicons/react/solid';
-
 import React, { useState, useRef } from 'react';
-import { useSelector } from 'react-redux';
-
-import { useRouter } from 'next/router';
-
 import {
   Button,
   FormControl,
@@ -25,22 +20,15 @@ import {
 
 import {
   ExperienceProps,
-  VisibilityItem,
   Tag,
-  SelectedUserIds,
 } from '../../interfaces/experience';
 import { People } from '../../interfaces/people';
 import { ListItemPeopleComponent } from '../atoms/ListItem/ListItemPeople';
 import ShowIf from '../common/show-if.component';
 import { useStyles } from './Experience.styles';
 
-import { debounce, isEmpty } from 'lodash';
-import { useExperienceHook } from 'src/hooks/use-experience-hook';
-import { User } from 'src/interfaces/user';
-import * as UserAPI from 'src/lib/api/user';
+import { debounce } from 'lodash';
 import i18n from 'src/locale';
-import { RootState } from 'src/reducers';
-import { UserState } from 'src/reducers/user/reducer';
 
 type ExperienceAdditionalEditorProps = {
   type?: 'Clone' | 'Edit' | 'Create';
@@ -50,12 +38,10 @@ type ExperienceAdditionalEditorProps = {
   people: People[];
   onSearchTags: (query: string) => void;
   onSearchPeople: (query: string) => void;
-  onSave: (experience: ExperienceProps) => void;
   onExperience: (value: any) => void;
   onStage: (value: number) => void;
   quick?: boolean;
   showAdvance?: boolean;
-  experienceVisibility?: VisibilityItem;
   newExperience: ExperienceProps;
   saveExperience: () => void;
 };
@@ -81,43 +67,18 @@ export const ExperienceAdditionalEditor: React.FC<ExperienceAdditionalEditorProp
       experience = DEFAULT_EXPERIENCE,
       people,
       tags,
-      onSave,
       onSearchTags,
       onSearchPeople,
       quick = false,
-      showAdvance = false,
-      experienceVisibility,
       onStage,
       onExperience,
       newExperience,
       saveExperience,
     } = props;
     const styles = useStyles({ quick });
-
-    const {
-      experiencePosts,
-      hasMore,
-      loadPostExperience,
-      loadNextPostExperience,
-      loadExperiencePostList,
-      addPostsToExperience,
-    } = useExperienceHook();
-    const router = useRouter();
-
     const ref = useRef(null);
-    const { anonymous, user } = useSelector<RootState, UserState>(
-      state => state.userState,
-    );
-    const [experienceId, setExperienceId] = useState<string | undefined>();
     const [, setDetailChanged] = useState<boolean>(false);
-    const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-    const [selectedVisibility, setSelectedVisibility] =
-      useState<VisibilityItem>(experienceVisibility);
-    const [selectedUserIds, setSelectedUserIds] = useState<User[]>([]);
-    const [pageUserIds, setPageUserIds] = React.useState<number>(1);
-    const [isLoadingSelectedUser, setIsLoadingSelectedUser] =
-      useState<boolean>(false);
-    const [errors, setErrors] = useState({
+    const [errors] = useState({
       name: false,
       picture: false,
       tags: false,
@@ -125,8 +86,6 @@ export const ExperienceAdditionalEditor: React.FC<ExperienceAdditionalEditorProp
       visibility: false,
       selectedUserId: false,
     });
-    const [showAdvanceSetting, setShowAdvanceSetting] =
-      useState<boolean>(showAdvance);
 
     const handleSearchTags = (event: React.ChangeEvent<HTMLInputElement>) => {
       const debounceSubmit = debounce(() => {

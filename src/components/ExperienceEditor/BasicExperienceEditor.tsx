@@ -7,8 +7,6 @@ import {
 
 import React, { useState, useRef } from 'react';
 
-import { useRouter } from 'next/router';
-
 import {
   Button,
   FormControl,
@@ -30,10 +28,7 @@ import {
 import {
   ExperienceProps,
   VisibilityItem,
-  Tag,
-  SelectedUserIds,
 } from '../../interfaces/experience';
-import { People } from '../../interfaces/people';
 import { Dropzone } from '../atoms/Dropzone';
 import { ListItemPeopleComponent } from '../atoms/ListItem/ListItemPeople';
 import { Loading } from '../atoms/Loading';
@@ -41,13 +36,9 @@ import ShowIf from '../common/show-if.component';
 import { useStyles } from './Experience.styles';
 
 import { debounce, isEmpty } from 'lodash';
-import { useExperienceHook } from 'src/hooks/use-experience-hook';
 import { useSearchHook } from 'src/hooks/use-search.hooks';
 import { User } from 'src/interfaces/user';
-import * as UserAPI from 'src/lib/api/user';
 import i18n from 'src/locale';
-import { RootState } from 'src/reducers';
-import { UserState } from 'src/reducers/user/reducer';
 
 type BasicExperienceEditorProps = {
   experience?: ExperienceProps;
@@ -85,7 +76,6 @@ export const BasicExperienceEditor: React.FC<BasicExperienceEditorProps> =
       onExperience,
       users,
       quick = false,
-      experienceVisibility,
       newExperience,
       image,
       onVisibility,
@@ -94,15 +84,14 @@ export const BasicExperienceEditor: React.FC<BasicExperienceEditorProps> =
       onSelectedUserIds,
     } = props;
     const styles = useStyles({ quick });
-    const router = useRouter();
     const { clearUsers } = useSearchHook();
 
     const ref = useRef(null);
     const [, setDetailChanged] = useState<boolean>(false);
-    const [isLoading, setIsloading] = useState<boolean>(false);
-    const [isLoadingSelectedUser, setIsLoadingSelectedUser] =
+    const [isLoading ] = useState<boolean>(false);
+    const [isLoadingSelectedUser ] =
       useState<boolean>(false);
-    const [errors, setErrors] = useState({
+    const [errors] = useState({
       name: false,
       picture: false,
       tags: false,
