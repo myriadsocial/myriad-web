@@ -25,10 +25,7 @@ import {
   AutocompleteRenderOptionState,
 } from '@material-ui/lab';
 
-import {
-  ExperienceProps,
-  VisibilityItem,
-} from '../../interfaces/experience';
+import { ExperienceProps, VisibilityItem } from '../../interfaces/experience';
 import { Dropzone } from '../atoms/Dropzone';
 import { ListItemPeopleComponent } from '../atoms/ListItem/ListItemPeople';
 import { Loading } from '../atoms/Loading';
@@ -88,9 +85,8 @@ export const BasicExperienceEditor: React.FC<BasicExperienceEditorProps> =
 
     const ref = useRef(null);
     const [, setDetailChanged] = useState<boolean>(false);
-    const [isLoading ] = useState<boolean>(false);
-    const [isLoadingSelectedUser ] =
-      useState<boolean>(false);
+    const [isLoading] = useState<boolean>(false);
+    const [isLoadingSelectedUser] = useState<boolean>(false);
     const [errors] = useState({
       name: false,
       picture: false,

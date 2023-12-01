@@ -3,7 +3,9 @@ import {
   XCircleIcon,
   PlusCircleIcon,
 } from '@heroicons/react/solid';
+
 import React, { useState, useRef } from 'react';
+
 import {
   Button,
   FormControl,
@@ -18,10 +20,7 @@ import {
   AutocompleteRenderOptionState,
 } from '@material-ui/lab';
 
-import {
-  ExperienceProps,
-  Tag,
-} from '../../interfaces/experience';
+import { ExperienceProps, Tag } from '../../interfaces/experience';
 import { People } from '../../interfaces/people';
 import { ListItemPeopleComponent } from '../atoms/ListItem/ListItemPeople';
 import ShowIf from '../common/show-if.component';

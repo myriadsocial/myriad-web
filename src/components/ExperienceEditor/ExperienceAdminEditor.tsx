@@ -61,8 +61,7 @@ export const AdminExperienceEditor: React.FC<AdminExperienceEditorProps> =
 
     const ref = useRef(null);
     const [, setDetailChanged] = useState<boolean>(false);
-    const [isLoadingSelectedUser] =
-      useState<boolean>(false);
+    const [isLoadingSelectedUser] = useState<boolean>(false);
     const [errors] = useState({
       name: false,
       picture: false,

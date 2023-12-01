@@ -67,9 +67,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   } = props;
   const styles = useStyles({ quick });
 
-  const {
-    loadPostExperience,
-  } = useExperienceHook();
+  const { loadPostExperience } = useExperienceHook();
   const router = useRouter();
 
   const ref = useRef(null);
@@ -88,8 +86,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   const [selectedUserIds, setSelectedUserIds] = useState<User[]>([]);
   const [editors, setEditors] = useState<User[]>([]);
   const [pageUserIds, setPageUserIds] = React.useState<number>(1);
-  const [, setIsLoadingSelectedUser] =
-    useState<boolean>(false);
+  const [, setIsLoadingSelectedUser] = useState<boolean>(false);
   const [, setErrors] = useState({
     name: false,
     picture: false,
