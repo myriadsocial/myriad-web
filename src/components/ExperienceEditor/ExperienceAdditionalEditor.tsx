@@ -52,7 +52,7 @@ type ExperienceAdditionalEditorProps = {
   onSearchPeople: (query: string) => void;
   onSave: (experience: ExperienceProps) => void;
   onExperience: (value: any) => void;
-  onStage: (value: Number) => void;
+  onStage: (value: number) => void;
   quick?: boolean;
   showAdvance?: boolean;
   experienceVisibility?: VisibilityItem;

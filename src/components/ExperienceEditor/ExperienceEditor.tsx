@@ -129,7 +129,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     experience?.experienceImageURL,
   );
   const [, setDetailChanged] = useState<boolean>(false);
-  const [stage, setStage] = useState<Number>(1);
+  const [stage, setStage] = useState<number>(1);
   const [isLoading, setIsloading] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [selectedVisibility, setSelectedVisibility] =
@@ -241,7 +241,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     }
   };
 
-  const onStage = (value: Number) => {
+  const onStage = (value: number) => {
     setStage(value);
   };
 

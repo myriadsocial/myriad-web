@@ -52,7 +52,7 @@ import { UserState } from 'src/reducers/user/reducer';
 type BasicExperienceEditorProps = {
   experience?: ExperienceProps;
   handleImageUpload: (files: File[]) => Promise<void>;
-  onStage: (value: Number) => void;
+  onStage: (value: number) => void;
   onExperience: (value: any) => void;
   onSearchUser?: (query: string) => void;
   users?: User[];
@@ -125,7 +125,7 @@ export const BasicExperienceEditor: React.FC<BasicExperienceEditorProps> =
       };
 
     const handleNext = () => {
-      const number: Number = 2;
+      const number = 2;
       onStage(number);
     };
 

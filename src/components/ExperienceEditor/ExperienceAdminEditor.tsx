@@ -59,7 +59,7 @@ type AdminExperienceEditorProps = {
   type?: 'Clone' | 'Edit' | 'Create';
   isEdit?: boolean;
   experience?: ExperienceProps;
-  onStage: (value: Number) => void;
+  onStage: (value: number) => void;
   onSearchUser?: (query: string) => void;
   users?: User[];
   quick?: boolean;
