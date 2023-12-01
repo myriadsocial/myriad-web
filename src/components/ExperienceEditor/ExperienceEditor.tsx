@@ -135,6 +135,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   const [selectedVisibility, setSelectedVisibility] =
     useState<VisibilityItem>(experienceVisibility);
   const [selectedUserIds, setSelectedUserIds] = useState<User[]>([]);
+  const [editors, setEditors] = useState<User[]>([]);
   const [pageUserIds, setPageUserIds] = React.useState<number>(1);
   const [isLoadingSelectedUser, setIsLoadingSelectedUser] =
     useState<boolean>(false);
@@ -375,10 +376,12 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
 
   const saveExperience = () => {
     setIsSubmitted(true);
+    
 
     const valid = validateExperience();
 
     if (valid) {
+      console.log(newExperience)
       onSave(newExperience);
     } else {
       ref.current?.scrollIntoView({
@@ -569,11 +572,12 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
   if (stage === 2) {
     return (
       <AdminExperienceEditor
-        onSave={onSave}
         onStage={onStage}
-        onImageUpload={onImageUpload}
         onSearchUser={onSearchUser}
         users={users}
+        editors={editors}
+        setEditors={setEditors}
+        onExperience={onExperience}
       />
     )
   }

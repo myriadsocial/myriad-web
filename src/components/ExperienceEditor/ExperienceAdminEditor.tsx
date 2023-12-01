@@ -59,14 +59,15 @@ import {
     type?: 'Clone' | 'Edit' | 'Create';
     isEdit?: boolean;
     experience?: ExperienceProps;
-    onSave: (experience: ExperienceProps) => void;
-    onImageUpload: (files: File[]) => Promise<string>;
     onStage: (value: Number) => void;
     onSearchUser?: (query: string) => void;
     users?: User[];
     quick?: boolean;
     showAdvance?: boolean;
     experienceVisibility?: VisibilityItem;
+    editors: User[],
+    setEditors: (editors : User[]) => void;
+    onExperience: (value: any) => void;
   };
   
   const DEFAULT_EXPERIENCE: ExperienceProps = {
@@ -82,14 +83,15 @@ import {
     const {
       type = 'Create',
       experience = DEFAULT_EXPERIENCE,
-      onSave,
-      onImageUpload,
       onSearchUser,
       users,
       quick = false,
       showAdvance = false,
       experienceVisibility,
       onStage,
+      editors,
+      setEditors,
+      onExperience
     } = props;
     const styles = useStyles({ quick });
   
@@ -111,9 +113,6 @@ import {
     const [experienceId, setExperienceId] = useState<string | undefined>();
     const [newExperience, setNewExperience] =
       useState<ExperienceProps>(experience);
-    const [image, setImage] = useState<string | undefined>(
-      experience?.experienceImageURL,
-    );
     const [, setDetailChanged] = useState<boolean>(false);
     const [isLoading, setIsloading] = useState<boolean>(false);
     const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
@@ -133,10 +132,18 @@ import {
     });
 
     const handleBack = () => {
+      onExperience(prevExperience => ({
+        ...prevExperience,
+        editorsId: editors.map(user => user.id),
+      }))
         onStage(1);
     }
 
     const handleNext = () => {
+      onExperience(prevExperience => ({
+        ...prevExperience,
+        editorsId: editors.map(user => user.id),
+      }))
         onStage(3);
     }
   
@@ -175,16 +182,16 @@ import {
       debounceSubmit();
     };
   
-    const handleVisibilityPeopleChange = (
+    const handleEditorsPeopleChange = (
       // eslint-disable-next-line @typescript-eslint/ban-types
       event: React.ChangeEvent<{}>,
       value: User[],
       reason: AutocompleteChangeReason,
     ) => {
-      const people = selectedUserIds ? selectedUserIds : [];
+      const people = editors ? editors : [];
       console.log({ value });
       if (reason === 'select-option') {
-        setSelectedUserIds([
+        setEditors([
           ...people,
           ...value.filter(option => people.indexOf(option) === -1),
         ]);
@@ -192,13 +199,13 @@ import {
         clearUsers();
       }
   
-      setDetailChanged(true);
+      // setDetailChanged(true);
     };
   
-    const removeVisibilityPeople = (selected: User) => () => {
-      setSelectedUserIds(
-        selectedUserIds
-          ? selectedUserIds.filter(people => people.id != selected.id)
+    const removeEditorsPeople = (selected: User) => () => {
+      setEditors(
+        editors
+          ? editors.filter(people => people.id != selected.id)
           : [],
       );
   
@@ -279,10 +286,10 @@ import {
           <div className={styles.row2}>
               <>
                 <Autocomplete
-                  id="experience-custom-visibility-people"
+                  id="experience-editor-people"
                   onBlur={clearUsers}
                   className={styles.people}
-                  value={(selectedUserIds as User[]) ?? []}
+                  value={(editors as User[]) ?? []}
                   multiple
                   options={users}
                   getOptionSelected={(option, value) => option.id === value.id}
@@ -297,7 +304,7 @@ import {
                       viewBox={'0 0 20 20'}
                     />
                   }
-                  onChange={handleVisibilityPeopleChange}
+                  onChange={handleEditorsPeopleChange}
                   renderTags={() => null}
                   renderInput={params => (
                     <TextField
@@ -364,7 +371,7 @@ import {
                     <ShowIf condition={isLoadingSelectedUser}>
                       <Loading />
                     </ShowIf>
-                    {selectedUserIds
+                    {editors
                       .filter(people => !isEmpty(people.id))
                       .map(people => (
                         <ListItemPeopleComponent
@@ -379,7 +386,7 @@ import {
                           avatar={people.profilePictureURL}
                           platform={'myriad'}
                           action={
-                            <IconButton onClick={removeVisibilityPeople(people)}>
+                            <IconButton onClick={removeEditorsPeople(people)}>
                               <SvgIcon
                                 classes={{ root: styles.fill }}
                                 component={XCircleIcon}
