@@ -111,6 +111,7 @@
       "Placeholder_3": "Search people here",
       "Placeholder_4": "Select Type of Privacy",
       "Placeholder_5": "Custom People Who Can View",
+      "Placeholder_6": "Who can edit timeline",
       "Post": {
         "Title": "Post",
         "Desc": "Manually added posts will appear here. You can manually add a post to an Timeline by selecting 'add post to Timeline' on the top-right menu of each post."
