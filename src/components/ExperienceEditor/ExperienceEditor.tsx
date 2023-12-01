@@ -43,7 +43,10 @@ import { Dropzone } from '../atoms/Dropzone';
 import { ListItemPeopleComponent } from '../atoms/ListItem/ListItemPeople';
 import { Loading } from '../atoms/Loading';
 import ShowIf from '../common/show-if.component';
+import { BasicExperienceEditor } from './BasicExperienceEditor';
 import { useStyles } from './Experience.styles';
+import { ExperienceAdditionalEditor } from './ExperienceAdditionalEditor';
+import { AdminExperienceEditor } from './ExperienceAdminEditor';
 
 import { debounce, isEmpty } from 'lodash';
 import { useExperienceHook } from 'src/hooks/use-experience-hook';
@@ -54,9 +57,6 @@ import * as UserAPI from 'src/lib/api/user';
 import i18n from 'src/locale';
 import { RootState } from 'src/reducers';
 import { UserState } from 'src/reducers/user/reducer';
-import { BasicExperienceEditor } from './BasicExperienceEditor';
-import { AdminExperienceEditor } from './ExperienceAdminEditor';
-import { ExperienceAdditionalEditor } from './ExperienceAdditionalEditor';
 
 type ExperienceEditorProps = {
   type?: 'Clone' | 'Edit' | 'Create';
@@ -243,7 +243,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
 
   const onStage = (value: Number) => {
     setStage(value);
-  }
+  };
 
   const handleTagsChange = (
     // eslint-disable-next-line @typescript-eslint/ban-types
@@ -376,12 +376,11 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
 
   const saveExperience = () => {
     setIsSubmitted(true);
-    
 
     const valid = validateExperience();
 
     if (valid) {
-      console.log(newExperience)
+      console.log(newExperience);
       onSave(newExperience);
     } else {
       ref.current?.scrollIntoView({
@@ -506,13 +505,13 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     }
   };
 
-  const onExperience = (value) => {
-    setNewExperience(value)
+  const onExperience = value => {
+    setNewExperience(value);
   };
 
-  const onVisibility = (value) => {
-    setSelectedVisibility(value)
-  }
+  const onVisibility = value => {
+    setSelectedVisibility(value);
+  };
 
   useEffect(() => {
     mappingUserIds();
@@ -552,22 +551,23 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
     setShowAdvanceSetting(!showAdvanceSetting);
   };
 
-  if (stage === 1) {return (
-    <BasicExperienceEditor
-      onStage={onStage}
-      onSearchUser={onSearchUser}
-      users={users}
-      onExperience={onExperience}
-      newExperience={newExperience}
-      onVisibility={onVisibility}
-      selectedVisibility={selectedVisibility}
-      image={image}
-      handleImageUpload={handleImageUpload}
-      selectedUserIds={selectedUserIds}
-      onSelectedUserIds={setSelectedUserIds}
-    />
-
-  );}
+  if (stage === 1) {
+    return (
+      <BasicExperienceEditor
+        onStage={onStage}
+        onSearchUser={onSearchUser}
+        users={users}
+        onExperience={onExperience}
+        newExperience={newExperience}
+        onVisibility={onVisibility}
+        selectedVisibility={selectedVisibility}
+        image={image}
+        handleImageUpload={handleImageUpload}
+        selectedUserIds={selectedUserIds}
+        onSelectedUserIds={setSelectedUserIds}
+      />
+    );
+  }
 
   if (stage === 2) {
     return (
@@ -579,7 +579,7 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         setEditors={setEditors}
         onExperience={onExperience}
       />
-    )
+    );
   }
 
   if (stage === 3) {
@@ -595,31 +595,31 @@ export const ExperienceEditor: React.FC<ExperienceEditorProps> = props => {
         newExperience={newExperience}
         saveExperience={saveExperience}
       />
-    )
+    );
   }
 
   return (
     <>
-    <ShowIf condition={quick}>
-          <div className={styles.header}>
-            <ShowIf condition={!showAdvanceSetting}>
-              <Button
-                color="primary"
-                variant="outlined"
-                style={{ width: 'auto' }}
-                onClick={handleAdvanceSetting}>
-                {i18n.t(`Experience.Editor.Btn.AdvancedSettings`)}
-              </Button>
-            </ShowIf>
+      <ShowIf condition={quick}>
+        <div className={styles.header}>
+          <ShowIf condition={!showAdvanceSetting}>
             <Button
               color="primary"
-              variant="contained"
-              style={{ width: 'auto', marginLeft: 'auto' }}
-              onClick={saveExperience}>
-              {i18n.t(`Experience.Editor.Btn.${type}`)}
+              variant="outlined"
+              style={{ width: 'auto' }}
+              onClick={handleAdvanceSetting}>
+              {i18n.t(`Experience.Editor.Btn.AdvancedSettings`)}
             </Button>
-          </div>
-        </ShowIf>
+          </ShowIf>
+          <Button
+            color="primary"
+            variant="contained"
+            style={{ width: 'auto', marginLeft: 'auto' }}
+            onClick={saveExperience}>
+            {i18n.t(`Experience.Editor.Btn.${type}`)}
+          </Button>
+        </div>
+      </ShowIf>
     </>
-  )
+  );
 };

@@ -1,81 +1,82 @@
 import {
-    SearchIcon,
-    XCircleIcon,
-    PlusCircleIcon,
-    ChevronDownIcon,
-  } from '@heroicons/react/solid';
-  
-  import React, { useState, useRef } from 'react';
-  
-  import { useRouter } from 'next/router';
-  
-  import {
-    Button,
-    FormControl,
-    FormHelperText,
-    IconButton,
-    InputLabel,
-    OutlinedInput,
-    SvgIcon,
-    TextField,
-    Typography,
-  } from '@material-ui/core';
-  import CircularProgress from '@material-ui/core/CircularProgress';
-  import {
-    Autocomplete,
-    AutocompleteChangeReason,
-    AutocompleteRenderOptionState,
-  } from '@material-ui/lab';
-  
-  import {
-    ExperienceProps,
-    VisibilityItem,
-    Tag,
-    SelectedUserIds,
-  } from '../../interfaces/experience';
-  import { People } from '../../interfaces/people';
-  import { Dropzone } from '../atoms/Dropzone';
-  import { ListItemPeopleComponent } from '../atoms/ListItem/ListItemPeople';
-  import { Loading } from '../atoms/Loading';
-  import ShowIf from '../common/show-if.component';
-  import { useStyles } from './Experience.styles';
-  
-  import { debounce, isEmpty } from 'lodash';
-  import { useExperienceHook } from 'src/hooks/use-experience-hook';
-  import { useSearchHook } from 'src/hooks/use-search.hooks';
-  import { User } from 'src/interfaces/user';
-  import * as UserAPI from 'src/lib/api/user';
-  import i18n from 'src/locale';
-  import { RootState } from 'src/reducers';
-  import { UserState } from 'src/reducers/user/reducer';
-  
-  type BasicExperienceEditorProps = {
-    experience?: ExperienceProps;
-    handleImageUpload: (files: File[]) => Promise<void>;
-    onStage: (value: Number) => void;
-    onExperience: (value: any) => void;
-    onSearchUser?: (query: string) => void;
-    users?: User[];
-    quick?: boolean;
-    experienceVisibility?: VisibilityItem;
-    newExperience: ExperienceProps;
-    onVisibility: (value: any) => void;
-    image: string;
-    selectedVisibility: VisibilityItem;
-    selectedUserIds: User[];
-    onSelectedUserIds: (value: any) => void;
-  };
-  
-  const DEFAULT_EXPERIENCE: ExperienceProps = {
-    name: '',
-    allowedTags: [],
-    people: [],
-    prohibitedTags: [],
-    visibility: '',
-    selectedUserIds: [],
-  };
-  
-  export const BasicExperienceEditor: React.FC<BasicExperienceEditorProps> = props => {
+  SearchIcon,
+  XCircleIcon,
+  PlusCircleIcon,
+  ChevronDownIcon,
+} from '@heroicons/react/solid';
+
+import React, { useState, useRef } from 'react';
+
+import { useRouter } from 'next/router';
+
+import {
+  Button,
+  FormControl,
+  FormHelperText,
+  IconButton,
+  InputLabel,
+  OutlinedInput,
+  SvgIcon,
+  TextField,
+  Typography,
+} from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import {
+  Autocomplete,
+  AutocompleteChangeReason,
+  AutocompleteRenderOptionState,
+} from '@material-ui/lab';
+
+import {
+  ExperienceProps,
+  VisibilityItem,
+  Tag,
+  SelectedUserIds,
+} from '../../interfaces/experience';
+import { People } from '../../interfaces/people';
+import { Dropzone } from '../atoms/Dropzone';
+import { ListItemPeopleComponent } from '../atoms/ListItem/ListItemPeople';
+import { Loading } from '../atoms/Loading';
+import ShowIf from '../common/show-if.component';
+import { useStyles } from './Experience.styles';
+
+import { debounce, isEmpty } from 'lodash';
+import { useExperienceHook } from 'src/hooks/use-experience-hook';
+import { useSearchHook } from 'src/hooks/use-search.hooks';
+import { User } from 'src/interfaces/user';
+import * as UserAPI from 'src/lib/api/user';
+import i18n from 'src/locale';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
+
+type BasicExperienceEditorProps = {
+  experience?: ExperienceProps;
+  handleImageUpload: (files: File[]) => Promise<void>;
+  onStage: (value: Number) => void;
+  onExperience: (value: any) => void;
+  onSearchUser?: (query: string) => void;
+  users?: User[];
+  quick?: boolean;
+  experienceVisibility?: VisibilityItem;
+  newExperience: ExperienceProps;
+  onVisibility: (value: any) => void;
+  image: string;
+  selectedVisibility: VisibilityItem;
+  selectedUserIds: User[];
+  onSelectedUserIds: (value: any) => void;
+};
+
+const DEFAULT_EXPERIENCE: ExperienceProps = {
+  name: '',
+  allowedTags: [],
+  people: [],
+  prohibitedTags: [],
+  visibility: '',
+  selectedUserIds: [],
+};
+
+export const BasicExperienceEditor: React.FC<BasicExperienceEditorProps> =
+  props => {
     const {
       experience = DEFAULT_EXPERIENCE,
       handleImageUpload,
@@ -90,12 +91,12 @@ import {
       onVisibility,
       selectedVisibility,
       selectedUserIds,
-      onSelectedUserIds
+      onSelectedUserIds,
     } = props;
     const styles = useStyles({ quick });
     const router = useRouter();
     const { clearUsers } = useSearchHook();
-  
+
     const ref = useRef(null);
     const [, setDetailChanged] = useState<boolean>(false);
     const [isLoading, setIsloading] = useState<boolean>(false);
@@ -109,25 +110,25 @@ import {
       visibility: false,
       selectedUserId: false,
     });
-  
+
     const handleChange =
       (field: keyof ExperienceProps) =>
       (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value.trimStart();
-  
+
         onExperience(prevExperience => ({
           ...prevExperience,
           [field]: value,
         }));
-  
+
         setDetailChanged(experience[field] !== value);
       };
 
     const handleNext = () => {
-        const number : Number = 2;
-        onStage(number);
-    }
-  
+      const number: Number = 2;
+      onStage(number);
+    };
+
     const visibilityList: VisibilityItem[] = [
       {
         id: 'public',
@@ -146,7 +147,7 @@ import {
         name: i18n.t('Experience.Editor.Visibility.Friend_Only'),
       },
     ];
-  
+
     const handleVisibilityChange = (
       // eslint-disable-next-line @typescript-eslint/ban-types
       event: React.ChangeEvent<{}>,
@@ -158,26 +159,26 @@ import {
         ...prevExperience,
         visibility: value?.id,
       }));
-  
+
       setDetailChanged(true);
     };
-  
+
     const handleSearchUser = (event: React.ChangeEvent<HTMLInputElement>) => {
       const debounceSubmit = debounce(() => {
         onSearchUser(event.target.value);
       }, 300);
-  
+
       debounceSubmit();
     };
-  
+
     const clearSearchedUser = () => {
       const debounceSubmit = debounce(() => {
         onSearchUser('');
       }, 300);
-  
+
       debounceSubmit();
     };
-  
+
     const handleVisibilityPeopleChange = (
       // eslint-disable-next-line @typescript-eslint/ban-types
       event: React.ChangeEvent<{}>,
@@ -194,20 +195,20 @@ import {
         clearSearchedUser();
         clearUsers();
       }
-  
+
       setDetailChanged(true);
     };
-  
+
     const removeVisibilityPeople = (selected: User) => () => {
       onSelectedUserIds(
         selectedUserIds
           ? selectedUserIds.filter(people => people.id != selected.id)
           : [],
       );
-  
+
       setDetailChanged(true);
     };
-  
+
     return (
       <div className={styles.root} ref={ref}>
         <ShowIf condition={!quick}>
@@ -231,7 +232,7 @@ import {
             </FormControl>
           </div>
         </ShowIf>
-  
+
         <div className={styles.content}>
           <div className={styles.row1}>
             <FormControl
@@ -277,7 +278,7 @@ import {
                 {newExperience?.name.length ?? 0}/50
               </Typography>
             </FormControl>
-  
+
             <Autocomplete
               id="experience-visibility"
               options={visibilityList}
@@ -305,7 +306,7 @@ import {
                 />
               )}
             />
-  
+
             {selectedVisibility?.id === 'selected_user' && (
               <>
                 <Autocomplete
@@ -388,7 +389,7 @@ import {
                     );
                   }}
                 />
-  
+
                 <div className={styles.preview}>
                   <div className={styles.customVisibility}>
                     <ShowIf condition={isLoadingSelectedUser}>
@@ -409,7 +410,8 @@ import {
                           avatar={people.profilePictureURL}
                           platform={'myriad'}
                           action={
-                            <IconButton onClick={removeVisibilityPeople(people)}>
+                            <IconButton
+                              onClick={removeVisibilityPeople(people)}>
                               <SvgIcon
                                 classes={{ root: styles.fill }}
                                 component={XCircleIcon}
@@ -424,7 +426,7 @@ import {
                 </div>
               </>
             )}
-  
+
             <FormControl
               fullWidth
               variant="outlined"
@@ -454,4 +456,3 @@ import {
       </div>
     );
   };
-  
