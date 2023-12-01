@@ -43,6 +43,7 @@ export interface ExperienceProps extends Searchable {
   people: People[];
   visibility: string;
   selectedUserIds: SelectedUserIds[];
+  editorsId?: string[];
 }
 
 export interface Experience extends ExperienceProps, BaseModel {
