@@ -1011,6 +1011,8 @@
       },
       "Notification_Title": "Notifikasi",
       "Notification_Subtitle": "Pengaturan notifikasi",
+      "Sharing_Title": "Account Sharing Setting",
+      "Sharing_Subtitle": "TBA",
       "Notification_Setting": {
         "Comments": "Komentar",
         "Mention": "Sebutan",
@@ -1046,7 +1048,8 @@
       "Email_Title": "Pengaturan Email",
       "Email_Subtitle": "Atur alamat email sebagai metode lain untuk login",
       "Email_Address": "Alamat Email",
-      "Email_Placeholder": "Tambah Alamat Email"
+      "Email_Placeholder": "Tambah Alamat Email",
+      "Token_Code": "Add Token Code"
     }
   },
   "SocialMedia": {
