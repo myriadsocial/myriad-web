@@ -7,6 +7,7 @@ import { AccountSettingsContainer } from '../AccountSettingsContainer';
 import EmailSettings from '../EmailSettings';
 import { LanguageSettingsContainer } from '../LanguageSettingsContainer';
 import { NotificationSettingsContainer } from '../NotificationSettings.container';
+import SharingSetting from '../SharingSettings';
 import { BlockListContainer } from '../render/BlockList';
 import { HelpComponent } from '../render/Help';
 
@@ -20,6 +21,7 @@ export type SettingsType =
   | 'account'
   | 'notification'
   | 'email'
+  | 'sharing'
   | 'block'
   | 'language'
   | 'about'
@@ -89,6 +91,12 @@ export const useSettingList = (): SettingsOption<SettingsType>[] => {
         title: i18n.t('Setting.List_Menu.Notification_Title'),
         subtitle: i18n.t('Setting.List_Menu.Notification_Subtitle'),
         component: <NotificationSettingsContainer />,
+      },
+      {
+        id: 'sharing',
+        title: i18n.t('Setting.List_Menu.Sharing_Title'),
+        subtitle: i18n.t('Setting.List_Menu.Sharing_Subtitle'),
+        component: <SharingSetting />,
       },
       {
         id: 'block',
