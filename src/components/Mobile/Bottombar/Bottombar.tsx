@@ -13,7 +13,7 @@ import { useDispatch } from 'react-redux';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 
-import { SvgIcon, Grid, IconButton, Popover } from '@material-ui/core';
+import { SvgIcon, Grid, IconButton, Modal } from '@material-ui/core';
 
 import { CustomFolderIcon } from 'components/Menu';
 import { Avatar, AvatarSize } from 'components/atoms/Avatar';
@@ -174,26 +174,6 @@ export const BottombarComponent: React.FC<SearchBoxContainerProps> = props => {
           </IconButton>
         </div>
 
-        <div className={style.buttonCreate}>
-          <IconButton
-            onClick={handleOpenPopover}
-            className={style.iconbuttonCreate}>
-            <SvgIcon className={style.fillButtonCreate} component={PlusIcon} />
-          </IconButton>
-          <Popover
-            open={popOpen}
-            onClose={handleClose}
-            className={style.popover}>
-            <IconButton
-              onClick={handleOpenCreatePost}
-              className={style.popoverbuttonCreate}>
-              <SvgIcon
-                className={style.fillButtonCreate}
-                component={PlusIcon}
-              />
-            </IconButton>
-          </Popover>
-        </div>
         <div className={style.button}>
           <IconButton
             onClick={() => openMenu(TimelineType.ALL)}
@@ -215,6 +195,20 @@ export const BottombarComponent: React.FC<SearchBoxContainerProps> = props => {
           />
         </div>
       </Grid>
+      <div className={style.buttonCreate}>
+        <IconButton
+          onClick={handleOpenPopover}
+          className={style.iconbuttonCreate}>
+          <SvgIcon className={style.fillButtonCreate} component={PlusIcon} />
+        </IconButton>
+        <Modal open={popOpen} onClose={handleClose}>
+          <IconButton
+            onClick={handleOpenCreatePost}
+            className={style.popoverbuttonCreate}>
+            <SvgIcon className={style.fillButtonCreate} component={PlusIcon} />
+          </IconButton>
+        </Modal>
+      </div>
     </>
   );
 };

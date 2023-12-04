@@ -36722,12 +36722,10 @@
         _setupDropMarker() {
           const t = this.editor;
           t.ui.view.body.add(this._dropTargetLineView);
-          t.conversion
-            .for('editingDowncast')
-            .markerToHighlight({
-              model: 'drop-target',
-              view: { classes: ['ck-clipboard-drop-target-range'] },
-            });
+          t.conversion.for('editingDowncast').markerToHighlight({
+            model: 'drop-target',
+            view: { classes: ['ck-clipboard-drop-target-range'] },
+          });
           t.conversion.for('editingDowncast').markerToElement({
             model: 'drop-target',
             view: (e, { writer: n }) => {
@@ -37897,12 +37895,10 @@
           const e = t.model;
           const n = e.document;
           e.schema.extend('$text', { allowAttributes: 'mention' });
-          t.conversion
-            .for('upcast')
-            .elementToAttribute({
-              view: { name: 'span', key: 'data-mention', classes: 'mention' },
-              model: { key: 'mention', value: t => UB(t) },
-            });
+          t.conversion.for('upcast').elementToAttribute({
+            view: { name: 'span', key: 'data-mention', classes: 'mention' },
+            model: { key: 'mention', value: t => UB(t) },
+          });
           t.conversion
             .for('downcast')
             .attributeToElement({ model: 'mention', view: JB });

@@ -12,7 +12,7 @@ import {
   Paper,
   SvgIcon,
   Typography,
-  Grid
+  Grid,
 } from '@material-ui/core';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
@@ -31,6 +31,7 @@ import ExclusiveCreate from 'components/ExclusiveContentCreate/ExclusiveCreate';
 import Reveal from 'components/ExclusiveContentCreate/Reveal/Reveal';
 import ExperienceListBarCreatePost from 'components/ExperienceList/ExperienceListBarCreatePost';
 import { ExperienceTimelinePost } from 'components/ExperienceTimelinePost';
+import { PrimaryCoinMenu } from 'components/PrimaryCoinMenu';
 import { SocialAvatar } from 'components/atoms/SocialAvatar';
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import { getEditorSelectors } from 'components/common/Editor/store';
@@ -53,7 +54,6 @@ import * as ExperienceAPI from 'src/lib/api/experience';
 import i18n from 'src/locale';
 import { RootState } from 'src/reducers';
 import { createExclusiveContent } from 'src/reducers/timeline/actions';
-import { PrimaryCoinMenu } from 'components/PrimaryCoinMenu';
 
 const CKEditor = dynamic(() => import('../common/CKEditor/Editor'), {
   ssr: false,
@@ -104,7 +104,7 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
   const [page, setPage] = useState<number>(1);
   const [currentExperience, setCurrentExperience] = useState<number>(0);
 
-  const Editor = CKEditor
+  const Editor = CKEditor;
 
   const header: Record<PostCreateType, { title: string; subtitle: string }> = {
     create: {
@@ -445,31 +445,26 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
           autoFocus={!showExclusive}
         />
         <div className={styles.grid}>
-        <Grid container spacing={2}>
-          <Grid md>
-            <IconButton>
-              <LogoMyriadCircle/>    
-            </IconButton>
+          <Grid container spacing={2}>
+            <Grid md>
+              <IconButton>
+                <LogoMyriadCircle />
+              </IconButton>
+            </Grid>
           </Grid>
-        </Grid>
-      </div>
-        <button
-        className={styles.privacySettingsButton}
-        >
+        </div>
+        <button className={styles.privacySettingsButton}>
           privacy settings
         </button>
-        <div
-        className={styles.privacyPaper}>
-        <Paper>
-          <div>
-            <Typography>Everyone can see this posts</Typography>
-          </div>
-        </Paper>
-        
+        <div className={styles.privacyPaper}>
+          <Paper>
+            <div>
+              <Typography>Everyone can see this posts</Typography>
+            </div>
+          </Paper>
         </div>
-        
       </div>
-      
+
       {/* Select Timeline */}
       {/* Timeline list */}
     </Modal>
