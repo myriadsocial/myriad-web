@@ -205,7 +205,7 @@ export const BottombarComponent: React.FC<SearchBoxContainerProps> = props => {
           <IconButton
             onClick={handleOpenCreatePost}
             className={style.popoverbuttonCreate}>
-            <SvgIcon className={style.fillButtonCreate} component={PlusIcon} />
+            <SvgIcon className={style.fillButtonCreate} component={PencilIcon} />
           </IconButton>
         </Modal>
       </div>
