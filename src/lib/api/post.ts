@@ -151,6 +151,16 @@ export const getPost = async (
       return post.createdBy === fields.owner;
     });
   }
+  if (data.data.length === 0 && params.experienceId) {
+    const { data } = await MyriadAPI().request<PostList>({
+      url: `/experience/${params.experienceId}/posts`,
+      method: 'GET',
+      params: {
+        filter: filterParams,
+      },
+    });
+    return data;
+  }
 
   return data;
 };

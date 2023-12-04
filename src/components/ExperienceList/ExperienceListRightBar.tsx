@@ -93,7 +93,7 @@ export const ExperienceListRightBar: React.FC<ExperienceListProps> = props => {
             onSubscribe={onSubscribe}
             onClone={onClone}
             menuDrawer={menuDrawer}
-            postCount={item.newPostCount !== 0}
+            postCount={false}
           />
         </div>
       ))}

@@ -59,7 +59,7 @@ export const UserMenu: React.FC<UserMenuProps> = props => {
       <TabsComponent<UserMenuTabs>
         tabs={tabs}
         selected={activeTab}
-        scrollButtons="auto"
+        scrollButtons="on"
         variant="scrollable"
         onChangeTab={setActiveTab}
         size="small"
