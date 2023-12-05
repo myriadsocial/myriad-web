@@ -19,6 +19,7 @@ export type StringifyData = {
   text: string;
   image: string;
 };
+import * as UserAPI from 'src/lib/api/user';
 
 export const serialize = (nodes: EditorValue): Partial<Post> => {
   const post: Partial<Post> = {
@@ -123,3 +124,75 @@ export const stringify = (post: Post): StringifyData => {
     image: imageURL,
   };
 };
+
+export const handleMention = async (username: string) => {
+  const User = await UserAPI.getUserByUserName(username).catch(err => console.error("There is an error ", err));
+  // console.log("User is", User);
+  return User ;
+}
+
+export const handleFormatCKEditor = async (rawtext: string) => {
+  const regex = /[\@\#][\w]+/g ;
+  const mention = /(?<=\@)\w+/g ;
+  const tag = /(?<=\#)\w+/g ;
+  const text = rawtext.split(regex);
+
+
+  const promises = text.map(substring => {
+    if (mention.test(substring)) {
+      const username = substring.match(mention)[0] ;
+      handleMention(username).then(User => {
+        if (!User) {
+          const child =  {
+            text : substring
+          }
+          return child ;
+        }
+        else {
+          const child = {
+            type: "mention",
+            value: User.id,
+            username: User.username,
+            name: User.name,
+            children : [{
+              text: ""
+            }]
+          }
+          return child ;
+        }
+      })
+
+    }
+    if (tag.test(substring)) {
+      const hashtag = substring.match(tag)[0]
+      const child = {
+        type: "hashtag",
+        hashtag,
+        children : [{
+          text: ""
+        }]
+      }
+      return new Promise(res => res(child)) ;
+
+    }
+    else {
+      const child =  {
+        text : substring
+      }
+      return new Promise(res => res(child)) ;
+    }
+  })
+
+  const children = await Promise.all(promises).catch(err => console.error(err));
+  if (children) {
+    const format = {
+      type: "p",
+      children
+    }
+    return format
+  }
+  else {
+    throw("There is a formatting error");
+  }
+
+}

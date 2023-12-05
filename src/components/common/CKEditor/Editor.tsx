@@ -50,7 +50,7 @@ export const Editor: React.FC<EditorProps> = props => {
       return {
         id: '@' + item.username,
         userId: item.id,
-        name: item.name,
+        name: item.username,
       };
     });
   };

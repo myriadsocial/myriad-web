@@ -25,7 +25,7 @@ import { TabPanel } from '../atoms/TabPanel';
 import { useStyles } from './MobilePostCreate.styles';
 import SettingVisibility from './SettingVisibility';
 import { menuOptions } from './default';
-import { serialize } from './formatter';
+import { handleMention, serialize } from './formatter';
 
 import ExclusiveCreate from 'components/ExclusiveContentCreate/ExclusiveCreate';
 import Reveal from 'components/ExclusiveContentCreate/Reveal/Reveal';
@@ -140,82 +140,7 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
     }
   };
 
-  const handleSubmit = () => {
-    if (activeTab === 'import' && importUrl) {
-      onSubmit(importUrl, {
-        NSFWTag: post.NSFWTag,
-        visibility: post.visibility ?? PostVisibility.PUBLIC,
-        selectedTimelineIds: timelineId,
-      });
-
-      setImport(undefined);
-    }
-
-    if (!isMobile && activeTab === 'create') {
-      const store = getEditorSelectors(user.id);
-      const value = store.value();
-
-      const attributes = serialize(value);
-
-      if (!attributes.rawText && !value[0].children[0].text) {
-        enqueueSnackbar({
-          message: i18n.t('Post_Create.Error.Empty'),
-          variant: 'warning',
-        });
-      } else if (exclusiveContent) {
-        dispatch(
-          createExclusiveContent(
-            exclusiveContent,
-            [],
-            (resp: ExclusiveContent) => {
-              const data = {
-                ...attributes,
-                asset: {
-                  exclusiveContents: [resp?.id],
-                },
-                selectedUserIds: post.selectedUserIds,
-                NSFWTag: post.NSFWTag,
-                visibility: post.visibility ?? PostVisibility.PUBLIC,
-                selectedTimelineIds: post.selectedTimelineIds ?? timelineId,
-              };
-
-              if (resp?.id) {
-                Object.assign(data, {
-                  asset: { exclusiveContents: [resp.id] },
-                });
-              }
-
-              onSubmit(data);
-            },
-            () => {
-              confirm({
-                title: i18n.t('LiteVersion.LimitTitlePost', { count: 0 }),
-                description: i18n.t('LiteVersion.LimitDescPost'),
-                icon: 'warning',
-                confirmationText: i18n.t('General.Got_It'),
-                cancellationText: i18n.t('LiteVersion.MaybeLater'),
-                onConfirm: () => {
-                  undefined;
-                },
-                onCancel: () => {
-                  undefined;
-                },
-                hideCancel: true,
-              });
-            },
-          ),
-        );
-        setExclusiveContent(null);
-      } else {
-        onSubmit({
-          ...attributes,
-          selectedUserIds: post.selectedUserIds,
-          NSFWTag: post.NSFWTag,
-          visibility: post.visibility ?? PostVisibility.PUBLIC,
-          selectedTimelineIds: timelineId,
-        });
-      }
-    }
+  const handleSubmit = async () => {
 
     if (isMobile && activeTab === 'create') {
       if (exclusiveContent) {
@@ -261,18 +186,20 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
         );
         setExclusiveContent(null);
       } else {
-        onSubmit({
-          text: content.current,
-          rawText: content.current,
-          selectedUserIds: post.selectedUserIds,
-          NSFWTag: post.NSFWTag,
-          visibility: post.visibility ?? PostVisibility.PUBLIC,
-          selectedTimelineIds: timelineId,
-        });
+        await handleMention("dawnstar").then(() => handleClose())
+        console.log(content.current)      
+        // onSubmit({
+        //   text: content.current,
+        //   rawText: content.current,
+        //   selectedUserIds: post.selectedUserIds,
+        //   NSFWTag: post.NSFWTag,
+        //   visibility: post.visibility ?? PostVisibility.PUBLIC,
+        //   selectedTimelineIds: timelineId,
+        // });
       }
     }
 
-    handleClose();
+    // handleClose();
   };
 
   const handleClose = () => {
@@ -419,7 +346,7 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
       maxWidth="md"
       className={styles.root}>
       <div>
-        <button className={styles.postbutton}>post</button>
+        <button className={styles.postbutton} onClick={handleSubmit}>post</button>
       </div>
       <div>
         <Paper className={styles.timelinePaper}>
