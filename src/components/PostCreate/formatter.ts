@@ -13,13 +13,14 @@ import {
   deserialize,
   formatToString,
 } from 'components/common/NodeViewer/formatter';
-import { Post } from 'src/interfaces/post';
+import { MentionUserProps, Post } from 'src/interfaces/post';
+import { User } from 'src/interfaces/user';
+import * as UserAPI from 'src/lib/api/user';
 
 export type StringifyData = {
   text: string;
   image: string;
 };
-import * as UserAPI from 'src/lib/api/user';
 
 export const serialize = (nodes: EditorValue): Partial<Post> => {
   const post: Partial<Post> = {
@@ -126,73 +127,87 @@ export const stringify = (post: Post): StringifyData => {
 };
 
 export const handleMention = async (username: string) => {
-  const User = await UserAPI.getUserByUserName(username).catch(err => console.error("There is an error ", err));
-  // console.log("User is", User);
-  return User ;
-}
+  try {
+    const User = await UserAPI.getUserByUserName(username);
+    console.log('User is', User);
+    return User;
+  } catch (err) {
+    throw 'Failed to fetch user';
+  }
+};
 
 export const handleFormatCKEditor = async (rawtext: string) => {
-  const regex = /[\@\#][\w]+/g ;
-  const mention = /(?<=\@)\w+/g ;
-  const tag = /(?<=\#)\w+/g ;
+  const regex = /([\@\#][\w]+)/g;
+  const mention = /(?<=\@)\w+/g;
+  const tag = /(?<=\#)\w+/g;
   const text = rawtext.split(regex);
-
+  let mentions: MentionUserProps[] = [];
+  let hashtags = [];
 
   const promises = text.map(substring => {
     if (mention.test(substring)) {
-      const username = substring.match(mention)[0] ;
-      handleMention(username).then(User => {
-        if (!User) {
-          const child =  {
-            text : substring
-          }
-          return child ;
-        }
-        else {
+      const match = substring.match(mention);
+      const username = match[0];
+      return handleMention(username).then(User => {
+        if (User.length !== 0) {
           const child = {
-            type: "mention",
-            value: User.id,
-            username: User.username,
-            name: User.name,
-            children : [{
-              text: ""
-            }]
-          }
-          return child ;
+            type: 'mention',
+            value: User[0].id,
+            username: User[0].username,
+            name: User[0].name,
+            children: [
+              {
+                text: '',
+              },
+            ],
+          };
+          mentions.push({
+            id: User[0].id,
+            username: User[0].username,
+            name: User[0].name,
+          });
+          return child;
         }
-      })
-
+        // else {
+        //   const child =  {
+        //     text : substring
+        //   }
+        //   return child ;
+        // }
+      });
     }
     if (tag.test(substring)) {
-      const hashtag = substring.match(tag)[0]
+      const match = substring.match(tag);
+      const hashtag = match[0];
+      hashtags.push(hashtag);
       const child = {
-        type: "hashtag",
+        type: 'hashtag',
         hashtag,
-        children : [{
-          text: ""
-        }]
-      }
-      return new Promise(res => res(child)) ;
-
+        children: [
+          {
+            text: '',
+          },
+        ],
+      };
+      return new Promise(res => res(child));
+    } else {
+      const child = {
+        text: substring,
+      };
+      return new Promise(res => res(child));
     }
-    else {
-      const child =  {
-        text : substring
-      }
-      return new Promise(res => res(child)) ;
-    }
-  })
+  });
 
   const children = await Promise.all(promises).catch(err => console.error(err));
   if (children) {
     const format = {
-      type: "p",
-      children
-    }
-    return format
+      type: 'p',
+      children,
+    };
+    const skeleton = { format, mentions, hashtags };
+    console.log(skeleton);
+    return skeleton;
+  } else {
+    throw 'There is a formatting error';
   }
-  else {
-    throw("There is a formatting error");
-  }
-
-}
+};

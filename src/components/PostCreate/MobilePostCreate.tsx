@@ -25,7 +25,7 @@ import { TabPanel } from '../atoms/TabPanel';
 import { useStyles } from './MobilePostCreate.styles';
 import SettingVisibility from './SettingVisibility';
 import { menuOptions } from './default';
-import { handleMention, serialize } from './formatter';
+import { handleFormatCKEditor, handleMention, serialize } from './formatter';
 
 import ExclusiveCreate from 'components/ExclusiveContentCreate/ExclusiveCreate';
 import Reveal from 'components/ExclusiveContentCreate/Reveal/Reveal';
@@ -37,6 +37,7 @@ import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import { getEditorSelectors } from 'components/common/Editor/store';
 import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import { ExclusiveContent } from 'components/common/Tipping/Tipping.interface';
+import { convert } from 'html-to-text';
 import ShowIf from 'src/components/common/show-if.component';
 import { useExperienceHook } from 'src/hooks/use-experience-hook';
 import { useUpload } from 'src/hooks/use-upload.hook';
@@ -141,7 +142,6 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
   };
 
   const handleSubmit = async () => {
-
     if (isMobile && activeTab === 'create') {
       if (exclusiveContent) {
         dispatch(
@@ -186,8 +186,22 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
         );
         setExclusiveContent(null);
       } else {
-        await handleMention("dawnstar").then(() => handleClose())
-        console.log(content.current)      
+        const rawtext = convert(content.current);
+        await handleFormatCKEditor(rawtext)
+          .then(output => {
+            onSubmit({
+              text: JSON.stringify(output.format),
+              rawText: rawtext,
+              selectedUserIds: post.selectedUserIds,
+              NSFWTag: post.NSFWTag,
+              visibility: post.visibility ?? PostVisibility.PUBLIC,
+              tags: output.hashtags,
+              mentions: output.mentions,
+              selectedTimelineIds: timelineId ?? ['656e94ae9370a8bd1f64671b'],
+            });
+          })
+          .then(() => handleClose());
+        console.log(content.current);
         // onSubmit({
         //   text: content.current,
         //   rawText: content.current,
@@ -346,7 +360,9 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
       maxWidth="md"
       className={styles.root}>
       <div>
-        <button className={styles.postbutton} onClick={handleSubmit}>post</button>
+        <button className={styles.postbutton} onClick={handleSubmit}>
+          post
+        </button>
       </div>
       <div>
         <Paper className={styles.timelinePaper}>
