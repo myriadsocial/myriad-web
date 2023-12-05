@@ -13,7 +13,14 @@ import { useDispatch } from 'react-redux';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 
-import { SvgIcon, Grid, IconButton, Modal } from '@material-ui/core';
+import {
+  SvgIcon,
+  Grid,
+  IconButton,
+  Modal,
+  useMediaQuery,
+} from '@material-ui/core';
+import { useTheme } from '@material-ui/core/styles';
 
 import { CustomFolderIcon } from 'components/Menu';
 import { Avatar, AvatarSize } from 'components/atoms/Avatar';
@@ -63,8 +70,10 @@ type SearchBoxContainerProps = {
 
 export const BottombarComponent: React.FC<SearchBoxContainerProps> = props => {
   const { searched = false } = props;
+  const theme = useTheme();
 
   const { query, replace } = useQueryParams();
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
   const dispatch = useDispatch();
 
   const style = useStyles();
@@ -195,23 +204,25 @@ export const BottombarComponent: React.FC<SearchBoxContainerProps> = props => {
           />
         </div>
       </Grid>
-      <div className={style.buttonCreate}>
-        <IconButton
-          onClick={handleOpenPopover}
-          className={style.iconbuttonCreate}>
-          <SvgIcon className={style.fillButtonCreate} component={PlusIcon} />
-        </IconButton>
-        <Modal open={popOpen} onClose={handleClose}>
+      {isMobile && (
+        <div className={style.buttonCreate}>
           <IconButton
-            onClick={handleOpenCreatePost}
-            className={style.popoverbuttonCreate}>
-            <SvgIcon
-              className={style.fillButtonCreate}
-              component={PencilIcon}
-            />
+            onClick={handleOpenPopover}
+            className={style.iconbuttonCreate}>
+            <SvgIcon className={style.fillButtonCreate} component={PlusIcon} />
           </IconButton>
-        </Modal>
-      </div>
+          <Modal open={popOpen} onClose={handleClose}>
+            <IconButton
+              onClick={handleOpenCreatePost}
+              className={style.popoverbuttonCreate}>
+              <SvgIcon
+                className={style.fillButtonCreate}
+                component={PencilIcon}
+              />
+            </IconButton>
+          </Modal>
+        </div>
+      )}
     </>
   );
 };
