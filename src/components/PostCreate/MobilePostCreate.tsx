@@ -42,7 +42,7 @@ import { convert } from 'html-to-text';
 import ShowIf from 'src/components/common/show-if.component';
 import { useExperienceHook } from 'src/hooks/use-experience-hook';
 import { useUpload } from 'src/hooks/use-upload.hook';
-import { LogoMyriadCircle } from 'src/images/Icons';
+import { BiVideoPlus } from "react-icons/bi";
 import { ExclusiveContentPost } from 'src/interfaces/exclusive';
 import {
   ExperienceProps,
@@ -297,14 +297,14 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
     setShowTimelineCreate(false);
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
-      UploadAPI.image(event.target.files[0], {
+      const { files } = await UploadAPI.image(event.target.files[0], {
         onUploadProgress: (event: ProgressEvent) => {
           const fileProgress = Math.round((100 * event.loaded) / event.total);
-          setImageUrl([fileProgress])
         },
       });
+      setImageUrl(files.map(file => file.url))
 
       if (uploadFieldRef && uploadFieldRef.current) {
         uploadFieldRef.current.value = '';
@@ -416,7 +416,7 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
         />
         <div className={styles.grid}>
           <Grid container spacing={2}>
-            <Grid item xs={3} md={4}>
+            <Grid item>
               <input
                 type="file"
                 ref={uploadFieldRef}
@@ -425,11 +425,30 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
                 accept="image/*"
               />
               <IconButton
+              color={"primary"}
               onClick={selectFile}
               size={"medium"}
               >
                 <LuImagePlus 
-                size={12}
+                size={33}
+                />
+              </IconButton>
+            </Grid>
+            <Grid item>
+              <input
+                type="file"
+                ref={uploadFieldRef}
+                onChange={handleFileChange}
+                style={{ display: 'none' }}
+                accept="image/*"
+              />
+              <IconButton
+              color={"primary"}
+              onClick={selectFile}
+              size={"medium"}
+              >
+                <BiVideoPlus 
+                size={33}
                 />
               </IconButton>
             </Grid>

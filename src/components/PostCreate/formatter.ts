@@ -136,7 +136,29 @@ export const handleMention = async (username: string) => {
   }
 };
 
-export const handleFormatCKEditor = async (rawtext: string) => {
+const handleImageFormat = (imageurl?: string[]) => {
+  if (!imageurl) {
+    return []
+  }
+  else {
+    const imagechildren = imageurl.map(url => {
+      return {
+        type: "img",
+        url: url,
+        children: [
+          {
+            text: '',
+          },
+        ],
+      }
+
+    })
+    return imagechildren
+  }
+  
+}
+
+export const handleFormatCKEditor = async (rawtext: string, imageurl?: string[]) => {
   const regex = /([\@\#][\w]+)/g;
   const mention = /(?<=\@)\w+/g;
   const tag = /(?<=\#)\w+/g;
@@ -202,7 +224,10 @@ export const handleFormatCKEditor = async (rawtext: string) => {
   if (children) {
     const format = {
       type: 'p',
-      children,
+      children : [
+        ...children,
+        ...handleImageFormat(imageurl)
+      ],
     };
     const skeleton = { format, mentions, hashtags };
     console.log(skeleton);
