@@ -1,9 +1,10 @@
 import { ArrowLeftIcon, GiftIcon, TrashIcon } from '@heroicons/react/outline';
-
+import { LuImagePlus } from "react-icons/lu";
 import React, { useEffect, useRef, useState } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
 import dynamic from 'next/dynamic';
+import * as UploadAPI from 'src/lib/api/upload';
 
 import {
   Box,
@@ -104,8 +105,11 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
   const [userExperiences, setUserExperiences] = useState<UserExperience[]>([]);
   const [page, setPage] = useState<number>(1);
   const [currentExperience, setCurrentExperience] = useState<number>(0);
+  const [imageUrl, setImageUrl] = useState([]);
 
   const Editor = CKEditor;
+
+  const uploadFieldRef = useRef<HTMLInputElement | null>(null);
 
   const header: Record<PostCreateType, { title: string; subtitle: string }> = {
     create: {
@@ -293,6 +297,29 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
     setShowTimelineCreate(false);
   };
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      UploadAPI.image(event.target.files[0], {
+        onUploadProgress: (event: ProgressEvent) => {
+          const fileProgress = Math.round((100 * event.loaded) / event.total);
+          setImageUrl([fileProgress])
+        },
+      });
+
+      if (uploadFieldRef && uploadFieldRef.current) {
+        uploadFieldRef.current.value = '';
+      }
+    }
+  };
+
+  const selectFile = (): void => {
+    const uploadField: any = uploadFieldRef?.current;
+
+    if (!uploadField) return;
+
+    uploadField.click();
+  };
+
   const fetchUserExperiences = async () => {
     const { meta, data: experiences } = await ExperienceAPI.getUserExperiences(
       user.id,
@@ -389,9 +416,21 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
         />
         <div className={styles.grid}>
           <Grid container spacing={2}>
-            <Grid md>
-              <IconButton>
-                <LogoMyriadCircle />
+            <Grid item xs={3} md={4}>
+              <input
+                type="file"
+                ref={uploadFieldRef}
+                onChange={handleFileChange}
+                style={{ display: 'none' }}
+                accept="image/*"
+              />
+              <IconButton
+              onClick={selectFile}
+              size={"medium"}
+              >
+                <LuImagePlus 
+                size={12}
+                />
               </IconButton>
             </Grid>
           </Grid>
