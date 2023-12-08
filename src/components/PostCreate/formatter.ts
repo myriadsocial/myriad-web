@@ -190,12 +190,12 @@ export const handleFormatCKEditor = async (
           });
           return child;
         }
-        // else {
-        //   const child =  {
-        //     text : substring
-        //   }
-        //   return child ;
-        // }
+        else {
+          const child =  {
+            text : substring
+          }
+          return child ;
+        }
       });
     }
     if (tag.test(substring)) {
