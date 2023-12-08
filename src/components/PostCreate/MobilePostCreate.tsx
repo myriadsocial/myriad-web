@@ -1,10 +1,7 @@
-import { ArrowLeftIcon, GiftIcon, TrashIcon } from '@heroicons/react/outline';
-import { LuImagePlus } from "react-icons/lu";
 import React, { useEffect, useRef, useState } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
 import dynamic from 'next/dynamic';
-import * as UploadAPI from 'src/lib/api/upload';
 
 import {
   Box,
@@ -39,12 +36,14 @@ import { getEditorSelectors } from 'components/common/Editor/store';
 import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import { ExclusiveContent } from 'components/common/Tipping/Tipping.interface';
 import { convert } from 'html-to-text';
+import { BiVideoPlus } from 'react-icons/bi';
+import { LuImagePlus } from 'react-icons/lu';
 import ShowIf from 'src/components/common/show-if.component';
 import { useExperienceHook } from 'src/hooks/use-experience-hook';
 import { useUpload } from 'src/hooks/use-upload.hook';
-import { BiVideoPlus } from "react-icons/bi";
 import { ExclusiveContentPost } from 'src/interfaces/exclusive';
 import {
+  Experience,
   ExperienceProps,
   UserExperience,
   WrappedExperience,
@@ -53,6 +52,7 @@ import { Post, PostVisibility } from 'src/interfaces/post';
 import { TimelineType } from 'src/interfaces/timeline';
 import { User } from 'src/interfaces/user';
 import * as ExperienceAPI from 'src/lib/api/experience';
+import * as UploadAPI from 'src/lib/api/upload';
 import i18n from 'src/locale';
 import { RootState } from 'src/reducers';
 import { createExclusiveContent } from 'src/reducers/timeline/actions';
@@ -106,6 +106,7 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
   const [page, setPage] = useState<number>(1);
   const [currentExperience, setCurrentExperience] = useState<number>(0);
   const [imageUrl, setImageUrl] = useState([]);
+  const [selectedTimeline, setSelectedTimeline] = useState<Experience>();
 
   const Editor = CKEditor;
 
@@ -190,7 +191,7 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
         );
         setExclusiveContent(null);
       } else {
-        const rawtext = convert(content.current);
+        const rawtext = convert(content.current); // convert ck editor html value into raw text
         await handleFormatCKEditor(rawtext)
           .then(output => {
             onSubmit({
@@ -205,7 +206,6 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
             });
           })
           .then(() => handleClose());
-        console.log(content.current);
         // onSubmit({
         //   text: content.current,
         //   rawText: content.current,
@@ -297,14 +297,17 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
     setShowTimelineCreate(false);
   };
 
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     if (event.target.files && event.target.files.length > 0) {
       const { files } = await UploadAPI.image(event.target.files[0], {
         onUploadProgress: (event: ProgressEvent) => {
           const fileProgress = Math.round((100 * event.loaded) / event.total);
         },
       });
-      setImageUrl(files.map(file => file.url))
+      const urls = files.map(file => file.url);
+      setImageUrl([...imageUrl, ...urls]);
 
       if (uploadFieldRef && uploadFieldRef.current) {
         uploadFieldRef.current.value = '';
@@ -328,6 +331,8 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
     );
 
     setUserExperiences([...experiences]);
+    if (userExperiences.length !== 0)
+      setSelectedTimeline(userExperiences[0].experience);
 
     if (meta.currentPage < meta.totalPageCount) setPage(page + 1);
   };
@@ -402,7 +407,9 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
             />
           </div>
           <div className={styles.cardUserName}>
-            <Typography>Timeline Name</Typography>
+            {selectedTimeline && (
+              <Typography>{selectedTimeline.name}</Typography>
+            )}
           </div>
         </Paper>
       </div>
@@ -425,13 +432,10 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
                 accept="image/*"
               />
               <IconButton
-              color={"primary"}
-              onClick={selectFile}
-              size={"medium"}
-              >
-                <LuImagePlus 
-                size={33}
-                />
+                color={'primary'}
+                onClick={selectFile}
+                size={'medium'}>
+                <LuImagePlus size={33} />
               </IconButton>
             </Grid>
             <Grid item>
@@ -443,13 +447,10 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
                 accept="image/*"
               />
               <IconButton
-              color={"primary"}
-              onClick={selectFile}
-              size={"medium"}
-              >
-                <BiVideoPlus 
-                size={33}
-                />
+                color={'primary'}
+                onClick={selectFile}
+                size={'medium'}>
+                <BiVideoPlus size={33} />
               </IconButton>
             </Grid>
           </Grid>
