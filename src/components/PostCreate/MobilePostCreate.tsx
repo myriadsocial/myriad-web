@@ -195,14 +195,14 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
         await handleFormatCKEditor(rawtext)
           .then(output => {
             onSubmit({
-              text: JSON.stringify(output.format),
+              text: JSON.stringify([output.format]),
               rawText: rawtext,
               selectedUserIds: post.selectedUserIds,
               NSFWTag: post.NSFWTag,
               visibility: post.visibility ?? PostVisibility.PUBLIC,
               tags: output.hashtags,
               mentions: output.mentions,
-              selectedTimelineIds: timelineId ?? ['656e94ae9370a8bd1f64671b'],
+              selectedTimelineIds: [selectedTimeline?.id],
             });
           })
           .then(() => handleClose());
@@ -331,8 +331,8 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
     );
 
     setUserExperiences([...experiences]);
-    if (userExperiences.length !== 0)
-      setSelectedTimeline(userExperiences[0].experience);
+    if (experiences.length !== 0)
+      setSelectedTimeline(experiences[0].experience);
 
     if (meta.currentPage < meta.totalPageCount) setPage(page + 1);
   };
@@ -400,22 +400,22 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
         <Paper className={styles.timelinePaper}>
           <div className={styles.avatar}>
             <SocialAvatar
-              avatar={user.profilePictureURL}
+              avatar={user ? user.profilePictureURL : ''}
               origin="myriad"
               onClick={() => {}}
               name="avatar"
             />
           </div>
-          <div className={styles.cardUserName}>
-            {selectedTimeline && (
+          {selectedTimeline && (
+            <div className={styles.cardUserName}>
               <Typography>{selectedTimeline.name}</Typography>
-            )}
-          </div>
+            </div>
+          )}
         </Paper>
       </div>
       <div className={styles.editor}>
         <Editor
-          userId={user.id}
+          userId={user ? user.id : ''}
           mobile={isMobile}
           onSearchMention={onSearchPeople}
           onChange={handleContentChange}

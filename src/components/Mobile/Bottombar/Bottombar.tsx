@@ -208,6 +208,7 @@ export const BottombarComponent: React.FC<SearchBoxContainerProps> = props => {
         <div className={style.buttonCreate}>
           <IconButton
             onClick={handleOpenPopover}
+            disabled={!user}
             className={style.iconbuttonCreate}>
             <SvgIcon className={style.fillButtonCreate} component={PlusIcon} />
           </IconButton>
