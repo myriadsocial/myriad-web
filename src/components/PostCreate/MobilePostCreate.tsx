@@ -1,60 +1,26 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import dynamic from 'next/dynamic';
 
-import {
-  Box,
-  Button,
-  IconButton,
-  Paper,
-  SvgIcon,
-  Typography,
-  Grid,
-} from '@material-ui/core';
-import Tab from '@material-ui/core/Tab';
-import Tabs from '@material-ui/core/Tabs';
+import { Paper, Typography } from '@material-ui/core';
 
-import { NSFWTags } from '../NSFWTags';
-import { PostImport } from '../PostImport';
-import { DropdownMenu } from '../atoms/DropdownMenu';
 import { Modal } from '../atoms/Modal';
-import { TabPanel } from '../atoms/TabPanel';
+import { MobileEmbed } from './MobileEmbed';
 import { useStyles } from './MobilePostCreate.styles';
-import SettingVisibility from './SettingVisibility';
-import { menuOptions } from './default';
-import { handleFormatCKEditor, handleMention, serialize } from './formatter';
+import { handleFormatCKEditor } from './formatter';
 
-import ExclusiveCreate from 'components/ExclusiveContentCreate/ExclusiveCreate';
-import Reveal from 'components/ExclusiveContentCreate/Reveal/Reveal';
-import ExperienceListBarCreatePost from 'components/ExperienceList/ExperienceListBarCreatePost';
-import { ExperienceTimelinePost } from 'components/ExperienceTimelinePost';
-import { PrimaryCoinMenu } from 'components/PrimaryCoinMenu';
 import { SocialAvatar } from 'components/atoms/SocialAvatar';
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
-import { getEditorSelectors } from 'components/common/Editor/store';
-import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
 import { ExclusiveContent } from 'components/common/Tipping/Tipping.interface';
 import { convert } from 'html-to-text';
-import { BiVideoPlus } from 'react-icons/bi';
-import { LuImagePlus } from 'react-icons/lu';
-import ShowIf from 'src/components/common/show-if.component';
-import { useExperienceHook } from 'src/hooks/use-experience-hook';
-import { useUpload } from 'src/hooks/use-upload.hook';
 import { ExclusiveContentPost } from 'src/interfaces/exclusive';
-import {
-  Experience,
-  ExperienceProps,
-  UserExperience,
-  WrappedExperience,
-} from 'src/interfaces/experience';
+import { Experience, UserExperience } from 'src/interfaces/experience';
 import { Post, PostVisibility } from 'src/interfaces/post';
-import { TimelineType } from 'src/interfaces/timeline';
 import { User } from 'src/interfaces/user';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import * as UploadAPI from 'src/lib/api/upload';
 import i18n from 'src/locale';
-import { RootState } from 'src/reducers';
 import { createExclusiveContent } from 'src/reducers/timeline/actions';
 
 const CKEditor = dynamic(() => import('../common/CKEditor/Editor'), {
@@ -85,26 +51,18 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
   const dispatch = useDispatch();
   const confirm = useConfirm();
   const styles = useStyles();
-  const enqueueSnackbar = useEnqueueSnackbar();
-
-  const [activeTab, setActiveTab] = useState<PostCreateType>('create');
   const [post, setPost] = useState<Partial<Post>>(initialPost);
-  const [editorValue, setEditorValue] = useState<string>('');
+  const [, setEditorValue] = useState<string>('');
   const content = useRef('');
-
-  const [importUrl, setImport] = useState<string | undefined>();
   const [exclusiveContent, setExclusiveContent] =
     useState<ExclusiveContentPost | null>(null);
   const [showExclusive, setShowExclusive] = useState<boolean>(false);
-  const [showTimelineCreate, setShowTimelineCreate] = useState<boolean>(false);
+  const [, setShowTimelineCreate] = useState<boolean>(false);
   const [timelineId, setTimelineId] = useState<string[]>([]);
-  const [experiencesVisibility, setExperienceVisibility] = useState<string[]>(
-    [],
-  );
-  const [commonUser, setCommonUser] = useState<string[]>([]);
-  const [userExperiences, setUserExperiences] = useState<UserExperience[]>([]);
+  const [, setExperienceVisibility] = useState<string[]>([]);
+  const [, setCommonUser] = useState<string[]>([]);
+  const [, setUserExperiences] = useState<UserExperience[]>([]);
   const [page, setPage] = useState<number>(1);
-  const [currentExperience, setCurrentExperience] = useState<number>(0);
   const [imageUrl, setImageUrl] = useState([]);
   const [selectedTimeline, setSelectedTimeline] = useState<Experience>();
 
@@ -123,21 +81,15 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
     },
   };
 
-  const handlePostUrlChange = (url: string | null) => {
-    setImport(url);
-    setEditorValue(url);
-  };
-
-  const handleConfirmNSFWTags = (tags: string[]) => {
-    setPost(prevPost => ({
-      ...prevPost,
-      isNSFW: tags.length > 0,
-      NSFWTag: tags.join(','),
-    }));
-  };
-
-  const handleVisibilityChange = (visibility: PostVisibility) => {
-    setPost(prevPost => ({ ...prevPost, visibility }));
+  const handleRemoveImage = (url: string) => {
+    const images = imageUrl;
+    console.log(images);
+    const index = images.indexOf(url);
+    if (index > -1) {
+      images.splice(index, 1);
+      console.log(images);
+      setImageUrl(images);
+    }
   };
 
   const handleImagePaste = event => {
@@ -147,7 +99,7 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
   };
 
   const handleSubmit = async () => {
-    if (isMobile && activeTab === 'create') {
+    if (isMobile) {
       if (exclusiveContent) {
         dispatch(
           createExclusiveContent(
@@ -192,7 +144,7 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
         setExclusiveContent(null);
       } else {
         const rawtext = convert(content.current); // convert ck editor html value into raw text
-        await handleFormatCKEditor(rawtext)
+        await handleFormatCKEditor(rawtext, imageUrl)
           .then(output => {
             onSubmit({
               text: JSON.stringify([output.format]),
@@ -221,8 +173,8 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
   };
 
   const handleClose = () => {
+    setImageUrl([]);
     setPost(initialPost);
-    setImport(undefined);
     setShowExclusive(false);
     setExclusiveContent(null);
     setShowTimelineCreate(false);
@@ -245,56 +197,16 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
     content.current = data;
   };
 
-  const handleErrorImport = () => {
-    setImport(undefined);
-  };
-
-  const handleshowExclusive = () => {
-    setShowExclusive(!showExclusive);
-    // getPlateEditorRef(`exclusive-${user.id}`);
-  };
-
-  const handleRemoveExclusiveContent = () => {
-    setExclusiveContent(null);
-  };
-
-  const handleSubmitExclusiveContent = (content: ExclusiveContentPost) => {
-    setExclusiveContent(content);
-    handleshowExclusive();
-  };
-
   const handleTitleModal: () => { title: string; subtitle: string } = () => {
     const title = !showExclusive
-      ? header[activeTab].title
+      ? header['create'].title
       : i18n.t('ExclusiveContent.Add');
-    const subtitle = !showExclusive ? header[activeTab].subtitle : '';
+    const subtitle = !showExclusive ? header['create'].subtitle : '';
 
     return {
       title,
       subtitle,
     };
-  };
-  const {
-    selectedExperience,
-    saveExperience,
-    removeExperience,
-    loadExperience,
-    unsubscribeExperience,
-  } = useExperienceHook();
-  const anonymous = useSelector<RootState, boolean>(
-    state => state.userState.anonymous,
-    shallowEqual,
-  );
-  const { uploadImage } = useUpload();
-  const onImageUpload = async (files: File[]) => {
-    const url = await uploadImage(files[0]);
-
-    return url ?? '';
-  };
-  const onSave = (attributes: ExperienceProps) => {
-    saveExperience(attributes);
-    fetchUserExperiences();
-    setShowTimelineCreate(false);
   };
 
   const handleFileChange = async (
@@ -303,6 +215,7 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
     if (event.target.files && event.target.files.length > 0) {
       const { files } = await UploadAPI.image(event.target.files[0], {
         onUploadProgress: (event: ProgressEvent) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const fileProgress = Math.round((100 * event.loaded) / event.total);
         },
       });
@@ -346,41 +259,6 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
     if (open) fetchUserExperiences();
     else resetExperiences();
   }, [open, page]);
-
-  const handleRemoveExperience = (experienceId: string) => {
-    removeExperience(experienceId, () => {
-      loadExperience();
-    });
-  };
-  const handleUnsubscribeExperience = (userExperienceId: string) => {
-    unsubscribeExperience(userExperienceId);
-  };
-
-  const handleViewPostList = (
-    type: TimelineType,
-    userExperience: WrappedExperience,
-  ) => {
-    if (timelineId.includes(userExperience.experience.id)) {
-      setTimelineId(
-        timelineId.filter(id => id !== userExperience.experience.id),
-      );
-      setExperienceVisibility(
-        experiencesVisibility.filter(
-          visibility => visibility !== userExperience.experience.visibility,
-        ),
-      );
-      setCommonUser(
-        commonUser.filter(user => user !== userExperience.experience.user.name),
-      );
-    } else {
-      setTimelineId([...timelineId, userExperience.experience.id]);
-      setExperienceVisibility([
-        ...experiencesVisibility,
-        userExperience.experience.visibility,
-      ]);
-      setCommonUser([...commonUser, userExperience.experience.user.name]);
-    }
-  };
   return (
     <Modal
       title={handleTitleModal().title}
@@ -422,38 +300,13 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
           autoFocus={!showExclusive}
         />
         <div className={styles.grid}>
-          <Grid container spacing={2}>
-            <Grid item>
-              <input
-                type="file"
-                ref={uploadFieldRef}
-                onChange={handleFileChange}
-                style={{ display: 'none' }}
-                accept="image/*"
-              />
-              <IconButton
-                color={'primary'}
-                onClick={selectFile}
-                size={'medium'}>
-                <LuImagePlus size={33} />
-              </IconButton>
-            </Grid>
-            <Grid item>
-              <input
-                type="file"
-                ref={uploadFieldRef}
-                onChange={handleFileChange}
-                style={{ display: 'none' }}
-                accept="image/*"
-              />
-              <IconButton
-                color={'primary'}
-                onClick={selectFile}
-                size={'medium'}>
-                <BiVideoPlus size={33} />
-              </IconButton>
-            </Grid>
-          </Grid>
+          <MobileEmbed
+            imageUrl={imageUrl}
+            videoUrl="aa"
+            onChange={handleFileChange}
+            onClick={selectFile}
+            uploadFieldRef={uploadFieldRef}
+            onRemove={handleRemoveImage}></MobileEmbed>
         </div>
         <button className={styles.privacySettingsButton}>
           privacy settings

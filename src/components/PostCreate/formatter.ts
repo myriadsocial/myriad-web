@@ -189,12 +189,11 @@ export const handleFormatCKEditor = async (
             name: User[0].name,
           });
           return child;
-        }
-        else {
-          const child =  {
-            text : substring
-          }
-          return child ;
+        } else {
+          const child = {
+            text: substring,
+          };
+          return child;
         }
       });
     }
@@ -227,7 +226,6 @@ export const handleFormatCKEditor = async (
       children: [...children, ...handleImageFormat(imageurl)],
     };
     const skeleton = { format, mentions, hashtags };
-    console.log(skeleton);
     return skeleton;
   } else {
     throw 'There is a formatting error';
