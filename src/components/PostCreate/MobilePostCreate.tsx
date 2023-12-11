@@ -280,7 +280,9 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
             <SocialAvatar
               avatar={user ? user.profilePictureURL : ''}
               origin="myriad"
-              onClick={() => {}}
+              onClick={() => {
+                console.log;
+              }}
               name="avatar"
             />
           </div>

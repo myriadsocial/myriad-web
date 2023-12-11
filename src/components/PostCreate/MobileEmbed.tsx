@@ -31,13 +31,12 @@ export const MobileEmbed: React.FC<MobileEmbedProps> = props => {
         />
         <ImageList cols={3}>
           {imageUrl.map(url => (
-            <ImageListItem>
+            <ImageListItem key={url}>
               <img src={url} />
               <IconButton
                 size={'medium'}
                 color={'secondary'}
                 onClick={handleRemove(url)}
-                key={url}
                 style={{ position: 'absolute', zIndex: 2, right: '-6%' }}>
                 <CiCircleRemove size={30} />
               </IconButton>

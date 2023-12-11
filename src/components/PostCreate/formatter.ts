@@ -14,7 +14,6 @@ import {
   formatToString,
 } from 'components/common/NodeViewer/formatter';
 import { MentionUserProps, Post } from 'src/interfaces/post';
-import { User } from 'src/interfaces/user';
 import * as UserAPI from 'src/lib/api/user';
 
 export type StringifyData = {
@@ -163,8 +162,8 @@ export const handleFormatCKEditor = async (
   const mention = /(?<=\@)\w+/g;
   const tag = /(?<=\#)\w+/g;
   const text = rawtext.split(regex);
-  let mentions: MentionUserProps[] = [];
-  let hashtags = [];
+  const mentions: MentionUserProps[] = [];
+  const hashtags = [];
 
   const promises = text.map(substring => {
     if (mention.test(substring)) {
