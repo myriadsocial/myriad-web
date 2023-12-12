@@ -20,7 +20,7 @@ class Editor extends ClassicEditor {
 		Paragraph
 	];
 
-	public static override defaultConfig: EditorConfig = {
+	public static override defaultConfig = {
 		toolbar: {
 			items: [
 			]
