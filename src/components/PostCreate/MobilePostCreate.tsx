@@ -63,12 +63,14 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
   const [, setCommonUser] = useState<string[]>([]);
   const [, setUserExperiences] = useState<UserExperience[]>([]);
   const [page, setPage] = useState<number>(1);
-  const [imageUrl, setImageUrl] = useState([]);
+  const [imageUrl, setImageUrl] = useState<string[]>([]);
   const [selectedTimeline, setSelectedTimeline] = useState<Experience>();
+  const [videoUrl, setVideoUrl] = useState<string[]>([""]);
 
   const Editor = CKEditor;
 
-  const uploadFieldRef = useRef<HTMLInputElement | null>(null);
+  const uploadImageFieldRef = useRef<HTMLInputElement | null>(null);
+  const uploadVideoFieldRef = useRef<HTMLInputElement | null>(null);
 
   const header: Record<PostCreateType, { title: string; subtitle: string }> = {
     create: {
@@ -209,33 +211,6 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
     };
   };
 
-  const handleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    if (event.target.files && event.target.files.length > 0) {
-      const { files } = await UploadAPI.image(event.target.files[0], {
-        onUploadProgress: (event: ProgressEvent) => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const fileProgress = Math.round((100 * event.loaded) / event.total);
-        },
-      });
-      const urls = files.map(file => file.url);
-      setImageUrl([...imageUrl, ...urls]);
-
-      if (uploadFieldRef && uploadFieldRef.current) {
-        uploadFieldRef.current.value = '';
-      }
-    }
-  };
-
-  const selectFile = (): void => {
-    const uploadField: any = uploadFieldRef?.current;
-
-    if (!uploadField) return;
-
-    uploadField.click();
-  };
-
   const fetchUserExperiences = async () => {
     const { meta, data: experiences } = await ExperienceAPI.getUserExperiences(
       user.id,
@@ -304,10 +279,11 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
         <div className={styles.grid}>
           <MobileEmbed
             imageUrl={imageUrl}
-            videoUrl="aa"
-            onChange={handleFileChange}
-            onClick={selectFile}
-            uploadFieldRef={uploadFieldRef}
+            videoUrl={videoUrl}
+            onImage={setImageUrl}
+            onVideo={setVideoUrl}
+            uploadImageFieldRef={uploadImageFieldRef}
+            uploadVideoFieldRef={uploadVideoFieldRef}
             onRemove={handleRemoveImage}></MobileEmbed>
         </div>
         <button className={styles.privacySettingsButton}>
