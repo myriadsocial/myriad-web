@@ -159,22 +159,13 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
             });
           })
           .then(() => handleClose());
-        // onSubmit({
-        //   text: content.current,
-        //   rawText: content.current,
-        //   selectedUserIds: post.selectedUserIds,
-        //   NSFWTag: post.NSFWTag,
-        //   visibility: post.visibility ?? PostVisibility.PUBLIC,
-        //   selectedTimelineIds: timelineId,
-        // });
       }
     }
-
-    // handleClose();
   };
 
   const handleClose = () => {
     setImageUrl([]);
+    setVideoUrl([]);
     setPost(initialPost);
     setShowExclusive(false);
     setExclusiveContent(null);
