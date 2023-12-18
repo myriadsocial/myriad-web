@@ -65,7 +65,7 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
   const [page, setPage] = useState<number>(1);
   const [imageUrl, setImageUrl] = useState<string[]>([]);
   const [selectedTimeline, setSelectedTimeline] = useState<Experience>();
-  const [videoUrl, setVideoUrl] = useState<string[]>([""]);
+  const [videoUrl, setVideoUrl] = useState<string[]>([]);
 
   const Editor = CKEditor;
 
@@ -146,7 +146,7 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
         setExclusiveContent(null);
       } else {
         const rawtext = convert(content.current); // convert ck editor html value into raw text
-        await handleFormatCKEditor(rawtext, imageUrl)
+        await handleFormatCKEditor(rawtext, imageUrl, videoUrl)
           .then(output => {
             onSubmit({
               text: JSON.stringify([output.format]),

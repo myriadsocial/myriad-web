@@ -154,9 +154,29 @@ const handleImageFormat = (imageurl?: string[]) => {
   }
 };
 
+const handleVideoFormat = (videourl?: string[]) => {
+  if (!videourl) {
+    return [];
+  } else {
+    const videochildren = videourl.map(url => {
+      return {
+        type: 'media_embed',
+        url: url,
+        children: [
+          {
+            text: '',
+          },
+        ],
+      };
+    });
+    return videochildren;
+  }
+};
+
 export const handleFormatCKEditor = async (
   rawtext: string,
   imageurl?: string[],
+  videoUrl?: string[],
 ) => {
   const regex = /([\@\#][\w]+)/g;
   const mention = /(?<=\@)\w+/g;
@@ -222,7 +242,11 @@ export const handleFormatCKEditor = async (
   if (children) {
     const format = {
       type: 'p',
-      children: [...children, ...handleImageFormat(imageurl)],
+      children: [
+        ...children,
+        ...handleImageFormat(imageurl),
+        ...handleVideoFormat(videoUrl),
+      ],
     };
     const skeleton = { format, mentions, hashtags };
     return skeleton;

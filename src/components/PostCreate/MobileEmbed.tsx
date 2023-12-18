@@ -1,9 +1,9 @@
 import { IconButton, Grid, ImageList, ImageListItem } from '@material-ui/core';
-import * as UploadAPI from 'src/lib/api/upload';
 
 import { BiVideoPlus } from 'react-icons/bi';
 import { CiCircleRemove } from 'react-icons/ci';
 import { LuImagePlus } from 'react-icons/lu';
+import * as UploadAPI from 'src/lib/api/upload';
 
 type MobileEmbedProps = {
   uploadVideoFieldRef: any;
@@ -16,10 +16,22 @@ type MobileEmbedProps = {
 };
 
 export const MobileEmbed: React.FC<MobileEmbedProps> = props => {
-  const { imageUrl, onImage, uploadImageFieldRef, uploadVideoFieldRef, onRemove, onVideo } = props;
+  const {
+    imageUrl,
+    videoUrl,
+    onImage,
+    uploadImageFieldRef,
+    uploadVideoFieldRef,
+    onRemove,
+    onVideo,
+  } = props;
 
   const handleRemove: (url: string) => () => void = (url: string) => {
     return () => onRemove(url);
+  };
+
+  const handleRemoveVideo = () => {
+    onVideo([]);
   };
   const handleImageChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -73,8 +85,6 @@ export const MobileEmbed: React.FC<MobileEmbedProps> = props => {
     uploadField.click();
   };
 
-
-
   if (imageUrl.length > 0)
     return (
       <>
@@ -108,6 +118,26 @@ export const MobileEmbed: React.FC<MobileEmbedProps> = props => {
             </ImageListItem>
           )}
         </ImageList>
+      </>
+    );
+
+  if (videoUrl.length > 0)
+    return (
+      <>
+        <Grid container>
+          <Grid item xs>
+            <IconButton
+              size={'medium'}
+              color={'secondary'}
+              onClick={handleRemoveVideo}
+              style={{ position: 'absolute', zIndex: 2, right: '-1%' }}>
+              <CiCircleRemove size={30} />
+            </IconButton>
+            <video width="100%" src={videoUrl[0]}>
+              Browser does not support video
+            </video>
+          </Grid>
+        </Grid>
       </>
     );
 
