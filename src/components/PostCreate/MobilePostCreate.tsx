@@ -19,7 +19,6 @@ import { Experience, UserExperience } from 'src/interfaces/experience';
 import { Post, PostVisibility } from 'src/interfaces/post';
 import { User } from 'src/interfaces/user';
 import * as ExperienceAPI from 'src/lib/api/experience';
-import * as UploadAPI from 'src/lib/api/upload';
 import i18n from 'src/locale';
 import { createExclusiveContent } from 'src/reducers/timeline/actions';
 

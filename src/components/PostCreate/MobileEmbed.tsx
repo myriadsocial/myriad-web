@@ -3,6 +3,7 @@ import { IconButton, Grid, ImageList, ImageListItem } from '@material-ui/core';
 import { BiVideoPlus } from 'react-icons/bi';
 import { CiCircleRemove } from 'react-icons/ci';
 import { LuImagePlus } from 'react-icons/lu';
+import * as UploadAPI from 'src/lib/api/upload';
 
 type MobileEmbedProps = {
   uploadVideoFieldRef: any;
