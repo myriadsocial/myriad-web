@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import dynamic from 'next/dynamic';
 
-import { Paper, Typography } from '@material-ui/core';
+import { Paper, Typography, Menu, MenuItem } from '@material-ui/core';
 
 import { Modal } from '../atoms/Modal';
 import { MobileEmbed } from './MobileEmbed';
@@ -14,6 +14,7 @@ import { SocialAvatar } from 'components/atoms/SocialAvatar';
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import { ExclusiveContent } from 'components/common/Tipping/Tipping.interface';
 import { convert } from 'html-to-text';
+import { FaChevronDown } from 'react-icons/fa';
 import { ExclusiveContentPost } from 'src/interfaces/exclusive';
 import { Experience, UserExperience } from 'src/interfaces/experience';
 import { Post, PostVisibility } from 'src/interfaces/post';
@@ -60,11 +61,12 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
   const [timelineId, setTimelineId] = useState<string[]>([]);
   const [, setExperienceVisibility] = useState<string[]>([]);
   const [, setCommonUser] = useState<string[]>([]);
-  const [, setUserExperiences] = useState<UserExperience[]>([]);
+  const [userExperiences, setUserExperiences] = useState<UserExperience[]>([]);
   const [page, setPage] = useState<number>(1);
   const [imageUrl, setImageUrl] = useState<string[]>([]);
   const [selectedTimeline, setSelectedTimeline] = useState<Experience>();
   const [videoUrl, setVideoUrl] = useState<string[]>([]);
+  const [anchorEl, setAnchorEl] = React.useState<null | SVGElement>(null);
 
   const Editor = CKEditor;
 
@@ -80,6 +82,20 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
       title: i18n.t('Post_Import.Title'),
       subtitle: i18n.t('Post_Import.Subtitle'),
     },
+  };
+
+  const handleOpenMenu = (event: React.MouseEvent<SVGElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleExperienceChange = (item: UserExperience) => {
+    return () => {
+      setSelectedTimeline(item.experience);
+    };
   };
 
   const handleRemoveImage = (url: string) => {
@@ -256,6 +272,25 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
               <Typography>{selectedTimeline.name}</Typography>
             </div>
           )}
+          <FaChevronDown
+            size={15}
+            onClick={handleOpenMenu}
+            style={{ position: 'absolute', right: 16, top: 22 }}
+          />
+          <Menu
+            anchorEl={anchorEl}
+            id="account-menu"
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+            onClick={handleMenuClose}
+            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}>
+            {userExperiences.map(item => (
+              <MenuItem onClick={handleExperienceChange(item)}>
+                {item.experience.name}
+              </MenuItem>
+            ))}
+          </Menu>
         </Paper>
       </div>
       <div className={styles.editor}>
