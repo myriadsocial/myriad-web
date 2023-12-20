@@ -286,7 +286,9 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
             transformOrigin={{ horizontal: 'right', vertical: 'top' }}
             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}>
             {userExperiences.map(item => (
-              <MenuItem key={item.experience.name} onClick={handleExperienceChange(item)}>
+              <MenuItem
+                key={item.experience.name}
+                onClick={handleExperienceChange(item)}>
                 {item.experience.name}
               </MenuItem>
             ))}
