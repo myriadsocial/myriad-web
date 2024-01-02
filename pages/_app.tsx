@@ -10,6 +10,8 @@ import Head from 'next/head';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 
+import '../ckeditor.css';
+
 import { SnackbarProvider } from 'notistack';
 import { I18nextProvider } from 'react-i18next';
 import { AppContextProvider } from 'src/context/AppContextProvider';

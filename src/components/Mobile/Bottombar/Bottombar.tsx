@@ -13,7 +13,14 @@ import { useDispatch } from 'react-redux';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 
-import { SvgIcon, Grid, IconButton } from '@material-ui/core';
+import {
+  SvgIcon,
+  Grid,
+  IconButton,
+  Modal,
+  useMediaQuery,
+} from '@material-ui/core';
+import { useTheme } from '@material-ui/core/styles';
 
 import { CustomFolderIcon } from 'components/Menu';
 import { Avatar, AvatarSize } from 'components/atoms/Avatar';
@@ -63,14 +70,17 @@ type SearchBoxContainerProps = {
 
 export const BottombarComponent: React.FC<SearchBoxContainerProps> = props => {
   const { searched = false } = props;
+  const theme = useTheme();
 
   const { query, replace } = useQueryParams();
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
   const dispatch = useDispatch();
 
   const style = useStyles();
   const router = useRouter();
 
   const { user, anonymous } = useUserHook();
+  const [popOpen, setPopOpen] = React.useState(false);
 
   const { instance } = useInstances();
 
@@ -78,7 +88,16 @@ export const BottombarComponent: React.FC<SearchBoxContainerProps> = props => {
   const [actived, setActived] = React.useState<TimelineType>();
 
   const handleOpenCreatePost = () => {
+    setPopOpen(false);
     setCreatePostOpened(true);
+  };
+
+  const handleOpenPopover = () => {
+    setPopOpen(true);
+  };
+
+  const handleClose = event => {
+    setPopOpen(false);
   };
 
   const handleCloseCreatePost = () => {
@@ -164,13 +183,6 @@ export const BottombarComponent: React.FC<SearchBoxContainerProps> = props => {
           </IconButton>
         </div>
 
-        <div className={style.buttonCreate}>
-          <IconButton
-            onClick={handleOpenCreatePost}
-            className={style.iconbuttonCreate}>
-            <SvgIcon className={style.fillButtonCreate} component={PlusIcon} />
-          </IconButton>
-        </div>
         <div className={style.button}>
           <IconButton
             onClick={() => openMenu(TimelineType.ALL)}
@@ -192,6 +204,26 @@ export const BottombarComponent: React.FC<SearchBoxContainerProps> = props => {
           />
         </div>
       </Grid>
+      {isMobile && (
+        <div className={style.buttonCreate}>
+          <IconButton
+            onClick={handleOpenPopover}
+            disabled={!user}
+            className={style.iconbuttonCreate}>
+            <SvgIcon className={style.fillButtonCreate} component={PlusIcon} />
+          </IconButton>
+          <Modal open={popOpen} onClose={handleClose}>
+            <IconButton
+              onClick={handleOpenCreatePost}
+              className={style.popoverbuttonCreate}>
+              <SvgIcon
+                className={style.fillButtonCreate}
+                component={PencilIcon}
+              />
+            </IconButton>
+          </Modal>
+        </div>
+      )}
     </>
   );
 };

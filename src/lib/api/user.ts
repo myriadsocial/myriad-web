@@ -175,3 +175,19 @@ export const getUserByIds = async (
 
   return data;
 };
+
+export const getUserByUserName = async (userName: string): Promise<User[]> => {
+  const params: Record<string, any> = {
+    filter: {
+      where: {
+        username: userName,
+      },
+    },
+  };
+  const { data } = await MyriadAPI().request({
+    url: `/users`,
+    method: 'GET',
+    params,
+  });
+  return data.data;
+};
