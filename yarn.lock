@@ -3739,6 +3739,16 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
+"@myriadsocial/ckeditor5-custom-build@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@myriadsocial/ckeditor5-custom-build/-/ckeditor5-custom-build-0.0.1.tgz#187810aec8b31df16ef6c68e4d0cf005a485053b"
+  integrity sha512-oUxVcFeAhOIw5ynQsNyQ8LMY8/HECSuJrogmbKXtte2mnwdZyUDj7eWtRfl8CWXlm5r+ROKIMxummYKyzas8aQ==
+  dependencies:
+    "@ckeditor/ckeditor5-editor-classic" "40.1.0"
+    "@ckeditor/ckeditor5-essentials" "40.1.0"
+    "@ckeditor/ckeditor5-mention" "40.1.0"
+    "@ckeditor/ckeditor5-paragraph" "40.1.0"
+
 "@next/bundle-analyzer@^12.1.0":
   version "12.1.1"
   resolved "https://registry.yarnpkg.com/@next/bundle-analyzer/-/bundle-analyzer-12.1.1.tgz#87798e7b50cc6655fcf7df0da05f91dfd1573587"
@@ -8517,14 +8527,6 @@ cjs-module-lexer@^1.0.0:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/cjs-module-lexer/-/cjs-module-lexer-1.2.2.tgz#9f84ba3244a512f3a54e5277e8eef4c489864e40"
   integrity sha512-cOU9usZw8/dXIXKtwa8pM0OTJQuJkxMN6w30csNRUerHfeQ5R6U3kkU/FtJeIf3M202OHfY2U8ccInBG7/xogA==
-
-"ckeditor5-custom-build@file:./ckeditor5":
-  version "0.0.1"
-  dependencies:
-    "@ckeditor/ckeditor5-editor-classic" "40.1.0"
-    "@ckeditor/ckeditor5-essentials" "40.1.0"
-    "@ckeditor/ckeditor5-mention" "40.1.0"
-    "@ckeditor/ckeditor5-paragraph" "40.1.0"
 
 ckeditor5@40.1.0:
   version "40.1.0"
