@@ -76,3 +76,6 @@ And you will receive a new modal to set the amount and choose the exact currency
 
 ![image](./BkLc5qbDT.png)
 
+# Automated Tests
+
+All the features connect directly to the blockchain including tipping and adding exclusive content. To run automated tests on these features please refer to the [testing guidelines inside the Myriad Parachain](https://github.com/myriadsocial/myriad-node-parachain?tab=readme-ov-file#guide-to-testing-the-project-using-docker) repository.
