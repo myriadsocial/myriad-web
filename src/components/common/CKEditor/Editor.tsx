@@ -1,11 +1,11 @@
 import { CKEditor } from '@ckeditor/ckeditor5-react';
+import customEditor from '@myriadsocial/ckeditor5-custom-build';
 
 import React, { useState } from 'react';
 
 import { EditorProps } from './Editor.interface';
 import { useStyles } from './Editor.style';
 
-import customEditor from 'ckeditor5/build/ckeditor';
 import * as UserAPI from 'src/lib/api/user';
 
 export const Editor: React.FC<EditorProps> = props => {
