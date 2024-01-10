@@ -56,7 +56,6 @@
     "@udecode/plate": "^14.2.0",
     "@udecode/plate-common": "^7.0.2",
     "axios": "^0.26.1",
-    "ckeditor5-custom-build": "file:./ckeditor5",
     "date-fns": "^2.28.0",
     "detect-browser": "^5.3.0",
     "dotenv": "^16.0.1",
