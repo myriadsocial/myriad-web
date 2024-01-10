@@ -8,6 +8,7 @@ import { Button, useMediaQuery } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 
 import { PromptComponent } from '../atoms/Prompt/prompt.component';
+import MobilePostCreate from './MobilePostCreate';
 
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import { useEnqueueSnackbar } from 'components/common/Snackbar/useEnqueueSnackbar.hook';
@@ -178,6 +179,56 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
+  if (!redirect && isMobile) {
+    return (
+      <>
+        <MobilePostCreate
+          user={user}
+          open={open}
+          onClose={onClose}
+          onSearchPeople={handleSearchPeople}
+          onSubmit={submitPost}
+          isMobile={isMobile}
+        />
+        <PromptComponent
+          title={i18n.t('Home.RichText.Prompt_Import.Title')}
+          subtitle={dialogFailedImport.message}
+          open={dialogFailedImport.open}
+          icon="warning"
+          onCancel={() =>
+            setDialogFailedImport({ ...dialogFailedImport, open: false })
+          }>
+          <div
+            style={{
+              marginTop: 32,
+              display: 'flex',
+              justifyContent: 'center',
+              gap: '20px',
+            }}>
+            <Button
+              size="small"
+              variant="outlined"
+              color="secondary"
+              onClick={() =>
+                setDialogFailedImport({ ...dialogFailedImport, open: false })
+              }>
+              {i18n.t('General.OK')}
+            </Button>
+            {/* TODO: Added translation */}
+            <Button
+              size="small"
+              variant="contained"
+              color="primary"
+              onClick={() =>
+                router.push({ pathname: `/post/${dialogFailedImport.postId}` })
+              }>
+              See post
+            </Button>
+          </div>
+        </PromptComponent>
+      </>
+    );
+  }
 
   if (!user) return null;
   if (!redirect) {

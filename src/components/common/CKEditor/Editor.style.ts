@@ -37,6 +37,7 @@ export const useStyles = makeStyles<Theme, EditorStyleProps>(theme =>
     },
     large: {
       width: props => (props.mobile ? '100%' : 820),
+      bottom: 50,
     },
     toolbar: {
       padding: '12px 12px!important',
