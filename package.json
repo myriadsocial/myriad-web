@@ -25,7 +25,7 @@
     "start": "yarn export-env && next start",
     "lint:check": "next lint --report-unused-disable-directives warn --ignore-path .gitignore .",
     "lint:fix": "next lint --fix --ignore-path .gitignore  .",
-    "format:check": "prettier --list-different --ignore-unknown --ignore-path .prettierignore . '!CHANGELOG.md'",
+    "format:check": "prettier --list-different --ignore-unknown --ignore-path .gitignore . '!CHANGELOG.md'",
     "format:fix": "prettier --write --ignore-unknown --ignore-path .gitignore . '!CHANGELOG.md'",
     "pretest": "yarn build",
     "test": "jest --ci",
