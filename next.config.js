@@ -8,6 +8,7 @@ const { version } = require('./package.json');
 
 /** @type {import('next').NextConfig} */
 const moduleExports = {
+  compress: true,
   reactStrictMode: false,
   experimental: {
     styledComponent: true,
