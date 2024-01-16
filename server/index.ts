@@ -2,6 +2,7 @@ import next from 'next';
 
 import * as dotenv from 'dotenv';
 import express from 'express';
+import expressStaticGzip from 'express-static-gzip';
 import path from 'path';
 import serveIndex from 'serve-index';
 
@@ -23,6 +24,14 @@ app.prepare().then(() => {
     '/docs',
     express.static(path.join(__dirname, '../docs')),
     serveIndex(path.join(__dirname, '../docs')),
+  );
+
+  server.use(
+    '/_next/static',
+    expressStaticGzip('/_next/static', {
+      enableBrotli: true,
+      orderPreference: ['br', 'gz'],
+    }),
   );
 
   server.all('*', (req, res) => {

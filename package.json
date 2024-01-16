@@ -61,6 +61,7 @@
     "dotenv": "^16.0.1",
     "emoji-picker-react": "^3.5.1",
     "express": "^4.17.3",
+    "express-static-gzip": "^2.1.7",
     "firebase": "^8.6.2",
     "global": "^4.4.0",
     "html-react-parser": "^3.0.8",
@@ -140,6 +141,7 @@
     "@typescript-eslint/eslint-plugin": "^5.16.0",
     "commitlint-config-jira": "^1.6.3",
     "commitlint-plugin-jira-rules": "^1.6.3",
+    "compression-webpack-plugin": "10.0.0",
     "cross-env": "^7.0.3",
     "eslint": "latest",
     "eslint-config-next": "latest",
@@ -153,7 +155,8 @@
     "nodemon": "^2.0.15",
     "prettier-plugin-sh": "^0.12.8",
     "prop-types": "^15.7.2",
-    "typescript": "latest"
+    "typescript": "latest",
+    "zlib": "^1.0.5"
   },
   "resolutions": {
     "@polkadot/api": "^9.14.2",
