@@ -56,11 +56,13 @@
     "@udecode/plate": "^14.2.0",
     "@udecode/plate-common": "^7.0.2",
     "axios": "^0.26.1",
+    "compression-webpack-plugin": "10.0.0",
     "date-fns": "^2.28.0",
     "detect-browser": "^5.3.0",
     "dotenv": "^16.0.1",
     "emoji-picker-react": "^3.5.1",
     "express": "^4.17.3",
+    "express-static-gzip": "^2.1.7",
     "firebase": "^8.6.2",
     "global": "^4.4.0",
     "html-react-parser": "^3.0.8",
@@ -153,7 +155,8 @@
     "nodemon": "^2.0.15",
     "prettier-plugin-sh": "^0.12.8",
     "prop-types": "^15.7.2",
-    "typescript": "latest"
+    "typescript": "latest",
+    "zlib": "^1.0.5"
   },
   "resolutions": {
     "@polkadot/api": "^9.14.2",
