@@ -69,14 +69,13 @@ const parseTipAmountContainingENumber = (message: string) => {
 
 const parseText = (message: string) => {
   try {
-  const newMessage = JSON.parse(message);
-  const text = newMessage[0].children[0].text ;
-  return text ? text : ""
-}
-catch {
-  return ""
-}
-}
+    const newMessage = JSON.parse(message);
+    const text = newMessage[0].children[0].text;
+    return text ? text : '';
+  } catch {
+    return '';
+  }
+};
 
 export const useNotificationList = (
   notifications: Notification[],
@@ -167,7 +166,9 @@ export const useNotificationList = (
             userId: notification.fromUserId.id,
             user: notification.fromUserId.name,
             avatar: notification.fromUserId.profilePictureURL,
-            description: i18n.t('Notification.Description.Post_Comment') + parseText(notification.message),
+            description:
+              i18n.t('Notification.Description.Post_Comment') +
+              parseText(notification.message),
             badge: (
               <div className={style.circle}>
                 <SvgIcon
