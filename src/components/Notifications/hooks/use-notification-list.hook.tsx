@@ -168,6 +168,7 @@ export const useNotificationList = (
             avatar: notification.fromUserId.profilePictureURL,
             description:
               i18n.t('Notification.Description.Post_Comment') +
+              '\n' +
               parseText(notification.message),
             badge: (
               <div className={style.circle}>
