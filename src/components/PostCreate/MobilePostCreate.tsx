@@ -3,13 +3,15 @@ import { useDispatch } from 'react-redux';
 
 import dynamic from 'next/dynamic';
 
-import { Paper, Typography, Menu, MenuItem } from '@material-ui/core';
+import { Paper, Typography, Menu, MenuItem, IconButton, SvgIcon } from '@material-ui/core';
+import { ArrowLeftIcon, GiftIcon, TrashIcon } from '@heroicons/react/outline';
 
 import { Modal } from '../atoms/Modal';
 import { MobileEmbed } from './MobileEmbed';
 import { useStyles } from './MobilePostCreate.styles';
 import { handleFormatCKEditor } from './formatter';
-
+import ExclusiveCreate from 'components/ExclusiveContentCreate/ExclusiveCreate';
+import ShowIf from 'src/components/common/show-if.component';
 import { SocialAvatar } from 'components/atoms/SocialAvatar';
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import { ExclusiveContent } from 'components/common/Tipping/Tipping.interface';
@@ -88,8 +90,22 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
     setAnchorEl(event.currentTarget);
   };
 
+  const handleshowExclusive = () => {
+    setShowExclusive(!showExclusive);
+    // getPlateEditorRef(`exclusive-${user.id}`);
+  };
+
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleRemoveExclusiveContent = () => {
+    setExclusiveContent(null);
+  };
+
+  const handleSubmitExclusiveContent = (content: ExclusiveContentPost) => {
+    setExclusiveContent(content);
+    handleshowExclusive();
   };
 
   const handleExperienceChange = (item: UserExperience) => {
@@ -118,19 +134,25 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
   const handleSubmit = async () => {
     if (isMobile) {
       if (exclusiveContent) {
+        const rawtext = convert(content.current); // convert ck editor html value into raw text
+        const data = await handleFormatCKEditor(rawtext, imageUrl, videoUrl)
+        .then(output => {
+          return {
+            text: JSON.stringify([output.format]),
+              rawText: rawtext,
+              selectedUserIds: post.selectedUserIds,
+              NSFWTag: post.NSFWTag,
+              visibility: post.visibility ?? PostVisibility.PUBLIC,
+              tags: output.hashtags,
+              mentions: output.mentions,
+              selectedTimelineIds: [selectedTimeline?.id],
+          }
+        })
         dispatch(
           createExclusiveContent(
             exclusiveContent,
             [],
             (resp: ExclusiveContent) => {
-              const data = {
-                text: content.current,
-                rawText: content.current,
-                selectedUserIds: post.selectedUserIds,
-                NSFWTag: post.NSFWTag,
-                visibility: post.visibility ?? PostVisibility.PUBLIC,
-                selectedTimelineIds: post.selectedTimelineIds ?? timelineId,
-              };
 
               if (resp?.id) {
                 Object.assign(data, {
@@ -295,7 +317,25 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
           </Menu>
         </Paper>
       </div>
-      <div className={styles.editor}>
+      <div style={{ display: showExclusive ? 'block' : 'none' }}>
+          <IconButton
+            aria-label="exclusive-content"
+            onClick={handleshowExclusive}>
+            <SvgIcon
+              component={ArrowLeftIcon}
+              viewBox="0 0 24 24"
+              className={styles.arrowLeftIcon}
+            />
+          </IconButton>
+          <ExclusiveCreate
+            user={user}
+            onSearchPeople={onSearchPeople}
+            isMobile={isMobile}
+            onSubmit={handleSubmitExclusiveContent}
+            autoFocus={showExclusive}
+          />
+        </div>
+      {!showExclusive && (<div className={styles.editor}>
         <Editor
           userId={user ? user.id : ''}
           mobile={isMobile}
@@ -313,9 +353,51 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
             uploadVideoFieldRef={uploadVideoFieldRef}
             onRemove={handleRemoveImage}></MobileEmbed>
         </div>
-        <button className={styles.privacySettingsButton}>
-          privacy settings
-        </button>
+        <div className="flex flex-row">
+        <div className={styles.option}>
+          <ShowIf condition={!showExclusive}>
+            {!exclusiveContent ? (
+              <>
+                <IconButton
+                  aria-label="exclusive-content"
+                  onClick={handleshowExclusive}>
+                  <SvgIcon
+                    component={GiftIcon}
+                    viewBox="0 0 24 24"
+                    className={styles.giftIcon}
+                  />
+                  <Typography
+                    component="span"
+                    color="primary"
+                    variant="body1"
+                    style={{ lineHeight: 1.8 }}>
+                    {i18n.t('ExclusiveContent.Add')}
+                  </Typography>
+                </IconButton>
+              </>
+            ) : (
+              <>
+                <IconButton
+                  aria-label="exclusive-content"
+                  onClick={() => handleRemoveExclusiveContent()}>
+                  <SvgIcon
+                    component={TrashIcon}
+                    viewBox="0 0 24 24"
+                    className={styles.giftIcon}
+                    style={{ color: '#f44336' }}
+                  />
+                  <Typography
+                    component="span"
+                    variant="body1"
+                    style={{ lineHeight: 1.8, color: '#f44336' }}>
+                    {i18n.t('ExclusiveContent.Remove')}
+                  </Typography>
+                </IconButton>
+              </>
+            )}
+          </ShowIf>
+        </div>
+      </div>
         <div className={styles.privacyPaper}>
           <Paper>
             <div>
@@ -323,7 +405,7 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
             </div>
           </Paper>
         </div>
-      </div>
+      </div>)}
 
       {/* Select Timeline */}
       {/* Timeline list */}
