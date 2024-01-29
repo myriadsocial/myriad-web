@@ -15,10 +15,28 @@ export const useStyles = makeStyles((theme: Theme) =>
       height: 55,
       top: 6,
     },
+    option: {
+      display: 'flex',
+      alignItems: 'center',
+      columnGap: 4,
+
+      [theme.breakpoints.down('xs')]: {
+        marginLeft: 20,
+      },
+    },
+    giftIcon: {
+      width: 16,
+      marginRight: '10px !important',
+      color: '#7342CC',
+    },
     avatar: {
       position: 'relative',
       top: 4.5,
       left: 5,
+    },
+    arrowLeftIcon: {
+      width: 24,
+      color: '#7342CC',
     },
     cardUserName: {
       position: 'relative',
