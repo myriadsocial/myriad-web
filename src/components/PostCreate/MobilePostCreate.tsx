@@ -1,22 +1,31 @@
+import { ArrowLeftIcon, GiftIcon, TrashIcon } from '@heroicons/react/outline';
+
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import dynamic from 'next/dynamic';
 
-import { Paper, Typography, Menu, MenuItem, IconButton, SvgIcon } from '@material-ui/core';
-import { ArrowLeftIcon, GiftIcon, TrashIcon } from '@heroicons/react/outline';
+import {
+  Paper,
+  Typography,
+  Menu,
+  MenuItem,
+  IconButton,
+  SvgIcon,
+} from '@material-ui/core';
 
 import { Modal } from '../atoms/Modal';
 import { MobileEmbed } from './MobileEmbed';
 import { useStyles } from './MobilePostCreate.styles';
 import { handleFormatCKEditor } from './formatter';
+
 import ExclusiveCreate from 'components/ExclusiveContentCreate/ExclusiveCreate';
-import ShowIf from 'src/components/common/show-if.component';
 import { SocialAvatar } from 'components/atoms/SocialAvatar';
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import { ExclusiveContent } from 'components/common/Tipping/Tipping.interface';
 import { convert } from 'html-to-text';
 import { FaChevronDown } from 'react-icons/fa';
+import ShowIf from 'src/components/common/show-if.component';
 import { ExclusiveContentPost } from 'src/interfaces/exclusive';
 import { Experience, UserExperience } from 'src/interfaces/experience';
 import { Post, PostVisibility } from 'src/interfaces/post';
@@ -135,25 +144,27 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
     if (isMobile) {
       if (exclusiveContent) {
         const rawtext = convert(content.current); // convert ck editor html value into raw text
-        const data = await handleFormatCKEditor(rawtext, imageUrl, videoUrl)
-        .then(output => {
+        const data = await handleFormatCKEditor(
+          rawtext,
+          imageUrl,
+          videoUrl,
+        ).then(output => {
           return {
             text: JSON.stringify([output.format]),
-              rawText: rawtext,
-              selectedUserIds: post.selectedUserIds,
-              NSFWTag: post.NSFWTag,
-              visibility: post.visibility ?? PostVisibility.PUBLIC,
-              tags: output.hashtags,
-              mentions: output.mentions,
-              selectedTimelineIds: [selectedTimeline?.id],
-          }
-        })
+            rawText: rawtext,
+            selectedUserIds: post.selectedUserIds,
+            NSFWTag: post.NSFWTag,
+            visibility: post.visibility ?? PostVisibility.PUBLIC,
+            tags: output.hashtags,
+            mentions: output.mentions,
+            selectedTimelineIds: [selectedTimeline?.id],
+          };
+        });
         dispatch(
           createExclusiveContent(
             exclusiveContent,
             [],
             (resp: ExclusiveContent) => {
-
               if (resp?.id) {
                 Object.assign(data, {
                   asset: { exclusiveContents: [resp.id] },
@@ -318,94 +329,96 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
         </Paper>
       </div>
       <div style={{ display: showExclusive ? 'block' : 'none' }}>
-          <IconButton
-            aria-label="exclusive-content"
-            onClick={handleshowExclusive}>
-            <SvgIcon
-              component={ArrowLeftIcon}
-              viewBox="0 0 24 24"
-              className={styles.arrowLeftIcon}
-            />
-          </IconButton>
-          <ExclusiveCreate
-            user={user}
-            onSearchPeople={onSearchPeople}
-            isMobile={isMobile}
-            onSubmit={handleSubmitExclusiveContent}
-            autoFocus={showExclusive}
+        <IconButton
+          aria-label="exclusive-content"
+          onClick={handleshowExclusive}>
+          <SvgIcon
+            component={ArrowLeftIcon}
+            viewBox="0 0 24 24"
+            className={styles.arrowLeftIcon}
           />
-        </div>
-      {!showExclusive && (<div className={styles.editor}>
-        <Editor
-          userId={user ? user.id : ''}
-          mobile={isMobile}
-          onSearchMention={onSearchPeople}
-          onChange={handleContentChange}
-          autoFocus={!showExclusive}
+        </IconButton>
+        <ExclusiveCreate
+          user={user}
+          onSearchPeople={onSearchPeople}
+          isMobile={isMobile}
+          onSubmit={handleSubmitExclusiveContent}
+          autoFocus={showExclusive}
         />
-        <div className={styles.grid}>
-          <MobileEmbed
-            imageUrl={imageUrl}
-            videoUrl={videoUrl}
-            onImage={setImageUrl}
-            onVideo={setVideoUrl}
-            uploadImageFieldRef={uploadImageFieldRef}
-            uploadVideoFieldRef={uploadVideoFieldRef}
-            onRemove={handleRemoveImage}></MobileEmbed>
-        </div>
-        <div className="flex flex-row">
-        <div className={styles.option}>
-          <ShowIf condition={!showExclusive}>
-            {!exclusiveContent ? (
-              <>
-                <IconButton
-                  aria-label="exclusive-content"
-                  onClick={handleshowExclusive}>
-                  <SvgIcon
-                    component={GiftIcon}
-                    viewBox="0 0 24 24"
-                    className={styles.giftIcon}
-                  />
-                  <Typography
-                    component="span"
-                    color="primary"
-                    variant="body1"
-                    style={{ lineHeight: 1.8 }}>
-                    {i18n.t('ExclusiveContent.Add')}
-                  </Typography>
-                </IconButton>
-              </>
-            ) : (
-              <>
-                <IconButton
-                  aria-label="exclusive-content"
-                  onClick={() => handleRemoveExclusiveContent()}>
-                  <SvgIcon
-                    component={TrashIcon}
-                    viewBox="0 0 24 24"
-                    className={styles.giftIcon}
-                    style={{ color: '#f44336' }}
-                  />
-                  <Typography
-                    component="span"
-                    variant="body1"
-                    style={{ lineHeight: 1.8, color: '#f44336' }}>
-                    {i18n.t('ExclusiveContent.Remove')}
-                  </Typography>
-                </IconButton>
-              </>
-            )}
-          </ShowIf>
-        </div>
       </div>
-        <div className={styles.privacyPaper}>
-          <Paper>
-            <div>
-              <Typography>Everyone can see this posts</Typography>
+      {!showExclusive && (
+        <div className={styles.editor}>
+          <Editor
+            userId={user ? user.id : ''}
+            mobile={isMobile}
+            onSearchMention={onSearchPeople}
+            onChange={handleContentChange}
+            autoFocus={!showExclusive}
+          />
+          <div className={styles.grid}>
+            <MobileEmbed
+              imageUrl={imageUrl}
+              videoUrl={videoUrl}
+              onImage={setImageUrl}
+              onVideo={setVideoUrl}
+              uploadImageFieldRef={uploadImageFieldRef}
+              uploadVideoFieldRef={uploadVideoFieldRef}
+              onRemove={handleRemoveImage}></MobileEmbed>
+          </div>
+          <div className="flex flex-row">
+            <div className={styles.option}>
+              <ShowIf condition={!showExclusive}>
+                {!exclusiveContent ? (
+                  <>
+                    <IconButton
+                      aria-label="exclusive-content"
+                      onClick={handleshowExclusive}>
+                      <SvgIcon
+                        component={GiftIcon}
+                        viewBox="0 0 24 24"
+                        className={styles.giftIcon}
+                      />
+                      <Typography
+                        component="span"
+                        color="primary"
+                        variant="body1"
+                        style={{ lineHeight: 1.8 }}>
+                        {i18n.t('ExclusiveContent.Add')}
+                      </Typography>
+                    </IconButton>
+                  </>
+                ) : (
+                  <>
+                    <IconButton
+                      aria-label="exclusive-content"
+                      onClick={() => handleRemoveExclusiveContent()}>
+                      <SvgIcon
+                        component={TrashIcon}
+                        viewBox="0 0 24 24"
+                        className={styles.giftIcon}
+                        style={{ color: '#f44336' }}
+                      />
+                      <Typography
+                        component="span"
+                        variant="body1"
+                        style={{ lineHeight: 1.8, color: '#f44336' }}>
+                        {i18n.t('ExclusiveContent.Remove')}
+                      </Typography>
+                    </IconButton>
+                  </>
+                )}
+              </ShowIf>
             </div>
-          </Paper>
+          </div>
+          <div className={styles.privacyPaper}>
+            <Paper>
+              <div>
+                <Typography>Everyone can see this posts</Typography>
+              </div>
+            </Paper>
+          </div>
         </div>
-      </div>)}
+      )}
 
       {/* Select Timeline */}
       {/* Timeline list */}
