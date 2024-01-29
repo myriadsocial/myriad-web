@@ -69,7 +69,7 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
     useState<ExclusiveContentPost | null>(null);
   const [showExclusive, setShowExclusive] = useState<boolean>(false);
   const [, setShowTimelineCreate] = useState<boolean>(false);
-  const [timelineId, setTimelineId] = useState<string[]>([]);
+  const [, setTimelineId] = useState<string[]>([]);
   const [, setExperienceVisibility] = useState<string[]>([]);
   const [, setCommonUser] = useState<string[]>([]);
   const [userExperiences, setUserExperiences] = useState<UserExperience[]>([]);
