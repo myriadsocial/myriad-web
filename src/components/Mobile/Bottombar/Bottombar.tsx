@@ -85,10 +85,17 @@ export const BottombarComponent: React.FC<SearchBoxContainerProps> = props => {
   const { instance } = useInstances();
 
   const [createPostOpened, setCreatePostOpened] = React.useState(false);
+  const [imported, setImported] = React.useState(false);
   const [actived, setActived] = React.useState<TimelineType>();
 
   const handleOpenCreatePost = () => {
     setPopOpen(false);
+    setCreatePostOpened(true);
+  };
+
+  const handleOpenImportPost = () => {
+    setPopOpen(false);
+    setImported(true);
     setCreatePostOpened(true);
   };
 
@@ -102,6 +109,7 @@ export const BottombarComponent: React.FC<SearchBoxContainerProps> = props => {
 
   const handleCloseCreatePost = () => {
     setCreatePostOpened(false);
+    setImported(false)
   };
 
   const openMenu = useCallback(
@@ -146,6 +154,7 @@ export const BottombarComponent: React.FC<SearchBoxContainerProps> = props => {
       <PostCreateContainer
         open={createPostOpened}
         onClose={handleCloseCreatePost}
+        imported={imported}
       />
 
       <Grid
@@ -213,6 +222,7 @@ export const BottombarComponent: React.FC<SearchBoxContainerProps> = props => {
             <SvgIcon className={style.fillButtonCreate} component={PlusIcon} />
           </IconButton>
           <Modal open={popOpen} onClose={handleClose}>
+            <div>
             <IconButton
               onClick={handleOpenCreatePost}
               className={style.popoverbuttonCreate}>
@@ -221,6 +231,15 @@ export const BottombarComponent: React.FC<SearchBoxContainerProps> = props => {
                 component={PencilIcon}
               />
             </IconButton>
+            <IconButton
+              onClick={handleOpenImportPost}
+              className={style.popoverbuttonImport}>
+              <SvgIcon
+                className={style.fillButtonCreate}
+                component={PlusIcon}
+              />
+            </IconButton>
+            </div>
           </Modal>
         </div>
       )}
