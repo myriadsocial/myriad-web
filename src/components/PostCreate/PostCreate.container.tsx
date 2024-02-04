@@ -282,7 +282,6 @@ export const PostCreateContainer: React.FC<PostCreateContainerType> = props => {
     );
   }
 
-
   if (!user) return null;
   if (!redirect) {
     return (

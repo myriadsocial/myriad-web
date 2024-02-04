@@ -109,7 +109,7 @@ export const BottombarComponent: React.FC<SearchBoxContainerProps> = props => {
 
   const handleCloseCreatePost = () => {
     setCreatePostOpened(false);
-    setImported(false)
+    setImported(false);
   };
 
   const openMenu = useCallback(
@@ -223,22 +223,22 @@ export const BottombarComponent: React.FC<SearchBoxContainerProps> = props => {
           </IconButton>
           <Modal open={popOpen} onClose={handleClose}>
             <div>
-            <IconButton
-              onClick={handleOpenCreatePost}
-              className={style.popoverbuttonCreate}>
-              <SvgIcon
-                className={style.fillButtonCreate}
-                component={PencilIcon}
-              />
-            </IconButton>
-            <IconButton
-              onClick={handleOpenImportPost}
-              className={style.popoverbuttonImport}>
-              <SvgIcon
-                className={style.fillButtonCreate}
-                component={PlusIcon}
-              />
-            </IconButton>
+              <IconButton
+                onClick={handleOpenCreatePost}
+                className={style.popoverbuttonCreate}>
+                <SvgIcon
+                  className={style.fillButtonCreate}
+                  component={PencilIcon}
+                />
+              </IconButton>
+              <IconButton
+                onClick={handleOpenImportPost}
+                className={style.popoverbuttonImport}>
+                <SvgIcon
+                  className={style.fillButtonCreate}
+                  component={PlusIcon}
+                />
+              </IconButton>
             </div>
           </Modal>
         </div>

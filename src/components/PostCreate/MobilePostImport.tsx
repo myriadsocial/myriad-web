@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import dynamic from 'next/dynamic';
-import { PostImport } from 'components/PostImport';
 
 import {
   Paper,
@@ -18,6 +17,8 @@ import {
 import { Modal } from '../atoms/Modal';
 import { useStyles } from './MobilePostCreate.styles';
 import { handleFormatCKEditor } from './formatter';
+
+import { PostImport } from 'components/PostImport';
 import { SocialAvatar } from 'components/atoms/SocialAvatar';
 import useConfirm from 'components/common/Confirm/use-confirm.hook';
 import { ExclusiveContent } from 'components/common/Tipping/Tipping.interface';
@@ -130,10 +131,10 @@ export const MobilePostImport: React.FC<MobilePostImportProps> = props => {
 
   const handleSubmit = async () => {
     onSubmit(importUrl, {
-        NSFWTag: post.NSFWTag,
-        visibility: post.visibility ?? PostVisibility.PUBLIC,
-        selectedTimelineIds: [selectedTimeline?.id],
-      });
+      NSFWTag: post.NSFWTag,
+      visibility: post.visibility ?? PostVisibility.PUBLIC,
+      selectedTimelineIds: [selectedTimeline?.id],
+    });
   };
 
   const handleClose = () => {
@@ -251,10 +252,10 @@ export const MobilePostImport: React.FC<MobilePostImportProps> = props => {
             ))}
           </Menu>
           <PostImport
-          value={importUrl}
-          onChange={handlePostUrlChange}
-          onError={handleErrorImport}
-        />
+            value={importUrl}
+            onChange={handlePostUrlChange}
+            onError={handleErrorImport}
+          />
         </Paper>
       </div>
 
