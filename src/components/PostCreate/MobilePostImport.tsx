@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import {
-  Paper,
-  Typography,
-  Menu,
-  MenuItem,
-} from '@material-ui/core';
+import { Paper, Typography, Menu, MenuItem } from '@material-ui/core';
 
 import { Modal } from '../atoms/Modal';
 import { useStyles } from './MobilePostCreate.styles';

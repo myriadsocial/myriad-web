@@ -24,7 +24,7 @@ import { createPost, importPost } from 'src/reducers/timeline/actions';
 
 type PostCreateContainerType = {
   open: boolean;
-  imported: boolean;
+  imported?: boolean;
   onClose: () => void;
 };
 
