@@ -46,6 +46,18 @@ export const useStyles = makeStyles((theme: Theme) =>
         opacity: 0.8,
       },
     },
+    popoverbuttonImport: {
+      backgroundColor: '#862AE9',
+      position: 'absolute',
+      bottom: 142,
+      right: 7,
+      width: '40px',
+      height: '40px',
+      '&:hover': {
+        backgroundColor: '#862AE9',
+        opacity: 0.8,
+      },
+    },
     popover: {
       position: 'relative',
       top: -40,
