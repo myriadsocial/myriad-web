@@ -1,41 +1,23 @@
-import { ArrowLeftIcon, GiftIcon, TrashIcon } from '@heroicons/react/outline';
-
-import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
-
-import dynamic from 'next/dynamic';
+import React, { useEffect, useState } from 'react';
 
 import {
   Paper,
   Typography,
   Menu,
   MenuItem,
-  IconButton,
-  SvgIcon,
 } from '@material-ui/core';
 
 import { Modal } from '../atoms/Modal';
 import { useStyles } from './MobilePostCreate.styles';
-import { handleFormatCKEditor } from './formatter';
 
 import { PostImport } from 'components/PostImport';
 import { SocialAvatar } from 'components/atoms/SocialAvatar';
-import useConfirm from 'components/common/Confirm/use-confirm.hook';
-import { ExclusiveContent } from 'components/common/Tipping/Tipping.interface';
-import { convert } from 'html-to-text';
 import { FaChevronDown } from 'react-icons/fa';
-import ShowIf from 'src/components/common/show-if.component';
-import { ExclusiveContentPost } from 'src/interfaces/exclusive';
 import { Experience, UserExperience } from 'src/interfaces/experience';
 import { Post, PostVisibility } from 'src/interfaces/post';
 import { User } from 'src/interfaces/user';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import i18n from 'src/locale';
-import { createExclusiveContent } from 'src/reducers/timeline/actions';
-
-const CKEditor = dynamic(() => import('../common/CKEditor/Editor'), {
-  ssr: false,
-});
 
 type MobilePostImportProps = {
   user: User;
@@ -57,15 +39,10 @@ const initialPost = {
 };
 
 export const MobilePostImport: React.FC<MobilePostImportProps> = props => {
-  const { open, user, isMobile, onClose, onSubmit, onSearchPeople } = props;
-  const dispatch = useDispatch();
-  const confirm = useConfirm();
+  const { open, user, isMobile, onClose, onSubmit } = props;
   const styles = useStyles();
   const [post, setPost] = useState<Partial<Post>>(initialPost);
   const [, setEditorValue] = useState<string>('');
-  const content = useRef('');
-  const [exclusiveContent, setExclusiveContent] =
-    useState<ExclusiveContentPost | null>(null);
   const [showExclusive, setShowExclusive] = useState<boolean>(false);
   const [, setShowTimelineCreate] = useState<boolean>(false);
   const [, setTimelineId] = useState<string[]>([]);
@@ -73,16 +50,9 @@ export const MobilePostImport: React.FC<MobilePostImportProps> = props => {
   const [, setCommonUser] = useState<string[]>([]);
   const [userExperiences, setUserExperiences] = useState<UserExperience[]>([]);
   const [page, setPage] = useState<number>(1);
-  const [imageUrl, setImageUrl] = useState<string[]>([]);
   const [selectedTimeline, setSelectedTimeline] = useState<Experience>();
-  const [videoUrl, setVideoUrl] = useState<string[]>([]);
   const [anchorEl, setAnchorEl] = React.useState<null | SVGElement>(null);
   const [importUrl, setImport] = useState<string | undefined>();
-
-  const Editor = CKEditor;
-
-  const uploadImageFieldRef = useRef<HTMLInputElement | null>(null);
-  const uploadVideoFieldRef = useRef<HTMLInputElement | null>(null);
 
   const header: Record<PostCreateType, { title: string; subtitle: string }> = {
     create: {
@@ -106,11 +76,6 @@ export const MobilePostImport: React.FC<MobilePostImportProps> = props => {
 
   const handleErrorImport = () => {
     setImport(undefined);
-  };
-
-  const handleshowExclusive = () => {
-    setShowExclusive(!showExclusive);
-    // getPlateEditorRef(`exclusive-${user.id}`);
   };
 
   const handleMenuClose = () => {
@@ -138,29 +103,14 @@ export const MobilePostImport: React.FC<MobilePostImportProps> = props => {
   };
 
   const handleClose = () => {
-    setImageUrl([]);
-    setVideoUrl([]);
     setPost(initialPost);
     setShowExclusive(false);
-    setExclusiveContent(null);
     setShowTimelineCreate(false);
     setEditorValue('');
     setTimelineId([]);
     setExperienceVisibility([]);
     setCommonUser([]);
     onClose();
-  };
-
-  const handleContentChange = data => {
-    if (!isMobile) {
-      if (data[0].children[0].text !== '' || data[0].children.length > 1) {
-        setEditorValue('not empty');
-      }
-    }
-    if (data.length > 0 && isMobile) {
-      setEditorValue(data);
-    }
-    content.current = data;
   };
 
   const handleTitleModal: () => { title: string; subtitle: string } = () => {
