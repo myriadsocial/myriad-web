@@ -302,6 +302,7 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
           </div>
           {selectedTimeline && (
             <div className={styles.cardUserName}>
+              <Typography>Timeline</Typography>
               <Typography>{selectedTimeline.name}</Typography>
             </div>
           )}
