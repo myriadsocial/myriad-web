@@ -55,7 +55,7 @@
     "@sentry/nextjs": "^6.19.2",
     "@udecode/plate": "^14.2.0",
     "@udecode/plate-common": "^7.0.2",
-    "axios": "^0.26.1",
+    "axios": "^0.28.0",
     "compression-webpack-plugin": "10.0.0",
     "date-fns": "^2.28.0",
     "detect-browser": "^5.3.0",
