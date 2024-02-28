@@ -39,6 +39,7 @@ import { toHexPublicKey } from 'src/lib/crypto';
 import i18n from 'src/locale';
 import { RootState } from 'src/reducers';
 import { ConfigState } from 'src/reducers/config/reducer';
+import LoginByToken from './render/Token/LoginByToken';
 
 type LoginProps = {
   redirectAuth: WalletTypeEnum | null;
@@ -343,6 +344,12 @@ export const Login: React.FC<LoginProps> = props => {
             index={false}
             path="/email"
             element={<LoginByEmail onNext={checkEmailRegistered} />}
+          />
+
+          <Route
+            index={false}
+            path="/token"
+            element={<LoginByToken onNext={checkEmailRegistered} />}
           />
 
           <Route
