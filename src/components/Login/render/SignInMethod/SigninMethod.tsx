@@ -21,7 +21,7 @@ export default function SigninMethod({
     if (method === 'token') {
       navigate('/token');
     }
-    if (method === 'web2') {
+    else if (method === 'web2') {
       navigate('/email');
     } else {
       navigate('/options');

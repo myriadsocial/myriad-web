@@ -156,10 +156,10 @@ const LoginByToken = ({ onNext }: LoginByTokenProps) => {
     <div className={styles.root}>
       <div>
         <Typography className={styles.title}>
-          {i18n.t('Login.Email.LoginByToken.Title')}
+          {i18n.t('Login.Token.LoginByToken.Title')}
         </Typography>
         <Typography className={styles.subtitle}>
-          {i18n.t('Login.Email.LoginByToken.Subtitle')}
+          {i18n.t('Login.Token.LoginByToken.Subtitle')}
         </Typography>
       </div>
       <Grid
@@ -216,13 +216,13 @@ const LoginByToken = ({ onNext }: LoginByTokenProps) => {
                   </ListItem>
                 </Tooltip>
               </Grid>
-            </Grid>
+      </Grid>
       <TextField
         fullWidth
         id="user-email-input"
         label="Email"
         variant="outlined"
-        placeholder={i18n.t('Login.Email.LoginByToken.Email_Placeholder')}
+        placeholder={i18n.t('Login.Token.LoginByToken.Email_Placeholder')}
         value={token}
         onChange={handleChange}
         error={error.isError}
@@ -231,14 +231,14 @@ const LoginByToken = ({ onNext }: LoginByTokenProps) => {
       <SelectServer page="login" onSwitchInstance={handleSwitchInstance} />
       <div className={styles.actionWrapper}>
         <Button variant="outlined" color="primary" onClick={handleBack}>
-          {i18n.t('Login.Email.LoginByToken.Back')}
+          {i18n.t('Login.Token.LoginByToken.Back')}
         </Button>
         <Button
           variant="contained"
           color="primary"
           disabled={!token.length || error.isError}
           onClick={handleNext}>
-          {i18n.t('Login.Email.LoginByToken.Next')}
+          {i18n.t('Login.Token.LoginByToken.Next')}
         </Button>
       </div>
     </div>
