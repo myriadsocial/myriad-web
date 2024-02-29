@@ -14,6 +14,8 @@ import {
 } from '@material-ui/core';
 
 import { useStyles } from './Settings.styles';
+import { v4 as uuidv4 } from 'uuid';
+import { sha256 } from 'js-sha256';
 
 import i18n from 'src/locale';
 import { RootState } from 'src/reducers';
@@ -39,6 +41,15 @@ const SharingSetting = () => {
   };
 
   const onClickAddToken = () => {
+    const token = uuidv4();
+    const tokenHash = sha256(token);
+    const first = token.slice(0, 4);
+    const second = token.slice(-4);
+    const replacement = 'xxxx-xxxx-xxxx-xxxx-xxxxxxxx';
+    const disguise = first + replacement + second;
+    // TODO create access token on blockchain
+    // await createAccessToken(hash, wallet)
+    // await APILink.store(disguise, hash)
     setToken('');
   };
 
