@@ -49,6 +49,7 @@ const SharingSetting = () => {
     const second = token.slice(-4);
     const replacement = 'xxxx-xxxx-xxxx-xxxx-xxxxxxxx';
     const disguise = first + replacement + second;
+    console.log(tokenHash, disguise)
     setModalOpen(true);
 
     // TODO create access token on blockchain

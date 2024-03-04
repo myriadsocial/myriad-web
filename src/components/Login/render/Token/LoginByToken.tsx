@@ -31,7 +31,6 @@ import {
   PolygonNetworkDisabledIcon,
 } from 'src/components/atoms/Icons';
 import { formatNetworkTitle } from 'src/helpers/wallet';
-import { useAuthLinkHook } from 'src/hooks/auth-link.hook';
 import { useAlertHook } from 'src/hooks/use-alert.hook';
 import { NetworkIdEnum } from 'src/interfaces/network';
 import { ServerListProps } from 'src/interfaces/server-list';
