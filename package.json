@@ -71,6 +71,7 @@
     "i18next": "^21.6.7",
     "i18next-browser-languagedetector": "^6.1.2",
     "immutability-helper": "^3.1.1",
+    "js-sha256": "^0.11.0",
     "lodash": "^4.17.21",
     "millify": "^4.0.0",
     "mux.js": "^6.0.1",
@@ -118,7 +119,7 @@
     "styled-components": "^5.3.5",
     "ua-parser-js": "^1.0.33",
     "unique-names-generator": "^4.7.1",
-    "uuid": "^8.3.2",
+    "uuid": "^9.0.1",
     "validator": "^13.7.0",
     "yarn-deduplicate": "^5.0.0"
   },
