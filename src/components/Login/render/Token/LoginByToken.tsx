@@ -76,8 +76,7 @@ const LoginByToken = ({ onNext }: LoginByTokenProps) => {
     }),
     [],
   );
-  const [, setBlockchainPlatform] =
-    useState<BlockchainPlatform | null>(null);
+  const [, setBlockchainPlatform] = useState<BlockchainPlatform | null>(null);
 
   useEffect(() => {
     const token = router?.query?.token?.toString() ?? '';
