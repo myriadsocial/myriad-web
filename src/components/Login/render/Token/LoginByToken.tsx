@@ -1,28 +1,25 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router';
+import { useCookies } from 'react-cookie';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 
+import { signIn } from 'next-auth/react';
+import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 
-import { Button, TextField, Typography, Grid, ListItem, Tooltip } from '@material-ui/core';
+import {
+  Button,
+  TextField,
+  Typography,
+  Grid,
+  ListItem,
+  Tooltip,
+} from '@material-ui/core';
 
 import { useStyles } from './LoginByToken.style';
 
-import SelectServer from 'src/components/SelectServer';
-import { useAuthLinkHook } from 'src/hooks/auth-link.hook';
-import { ServerListProps } from 'src/interfaces/server-list';
-import i18n from 'src/locale';
-import validator from 'validator';
-import { useCookies } from 'react-cookie';
 import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
-import { signIn } from 'next-auth/react';
-import getConfig from 'next/config';
-import { useAlertHook } from 'src/hooks/use-alert.hook';
-import { RootState } from 'src/reducers';
-import { UserState } from 'src/reducers/user/reducer';
-import { NetworkIdEnum } from 'src/interfaces/network';
-import { BlockchainPlatform } from 'src/interfaces/wallet';
-import { formatNetworkTitle } from 'src/helpers/wallet';
+import SelectServer from 'src/components/SelectServer';
 import {
   EthereumNetworkIcon,
   KusamaNetworkIcon,
@@ -33,6 +30,16 @@ import {
   PolkadotNetworkIcon,
   PolygonNetworkDisabledIcon,
 } from 'src/components/atoms/Icons';
+import { formatNetworkTitle } from 'src/helpers/wallet';
+import { useAuthLinkHook } from 'src/hooks/auth-link.hook';
+import { useAlertHook } from 'src/hooks/use-alert.hook';
+import { NetworkIdEnum } from 'src/interfaces/network';
+import { ServerListProps } from 'src/interfaces/server-list';
+import { BlockchainPlatform } from 'src/interfaces/wallet';
+import i18n from 'src/locale';
+import { RootState } from 'src/reducers';
+import { UserState } from 'src/reducers/user/reducer';
+import validator from 'validator';
 
 type LoginByTokenProps = {
   onNext: (
@@ -57,7 +64,7 @@ const LoginByToken = ({ onNext }: LoginByTokenProps) => {
 
   const [token, setToken] = useState('');
   const [networkId, setNetworkId] = useState<NetworkIdEnum | null>(null);
-  const [rpcUrl, setRpcUrl] = useState<string | null>(null)
+  const [rpcUrl, setRpcUrl] = useState<string | null>(null);
   const [error, setError] = useState({
     isError: false,
     message: '',
@@ -114,7 +121,7 @@ const LoginByToken = ({ onNext }: LoginByTokenProps) => {
             router.reload();
             router.push('/');
           }
-  
+
           if (response.error) {
             showAlert({
               message: token
@@ -138,7 +145,11 @@ const LoginByToken = ({ onNext }: LoginByTokenProps) => {
   };
 
   const setSelectedNetwork =
-    (networkId: NetworkIdEnum, blockchainPlatform: BlockchainPlatform, rpcUrl: string) =>
+    (
+      networkId: NetworkIdEnum,
+      blockchainPlatform: BlockchainPlatform,
+      rpcUrl: string,
+    ) =>
     () => {
       setNetworkId(networkId);
       setBlockchainPlatform(blockchainPlatform);
@@ -163,59 +174,59 @@ const LoginByToken = ({ onNext }: LoginByTokenProps) => {
         </Typography>
       </div>
       <Grid
-              container
-              justifyContent="flex-start"
-              alignContent="center"
-              classes={{ root: styles.list }}>
-              {networks.map(network => (
-                <Grid item xs={3} key={network.id}>
-                  <ListItem
-                    disableGutters
-                    selected={networkId === network.id}
-                    onClick={setSelectedNetwork(
-                      network.id,
-                      network.blockchainPlatform,
-                      network.rpcURL
-                    )}>
-                    <div className={styles.card}>
-                      {icons[network.id as keyof typeof icons]}
-                      <Typography>{formatNetworkTitle(network)}</Typography>
-                    </div>
-                  </ListItem>
-                </Grid>
-              ))}
-              <Grid item xs={3}>
-                <Tooltip
-                  title={
-                    <Typography component="span">
-                      {i18n.t('Login.Options.Tooltip_Wallet')}
-                    </Typography>
-                  }
-                  arrow>
-                  <ListItem disableGutters disabled>
-                    <div className={styles.card}>
-                      <EthereumNetworkIcon className={styles.icon} />
-                      <Typography>Ethereum</Typography>
-                    </div>
-                  </ListItem>
-                </Tooltip>
-              </Grid>
-              <Grid item xs={3}>
-                <Tooltip
-                  title={
-                    <Typography component="span">
-                      {i18n.t('Login.Options.Tooltip_Wallet')}
-                    </Typography>
-                  }
-                  arrow>
-                  <ListItem disableGutters disabled>
-                    <div className={styles.card}>
-                      <PolygonNetworkDisabledIcon className={styles.icon} />
-                      <Typography>Polygon</Typography>
-                    </div>
-                  </ListItem>
-                </Tooltip>
-              </Grid>
+        container
+        justifyContent="flex-start"
+        alignContent="center"
+        classes={{ root: styles.list }}>
+        {networks.map(network => (
+          <Grid item xs={3} key={network.id}>
+            <ListItem
+              disableGutters
+              selected={networkId === network.id}
+              onClick={setSelectedNetwork(
+                network.id,
+                network.blockchainPlatform,
+                network.rpcURL,
+              )}>
+              <div className={styles.card}>
+                {icons[network.id as keyof typeof icons]}
+                <Typography>{formatNetworkTitle(network)}</Typography>
+              </div>
+            </ListItem>
+          </Grid>
+        ))}
+        <Grid item xs={3}>
+          <Tooltip
+            title={
+              <Typography component="span">
+                {i18n.t('Login.Options.Tooltip_Wallet')}
+              </Typography>
+            }
+            arrow>
+            <ListItem disableGutters disabled>
+              <div className={styles.card}>
+                <EthereumNetworkIcon className={styles.icon} />
+                <Typography>Ethereum</Typography>
+              </div>
+            </ListItem>
+          </Tooltip>
+        </Grid>
+        <Grid item xs={3}>
+          <Tooltip
+            title={
+              <Typography component="span">
+                {i18n.t('Login.Options.Tooltip_Wallet')}
+              </Typography>
+            }
+            arrow>
+            <ListItem disableGutters disabled>
+              <div className={styles.card}>
+                <PolygonNetworkDisabledIcon className={styles.icon} />
+                <Typography>Polygon</Typography>
+              </div>
+            </ListItem>
+          </Tooltip>
+        </Grid>
       </Grid>
       <TextField
         fullWidth

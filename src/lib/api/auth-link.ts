@@ -79,7 +79,7 @@ export const loginWithAccessToken = async (
     method: 'POST',
     data: {
       token,
-      rpcUrl
+      rpcUrl,
     },
     headers: {
       'Content-Type': 'application/json',

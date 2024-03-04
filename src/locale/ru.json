@@ -1364,5 +1364,11 @@
       "tooltip": "Sign-in with token."
     }
   },
-  "TrendingHashtag": "Top Weekly Hashtags"
+  "TrendingHashtag": "Top Weekly Hashtags",
+  "Token": {
+    "Modal": {
+      "Title": "Token Generated",
+      "Subtitle": "Your access token has been generated"
+    }
+  }
 }

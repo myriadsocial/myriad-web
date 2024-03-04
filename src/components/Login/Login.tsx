@@ -20,6 +20,7 @@ import LoginByEmail from './render/Email/LoginByEmail';
 import { Options } from './render/Options';
 import { Profile } from './render/Profile';
 import SigninMethod from './render/SignInMethod/SigninMethod';
+import LoginByToken from './render/Token/LoginByToken';
 
 import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
 import { MyriadFullIcon } from 'components/atoms/Icons';
@@ -39,7 +40,6 @@ import { toHexPublicKey } from 'src/lib/crypto';
 import i18n from 'src/locale';
 import { RootState } from 'src/reducers';
 import { ConfigState } from 'src/reducers/config/reducer';
-import LoginByToken from './render/Token/LoginByToken';
 
 type LoginProps = {
   redirectAuth: WalletTypeEnum | null;

@@ -20,8 +20,7 @@ export default function SigninMethod({
   const handleSelected = ({ method }: { method: string }) => {
     if (method === 'token') {
       navigate('/token');
-    }
-    else if (method === 'web2') {
+    } else if (method === 'web2') {
       navigate('/email');
     } else {
       navigate('/options');

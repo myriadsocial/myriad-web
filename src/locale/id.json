@@ -1355,5 +1355,11 @@
       "tooltip": "Sign-in melalui email untuk mendapatkan banyak fitur dari myriad. Anda dapat mendapatkan seluruhnya nanti dengan menambahkan dompet pada pengaturan dompet. Kami tidak akan menggunakan email anda demi kepentingan komersial."
     }
   },
-  "TrendingHashtag": "Hashtag Trending Mingguan"
+  "TrendingHashtag": "Hashtag Trending Mingguan",
+  "Token": {
+    "Modal": {
+      "Title": "Token Generated",
+      "Subtitle": "Your access token has been generated"
+    }
+  }
 }

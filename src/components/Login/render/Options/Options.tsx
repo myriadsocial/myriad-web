@@ -547,7 +547,13 @@ export const Options: React.FC<OptionProps> = props => {
                   <Grid item xs={12} key={network.id}>
                     {network.id === NetworkIdEnum.POLKADOT ? (
                       <>
-                        <ListItem disableGutters disabled>
+                        <ListItem
+                          disableGutters
+                          selected={networkId === network.id}
+                          onClick={setSelectedNetwork(
+                            network.id,
+                            network.blockchainPlatform,
+                          )}>
                           <div className={styles.rowCard}>
                             {icons['polkadot']}
                             <Typography>
