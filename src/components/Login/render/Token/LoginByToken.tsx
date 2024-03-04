@@ -39,7 +39,6 @@ import { BlockchainPlatform } from 'src/interfaces/wallet';
 import i18n from 'src/locale';
 import { RootState } from 'src/reducers';
 import { UserState } from 'src/reducers/user/reducer';
-import validator from 'validator';
 
 type LoginByTokenProps = {
   onNext: (
@@ -52,8 +51,6 @@ type LoginByTokenProps = {
 const LoginByToken = ({ onNext }: LoginByTokenProps) => {
   const styles = useStyles();
   const router = useRouter();
-
-  const { requestLink } = useAuthLinkHook();
   const getMobileIconStyles = styles.icon;
   const { networks } = useSelector<RootState, UserState>(
     state => state.userState,
@@ -80,7 +77,7 @@ const LoginByToken = ({ onNext }: LoginByTokenProps) => {
     }),
     [],
   );
-  const [blockchainPlatform, setBlockchainPlatform] =
+  const [, setBlockchainPlatform] =
     useState<BlockchainPlatform | null>(null);
 
   useEffect(() => {
