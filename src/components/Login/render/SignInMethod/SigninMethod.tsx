@@ -18,7 +18,9 @@ export default function SigninMethod({
   const styles = useStyles(detect.isMobile())();
 
   const handleSelected = ({ method }: { method: string }) => {
-    if (method === 'web2') {
+    if (method === 'token') {
+      navigate('/token');
+    } else if (method === 'web2') {
       navigate('/email');
     } else {
       navigate('/options');
@@ -84,6 +86,15 @@ export default function SigninMethod({
             desc={i18n.t('Sign_In.Email.desc')}
             image={<LoginWeb2 />}
             onClick={() => handleSelected({ method: 'web2' })}
+            disabled={disableSignIn}
+            tooltip={i18n.t('Sign_In.Email.tooltip')}
+          />
+          <div className={styles.textOr}>or</div>
+          <CardSign
+            title={i18n.t('Sign_In.Token.title')}
+            desc={i18n.t('Sign_In.Token.desc')}
+            image={<LoginWeb2 />}
+            onClick={() => handleSelected({ method: 'token' })}
             disabled={disableSignIn}
             tooltip={i18n.t('Sign_In.Email.tooltip')}
           />

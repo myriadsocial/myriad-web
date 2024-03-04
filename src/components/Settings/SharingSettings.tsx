@@ -13,10 +13,13 @@ import {
   Typography,
 } from '@material-ui/core';
 
+import { Modal } from '../atoms/Modal';
 import { useStyles } from './Settings.styles';
 
+import { sha256 } from 'js-sha256';
 import i18n from 'src/locale';
 import { RootState } from 'src/reducers';
+import { v4 as uuidv4 } from 'uuid';
 
 const SharingSetting = () => {
   const styles = useStyles();
@@ -24,6 +27,7 @@ const SharingSetting = () => {
     ({ configState: { loading } }) => loading,
   );
   const [tokenValue, setToken] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
   const [error, setError] = useState({
     isError: false,
     message: '',
@@ -39,7 +43,23 @@ const SharingSetting = () => {
   };
 
   const onClickAddToken = () => {
-    setToken('');
+    const token = uuidv4();
+    const tokenHash = sha256(token);
+    const first = token.slice(0, 4);
+    const second = token.slice(-4);
+    const replacement = 'xxxx-xxxx-xxxx-xxxx-xxxxxxxx';
+    const disguise = first + replacement + second;
+    console.log(tokenHash, disguise);
+    setModalOpen(true);
+
+    // TODO create access token on blockchain
+    // await createAccessToken(hash, wallet)
+    // await APILink.store(disguise, hash)
+    setToken(token);
+  };
+
+  const handleClose = () => {
+    setModalOpen(false);
   };
 
   if (loading)
@@ -51,6 +71,16 @@ const SharingSetting = () => {
 
   return (
     <Paper elevation={0} className={styles.root}>
+      <Modal
+        title={i18n.t('Token.Modal.Title')}
+        subtitle={i18n.t('Token.Modal.Subtitle')}
+        onClose={handleClose}
+        open={modalOpen}
+        className={styles.root}>
+        <Typography component="div" variant="h3">
+          Token is {tokenValue}
+        </Typography>
+      </Modal>
       <Typography className={styles.subtitle}>Input Code Here</Typography>
       <div
         className={styles.option}

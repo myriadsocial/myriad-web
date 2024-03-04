@@ -210,6 +210,26 @@ export const useWallet = () => {
     }
   };
 
+  // const createAccessToken = async () : Promise<void> => {
+  //   try {
+  //     await provider.createAccessToken()
+
+  //   }
+  //   catch (error) {
+  //     const variant = error.message === 'Cancelled' ? 'warning' : 'error';
+  //     const message =
+  //       variant === 'warning'
+  //         ? i18n.t('Tipping.Toaster.Cancelled')
+  //         : error.message;
+  //     enqueueSnackbar({ variant, message });
+
+  //   } finally {
+  //     setLoading(false);
+  //     setSignerLoading(false);
+  //   }
+
+  // }
+
   return {
     loading,
     isSignerLoading,

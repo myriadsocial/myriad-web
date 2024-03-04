@@ -280,6 +280,15 @@
         "Next": "Next"
       }
     },
+    "Token": {
+      "LoginByToken": {
+        "Title": "Sign-in with Token",
+        "Subtitle": "You need to input token.",
+        "Email_Placeholder": "Add your email",
+        "Back": "Back",
+        "Next": "Next"
+      }
+    },
     "Options": {
       "Network": "Select Network",
       "Wallet": "Select Wallet",
@@ -1359,7 +1368,18 @@
       "title": "Email",
       "desc": "Sign in via Web 2.0",
       "tooltip": "Sign-in via email lets you use many of Myriad’s features. You can get the real deal later by adding a crypto wallet address in your wallet settings. We will not use your email for commercial purposes."
+    },
+    "Token": {
+      "title": "Token",
+      "desc": "Sign in via Token",
+      "tooltip": "Sign-in with token."
     }
   },
-  "TrendingHashtag": "Top Weekly Hashtags"
+  "TrendingHashtag": "Top Weekly Hashtags",
+  "Token": {
+    "Modal": {
+      "Title": "Token Generated",
+      "Subtitle": "Your access token has been generated"
+    }
+  }
 }
