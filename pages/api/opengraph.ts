@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import axios from 'axios';
-import { createCanvas, CanvasRenderingContext2D } from 'canvas';
+import { createCanvas, CanvasRenderingContext2D, registerFont } from 'canvas';
 import sharp from 'sharp';
 
 async function downloadImage(url: string) {
@@ -86,7 +86,8 @@ export default async function handler(
     const context = canvas.getContext('2d');
 
     // Optional: Register a custom font
-    context.font = `${fontSize}px sans-serif`;
+    registerFont('./public/fonts/coolvetica.otf', { family: 'CustomFont' });
+    context.font = `${fontSize}px CustomFont`;
     context.fillStyle = 'black'; // Text color
     context.textAlign = 'left';
     context.textBaseline = 'top';
