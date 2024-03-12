@@ -60,7 +60,7 @@ export default async function handler(
   }
 
   // Ensure text is a string
-  const requestText = req.query.text;
+  const requestText = decodeURIComponent(req.query.text.toString());
   if (typeof requestText !== 'string') {
     return res.status(400).json({
       status: 'error',
@@ -122,7 +122,6 @@ export default async function handler(
     res.status(500).json({
       status: 'error',
       message: 'Internal server error',
-      details: `${JSON.stringify(error)}`,
     });
   }
 }
