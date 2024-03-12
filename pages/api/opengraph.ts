@@ -1,7 +1,19 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
+import axios from 'axios';
 import { createCanvas, CanvasRenderingContext2D } from 'canvas';
 import sharp from 'sharp';
+
+async function downloadImage(url: string) {
+  try {
+    // Fetch the image using axios with responseType set to 'arraybuffer'
+    const response = await axios.get(url, { responseType: 'arraybuffer' });
+    return response.data;
+  } catch (e) {
+    console.error('Error downloading image:', e);
+    throw e;
+  }
+}
 
 function wrapText(
   context: CanvasRenderingContext2D,
@@ -57,14 +69,17 @@ export default async function handler(
   }
 
   try {
+    // Download image
+    const imageBuffer = await downloadImage(
+      'https://raw.githubusercontent.com/agustinustheo/sharp-canvas-ts/main/template.jpg',
+    );
+
     // Cut the text if needed and add an ellipsis
     const text = cutAndAddEllipsis(requestText);
     const fontSize = 48;
 
     // Load the original image to get its dimensions
-    const originalImage = await sharp(
-      'https://raw.githubusercontent.com/agustinustheo/sharp-canvas-ts/main/template.jpg',
-    ).metadata();
+    const originalImage = await sharp(imageBuffer).metadata();
 
     // Create a canvas that matches the original image's dimensions
     const canvas = createCanvas(originalImage.width!, originalImage.height!);
@@ -95,17 +110,19 @@ export default async function handler(
     const textBuffer = canvas.toBuffer();
 
     // Overlay the text image on the original image
-    const imageBuffer = await sharp(
-      'https://raw.githubusercontent.com/agustinustheo/sharp-canvas-ts/main/template.jpg',
-    )
+    const newImage = await sharp(imageBuffer)
       .composite([{ input: textBuffer, blend: 'over' }])
-      .png()
+      .jpeg()
       .toBuffer();
 
-    res.setHeader('Content-Type', 'image/png');
-    res.send(imageBuffer);
+    res.setHeader('Content-Type', 'image/jpeg');
+    res.send(newImage);
   } catch (error) {
     console.error('Error:', error);
-    res.status(500).json({ status: 'error', message: 'Internal server error' });
+    res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+      details: `${JSON.stringify(error)}`,
+    });
   }
 }
