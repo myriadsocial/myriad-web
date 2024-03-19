@@ -120,7 +120,6 @@
     "styled-components": "^5.3.5",
     "ua-parser-js": "^1.0.33",
     "unique-names-generator": "^4.7.1",
-    "uuid": "^9.0.1",
     "validator": "^13.7.0",
     "yarn-deduplicate": "^5.0.0"
   },

@@ -76,7 +76,7 @@ export default async function handler(
 
     // Cut the text if needed and add an ellipsis
     const text = cutAndAddEllipsis(requestText);
-    const fontSize = 48;
+    const fontSize = 52;
 
     // Load the original image to get its dimensions
     const originalImage = await sharp(imageBuffer).metadata();
