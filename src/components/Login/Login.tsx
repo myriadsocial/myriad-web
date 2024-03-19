@@ -20,7 +20,6 @@ import LoginByEmail from './render/Email/LoginByEmail';
 import { Options } from './render/Options';
 import { Profile } from './render/Profile';
 import SigninMethod from './render/SignInMethod/SigninMethod';
-import LoginByToken from './render/Token/LoginByToken';
 
 import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
 import { MyriadFullIcon } from 'components/atoms/Icons';
@@ -344,12 +343,6 @@ export const Login: React.FC<LoginProps> = props => {
             index={false}
             path="/email"
             element={<LoginByEmail onNext={checkEmailRegistered} />}
-          />
-
-          <Route
-            index={false}
-            path="/token"
-            element={<LoginByToken onNext={checkEmailRegistered} />}
           />
 
           <Route
