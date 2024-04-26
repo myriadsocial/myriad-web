@@ -49,7 +49,7 @@ export const MediaEmbedToolbarButton = ({
         loading={progress > 0}
         onFileSelected={handleFileSelected}
         accept={['video/mp4', 'video/x-m4v', 'video/*']}
-        maxSize={100}
+        maxSize={210}
         placeholder={i18n.t('Post_Create.Upload.Video.Placeholder')}
         usage="post"
       />

@@ -186,6 +186,12 @@ export const minimize = (
       if ([ELEMENT_IMAGE].includes(element.type)) {
         urls.push(element.url as string);
       }
+      if ([ELEMENT_MEDIA_EMBED].includes(element.type)) {
+        nodes.push(element);
+      }
+      // if ([ELEMENT_LINK].includes(element.type)) {
+      //   nodes.push(element);
+      // }
     }
 
     if (urls.length) {

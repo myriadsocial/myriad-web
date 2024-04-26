@@ -654,7 +654,7 @@
       "Btn_Confirm": "Confirmer",
       "Video": {
         "Title": "Télécharger une video",
-        "Placeholder": "Téléchargez un fichier vidéo .mp4 d'une taille inférieure à 100 Mo"
+        "Placeholder": "Téléchargez un fichier vidéo .mp4 d'une taille inférieure à 200 Mo"
       },
       "Image": {
         "Title": "Charger une photo"

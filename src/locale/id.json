@@ -640,7 +640,7 @@
       "Btn_Confirm": "Konfirmasi",
       "Video": {
         "Title": "Unggah video",
-        "Placeholder": "Unggah file video .mp4 dengan ukuran kurang dari 100Mb"
+        "Placeholder": "Unggah file video .mp4 dengan ukuran kurang dari 200Mb"
       },
       "Image": {
         "Title": "Unggah Gambar"
