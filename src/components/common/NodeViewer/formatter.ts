@@ -8,7 +8,6 @@ import {
 } from '@udecode/plate';
 
 import { EditorValue, RootBlock } from '../Editor/Editor.interface';
-import { ELEMENT_LINK } from '../Editor/plugins';
 import { ELEMENT_EMOJI } from '../Editor/plugins/EmojiPicker';
 import { ELEMENT_HASHTAG } from '../Editor/plugins/Hashtag';
 import { ELEMENT_IMAGE_LIST } from '../Editor/plugins/ImageList/createImageListPlugin';
