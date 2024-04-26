@@ -8,6 +8,7 @@ import {
 } from '@udecode/plate';
 
 import { EditorValue, RootBlock } from '../Editor/Editor.interface';
+import { ELEMENT_LINK } from '../Editor/plugins';
 import { ELEMENT_EMOJI } from '../Editor/plugins/EmojiPicker';
 import { ELEMENT_HASHTAG } from '../Editor/plugins/Hashtag';
 import { ELEMENT_IMAGE_LIST } from '../Editor/plugins/ImageList/createImageListPlugin';
@@ -15,7 +16,6 @@ import { ELEMENT_SHOW_MORE } from '../Editor/plugins/ShowMore';
 
 import { ReportType } from 'src/interfaces/comment';
 import i18n from 'src/locale';
-import { ELEMENT_LINK } from '../Editor/plugins';
 
 const ReportTypeCategoryMapper: Record<ReportType, string> = {
   abusive_violent: i18n.t('Post_Comment.Modal_Report.Reason_Abuse'),
