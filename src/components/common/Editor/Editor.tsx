@@ -85,7 +85,7 @@ import { ListItemComponent } from 'src/components/atoms/ListItem';
 import { User } from 'src/interfaces/user';
 import * as UploadAPI from 'src/lib/api/upload';
 
-const MAX_CHARACTER_LIMIT = 5000;
+const MAX_CHARACTER_LIMIT = 15000;
 const MAX_HASHTAG_CHAR_LENGTH = 160;
 
 const editableProps: TEditableProps<EditorValue> = {

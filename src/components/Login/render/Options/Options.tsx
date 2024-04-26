@@ -105,7 +105,6 @@ export const Options: React.FC<OptionProps> = props => {
     () => ({
       polkadot: <PolkadotNetworkIcon className={getMobileIconStyles} />,
       sender: <SenderWalletDisabledIcon className={getMobileIconStyles} />,
-      near: <NearNetworkIcon className={getMobileIconStyles} />,
       nova: <NovaDisableIcon className={getMobileIconStyles} />,
       'my-near': <MyNearWalletIcon className={getMobileIconStyles} />,
     }),
@@ -123,7 +122,7 @@ export const Options: React.FC<OptionProps> = props => {
           return setSelectedWallet(WalletTypeEnum.POLKADOT)();
         case BlockchainPlatform.NEAR:
           console.log('test');
-          return setSelectedWallet(WalletTypeEnum.NEAR)();
+          return setSelectedWallet(WalletTypeEnum.MYNEAR)();
         default:
           return setWallet(null);
       }
@@ -137,7 +136,6 @@ export const Options: React.FC<OptionProps> = props => {
         break;
 
       case WalletTypeEnum.MYNEAR:
-      case WalletTypeEnum.NEAR:
         setWallet(value);
         setExtensionChecked(true);
         setExtensionEnabled(true);
@@ -372,7 +370,7 @@ export const Options: React.FC<OptionProps> = props => {
               </ShowIf>
               <ShowIf
                 condition={blockchainPlatform === BlockchainPlatform.NEAR}>
-                {[WalletTypeEnum.NEAR, WalletTypeEnum.MYNEAR].map(e => {
+                {[WalletTypeEnum.MYNEAR].map(e => {
                   return (
                     <Grid item xs={3} key={e}>
                       <ListItem
@@ -388,16 +386,8 @@ export const Options: React.FC<OptionProps> = props => {
                             : ''
                         }>
                         <div className={styles.card}>
-                          {e === WalletTypeEnum.NEAR ? (
-                            <NearNetworkIcon className={styles.icon} />
-                          ) : (
-                            <MyNearWalletIcon className={styles.icon} />
-                          )}
-                          <Typography>
-                            {e === WalletTypeEnum.NEAR
-                              ? 'NEAR Wallet'
-                              : 'MyNearWallet'}
-                          </Typography>
+                          <MyNearWalletIcon className={styles.icon} />
+                          <Typography>MyNearWallet</Typography>
                         </div>
                       </ListItem>
                     </Grid>
@@ -600,7 +590,7 @@ export const Options: React.FC<OptionProps> = props => {
                 classes={{ root: styles.list }}>
                 <ShowIf
                   condition={blockchainPlatform === BlockchainPlatform.NEAR}>
-                  {[WalletTypeEnum.NEAR, WalletTypeEnum.MYNEAR].map(e => {
+                  {[WalletTypeEnum.MYNEAR].map(e => {
                     return (
                       <Grid item xs={12} key={e}>
                         <ListItem
@@ -618,11 +608,7 @@ export const Options: React.FC<OptionProps> = props => {
                           }>
                           <div className={styles.rowCard}>
                             {walletIcons[e]}
-                            <Typography>
-                              {e === WalletTypeEnum.NEAR
-                                ? 'NEAR Wallet'
-                                : 'MyNearWallet'}
-                            </Typography>
+                            <Typography>MyNearWallet</Typography>
                           </div>
                         </ListItem>
                       </Grid>

@@ -654,7 +654,7 @@
       "Btn_Confirm": "Confirm",
       "Video": {
         "Title": "Upload Video",
-        "Placeholder": "Upload .mp4 video file with size less than 100Mb"
+        "Placeholder": "Upload .mp4 video file with size less than 200Mb"
       },
       "Image": {
         "Title": "Upload Picture"
