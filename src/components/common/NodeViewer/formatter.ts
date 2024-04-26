@@ -15,6 +15,7 @@ import { ELEMENT_SHOW_MORE } from '../Editor/plugins/ShowMore';
 
 import { ReportType } from 'src/interfaces/comment';
 import i18n from 'src/locale';
+import { ELEMENT_LINK } from '../Editor/plugins';
 
 const ReportTypeCategoryMapper: Record<ReportType, string> = {
   abusive_violent: i18n.t('Post_Comment.Modal_Report.Reason_Abuse'),
@@ -186,6 +187,12 @@ export const minimize = (
       if ([ELEMENT_IMAGE].includes(element.type)) {
         urls.push(element.url as string);
       }
+      if ([ELEMENT_MEDIA_EMBED].includes(element.type)) {
+        nodes.push(element);
+      }
+      // if ([ELEMENT_LINK].includes(element.type)) {
+      //   nodes.push(element);
+      // }
     }
 
     if (urls.length) {
