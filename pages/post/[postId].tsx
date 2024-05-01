@@ -20,12 +20,14 @@ import { TippingSuccess } from 'src/components/common/Tipping/render/Tipping.suc
 import { DefaultLayout } from 'src/components/template/Default/DefaultLayout';
 import { generateAnonymousUser } from 'src/helpers/auth';
 import { htmlToJson, isJson } from 'src/helpers/string';
+import { Sizes } from 'src/interfaces/assets';
 import { Post } from 'src/interfaces/post';
 import { User } from 'src/interfaces/user';
 import { updateSession } from 'src/lib/api/auth-link';
 import { initialize } from 'src/lib/api/base';
 import { healthcheck } from 'src/lib/api/healthcheck';
 import * as PostAPI from 'src/lib/api/post';
+import { createOpenGraphImageUrl } from 'src/lib/config';
 import i18n from 'src/locale';
 import { RootState } from 'src/reducers';
 import {
@@ -106,14 +108,14 @@ const PostPage: React.FC<PostPageProps> = props => {
         />
         <meta property="og:description" content={description} />
         <meta property="og:title" content={title} />
-        {image && <meta property="og:image" content={image} />}
+        <meta property="og:image" content={image} />
         <meta property="og:image:width" content="2024" />
         <meta property="og:image:height" content="1012" />
         <meta property="og:image:secure_url" content={image} />
         {/* Twitter Card tags */}
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
-        {image && <meta name="twitter:image" content={image} />}
+        <meta name="twitter:image" content={image} />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
       <DefaultLayout isOnProfilePage={false} {...props}>
@@ -249,13 +251,25 @@ export const getServerSideProps = wrapper.getServerSideProps(
     let title = post
       ? post?.title ?? `${post.user.name} on ${publicRuntimeConfig.appName}`
       : 'We cannot find what you are looking for';
-    let image = post
-      ? post.asset?.images && post.asset.images.length > 0
-        ? typeof post.asset.images[0] === 'string'
-          ? post.asset.images[0]
-          : post.asset.images[0].large
-        : null
-      : null;
+
+    let image = null; // Default value for image
+
+    if (post) {
+      // Check if post exists
+      if (post.asset?.images && post.asset.images.length > 0) {
+        // Check if images array is present and not empty
+        if (typeof post.asset.images[0] === 'string') {
+          // Check if the first item is a string
+          image = post.asset.images[0];
+        }
+        // If the first item is not a string, access its 'large' property
+        image = (post.asset.images[0] as Sizes).large;
+      }
+      image = createOpenGraphImageUrl(
+        publicRuntimeConfig.appAuthURL,
+        description,
+      );
+    }
 
     if (post?.platform === 'myriad') {
       const { text, image: imageData } = stringify(post);
@@ -280,7 +294,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       title = 'Login with Myriad Account';
       description =
         'Log in to Myriad Social! Not a Myriad user? Sign up for free.';
-      image = null;
+      image = createOpenGraphImageUrl(publicRuntimeConfig.appAuthURL, title);
     }
 
     return {

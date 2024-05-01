@@ -20,6 +20,7 @@ import { updateSession } from 'src/lib/api/auth-link';
 import { initialize } from 'src/lib/api/base';
 import * as ExperienceAPI from 'src/lib/api/experience';
 import { healthcheck } from 'src/lib/api/healthcheck';
+import { createOpenGraphImageUrl } from 'src/lib/config';
 import i18n from 'src/locale';
 import { fetchAvailableToken } from 'src/reducers/config/actions';
 import { fetchExchangeRates } from 'src/reducers/exchange-rate/actions';
@@ -72,7 +73,7 @@ const PreviewExperience: React.FC<ExperiencePageProps> = props => {
         <meta property="og:image:secure_url" content={image} />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description ?? ''} />
-        <meta name="twitter:image" content={image ?? ''} />
+        <meta name="twitter:image" content={image} />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
       {hidden ? (
@@ -198,7 +199,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
       props: {
         title: title,
         description: description,
-        image: image,
+        image:
+          image ??
+          createOpenGraphImageUrl(publicRuntimeConfig.appAuthURL, title),
         hidden: hidden,
       },
     };
