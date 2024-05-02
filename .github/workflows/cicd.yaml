@@ -170,6 +170,6 @@ jobs:
           fetch-depth: 0
       - name: Update Docker Compose File
         run: |
-          sed -i "s|myriadsocial/myriad-web:.*|myriadsocial/myriad-web:${{ github.sha }}|" docker-compose.yml
+          sed -i "s|myriadsocial/myriad-web:.*|myriadsocial/myriad-web:${{ github.sha }}|" /home/devops/docker-compose.yml
       - name: Deploy Updated Compose
         run: sudo systemctl restart myriad.service
