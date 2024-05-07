@@ -357,7 +357,7 @@ export const PostCreate: React.FC<PostCreateProps> = props => {
       page,
     );
 
-    setUserExperiences([...experiences]);
+    setUserExperiences([...userExperiences,...experiences]);
 
     if (meta.currentPage < meta.totalPageCount) setPage(page + 1);
   };
