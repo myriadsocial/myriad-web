@@ -257,7 +257,7 @@ export const MobilePostCreate: React.FC<MobilePostCreateProps> = props => {
       page,
     );
 
-    setUserExperiences([...experiences]);
+    setUserExperiences([...userExperiences , ...experiences]);
     if (experiences.length !== 0)
       setSelectedTimeline(experiences[0].experience);
 
