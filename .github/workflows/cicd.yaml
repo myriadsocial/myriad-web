@@ -161,55 +161,15 @@ jobs:
           - is_release: false
             environment: MAINNET
     environment: ${{ matrix.environment }}
-    runs-on: ubuntu-20.04
+    runs-on: self-hosted
     name: Deploy to ${{ matrix.environment }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@f105ef0cdb3b102a020be1767fcc8a974898b7c6
-        with:
-          workload_identity_provider: ${{ secrets[format('{0}_{1}', matrix.environment, 'GCP_WORKLOAD_IDENTITY_PROVIDER')] }}
-          service_account: ${{ secrets[format('{0}_{1}', matrix.environment, 'GCP_WORKLOAD_IDENTITY_SERVICE_ACCOUNT')] }}
-      - name: Set Up Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@e30db14379863a8c79331b04a9969f4c1e225e0b
-      - name: Get GKE Credentials
-        uses: google-github-actions/get-gke-credentials@35ab0d2b2d48792c19f09325413bd185c8d44394
-        with:
-          cluster_name: ${{ secrets[format('{0}_{1}', matrix.environment, 'GKE_CLUSTER_NAME')] }}
-          location: ${{ secrets[format('{0}_{1}', matrix.environment, 'GKE_LOCATION')] }}
-          use_internal_ip: true
-      - name: Tunneling SSH connections
+      - name: Update Docker Compose File
         run: |
-          gcloud compute ssh ${{ secrets[format('{0}_{1}', matrix.environment, 'GCE_BASTION_INSTANCE_NAME')] }} \
-            --project=${{ secrets[format('{0}_{1}', matrix.environment, 'GCP_PROJECT_ID')] }} \
-            --zone ${{ secrets[format('{0}_{1}', matrix.environment, 'GCE_BASTION_INSTANCE_ZONE')] }} \
-            --ssh-flag '-4 -L 8888:127.0.0.1:8888 -N -q -f' \
-            --tunnel-through-iap \
-            --quiet
-      - name: Set Up Helm
-        uses: azure/setup-helm@5119fcb9089d432beecbf79bb2c7915207344b78
-        with:
-          version: v3.10.0
-      - name: Perform Deployment
-        run: |
-          helm repo add myriadsocial https://charts.myriad.social
-          helm repo update
-          HTTPS_PROXY=127.0.0.1:8888 helm upgrade ${{ github.event.repository.name }} myriadsocial/myriad-web \
-            --install \
-            --set-string image.tag=${{ needs.release-please.outputs.tag_name || github.sha }} \
-            --set-string serviceAccount.name=${{ github.event.repository.name }} \
-            --set-string serviceAccount.annotations.'iam\.gke\.io/gcp-service-account'=${{ github.event.repository.name }}@${{ secrets[format('{0}_{1}', matrix.environment, 'GCP_PROJECT_ID')] }}.iam.gserviceaccount.com \
-            --set config.secretsStore.enabled=true \
-            --set-string config.secretsStore.providerClass=${{ github.event.repository.name }}-secrets-store-provider \
-            --set-string config.secretsStore.name=${{ github.event.repository.name }}-secrets-store \
-            --set-string nodeSelector.node_pool=general \
-            --set-string nodeSelector.'iam\.gke\.io/gke-metadata-server-enabled'='true'
-          HTTPS_PROXY=127.0.0.1:8888 kubectl rollout status deployment/${{ github.event.repository.name }}
-      - name: Clean Up Tunneling SSH Connections
-        if: always()
-        run: |
-          kill -9 $(lsof -ti:8888)
-          gcloud compute os-login ssh-keys remove --key-file=/home/runner/.ssh/google_compute_engine.pub
+          sed -i "s|myriadsocial/myriad-web:.*|myriadsocial/myriad-web:${{ github.sha }}|" /home/$USER/docker-compose.yml
+      - name: Deploy Updated Compose
+        run: sudo systemctl restart myriad-social.service

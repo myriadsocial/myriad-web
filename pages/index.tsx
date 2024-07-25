@@ -22,6 +22,7 @@ import { generateAnonymousUser } from 'src/helpers/auth';
 import { updateSession } from 'src/lib/api/auth-link';
 import { initialize } from 'src/lib/api/base';
 import { healthcheck } from 'src/lib/api/healthcheck';
+import { createOpenGraphImageUrl } from 'src/lib/config';
 import i18n from 'src/locale';
 import {
   fetchAvailableToken,
@@ -191,7 +192,12 @@ export const getServerSideProps = wrapper.getServerSideProps(
         session,
         description,
         title,
-        image,
+        image:
+          image ??
+          createOpenGraphImageUrl(
+            publicRuntimeConfig.appAuthURL,
+            'Myriad Social',
+          ),
         experience,
       },
     };

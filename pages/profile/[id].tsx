@@ -18,6 +18,7 @@ import { updateSession } from 'src/lib/api/auth-link';
 import { initialize } from 'src/lib/api/base';
 import { healthcheck } from 'src/lib/api/healthcheck';
 import * as UserAPI from 'src/lib/api/user';
+import { createOpenGraphImageUrl } from 'src/lib/config';
 import i18n from 'src/locale';
 import {
   fetchAvailableToken,
@@ -175,9 +176,14 @@ export const getServerSideProps = wrapper.getServerSideProps(
       return {
         props: {
           session,
-          title: detail?.name ?? null,
-          description: detail?.bio ?? null,
-          image: detail?.profilePictureURL ?? null,
+          title: detail?.name ?? "Myriad User's Profile",
+          description: detail?.bio ?? "Myriad User's Bio",
+          image:
+            detail?.profilePictureURL ??
+            createOpenGraphImageUrl(
+              publicRuntimeConfig.appAuthURL,
+              'Myriad User Profile',
+            ),
           isBanned: Boolean(detail?.deletedAt),
         },
       };
