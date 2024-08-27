@@ -26,7 +26,7 @@ type ProfilePostsTabProps = {
 
 export const ProfilePostsTab: React.FC<ProfilePostsTabProps> = props => {
   const { filters, filterType, user } = props;
-  const userId = filters?.owner ?? user.id
+  const userId = filters?.owner ?? user.id;
   const { query } = useQueryParams();
   const [timelinePost, setTimelinePost] = useState(1); // this one used with total post to prevent race condition
   const { detail: profile } = useSelector<RootState, ProfileState>(
@@ -73,7 +73,12 @@ export const ProfilePostsTab: React.FC<ProfilePostsTabProps> = props => {
       </ShowIf>
 
       <ShowIf condition={totalPost > 0}>
-        <ProfilePostsListContainer filters={filters} query={query} user={user} userId={userId} />
+        <ProfilePostsListContainer
+          filters={filters}
+          query={query}
+          user={user}
+          userId={userId}
+        />
       </ShowIf>
     </>
   );

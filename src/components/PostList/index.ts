@@ -1,2 +1,2 @@
 export * from './PostList.container';
-export * from './ProfilePostList.container'
+export * from './ProfilePostList.container';

@@ -15,7 +15,10 @@ import { RootState } from 'src/reducers';
 import { loadProfile, clearTimeline } from 'src/reducers/timeline/actions';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const useProfileFilter = (filters?: TimelineFilterFields, userId?: string) => {
+export const useProfileFilter = (
+  filters?: TimelineFilterFields,
+  userId?: string,
+) => {
   const dispatch = useDispatch();
 
   const filterFields = useSelector<RootState, TimelineFilterFields>(
@@ -65,7 +68,7 @@ export const useProfileFilter = (filters?: TimelineFilterFields, userId?: string
 
   const filterTimeline = useCallback(
     async (query?: ParsedUrlQuery) => {
-        console.log("HAHAHA")
+      console.log('HAHAHA');
       let timelineType = TimelineType.PROFILE;
       let timelineOrder = TimelineOrderType.LATEST;
       let tags: string[] = [];
@@ -99,18 +102,18 @@ export const useProfileFilter = (filters?: TimelineFilterFields, userId?: string
         // TODO: anonymous user should only see trending posts
       }
 
-        dispatch(
-          loadProfile(
-            1,
-            userId,
-            {
-              fields: newFilterFields,
-              order: timelineOrder,
-              query: search,
-            },
-            timelineType,
-          ),
-        );
+      dispatch(
+        loadProfile(
+          1,
+          userId,
+          {
+            fields: newFilterFields,
+            order: timelineOrder,
+            query: search,
+          },
+          timelineType,
+        ),
+      );
     },
     [filterFields],
   );
