@@ -130,7 +130,7 @@ export const getPost = async (
   }
 
   if (profile) {
-    params.owner = userId
+    params.owner = userId;
   }
 
   const { data } = await MyriadAPI().request<PostList>({

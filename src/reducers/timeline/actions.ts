@@ -303,7 +303,7 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
   };
 
 export const loadProfile: ThunkActionCreator<Actions, RootState> =
-  (page = 1, userId:string ,filters?: TimelineFilters, type?: TimelineType) =>
+  (page = 1, userId: string, filters?: TimelineFilters, type?: TimelineType) =>
   async (dispatch, getState) => {
     dispatch(setTimelineLoading(true));
 
@@ -321,7 +321,7 @@ export const loadProfile: ThunkActionCreator<Actions, RootState> =
         userId,
         timelineType,
         timelineFilter,
-        true
+        true,
       );
 
       dispatch({
