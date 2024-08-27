@@ -302,6 +302,60 @@ export const loadTimeline: ThunkActionCreator<Actions, RootState> =
     }
   };
 
+export const loadProfile: ThunkActionCreator<Actions, RootState> =
+  (page = 1, userId:string ,filters?: TimelineFilters, type?: TimelineType) =>
+  async (dispatch, getState) => {
+    dispatch(setTimelineLoading(true));
+
+    const {
+      userState: { user },
+      timelineState,
+    } = getState();
+
+    try {
+      const timelineType = type ?? timelineState.type;
+      const timelineFilter = filters ?? timelineState.filters;
+
+      const { data: posts, meta } = await PostAPI.getPost(
+        page,
+        userId,
+        timelineType,
+        timelineFilter,
+        true
+      );
+
+      dispatch({
+        type: constants.LOAD_TIMELINE,
+        payload: {
+          type,
+          posts: posts.map(origin => {
+            const upvoted = origin.votes?.filter(
+              vote => vote.userId === userId && vote.state,
+            );
+            const downvoted = origin.votes?.filter(
+              vote => vote.userId === userId && !vote.state,
+            );
+
+            const post: Post = {
+              ...origin,
+              isUpvoted: upvoted && upvoted.length > 0,
+              isDownVoted: downvoted && downvoted.length > 0,
+              totalComment: origin.metric.comments,
+            };
+
+            return post;
+          }),
+          filters: timelineFilter,
+          meta,
+        },
+      });
+    } catch (error) {
+      dispatch(setError(error));
+    } finally {
+      dispatch(setTimelineLoading(false));
+    }
+  };
+
 export const createPost: ThunkActionCreator<Actions, RootState> =
   (
     post: PostProps,
