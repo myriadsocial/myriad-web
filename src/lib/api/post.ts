@@ -38,6 +38,7 @@ export const getPost = async (
   userId: string,
   type: TimelineType = TimelineType.TRENDING,
   filters?: TimelineFilters,
+  profile?: boolean,
 ): Promise<PostList> => {
   const {
     sort = 'DESC',
@@ -126,6 +127,10 @@ export const getPost = async (
 
     params = restParams;
     params.q = query;
+  }
+
+  if (profile) {
+    params.owner = userId;
   }
 
   const { data } = await MyriadAPI().request<PostList>({
