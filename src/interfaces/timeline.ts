@@ -5,6 +5,7 @@ export enum TimelineType {
   EXPERIENCE = 'experience',
   TRENDING = 'trending',
   FRIEND = 'friend',
+  PROFILE = 'profile',
 }
 
 export type PostOrigin = 'facebook' | 'twitter' | 'reddit' | 'myriad';
