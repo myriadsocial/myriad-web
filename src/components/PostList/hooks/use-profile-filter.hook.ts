@@ -69,7 +69,7 @@ export const useProfileFilter = (
   const filterTimeline = useCallback(
     async (query?: ParsedUrlQuery) => {
       console.log('HAHAHA');
-      let timelineType = TimelineType.PROFILE;
+      const timelineType = TimelineType.PROFILE;
       let timelineOrder = TimelineOrderType.LATEST;
       let tags: string[] = [];
       let search: string;

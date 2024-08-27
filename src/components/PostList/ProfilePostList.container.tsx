@@ -15,7 +15,6 @@ import { EmptyContentEnum } from '../Search/EmptyResult.interfaces';
 import { Loading } from '../atoms/Loading';
 import { useStyles } from './PostList.styles';
 import { useProfileFilter } from './hooks/use-profile-filter.hook';
-import { useTimelineFilter } from './hooks/use-timeline-filter.hook';
 
 import { PostDetailContainer } from 'components/PostDetail/PostDetail.container';
 import ShowIf from 'components/common/show-if.component';
