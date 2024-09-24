@@ -60,6 +60,7 @@ export const formatWalletTitle = (
 
   if (networkId) {
     switch (networkId) {
+      case NetworkIdEnum.MYRIADPASEO:
       case NetworkIdEnum.MYRIADROCOCO:
       case NetworkIdEnum.MYRIADOCTOPUS:
       case NetworkIdEnum.DEBIO:

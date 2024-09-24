@@ -16,6 +16,7 @@ import ShowIf from 'components/common/show-if.component';
 import {
   NearNetworkIcon24,
   MyriadOctopusIcon,
+  MyriadPaseoIcon,
   MyriadRococoIcon,
   PolkadotNetworkIcon,
   KusamaNetworkIcon,
@@ -53,6 +54,7 @@ export const ProfileContent: React.FC<ProfileCardProps> = props => {
       kusama: <KusamaNetworkIcon />,
       near: <NearNetworkIcon24 />,
       myriad: <MyriadOctopusIcon />,
+      paseo: <MyriadPaseoIcon />,
       rococo: <MyriadRococoIcon />,
       debio: <DebioNetworkIcon />,
     }),

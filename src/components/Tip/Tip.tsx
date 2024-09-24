@@ -20,6 +20,7 @@ import {
   PolkadotNetworkIcon,
   KusamaNetworkIcon,
   DebioNetworkIcon,
+  MyriadPaseoIcon,
   MyriadRococoIcon,
 } from 'src/components/atoms/Icons';
 import ShowIf from 'src/components/common/show-if.component';
@@ -58,6 +59,10 @@ const networkOptions: MenuOptions<string>[] = [
     title: 'NEAR',
   },
   {
+    id: 'paseo',
+    title: 'Myriad Paseo',
+  },
+  {
     id: 'rococo',
     title: 'Myriad Rococo',
   },
@@ -93,6 +98,7 @@ export const Tip: React.FC<TipProps> = props => {
       kusama: <KusamaNetworkIcon width={'24px'} height={'24px'} />,
       near: <NearNetworkIcon24 width={'24px'} height={'24px'} />,
       myriad: <MyriadOctopusIcon width={'24px'} height={'24px'} />,
+      paseo: <MyriadPaseoIcon width={'24px'} height={'24px'} />,
       rococo: <MyriadRococoIcon width={'24px'} height={'24px'} />,
       debio: <DebioNetworkIcon width={'24px'} height={'24px'} />,
     }),

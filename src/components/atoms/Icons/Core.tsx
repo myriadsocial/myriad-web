@@ -13,6 +13,7 @@ import MyriadFullBlack from 'src/images/Icons/myriad-full-black.svg';
 import MyriadGrey from 'src/images/Icons/myriad-grey.svg';
 import MyriadFull from 'src/images/Icons/myriad-logo-full.svg';
 import MyriadOctopus from 'src/images/Icons/myriad-octopus.svg';
+import MyriadPaseo from 'src/images/Icons/myriad-paseo.svg';
 import MyriadRococo from 'src/images/Icons/myriad-rococo.svg';
 import Notification from 'src/images/Icons/notif-default.svg';
 import OfficialBadge from 'src/images/Icons/official-badge.svg';
@@ -31,6 +32,15 @@ export const MyriadCircleIcon: React.FC<IconProps> = props => (
 export const MyriadOctopusIcon: React.FC<IconProps> = props => (
   <SvgIcon
     component={MyriadOctopus}
+    viewBox="0 0 30 30"
+    style={{ width: props.width, height: props.height, fill: 'none' }}
+    {...props}
+  />
+);
+
+export const MyriadPaseoIcon: React.FC<IconProps> = props => (
+  <SvgIcon
+    component={MyriadPaseo}
     viewBox="0 0 30 30"
     style={{ width: props.width, height: props.height, fill: 'none' }}
     {...props}
