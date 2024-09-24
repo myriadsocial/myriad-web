@@ -52,6 +52,10 @@ export const convertToPolkadotAddress = (
 ): string => {
   if (isHex(address)) {
     switch (currentWallet.networkId) {
+      case NetworkIdEnum.MYRIADPASEO: {
+        return encodeAddress(hexToU8a(address), 42);
+      }
+
       case NetworkIdEnum.MYRIADROCOCO: {
         return encodeAddress(hexToU8a(address), 42);
       }

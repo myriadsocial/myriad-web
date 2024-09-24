@@ -47,6 +47,7 @@ export const CurrencyOption: React.FC<CurrencyOptionProps> = ({
     if (
       balance.networkId === 'myriad' ||
       balance.networkId === 'debio' ||
+      balance.networkId === 'paseo' ||
       balance.networkId === 'rococo'
     )
       return balance;

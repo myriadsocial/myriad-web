@@ -11,6 +11,7 @@ export enum NetworkIdEnum {
   POLYGON = 'polygon',
   NEAR = 'near',
   MYRIADOCTOPUS = 'myriad',
+  MYRIADPASEO = 'paseo',
   MYRIADROCOCO = 'rococo',
   KUSAMA = 'kusama',
   DEBIO = 'debio',
