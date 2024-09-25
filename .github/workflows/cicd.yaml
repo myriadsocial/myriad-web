@@ -67,6 +67,9 @@ jobs:
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
+      - name: Generate Random Tag
+        id: random-tag
+        run: echo "RANDOM_TAG=$(date +%s%N | sha256sum | head -c 8)" >> $GITHUB_OUTPUT
       - name: Build Docker
         uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56
         with:
@@ -76,7 +79,9 @@ jobs:
           context: .
           file: .maintain/docker/Dockerfile
           build-args: VCS_REF=${{ github.sha }}
-          tags: ${{ github.repository }}:${{ github.sha }}
+          tags: |
+            ${{ github.repository }}:${{ github.sha }}
+            ${{ github.repository }}:${{ steps.random-tag.outputs.RANDOM_TAG }}
           outputs: type=docker,dest=/tmp/docker_image.tar
       - name: Move Cache Docker Layers
         run: |
@@ -89,33 +94,12 @@ jobs:
           path: |
             /tmp/docker_image.tar
           retention-days: 5
-
-  release-please:
-    needs:
-      - build
-    runs-on: ubuntu-20.04
-    name: Release Please
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
-        with:
-          fetch-depth: 0
-      - name: Release
-        id: release
-        uses: google-github-actions/release-please-action@db8f2c60ee802b3748b512940dde88eabd7b7e01
-        with:
-          token: ${{ secrets.PAT }}
-          fork: true
-          release-type: node
-          package-name: ${{ github.event.repository.name }}
-          include-v-in-tag: false
     outputs:
-      release_created: ${{ steps.release.outputs.release_created }}
-      tag_name: ${{ steps.release.outputs.tag_name }}
+      random_tag: ${{ steps.random-tag.outputs.RANDOM_TAG }}
 
   publish-docker:
     needs:
-      - release-please
+      - build
     runs-on: ubuntu-20.04
     name: Publish Docker
     steps:
@@ -134,9 +118,8 @@ jobs:
           docker load --input /tmp/docker_image.tar
           docker images --no-trunc --digests ${{ github.repository }}
       - name: Tag as Release Version
-        if: ${{ needs.release-please.outputs.release_created }}
         run: |
-          docker tag ${{ github.repository }}:${{ github.sha }} ${{ github.repository }}:${{ needs.release-please.outputs.tag_name }}
+          docker tag ${{ github.repository }}:${{ github.sha }} ${{ github.repository }}:${{ needs.build.outputs.random_tag }}
           docker tag ${{ github.repository }}:${{ github.sha }} ${{ github.repository }}:latest
           docker images --no-trunc --digests ${{ github.repository }}
       - name: Push
@@ -144,7 +127,6 @@ jobs:
 
   deploy:
     needs:
-      - release-please
       - publish-docker
     permissions:
       contents: read
@@ -152,14 +134,11 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        is_release:
-          - ${{ needs.release-please.outputs.release_created || false }}
         environment:
           - TESTNET
           - MAINNET
         exclude:
-          - is_release: false
-            environment: MAINNET
+          - environment: MAINNET
     environment: ${{ matrix.environment }}
     runs-on: self-hosted
     name: Deploy to ${{ matrix.environment }}
