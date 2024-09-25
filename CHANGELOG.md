@@ -1,5 +1,57 @@
 # Changelog
 
+## [2.5.0](https://github.com/myriadsocial/myriad-web/compare/2.4.0...2.5.0) (2024-09-25)
+
+
+### Features
+
+* add new octopus and rococo icons ([#1899](https://github.com/myriadsocial/myriad-web/issues/1899)) ([81190fd](https://github.com/myriadsocial/myriad-web/commit/81190fdf2c2e7bb42d67452a3c79ab0ccb7e9d76))
+* add og link previews ([7ca36dc](https://github.com/myriadsocial/myriad-web/commit/7ca36dc8a6ed2b12e4f40c542294483a2b410106))
+* add PAT & account sharing setting ([#1907](https://github.com/myriadsocial/myriad-web/issues/1907)) ([e15a84b](https://github.com/myriadsocial/myriad-web/commit/e15a84bfa85ba4aaa5fd91e83032ce612332f72e))
+* add rococo to the exclusive content currency list ([a73f694](https://github.com/myriadsocial/myriad-web/commit/a73f6948f1df587cf62e02c150383f895257e872))
+* added new compression in webpack ([fc6ff5f](https://github.com/myriadsocial/myriad-web/commit/fc6ff5f56005bc6a4ac3b04a2348435941a84b33))
+* loopback api limit 10 ([7a8b5f2](https://github.com/myriadsocial/myriad-web/commit/7a8b5f21d10e7dec33c9e49fc4e54881cbd6797a))
+* remove huge image performance bottlenecks ([6f35d1a](https://github.com/myriadsocial/myriad-web/commit/6f35d1a7719c19e83f7af2dfe7b537ef7c7727fc))
+* update caniuse lite ([3096145](https://github.com/myriadsocial/myriad-web/commit/30961453f256a26d3d5dbdcca204ac2abb65ef8b))
+* update next.config.js no compression ([de5adce](https://github.com/myriadsocial/myriad-web/commit/de5adce970ab85f480e371e4eb6ea67bc1baaf5d))
+
+
+### Bug Fixes
+
+* add custom coolvetica font ([e324b85](https://github.com/myriadsocial/myriad-web/commit/e324b8572f925c3d7f48cdc28b3ec8b265879dde))
+* add editors to timeline creation ([#1918](https://github.com/myriadsocial/myriad-web/issues/1918)) ([e3414fe](https://github.com/myriadsocial/myriad-web/commit/e3414fee036fd4f34ad4af1364e8b994bb999985))
+* add scroll  ([#1919](https://github.com/myriadsocial/myriad-web/issues/1919)) ([9f2440d](https://github.com/myriadsocial/myriad-web/commit/9f2440de5406c8d0b9126f3443eb3fa45d862498))
+* decode uri ([b7948f8](https://github.com/myriadsocial/myriad-web/commit/b7948f81189cacd0800ecd88a5ecba4108bded0c))
+* dependency issue ([#1932](https://github.com/myriadsocial/myriad-web/issues/1932)) ([bc5d491](https://github.com/myriadsocial/myriad-web/commit/bc5d49181c29db453894def55080dacae2190aa5))
+* disable create post button when editor is empty or timeline not selected ([#1876](https://github.com/myriadsocial/myriad-web/issues/1876)) ([2409438](https://github.com/myriadsocial/myriad-web/commit/24094387f098dd3bccd37bdbd35d40c9c206fcf8))
+* download image buffer before generating ([8e09c7b](https://github.com/myriadsocial/myriad-web/commit/8e09c7b121952059df98871b7067da223c2e5e7e))
+* exclusive content on mobile ([#1939](https://github.com/myriadsocial/myriad-web/issues/1939)) ([de6df79](https://github.com/myriadsocial/myriad-web/commit/de6df7999d577f1fb8350a2bb6715550f4472e87))
+* extension support ([#1880](https://github.com/myriadsocial/myriad-web/issues/1880)) ([7c2bccc](https://github.com/myriadsocial/myriad-web/commit/7c2bccca6388a3068a31869469834ae5726969d2))
+* fail to create exclusive content ([def94fe](https://github.com/myriadsocial/myriad-web/commit/def94fea467d729040deb67a08f029009dcc8e55))
+* fail to create exclusive content post ([#1887](https://github.com/myriadsocial/myriad-web/issues/1887)) ([def94fe](https://github.com/myriadsocial/myriad-web/commit/def94fea467d729040deb67a08f029009dcc8e55))
+* filter ([f35aecd](https://github.com/myriadsocial/myriad-web/commit/f35aecd08d7d60cd37f759d9a33d0651b130ceec))
+* Issue with video upload ([#1951](https://github.com/myriadsocial/myriad-web/issues/1951)) ([1871d50](https://github.com/myriadsocial/myriad-web/commit/1871d508d71af1b3ca3a8f94226f61997bd5961c))
+* mobile bottom navbar not appearing ([#1867](https://github.com/myriadsocial/myriad-web/issues/1867)) ([d1cce12](https://github.com/myriadsocial/myriad-web/commit/d1cce121b80e7846ff056dfe46232579f0012f9e))
+* mobile import ([#1940](https://github.com/myriadsocial/myriad-web/issues/1940)) ([4f11211](https://github.com/myriadsocial/myriad-web/commit/4f1121147a424e95bd5389f5621ee9ac8070f572))
+* mobile timeline card ([#1941](https://github.com/myriadsocial/myriad-web/issues/1941)) ([1e3478e](https://github.com/myriadsocial/myriad-web/commit/1e3478e43d082ead3b7bccf45e35d5811137ca5c))
+* mobile video not uploading ([#1885](https://github.com/myriadsocial/myriad-web/issues/1885)) ([867ed19](https://github.com/myriadsocial/myriad-web/commit/867ed19150ac80ee03876d1e0c80139fd36fdc08))
+* new mobile create post UI ([#1922](https://github.com/myriadsocial/myriad-web/issues/1922)) ([1e8d1b6](https://github.com/myriadsocial/myriad-web/commit/1e8d1b60c78d4bef8bf9066e144cce62ee9d4645))
+* notification message ([#1934](https://github.com/myriadsocial/myriad-web/issues/1934)) ([9b83c82](https://github.com/myriadsocial/myriad-web/commit/9b83c8212650854c06bca957ddd93199f517eb07))
+* notification spacing ([#1938](https://github.com/myriadsocial/myriad-web/issues/1938)) ([82ef216](https://github.com/myriadsocial/myriad-web/commit/82ef2169461c9a29e80788f2cc19afa05f1848a3))
+* PAT UI ([#1949](https://github.com/myriadsocial/myriad-web/issues/1949)) ([d385a0e](https://github.com/myriadsocial/myriad-web/commit/d385a0e6a131a38b4b38193c8398418b7b423c32))
+* profile post ([#1954](https://github.com/myriadsocial/myriad-web/issues/1954)) ([aef26e5](https://github.com/myriadsocial/myriad-web/commit/aef26e511b6a05e51aef44aafad8599e12b2b41f))
+* profile post frontend ([#1953](https://github.com/myriadsocial/myriad-web/issues/1953)) ([0ea361d](https://github.com/myriadsocial/myriad-web/commit/0ea361dde8a7e833e7aebd07c2d91a7014cd9431))
+* redirect to home when logo is clicked ([#1865](https://github.com/myriadsocial/myriad-web/issues/1865)) ([ec5b702](https://github.com/myriadsocial/myriad-web/commit/ec5b702bd3d524739cffa713d651126b7e6fd4ab))
+* remove halo from profile header ([#1866](https://github.com/myriadsocial/myriad-web/issues/1866)) ([3c3ce19](https://github.com/myriadsocial/myriad-web/commit/3c3ce19c696f53e19dfd904754f82c44c3b3ce77))
+* sanitize x as twitter ([#1892](https://github.com/myriadsocial/myriad-web/issues/1892)) ([b0fcae1](https://github.com/myriadsocial/myriad-web/commit/b0fcae1758a0bf041ca815fceafd0ca32d2a98c4))
+* sed docker compose location ([90e0402](https://github.com/myriadsocial/myriad-web/commit/90e0402abc49277469cd54462d04005dff563b30))
+* user timeline update ([#1952](https://github.com/myriadsocial/myriad-web/issues/1952)) ([12f2975](https://github.com/myriadsocial/myriad-web/commit/12f2975120416d4b428dd0476b707484ac552cfb))
+
+
+### Reverts
+
+* PAT UI ([#1950](https://github.com/myriadsocial/myriad-web/issues/1950)) ([6386e19](https://github.com/myriadsocial/myriad-web/commit/6386e19c31c74b645be322fa5960941e6c0ce1e1))
+
 ## [2.4.0](https://github.com/myriadsocial/myriad-web/compare/2.3.3...2.4.0) (2023-06-15)
 
 
