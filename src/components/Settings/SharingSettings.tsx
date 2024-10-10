@@ -20,6 +20,7 @@ import { sha256 } from 'js-sha256';
 import i18n from 'src/locale';
 import { RootState } from 'src/reducers';
 import { v4 as uuidv4 } from 'uuid';
+import { useUserHook } from 'src/hooks/use-user.hook';
 
 const SharingSetting = () => {
   const styles = useStyles();
@@ -32,6 +33,8 @@ const SharingSetting = () => {
     isError: false,
     message: '',
   });
+
+  const { currentWallet } = useUserHook();
 
   const onChangeToken = (event: React.ChangeEvent<HTMLInputElement>) => {
     const input = event.target.value;
