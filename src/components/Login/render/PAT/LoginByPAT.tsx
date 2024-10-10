@@ -12,7 +12,6 @@ import { useStyles } from './LoginByPAT.style';
 
 import { COOKIE_INSTANCE_URL } from 'components/SelectServer';
 import SelectServer from 'src/components/SelectServer';
-import { useAuthLinkHook } from 'src/hooks/auth-link.hook';
 import { useAlertHook } from 'src/hooks/use-alert.hook';
 import { ServerListProps } from 'src/interfaces/server-list';
 import i18n from 'src/locale';

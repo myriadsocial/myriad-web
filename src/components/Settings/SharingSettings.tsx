@@ -16,7 +16,6 @@ import { Modal } from '../atoms/Modal';
 import { useStyles } from './Settings.styles';
 
 import { sha256 } from 'js-sha256';
-import { useUserHook } from 'src/hooks/use-user.hook';
 import * as AccessTokenAPI from 'src/lib/api/access-token';
 import i18n from 'src/locale';
 import { RootState } from 'src/reducers';
