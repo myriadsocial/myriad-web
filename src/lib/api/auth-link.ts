@@ -72,14 +72,12 @@ export const loginWithLink = async (
 
 export const loginWithAccessToken = async (
   token: string,
-  rpcUrl: string,
 ): Promise<LoginResponseProps> => {
   const { data } = await MyriadAPI().request({
     url: '/authentication/login/pat',
     method: 'POST',
     data: {
       token,
-      rpcUrl,
     },
     headers: {
       'Content-Type': 'application/json',

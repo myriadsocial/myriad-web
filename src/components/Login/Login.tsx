@@ -18,6 +18,7 @@ import { Accounts } from './render/Accounts';
 import CreateAccounts from './render/CreateAccounts/CreateAccounts';
 import LoginByEmail from './render/Email/LoginByEmail';
 import { Options } from './render/Options';
+import LoginByPAT from './render/PAT/LoginByPAT';
 import { Profile } from './render/Profile';
 import SigninMethod from './render/SignInMethod/SigninMethod';
 
@@ -343,6 +344,12 @@ export const Login: React.FC<LoginProps> = props => {
             index={false}
             path="/email"
             element={<LoginByEmail onNext={checkEmailRegistered} />}
+          />
+
+          <Route
+            index={false}
+            path="/pat"
+            element={<LoginByPAT onNext={checkEmailRegistered} />}
           />
 
           <Route

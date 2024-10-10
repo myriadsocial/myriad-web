@@ -128,7 +128,6 @@ const createOptions = (req: NextApiRequest) => ({
       // e.g. domain, username, password, 2FA token, etc.
       credentials: {
         token: { label: 'Token', type: 'text' },
-        rpcUrl: { label: 'rpc url', type: 'text' },
         instanceURL: { label: 'Instance url', type: 'text' },
       },
       async authorize(credentials) {
@@ -137,10 +136,7 @@ const createOptions = (req: NextApiRequest) => ({
         // Initialize instance api url
         initialize({ apiURL: credentials.instanceURL });
 
-        const data = await AuthLinkAPI.loginWithAccessToken(
-          credentials.token,
-          credentials.rpcUrl,
-        );
+        const data = await AuthLinkAPI.loginWithAccessToken(credentials.token);
 
         if (!data?.token?.accessToken) throw Error('Failed to authorize user!');
 

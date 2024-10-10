@@ -13,14 +13,17 @@ import {
   Typography,
 } from '@material-ui/core';
 
+import { ApiPromise, WsProvider } from '@polkadot/api';
+
 import { Modal } from '../atoms/Modal';
 import { useStyles } from './Settings.styles';
 
 import { sha256 } from 'js-sha256';
+import { useUserHook } from 'src/hooks/use-user.hook';
+import * as AccessTokenAPI from 'src/lib/api/access-token';
 import i18n from 'src/locale';
 import { RootState } from 'src/reducers';
 import { v4 as uuidv4 } from 'uuid';
-import { useUserHook } from 'src/hooks/use-user.hook';
 
 const SharingSetting = () => {
   const styles = useStyles();
@@ -45,7 +48,7 @@ const SharingSetting = () => {
     setToken(event.target.value);
   };
 
-  const onClickAddToken = () => {
+  const onClickAddToken = async () => {
     const token = uuidv4();
     const tokenHash = sha256(token);
     const first = token.slice(0, 4);
@@ -53,7 +56,12 @@ const SharingSetting = () => {
     const replacement = 'xxxx-xxxx-xxxx-xxxx-xxxxxxxx';
     const disguise = first + replacement + second;
     console.log(tokenHash, disguise);
-    setModalOpen(true);
+    try {
+      await AccessTokenAPI.postToken(tokenHash, disguise);
+      setModalOpen(true);
+    } catch (error) {
+      console.error(error);
+    }
 
     // TODO create access token on blockchain
     // await createAccessToken(hash, wallet)
@@ -84,36 +92,6 @@ const SharingSetting = () => {
           Token is {tokenValue}
         </Typography>
       </Modal>
-      <Typography className={styles.subtitle}>Input Code Here</Typography>
-      <div
-        className={styles.option}
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}>
-        <>
-          <TextField
-            variant="outlined"
-            fullWidth
-            label={i18n.t('Setting.List_Menu.Token_Code')}
-            placeholder={i18n.t('Setting.List_Menu.Token_Code')}
-            value={tokenValue}
-            style={{ marginBottom: 'unset' }}
-            onChange={onChangeToken}
-            error={error.isError}
-            helperText={error.isError ? error.message : ''}
-          />
-          <Button
-            size="small"
-            variant="contained"
-            color="primary"
-            style={{ marginLeft: '24px', marginRight: '17px' }}
-            onClick={onClickAddToken}>
-            Add
-          </Button>
-        </>
-      </div>
       <div>
         <Button
           size="medium"
