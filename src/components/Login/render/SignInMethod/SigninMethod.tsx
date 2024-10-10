@@ -20,6 +20,8 @@ export default function SigninMethod({
   const handleSelected = ({ method }: { method: string }) => {
     if (method === 'web2') {
       navigate('/email');
+    } else if (method === 'pat') {
+      navigate('/pat');
     } else {
       navigate('/options');
     }
@@ -86,6 +88,15 @@ export default function SigninMethod({
             onClick={() => handleSelected({ method: 'web2' })}
             disabled={disableSignIn}
             tooltip={i18n.t('Sign_In.Email.tooltip')}
+          />
+          <div className={styles.textOr}>or</div>
+          <CardSign
+            title={i18n.t('Sign_In.Token.title')}
+            desc={i18n.t('Sign_In.Token.desc')}
+            image={<LoginWeb2 />}
+            onClick={() => handleSelected({ method: 'pat' })}
+            disabled={disableSignIn}
+            tooltip={i18n.t('Sign_In.Token.tooltip')}
           />
         </div>
       </div>
