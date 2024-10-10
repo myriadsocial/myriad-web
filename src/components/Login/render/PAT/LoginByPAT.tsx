@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router';
 
@@ -16,7 +16,6 @@ import { useAuthLinkHook } from 'src/hooks/auth-link.hook';
 import { useAlertHook } from 'src/hooks/use-alert.hook';
 import { ServerListProps } from 'src/interfaces/server-list';
 import i18n from 'src/locale';
-import validator from 'validator';
 
 type LoginByPATProps = {
   onNext: (
@@ -31,12 +30,10 @@ const LoginByPAT = ({ onNext }: LoginByPATProps) => {
   const router = useRouter();
   const { publicRuntimeConfig } = getConfig();
   const { showAlert } = useAlertHook();
-
-  const { requestLink } = useAuthLinkHook();
   const [cookies] = useCookies([COOKIE_INSTANCE_URL]);
 
   const [token, setToken] = useState('');
-  const [error, setError] = useState({
+  const [error] = useState({
     isError: false,
     message: '',
   });

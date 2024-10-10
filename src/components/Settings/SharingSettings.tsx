@@ -6,14 +6,11 @@ import { useSelector } from 'react-redux';
 
 import {
   Button,
-  TextField,
   Paper,
   Grid,
   CircularProgress,
   Typography,
 } from '@material-ui/core';
-
-import { ApiPromise, WsProvider } from '@polkadot/api';
 
 import { Modal } from '../atoms/Modal';
 import { useStyles } from './Settings.styles';
@@ -32,21 +29,6 @@ const SharingSetting = () => {
   );
   const [tokenValue, setToken] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
-  const [error, setError] = useState({
-    isError: false,
-    message: '',
-  });
-
-  const { currentWallet } = useUserHook();
-
-  const onChangeToken = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const input = event.target.value;
-
-    if (!input.length) {
-      setError({ isError: false, message: '' });
-    }
-    setToken(event.target.value);
-  };
 
   const onClickAddToken = async () => {
     const token = uuidv4();
