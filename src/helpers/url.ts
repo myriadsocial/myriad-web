@@ -8,6 +8,8 @@ const postUrlRegex = {
     /^(?:https?:\/\/)?(?:www\.|m\.|mobile\.|touch\.|mbasic\.)?(?:facebook\.com|fb(?:\.me|\.com))\/(?!$)(?:(?:\w)*#!\/)?(?:pages\/)?(?:photo\.php\?fbid=)?(?:[\w\-]*\/)*?(?:\/)?(?:profile\.php\?id=)?([^\/?&\s]*)(?:\/|&|\?)?.*$/g,
   [SocialsEnum.REDDIT]:
     /(?:^.+?)(?:reddit.com\/r)(?:\/[\w\d]+){2}(?:\/)([\w\d]*)/g,
+  [SocialsEnum.YOUTUBE]:
+    /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/(?:watch\?v=)?[\w-]{11}$/,
 };
 
 export const parsePostUrl = (
@@ -43,4 +45,11 @@ export const forceHttps = (url: string) => {
   }
 
   return url;
+};
+
+export const extractYouTubeVideoId = (url: string): string | null => {
+  const regex =
+    /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?.*v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+  const match = url.match(regex);
+  return match ? match[1] : null;
 };

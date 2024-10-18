@@ -24,9 +24,11 @@ import { useToggle } from 'src/hooks/use-toggle.hook';
 import { InfoIconYellow } from 'src/images/Icons';
 import { ReferenceType } from 'src/interfaces/interaction';
 import i18n from 'src/locale';
+import { extractYouTubeVideoId } from 'src/helpers/url';
 
 const Reddit = dynamic(() => import('./render/Reddit'), { ssr: false });
 const Twitter = dynamic(() => import('./render/Twitter'), { ssr: false });
+const YouTube = dynamic(() => import('./render/YouTube'), { ssr: false });
 const Gallery = dynamic(() => import('src/components/atoms/Gallery/Gallery'), {
   ssr: false,
 });
@@ -49,11 +51,11 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
 
   const downvoted = post.votes
     ? post.votes.filter(vote => vote.userId === user?.id && !vote.state)
-        .length > 0
+      .length > 0
     : false;
   const upvoted = post.votes
     ? post.votes.filter(vote => vote.userId === user?.id && vote.state).length >
-      0
+    0
     : false;
 
   const isPostCreator = post.createdBy === user?.id;
@@ -98,6 +100,13 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [downvoted, upvoted]);
+
+
+  // Extract YouTube Video ID
+  let videoId: string | null = null;
+  if (post.platform === 'youtube' && post.url) {
+    videoId = extractYouTubeVideoId(post.url);
+  }
 
   return (
     <div className={styles.wrapper}>
@@ -160,6 +169,14 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
               onHashtagClicked={handleHashtagClicked}
             />
           </ShowIf>
+
+          <ShowIf condition={post.platform === 'youtube' && Boolean(videoId)}>
+              <YouTube
+                text={post.text}
+                onHashtagClicked={handleHashtagClicked}
+                videoId={videoId}
+              />
+            </ShowIf>
 
           {post.asset?.exclusiveContents &&
             post.asset?.exclusiveContents.length > 0 &&
