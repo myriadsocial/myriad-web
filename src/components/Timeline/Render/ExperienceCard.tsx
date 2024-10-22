@@ -59,6 +59,7 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = props => {
   const confirm = useConfirm();
   const enqueueSnackbar = useEnqueueSnackbar();
   const [promptSignin, setPromptSignin] = useState(false);
+  const [isSubscribing, setSubscribing] = useState(false);
   const [menuAnchorElement, setMenuAnchorElement] =
     useState<null | HTMLElement>(null);
   const [shareAnchorElement, setShareAnchorElement] =
@@ -72,6 +73,7 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = props => {
     if (experience.private && experience.friend) return false;
     return false;
   };
+  const isExclusive = experience.exclusive ? experience.exclusive : false
 
   const isSubscribed = () => {
     return (
@@ -175,6 +177,14 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = props => {
     });
   };
 
+  const handleSubscription = () => {
+    setSubscribing(true)
+  }
+
+  const closeSubscribing = () => {
+    setSubscribing(false)
+  }
+
   const confirmDeleteExperience = () => {
     handleCloseSettings();
 
@@ -259,11 +269,11 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = props => {
               color="primary"
               size="small"
               onClick={
-                isSubscribed()
+                isExclusive ? handleSubscription : isSubscribed()
                   ? openUnsubscribeConfirmation
                   : handleSubscribeExperience
               }>
-              {isSubscribed()
+              {isExclusive ? i18n.t('Experience.Preview.Button.Subscription') : isSubscribed()
                 ? i18n.t('Experience.Preview.Button.Unsubscribe')
                 : i18n.t('Experience.Preview.Button.Subscribe')}
             </Button>
@@ -381,6 +391,21 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = props => {
             }}
           />
         </div>
+      </Modal>
+      <Modal
+      title="subscription"
+      subtitle="subscription"
+      className={style.modal}
+      open={isSubscribing}
+      onClose={closeSubscribing}
+      >
+        <Button
+              variant="contained"
+              color="primary"
+              size="small">
+              {i18n.t('Experience.Preview.Button.Subscription')}
+            </Button>
+
       </Modal>
       <ExperienceSignInDialog
         open={promptSignin}
