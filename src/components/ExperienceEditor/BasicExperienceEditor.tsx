@@ -100,11 +100,11 @@ export const BasicExperienceEditor: React.FC<BasicExperienceEditorProps> =
     });
 
     const onSwitch = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const value = event.target.checked
+      const value = event.target.checked;
       onExperience(prevExperience => ({
         ...prevExperience,
-        exclusive: value
-      }))
+        exclusive: value,
+      }));
       setDetailChanged(experience['exclusive'] !== value);
     };
 
@@ -254,7 +254,9 @@ export const BasicExperienceEditor: React.FC<BasicExperienceEditorProps> =
               </ShowIf>
             </FormControl>
             <FormGroup>
-              <FormControlLabel control={<Switch onChange={onSwitch} />} label="Exclusive"></FormControlLabel>
+              <FormControlLabel
+                control={<Switch onChange={onSwitch} />}
+                label="Exclusive"></FormControlLabel>
             </FormGroup>
           </div>
           <div className={styles.row2}>

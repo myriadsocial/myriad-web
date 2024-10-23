@@ -273,15 +273,14 @@ export class PolkadotJs implements IProvider {
       // passing the injected account address as the first argument of signAndSend
       // will allow the api to retrieve the signer and the user will see the extension
       // popup asking to sign the balance transfer transaction
-      
+
       const txInfo = await transferExtrinsic.signAndSend(signer.address, {
         signer: injector.signer,
         // make sure nonce does not stuck
         nonce: -1,
-      }
-    );
+      });
 
-    return txInfo.toHex();
+      return txInfo.toHex();
     } catch (error) {
       console.log(error);
       throw error;
