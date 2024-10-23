@@ -22,7 +22,7 @@ import {
 import Menu from '@material-ui/core/Menu';
 import BaseMenuItem from '@material-ui/core/MenuItem';
 
-import { BN, BN_TEN, BN_ZERO } from '@polkadot/util';
+import { BN, BN_TEN } from '@polkadot/util';
 
 import { useStyles } from './experience-card.style';
 
@@ -84,10 +84,9 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = props => {
   };
   const isExclusive = experience.exclusive ? experience.exclusive : false;
 
-  const { balanceDetails: balances, loading } = useSelector<
-    RootState,
-    BalanceState
-  >(state => state.balanceState);
+  const { balanceDetails: balances } = useSelector<RootState, BalanceState>(
+    state => state.balanceState,
+  );
 
   const isSubscribed = () => {
     return (
