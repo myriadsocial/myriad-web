@@ -32,6 +32,13 @@ import { useExperienceHook } from 'src/hooks/use-experience-hook';
 import { Experience, WrappedExperience } from 'src/interfaces/experience';
 import { User } from 'src/interfaces/user';
 import i18n from 'src/locale';
+import { useWallet } from 'src/hooks/use-wallet-hook';
+import * as UserAPI from 'src/lib/api/user';
+import { BN, BN_TEN, BN_ZERO } from '@polkadot/util';
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/reducers';
+import { BalanceState } from 'src/reducers/balance/reducer';
+import { ReferenceType } from 'src/interfaces/interaction';
 
 const MenuItem = WithAuthorizeAction(BaseMenuItem);
 
@@ -66,6 +73,7 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = props => {
     useState<null | HTMLElement>(null);
   const { userExperiencesMeta, removeExperience, loadExperience } =
     useExperienceHook();
+  const { sendTip } = useWallet()
   const link = publicRuntimeConfig.appAuthURL + `?type=all&id=${experience.id}`;
   const isOwnExperience = experience?.createdBy === user?.id;
   const isHidden = () => {
@@ -74,6 +82,11 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = props => {
     return false;
   };
   const isExclusive = experience.exclusive ? experience.exclusive : false
+
+  const { balanceDetails: balances, loading } = useSelector<
+    RootState,
+    BalanceState
+  >(state => state.balanceState);
 
   const isSubscribed = () => {
     return (
@@ -185,6 +198,21 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = props => {
     setSubscribing(false)
   }
 
+  const handlePaySubscription = async () => {
+    const receiver = await UserAPI.getWalletAddress(experience.createdBy)
+    const defaultCurrency = balances[0]
+    const amount = BN_TEN.pow(new BN(defaultCurrency.decimal - 2))
+    await sendTip(
+      receiver,
+      amount,
+      balances[0],
+      ReferenceType.EXCLUSIVE_TIMELINE,
+      experience.id
+    );
+    handleSubscribeExperience();
+    closeSubscribing()
+  }
+
   const confirmDeleteExperience = () => {
     handleCloseSettings();
 
@@ -268,12 +296,13 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = props => {
               variant="contained"
               color="primary"
               size="small"
+              disabled={isExclusive && isSubscribed()}
               onClick={
                 isExclusive ? handleSubscription : isSubscribed()
                   ? openUnsubscribeConfirmation
                   : handleSubscribeExperience
               }>
-              {isExclusive ? i18n.t('Experience.Preview.Button.Subscription') : isSubscribed()
+              {isExclusive ? isSubscribed() ? "subscribed" : i18n.t('Experience.Preview.Button.Subscription') : isSubscribed()
                 ? i18n.t('Experience.Preview.Button.Unsubscribe')
                 : i18n.t('Experience.Preview.Button.Subscribe')}
             </Button>
@@ -399,10 +428,13 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = props => {
       open={isSubscribing}
       onClose={closeSubscribing}
       >
+        
         <Button
               variant="contained"
               color="primary"
-              size="small">
+              size="small"
+              onClick={handlePaySubscription}
+              >
               {i18n.t('Experience.Preview.Button.Subscription')}
             </Button>
 
