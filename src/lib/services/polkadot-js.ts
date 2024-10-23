@@ -260,62 +260,27 @@ export class PolkadotJs implements IProvider {
 
       callback && callback({ signerOpened: true });
 
-      // here we use the api to create a balance transfer to some account of a value of 12345678
       const { referenceId: accountId, referenceType } = walletDetail;
       const isWalletAddress =
         referenceType === WalletReferenceType.WALLET_ADDRESS;
       const assetId = parseInt(referenceId);
       const transferExtrinsic = isWalletAddress
         ? !referenceId
-          ? api.tx.balances.transfer(accountId, amount)
+          ? api.tx.balances.transferKeepAlive(accountId, amount)
           : api.tx.octopusAssets.transfer(assetId, accountId, amount)
         : api.tx.tipping.sendTip(walletDetail, amount);
 
       // passing the injected account address as the first argument of signAndSend
       // will allow the api to retrieve the signer and the user will see the extension
       // popup asking to sign the balance transfer transaction
-      const txInfo = await transferExtrinsic.signAsync(signer.address, {
+
+      const txInfo = await transferExtrinsic.signAndSend(signer.address, {
         signer: injector.signer,
         // make sure nonce does not stuck
         nonce: -1,
       });
 
-      const txHash: string = await new Promise((resolve, reject) => {
-        txInfo
-          .send(({ status, isError, dispatchError }) => {
-            if (status.isInBlock) {
-              console.log(`\tBlock hash    : ${status.asInBlock.toHex()}`);
-            } else if (status.isFinalized) {
-              console.log(`\tFinalized     : ${status.asFinalized.toHex()}`);
-              resolve(status.asFinalized.toHex());
-            } else if (isError) {
-              console.log(`\tFinalized     : null`);
-              reject('FailedToSendTip');
-            }
-
-            if (dispatchError) {
-              if (dispatchError.isModule) {
-                const { name } = api.registry.findMetaError(
-                  dispatchError.asModule,
-                );
-
-                reject(new Error(name));
-              } else {
-                const dispatchErrorType = dispatchError.toString();
-                const parseDispatch = JSON.parse(dispatchErrorType);
-
-                const values: string[] = Object.values(parseDispatch);
-
-                reject(new Error(values[0] ?? 'ExtrinsicFailed'));
-              }
-            }
-          })
-          .catch(err => {
-            reject(err);
-          });
-      });
-
-      return txHash;
+      return txInfo.toHex();
     } catch (error) {
       console.log(error);
       throw error;
