@@ -10,11 +10,14 @@ import React, { useState, useRef } from 'react';
 import {
   Button,
   FormControl,
+  FormControlLabel,
+  FormGroup,
   FormHelperText,
   IconButton,
   InputLabel,
   OutlinedInput,
   SvgIcon,
+  Switch,
   TextField,
   Typography,
 } from '@material-ui/core';
@@ -96,11 +99,19 @@ export const BasicExperienceEditor: React.FC<BasicExperienceEditorProps> =
       selectedUserId: false,
     });
 
+    const onSwitch = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.checked;
+      onExperience(prevExperience => ({
+        ...prevExperience,
+        exclusive: value,
+      }));
+      setDetailChanged(experience['exclusive'] !== value);
+    };
+
     const handleChange =
       (field: keyof ExperienceProps) =>
       (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value.trimStart();
-
         onExperience(prevExperience => ({
           ...prevExperience,
           [field]: value,
@@ -242,6 +253,11 @@ export const BasicExperienceEditor: React.FC<BasicExperienceEditorProps> =
                 </div>
               </ShowIf>
             </FormControl>
+            <FormGroup>
+              <FormControlLabel
+                control={<Switch onChange={onSwitch} />}
+                label="Exclusive"></FormControlLabel>
+            </FormGroup>
           </div>
           <div className={styles.row2}>
             <FormControl fullWidth variant="outlined" error={errors.name}>

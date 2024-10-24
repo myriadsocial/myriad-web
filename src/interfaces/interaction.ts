@@ -6,6 +6,7 @@ export enum ReferenceType {
   USER = 'user',
   PEOPLE = 'people',
   EXCLUSIVE_CONTENT = 'unlockable_content',
+  EXCLUSIVE_TIMELINE = 'unlockable_timeline',
 }
 
 export enum SectionType {

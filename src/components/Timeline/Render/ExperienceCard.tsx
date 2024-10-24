@@ -2,6 +2,7 @@ import { DotsVerticalIcon, DuplicateIcon } from '@heroicons/react/outline';
 
 import React, { useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
+import { useSelector } from 'react-redux';
 
 import getConfig from 'next/config';
 import dynamic from 'next/dynamic';
@@ -21,6 +22,8 @@ import {
 import Menu from '@material-ui/core/Menu';
 import BaseMenuItem from '@material-ui/core/MenuItem';
 
+import { BN, BN_TEN } from '@polkadot/util';
+
 import { useStyles } from './experience-card.style';
 
 import { WithAuthorizeAction } from 'components/common/Authorization/WithAuthorizeAction';
@@ -29,9 +32,14 @@ import ShowIf from 'components/common/show-if.component';
 import { Modal } from 'src/components/atoms/Modal';
 import useConfirm from 'src/components/common/Confirm/use-confirm.hook';
 import { useExperienceHook } from 'src/hooks/use-experience-hook';
+import { useWallet } from 'src/hooks/use-wallet-hook';
 import { Experience, WrappedExperience } from 'src/interfaces/experience';
+import { ReferenceType } from 'src/interfaces/interaction';
 import { User } from 'src/interfaces/user';
+import * as UserAPI from 'src/lib/api/user';
 import i18n from 'src/locale';
+import { RootState } from 'src/reducers';
+import { BalanceState } from 'src/reducers/balance/reducer';
 
 const MenuItem = WithAuthorizeAction(BaseMenuItem);
 
@@ -59,12 +67,14 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = props => {
   const confirm = useConfirm();
   const enqueueSnackbar = useEnqueueSnackbar();
   const [promptSignin, setPromptSignin] = useState(false);
+  const [isSubscribing, setSubscribing] = useState(false);
   const [menuAnchorElement, setMenuAnchorElement] =
     useState<null | HTMLElement>(null);
   const [shareAnchorElement, setShareAnchorElement] =
     useState<null | HTMLElement>(null);
   const { userExperiencesMeta, removeExperience, loadExperience } =
     useExperienceHook();
+  const { sendTip } = useWallet();
   const link = publicRuntimeConfig.appAuthURL + `?type=all&id=${experience.id}`;
   const isOwnExperience = experience?.createdBy === user?.id;
   const isHidden = () => {
@@ -72,6 +82,11 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = props => {
     if (experience.private && experience.friend) return false;
     return false;
   };
+  const isExclusive = experience.exclusive ? experience.exclusive : false;
+
+  const { balanceDetails: balances } = useSelector<RootState, BalanceState>(
+    state => state.balanceState,
+  );
 
   const isSubscribed = () => {
     return (
@@ -175,6 +190,29 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = props => {
     });
   };
 
+  const handleSubscription = () => {
+    setSubscribing(true);
+  };
+
+  const closeSubscribing = () => {
+    setSubscribing(false);
+  };
+
+  const handlePaySubscription = async () => {
+    const receiver = await UserAPI.getWalletAddress(experience.createdBy);
+    const defaultCurrency = balances[0];
+    const amount = BN_TEN.pow(new BN(defaultCurrency.decimal - 2));
+    await sendTip(
+      receiver,
+      amount,
+      balances[0],
+      ReferenceType.EXCLUSIVE_TIMELINE,
+      experience.id,
+    );
+    handleSubscribeExperience();
+    closeSubscribing();
+  };
+
   const confirmDeleteExperience = () => {
     handleCloseSettings();
 
@@ -258,12 +296,19 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = props => {
               variant="contained"
               color="primary"
               size="small"
+              disabled={isExclusive && isSubscribed()}
               onClick={
-                isSubscribed()
+                isExclusive
+                  ? handleSubscription
+                  : isSubscribed()
                   ? openUnsubscribeConfirmation
                   : handleSubscribeExperience
               }>
-              {isSubscribed()
+              {isExclusive
+                ? isSubscribed()
+                  ? 'subscribed'
+                  : i18n.t('Experience.Preview.Button.Subscription')
+                : isSubscribed()
                 ? i18n.t('Experience.Preview.Button.Unsubscribe')
                 : i18n.t('Experience.Preview.Button.Subscribe')}
             </Button>
@@ -381,6 +426,20 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = props => {
             }}
           />
         </div>
+      </Modal>
+      <Modal
+        title="subscription"
+        subtitle="subscription"
+        className={style.modal}
+        open={isSubscribing}
+        onClose={closeSubscribing}>
+        <Button
+          variant="contained"
+          color="primary"
+          size="small"
+          onClick={handlePaySubscription}>
+          {i18n.t('Experience.Preview.Button.Subscription')}
+        </Button>
       </Modal>
       <ExperienceSignInDialog
         open={promptSignin}

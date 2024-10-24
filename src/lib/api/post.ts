@@ -133,6 +133,17 @@ export const getPost = async (
     params.owner = userId;
   }
 
+  if (params.experienceId) {
+    const { data } = await MyriadAPI().request<PostList>({
+      url: `/experience/${params.experienceId}/posts`,
+      method: 'GET',
+      params: {
+        filter: filterParams,
+      },
+    });
+    return data;
+  }
+
   const { data } = await MyriadAPI().request<PostList>({
     url: '/user/posts',
     method: 'GET',
@@ -155,16 +166,6 @@ export const getPost = async (
     data.data.filter(post => {
       return post.createdBy === fields.owner;
     });
-  }
-  if (data.data.length === 0 && params.experienceId) {
-    const { data } = await MyriadAPI().request<PostList>({
-      url: `/experience/${params.experienceId}/posts`,
-      method: 'GET',
-      params: {
-        filter: filterParams,
-      },
-    });
-    return data;
   }
 
   return data;
