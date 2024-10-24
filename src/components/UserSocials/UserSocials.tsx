@@ -56,6 +56,11 @@ export const UserSocials: React.FC<UserSocialsProps> = props => {
           selectedSocials.people?.username as string
         }`;
         break;
+      case SocialsEnum.YOUTUBE:
+        url = `https://youtube.com/channel/${
+          selectedSocials.people?.username as string
+        }`;
+        break;
     }
 
     return url;

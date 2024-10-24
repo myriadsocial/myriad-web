@@ -161,7 +161,7 @@ export const useTimelineFilter = (filters?: TimelineFilterFields) => {
           filterFields.owner = people.id;
           break;
         case 'imported':
-          filterFields.platform = ['facebook', 'reddit', 'twitter'];
+          filterFields.platform = ['facebook', 'reddit', 'twitter', 'youtube'];
           filterFields.owner = people.id;
           break;
 

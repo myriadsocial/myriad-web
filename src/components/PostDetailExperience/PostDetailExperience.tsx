@@ -16,6 +16,7 @@ import ShowIf from 'src/components/common/show-if.component';
 import { isJson } from 'src/helpers/string';
 import { Post } from 'src/interfaces/post';
 import { User } from 'src/interfaces/user';
+import { extractYouTubeVideoId } from 'src/helpers/url';
 
 const Gallery = dynamic(() => import('../atoms/Gallery/Gallery'), {
   ssr: false,
@@ -24,6 +25,9 @@ const Reddit = dynamic(() => import('../PostDetail/render/Reddit'), {
   ssr: false,
 });
 const Twitter = dynamic(() => import('../PostDetail/render/Twitter'), {
+  ssr: false,
+});
+const YouTube = dynamic(() => import('../PostDetail/render/YouTube'), {
   ssr: false,
 });
 
@@ -77,6 +81,12 @@ export const PostDetailExperience: React.FC<PostDetailProps> = props => {
     setMaxLength(undefined);
   };
 
+  // Extract YouTube Video ID
+  let videoId: string | null = null;
+  if (post.platform === 'youtube' && post.url) {
+    videoId = extractYouTubeVideoId(post.url);
+  }
+
   return (
     <Paper square className={styles.root} ref={ref}>
       <HeaderComponentExperience
@@ -118,20 +128,28 @@ export const PostDetailExperience: React.FC<PostDetailProps> = props => {
             />
           </ShowIf>
 
-          {post?.asset?.images && post?.asset?.images?.length > 0 && (
-            <Gallery images={post.asset?.images} variant="vertical" />
-          )}
-
-          {post?.asset?.videos && post?.asset?.videos?.length > 0 && (
-            <Video url={post.asset.videos[0]} width={560} />
-          )}
+          <ShowIf condition={post.platform === 'youtube' && Boolean(videoId)}>
+            <YouTube
+              text={post.text}
+              onHashtagClicked={onHashtagClicked}
+              videoId={videoId}
+            />
+          </ShowIf>
         </ShowIf>
+
+        {post?.asset?.images && post?.asset?.images?.length > 0 && (
+          <Gallery images={post.asset?.images} variant="vertical" />
+        )}
+
+        {post?.asset?.videos && post?.asset?.videos?.length > 0 && (
+          <Video url={post.asset.videos[0]} width={560} />
+        )}
 
         {post?.asset?.images?.length === 0 &&
           post?.asset?.videos?.length === 0 &&
           post.embeddedURL &&
           !post.deletedAt && <LinkPreview embed={post.embeddedURL} />}
       </div>
-    </Paper>
+    </Paper >
   );
 };
