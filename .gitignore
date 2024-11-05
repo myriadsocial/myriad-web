@@ -107,6 +107,6 @@ prisma
 .vscode
 
 # Docs
-/docs/*
+# /docs/*
 # exception to the rule
 !docs/.gitkeep

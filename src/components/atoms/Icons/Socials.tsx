@@ -15,6 +15,7 @@ import VK from 'src/images/socials/vk.svg';
 import WeChat from 'src/images/socials/wechat.svg';
 import Weibo from 'src/images/socials/weibo.svg';
 import { SocialsEnum } from 'src/interfaces/social';
+import Youtube from 'src/images/socials/youtube.svg';
 
 export const TwitterIcon = (
   <SvgIcon viewBox="0 0 20 20" style={{ background: '#3b5998', fontSize: 20 }}>
@@ -45,4 +46,5 @@ export const socials: Record<SocialsEnum, JSX.Element> = {
   [SocialsEnum.VK]: <VK />,
   [SocialsEnum.WEIBO]: <Weibo />,
   [SocialsEnum.X]: <Twitter />,
+  [SocialsEnum.YOUTUBE]: <Youtube />,
 };

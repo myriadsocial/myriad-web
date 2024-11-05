@@ -52,6 +52,7 @@ const prefix: Record<SocialsEnum, string> = {
   [SocialsEnum.WECHAT]: '',
   [SocialsEnum.WEIBO]: '',
   [SocialsEnum.X]: '',
+  [SocialsEnum.YOUTUBE]: 'https://youtube.com/',
 };
 
 export const AddSocialMedia: React.FC<AddSocialMediaProps> = props => {
