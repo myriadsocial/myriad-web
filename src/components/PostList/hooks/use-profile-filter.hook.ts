@@ -130,7 +130,7 @@ export const useProfileFilter = (
           filterFields.owner = people.id;
           break;
         case 'imported':
-          filterFields.platform = ['facebook', 'reddit', 'twitter'];
+          filterFields.platform = ['facebook', 'reddit', 'twitter', 'youtube'];
           filterFields.owner = people.id;
           break;
 
