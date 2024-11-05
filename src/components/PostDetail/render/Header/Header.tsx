@@ -71,6 +71,9 @@ export const PostHeader: React.FC<PostHeaderProps> = props => {
       case SocialsEnum.REDDIT:
         url = `https://reddit.com/user/${post.people?.username as string}`;
         break;
+      case SocialsEnum.YOUTUBE:
+        url = `https://youtube.com/channel/${post.people?.username as string}`;
+        break;
       case 'myriad':
         url = `/profile/${post.createdBy}`;
         break;

@@ -33,6 +33,8 @@ const regex = {
     /^(?:https?:\/\/)?(?:www\.|m\.|mobile\.|touch\.|mbasic\.)?(?:facebook\.com|fb(?:\.me|\.com))\/(?!$)(?:(?:\w)*#!\/)?(?:pages\/)?(?:photo\.php\?fbid=)?(?:[\w\-]*\/)*?(?:\/)?(?:profile\.php\?id=)?([^\/?&\s]*)(?:\/|&|\?)?.*$/s,
   [SocialsEnum.REDDIT]:
     /(?:^.+?)(?:reddit.com)(\/r|\/user)(?:\/[\w\d]+){2}(?:\/)([\w\d]*)/,
+  [SocialsEnum.YOUTUBE]:
+    /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/(?:watch\?v=)?([\w-]{11})$/,
 };
 
 export const PostImport: React.FC<PostImportProps> = props => {
@@ -52,6 +54,9 @@ export const PostImport: React.FC<PostImportProps> = props => {
   }, [value]);
 
   const handleSanitizeUrl = () => {
+    if (social === SocialsEnum.YOUTUBE && postId) {
+      return `https://www.youtube.com/embed/${postId}`;
+    }
     return url.replace(/x\.com/, 'twitter.com');
   };
 
@@ -97,6 +102,15 @@ export const PostImport: React.FC<PostImportProps> = props => {
     if (matchReddit) {
       setSocial(SocialsEnum.REDDIT);
       setPostId(matchReddit[1]);
+
+      return;
+    }
+
+    const matchYoutube = regex[SocialsEnum.YOUTUBE].exec(url);
+
+    if (matchYoutube) {
+      setSocial(SocialsEnum.YOUTUBE);
+      setPostId(matchYoutube[3]);
 
       return;
     }

@@ -4,6 +4,8 @@ import { BiVideoPlus } from 'react-icons/bi';
 import { CiCircleRemove } from 'react-icons/ci';
 import { LuImagePlus } from 'react-icons/lu';
 import * as UploadAPI from 'src/lib/api/upload';
+import React from 'react';
+import { YouTubeEmbed } from '../atoms/Embed/YouTube/YoutubeEmbed';
 
 type MobileEmbedProps = {
   uploadVideoFieldRef: any;
@@ -133,9 +135,25 @@ export const MobileEmbed: React.FC<MobileEmbedProps> = props => {
               style={{ position: 'absolute', zIndex: 2, right: '-1%' }}>
               <CiCircleRemove size={30} />
             </IconButton>
-            <video width="100%" src={videoUrl[0]}>
-              Browser does not support video
-            </video>
+            {(() => {
+              // handle the video URL is a YouTube link; extract videoId
+              const extractYouTubeVideoId = (url: string): string | null => {
+                const regex =
+                  /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+                const match = url.match(regex);
+                return match ? match[1] : null;
+              };
+
+              const videoId = extractYouTubeVideoId(videoUrl[0]);
+
+              return videoId ? (
+                <YouTubeEmbed videoId={videoId} placeholder={<p>Loading video...</p>} />
+              ) : (
+                <video width="100%" src={videoUrl[0]}>
+                  Browser does not support video
+                </video>
+              );
+            })()}
           </Grid>
         </Grid>
       </>
