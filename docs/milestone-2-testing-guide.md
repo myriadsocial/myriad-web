@@ -16,7 +16,7 @@ If you've haven't used Myriad Social before to test the new features you would n
 
 ## 1. Testing Myriad Social Wallet Integration
 
-The wallet integration focuses on two functionalities authentication and moving chains. In a multi-chain ecosystem users will need to be able to change the chain they are on seamlessly. 
+The wallet integration focuses on two functionalities authentication and moving chains. In a multi-chain ecosystem users will need to be able to change the chain they are on seamlessly.
 
 ### 1.1. Login Using Myriad Social Rococo
 

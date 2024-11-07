@@ -20,11 +20,11 @@ import { LinkPreview } from 'src/components/atoms/LinkPreview';
 import { NSFW } from 'src/components/atoms/NSFW/NSFW.component';
 import { SendTipButton } from 'src/components/common/SendTipButton/SendTipButton';
 import { isJson } from 'src/helpers/string';
+import { extractYouTubeVideoId } from 'src/helpers/url';
 import { useToggle } from 'src/hooks/use-toggle.hook';
 import { InfoIconYellow } from 'src/images/Icons';
 import { ReferenceType } from 'src/interfaces/interaction';
 import i18n from 'src/locale';
-import { extractYouTubeVideoId } from 'src/helpers/url';
 
 const Reddit = dynamic(() => import('./render/Reddit'), { ssr: false });
 const Twitter = dynamic(() => import('./render/Twitter'), { ssr: false });
@@ -51,11 +51,11 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
 
   const downvoted = post.votes
     ? post.votes.filter(vote => vote.userId === user?.id && !vote.state)
-      .length > 0
+        .length > 0
     : false;
   const upvoted = post.votes
     ? post.votes.filter(vote => vote.userId === user?.id && vote.state).length >
-    0
+      0
     : false;
 
   const isPostCreator = post.createdBy === user?.id;
@@ -100,7 +100,6 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [downvoted, upvoted]);
-
 
   // Extract YouTube Video ID
   let videoId: string | null = null;
@@ -171,12 +170,12 @@ export const PostDetail: React.FC<PostDetailProps> = props => {
           </ShowIf>
 
           <ShowIf condition={post.platform === 'youtube' && Boolean(videoId)}>
-              <YouTube
-                text={post.text}
-                onHashtagClicked={handleHashtagClicked}
-                videoId={videoId}
-              />
-            </ShowIf>
+            <YouTube
+              text={post.text}
+              onHashtagClicked={handleHashtagClicked}
+              videoId={videoId}
+            />
+          </ShowIf>
 
           {post.asset?.exclusiveContents &&
             post.asset?.exclusiveContents.length > 0 &&

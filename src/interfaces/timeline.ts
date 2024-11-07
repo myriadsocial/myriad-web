@@ -8,7 +8,12 @@ export enum TimelineType {
   PROFILE = 'profile',
 }
 
-export type PostOrigin = 'facebook' | 'twitter' | 'reddit' | 'myriad' | 'youtube';
+export type PostOrigin =
+  | 'facebook'
+  | 'twitter'
+  | 'reddit'
+  | 'myriad'
+  | 'youtube';
 
 export type PostOriginType = 'all' | 'myriad' | 'imported';
 

@@ -8,7 +8,9 @@ In our latest milestone, we have introduced a refreshed user interface aimed at 
 
 We have revamped the Polkadot wallet integration process to make it more user-friendly. A step-by-step guide with interactive tooltips now assists you through every stage of connecting your Polkadot wallet.
 
-![Polkadot Setup Guide]()
+![Polkadot Setup Guide](./select-wallet.png)
+![Polkadot Setup User Select Guide](./select-user.png)
+![Sign the wallet](./wallet-sign-in.png)
 
 The new Polkadot setup and connection process offers several enhancements. It includes **interactive tooltips** that provide real-time assistance when hovering over elements during the setup. Additionally, the **simplified connection flow** reduces the number of steps and offers clearer instructions, ensuring you can connect your wallet seamlessly. Furthermore, enhanced visuals with intuitive graphics guide you through the entire process, making the experience more user-friendly and visually appealing.
 
@@ -16,10 +18,10 @@ The new Polkadot setup and connection process offers several enhancements. It in
 
 We have streamlined the transaction processes for tipping creators and accessing exclusive content, ensuring a smoother experience.
 
-![Simplified Tipping Flow]()
+![Simplified Tipping Flow](./send-tip.png)
+![Send Tip](./send-tip-myriar.png)
 
 The new **Tipping Enhancements** bring a more seamless and transparent experience for users. With a **unified interface**, the tipping window is now consolidated and easy to navigate, simplifying the process. **Quick access buttons** allow users to tip creators directly from their posts without the need for extra navigation, making support instant and effortless. Moreover, **transparent fees** ensure that any transaction costs are clearly displayed before confirming a tip, fostering trust and clarity in every transaction.
-
 
 ## 3. Token On-Ramp
 
@@ -31,11 +33,17 @@ The Token On-Ramp feature allowing you to purchase $MYRIA tokens directly within
 
 ## 4. Simplified Timeline Discovery and First Step Guide for New Users
 
-![Timeline Discovery]()
+![Timeline Discovery](./timeline-discovery.png)
 
-Discovering new timelines and managing your own is now more intuitive thanks to a revamped layout and enhanced search capabilities.
+Discovering new timelines and managing your own is now more intuitive thanks to a revamped layout and enhanced search capabilities, allowing users to discover new timeline based on tags user want to see or dont want to see.
 
-![First Step Guide]()
+![First Step Guide](./create-timeline.png)
+
+The first step for user is to click the create timeline button that redirects user to our multi staged timeline creation interface designed to prevent information overload to user while still allowing user to have more granular control over their timeline.
+
+![Step One](./timeline-creation-1.png)
+![Step Two](./timeline-creation-2.png)
+![Step Three](./create-timeline-3.png)
 
 The new user onboarding guide includes Step-by-Step Tooltips, which provide contextual tips as you navigate through the platform, and an Onboarding Checklist that allows you to keep track of your progress with a list of introductory tasks. These features work together to ensure a smooth and comprehensive onboarding experience, helping you become familiar with the platform efficiently and effectively.
 
@@ -58,6 +66,7 @@ The new account sharing system introduces a secure way to manage multiple user a
 Our B2B implementation offers essential features for team management, including timeline collaboration for shared contributions, a content metrics dashboard to track engagement and performance, and access level management to control user permissions. Designed with a focus on security and usability, this multi-user system empowers businesses and organizations to strengthen their social media presence while maintaining control over their digital assets.
 
 ### Video Tutorial: Multi-User System
+
 [![Multi-User Tutorial](https://img.youtube.com/vi/-cf-RXFiCdM/0.jpg)](https://www.youtube.com/watch?v=-cf-RXFiCdM)
 
 ## 6. Mobile Wallet Integration with Nova Wallet
@@ -83,14 +92,16 @@ To connect your Polkadot wallet on mobile, follow these steps:
 5. **Start Exploring**: Once connected, you can start interacting with the Myriad Social platform.
 
 ## 7. Backend Improvements and Algorithm Enhancements
+
 ![Youtube Integration]()
 ![Refined Content](./Filtering%20cut%20off12.png)
 
 We have significantly enhanced our backend infrastructure and algorithms to improve content discovery, platform performance, and user experience. Users can now seamlessly import and embed YouTube content with native playback support, automatic metadata extraction, and optimized performance, while our refined content ranking algorithm focuses on the most recent 12 months of data to ensure fresh content, phasing out historical posts while still maintaining archive access. Enhanced ranking factors now include post engagement metrics, timeline trends, hashtag usage, user interactions, and content quality signals.
 
 ### Video Tutorial: Update Filtering
-[![Filteringl](https://img.youtube.com/vi/D0Km7_Buclo/0.jpg)](https://www.youtube.com/watch?v=D0Km7_Buclo)
----
+
+## [![Filteringl](https://img.youtube.com/vi/D0Km7_Buclo/0.jpg)](https://www.youtube.com/watch?v=D0Km7_Buclo)
+
 We are excited for you to experience these new features and improvements. Your feedback is invaluable to us, so please do not hesitate to share your thoughts and suggestions.
 
 **Host your own decentralized social network!**
