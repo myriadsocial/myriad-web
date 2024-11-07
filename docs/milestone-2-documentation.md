@@ -6,7 +6,7 @@ We've released a new version of Myriad Social, which is now built on the Polkado
 
 ## 1. Adding New Wallet Integrations for Rococo
 
-With the transition to Rococo, Myriad Social is adding new wallet integrations to enhance user experience and broaden accessibility. Users can now do Crypto Wallet authentication from the Myriad Social Rococo Substrate blockchain. 
+With the transition to Rococo, Myriad Social is adding new wallet integrations to enhance user experience and broaden accessibility. Users can now do Crypto Wallet authentication from the Myriad Social Rococo Substrate blockchain.
 
 ![image](./S1CCRYbva.png)
 
@@ -16,7 +16,7 @@ This enables users to have a seamless and secure experience within the Myriad So
 
 With the addition of a Myriad Social Rococo wallet integration it is easier to integrate the new chain to the already existing content tipping and exclusive content already available in the platform.
 
-Exclusive content can now be priced in $MYRIAr a currency that is native to the new Myriad Social Rococo blockchain. 
+Exclusive content can now be priced in $MYRIAr a currency that is native to the new Myriad Social Rococo blockchain.
 
 ![image](./Hk3G19-vp.png)
 

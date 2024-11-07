@@ -74,7 +74,9 @@ export const HeaderComponentExperience: React.FC<PostHeaderExperienceProps> =
           url = `https://reddit.com/user/${post.people?.username as string}`;
           break;
         case SocialsEnum.YOUTUBE:
-          url = `https://youtube.com/channel/${post.people?.username as string}`;
+          url = `https://youtube.com/channel/${
+            post.people?.username as string
+          }`;
           break;
         case 'myriad':
           url = `/profile/${post.createdBy}`;

@@ -14,8 +14,8 @@ import Twitter from 'src/images/socials/twitter.svg';
 import VK from 'src/images/socials/vk.svg';
 import WeChat from 'src/images/socials/wechat.svg';
 import Weibo from 'src/images/socials/weibo.svg';
-import { SocialsEnum } from 'src/interfaces/social';
 import Youtube from 'src/images/socials/youtube.svg';
+import { SocialsEnum } from 'src/interfaces/social';
 
 export const TwitterIcon = (
   <SvgIcon viewBox="0 0 20 20" style={{ background: '#3b5998', fontSize: 20 }}>

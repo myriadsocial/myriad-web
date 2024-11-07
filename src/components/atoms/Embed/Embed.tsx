@@ -7,8 +7,8 @@ import { YouTubeEmbed } from './YouTube/YoutubeEmbed';
 
 import { Loading } from 'src/components/atoms/Loading';
 import ShowIf from 'src/components/common/show-if.component';
-import { SocialsEnum } from 'src/interfaces/social';
 import { extractYouTubeVideoId } from 'src/helpers/url';
+import { SocialsEnum } from 'src/interfaces/social';
 
 type EmbedProps = {
   social: SocialsEnum;
@@ -35,8 +35,9 @@ export const Embed: React.FC<EmbedProps> = ({
   };
 
   // Extract YouTube Video ID
-  const youtubeVideoId = social === SocialsEnum.YOUTUBE ? extractYouTubeVideoId(url) : null;
-  
+  const youtubeVideoId =
+    social === SocialsEnum.YOUTUBE ? extractYouTubeVideoId(url) : null;
+
   return (
     <div className={styles.root} onClick={handleClick}>
       <ShowIf condition={social === SocialsEnum.TWITTER}>

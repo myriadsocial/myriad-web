@@ -14,9 +14,9 @@ import { NodeViewer } from 'components/common/NodeViewer';
 import { LinkPreview } from 'src/components/atoms/LinkPreview';
 import ShowIf from 'src/components/common/show-if.component';
 import { isJson } from 'src/helpers/string';
+import { extractYouTubeVideoId } from 'src/helpers/url';
 import { Post } from 'src/interfaces/post';
 import { User } from 'src/interfaces/user';
-import { extractYouTubeVideoId } from 'src/helpers/url';
 
 const Gallery = dynamic(() => import('../atoms/Gallery/Gallery'), {
   ssr: false,
@@ -150,6 +150,6 @@ export const PostDetailExperience: React.FC<PostDetailProps> = props => {
           post.embeddedURL &&
           !post.deletedAt && <LinkPreview embed={post.embeddedURL} />}
       </div>
-    </Paper >
+    </Paper>
   );
 };

@@ -1,11 +1,13 @@
+import React from 'react';
+
 import { IconButton, Grid, ImageList, ImageListItem } from '@material-ui/core';
+
+import { YouTubeEmbed } from '../atoms/Embed/YouTube/YoutubeEmbed';
 
 import { BiVideoPlus } from 'react-icons/bi';
 import { CiCircleRemove } from 'react-icons/ci';
 import { LuImagePlus } from 'react-icons/lu';
 import * as UploadAPI from 'src/lib/api/upload';
-import React from 'react';
-import { YouTubeEmbed } from '../atoms/Embed/YouTube/YoutubeEmbed';
 
 type MobileEmbedProps = {
   uploadVideoFieldRef: any;
@@ -147,7 +149,10 @@ export const MobileEmbed: React.FC<MobileEmbedProps> = props => {
               const videoId = extractYouTubeVideoId(videoUrl[0]);
 
               return videoId ? (
-                <YouTubeEmbed videoId={videoId} placeholder={<p>Loading video...</p>} />
+                <YouTubeEmbed
+                  videoId={videoId}
+                  placeholder={<p>Loading video...</p>}
+                />
               ) : (
                 <video width="100%" src={videoUrl[0]}>
                   Browser does not support video
