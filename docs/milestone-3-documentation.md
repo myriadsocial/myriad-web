@@ -73,7 +73,8 @@ Our B2B implementation offers essential features for team management, including 
 
 We are excited to announce that Myriad Social now supports mobile wallet integration with Nova Wallet. Previously, mobile users were limited to connecting via NEAR Wallet, but with this update, you can now connect your Polkadot wallet seamlessly on mobile devices.
 
-![Nova Wallet Integration]()
+### Video Tutorial: Nova Wallet Integration
+[![Nova Wallet Tutorial](https://img.youtube.com/vi/6PtEhR9-K50/0.jpg)](https://www.youtube.com/watch?v=6PtEhR9-K50)
 
 The mobile wallet integration with Nova Wallet offers the following benefits:
 
