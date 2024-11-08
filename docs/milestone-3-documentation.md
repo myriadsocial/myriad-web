@@ -23,15 +23,7 @@ We have streamlined the transaction processes for tipping creators and accessing
 
 The new **Tipping Enhancements** bring a more seamless and transparent experience for users. With a **unified interface**, the tipping window is now consolidated and easy to navigate, simplifying the process. **Quick access buttons** allow users to tip creators directly from their posts without the need for extra navigation, making support instant and effortless. Moreover, **transparent fees** ensure that any transaction costs are clearly displayed before confirming a tip, fostering trust and clarity in every transaction.
 
-## 3. Token On-Ramp
-
-We have introduced the Token On-Ramp feature, which allows you to purchase $MYRIA tokens directly within the platform.
-
-![Token On-Ramp Interface]()
-
-The Token On-Ramp feature allowing you to purchase $MYRIA tokens directly within the platform. This convenient feature enables integrated purchasing, so you can buy tokens without the need to navigate to external sites. It supports multiple payment options, including credit cards and cryptocurrencies, providing flexibility to suit your preferences. Additionally, the Token On-Ramp ensures instant balance updates, allowing you to see your token balance reflect purchases in real-time immediately after completing a transaction.
-
-## 4. Simplified Timeline Discovery and First Step Guide for New Users
+## 3. Simplified Timeline Discovery and First Step Guide for New Users
 
 ![Timeline Discovery](./timeline-discovery.png)
 
@@ -47,7 +39,23 @@ The first step for user is to click the create timeline button that redirects us
 
 The new user onboarding guide includes Step-by-Step Tooltips, which provide contextual tips as you navigate through the platform, and an Onboarding Checklist that allows you to keep track of your progress with a list of introductory tasks. These features work together to ensure a smooth and comprehensive onboarding experience, helping you become familiar with the platform efficiently and effectively.
 
-## 5. B2B Features: Multi-User Management System
+### Exclusive Timeline
+
+![Exclusive Timelines](./create-exclusive-timeline.png)
+
+We have introduced the Exclusive Timeline feature, which allows you to mark specific timeline content as exclusive. Here's how to create one:
+
+1. Click the "Create New Timeline" button in the left sidebar to start creating a new timeline
+
+2. In the creation form, you'll find an "Exclusive" toggle switch that lets you mark your timeline as exclusive content
+
+3. After filling in your timeline details, click the "Next" button to proceed with creating your exclusive timeline
+
+Your timeline name can be between 1-50 characters, and you can optionally add a description (up to 280 characters). You can also set the privacy level (Public, Private, etc.) and customize the timeline picture.
+
+When a timeline is marked as exclusive, it will be clearly indicated with an exclusive label, helping differentiate it from regular timelines in the listing.
+
+## 4. B2B Features: Multi-User Management System
 
 We have implemented comprehensive B2B features that enable organizations to manage multiple users, timelines, and content metrics efficiently through a single interface. This enterprise-grade functionality provides organizations with powerful tools for team collaboration and content management.
 
@@ -69,7 +77,7 @@ Our B2B implementation offers essential features for team management, including 
 
 [![Multi-User Tutorial](https://img.youtube.com/vi/-cf-RXFiCdM/0.jpg)](https://www.youtube.com/watch?v=-cf-RXFiCdM)
 
-## 6. Mobile Wallet Integration with Nova Wallet
+## 5. Mobile Wallet Integration with Nova Wallet
 
 We are excited to announce that Myriad Social now supports mobile wallet integration with Nova Wallet. Previously, mobile users were limited to connecting via NEAR Wallet, but with this update, you can now connect your Polkadot wallet seamlessly on mobile devices.
 
@@ -92,12 +100,11 @@ To connect your Polkadot wallet on mobile, follow these steps:
 4. **Authorize Connection**: Follow the prompts in Nova Wallet to authorize the connection.
 5. **Start Exploring**: Once connected, you can start interacting with the Myriad Social platform.
 
-## 7. Backend Improvements and Algorithm Enhancements
+## 6. Backend Improvements and Algorithm Enhancements
 
-![Youtube Integration]()
 ![Refined Content](./Filtering%20cut%20off12.png)
 
-We have significantly enhanced our backend infrastructure and algorithms to improve content discovery, platform performance, and user experience. Users can now seamlessly import and embed YouTube content with native playback support, automatic metadata extraction, and optimized performance, while our refined content ranking algorithm focuses on the most recent 12 months of data to ensure fresh content, phasing out historical posts while still maintaining archive access. Enhanced ranking factors now include post engagement metrics, timeline trends, hashtag usage, user interactions, and content quality signals.
+We have significantly enhanced our backend infrastructure and algorithms to improve content discovery, platform performance, and user experience. Users can now seamlessly import and embed [YouTube content](https://github.com/myriadsocial/myriad-api/pull/976) with native playback support, automatic metadata extraction, and optimized performance, while our refined content ranking algorithm focuses on the most recent 12 months of data to ensure fresh content, phasing out historical posts while still maintaining archive access. Enhanced ranking factors now include post engagement metrics, timeline trends, hashtag usage, user interactions, and content quality signals.
 
 ### Video Tutorial: Update Filtering
 
