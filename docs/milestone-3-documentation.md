@@ -18,7 +18,7 @@ The new Polkadot setup and connection process offers several enhancements. It in
 
 We have streamlined the transaction processes for tipping creators and accessing exclusive content, ensuring a smoother experience.
 
-![Simplified Tipping Flow](./send-tip.png)
+![Simplified Tipping Flow](./step-send-tip.png)
 ![Send Tip](./send-tip-myriar.png)
 
 The new **Tipping Enhancements** bring a more seamless and transparent experience for users. With a **unified interface**, the tipping window is now consolidated and easy to navigate, simplifying the process. **Quick access buttons** allow users to tip creators directly from their posts without the need for extra navigation, making support instant and effortless. Moreover, **transparent fees** ensure that any transaction costs are clearly displayed before confirming a tip, fostering trust and clarity in every transaction.
@@ -29,7 +29,7 @@ The new **Tipping Enhancements** bring a more seamless and transparent experienc
 
 Discovering new timelines and managing your own is now more intuitive thanks to a revamped layout and enhanced search capabilities, allowing users to discover new timeline based on tags user want to see or dont want to see.
 
-![First Step Guide](./create-timeline.png)
+![First Step Guide](./step-create-timeline.png)
 
 The first step for user is to click the create timeline button that redirects user to our multi staged timeline creation interface designed to prevent information overload to user while still allowing user to have more granular control over their timeline.
 
