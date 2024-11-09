@@ -110,6 +110,65 @@ We have significantly enhanced our backend infrastructure and algorithms to impr
 
 ## [![Filteringl](https://img.youtube.com/vi/D0Km7_Buclo/0.jpg)](https://www.youtube.com/watch?v=D0Km7_Buclo)
 
+## 7. Performance Optimization and Enhancement
+
+We have implemented significant performance improvements to enhance the user experience and reduce resource consumption. These optimizations focus on reducing payload sizes, implementing modern compression techniques, and optimizing network requests.
+
+### Reduced Transfer Size
+
+We have successfully cut the total transfer size by more than 50%, reducing it from 24.3 MB to 10.4 MB. This dramatic reduction results in faster page loads and reduced data consumption for users.
+
+#### Transfer Size Before
+![Transfer Size Before](image.png)
+
+#### Transfer Size After
+![Transfer Size After](image-1.png)
+
+### Brotli Compression Implementation
+
+The platform now utilizes Brotli compression, a modern compression algorithm that offers better compression ratios compared to traditional methods like gzip. This enhancement enables:
+- Smaller file sizes for faster downloads
+- Reduced server bandwidth usage
+- The significant improvements in our JavaScript bundle size (14% reduction to 325kb)
+- The enhanced Fetch/XHR payload efficiency (reduced to 7%)
+
+![Brotli Compression](image-2.png)
+
+### Optimized API Communications
+
+We've achieved a significant improvement in Fetch/XHR payload efficiency through Brotli compression, reducing the overhead to just 7% of its previous size. This optimization results in:
+- Faster API responses
+- Reduced server load
+- More efficient data transfer
+
+#### API Payload Before
+![API Payload Before](image-3.png)
+
+#### API Payload After
+![API Payload After](image-5.png)
+
+### JavaScript Bundle Optimization
+
+Through careful analysis and optimization of our JavaScript bundles, combined with Brotli compression, we've achieved a 14% reduction in JavaScript payload size, bringing it down to 325kb. This improvement provides:
+- Faster initial page loads
+- Reduced memory usage
+- Improved runtime performance
+- Better mobile device performance
+
+#### JS Bundle Size Before
+![JS Bundle Size Before](image-6.png)
+
+#### JS Bundle Size After
+![JS Bundle Size After](image-4.png)
+
+These performance improvements collectively contribute to a more responsive and efficient platform, particularly benefiting users on mobile devices or with limited bandwidth. Users can now enjoy:
+- Faster page loading times
+- Reduced data usage
+- Smoother interactions
+- Improved overall experience
+
+---
+
 We are excited for you to experience these new features and improvements. Your feedback is invaluable to us, so please do not hesitate to share your thoughts and suggestions.
 
 **Host your own decentralized social network!**
