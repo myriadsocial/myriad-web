@@ -9,7 +9,19 @@ In our latest milestone, we have introduced a refreshed user interface aimed at 
 <div align="center">
 <img src="https://raw.githubusercontent.com/agustinustheo/apps/1b55f22c955dd9f0077ba0fac962d8da5bfa9f64/packages/apps-config/src/ui/logos/nodes/myriadPaseo.svg" width="200">
 </div>
+
 We're excited to announce that Myriad Social is now part of the Paseo network as a Parachain with ParaID 4005! This integration brings new features and better connectivity to everyone using Myriad.
+
+### Successful Data Migration
+
+We've completed the token migration from Octopus Testnet to Myriad Paseo! All user funds have been safely moved through our automated airdrop process. This migration ensures that:
+- All user balances are preserved
+- Tokens are now active on Paseo Network
+- No action is needed from users - funds are already transferred
+
+For transparency, you can view:
+- [Migration Script Source Code](https://github.com/myriadsocial/myriad-scripts/tree/main/scripts/paseo-airdrop)
+- [Complete Airdrop Logs](https://github.com/myriadsocial/myriad-scripts/blob/main/scripts/paseo-airdrop/airdropLogs.txt)
 
 ### Quick Connection Guide
 
@@ -19,6 +31,10 @@ wss://ws-rpc.paseo.myriad.social
 ```
 
 This endpoint lets you connect directly to Myriad Social on the Paseo network, making it easy to use all our features.
+
+----
+
+[Rest of the documentation continues with Section 1...]
 
 ----
 
