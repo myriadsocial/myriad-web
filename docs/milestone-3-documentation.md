@@ -167,6 +167,96 @@ These performance improvements collectively contribute to a more responsive and 
 - Smoother interactions
 - Improved overall experience
 
+## 8. Self-Hosting Capabilities
+
+We are excited to announce that Myriad Social can now be self-hosted, giving users complete control over their social media infrastructure. Our comprehensive setup process utilizes industry-standard technologies to ensure reliable deployment and maintenance.
+
+### Getting Started
+
+Detailed documentation and resources are available to help you begin your self-hosting journey:
+
+1. Review our [Complete Setup Guide](https://github.com/myriadsocial/myriad-infrastructure/blob/main/linux/README.md)
+2. Download the [Marauder Setup Script](https://github.com/myriadsocial/myriad-infrastructure/blob/main/linux/marauder.sh)
+3. Check our [Test Environment Dockerfile](https://github.com/myriadsocial/myriad-infrastructure/blob/main/linux/Dockerfile)
+
+Our self-hosting solution empowers users to:
+- Maintain complete control over their data
+- Customize their instance configuration
+- Scale resources according to needs
+- Implement custom security policies
+- Access detailed system metrics
+- Perform direct database management
+
+### System Requirements
+
+To successfully self-host Myriad Social, your system should meet the following requirements:
+
+- Ubuntu 22.04 or later
+- Sudo privileges
+- Stable internet connection
+- Minimum 4GB RAM
+- 20GB available storage
+- Basic command-line knowledge
+
+### Core Infrastructure Components
+
+The self-hosted version of Myriad Social is built on a robust stack of modern technologies:
+
+- **Docker & Docker Compose**: Container orchestration for consistent deployment
+- **MongoDB**: Database management for user data and content
+- **MinIO**: Object storage for media and files
+- **Nginx**: Web server and reverse proxy
+- **zrok**: Secure tunnel for public access
+- **Systemd**: Service management and monitoring
+
+![Infrastructure Overview](image-7.png)
+
+### Automated Setup Process
+
+We've developed the Marauder setup script to streamline the installation process. This automated tool handles:
+
+- System dependency installation
+- Docker environment configuration
+- Database setup and initialization
+- Storage system deployment
+- Service configuration
+- Network tunnel establishment
+
+```bash
+# Quick start command
+wget --no-cache https://raw.githubusercontent.com/myriadsocial/myriad-infrastructure/main/linux/marauder.sh
+chmod +x marauder.sh
+./marauder.sh
+```
+
+![Marauder Setup Flow](image-8.png)
+
+### Docker Container Management
+
+The platform utilizes Docker containers for easy deployment and management. Users can control their instance using standard Docker commands or our service wrapper:
+
+```bash
+# Start Myriad Social service
+sudo systemctl start myriad-social.service
+
+# Monitor service status
+sudo systemctl status myriad-social.service
+
+# View service logs
+sudo journalctl -u myriad-social.service
+```
+
+### Development Environment
+
+For developers and testers, we provide a specialized Docker container that simulates the production environment:
+
+```bash
+docker run -it --name marauder-container \
+--network host \
+-v /var/run/docker.sock:/var/run/docker.sock \
+agustinustheoo/marauder-test:latest
+```
+
 ---
 
 We are excited for you to experience these new features and improvements. Your feedback is invaluable to us, so please do not hesitate to share your thoughts and suggestions.
