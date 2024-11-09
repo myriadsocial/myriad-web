@@ -34,10 +34,6 @@ This endpoint lets you connect directly to Myriad Social on the Paseo network, m
 
 ----
 
-[Rest of the documentation continues with Section 1...]
-
-----
-
 ## 1. Polkadot Setup, Connection, and User Guide
 
 We have revamped the Polkadot wallet integration process to make it more user-friendly. A step-by-step guide with interactive tooltips now assists you through every stage of connecting your Polkadot wallet.
