@@ -4,6 +4,24 @@ Myriad Social is a Web3 Social Media platform that functions as a layer on top o
 
 In our latest milestone, we have introduced a refreshed user interface aimed at enhancing the overall user experience and simplifying platform interactions. This update brings streamlined functionalities, intuitive navigation, and comprehensive guides to assist both new and existing users.
 
+## Myriad Social on Paseo Network
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/agustinustheo/apps/1b55f22c955dd9f0077ba0fac962d8da5bfa9f64/packages/apps-config/src/ui/logos/nodes/myriadPaseo.svg" width="200">
+</div>
+We're excited to announce that Myriad Social is now part of the Paseo network as a Parachain with ParaID 4005! This integration brings new features and better connectivity to everyone using Myriad.
+
+### Quick Connection Guide
+
+Need to connect? Use our RPC endpoint:
+```
+wss://ws-rpc.paseo.myriad.social
+```
+
+This endpoint lets you connect directly to Myriad Social on the Paseo network, making it easy to use all our features.
+
+----
+
 ## 1. Polkadot Setup, Connection, and User Guide
 
 We have revamped the Polkadot wallet integration process to make it more user-friendly. A step-by-step guide with interactive tooltips now assists you through every stage of connecting your Polkadot wallet.
@@ -13,6 +31,10 @@ We have revamped the Polkadot wallet integration process to make it more user-fr
 ![Sign the wallet](./wallet-sign-in.png)
 
 The new Polkadot setup and connection process offers several enhancements. It includes **interactive tooltips** that provide real-time assistance when hovering over elements during the setup. Additionally, the **simplified connection flow** reduces the number of steps and offers clearer instructions, ensuring you can connect your wallet seamlessly. Furthermore, enhanced visuals with intuitive graphics guide you through the entire process, making the experience more user-friendly and visually appealing.
+
+### Conclusion
+
+These wallet improvements make it easier for everyone to use Web3 features. With clearer steps and helpful guides, connecting your wallet is now simpler and safer. 
 
 ## 2. Simplified Transaction Flow for Tipping and Exclusive Content
 
@@ -76,6 +98,10 @@ Our B2B implementation offers essential features for team management, including 
 ### Video Tutorial: Multi-User System
 
 [![Multi-User Tutorial](https://img.youtube.com/vi/-cf-RXFiCdM/0.jpg)](https://www.youtube.com/watch?v=-cf-RXFiCdM)
+
+### Conclusion
+
+With these new B2B features, teams and businesses can now better manage their Myriad Social presence. Whether you're handling multiple accounts, working with a team, or tracking content performance, these tools make it simple.
 
 ## 5. Mobile Wallet Integration with Nova Wallet
 
@@ -166,6 +192,10 @@ These performance improvements collectively contribute to a more responsive and 
 - Reduced data usage
 - Smoother interactions
 - Improved overall experience
+
+### Conclusion
+
+Our latest updates have made Myriad Social faster and more efficient. Pages load quicker, use less data, and work better on all devices. Using new compression technology and better code, we've cut loading times in half while using less bandwidth.
 
 ## 8. Self-Hosting Capabilities
 
